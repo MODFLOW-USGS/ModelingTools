@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SWI2_Strat" FileType="bin">
+    <FileName Model_Name="SWI2_Strat" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SWI2_Strat" FileType="ancillary">
+    <FileName Model_Name="SWI2_Strat" FileType="ancillary">SWI2_Strat.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SWI2_Strat" FileType="Model Input">
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.bas</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.bcf</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.chd</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.dis</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.gsf</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.nam.archive</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.oc</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.pcg</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">SWI2_Strat.swi</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Input">usgs.SWI2_Strat.reference</FileName>
+  </model>
+  <output Model_Name="SWI2_Strat" FileType="Model Output">
+    <FileName Model_Name="SWI2_Strat" FileType="Model Output">SWI2_Strat.cbc</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Output">SWI2_Strat.fdn</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Output">SWI2_Strat.fhd</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Output">SWI2_Strat.lst</FileName>
+    <FileName Model_Name="SWI2_Strat" FileType="Model Output">SWI2_Strat.zta</FileName>
+  </output>
+</Model_Archive_List>

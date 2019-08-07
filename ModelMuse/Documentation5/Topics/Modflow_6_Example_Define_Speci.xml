@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Example: Define Specified Head Boundary</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Define Specified Head Boundary</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to represent a lake in the upper right corner with a specified head boundary in the top layer.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">We don&apos;t need to work with the objects that define the thickness of the middle aquifer any more so use the Show or Hide Objects dialog box to hide them.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Use the Model Cube </text><image src="Modflow6ModelCubeTopLayer.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Model Cube, top layer</title></image><text styleclass="Normal" translate="true"> to select the top layer. This ensures that when we create the object, the formulas for the higher and layer Z formulas will be the ones for the top and bottom of the top layer.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Change the value in the &quot;Number of elevations in new objects&quot; combo box from 0 back to 2.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Click the &quot;Create polygon object&quot; button </text><image src="CreatePolygon.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true"> and create a polygon &#160;on the top view of the model that surrounds several active cells in the upper right corner of the grid. This polygon will represent the lake. When you double-click to complete the polygon, the Object Properties dialog box will appear.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, make sure the the formulas for the higher and lower Z coordinates are &quot;Model_Top&quot; and &quot;Upper_Aquifer_Bottom&quot; respectively so that the object applies to cells in the top layer.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">On the MODFLOW Features tab, check the check box for the CHD package, set the starting and ending times to -1 and 0 respectively. (By default, ModelMuse defines an initial steady-state stress period extending from -1 to 0.) Set the starting and ending heads to 450. (If the starting and ending heads are set to different values MODFLOW will interpolate the heads between them in each time step.)</text><br/><image src="Modflow6ExampleCHD.bmp" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying the starting and ending heads for the CHD package</title><caption translate="true"><![CDATA[Specifying the starting and ending heads for the CHD package.]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(Optional) If you wish, you can try coloring the grid the CHD ending head. The cells inside the object should end up colored green.</text></li>
+    </list>
+  </body>
+</topic>

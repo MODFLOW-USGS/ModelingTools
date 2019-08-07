@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SqrI</title>
+  <keywords>
+    <keyword translate="true">SqrI</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">SqrI</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">SqrI</text><text styleclass="Normal" translate="true">(Integer_Value) returns Integer_Value squared. Integer_Value must be an integer. The result of SqrI will be an integer.</text></para>
+  </body>
+</topic>

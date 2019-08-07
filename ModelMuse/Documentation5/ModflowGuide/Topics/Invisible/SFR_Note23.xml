@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SFR_Note23</title>
+  <body>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 23</text><text styleclass="Normal" translate="true">: If Item 6, Part 6f is included because solute transport is being simulated, then Part 6f should consist of one record (line) for each solute; each record must contain two or three values; and there must be as many records as the number of solutes being simulated (NSOL). The default value of NSOL is 1 and the presently documented version of MODFLOW-GWT is limited to simulating one solute.</text></li>
+    </list>
+  </body>
+</topic>

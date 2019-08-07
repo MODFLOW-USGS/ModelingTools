@@ -1,0 +1,98 @@
+TITLE
+.      One dimensional unconfined flow with recharge
+.      Bear, parabolic analytical solution
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT false
+UNITS
+      -time seconds
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 400 5
+      -uniform   Y   0 400 5
+      -uniform   Z   0 275 2
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 400 400 275
+            -Kx 0.011572
+            -Ky 0.0011572
+            -Kz 115.72
+            -porosity 0.15
+            -specific_storage 8.7034E-10
+      -zone 0 0 0 400 400 275
+            -active 1
+FREE_SURFACE_BC true
+STEADY_FLOW false
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0.5
+      -time_differencing 1
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 400 400 275
+            -head 200
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 2 step
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -HDF_heads 2 step
+      -HDF_velocities 2 step
+      -heads 4 step
+      -progress_statistics 1 step
+      -restart 0 
+      -save_final_heads false
+      -velocities 4 step
+      -wells 0 
+      -xyz_components 0 
+      -xyz_heads 4 step
+      -xyz_velocities 4 step
+      -xyz_wells 0 
+      -end_of_period_default false
+FLUX_BC
+      -zone 0 50 275 400 350 275
+            -face Z
+            -flux
+                  0 -0.001157
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 400 50 275
+            -head
+                  0 200
+      -zone 0 350 0 400 400 275
+            -head
+                  0 150
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 43200 seconds
+            -time_end
+                  172800 seconds
+END

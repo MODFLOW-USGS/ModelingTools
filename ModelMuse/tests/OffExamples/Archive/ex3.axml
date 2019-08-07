@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ex3" FileType="bin">
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="ex3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="ex3" FileType="ancillary">
+    <FileName Model_Name="ex3" FileType="ancillary">ex3.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ex3" FileType="Model Input">
+    <FileName Model_Name="ex3" FileType="Model Input">ex3.chem.dat</FileName>
+    <FileName Model_Name="ex3" FileType="Model Input">ex3.trans.dat</FileName>
+    <FileName Model_Name="ex3" FileType="Model Input">phast.dat</FileName>
+    <FileName Model_Name="ex3" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="ex3" FileType="Model Input">usgs.ex3.reference</FileName>
+  </model>
+  <output Model_Name="ex3" FileType="Model Output">
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.h5</FileName>
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.log</FileName>
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.O.comps</FileName>
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.O.head</FileName>
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.O.probdef</FileName>
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.O.wel</FileName>
+    <FileName Model_Name="ex3" FileType="Model Output">ex3.xyz.chem</FileName>
+  </output>
+</Model_Archive_List>

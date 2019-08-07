@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.testGlobal\testGlobal.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.testGlobal\testGlobal.cbc REPLACE
+DIS              12 ..\..\model\model.testGlobal\testGlobal.dis OLD
+BAS6             13 ..\..\model\model.testGlobal\testGlobal.bas OLD
+OC               39 ..\..\model\model.testGlobal\testGlobal.oc OLD
+DATA             37 ..\..\output\output.testGlobal\testGlobal.fhd REPLACE
+DATA             38 ..\..\output\output.testGlobal\testGlobal.fdn REPLACE
+PCG              18 ..\..\model\model.testGlobal\testGlobal.pcg OLD
+LPF              14 ..\..\model\model.testGlobal\testGlobal.lpf OLD

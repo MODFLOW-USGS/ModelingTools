@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specifying Angles for SUTRA</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Specifying Angles for SUTRA</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA, for 3D models,the user must specify three angles to set the direction of the maximum, middle and minimum permeability and the longitudinal and transverse dispersivity values associated with those permeability directions (one angle for 2D models). To make specifying such angels easier, the user can draw contours on the top view of the model and use the function “ObjectCurrentSegmentAngleDegrees” to specify the angle. The angle that is assigned will be the angle of the segment of the object that is being evaluated. Furthermore, the interpolation methods in ModelMuse have been altered to interpolate angles in a different way from other data types. If the units of the data set have been set to degrees or radians, when interpolation is performed on the data, the values that will be interpolated will not be the angles themselves but rather the sine and cosine of the angles. The interpolated values of sine and cosine will be treated as two edges of a right-triangle and the angle of the hypotenuse of the triangle will be the interpolated angle. In fig. 4, the four objects in blue are all used to assign the maximum permeability angle by interpolation. All four objects use the formula “ObjectCurrentSegmentAngleDegrees”. However, in figure 4A, the data set has been assigned units of Degrees whereas in figure 4B, no units have been assigned. The goal was to have all the vectors point outward from the center of the mesh. This goal has been achieved in figure 4A but not in figure 4B.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="3" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A. </text><image src="AngleInterpolation.png" scale="70.00%" width="330" height="271" styleclass="Image Caption"></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">B. </text><image src="WithoutAngleInterpolation.png" scale="70.00%" width="330" height="271" styleclass="Image Caption"></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Image Number" translate="true">Figure 4. </text><text styleclass="Image Caption" translate="true">Illustration of angle interpolation. In both illustrations, the blue objects specify ANGLE1 by interpolation using the formula “ObjectCurrentSegmentAngleDegrees” and the vectors display the maximum permeability. A. The data set has its unit set to “Degrees” so that a special form of interpolation is used. B. The data set has no units so the ordinary form of interpolation is used.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

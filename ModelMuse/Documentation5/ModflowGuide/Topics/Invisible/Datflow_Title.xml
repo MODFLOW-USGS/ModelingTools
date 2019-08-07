@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Datflow Title</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">TITLE - When DAFLOW is linked to MODFLOW, input information is required in addition to what is contained in the flow.in file. This information is contained in a file that has file type DAFG in the MODFLOW name file. The first 80 characters of the first three lines of the DAFG file are simply read in as text and printed in the MODFLOW output file for information purposes. It is recommended that the first line contain identifying information, and the second two lines contain column headings to identify the eight data fields that will follow. Examples of the column headings are shown in figure 7, which contains input data for the example shown in figure 2.</text></para>
+  </body>
+</topic>

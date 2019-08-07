@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Solver Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Solver Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Solver</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box. It is used to select the solvers for the pressure and transport solutions and control variables for those solvers. Note that if the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Direct</text><text styleclass="Normal" translate="true"> solver is used for either the pressure or transport solution SUTRA requires that it be used for both.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

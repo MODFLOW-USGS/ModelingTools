@@ -1,0 +1,15 @@
+    1    4   38    1    1    1   0.0  0          ITEM 1:  NPTH NLOC IOUTADV KTFLG KTREV ADVSTP FSNK IADVHUF
+'PARAMETER' 2  2                                 ITEM 2  POROSITY
+POROSITY     PRST .33000000000000 2
+1  NONE ALL
+2  NONE ALL
+POROSTY_CB   PRCB 0.10            1
+1  NONE ALL
+    4    1    2   16  0.5  0.0  0.0              ITEM 3 PARTICLE INITIAL POSITION
+ad10     1    9   10  0.0  0.0  0.0 200.  1 200.  1  10.  1   3.15e+8   10 yr
+ad50     1    9   10  0.0  0.0  0.0 600.  1 600.  1  15.  1   1.57e+9   50 yr
+a100     1    9   10  0.0  0.0  0.0 1000. 1 1000. 1  25.  1   3.15e+9  100 yr
+a175     1    9   10  0.0  0.0  0.0 1300. 1 1300. 1  50.  1   5.52e+9  175 yr
+    0                                            ITEM 5 IOWTQ
+
+

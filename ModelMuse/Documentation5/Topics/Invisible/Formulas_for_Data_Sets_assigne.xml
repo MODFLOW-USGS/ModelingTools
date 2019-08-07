@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Formulas for Data Sets assigned with parameters</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For data sets in MODFLOW models for which parameters have been defined, the values of the data set will be determined by the parameters rather than the formula for the object. For such data sets, the phrase &quot;(defined by parameters)&quot; will appear after the name of the data set and the user will not be able to assign values for the data set directly. If the grid is colored with such a data set, ModelMuse will generate a formula that will mimic how the data set values are assigned by MODFLOW.</text></para>
+  </body>
+</topic>

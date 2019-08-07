@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 ImportedSub2.lst REPLACE
+DATA(BINARY)      9 ImportedSub2.cbc REPLACE
+DIS              12 ImportedSub2.dis OLD
+BAS6             13 ImportedSub2.bas OLD
+OC               39 ImportedSub2.oc OLD
+DATA             37 ImportedSub2.fhd REPLACE
+DATA             38 ImportedSub2.fdn REPLACE
+SIP              35 ImportedSub2.sip OLD
+BCF6             64 ImportedSub2.bcf OLD
+CHD              17 ImportedSub2.chd OLD
+WEL              20 ImportedSub2.wel OLD
+SUB              65 ImportedSub2.sub OLD
+DATA(BINARY)    110 ImportedSub2.SubSubOut REPLACE
+DATA(BINARY)    111 ImportedSub2.SubComMlOut REPLACE
+DATA(BINARY)    112 ImportedSub2.SubComIsOut REPLACE

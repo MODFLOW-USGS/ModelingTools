@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">File Types Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">File Types Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">File Types</text><text styleclass="Normal" translate="true"> dialog box displays a list of the file extensions handled by ModelMuse, their functions, and a description of each file. This dialog box can be displayed by selecting </text><text styleclass="Strong" translate="true">Help|File Types</text><text styleclass="Normal" translate="true">.or clicking the </text><text styleclass="Strong" translate="true">Show file types</text><text styleclass="Normal" translate="true"> button on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Name_File_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Name File</link><text styleclass="Normal" translate="true"> dialog box. The data in this dialog box can not be edited; it can only be displayed. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The table can be sorted by clicking on a column heading.</text></para>
+  </body>
+</topic>

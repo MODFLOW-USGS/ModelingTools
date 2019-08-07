@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW-LGR</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW-LGR</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW-LGR functions provide capabilities that are specific to MODFLOW with Local Grid Refiniment.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="GridName" styleclass="Normal" translate="true">GridName</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="GridNumber" styleclass="Normal" translate="true">GridNumber</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="Horizontal_Subdivision" styleclass="Normal" translate="true">Horizontal_Subdivision</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ParentColumn" styleclass="Normal" translate="true">ParentColumn</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ParentLayer" styleclass="Normal" translate="true">ParentLayer</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ParentRow" styleclass="Normal" translate="true">ParentRow</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertical_Subdivision" styleclass="Normal" translate="true">Vertical_Subdivision</link></li>
+    </list>
+  </body>
+</topic>

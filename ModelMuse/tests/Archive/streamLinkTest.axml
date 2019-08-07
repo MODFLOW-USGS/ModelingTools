@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="streamLinkTest" FileType="bin">
+    <FileName Model_Name="streamLinkTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="streamLinkTest" FileType="ancillary">
+    <FileName Model_Name="streamLinkTest" FileType="ancillary">streamLinkTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="streamLinkTest" FileType="Model Input">
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.bas</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.dis</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.gsf</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.lak</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.lpf</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.nam.archive</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.oc</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.pcg</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">streamLinkTest.sfr</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Input">usgs.streamLinkTest.reference</FileName>
+  </model>
+  <output Model_Name="streamLinkTest" FileType="Model Output">
+    <FileName Model_Name="streamLinkTest" FileType="Model Output">streamLinkTest.cbc</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Output">streamLinkTest.fdn</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Output">streamLinkTest.fhd</FileName>
+    <FileName Model_Name="streamLinkTest" FileType="Model Output">streamLinkTest.lst</FileName>
+  </output>
+</Model_Archive_List>

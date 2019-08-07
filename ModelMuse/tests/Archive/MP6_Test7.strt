@@ -1,0 +1,23 @@
+# MODPATH Starting Locations file file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     2 # Data Set 1: InputStyle
+     2 # Data Set 6: GroupCount
+PG01 # Data Set 7: GroupName
+     8  0.000000000000E+000      1 # Data Set 8: LocationCount ReleaseStartTime ReleaseOption
+     1     1     5    10 0.999 0.5 1 0 0 0 PG01-1 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.853 0.147 1 0 0 0 PG01-2 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.5 0.001 1 0 0 0 PG01-3 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.147 0.147 1 0 0 0 PG01-4 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.001 0.5 1 0 0 0 PG01-5 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.147 0.853 1 0 0 0 PG01-6 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.5 0.999 1 0 0 0 PG01-7 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     5    10 0.853 0.853 1 0 0 0 PG01-8 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+PG02 # Data Set 7: GroupName
+     8  1.000000000000E+004      1 # Data Set 8: LocationCount ReleaseStartTime ReleaseOption
+     1     1     7    12 0.999 0.5 1 0 0 0 PG02-1 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.853 0.147 1 0 0 0 PG02-2 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.5 0.001 1 0 0 0 PG02-3 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.147 0.147 1 0 0 0 PG02-4 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.001 0.5 1 0 0 0 PG02-5 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.147 0.853 1 0 0 0 PG02-6 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.5 0.999 1 0 0 0 PG02-7 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label
+     1     1     7    12 0.853 0.853 1 0 0 0 PG02-8 # Data Set 12: Grid Layer Row Column LocalX LocalY LocalZ Label

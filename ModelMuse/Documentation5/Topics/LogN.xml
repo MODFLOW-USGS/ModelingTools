@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">logN</title>
+  <keywords>
+    <keyword translate="true">logN</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">logN</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">logN</text><text styleclass="Normal" translate="true">(Base, Value) returns the log to the base N of Value.</text></para>
+  </body>
+</topic>

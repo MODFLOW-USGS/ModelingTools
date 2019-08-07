@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="NwtTest1" FileType="bin">
+    <FileName Model_Name="NwtTest1" FileType="bin">C:\WRDAPP\MODFLOW-NWT_1.1.3\bin\MODFLOW-NWT_64.exe</FileName>
+  </bin>
+  <ancillary Model_Name="NwtTest1" FileType="ancillary">
+    <FileName Model_Name="NwtTest1" FileType="ancillary">NwtTest1.gpt</FileName>
+  </ancillary>
+  <model Model_Name="NwtTest1" FileType="Model Input">
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.bas</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.chd</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.dis</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.drn</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.gsf</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.jtf</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.mlt</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.nam.archive</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.nwt</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.oc</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.pval</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.rch</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.upw</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.wel</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">NwtTest1.zon</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Input">usgs.NwtTest1.reference</FileName>
+  </model>
+  <output Model_Name="NwtTest1" FileType="Model Output">
+    <FileName Model_Name="NwtTest1" FileType="Model Output">NwtTest1.cbc</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Output">NwtTest1.fdn</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Output">NwtTest1.fhd</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Output">NwtTest1.lst</FileName>
+    <FileName Model_Name="NwtTest1" FileType="Model Output">NwtTest1.wel_dewater.txt</FileName>
+  </output>
+</Model_Archive_List>

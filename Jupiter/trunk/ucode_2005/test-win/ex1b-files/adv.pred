@@ -1,0 +1,21 @@
+BEGIN PREDICTION_DATA TABLE
+nrow=16 ncol=6  columnlabels  
+predname     refvalue  measstatistic  measstatflag groupname equation
+AD10_X		   322.1       200.            SD       pred-x     _
+AD10_Y		    75.8       200.            SD       pred-y     _
+AD10_Z		    14.1        10.            SD       pred-z     _
+test10		      1.        10.            SD       pred-test  AD10_Z
+AD50_X		  2030.7       600.            SD       pred-x     _
+AD50_Y		   537.3       600.            SD       pred-y     _
+AD50_Z		    51.1        15.            SD       pred-z     _
+test50		      1.        10.            SD       pred-test  AD50_Z
+A100_X		  4334.8      1000.            SD       pred-x     _
+A100_Y		  1409.8      1000.            SD       pred-y     _
+A100_Z		    79.6        25.            SD       pred-z     _
+test100		      1.        10.            SD       pred-test  A100_Z
+A175_X		  7481.1      1300.            SD       pred-x     _
+A175_Y		  5025.3      1300.            SD       pred-y     _
+A175_Z		    93.0        50.            SD       pred-z     _
+test175		      1.        10.            SD       pred-test  A175_Z
+END PREDICTION_DATA
+

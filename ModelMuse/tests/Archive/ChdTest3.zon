@@ -1,0 +1,218 @@
+# Zone (ZONE) File created on 12/12/2015 by ModelMuse version 3.6.3.5.
+    18 # NZN
+HK_Par1_Z1 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Upper Aquifer
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z2 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z3 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 2
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z4 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 3
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z5 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 4
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z6 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 5
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z7 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 6
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z8 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Middle Aquifer Layer 7
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par1_Z9 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par1 in Lower Aquifer
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     0     0     0     0     0     1     1
+     1     1     1     1     1     1     1     1     1     1
+     1     1     1     1     1     1     1     1     1     1
+HK_Par2_Z1 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Upper Aquifer
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z2 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 1
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z3 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 2
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z4 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 3
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z5 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 4
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z6 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 5
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z7 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 6
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z8 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Middle Aquifer Layer 7
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+HK_Par2_Z9 # ZONNAM
+INTERNAL 1 (FREE)        5 # Zone array for HK_Par2 in Lower Aquifer
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     1     1     1     1     1     0     0
+     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0

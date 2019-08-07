@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GIS</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">GIS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The GIS functions return values related to location.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="X" styleclass="Normal" translate="true">X</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="X_Prime" styleclass="Normal" translate="true">X_Prime</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Y" styleclass="Normal" translate="true">Y</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Y_Prime" styleclass="Normal" translate="true">Y_Prime</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Z" styleclass="Normal" translate="true">Z</link></li>
+    </list>
+  </body>
+</topic>

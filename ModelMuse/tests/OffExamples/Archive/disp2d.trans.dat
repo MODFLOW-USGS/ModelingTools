@@ -1,0 +1,151 @@
+TITLE
+.      2D HST test problem CXD
+PRINT_INITIAL
+      -boundary_conditions false
+      -components true
+      -conductance true
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print false
+      -HDF_chemistry true
+      -HDF_heads true
+      -HDF_steady_flow_velocities true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -steady_flow_velocities false
+      -wells true
+      -xyz_chemistry false
+      -xyz_components false
+      -xyz_heads false
+      -xyz_steady_flow_velocities false
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 0
+UNITS
+      -time days
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -nonuniform   X    0 1 2 3 4 5 6 7 8 9 10
+             11 12 13 14 15 16 17 18 19 20
+             21 22 23 24 25 26 27 28 29 30
+             31 32 33 34 35 36 37 38 39 40
+             41 42 43 44 45 46 47 48 49 50
+      -nonuniform   Y    0 1 2 3 4 5 6 7 8 9 10
+             11 12 13 14 15 16 17 18 19 20
+             21 22 23 24 25 26 27 28 29 30
+             31 32 33 34 35 36 37 38 39 40
+             41 42 43 44 45 46 47 48 49 50
+      -uniform   Z   0 1 2
+      -chemistry_dimensions XYZ
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 50 50 1
+            -Kx 0.0001157422
+            -Ky 0.0001157422
+            -Kz 0.0001157422
+            -porosity 0.1
+            -specific_storage 0
+            -longitudinal_dispersivity 1
+            -horizontal_dispersivity 0.1
+            -vertical_dispersivity 0.1
+      -zone 0 0 0 50 50 1
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW true
+      -head_tolerance 1E-10
+      -flow_balance_tolerance 1E-8
+      -iterations 100
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion true
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 50 50 1
+            -head 1
+CHEMISTRY_IC
+      -zone 0 0 0 50 50 0.5
+            -solution 1
+      -zone 0 0 0.5 50 0.5 1
+            -solution 1
+      -zone 0 0.5 0.5 0.5 3.5 1
+            -solution 1
+      -zone 0.5 0.5 0.5 3.5 3.5 1
+            -solution 2
+      -zone 3.5 0.5 0.5 50 3.5 1
+            -solution 1
+      -zone 0 3.5 0.5 50 50 1
+            -solution 1
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 10 
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 0 
+      -HDF_chemistry 10 
+      -HDF_heads 10 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 10 
+      -wells 0 
+      -xyz_chemistry 10 
+      -xyz_components 0 
+      -xyz_heads 0 
+      -xyz_velocities 10 
+      -xyz_wells 0 
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 50 50 1
+            -print 1
+      -xyz_chemistry
+      -zone 0 0 0 50 50 1
+            -print 1
+SPECIFIED_HEAD_BC
+      -zone 0.5 0 0 49.5 0.5 1
+            -head
+                  0 X 1.707 0 1.35351 50
+            -associated_solution
+                  0 1
+      -zone 0 0 0 0.5 49.5 1
+            -head
+                  0 Y 1.707 0 1.35351 50
+            -associated_solution
+                  0 1
+      -zone 49.5 0 0 50 49.5 1
+            -head
+                  0 Y 1.35351 0 1 50
+            -associated_solution
+                  0 1
+      -zone 0 49.5 0 50 50 1
+            -head
+                  0 X 1.35351 0 1 50
+            -associated_solution
+                  0 1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 1 days
+            -time_end
+                  10 days
+END

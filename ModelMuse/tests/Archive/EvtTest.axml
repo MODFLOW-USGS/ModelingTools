@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="EvtTest" FileType="bin">
+    <FileName Model_Name="EvtTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="EvtTest" FileType="ancillary">
+    <FileName Model_Name="EvtTest" FileType="ancillary">EvtTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="EvtTest" FileType="Model Input">
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.bas</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.dis</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.evt</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.gsf</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.lpf</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.nam.archive</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.oc</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">EvtTest.pcg</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Input">usgs.EvtTest.reference</FileName>
+  </model>
+  <output Model_Name="EvtTest" FileType="Model Output">
+    <FileName Model_Name="EvtTest" FileType="Model Output">EvtTest.cbc</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Output">EvtTest.fdn</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Output">EvtTest.fhd</FileName>
+    <FileName Model_Name="EvtTest" FileType="Model Output">EvtTest.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,30 @@
+# NAME file for test case tc1
+#
+# NOTE: Backward slashes (\) in pathnames may need to be converted
+#       to forward slashes (/) in some computing environments
+#
+# Output files
+global          11  ..\..\test-data-win\data-transient\tc1.glo
+list            12  ..\..\test-data-win\data-transient\tc1.lst
+#
+# Obs-Sen-Pes process input files
+obs             21  ..\..\test-data-win\data-transient\tc1.obs
+hob             22  ..\..\test-data-win\data-transient\tc1.ohd
+rvob            23  ..\..\test-data-win\data-transient\tc1.orv
+sen             24  ..\..\test-data-win\data-transient\tc1-fwd-der.sen
+#
+# Global input files
+dis             31  ..\..\test-data-win\data-transient\tc1.dis
+zone            32  ..\..\test-data-win\data-used-by-all\tc1.zon
+mult            33  ..\..\test-data-win\data-used-by-all\tc1.mlt
+#
+# Flow process input files
+bas6            41  ..\..\test-data-win\data-transient\tc1.bas
+wel             43  ..\..\test-data-win\data-transient\tc1.wel
+lpf             42  ..\..\test-data-win\data-used-by-all\tc1.lpf
+pcg             44  ..\..\test-data-win\data-used-by-all\tc1.pcg
+oc              45  ..\..\test-data-win\data-used-by-all\tc1.oc
+ghb             46  ..\..\test-data-win\data-used-by-all\tc1.ghb
+riv             47  ..\..\test-data-win\data-used-by-all\tc1.riv
+rch             48  ..\..\test-data-win\data-used-by-all\tc1.rch
+

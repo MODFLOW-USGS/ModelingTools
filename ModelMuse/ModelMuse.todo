@@ -1,0 +1,18 @@
+{TODO : Export to Paraview See https://www.hatarilabs.com/ih-en/basic-example-of-groundwater-modeling-in-modflow-6-and-visualization-with-paraview-and-flopy}
+{TODO -cArchive :
+Create an archive that meets OGW archive policy. This may involve
+modifying where the input and output files are generated.}
+{TODO -cSWR : Plot lateral flow and structure flow spatially similarly to how reach links are plotted.}
+{DONE -cSWR : make it possible to create a structure at a location.}
+{DONE -cSWR : plot stage and other output variables spatially.}
+{TODO -cSWR : Plot stage or other variables along the length of an object or objects.}
+{DONE -cSWR : Make it easy to make connections to nearest objects}
+{TODO -cSWR : when import shapefiles import connections}
+{TODO -cSWR : update import of existing models? time varying reach vs cell. always import as reach}
+{TODO -cSWR : validate tab files when selecting them in the tab files dialog box.}
+{TODO -cSWR : plot tab file data as time series in Tabfiles dialog box.}
+{DONE -cSWR : plot structure locations and connections on grid.}
+{DONE -cSWR : plot cross sections in geometry dialog box.}
+{DONE -cSWR : plot structures tables in structure dialog box.}
+{TODO -cSUTRA : import pressure and/or U from .rst file for initial conditions}
+{TODO -cSUTRA : Create a way to import the coordinates of a fishnet mesh}

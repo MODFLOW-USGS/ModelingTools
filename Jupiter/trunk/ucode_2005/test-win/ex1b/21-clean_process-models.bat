@@ -1,0 +1,13 @@
+cd ..\..\test-data-win\data-transient\
+del *._*
+del *.lst
+del *.glo
+del *.bak
+del out
+cd ..\..\test-data-win\data-adv-preds-ex1b\
+del *._*
+del *.lst
+del *.glo
+del *.bak
+del *.advout
+del out

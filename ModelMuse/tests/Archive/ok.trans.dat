@@ -1,0 +1,342 @@
+TITLE
+.      Central Oklahoma aquifer,
+.      demonstration of PHAST
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -HDF_heads true
+      -HDF_steady_flow_velocities true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -steady_flow_velocities false
+      -wells true
+      -xyz_components false
+      -xyz_heads true
+      -xyz_steady_flow_velocities true
+      -xyz_wells false
+SOLUTE_TRANSPORT false
+UNITS
+      -time years
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/days
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter in
+      -well_flow_rate liter/days
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 90000 16
+      -uniform   Y   0 48000 9
+      -uniform   Z   0 400 5
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 90000 48000 400
+            -Kx 1.373E-5
+            -Ky 1.373E-5
+            -Kz 1.373E-7
+            -porosity 0.22
+            -specific_storage 0
+      -zone 0 0 0 48000 48000 100
+            -active 1
+      -zone 48000 0 0 90000 48000 100
+            -active 0
+      -zone 0 0 100 90000 48000 400
+            -active 1
+FREE_SURFACE_BC true
+STEADY_FLOW true
+      -head_tolerance 0.001
+      -flow_balance_tolerance 0.001
+      -iterations 100
+SOLUTION_METHOD
+      -iterative_solver true
+      -tolerance 1E-10
+      -save_directions 10
+      -maximum_iterations 500
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 90000 48000 400
+            -head 380
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 0 
+      -wells 0 
+      -xyz_components 0 
+      -xyz_heads 0 
+      -xyz_velocities 0 
+      -xyz_wells 2000 years
+      -end_of_period_default false
+LEAKY_BC
+      -zone 0 48000 0 27000 48000 400
+            -face Y
+            -head
+                  0 305
+            -hydraulic_conductivity 1.618E-5
+            -thickness 30000
+FLUX_BC
+      -zone 27000 3000 400 90000 15000 400
+            -face Z
+            -flux
+                  0 -0.0001
+      -zone 33000 15000 400 90000 21000 400
+            -face Z
+            -flux
+                  0 -0.0001
+      -zone 27000 21000 400 90000 45000 400
+            -face Z
+            -flux
+                  0 -0.0001
+SPECIFIED_HEAD_BC
+      -zone 27000 15000 250 33000 21000 400
+            -head
+                  0 348
+RIVER 1 Canadian River
+      point 30000 0 # x and y location of point on river
+            -head
+            0      320
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 36000 0 # x and y location of point on river
+            -head
+            0      315.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 42000 0 # x and y location of point on river
+            -head
+            0      311
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 48000 0 # x and y location of point on river
+            -head
+            0      306.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 54000 0 # x and y location of point on river
+            -head
+            0      302
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 60000 0 # x and y location of point on river
+            -head
+            0      297.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 66000 0 # x and y location of point on river
+            -head
+            0      293
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 72000 0 # x and y location of point on river
+            -head
+            0      288.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 78000 0 # x and y location of point on river
+            -head
+            0      284
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 84000 0 # x and y location of point on river
+            -head
+            0      279.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 90000 0 # x and y location of point on river
+            -head
+            0      275
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+RIVER 2 North Fork River
+      point 30000 36000 # x and y location of point on river
+            -head
+            0      335
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 30000 42000 # x and y location of point on river
+            -head
+            0      327.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 30000 48000 # x and y location of point on river
+            -head
+            0      320
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 36000 48000 # x and y location of point on river
+            -head
+            0      312.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 42000 48000 # x and y location of point on river
+            -head
+            0      305
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 48000 48000 # x and y location of point on river
+            -head
+            0      297.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 54000 48000 # x and y location of point on river
+            -head
+            0      290
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 60000 48000 # x and y location of point on river
+            -head
+            0      282.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 66000 48000 # x and y location of point on river
+            -head
+            0      275
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 72000 48000 # x and y location of point on river
+            -head
+            0      267.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 78000 48000 # x and y location of point on river
+            -head
+            0      260
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 84000 48000 # x and y location of point on river
+            -head
+            0      252.5
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 90000 48000 # x and y location of point on river
+            -head
+            0      245
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+RIVER 3 North Canadian River
+      point 60000 30000 # x and y location of point on river
+            -head
+            0      335
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 66000 28000 # x and y location of point on river
+            -head
+            0      326
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 72000 26000 # x and y location of point on river
+            -head
+            0      317
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 78000 24000 # x and y location of point on river
+            -head
+            0      308
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 84000 22000 # x and y location of point on river
+            -head
+            0      299
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+      point 90000 20000 # x and y location of point on river
+            -head
+            0      290
+            -width 200
+            -depth 1
+            -bed_hydraulic_conductivity 1
+            -bed_thickness 1
+WELL 1 Observation well 1 in arsenic zone
+      12000 36000
+            -diameter 2
+            -elevation 90 110
+            -pumping_rate
+                  0       1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 2000 years
+            -time_end
+                  100000 years
+END

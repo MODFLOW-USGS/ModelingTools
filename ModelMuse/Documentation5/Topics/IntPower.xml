@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">IntPower</title>
+  <keywords>
+    <keyword translate="true">IntPower</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">IntPower</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">IntPower</text><text styleclass="Normal" translate="true">(Base, Exponent) returns Base raised to the Exponent power. Base is a real number or integer. Exponent is an integer. IntPower returns a real number. See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Power" styleclass="Normal" translate="true">Power</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

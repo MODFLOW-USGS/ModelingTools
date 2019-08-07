@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ObservationTest5" FileType="bin">
+    <FileName Model_Name="ObservationTest5" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ObservationTest5" FileType="ancillary">
+    <FileName Model_Name="ObservationTest5" FileType="ancillary">ObservationTest5.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ObservationTest5" FileType="Model Input">
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.bas</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.chd</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.dis</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.drn</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.ghb</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.gsf</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.jtf</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.lpf</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.nam.archive</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.ob_hob</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.oc</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.pcg</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.pval</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">ObservationTest5.riv</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Input">usgs.ObservationTest5.reference</FileName>
+  </model>
+  <output Model_Name="ObservationTest5" FileType="Model Output">
+    <FileName Model_Name="ObservationTest5" FileType="Model Output">ObservationTest5.cbc</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Output">ObservationTest5.fdn</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Output">ObservationTest5.fhd</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Output">ObservationTest5.hob_out</FileName>
+    <FileName Model_Name="ObservationTest5" FileType="Model Output">ObservationTest5.lst</FileName>
+  </output>
+</Model_Archive_List>

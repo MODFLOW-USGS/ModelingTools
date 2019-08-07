@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SWI6-1" FileType="bin">
+    <FileName Model_Name="SWI6-1" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SWI6-1" FileType="ancillary">
+    <FileName Model_Name="SWI6-1" FileType="ancillary">SWI6-1.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SWI6-1" FileType="Model Input">
+    <FileName Model_Name="SWI6-1" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.bas</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.dis</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.ghb</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.gsf</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.lpf</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.nam.archive</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.oc</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.pcg</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.swi</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">SWI6-1.wel</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Input">usgs.SWI6-1.reference</FileName>
+  </model>
+  <output Model_Name="SWI6-1" FileType="Model Output">
+    <FileName Model_Name="SWI6-1" FileType="Model Output">SWI6-1.cbc</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Output">SWI6-1.fdn</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Output">SWI6-1.fhd</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Output">SWI6-1.lst</FileName>
+    <FileName Model_Name="SWI6-1" FileType="Model Output">SWI6-1.zta</FileName>
+  </output>
+</Model_Archive_List>

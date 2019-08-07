@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Assigning Values to Data Sets</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Assigning Values to Data Sets</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse assigns values to data sets using slightly different methods, depending on whether the model is a MODFLOW, SUTRA, or PHAST model. However, in all cases formulas and objects are used to assign the values. Because values for data sets are specified using formulas and objects, the data for a given model are independent of the spatial discretization of the model. Values of a data set are needed when exporting the model input or when coloring the grid with the data set. Values for data sets are recalculated when the data are needed and the values for the data set are out of date. These values become out of date when any of the following occur:</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">The grid or mesh changes.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Any of the formulas used to set values of the data set change.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">The interpolation method for the data set changes.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Any of the objects used to set the value of the data set are edited.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Any of the data sets on which the data set in question depends become out of date.</text></li>
+    </list>
+  </body>
+</topic>

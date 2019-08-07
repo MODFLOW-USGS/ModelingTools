@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.McBug\McBug.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.McBug\McBug.cbc REPLACE
+DIS              12 ..\..\model\model.McBug\McBug.dis OLD
+BAS6             13 ..\..\model\model.McBug\McBug.bas OLD
+OC               39 ..\..\model\model.McBug\McBug.oc OLD
+DATA             37 ..\..\output\output.McBug\McBug.fhd REPLACE
+DATA             38 ..\..\output\output.McBug\McBug.fdn REPLACE
+PCG              18 ..\..\model\model.McBug\McBug.pcg OLD
+LPF              14 ..\..\model\model.McBug\McBug.lpf OLD
+CHD              17 ..\..\model\model.McBug\McBug.chd OLD
+WEL              20 ..\..\model\model.McBug\McBug.wel OLD
+ZONE             15 ..\..\model\model.McBug\McBug.zon OLD
+PVAL             52 ..\..\model\model.McBug\McBug.pval OLD

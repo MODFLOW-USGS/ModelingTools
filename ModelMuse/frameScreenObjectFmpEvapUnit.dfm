@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmpEvap: TframeScreenObjectFmpEvap
+end

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Interpolate</title>
+  <keywords>
+    <keyword translate="true">Interpolate</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Interpolate</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Interpolate</text><text styleclass="Normal" translate="true">(Position, Value1, Distance1, Value2, Distance2). Interpolate returns (Position-Distance1)/(Distance2-Distance1)*(Value2-Value1)+Value1. As its name implies, this is an interpolation between Value1 and Value2 based on where Position is between Distance1 and Distance2. If Position is not between Distance1 and Distance2, Interpolate extrapolates a value. See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MultiInterpolate" styleclass="Normal" translate="true">MultiInterpolate</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Example</text><text styleclass="Normal" translate="true">: Interpolate(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="FractionOfObjectLength" styleclass="Normal" translate="true">FractionOfObjectLength</link><text styleclass="Normal" translate="true">, 0.00015, 0., 0.0002, 1.)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example formula will interpolate along the length of an object. It will assign a value of 0.00015 at the first point and a value of 0.0002 at the last point. Intermediate values will be assigned at intermediate distances along the length of the object. </text></para>
+  </body>
+</topic>

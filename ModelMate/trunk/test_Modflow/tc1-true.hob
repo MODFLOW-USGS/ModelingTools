@@ -1,0 +1,54 @@
+   32    0    0   50  -9999.0                           ITEM 1: NH MOBS MAXM IUHOBSV HOBDRY
+   86400.0                                              ITEM 2: TOMULT    
+h_1.0         1    3    1   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS
+    2                                                   ITEM 5: ITT
+h_1.0         1    0.00     100.225                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS
+h_1.1         3    0.00     100.225                   
+h_1.12        5  272.7713   100.119                    
+h_2.0         1    4    4   -5      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS  
+    2                                                   ITEM 5: ITT                                                                  
+h_2.0         1    0.00     126.938                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS            
+h_2.1         3    0.00     126.904                    
+h_2.2         4    0.00     126.382                   
+h_2.8         5  97.59433   115.357                   
+h_2.12        5  272.7713   112.782                   
+h_3.0         1   10    9   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_3.0         1    0.00     157.146                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS               
+h_3.1         3    0.00     152.786                   
+h_3.12        5  272.7713   114.590                   
+h_4.0         1   13    4   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_4.0         1    0.00     126.938                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS              
+h_4.1         3    0.00     126.886                    
+h_4.12        5  272.7713   112.724                    
+h_5.0         1   14    6   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_5.0         1    0.00     140.863                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS              
+h_5.1         3    0.00     140.763                   
+h_5.12        5  272.7713   119.254                   
+h_6.0         2    4    4   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_6.0         1    0.00     127.149                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS             
+h_6.1         3    0.00     127.111                   
+h_6.12        5  272.7713   112.820                    
+h_7.0         2   10    1   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_7.0         1    0.00     101.235                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS            
+h_7.1         3    0.00     101.233                    
+h_7.12        5  272.7713   100.569                    
+h_8.0         2   10    9   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_8.0         1    0.00     157.133                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS              
+h_8.1         3    0.00     151.685                   
+h_8.12        5  272.7713   114.046                   
+h_9.0         2   10   18   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_9.0         1    0.00     176.946                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS             
+h_9.1         3    0.00     176.850                   
+h_9.12        5  272.7713   138.614                   
+h_0.0         2   18    6   -3      0.0  0.0  0.0  0.0  ITEM 3: OBSNAM LAY ROW COL IREFSP TOFFSET ROFF COFF HOBS 
+    2                                                   ITEM 5: ITT                                                                  
+h_0.0         1    0.00     140.972                     ITEM 6: OBSNAM IREFSP TOFFSET HOBS              
+h_0.1         3    0.00     140.956                    
+h_0.12        5  272.7713   121.147                       

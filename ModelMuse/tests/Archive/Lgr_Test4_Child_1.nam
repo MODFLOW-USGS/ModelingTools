@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST           1011 Lgr_Test4_Child_1.lst REPLACE
+DATA(BINARY)   1009 Lgr_Test4_Child_1.cbc REPLACE
+DIS            1012 Lgr_Test4_Child_1.dis OLD
+BAS6           1013 Lgr_Test4_Child_1.bas OLD
+OC             1039 Lgr_Test4_Child_1.oc OLD
+DATA           1037 Lgr_Test4_Child_1.fhd REPLACE
+DATA           1038 Lgr_Test4_Child_1.fdn REPLACE
+PCG            1018 Lgr_Test4_Child_1.pcg OLD
+BCF6           1064 Lgr_Test4_Child_1.bcf OLD
+CHD            1017 Lgr_Test4_Child_1.chd OLD
+WEL            1020 Lgr_Test4_Child_1.wel OLD
+DRN            1022 Lgr_Test4_Child_1.drn OLD
+RCH            1024 Lgr_Test4_Child_1.rch OLD
+HFB6           1043 Lgr_Test4_Child_1.hfb OLD

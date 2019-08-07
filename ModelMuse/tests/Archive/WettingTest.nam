@@ -1,0 +1,11 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 WettingTest.lst REPLACE
+DATA(BINARY)      9 WettingTest.cbc REPLACE
+DIS              12 WettingTest.dis OLD
+BAS6             13 WettingTest.bas OLD
+OC               39 WettingTest.oc OLD
+DATA             37 WettingTest.fhd REPLACE
+DATA             38 WettingTest.fdn REPLACE
+PCG              18 WettingTest.pcg OLD
+LPF              14 WettingTest.lpf OLD
+CHD              17 WettingTest.chd OLD

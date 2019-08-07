@@ -1,0 +1,17 @@
+# HFB: Horizontal Flow Barrier package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Test problem from USGS Techniques and Methods 6 A-16.  Cells 1,10,14 and
+# 3,6,12 given a large transmissivity, and HFB is used to cause the
+# transmissivity to be essentially the same as before.
+# For layer 1, K is .001.  The barrier width will represent half a cell
+# (2500 ft), so HYDCHR=.001/2500.
+# For layer 3, K is .0002, so HYDCHR is .0002/2500.
+     0     0     8 # Data set 1: NPHFB MXFB NHFBNP
+     1    10    15    10    14  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     1    10    14    10    13  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     1    11    14    10    14  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     1    10    14     9    14  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6    13     6    12  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6    12     6    11  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     7    12     6    12  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6    12     5    12  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     0 # Data Set 5: NACTHFB

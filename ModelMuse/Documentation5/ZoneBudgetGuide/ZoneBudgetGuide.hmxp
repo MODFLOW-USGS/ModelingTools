@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false">
+  <config>
+    <namespaces/>
+    <helpwindows>
+      <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
+        <caption translate="true">&lt;%TITLE%&gt;</caption>
+        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#F0F0F0" textcolor="#FFFFFF"/>
+        <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
+          <user-button name="jump1">
+            <caption translate="true">jump1</caption>
+          </user-button>
+          <user-button name="jump2">
+            <caption translate="true">jump2</caption>
+          </user-button>
+        </window-options-chm>
+      </helpwindow>
+    </helpwindows>
+    <styleclasses>
+      <styleclass name="Code Example" shortcut="0">
+        <style-set media="screen" type="para">background-color:#ccffff; white-space:nowrap; page-break-inside:avoid; border:none;</style-set>
+        <style-set media="screen" type="text">font-family:'Courier New'; font-size:12pt;</style-set>
+      </styleclass>
+      <styleclass name="Courier Fixed" shortcut="116">
+        <style-set media="screen" type="text">font-family:'Courier New'; font-size:9pt; color:#000000;</style-set>
+      </styleclass>
+      <styleclass name="New Materials" parentclass="Courier Fixed" shortcut="0">
+        <style-set media="screen" type="text">font-size:12pt; font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Normal" shortcut="115">
+        <style-set media="screen" type="para">text-align:left; text-indent:0px; margin-right:0px; margin-bottom:6px; margin-left:0px;</style-set>
+        <style-set media="screen" type="text">font-family:'Times New Roman'; font-size:12pt; color:#000000;</style-set>
+      </styleclass>
+      <styleclass name="Citation" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+        <style-set media="screen" type="text">font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="Comment" parentclass="Normal" shortcut="0"/>
+      <styleclass name="Heading1" parentclass="Normal" shortcut="114">
+        <style-set media="screen" type="para">margin-top:12px; margin-bottom:6px;</style-set>
+        <style-set media="screen" type="text">font-size:14pt; font-weight:bold; color:#000000;</style-set>
+      </styleclass>
+      <styleclass name="Heading2_atoc_" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">margin-top:6px; border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Heading3_atocs_" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold; font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="Image Caption" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="text">font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Indented bullet" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">margin-left:28px; border:none;</style-set>
+      </styleclass>
+      <styleclass name="Keywords" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold; font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="New Style" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+      </styleclass>
+      <styleclass name="Notes" parentclass="Normal" shortcut="0"/>
+      <styleclass name="Table Header" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">text-align:center; border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold;</style-set>
+      </styleclass>
+      <tablestyleclass name="Default">
+        <style-set media="screen">width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;</style-set>
+      </tablestyleclass>
+    </styleclasses>
+    <config-group name="project">
+      <config-value name="title">ZoneBudget Guid</config-value>
+      <config-value name="author" translate="true">Enter your company name</config-value>
+      <config-value name="copyright" translate="true">© &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
+      <config-value name="versionmajor">1</config-value>
+      <config-value name="versionminor">0</config-value>
+      <config-value name="versionbuild">0</config-value>
+      <config-value name="lcid">en-us</config-value>
+      <config-value name="charset">ANSI_CHARSET</config-value>
+      <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
+      <config-value name="autohelpstart">0</config-value>
+      <config-value name="autohelpincrement">1</config-value>
+      <config-value name="autohelpanchor">0</config-value>
+      <config-value name="searchpath">.\;..\ModpathGuide\</config-value>
+      <config-group name="custombuilds">
+        <config-value name="demo">Demo Build</config-value>
+        <config-value name="user1">User defined 1</config-value>
+        <config-value name="user2">User defined 2</config-value>
+        <config-value name="user3">User defined 3</config-value>
+      </config-group>
+      <config-value name="imageshortcuts_includebaggage">1</config-value>
+      <config-value name="make0include">CHM</config-value>
+      <config-value name="make0status">*</config-value>
+    </config-group>
+    <config-group name="user">
+      <config-group name="rbwinst-pr">
+        <config-group name="project">
+          <config-value name="lastexport">0</config-value>
+        </config-group>
+      </config-group>
+    </config-group>
+    <config-group name="chm">
+      <config-value name="outputfile">ZoneBudgetGuide.chm</config-value>
+      <config-value name="deletetemp">1</config-value>
+    </config-group>
+    <variables>
+      <variable id="CNSTNT" type="text" translate="true">CNSTNT—is a real-number constant for U2DREL and U1DREL, and an integer constant for U2DINT. If the array is being defined as a constant, CNSTNT is the constant value. If individual elements of the array are being read, the values are multiplied by CNSTNT after they are read. When CNSTNT is used as a multiplier and specified as 0, it is changed to 1.</variable>
+      <variable id="EXPLANATIONOFVARIABLES" type="text" translate="true">Explanation of variables</variable>
+      <variable id="FB_BODY" type="text" translate="true">Enter value</variable>
+      <variable id="FB_TO" type="text" translate="true">rbwinst@usgs.gov</variable>
+      <variable id="FB_TONOJS" type="text" translate="true">rbwinst@usgs.gov</variable>
+      <variable id="HELP_URL" type="text" translate="true">http://water.usgs.gov/nrp/gwsoftware/modflow2000/MFDOC/index.html</variable>
+      <variable id="MNWFILENAME" type="text" translate="true">filename = is the name of an auxiliary output file.</variable>
+      <variable id="NOTES" type="text" translate="true">Notes</variable>
+    </variables>
+    <helpcontext-numbers/>
+  </config>
+  <xi:include parse="xml" href="Maps/table_of_contents.xml"/>
+  <project-files>
+    <file href="Topics/*.xml" build="ALL" filetype="topic"/>
+    <file href="Baggage/*.*" build="ALL" filetype="baggage"/>
+  </project-files>
+</helpproject>

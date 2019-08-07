@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Delete Image Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Delete Image Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Delete Image</text><text styleclass="Normal" translate="true"> dialog box is displayed when the user selects &quot;Edit|Delete Image&quot; after having imported more than one image into the ModelMuse file. The </text><text styleclass="Strong" translate="true">Delete Image</text><text styleclass="Normal" translate="true"> dialog box displays a list of images that have been imported with a checkbox next to each of them. When the user clicks the </text><text styleclass="Strong" translate="true">OK</text><text styleclass="Normal" translate="true"> button, all the images with check marks in their corresponding checkbox will be deleted.</text></para>
+  </body>
+</topic>

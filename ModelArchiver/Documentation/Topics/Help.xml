@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Help</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Help</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Help menu has a single entry: &quot;Help Contents&quot;. Selecting it will open the default web browser to display the first page of the help. Another way to access help for the main form is to press the F1 button on the keyboard. Doing so will open the default web browser with help on the active pane of the main ModelArchiver window.</text></para>
+  </body>
+</topic>

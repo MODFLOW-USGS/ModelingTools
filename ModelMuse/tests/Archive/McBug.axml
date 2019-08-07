@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="McBug" FileType="bin">
+    <FileName Model_Name="McBug" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="McBug" FileType="ancillary">
+    <FileName Model_Name="McBug" FileType="ancillary">McBug.gpt</FileName>
+  </ancillary>
+  <model Model_Name="McBug" FileType="Model Input">
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.bas</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.chd</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.dis</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.gsf</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.jtf</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.lpf</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.nam.archive</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.oc</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.pcg</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.pval</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.wel</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">McBug.zon</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="McBug" FileType="Model Input">usgs.McBug.reference</FileName>
+  </model>
+  <output Model_Name="McBug" FileType="Model Output">
+    <FileName Model_Name="McBug" FileType="Model Output">McBug.cbc</FileName>
+    <FileName Model_Name="McBug" FileType="Model Output">McBug.fdn</FileName>
+    <FileName Model_Name="McBug" FileType="Model Output">McBug.fhd</FileName>
+    <FileName Model_Name="McBug" FileType="Model Output">McBug.lst</FileName>
+  </output>
+</Model_Archive_List>

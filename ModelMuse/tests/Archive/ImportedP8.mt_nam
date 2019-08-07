@@ -1,0 +1,11 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportedP8.mls
+FTL 10 ImportedP8.ftl
+DATA 17 ImportedP8.cnf
+BTN 1 ImportedP8.btn
+DATA(BINARY) 201 ImportedP8_Comp1.ucn
+DATA 601 ImportedP8_Comp1._mas
+ADV 2 ImportedP8.adv
+DSP 3 ImportedP8.dsp
+SSM 4 ImportedP8.ssm
+GCG 9 ImportedP8.gcg

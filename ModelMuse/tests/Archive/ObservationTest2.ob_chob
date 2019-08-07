@@ -1,0 +1,12 @@
+# CHOB: Specified-Head Flow Observation package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+3 3 3 51 # Data Set 1: NQCH NQCCH NQTCH IUCHOBSV
+1 # Data Set 2: TOMULTCH
+1 1 # Data Set 3: NQOBCH NQCLCH
+Chob1_1 3  0.000000000000E+000  1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment 1
+1 1 1  1.000000000000E+000  # Data Set 5: Layer Row Column Factor
+1 1 # Data Set 3: NQOBCH NQCLCH
+Chob2_1 2  5.000000000000E-002  1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment2
+1 1 4  1.000000000000E+000  # Data Set 5: Layer Row Column Factor
+1 1 # Data Set 3: NQOBCH NQCLCH
+Chob3_1 3  5.000000000000E-002 -1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment 3
+1 4 1  1.000000000000E+000  # Data Set 5: Layer Row Column Factor

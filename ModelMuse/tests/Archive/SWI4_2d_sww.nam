@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 SWI4_2d_sww.lst REPLACE
+DATA(BINARY)      9 SWI4_2d_sww.cbc REPLACE
+DIS              12 SWI4_2d_sww.dis OLD
+BAS6             13 SWI4_2d_sww.bas OLD
+OC               39 SWI4_2d_sww.oc OLD
+DATA             37 SWI4_2d_sww.fhd REPLACE
+DATA             38 SWI4_2d_sww.fdn REPLACE
+PCG              18 SWI4_2d_sww.pcg OLD
+LPF              14 SWI4_2d_sww.lpf OLD
+GHB              19 SWI4_2d_sww.ghb OLD
+WEL              20 SWI4_2d_sww.wel OLD
+SWI2            168 SWI4_2d_sww.swi OLD
+DATA(BINARY)    169 SWI4_2d_sww.swi_obs REPLACE
+DATA(BINARY)    170 SWI4_2d_sww.zta REPLACE

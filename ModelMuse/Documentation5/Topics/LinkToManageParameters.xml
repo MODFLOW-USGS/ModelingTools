@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LinkToManageParameters</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LinkToManageParameters</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Parameters can also be edited in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Parameters_Dialog_Box" styleclass="Strong" translate="true">Manage Parameters</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

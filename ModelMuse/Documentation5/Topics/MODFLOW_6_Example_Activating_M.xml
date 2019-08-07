@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Example: Activating MODPATH</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Activating MODPATH</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next we will activate MODPATH and use it to visualize flow in our model.</text></para>
+    <list id="4" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Model|MODFLOW Packages and Programs&quot; and activate MODPATH. Be sure that MODPATH version 7 and Pathlilnes are both selected.</text><br/><image src="Modflow6ExampleModpath7Activation.bmp" scale="60.00%" width="470" height="352" styleclass="Image Caption"><title translate="true">Activating MODPATH</title><caption translate="true"><![CDATA[Activating MODPATH]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">On the Version 6 &amp; 7 options tab, set StopOption to Stop at termination points.</text><br/><image src="Modflow6ExampleModpath7StopOption.bmp" scale="60.00%" width="470" height="352" styleclass="Image Caption"><title translate="true">StopOption</title><caption translate="true"><![CDATA[StopOption ]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box.</text></li>
+    </list>
+  </body>
+</topic>

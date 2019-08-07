@@ -1,0 +1,5 @@
+# SSM: Sink and Source Mixing package file created on 9/21/2017 by ModelMuse version 3.9.0.15.
+       128         0 # Data Set 2: MXSS ISSGOUT
+         2 # Data set 7: NSS; Stress Period 1
+         1        13        29      1000         2      1000 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         1        13        30      1000         2      1000 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]

@@ -1,0 +1,13 @@
+# Name File for MODFLOW created on 5/18/2019 by ModelMuse Version 3.10.0.60
+LIST             11 ..\..\output\output.MnwSsmScreenTest\MnwSsmScreenTest.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.MnwSsmScreenTest\MnwSsmScreenTest.cbc REPLACE
+DIS              12 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.dis OLD
+BAS6             13 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.bas OLD
+OC               39 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.oc OLD
+DATA             37 ..\..\output\output.MnwSsmScreenTest\MnwSsmScreenTest.fhd REPLACE
+DATA             38 ..\..\output\output.MnwSsmScreenTest\MnwSsmScreenTest.fdn REPLACE
+PCG              18 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.pcg OLD
+LPF              14 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.lpf OLD
+LMT6            135 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.lmt OLD
+CHD              17 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.chd OLD
+MNW2             59 ..\..\model\model.MnwSsmScreenTest\MnwSsmScreenTest.mnw2 OLD

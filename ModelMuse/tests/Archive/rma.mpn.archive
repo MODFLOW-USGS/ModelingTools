@@ -1,0 +1,9 @@
+LIST 11 ..\..\output\output.rma_Modpath\rma.mplst
+MAIN 12 rma.mpm
+DIS 13 ..\..\model\model.rma\rma.dis
+ENDPOINT 15 ..\..\output\output.rma_Modpath\rma.end
+PATHLINE 16 ..\..\output\output.rma_Modpath\rma.path
+LOCATIONS 19 rma.strt
+BUDGET 20 ..\..\output\output.rma\rma.cbc
+HEAD 21 ..\..\output\output.rma\rma.fhd
+DRAWDOWN 23 ..\..\output\output.rma\rma.fdn

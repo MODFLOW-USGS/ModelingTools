@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Update Paths</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Update Paths</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Update paths</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In some cases, the paths for your models might change either because you have moved or renamed the model directory or because the models are on a removable or network drive. If possible, it is best to keep the ModelArchiver file on the same drive as the models because the paths to the models are stored in the ModelArchiver file relative to the location of the ModelArchiver file itself. However, you can update the paths if you need to do so.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Clicking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Update paths</text><text styleclass="Normal" translate="true"> button will allow you to change the name of any folder in which your models are stored. In the Update Paths dialog box, specify the old and new names for the directory you wish to change and click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

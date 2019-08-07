@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Import/Edit Image Dialog Box</title>
+  <keywords>
+    <keyword translate="true">bitmap</keyword>
+    <keyword translate="true">bmp</keyword>
+    <keyword translate="true">jpeg</keyword>
+    <keyword translate="true">jpg</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Import/Edit Image Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It is often useful to display an image in the background when working with a model. To import an image, the user first selects </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Import|Image... </text><text styleclass="Normal" translate="true"> The same dialog box can be displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit|Edit Images... </text><text styleclass="Normal" translate="true"> The user clicks the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Select Image</text><text styleclass="Normal" translate="true"> button to select the image to import. If a World (*.wld) file with the same file name as the selected image exists, it will be read and used to specify the location of the image. The user may also click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Import World File</text><text styleclass="Normal" translate="true"> button to select a World file to read. There are at least two different world file formats. They are described at the following URLs:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Raster world file: </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://webhelp.esri.com/arcgisdesktop/9.3/index.cfm?id=3046&amp;pid=3034&amp;topicname=World_files_for_raster_datasets" target="_blank" styleclass="Normal" translate="true">http://webhelp.esri.com/arcgisdesktop/9.3/index.cfm?id=3046&amp;pid=3034&amp;topicname=World_files_for_raster_datasets</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CAD world file: </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://support.esri.com/index.cfm?fa=knowledgebase.techarticles.articleShow&amp;d=16106" target="_blank" styleclass="Normal" translate="true">http://support.esri.com/index.cfm?fa=knowledgebase.techarticles.articleShow&amp;d=16106</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can also specify the location of the image without using a World file. To specify the location of the image, the user clicks on the image two or more times. &#160;For each point the user clicks, a dialog box will appear in which the user must specify the real world locations of the pixels that were clicked. The data will be entered in the table to the left of the image. To delete one of these points, delete one or more of the values for the point. If any of the values for a point is missing, the point will be ignored. The user must enter at least two points before the image can be imported. The user also must specify a name for the image and whether the image will be visible from the top, front, or side of the model. By default, the image will be visible; however, the user can hide it by unchecking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Visible</text><text styleclass="Normal" translate="true"> checkbox.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Images can be in bmp, jpeg, png, emf, wmf and a variety of other formats.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the United States, one convenient source of air photo and map images is the National Map https://www.usgs.gov/core-science-systems/national-geospatial-program/national-map</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Bitmaps_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Show or Hide Images</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

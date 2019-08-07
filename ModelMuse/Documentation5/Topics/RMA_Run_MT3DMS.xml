@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Run MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Run MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">We are now almost ready to run MT3DMS. The one thing we have to do first is to run MODFLOW again. When MODFLOW is run this time, it will create a flow-transport link file. MT3DMS uses this file as part of its input. To run MODFLOW, select </text><text styleclass="Strong" translate="true">File|Export|MODFLOW Input Files </text><text styleclass="Normal" translate="true">or click the </text><text styleclass="Strong" translate="true">Run MODFLOW</text><text styleclass="Normal" translate="true"> button </text><image src="RunModflowButton.png" scale="100.00%" styleclass="Normal"><title translate="true">Run MODFLOW button</title></image><text styleclass="Normal" translate="true"> and save the MODFLOW input files. When MODFLOW has finished running, select </text><text styleclass="Strong" translate="true">File|Export|MT3DMS Input Files</text><text styleclass="Normal" translate="true"> or click the down arrow next to the </text><text styleclass="Strong" translate="true">Run MODFLOW</text><text styleclass="Normal" translate="true"> button and select </text><text styleclass="Strong" translate="true">Export MT3DMS Input Files.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma5Run.png" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

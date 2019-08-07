@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ChdTest2" FileType="bin">
+    <FileName Model_Name="ChdTest2" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ChdTest2" FileType="ancillary">
+    <FileName Model_Name="ChdTest2" FileType="ancillary">ChdTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ChdTest2" FileType="Model Input">
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.bas</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.chd</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.dis</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.gsf</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.jtf</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.lpf</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.nam.archive</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.oc</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.pcg</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">ChdTest2.pval</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Input">usgs.ChdTest2.reference</FileName>
+  </model>
+  <output Model_Name="ChdTest2" FileType="Model Output">
+    <FileName Model_Name="ChdTest2" FileType="Model Output">ChdTest2.cbc</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Output">ChdTest2.fdn</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Output">ChdTest2.fhd</FileName>
+    <FileName Model_Name="ChdTest2" FileType="Model Output">ChdTest2.lst</FileName>
+  </output>
+</Model_Archive_List>

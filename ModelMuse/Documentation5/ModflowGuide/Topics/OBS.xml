@@ -1,0 +1,442 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">OBS - Input File For All Observations</title>
+  <keywords>
+    <keyword translate="true">ALLFILES</keyword>
+    <keyword translate="true">ISCALS</keyword>
+    <keyword translate="true">OBS</keyword>
+    <keyword translate="true">OUTNAM</keyword>
+    <keyword translate="true">Text</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">OBS - Input File For All Observations</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OBS</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This short input file contains information applicable to all observations, and needs to be included in the name file using file type OBS if any of the input file types for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation-Process</link><text styleclass="Normal" translate="true"> packages are included.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr00184" target="_blank" styleclass="Citation" translate="true">Hill, M.C., Banta, E.R., Harbaugh, A.W., and Anderman, E.R., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to the Observation, Sensitivity, and Parameter-Estimation Processes and three post-processing programs: U.S. Geological Survey Open-File Report 00-184, 210 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="underscore.txt" styleclass="Normal" translate="true">underscore.txt</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation Process</link><text styleclass="Normal" translate="true"> input files</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This short input file contains information applicable to all observations, and needs to be included in the name file using file type OBS if any of the input file types for Observation-Process packages are included.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for the Observation Process for all observations is read from a file listed in the name file with &quot;OBS&quot; as the file type (table 2).</text></para>
+    <para styleclass="Normal"><table rowcount="2" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional and can include as many lines as desired. Each line needs to begin with the “#” character in the first column.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character string (maximum of 79 characters) that starts in column 2. Any characters can be included in Text. The “#” character needs to be in column 1. Text is printed when the file is read and provides an opportunity for the user to include information about the model both in the input file and the associated output file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OUTNAM ISCALS [</text><text styleclass="Keywords" translate="true">ALLFILES</text><text styleclass="Normal" translate="true">] (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OUTNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">OUTNAM—a string of one to 78 nonblank characters. OUTNAM indicates whether or not the output files listed in tables 5 and 6 are produced by MODFLOW-2000 (table 5) or its post-processing programs RESAN-2000, YCINT-2000, or BEALE-2000 (table 6). If “</text><text styleclass="Keywords" translate="true">NONE</text><text styleclass="Normal" translate="true">” is specified (can be any combination of upper and lower case), none of the output files are created. Otherwise, the output files are named using OUTNAM as the base followed by a period and the two- or three-character extensions listed in tables 5 and 6. The specification of lower and upper case in OUTNAM is preserved in generating the file-name base. Extensions for files that are intended for use by a post-processor, graphics program, or other program start with an underscore ( _ ); extensions for files that are intended to be read by the user start with a number sign (#). OUTNAM can include a path; constraints imposed by the operating system regarding file names and paths should be considered when specifying OUTNAM. For compatibility with the post-processing programs, the OUTNAM string should not be changed between the separate model runs used to generate the files to be read by the post processors (see header of table 5 and the discussion in chapter 7).</text></para>
+                      <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Table 5: Files produced by MODFLOW-2000 when OUTNAM is not “NONE” that are designed for use by plotting routines and other programs.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">[Files are named as OUTNAM followed by a period and an extension that begins with an underscore. For example, if OUTNAM is “gw”, file names would be “gw._os” and so on. The files can be used as described later in this report and in table 16. Shading indicates files that probably require special simulations to be produced properly.]</text></para>
+                      <para style="text-align:center;"></para>
+                      <para style="text-align:center; margin-left:1px;"><table rowcount="26" colcount="2" style="width:100%; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Extension</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Table Header" translate="true">File contents</text><text styleclass="Normal" translate="true"> (The file contents are in the order listed. An * indicates that for each observation the listed items are followed by the OBSNAM and PLOT-SYMBOL. The files can be read as space-delimited free format.)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td colspan="2" style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Observation Process is active:</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_os</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Unweighted simulated equivalents and observations *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_ww</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Weighted simulated equivalents and observations *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_ws</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Weighted simulated equivalents and residuals *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_r</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Unweighted residuals *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_w</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Weighted residuals *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_nm</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Weighted residuals and probability plotting positions *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td colspan="2" style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Sensitivity Process also is active, the following files also are produced:</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_sc</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Composite scaled sensitivity for each parameter, preceded by the PARNAM.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_sd</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Dimensionless scaled sensitivities for each parameter, preceded by OBSNAM and PLOT-SYMBOL. Repeated for each observation.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_s1</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">One-percent scaled sensitivities for each parameter, preceded by OBSNAM and PLOT-SYMBOL. Repeated for each observation.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td colspan="2" style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Parameter-Estimation Process also is active, the following files also are produced:</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_ss</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Sum of squared weighted residuals for each type of observation and prior information and the total; values are listed for all parameter-estimation iterations.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_pa</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Parameter values for each parameter-estimation iteration, formatted for easy production of graphs showing parameter values for each iteration. This file is not produced until the end of the program; to access parameter values as each iteration is performed, use the _b file described below.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_b</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Information from each parameter-estimation iteration, including parameter values formatted for easy substitution into the Sensitivity Process input file, sum of squared weighted residuals, maximum calculated fractional parameter change and the associated parameter number (as listed in the SEN file), and value of the Marquardt parameter.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_rs</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Input file for post-processing program RESAN-2000 (see chapter 7)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle; background-color:#c0c0c0;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_y0</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Input file for post-processing program YCINT-2000 (see chapter 7). Produced when IYCFLG = 0.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle; background-color:#c0c0c0;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_y1</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Input file for post-processing program YCINT-2000 (see chapter 7). Produced when IYCFLG = 1.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle; background-color:#c0c0c0;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_y2</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Optional input file for post-processing program YCINT-2000 (see chapter 7). Produced when IYCFLG = 2.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_b1</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">One of two input files for post-processing program BEALE-2000 (see chapter 7). Produced when IBEFLG = 1.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle; background-color:#c0c0c0;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_b2</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The second input file for the post-processing program BEALE-2000 (see chapter 7). Produced when IBEFLG = 2.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_pc</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">This file contains a record for each estimated parameter listing: parameter name, LN, optimized parameter value, BL, BU, lower 95-percent confidence limit on the parameter value, and upper 95-percent confidence limit on the parameter value.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_wt</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">This file contains observation weights, or the full weight matrix if any of the observation types is entered with a variance-covariance matrix (WTQ in the Observation Process input instructions of USGS Open-File Rep ort 00-184).The first line of this file indicates whether the rest of the file contains a vector of weights or a correlated-weight matrix. &#160;In either case, the ordering of weights is such that weights on all head observations are listed first, followed by weights on observations of the Drain, River, General Head Boundary, and Streamflow Routing (STR) Packages; observations of constant-head flow (Basic Package); and observations of the Drain-Return and Advective-Transport Packages.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The format of this file is described in </text><link displaytype="text" defaultstyle="true" type="filelink" href="underscore.txt" styleclass="Normal" translate="true">underscore.txt</link><text styleclass="Normal" translate="true">.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_su</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">This file contains the sensitivity of the simulated equivalent of each observation to each parameter.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The format of this file is described in </text><link displaytype="text" defaultstyle="true" type="filelink" href="underscore.txt" styleclass="Normal" translate="true">underscore.txt</link><text styleclass="Normal" translate="true">.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">._mc</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">This file contains the matrix of parameter correlations. </text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The format of this file is described in </text><link displaytype="text" defaultstyle="true" type="filelink" href="underscore.txt" styleclass="Normal" translate="true">underscore.txt</link><text styleclass="Normal" translate="true">.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Table Header"></para>
+                      <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Table 6: Files produced by the MODFLOW-2000 post-processors RESAN-2000, YCINT-2000, and BEALE-2000 (chapter 7) when OUTNAM is not “NONE”.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">[File names are the base specified by OUTNAM followed by a period and an extension. For example, if OUTNAM is defined as “gwmodel,” the file names would be gwmodel._rd, gwmodel.#yc, and so on. Files with extensions that start with an underscore (_) are designed to facilitate plotting; files with extensions that start with a # are designed to be read by the modeler. Use these files as described later in this report and in table 16.]</text></para>
+                      <para style="text-align:center; margin-left:1px;"><table rowcount="13" colcount="2" style="width:100%; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Extension</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Table Header" translate="true">File contents</text><text styleclass="Normal" translate="true"> (The ‘_’ files contain the items listed in the order listed. An * indicates that for each observation the listed items are followed by the OBSNAM and PLOT-SYMBOL. All ‘_’ files can be read as space-delimited free format.)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td colspan="2" style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the post-processing program RESANP is executed:</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">#rs</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Main output file.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_rd</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Ordered uncorrelated deviates and probability plotting positions. *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_rg</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Ordered correlated deviates and probability plotting positions. *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_rc</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Cook’s D statistic for each observation. *</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">See also </text><link displaytype="text" defaultstyle="true" type="filelink" href="underscore.txt" styleclass="Normal" translate="true">underscore.txt</link><text styleclass="Normal" translate="true">.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_rb</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">DFBeta statistics for each parameter, preceded by OBSNAM and PLOT-SYMBOL. Repeated for each observation.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">See also </text><link displaytype="text" defaultstyle="true" type="filelink" href="underscore.txt" styleclass="Normal" translate="true">underscore.txt</link><text styleclass="Normal" translate="true">.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td colspan="2" style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the post-processing program YCINT-2000 is executed:</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">#yc</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">For the listed predictions or differences, this file contains the linear, 95-percent confidence and prediction intervals. Individual and simultaneous intervals are included.</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_yp</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Confidence and prediction intervals on predictions. Title lines describing the type of interval are followed by data lines for each prediction. Data lines include lower limit, upper limit, prediction, and standard deviation. *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">_yd</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Confidence and prediction intervals on differences. Title lines describing the type of interval are followed by data lines for each difference. Data lines include lower limit, upper limit, difference, and standard deviation. *</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td colspan="2" style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the post-processing program BEALE-2000 is executed:</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">#be</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The modified Beale’s measure statistic and auxiliary information.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISCALS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISCALS—Controls printing of the observation-sensitivity tables in the primary output files. Creation of the _sc, _sd, and _s1 files is not affected by ISCALS. (ISCALS typically is specified as 1, 2, or 3. Unscaled sensitivities are rarely of interest.) The different types of sensitivities are discussed in Hill (1998, p. 14-16, 33, 38-40, 62-64).</text></para>
+                      <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISCALS &lt; 0, No observation-sensitivity tables are printed, but a table showing composite scaled sensitivity for each parameter is printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISCALS = 0, Unscaled sensitivities are printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISCALS = 1, Dimensionless scaled sensitivities are printed. Sensitivities are scaled by multiplying by the parameter value and the square-root of the weight, which produces dimensionless numbers. If the parameter value is less than BSCAL, which is read from the Sensitivity Process input file for each parameter listed there, the parameter value is replaced by BSCAL for the scaling. The resulting values are dimensionless and equal the number of observation error standard deviations that the simulated value would change given a one-percent change in the parameter value, times 100. Composite scaled sensitivities also are printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISCALS = 2, One-percent sensitivities are printed. Sensitivities are scaled by multiplying by the parameter value and dividing by 100. If the parameter value is less than BSCAL, which is read from the Sensitivity Process input file for each parameter listed there, the parameter value is replaced by BSCAL for the scaling. The one-percent scaled sensitivities are designed to have the same dimensions as the observations and to equal the amount the associated simulated value will change given a one-percent change in the parameter value.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISCALS = 3, Both dimensionless and one-percent sensitivities are printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[ALLFILES]]></caption></toggle></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">ALLFILES</text><text styleclass="Normal" translate="true"> If &quot;</text><text styleclass="Keywords" translate="true">ALLFILES</text><text styleclass="Normal" translate="true">&quot; is specified following the ISCALS value, and if the value specified for OUTNAM is not &quot;</text><text styleclass="Keywords" translate="true">NONE</text><text styleclass="Normal" translate="true">&quot;, up to three additional output files are generated with the filename base defined by OUTNAM. &#160;The &quot;underscore.txt&quot; file in the doc directory describes the new files.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

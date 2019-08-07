@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specified Head</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Specified Head</text></para>
+    </header>
+    <para styleclass="Normal"><var styleclass="Normal">&lt;%SPECHEADDESC%&gt;</var><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD_Time_Variant_Specified_Head" styleclass="Normal" translate="true">Time-Variant Specified-Head (CHD)</link><text styleclass="Normal" translate="true"> package allows the user to specify the heads in cells. The specified heads can vary with time and parameters can be used to specify the specified-head. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB_Flow_and_Head_Boundary_Pac" styleclass="Normal" translate="true">Flow and Head Boundary (FHB)</link><text styleclass="Normal" translate="true"> package allows the user to specify heads and flow rates in cells that vary in time in a manner independent of the stress periods.</text></para>
+  </body>
+</topic>

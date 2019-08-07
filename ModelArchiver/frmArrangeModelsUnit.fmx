@@ -1,0 +1,101 @@
+object frmArrangeModels: TfrmArrangeModels
+  Left = 0
+  Top = 0
+  Caption = 'Arrange Models'
+  ClientHeight = 480
+  ClientWidth = 500
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnKeyUp = FormKeyUp
+  DesignerMasterStyle = 0
+  object pnl5: TPanel
+    Align = Bottom
+    Position.Y = 433.000000000000000000
+    Size.Width = 500.000000000000000000
+    Size.Height = 47.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object btnOk: TButton
+      Anchors = [akTop, akRight]
+      ModalResult = 1
+      Position.X = 323.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'OK'
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btnOkClick
+    end
+    object btnCancel: TButton
+      Anchors = [akTop, akRight]
+      ModalResult = 2
+      Position.X = 411.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Cancel'
+      TextSettings.Font.Size = 16.000000000000000000
+    end
+    object btnAlphabetize: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 2
+      Text = 'Alphabetize'
+      OnClick = btnAlphabetizeClick
+    end
+    object btnHelp: TButton
+      HelpContext = 210
+      HelpKeyword = 'arrange_models_form.htm'
+      HelpType = htKeyword
+      Position.X = 232.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 3
+      Text = 'Help'
+      OnClick = btnHelpClick
+    end
+  end
+  object lbModelNames: TListBox
+    Align = Client
+    Size.Width = 500.000000000000000000
+    Size.Height = 339.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    OnMouseDown = lbModelNamesMouseDown
+    OnMouseUp = lbModelNamesMouseUp
+    AllowDrag = True
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    OnItemClick = lbModelNamesItemClick
+    Viewport.Width = 496.000000000000000000
+    Viewport.Height = 335.000000000000000000
+  end
+  object MemoDescription: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    ReadOnly = True
+    Align = Bottom
+    Position.Y = 344.000000000000000000
+    Size.Width = 500.000000000000000000
+    Size.Height = 89.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 496.000000000000000000
+    Viewport.Height = 85.000000000000000000
+  end
+  object Splitter1: TSplitter
+    Align = Bottom
+    Cursor = crVSplit
+    MinSize = 20.000000000000000000
+    Position.Y = 339.000000000000000000
+    Size.Width = 500.000000000000000000
+    Size.Height = 5.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="HobTest" FileType="bin">
+    <FileName Model_Name="HobTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="HobTest" FileType="ancillary">
+    <FileName Model_Name="HobTest" FileType="ancillary">HobTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="HobTest" FileType="Model Input">
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.bas</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.dis</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.gsf</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.lpf</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.nam.archive</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.ob_hob</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.oc</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">HobTest.pcg</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Input">usgs.HobTest.reference</FileName>
+  </model>
+  <output Model_Name="HobTest" FileType="Model Output">
+    <FileName Model_Name="HobTest" FileType="Model Output">HobTest.cbc</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Output">HobTest.fdn</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Output">HobTest.fhd</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Output">HobTest.hob_out</FileName>
+    <FileName Model_Name="HobTest" FileType="Model Output">HobTest.lst</FileName>
+  </output>
+</Model_Archive_List>

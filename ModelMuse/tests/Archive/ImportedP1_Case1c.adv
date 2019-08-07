@@ -1,0 +1,5 @@
+         3       0.5      2000         1 # Data Set 1: MIXELM PERCEL MXPART NADVFD
+         1       0.5 # Data Set 2: ITRACK WD
+    1E-005         1         0         4         0         8 # Data Set 3: DCEPS NPLANE NPL NPH NPMIN NPMAX
+         1         1         4 # Data Set 4: INTERP NLSINK NPSINK
+     0.001 # Data Set 5: DCHMOC

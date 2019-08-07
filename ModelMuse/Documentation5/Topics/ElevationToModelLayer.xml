@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ElevationToModelLayer</title>
+  <keywords>
+    <keyword translate="true">ElevationToModelLayer</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ElevationToModelLayer</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW and PHAST models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToModelLayer</text><text styleclass="Normal" translate="true">(Elevation) returns the model layer that contains Elevation at the X,Y coordinate that is being evaluated. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ElevationToLayer" styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</link><text styleclass="Normal" translate="true"> differs from </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToModelLayer</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> in that nonsimulated layers are counted in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ElevationToLayer" styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</link><text styleclass="Normal" style="font-weight:bold;" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:normal;" translate="true">but not </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToModelLayer.</text><text styleclass="Normal" translate="true"> For SUTRA and MODFLOW 6 models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToModelLayer</text><text styleclass="Normal" translate="true"> is the same as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ElevationToLayer" styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

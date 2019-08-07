@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ColumnCount</title>
+  <keywords>
+    <keyword translate="true">ColumnCount</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ColumnCount</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW, PHAST, and WellFootprint models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnCount</text><text styleclass="Normal" translate="true"> returns the number of column boundaries in the grid, which equals the number of nodes in the X direction for PHAST models and the number of cells plus 1 for MODFLOW models. For SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnCount</text><text styleclass="Normal" translate="true"> returns the number of nodes, elements, or cells in the top view of the model.</text></para>
+  </body>
+</topic>

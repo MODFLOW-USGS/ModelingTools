@@ -1,0 +1,18 @@
+inherited frameChoice: TframeChoice
+  inherited memoDescription: TMemo
+    Viewport.Width = 316.000000000000000000
+    Viewport.Height = 73.000000000000000000
+  end
+  inherited pnlBottom: TPanel
+    object comboChoices: TComboBox
+      Anchors = [akLeft, akTop, akRight]
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 305.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnChange = comboChoicesChange
+    end
+  end
+end

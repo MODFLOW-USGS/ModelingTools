@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SwfFormat Codes</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Format codes for IZCFM, IGLFM, IESTFM, IPCSFM, ISTFM, Ifm1, Ifm2, Ifm3, … Ifm13 are as follows:</text></para>
+    <para styleclass="Table Header"><snippet src="Format_Codes"/></para>
+    <para style="margin-top:7px; margin-bottom:7px;"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">(Positive values for wrap format; negative values for strip format.)</text></para>
+  </body>
+</topic>

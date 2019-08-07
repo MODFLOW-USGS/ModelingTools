@@ -1,0 +1,196 @@
+object frmModelFiles: TfrmModelFiles
+  Left = 0
+  Top = 0
+  Caption = 'Model Files'
+  ClientHeight = 400
+  ClientWidth = 633
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop, iPhone, iPad]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyUp = FormKeyUp
+  DesignerMasterStyle = 0
+  object pnl2: TPanel
+    Align = Bottom
+    Position.Y = 200.000000000000000000
+    Size.Width = 633.000000000000000000
+    Size.Height = 200.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object pnlOutput: TPanel
+      Align = Client
+      Size.Width = 321.000000000000000000
+      Size.Height = 153.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object lstOutputExtensions: TListBox
+        Align = Client
+        Size.Width = 321.000000000000000000
+        Size.Height = 133.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        DisableFocusEffect = True
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        ShowCheckboxes = True
+        OnChangeCheck = ExtensionsChangeCheck
+        Viewport.Width = 321.000000000000000000
+        Viewport.Height = 133.000000000000000000
+      end
+      object lbl1: TLabel
+        Align = Top
+        Size.Width = 321.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 16.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'Output'
+      end
+    end
+    object pnlInput: TPanel
+      Align = Left
+      Size.Width = 145.000000000000000000
+      Size.Height = 153.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object lstInputExtensions: TListBox
+        Align = Client
+        Size.Width = 145.000000000000000000
+        Size.Height = 133.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        DisableFocusEffect = True
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        ShowCheckboxes = True
+        OnChangeCheck = ExtensionsChangeCheck
+        Viewport.Width = 145.000000000000000000
+        Viewport.Height = 133.000000000000000000
+      end
+      object lbl2: TLabel
+        Align = Top
+        Size.Width = 145.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 16.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'Model (Input and Georef)'
+      end
+    end
+    object pnl5: TPanel
+      Align = Bottom
+      Position.Y = 153.000000000000000000
+      Size.Width = 633.000000000000000000
+      Size.Height = 47.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object btnOk: TButton
+        ModalResult = 1
+        Position.X = 456.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'OK'
+        TextSettings.Font.Size = 16.000000000000000000
+        OnClick = btnOkClick
+      end
+      object btnCancel: TButton
+        ModalResult = 2
+        Position.X = 544.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+        TextSettings.Font.Size = 16.000000000000000000
+      end
+      object btnHelp: TButton
+        HelpContext = 230
+        HelpKeyword = 'model_files_dialog_box.htm'
+        HelpType = htKeyword
+        Position.X = 368.000000000000000000
+        Position.Y = 8.000000000000000000
+        TabOrder = 2
+        Text = 'Help'
+        OnClick = btnHelpClick
+      end
+    end
+    object spl1: TSplitter
+      Align = Right
+      Cursor = crHSplit
+      MinSize = 20.000000000000000000
+      Position.X = 471.000000000000000000
+      Size.Width = 5.000000000000000000
+      Size.Height = 153.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object spl2: TSplitter
+      Align = Left
+      Cursor = crHSplit
+      MinSize = 20.000000000000000000
+      Position.X = 145.000000000000000000
+      Size.Width = 5.000000000000000000
+      Size.Height = 153.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object pnlAncillary: TPanel
+      Align = Right
+      Position.X = 476.000000000000000000
+      Size.Width = 157.000000000000000000
+      Size.Height = 153.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      object lstAncillaryExtensions: TListBox
+        Align = Client
+        Size.Width = 157.000000000000000000
+        Size.Height = 133.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        DisableFocusEffect = True
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        ShowCheckboxes = True
+        OnChangeCheck = ExtensionsChangeCheck
+        Viewport.Width = 157.000000000000000000
+        Viewport.Height = 133.000000000000000000
+      end
+      object lbl4: TLabel
+        Align = Top
+        Size.Width = 157.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 16.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'Ancillary'
+      end
+    end
+  end
+  object tvFiles: TTreeView
+    Align = Client
+    Size.Width = 633.000000000000000000
+    Size.Height = 192.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    ItemHeight = 25.000000000000000000
+    ShowCheckboxes = True
+    OnChangeCheck = tvFilesChangeCheck
+    Viewport.Width = 633.000000000000000000
+    Viewport.Height = 192.000000000000000000
+  end
+  object spl4: TSplitter
+    Align = Bottom
+    Cursor = crVSplit
+    MinSize = 20.000000000000000000
+    Position.Y = 192.000000000000000000
+    Size.Width = 633.000000000000000000
+    Size.Height = 8.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

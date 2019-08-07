@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Lgr_Test9" FileType="bin">
+    <FileName Model_Name="Lgr_Test9" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Lgr_Test9" FileType="ancillary">
+    <FileName Model_Name="Lgr_Test9" FileType="ancillary">Lgr_Test9.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Lgr_Test9" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.bas</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.dis</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.gag</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.ghb</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.gsf</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.lgr.archive</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.lpf</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.oc</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.sfr</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.sip</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.uzf</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">Lgr_Test9.wel</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Input">usgs.Lgr_Test9.reference</FileName>
+  </model>
+  <model Model_Name="Lgr_Test9_Child_1" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.bas</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.dis</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.gag</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.gsf</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.lpf</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.oc</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.sfr</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.sip</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.uzf</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Input">Lgr_Test9_Child_1.wel</FileName>
+  </model>
+  <output Model_Name="Lgr_Test9" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.bfh_flux</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.bfh_head</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.cbc</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.fdn</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.fhd</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.lst</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg1</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg2</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg3</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg4</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg5</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg6</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg7</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test9.sfrg8</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test91.uzfg</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test92.uzfg</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test93.uzfg</FileName>
+    <FileName Model_Name="Lgr_Test9" FileType="Model Output">Lgr_Test94.uzfg</FileName>
+  </output>
+  <output Model_Name="Lgr_Test9_Child_1" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.cbc</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.fdn</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.fhd</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.lst</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg1</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg2</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg3</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg4</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg5</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg6</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_1.sfrg7</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_11.uzfg</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_12.uzfg</FileName>
+    <FileName Model_Name="Lgr_Test9_Child_1" FileType="Model Output">Lgr_Test9_Child_13.uzfg</FileName>
+  </output>
+</Model_Archive_List>

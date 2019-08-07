@@ -1,0 +1,11 @@
+# Name File for MT3DMS created on 10/11/2018 by ModelMuse
+LIST 16 ..\..\output\output.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.mls
+FTL 10 ..\..\output\output.MnwSsmScreenTest\MnwSsmScreenTest.ftl
+DATA 17 ..\..\output\output.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.cnf
+BTN 1 ..\..\model\model.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.btn
+DATA(BINARY) 201 ..\..\output\output.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest_Cl.ucn
+DATA 601 ..\..\output\output.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest_Cl._mas
+ADV 2 ..\..\model\model.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.adv
+DSP 3 ..\..\model\model.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.dsp
+SSM 4 ..\..\model\model.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.ssm
+GCG 9 ..\..\model\model.MnwSsmScreenTest_MT3DMS\MnwSsmScreenTest.gcg

@@ -1,0 +1,11 @@
+# Name File for MT3DMS created on 9/21/2017 by ModelMuse
+LIST 16 ..\..\output\output.rma_MT3DMS\rma.mls
+FTL 10 ..\..\output\rma\rma.ftl
+DATA 17 ..\..\output\output.rma_MT3DMS\rma.cnf
+BTN 1 ..\..\model\model.rma_MT3DMS\rma.btn
+DATA(BINARY) 201 ..\..\output\output.rma_MT3DMS\rma_Cl.ucn
+DATA 601 ..\..\output\output.rma_MT3DMS\rma_Cl._mas
+ADV 2 ..\..\model\model.rma_MT3DMS\rma.adv
+DSP 3 ..\..\model\model.rma_MT3DMS\rma.dsp
+SSM 4 ..\..\model\model.rma_MT3DMS\rma.ssm
+GCG 9 ..\..\model\model.rma_MT3DMS\rma.gcg

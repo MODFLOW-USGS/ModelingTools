@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Precip. in FMP: Farm Process Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Precip. in FMP: Farm Process Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Precip. in FMP: Farm Process</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="When_to_Read_Flags" anchor="IPFL" styleclass="Strong" translate="true">IPFL</link><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Strong" translate="true">Spatially distributed (2)</text><text styleclass="Normal" translate="true">, the spatially distributed precipitation rate (L/T) is set in this pane.</text></para>
+  </body>
+</topic>

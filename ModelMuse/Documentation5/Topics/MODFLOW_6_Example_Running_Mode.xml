@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Example: Running Model with DISV</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Running Model with DISV</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">We&apos;ll try running the model again to see what happens. Use the same command as before to run MODFLOW. Because ZONEBUDGET and MODPATH are already selected, they can also be run at the same time with the same command. If we refined any of the farm cells, we may have to adjust the values defined for the MVR. Then try importing the model results. You may find some differences if you look carefully but the overall patterns of the results are similar.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="fgdc_classic.xsl"?>
+<metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://water.usgs.gov/GIS/metadata/usgswrd/fgdc-std-001-1998.xsd">
+	<idinfo>
+		<citation>
+			<citeinfo>
+				<origin>USGS</origin>
+				<origin>National Research Program</origin>
+				<origin>Richard B. Winston</origin>
+				<pubdate>20170921</pubdate>
+				<title>Example model archive</title>
+			</citeinfo>
+		</citation>
+		<descript>
+			<abstract>These models serve as an example of how to create a model archive.</abstract>
+			<purpose>These models were originally created to help teach how to use MODFLOW. Here, however, they are used as examples of how to archive models.</purpose>
+		</descript>
+		<timeperd>
+			<timeinfo>
+				<sngdate>
+					<caldate>20170921</caldate>
+				</sngdate>
+			</timeinfo>
+			<current>ground condition</current>
+		</timeperd>
+		<status>
+			<progress>Complete</progress>
+			<update>None planned</update>
+		</status>
+		<spdom>
+			<bounding>
+				<westbc>-105</westbc>
+				<eastbc>-104</eastbc>
+				<northbc>40</northbc>
+				<southbc>39</southbc>
+			</bounding>
+		</spdom>
+		<keywords>
+			<theme>
+				<themekt>USGS Thesaurus</themekt>
+				<themekey>hydrology</themekey>
+				<themekey>groundwater quality</themekey>
+			</theme>
+			<place>
+				<placekt>Geographic Names Information System</placekt>
+				<placekey>Colorado</placekey>
+				<placekey>Denver</placekey>
+			</place>
+		</keywords>
+		<accconst>“No access constraints as all data is open and non-proprietary</accconst>
+		<useconst>“The USGS shall not be held liable for improper or incorrect use of the data retrieved from the system.</useconst>
+	</idinfo>
+	<dataqual>
+		<attracc>
+			<attraccr>Description needed here.</attraccr>
+			<qattracc>
+				<attraccv>Unknown</attraccv>
+				<attracce>explanation needed here.</attracce>
+			</qattracc>
+		</attracc>
+		<logic>consistent</logic>
+		<complete>complete</complete>
+		<lineage>
+			<srcinfo>
+				<srccite>
+					<citeinfo>
+						<origin>Unknown</origin>
+						<pubdate>20170921</pubdate>
+						<title>no title listed.</title>
+					</citeinfo>
+				</srccite>
+				<typesrc>online</typesrc>
+				<srctime>
+					<timeinfo>
+						<sngdate>
+							<caldate>20170921</caldate>
+						</sngdate>
+					</timeinfo>
+					<srccurr>publication date</srccurr>
+				</srctime>
+				<srccitea>unknown</srccitea>
+				<srccontr>unknown</srccontr>
+			</srcinfo>
+			<procstep>
+				<procdesc>More information needed here.</procdesc>
+				<procdate>20170921</procdate>
+				<proccont>
+					<cntinfo>
+						<cntperp>
+							<cntper>Richard B. Winston</cntper>
+						</cntperp>
+						<cntaddr>
+							<addrtype>mailing and physical</addrtype>
+							<city>This line intentionall blank.</city>
+							<state>This line intentionall blank.</state>
+							<postal>This line intentionall blank.</postal>
+						</cntaddr>
+						<cntvoice>This line intentionall blank.</cntvoice>
+					</cntinfo>
+				</proccont>
+			</procstep>
+		</lineage>
+	</dataqual>
+	<spdoinfo>
+		<indspref>model coordinates</indspref>
+	</spdoinfo>
+	<distinfo>
+		<distrib>
+			<cntinfo>
+				<cntorgp>
+					<cntorg>U.S. Geological Survey</cntorg>
+				</cntorgp>
+				<cntaddr>
+					<addrtype>mailing and physical</addrtype>
+					<city>Reston</city>
+					<state>VA</state>
+					<postal>20192</postal>
+				</cntaddr>
+				<cntvoice>1-888-275-8747 (1-888-ASK-USGS)</cntvoice>
+			</cntinfo>
+		</distrib>
+		<resdesc>Model Archiver example</resdesc>
+		<distliab>The data you have secured from the U.S. Geological Survey (USGS) database identified as [database name] have not received USGS approval and as such are provisional and subject to revision. The data are released on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.</distliab>
+	</distinfo>
+	<metainfo>
+		<metd>20170921</metd>
+		<metc>
+			<cntinfo>
+				<cntorgp>
+					<cntorg>U.S. Geological Survey</cntorg>
+				</cntorgp>
+				<cntpos>Ask USGS - Water Webserver Team</cntpos>
+				<cntaddr>
+					<addrtype>mailing and physical</addrtype>
+					<city>Reston</city>
+					<state>VA</state>
+					<postal>20192</postal>
+				</cntaddr>
+				<cntvoice>1-888-275-8747 (1-888-ASK-USGS)</cntvoice>
+			</cntinfo>
+		</metc>
+		<metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+		<metstdv>FGDC-STD-001-1998</metstdv>
+	</metainfo>
+</metadata>

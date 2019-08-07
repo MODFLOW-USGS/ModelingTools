@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Polygons</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Polygons</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Polygon objects have four or more vertices. The last vertex is always at the same location as the first vertex, so a polygon with four vertices is a triangle. To create a polygon object, the user does the following: </text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">The user either selects </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Object|Create|Polygon</text><text styleclass="Normal" translate="true"> or clicks on the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Create polygon object</text><text styleclass="Normal" translate="true"> button </text><image src="CreatePolygon.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Polygon Object button</title></image><text styleclass="Image Caption" translate="true">.</text><text styleclass="Normal" translate="true"> </text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">The user continues adding vertices as described with Polylines. </text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">When the polygon is complete, a final vertex will be added at the location of the first vertex to close the polygon. The polygon may be completed by double-clicking with mouse to add the last vertex of the polygon, single-clicking at the location of the first polygon or pressing the Enter key on the keyboard. Pressing the escape or delete key while creating an object deletes the last created vertex of that object. As with points, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box is used to specify the properties of the object.</text></li>
+    </list>
+    <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:avoid; page-break-after:auto; tabstops:none;"><snippet src="Snap_to_Point"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Typical uses for polygons are to define zones with differing media properties or boundary conditions such as lakes.</text></para>
+  </body>
+</topic>

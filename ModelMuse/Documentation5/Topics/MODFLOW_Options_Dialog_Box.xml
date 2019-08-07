@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW Options Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">MODFLOW Options Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Options</text><text styleclass="Normal" translate="true"> dialog box is used to </text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">give a general description of the model (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Description_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Description</link><text styleclass="Normal" translate="true"> tab),</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">specify the units and other options of the model (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Options_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Options</link><text styleclass="Normal" translate="true"> tab), and</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">activate the wetting option and specify wetting related parameters (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Wetting_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Wetting</link><text styleclass="Normal" translate="true"> tab). The wetting tab is not visible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package_Pane" styleclass="Normal" translate="true">Upstream Weighting</link><text styleclass="Normal" translate="true"> package in MODFLOW-NWT is being used.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Options</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|MODFLOW Options...</text></para>
+  </body>
+</topic>

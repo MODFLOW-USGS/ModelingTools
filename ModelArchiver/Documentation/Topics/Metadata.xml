@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Metadaa</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Metadata</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The metadata file is another file that will be used by catalogs. It is an XML (Extensible Markup Language) file that describes the contents of the archive. The metadata file can be edited within ModelArchiver by clicking the &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Edit_Metadata_Dialog_Box" styleclass="Normal" translate="true">Edit metadata file</link><text styleclass="Normal" translate="true">&quot; button. FgdcMetaEditor, the MetadataWizard (</text><link displaytype="text" defaultstyle="true" type="weblink" href="https://usgs.github.io/fort-pymdwizard/" target="_blank" styleclass="Normal" translate="true">https://usgs.github.io/fort-pymdwizard/</link><text styleclass="Normal" translate="true">), or the USGS Online Metadata Editor (</text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://www1.usgs.gov/csas/ome/</link><text styleclass="Normal" translate="true">) also can be used to create the metadata file. The USGS Geospatial Metadata Validation Service (</text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">https://mrdata.usgs.gov/validation/</link><text styleclass="Normal" translate="true">) can be used for validating the metadata file once it is created.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Only the name of the metadata file is stored in ModelArchiver. The content of the metadata file is stored in the XML file whose name is selected on this pane.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The metadata file for USGS model archives must contain the keyword &quot;usgsgroundwatermodel&quot; and the name of the modeling program(s) as a theme keywords. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the &quot;Add file descriptions to meta data&quot; checkbox is checked, ModelArchiver will include data about each downloadable file in &#160;section 6.4 (Standard Order Process) of the metadata file when the archive is created so the user does not need to do that manually.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,19 @@
+{TODO 3 -cinterface : Enhancement: Add support for importing STR observations}
+{TODO 3 -cinterface : Show progress bar when populating runner directories.}
+{TODO 3 -cinterface : Menu item to create .jif file for a PVAL file.}
+{TODO 3 -cinterface : Test ModelMuse/ModelMate with other versions of Modflow: MODFLOW-NWT, others?}
+{TODO 3 -cinterface : Add dialog to save a parameter/value file as _pasave (like _paopt) -- allow comment.}
+{TODO 3 -cinterface : Add new form to display Observations and Simulated Equivalents.}
+{TODO 3 -cinterface : Add capability to add/insert text into UCODE input file.}
+{TODO 3 -cinterface : Ask Eileen about omitting observations from objective function -- are values in fn.omit ignored?}
+{TODO 3 -cinterface : Add support for rewriting instruction files without reimporting observations.}
+{TODO 4 -cinterface : Add form to define OmitVals. (or is this already supported somehow?)}
+{TODO 4 -cinterface : Forms to specify controls for residual_analysis, other post-precessing utilities.}
+{TODO 4 -cinterface : File Viewer: Add options to toggle Word Wrap, add "Save As" option, change font size.}
+{TODO 3 -cinterface : Add button to Stop All Runners, with verification dialog.}
+{TODO 1 -cinterface : Fix bug: Delete selected observagtions & then Cancel -- deleted observations are not restored.}
+{TODO 1 -cinterface : Fix bug: "Revert to last saved" does not restore deleted observations.}
+{TODO 2 -cinterface : Extract key data from UCODE listing file and other files. -- Extracted data to be dependent on mode. Capture Errors, Warnings, and Suggestions.}
+{TODO 2 -cinterface : Develop form & code to read _pasub (and _paopt) file to replace parameter values.}
+{TODO 2 -cinterface : Develop an Equation Builder (like Formula Editor in ModelMuse)}
+{TODO 1 -cinterface : Trap unexpected group name in CreateMF2005InstructFiles and report as error. See email of 2/9/2016 with Glen Carleton.}

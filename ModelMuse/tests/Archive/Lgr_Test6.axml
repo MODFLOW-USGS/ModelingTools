@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Lgr_Test6" FileType="bin">
+    <FileName Model_Name="Lgr_Test6" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Lgr_Test6" FileType="ancillary">
+    <FileName Model_Name="Lgr_Test6" FileType="ancillary">Lgr_Test6.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Lgr_Test6" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.bas</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.chd</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.dis</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.drn</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.evt</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.ghb</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.gsf</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.huf</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.jtf</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.lgr.archive</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.mlt</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.oc</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.pcg</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.pval</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.rch</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.wel</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">Lgr_Test6.zon</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Input">usgs.Lgr_Test6.reference</FileName>
+  </model>
+  <model Model_Name="Lgr_Test6_Child_1" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.bas</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.chd</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.dis</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.drn</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.evt</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.ghb</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.gsf</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.huf</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.jtf</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.mlt</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.oc</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.pcg</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.pval</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.rch</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.wel</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Input">Lgr_Test6_Child_1.zon</FileName>
+  </model>
+  <output Model_Name="Lgr_Test6" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.bfh_flux</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.bfh_head</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.cbc</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.fdn</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.fhd</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.huf_fhd</FileName>
+    <FileName Model_Name="Lgr_Test6" FileType="Model Output">Lgr_Test6.lst</FileName>
+  </output>
+  <output Model_Name="Lgr_Test6_Child_1" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Output">Lgr_Test6_Child_1.cbc</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Output">Lgr_Test6_Child_1.fdn</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Output">Lgr_Test6_Child_1.fhd</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Output">Lgr_Test6_Child_1.huf_fhd</FileName>
+    <FileName Model_Name="Lgr_Test6_Child_1" FileType="Model Output">Lgr_Test6_Child_1.lst</FileName>
+  </output>
+</Model_Archive_List>

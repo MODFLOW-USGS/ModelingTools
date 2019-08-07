@@ -1,0 +1,2 @@
+"C:\Program Files\ImageMagick-7.0.7-Q16\convert.exe" D:\Colab\GWModelTools\ModelArchiver\PotentialIcon.png -alpha on -resize 256x256 -define icon:auto-resize="256,128,96,64,48,32,16" PotentialIcon.ico
+pause

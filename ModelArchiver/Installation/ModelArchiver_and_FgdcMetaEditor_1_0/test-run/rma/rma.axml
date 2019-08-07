@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="rma" FileType="bin">
+    <FileName Model_Name="rma" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="rma" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="rma" FileType="bin">C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe</FileName>
+  </bin>
+  <ancillary Model_Name="rma" FileType="ancillary">
+    <FileName Model_Name="rma" FileType="ancillary">rma.gpt</FileName>
+  </ancillary>
+  <model Model_Name="rma" FileType="Model Input">
+    <FileName Model_Name="rma" FileType="Model Input">rma.bas</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.chd</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.dis</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.gsf</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.lmt</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.lpf</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.nam.archive</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.oc</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.pcg</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">rma.wel</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="rma" FileType="Model Input">usgs.rma.reference</FileName>
+  </model>
+  <output Model_Name="rma" FileType="Model Output">
+    <FileName Model_Name="rma" FileType="Model Output">rma.cbc</FileName>
+    <FileName Model_Name="rma" FileType="Model Output">rma.fdn</FileName>
+    <FileName Model_Name="rma" FileType="Model Output">rma.fhd</FileName>
+    <FileName Model_Name="rma" FileType="Model Output">rma.ftl</FileName>
+    <FileName Model_Name="rma" FileType="Model Output">rma.lst</FileName>
+  </output>
+  <Modpath_Input_Files Model_Name="rma" FileType="Modpath Input">
+    <FileName Model_Name="rma" FileType="Modpath Input">Mp.bat.archive</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">MpIn.txt</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">rma.mpm</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">rma.mpn.archive</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">rma.mprsp.archive</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">rma.strt</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">RunModpath.Bat.archive</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Input">usgs.rma_Modpath.reference</FileName>
+  </Modpath_Input_Files>
+  <Modpath_Output_Files Model_Name="rma" FileType="Modpath Output">
+    <FileName Model_Name="rma" FileType="Modpath Output">rma.end</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Output">rma.mplst</FileName>
+    <FileName Model_Name="rma" FileType="Modpath Output">rma.path</FileName>
+  </Modpath_Output_Files>
+  <Mt3dms_Input_Files Model_Name="rma" FileType="Mt3dms Input">
+    <FileName Model_Name="rma" FileType="Mt3dms Input">rma.adv</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">rma.btn</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">rma.dsp</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">rma.gcg</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">rma.mt_nam.archive</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">rma.ssm</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Input">usgs.rma_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="rma" FileType="Mt3dms Output">
+    <FileName Model_Name="rma" FileType="Mt3dms Output">rma.cnf</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Output">rma.mls</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Output">rma_Cl._mas</FileName>
+    <FileName Model_Name="rma" FileType="Mt3dms Output">rma_Cl.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

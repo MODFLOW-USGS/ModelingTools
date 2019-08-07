@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Conduit Flow Process</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Conduit Flow Process</text></para>
+    </header>
+    <para style="text-indent:27px; line-height:13px;"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">The Conduit Flow Process (CFP) simulates turbulent (non-Darcian) groundwater flow by: (1) coupling the traditional groundwater flow equation with formulations for a discrete network of cylindrical pipes (Mode 1), (2) inserting a high-conductivity flow layer that can switch between laminar and turbulent flow (Mode 2), or (3) simultaneously coupling a discrete pipe network while inserting a high-conductivity flow layer that can switch between laminar and turbulent flow (Mode 3). </text></para>
+    <para style="text-indent:27px; line-height:13px;"><text styleclass="Normal" translate="true">The Conduit Flow Process includes the following Packages </text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The Conduit Flow Process (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP" styleclass="Normal" translate="true">CFP</link><text styleclass="Normal" translate="true">) Input File (required)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The Conduit Recharge Package (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="CRCH" styleclass="Normal" translate="true">CRCH</link><text styleclass="Normal" translate="true">) (optional)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The Conduit Output Control (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="COC" styleclass="Normal" translate="true">COC</link><text styleclass="Normal" translate="true">) File (optional)</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><image src="CFP_Fig2.bmp" scale="71.68%" width="689" height="448" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

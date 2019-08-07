@@ -1,0 +1,16 @@
+# SSM: Sink and Source Mixing package file created on 9/2/2015 by ModelMuse version 3.6.2.2.
+        14         0 # Data Set 2: MXSS ISSGOUT
+        13 # Data set 7: NSS; Stress Period 1
+         1         1         1         1         1         1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         1         4         7       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         2         4         7       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         3         4         7       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         1         4         7       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         2         4         7       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         3         4         7       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         1         5         6       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         2         5         6       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         3         5         6       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         1         5         6       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         2         5         6       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         3         5         6       0.1        27       0.1 # Data Set 8: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">LakeTransient</title>
+  <body>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="New Materials" translate="true">In MODFLOW-2000 and later, ISS is not part of the input. &#160;Instead NSSITR or SSCNCR should be included if one or more stress periods is a steady state stress period as defined in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="Sstr" styleclass="New Materials" translate="true">Ss/tr</link><text styleclass="New Materials" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="New Materials" translate="true">Discretization</link><text styleclass="New Materials" translate="true"> file.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">SSCNCR and NSSITR can be read for a transient only simulation by placing a negative sign immeditately in front of THETA. A negative THETA sets a flag which assumes input values for NSSITR and SSCNCR will follow THETA in the format as described by Merritt and Konikow (p. 52). A negative THETA is automatically reset to a positive value after values of NSSITR and SSCNCR are read.</text></li>
+    </list>
+  </body>
+</topic>

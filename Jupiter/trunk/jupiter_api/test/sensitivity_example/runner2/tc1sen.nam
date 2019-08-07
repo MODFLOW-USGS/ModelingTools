@@ -1,0 +1,29 @@
+# NAME file for test case tc1fwd
+#
+# NOTE: Forward slashes (/) in pathnames may need to be converted
+#       to back slashes (\) in some computing environments
+#
+# Output files
+global          11  tc1sen.glo
+list            12  tc1sen.lst
+#
+# Obs-Sen-Pes process input files
+obs             21  tc1sen.obs
+hob             22  tc1fwd.ohd
+rvob            23  tc1fwd.orv
+sen             24  tc1sen.sen
+#
+# Global input files
+dis             31  tc1fwd.dis
+zone            32  tc1fwd.zon
+mult            33  tc1fwd.mlt
+#
+# Flow process input files
+bas6            41  tc1fwd.bas
+lpf             42  tc1fwd.lpf
+wel             43  tc1fwd.wel
+pcg             44  tc1fwd.pcg
+oc              45  tc1fwd.oc
+ghb             46  tc1fwd.ghb
+riv             47  tc1fwd.riv
+rch             48  tc1fwd.rch

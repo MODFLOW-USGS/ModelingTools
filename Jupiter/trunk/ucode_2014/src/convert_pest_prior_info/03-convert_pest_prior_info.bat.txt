@@ -1,0 +1,2 @@
+convert_pest_prior_info.exe 06-upestrun-p.pst r
+pause

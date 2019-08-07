@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CFP: Fixed Heads Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CFP: Fixed Heads Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">CFP: Fixed Heads</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is only visible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP_Conduit_Flow_Process" styleclass="Strong" translate="true">Conduit Flow Process</link><text styleclass="Normal" translate="true"> is selected and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP_Conduit_Flow_Process" anchor="Mode" styleclass="Normal" translate="true">individual conduits are simulated</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If one or more nodes in a conduit is a fixed head node, this pane is used to specify the head at such nodes. Note that conduit nodes are defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP_Conduit_Flow_Process_Pane" styleclass="Strong" translate="true">CFP: Conduit Flow Process Pane</link><text styleclass="Normal" translate="true"> and that an object that defines a fixed head node does not also have to define conduit nodes. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There is a hidden data set named CfpFixedHeads that can be used display values of fixed head nodes in the Conduit Flow Process.</text></para>
+  </body>
+</topic>

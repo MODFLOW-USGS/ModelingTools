@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Grid Position Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Grid Position Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Grid Position</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">Grid|Move Grid</text><text styleclass="Normal" translate="true">. When first displayed, it shows the X and Y coordinates of the grid origin. For all models, the grid origin as at the position of the first row and column boundaries. The grid origin is the upper left corner for MODFLOW models and the lower left corner for PHAST models. If the user enters new coordinates and clicks the </text><text styleclass="Strong" translate="true">OK</text><text styleclass="Normal" translate="true"> button, the grid will be moved to the new position.</text></para>
+  </body>
+</topic>

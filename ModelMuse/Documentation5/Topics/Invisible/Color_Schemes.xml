@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Color Schemes</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Different color schemes can be used to associate a given value of the data set, boundary condition, or MODPATH data with a color. The desired color scheme is selected in the combo box near the bottom of the dialog box. The range of colors in the selected color scheme is displayed below the combo box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To cycle through the range of colors for a color scheme more than one time, change the value in the edit box labeled </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Cycles</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Because different monitors will display the colors slightly differently, the color adjustment can be used to optimize the appearance of the data.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See Light and Bartlein (2004, 2005), and Stephenson (2005) for more information about color schemes.</text></para>
+  </body>
+</topic>

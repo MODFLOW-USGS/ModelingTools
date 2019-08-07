@@ -1,0 +1,16 @@
+inherited frameDate: TframeDate
+  Size.Height = 317.000000000000000000
+  inherited memoDescription: TMemo
+    Viewport.Width = 316.000000000000000000
+    Viewport.Height = 73.000000000000000000
+  end
+  inherited pnlBottom: TPanel
+    Size.Height = 228.000000000000000000
+    inline frameDate: TframeDateEdits
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 228.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+end

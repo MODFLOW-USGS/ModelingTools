@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Handling Discretization in SUB</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If a layer group is discretized into multiple layers, the user must also specify which layers in the layer group the interbed system is associated with. If </text><text styleclass="Strong" translate="true">Use in All Layers</text><text styleclass="Normal" translate="true"> is checked, every layer in the layer group system will be associated with the interbed system. The user can also choose which layer or layers in the layer group are associated with the interbed system by checking the appropriate check boxes.</text></para>
+  </body>
+</topic>

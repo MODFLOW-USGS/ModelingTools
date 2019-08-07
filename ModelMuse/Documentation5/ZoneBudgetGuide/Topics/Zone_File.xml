@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Zone File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Zone File</text></para>
+    </header>
+    <para styleclass="Table Header"><table rowcount="2" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Zone File defines the numeric and composite zones for which subregional water budgets will be computed.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="http://water.usgs.gov/nrp/gwsoftware/zonebud3/ofr90392.pdf" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., 1990, A computer program for calculating subregional water budgets using results from the U.S. Geological Survey modular three-dimensional ground-water flow model: U.S. Geological Survey Open-File Report 90-392, 46 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="zonbud3.pdf" styleclass="Normal" translate="true">zonbud3.pdf</link></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Description</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NLAY NROW NCOL</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" style="margin-top:5px; margin-left:24px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li style="margin-top:5px; margin-left:24px;"><text styleclass="Normal" translate="true">NLAY is the number of model layers. </text></li>
+                  <li style="margin-top:5px; margin-left:24px;"><text styleclass="Normal" translate="true">NROW is the number of model rows. &#160;</text></li>
+                  <li style="margin-top:5px; margin-left:24px;"><text styleclass="Normal" translate="true">NCOL is the number of model columns. </text></li>
+                </list>
+                <para style="margin-top:5px; margin-left:24px;"><text styleclass="Normal" translate="true">These are checked for consistency with the grid dimensions included in the budget file. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Zone array: IZONE(NCOL,NROW,NCOL) ]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">This array is read one model layer at a time, starting with layer 1. The user can choose from three input forms for each layer.</text></para>
+                <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Form 1: CONSTANT ICONST]]></caption></toggle></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The word “CONSTANT” is a keyword that signifies that the entire layer should have the same value, which is specified in the ICONST field.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Form 2: EXTERNAL FMTIN IPRN]]></caption></toggle></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The keyword “EXTERNAL” indicates that the zone values for the layer are read from a separate file whose name is specified on the following line. The values are read one row at a time, starting with row 1, using the Fortran format specified in field FMTIN. FMTIN must begin with “(“ and end with “)” as required by Fortran. If the value in parentheses is blank, free format is used. IPRN specifies whether or not the zone values read are printed in the output file. If IPRN is greater than or equal to 0, the zone values will be printed. If IPRN is less than 0, zone values will not be printed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Form 3: INTERNAL FMTIN IPRN]]></caption></toggle></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">“INTERNAL” indicates that the zone values for the layer are read from the Zone file immediately following Item 2. The values are read one row at a time, starting with row 1, using the Fortran format specified in field FMTIN. FMTIN must begin with “(“ and end with “)” as required by Fortran. If the value in parentheses is blank, free format is used. IPRN specifies whether or not the zone values read are printed in the output file. If IPRN is greater than or equal to 0, the zone values will be printed. If IPRN is less than 0, zone values will not be printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Item 3 – [NAMCOMP] ICOMP(50)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Up to 100 composite zones can be defined, with each composite zone consisting of up to 50 numeric zones. Each composite zone is specified on a single line. A composite zone need not include 50 numeric zones; simply terminate the line after specifying the desired zones. Specify as many lines as required for the desired number of composite zones. NAMCOMP is the name for the composite zone, which is optional as indicated by “[ ]”. The name must start with a non-numeric character and can consist of up to 10 characters. If NAMCOMP is not included, a name is automatically generated.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

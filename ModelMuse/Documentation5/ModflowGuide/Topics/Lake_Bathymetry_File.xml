@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Lake Bathymetry File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Lake Bathymetry File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If keyword “TABLEINPUT” is specified in item 1a then the following data are required, where 1 file is required for each lake: </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Data: {STAGELAKE VOLUMELAKE AREALAKE} </text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STAGELAKE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">STAGELAKE are the lake stage values. These values should include lake stage values over the range that could occur in the simulation. </text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VOLUMELAKE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">VOLUMELAKE are the lake volume values corresponding to the values specified for STAGELAKE. </text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[AREALAKE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td style="height:26px;">
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">AREALAKE are the lake surface area values corresponding to the values specified for STAGELAKE. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Notes: </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">1. Exactly 151 lines must be included within each lake bathymetry input file and each line must contain 1 value of lake stage, volume, and area (3 numbers per line) if the keyword “</text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" anchor="TABLEINPUT" styleclass="Normal" translate="true">TABLEINPUT</link><text styleclass="Normal" translate="true">” is specified in item 1a. A separate file is required for each lake. Thus, if there are 4 lakes in a simulation then 4 lake bathymetry files are required. 151 values are required in each file to be consistent with the original Lake Package. See the definition of the keyword “TABLEINPUT” for more details. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Example LAK3 input file demonstrating the use of the TABLEINPUT functionality. The numbers are in free format. Comment lines are not supported. The following is an example of the beginning of a lake bathymetry file.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">9.70000E+01 0.00000E+00 2.25000E+06 #Stage Volume Area </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">9.96867E+01 6.04500E+06 2.25000E+06 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">1.02373E+02 1.20900E+07 2.25000E+06 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">1.05060E+02 1.81350E+07 2.25000E+06 </text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">1.07747E+02 3.49267E+07 6.25000E+06 </text></para>
+  </body>
+</topic>

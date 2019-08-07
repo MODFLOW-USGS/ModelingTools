@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">How do I plot head, drawdown or concentration vs. time?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">How do I plot head, drawdown or concentration vs. time?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A separate program, GW_Chart, can be used to plot a number of types of data vs. time. GW_Chart is available from </text><link displaytype="text" defaultstyle="true" type="weblink" href="<%LINK_CAPTION%>" target="_blank" styleclass="Normal" translate="true">https://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html</link><text styleclass="Normal" translate="true">. To plot the data, first select </text><text styleclass="Strong" translate="true">Chart Type/Convert|Hydrographs</text><text styleclass="Normal" translate="true">. Then select the type of data, such as a MODFLOW head or drawdown file and other required data such as the column, row, and layer number. Finally, click the Read button to select the file and make the plot.</text></para>
+    <para styleclass="Normal"><image src="GW_Chart_Plot_Heads.png" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

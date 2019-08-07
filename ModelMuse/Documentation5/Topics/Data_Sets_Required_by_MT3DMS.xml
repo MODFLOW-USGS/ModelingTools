@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets Required by MT3DMS or MT3D-USGS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets Required by MT3DMS or MT3D-USGS</text></para>
+    </header>
+    <para styleclass="Normal"><table id="Mt3dmsDataSets_srt_" styleclass="Default" rowcount="8" colcount="5" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <thead style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MT3DMS_DataSets_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MT3DMS_Description_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Description</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MT3DMS_Package_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">MT3DMS Package</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MT3DMS_Equivalent_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">MT3DMS Equivalent</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MT3DMS_WhenUsed_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">When used</text></para>
+        </td>
+      </thead>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Porosity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the porosity.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Basic</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> PRSITY</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Longitudinal_Dispersivity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the longitudinal dispersivity.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Dispersion</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">AL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">When the Dispersion package is used</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><anchor id="MT3DMS_Observation_Locations" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">MT3DMS_Observation_Locations</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Cell containing anobservation point for which the concentration is to be printed at every transport step in file MT3Dnnn.OBS</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Basic</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Sets 18 and 19</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MT3DMS_Active</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Indicates whether a cell is active in MT3DMS or not. Not all active MODFLOW cells are required to be active MT3DMS cells.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Basic</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ICBUND</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Bulk_Density</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">the bulk density of the aquifer medium</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Chemical Reaction</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">RHOB</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When the chemical reaction package is used and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Table Cell" translate="true">sorption choice is Linear, Freundlich, Langmuir, first order kinetic, or dual domain with sorption</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Immobile_Domain_Porosity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">the porosity of the immobile domain, i.e., the ratio of pore spaces filled with immobile fluids over the bulk volume of the aquifer medium, when the simulation is intended to represent a dual-domain system</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Chemical Reaction</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PRSITY2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">When the chemical reaction package is used and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">dual porosity is selected.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MT3DMS_Layer_Thickness</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The thickness of a layer</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Basic</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DZ</text></para>
+        </td>
+        <td>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Example: Activate Boundary Condition Packages</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Activate Boundary Condition Packages</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to activate the boundary condition packages that we will use in our model. </text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">To activate the packages, first select &quot;Model|MODFLOW Packages and Programs&quot;.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Check the check boxes for the CHD, RCH, MAW, MVR, SFR, and UZF packges. For the UZF package, select to simulate evapotranspiration from both the saturated and unsaturated zone using a linear method for the saturated zone and using water content when calculating evapotranspiration from the unsaturated zone.</text><br/><image src="Modflow6ExamplePackages.bmp" scale="60.00%" width="470" height="352" styleclass="Image Caption"><title translate="true">Select CHD, MAW, MVR, SFR, and UZF packages for model</title><caption translate="true"><![CDATA[Select CHD, MAW, MVR, SFR, and UZF packages for model]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box.</text></li>
+    </list>
+  </body>
+</topic>

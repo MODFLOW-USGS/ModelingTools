@@ -1,0 +1,16 @@
+# OBS: Observation Utility file created on 7/31/2019 by ModelMuse version 4.0.0.7.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT LakeMf6.lak_stage_ob.csv
+ 'Lak1' stage Lake1 
+ 'Lak2' stage Lake2 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT LakeMf6.lak_volume_ob.csv
+ 'Lak1' volume Lake1 
+ 'Lak2' volume Lake2 
+END CONTINUOUS
+

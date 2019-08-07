@@ -1,0 +1,113 @@
+object frameTimeEdits: TframeTimeEdits
+  Size.Width = 320.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object grpDifferential: TGroupBox
+    StyledSettings = [Family, Style, FontColor, Other]
+    Position.X = 8.000000000000000000
+    Position.Y = 112.000000000000000000
+    Size.Width = 305.000000000000000000
+    Size.Height = 100.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Time Differential'
+    TextSettings.Font.Size = 16.000000000000000000
+    TabOrder = 5
+    object nmbrbxHours: TNumberBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 1
+      Cursor = crIBeam
+      Min = -12.000000000000000000
+      Max = 12.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      Position.X = 16.000000000000000000
+      Position.Y = 24.000000000000000000
+      HorzIncrement = 0.000000000000000000
+      VertIncrement = 0.000000000000000000
+      StyledSettings = [Family, Style, FontColor]
+      OnChange = nmbrbxHoursChange
+    end
+    object lblHours: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 120.000000000000000000
+      Position.Y = 24.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      Text = 'Hours'
+    end
+    object lblMinutes: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 120.000000000000000000
+      Position.Y = 56.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      Text = 'Minutes'
+    end
+    object nmbrbxMinutes: TNumberBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 0
+      Cursor = crIBeam
+      Max = 60.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      Position.X = 16.000000000000000000
+      Position.Y = 56.000000000000000000
+      HorzIncrement = 0.000000000000000000
+      VertIncrement = 0.000000000000000000
+      StyledSettings = [Family, Style, FontColor]
+      OnChange = nmbrbxMinutesChange
+    end
+  end
+  object lblTime: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 160.000000000000000000
+    Position.Y = 16.000000000000000000
+    TextSettings.Font.Size = 16.000000000000000000
+    Text = 'Time'
+  end
+  object rbLocalTime: TRadioButton
+    StyledSettings = [Family, Style, FontColor]
+    GroupName = 'TimeFormat'
+    Position.X = 12.000000000000000000
+    Position.Y = 40.000000000000000000
+    TabOrder = 1
+    Text = 'Local Time'
+    TextSettings.Font.Size = 16.000000000000000000
+    OnChange = rbTimeChange
+  end
+  object rbTimeOffset: TRadioButton
+    StyledSettings = [Family, Style, FontColor]
+    GroupName = 'TimeFormat'
+    Position.X = 12.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 253.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Local Time with Time Differential Factor'
+    TextSettings.Font.Size = 16.000000000000000000
+    OnChange = rbTimeChange
+  end
+  object rbUniversalTime: TRadioButton
+    StyledSettings = [Family, Style, FontColor]
+    GroupName = 'TimeFormat'
+    Position.X = 11.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 365.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Text = 'Universal Time (Greenwich Mean Time)'
+    TextSettings.Font.Size = 16.000000000000000000
+    OnChange = rbTimeChange
+  end
+  object tmdtTime: TTimeEdit
+    Format = 'h:n:s.zzz'
+    Time = 0.602083333333333200
+    OnChange = tmdtTimeChange
+    Position.X = 12.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 133.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    TextSettings.Font.Size = 16.000000000000000000
+    TabOrder = 0
+  end
+end

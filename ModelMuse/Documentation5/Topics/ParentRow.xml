@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ParentRow</title>
+  <keywords>
+    <keyword translate="true">ParentRow</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ParentRow</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For child grids, </text><text styleclass="Strong" translate="true">ParentRow</text><text styleclass="Normal" translate="true"> returns the row of the parent grid that encloses the current child grid cell. For the parent grid, </text><text styleclass="Strong" translate="true">ParentRow</text><text styleclass="Normal" translate="true"> returns the row of the current grid cell.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Row" styleclass="Strong" translate="true">Row</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

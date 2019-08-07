@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Object_VertexValue</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Object_VertexValue</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Vertex values are specified for individual vertices of an object using the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Strong" translate="true">Vertex Values</link><text styleclass="Normal" translate="true"> dialog box. The following functions use these vertex values to determine the value of an object in a particular cell or element.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="margin-top:0px; margin-bottom:0px; line-height:1.0; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="margin-top:0px; margin-bottom:0px; line-height:1.0;"><link displaytype="text" defaultstyle="true" type="topiclink" href="FirstVertexValue" styleclass="Normal" translate="true">FirstVertexValue</link></li>
+      <li styleclass="Normal" style="margin-top:0px; margin-bottom:0px; line-height:1.0;"><link displaytype="text" defaultstyle="true" type="topiclink" href="HighestVertexValue" styleclass="Normal" translate="true">HighestVertexValue</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="InterpolatedVertexValue" styleclass="Normal" translate="true">InterpolatedVertexValue</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="LastVertexValue" styleclass="Normal" translate="true">LastVertexValue</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="LowestVertexValue" styleclass="Normal" translate="true">LowestVertexValue</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="MeanVertexValue" styleclass="Normal" translate="true">MeanVertexValue</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="MedianVertexValue" styleclass="Normal" translate="true">MedianVertexValue</link></li>
+      <li styleclass="Normal" style="margin-top:0px; margin-bottom:0px; line-height:1.0;"><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectBasisFunction" styleclass="Normal" translate="true">ObjectBasisFunction</link></li>
+    </list>
+    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="VertexValue" styleclass="Normal" translate="true">VertexValue</link></li>
+    </list>
+  </body>
+</topic>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ModflowObjectInterectAreaTest" FileType="bin">
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ModflowObjectInterectAreaTest" FileType="ancillary">
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="ancillary">ModflowObjectInterectAreaTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.bas</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.chd</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.dis</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.gsf</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.jtf</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.lpf</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.mlt</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.nam.archive</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.oc</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.pcg</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.pval</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.wel</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">ModflowObjectInterectAreaTest.zon</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Input">usgs.ModflowObjectInterectAreaTest.reference</FileName>
+  </model>
+  <output Model_Name="ModflowObjectInterectAreaTest" FileType="Model Output">
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Output">ModflowObjectInterectAreaTest.cbc</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Output">ModflowObjectInterectAreaTest.fdn</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Output">ModflowObjectInterectAreaTest.fhd</FileName>
+    <FileName Model_Name="ModflowObjectInterectAreaTest" FileType="Model Output">ModflowObjectInterectAreaTest.lst</FileName>
+  </output>
+</Model_Archive_List>

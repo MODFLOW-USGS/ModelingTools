@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Simple" FileType="bin">
+    <FileName Model_Name="Simple" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Simple" FileType="ancillary">
+    <FileName Model_Name="Simple" FileType="ancillary">Simple.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Simple" FileType="Model Input">
+    <FileName Model_Name="Simple" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.bas</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.chd</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.dis</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.gsf</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.lpf</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.nam.archive</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.oc</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">Simple.pcg</FileName>
+    <FileName Model_Name="Simple" FileType="Model Input">usgs.Simple.reference</FileName>
+  </model>
+  <output Model_Name="Simple" FileType="Model Output">
+    <FileName Model_Name="Simple" FileType="Model Output">Simple.cbc</FileName>
+    <FileName Model_Name="Simple" FileType="Model Output">Simple.fdn</FileName>
+    <FileName Model_Name="Simple" FileType="Model Output">Simple.fhd</FileName>
+    <FileName Model_Name="Simple" FileType="Model Output">Simple.lst</FileName>
+  </output>
+</Model_Archive_List>

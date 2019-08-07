@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title>ModelMate&mdash;A GUI for Model Analysis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="publisher" content="USGS" >
+    <link href="/style/common.css" rel="stylesheet" type="text/css" >
+    <link href="/style/custom.css" rel="stylesheet" type="text/css" >
+    <link href="/style/styles.css" rel="stylesheet" type="text/css" >
+    <link href="/style/body.css"   rel="stylesheet" type="text/css" >
+    <link href="/software/software.css" rel="stylesheet" type="text/css" >
+    <link href="./list.css" rel="stylesheet" type="text/css" >
+
+    <meta name="description" content="A graphical user interface (GUI) for model analysis.
+            ModelMate supports UCODE_2005 or UCODE_2015 (UCODE), MODFLOW-2005 (MODFLOW), and ModelMuse.">
+    <meta name="title" content="ModelMate">
+    <meta name="version" content="1.0.2">
+    <meta name="os" content="DOS/Win">
+    <meta name="category" content="groundwater:50_gui-and-postproc, general">
+    <meta name="lastupdated" content="2013/11/19">
+      <!--#include virtual="/includes/google-analytics.html" --> 
+<!--#include virtual="/SSI/google_analytics_head.html"-->
+  </head>
+
+  <body>
+    <!--#include virtual="/inc/header.html" -->
+    <!-- water navigation bar -->
+
+    <div id="navmain" class="noprint">
+      <ul class="navmain">
+        <li><a href="/" title="Home">Home</a></li>
+        <li><a href="/data/" title="Water Resources Data">Data</a></li>
+        <li><a href="/maps.html" title="Water Resources Maps and GIS Information">Maps</a></li>
+        <li class="chosentopic">
+          <a href="/software/" title="Water Resources Applications Software">Software</a></li>
+        <li><a href="/pubs/" title="Water Resources Reports">Publications</a></li>
+        <li><a href="/programs.html" title="Water Resources Projects">Programs</a></li>
+        <li><a href="/user_feedback_form.html" title="Send Feedback">Contact</a></li>
+      </ul>
+
+    </div>
+    <!-- END water navigation bar -->
+
+    <h2>ModelMate: Frequently Asked Questions</h2>
+
+<ul class="collapsibleList">
+
+<!-- Q.1 -->  
+ <li>
+  <h3><label for="mylist-node1">Q.1: I am using ModelMuse and ModelMate. 
+    How do I generate extraction-instruction file(s)?</label></h3>
+  <input type="checkbox" id="mylist-node1" />
+  <ul>
+   <li><b>A.1:</b> The steps for creating instruction file(s) are described on p. 28 of 
+    the ModelMate documentation. In ModelMate, use menu item <b>Model|Create 
+  Instruction Files For Observations Defined In ModelMuse</b>. To generate the 
+    model output file, you'll need to run Ucode (which can be done from ModelMate) 
+    so it will run the model.  ModelMate and the ModelMate documentation are 
+    available free for download here:<br><br>
+    Banta, E.R., 2011, ModelMate--A graphical user interface for model analysis: 
+    <a href="http://pubs.usgs.gov/tm/tm6e4/">
+      U.S. Geological Survey Techniques and Methods, book 6, chap. E4 
+    </a></li>
+  </ul>
+ </li>
+
+<!-- Q.2 -->  
+ <li>
+  <h3><label for="mylist-node2">Q.2: I can't get ModelMate to make a 
+    parameter-estimation run. What's wrong?</label></h3>
+  <input type="checkbox" id="mylist-node2" />
+  <ul>
+   <li><b>A.2:</b> Before attempting to make a parameter-estimation run, ensure that 
+    ModelMate is configured correctly to start UCODE_2005 and make a forward 
+    model run. Ensure that you have parameters defined. Ensure that template 
+    files are defined correctly for each model-input file that UCODE will 
+    need to generate to make a model run. Ensure that extraction-instruction 
+    files are defined correctly for each model-output file from which simulated 
+    values will need to be extracted. Next, make one parameter adjustable and 
+    make a sensitivity run. If that is successful, make multiple parameters 
+    adjustable, if desired, and make a parameter-estimation run.</li>
+  </ul>
+ </li>
+ 
+<!-- Q.3 -->   
+ <li>
+  <h3><label for="mylist-node3">Q.3: Please explain [something] from answer A.2.</label></h3>
+  <input type="checkbox" id="mylist-node3" />
+  <ul>
+   <b>A.3:</b> ModelMate is a preprocessor for UCODE_2005. Success in running ModelMate 
+   is dependent on an adequate understanding of UCODE_2005. Information on use 
+   of UCODE_2005 is provided in: <br><br>
+   Poeter, E.P., Hill, M.C., Banta, E.R., Mehl, Steffen, and Christensen, Steen, 
+   2005, UCODE_2005 and six 
+    other computer codes for universal sensitivity analysis, calibration, 
+    and uncertainty evaluation constructed using the JUPITER API:
+    <a href="http://igwmc.mines.edu/freeware/ucode/">
+      U.S. Geological Survey Techniques and Methods, book 6, chap. A11.</a> <br><br>
+    Additional information on gradient-based sensitivity analysis and model 
+    calibration in general is provided in:<br><br>
+    Hill, M.C., 1998, 
+      Methods and guidelines for effective model calibration: 
+      <a href="http://water.usgs.gov/nrp/gwsoftware/modflow2000/WRIR98-4005.pdf">
+        U.S. Geological Survey Water-Resources Investigations Report 98-4005, 90 p.</a><br><br>
+    Hill, M.C., and Tiedeman, C.R., 2007, 
+    <a href="http://www.wiley.com/WileyCDA/WileyTitle/productCd-047177636X.html">
+      Effective groundwater model calibration, 
+    with analysis of data, sensitivities, predictions and uncertainty: 
+    New York, John Wiley & Sons, 464 p.</a> (Requires purchase, but may be 
+    available in some libraries.)
+  </ul>
+ </li>
+    
+<!-- Q.4 -->  
+ <li>
+  <h3><label for="mylist-node4">Q.4: What utilities are available to help me 
+    interpret my results?</label></h3>
+  <input type="checkbox" id="mylist-node4" />
+  <ul>
+   <li><b>A.4:</b> <a href="http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html">
+    GW_Chart</a> provides graphing capabilities for many of the analyses 
+    described in Hill (1998) and Hill & Tiedeman (2007).  
+    ModelMate has a menu item for starting GW_Chart, but you will need to 
+    download and install 
+      GW_Chart yourself.  
+   </li>
+  </ul>
+ </li>
+
+<!-- Q.5 -->  
+ <li>
+  <h3><label for="mylist-node5">Q.5: My
+    parameter-estimation run does not converge. What's wrong?</label></h3>
+  <input type="checkbox" id="mylist-node5" />
+  <ul>
+   <li><b>A.5:</b> 
+    Parameter estimation is a notoriously difficult problem. 
+    As one student said: 
+    <italics>"Great, now there is another way for my model 
+      not to converge!"</italics>
+    </li>
+  </ul>
+ </li>
+ 
+</ul>
+
+    <hr>
+    <!--#include virtual="/inc/footer_water.html" -->
+    <!--#include virtual="/inc/footer.html" -->
+  </body>
+</html>

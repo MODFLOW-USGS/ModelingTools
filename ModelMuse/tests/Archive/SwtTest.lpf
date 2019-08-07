@@ -1,0 +1,27 @@
+# LPF: Layer Property Flow package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     9 -1.000000000000E+020      0 # ILPFCB, HDRY, NPLPF
+     1     1     1     1 # LAYTYP
+     0     0     0     0 # LAYAVG
+    -1    -1    -1    -1 # CHANI
+     0     0     0     0 # LAYVKA
+     0     0     0     0 # LAYWET
+CONSTANT     4.000000000000E+000  # HK Upper Unconfined Aquifer Layer 1
+CONSTANT     1.000000000000E+000  # HANI Upper Unconfined Aquifer Layer 1
+CONSTANT     4.000000000000E-001  # VKA Upper Unconfined Aquifer Layer 1
+CONSTANT     1.400000000000E-006  # SS Upper Unconfined Aquifer Layer 1
+CONSTANT     3.000000000000E-001  # SY Upper Unconfined Aquifer Layer 1
+CONSTANT     4.000000000000E+000  # HK Upper Unconfined Aquifer Layer 2
+CONSTANT     1.000000000000E+000  # HANI Upper Unconfined Aquifer Layer 2
+CONSTANT     4.000000000000E-001  # VKA Upper Unconfined Aquifer Layer 2
+CONSTANT     1.400000000000E-006  # SS Upper Unconfined Aquifer Layer 2
+CONSTANT     3.000000000000E-001  # SY Upper Unconfined Aquifer Layer 2
+CONSTANT     1.000000000000E-002  # HK Confining Unit Layer 3
+CONSTANT     1.000000000000E+000  # HANI Confining Unit Layer 3
+CONSTANT     1.000000000000E-002  # VKA Confining Unit Layer 3
+CONSTANT     1.400000000000E-006  # SS Confining Unit Layer 3
+CONSTANT     3.000000000000E-001  # SY Confining Unit Layer 3
+CONSTANT     4.000000000000E+000  # HK Lower Confined Aquifer Layer 4
+CONSTANT     1.000000000000E+000  # HANI Lower Confined Aquifer Layer 4
+CONSTANT     4.000000000000E-001  # VKA Lower Confined Aquifer Layer 4
+CONSTANT     1.400000000000E-006  # SS Lower Confined Aquifer Layer 4
+CONSTANT     3.000000000000E-001  # SY Lower Confined Aquifer Layer 4

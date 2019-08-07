@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MNWI - Multi-Node Well Information Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MNWI - Multi-Node Well Information Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MNWi</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data calculated for multi-node wells can be recorded at every time increment using the MNWI Package.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/tm6a30/" target="_blank" styleclass="Normal" translate="true">Konikow, L.F., Hornberger, G.Z., Halford, K.J., and Hanson, R.T., 2009, Revised multi-node well (MNW2) package for MODFLOW ground-water flow model: U.S. Geological Survey Techniques and Methods 6–A30, 67 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2" styleclass="Normal" translate="true">MNW2</link><text styleclass="Normal" translate="true"> package</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MNWI is designed to work with both MODFLOW-2000 and MODFLOW-2005 but the released version of MODFLOW-2000 does not include MNWI.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW Name File</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can optionally specify that information calculated for specific multi-node wells are to be written to separate output files by including a record in the MODFLOW name file using the file type (Ftype) “MNWI” that specifies the relevant input data file giving selected well locations. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2" styleclass="Normal" translate="true">MNW2</link><text styleclass="Normal" translate="true"> and MNWI Packages are compatible with MODFLOW–2000 (Harbaugh and others, 2000) and MODFLOW–2005 (Harbaugh, 2005) and with compatible versions of the groundwater transport process, but not with earlier versions of MODFLOW.</text></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Multi-Node Well Information (MNWI) Package</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Data calculated for multi-node wells can be recorded at every time increment using the MNWI Package. The specific nature of the recorded and written information depends on the selection of a number of options, as described below. Some options will save specific types of information for all multi-node wells to a single file, and other options will save certain information about an individual multi-node well to a single file. These output options can facilitate graphical postprocessing of the calculated data. The input file is read if the file type (Ftype) “MNWI” is included in the MODFLOW name file, and MNWI should only be used if the MNW2 Package is active.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the following description, input parameters are indicated as being optional by their enclosure in curly brackets. All input data are read using free formats.</text></para>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WEL1flag QSUMflag BYNDflag</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WEL1flag]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is an integer value indicating whether or not to create an output file in which the flows from every MNW node at the end of each stress period are written as single-cell fluxes in the format of the original MODFLOW Well Package (WEL1). This is equivalent to the “WEL1” option in the original </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" styleclass="Normal" translate="true">MNW</link><text styleclass="Normal" translate="true"> Package (Halford and Hanson, 2002). If WEL1flag = 0, then the WEL1 output file will not be created. If WEL1flag &gt; 0, then the value of WEL1flag is the unit number to which the WEL1 information will be saved.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QSUMflag]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is an integer value indicating whether or not to create an output file that lists the flow rates from each multi-node well for each time step. This is essentially equivalent to the “QSUM” option in the original </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" styleclass="Normal" translate="true">MNW</link><text styleclass="Normal" translate="true"> Package (Halford and Hanson, 2002). If QSUMflag = 0, then the QSUM output file will not be created. If QSUMflag &gt; 0, then the value of QSUMflag is the unit number to which the QSUM information will be saved.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BYNDflag]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is an integer value indicating whether or not to create an output file in which the flows and other information associated with every MNW node are written to a single file. This is essentially equivalent to the “BYNODE” option in the original </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" styleclass="Normal" translate="true">MNW</link><text styleclass="Normal" translate="true"> Package (Halford and Hanson, 2002). If BYNDflag = 0, then the output file will not be created. If BYNDflag &gt; 0, then the value of BYNDflag is the unit number to which the nodal information will be saved.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Notes 11-14]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Note 11: Unit numbers must be unique and matched to a DATA file type and file name in the MODFLOW name file.</text></li>
+                        <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Note 12: As noted by Halford and Hanson (2002, p. 15), the WEL1 file can be used in post-processing programs, such as MODPATH (Pollock, 1994), that currently are not compatible with multi-node wells. Although flow rates for constrained wells can change during a stress period, only flow rates from the last time step of each stress period are reported because the WEL1 Package is limited to a pumping rate that is constant and uniform in a given well during each stress period. The WEL1 file will not include information about auxiliary variables or wells that were specified using the standard WEL Package of MODFLOW.</text></li>
+                        <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Note 13: The QSUM file will include a table of values for all multi-node wells for all times that consists: of the sum of all nodal inflows (Q &lt; 0) from the aquifer to each well (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), the sum of all nodal outflows (discharges; Q &gt; 0) to the aquifer from each well (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), the net flow at the wellhead (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), and the calculated head in the well (L). If the GWT process is active, then calculated concentrations in the well will also be saved, with the exact information depending on the flow. For withdrawal wells (Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">net</text><text styleclass="Normal" translate="true"> &lt; 0), the MNWI Package will record the calculated concentration in the well discharge at the wellhead. For highrate injection wells (Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">net</text><text styleclass="Normal" translate="true"> &gt; 0 and no inflow at any nodes of the MNW), the MNWI Package will record the user-specified source concentration ( ). For nonpumping wells and low-rate injection wells (which include a mix of inflow and outflow nodes in the MNW), the MNWI Package will record the length-weighted average concentration in the borehole.</text></li>
+                        <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Note 14: The BYND file will include a table of values for all nodes of all multi-node wells for all times listing the flow between the node and the aquifer (Q &lt; 0 represents flow out of the aquifer into the well; Q &gt; 0 represents flow out of the well into the aquifer), and the calculated heads in both the cell and the well. If the GWT process is active, then the calculated concentration in the well at that nodal location will also be saved.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MNWOBS]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">Number of multi-node wells for which detailed flow, head, and (if the GWT process is active) solute data are to be saved in a separate file for each multi-node well. MNWOBS must be </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">³</text><text styleclass="Normal" translate="true"> 0.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IF MNWOBS &gt; 0, THEN FOR EACH MULTI-NODE WELL TO BE MONITORED:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WELLID UNIT QNDflag QBHflag [CONCflag]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WELLID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the name of the multi-node well. This is an alphanumeric identification label for each well, as defined in dataset 2a. The text string is limited to 20 alphanumeric characters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[UNIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the unit number for the output file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QNDflag]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is an integer flag used to indicate whether additional flow information for every node in the MNW is written to this output file. If QNDflag = 0, then nodal flow information is not written, resulting in a smaller file. If QNDflag &gt; 0, then the flow (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T) between the well node and the aquifer for all nodes of the MNW will be written (with a negative value indicating flow out of the aquifer and into the well). The additional data will not be written if the well contains only one node.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QBHflag]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is an integer flag used to indicate whether additional flow information for the MNW borehole is written to this output file. If QBHflag = 0, then flows between adjacent nodes of the well are not written, resulting in a smaller file. If QBHflag &gt; 0, then the flow between each well node in the borehole will be written (with a negative value indicating downward flow and a positive value indicating upwards flow). For each well node, the intraborehole flow across the top face (closest to the wellhead) of the node is recorded, where the flow is a volumetric rate (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T) within the borehole. The flow across the top face of the first node equals Qnet if the pump is located above the open interval. The flow across the bottom face of the last node is always 0.0, though this value is not printed. These data can be used to conveniently analyze or plot a profile of flows or velocities down a borehole. The additional data will not be written if the well contains only one node.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CONCflag]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is an integer flag used to indicate what solute information for this particular multi-node well is written to its output file. Only specify if the GWT process is active. If CONCflag = 0, then in addition to the flow and head information, the concentration in the well will also be saved (see “notes” below for more details about the concentration value to be saved). If CONCflag = 1, then additional columns of information about mass flux will be printed. The mass flux removed from (or injected into) the groundwater system for the time increment and cumulatively will be written (these always equal 0.0 for a nonpumping well). Additionally, the mass flux into the well from the groundwater system during the time increment, the cumulative mass flux into the well, the mass flux out of the well and into the groundwater system during the time increment, and the cumulative mass flux out of the well will be written in successive columns. If CONCflag = 2, then concentration in the well and the calculated concentration at every well node are saved (but no data on mass flux are recorded). If CONCflag = 3, then all solute-related data are saved and written to the output file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Notes 15-17]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">Note 15: A unique unit number must be specified for each multi-node well listed in record 3 and matched to a DATA file type and file name in the MODFLOW name file.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">Note 16: For each well listed, the output file will record in tabular format the elapsed simulation time, the sum of all nodal inflows from the aquifer into the well (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), the sum of all nodal outflows from the well into the aquifer (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), the net flow rate into or out of the well at the wellhead (Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">net</text><text styleclass="Normal" translate="true">) (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), the cumulative volume of flow into or out of the well at the wellhead over all time steps (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">), and the calculated head in the well (L). To this extent, the output file for each listed MNWOBS well is similar to that contained in the QSUM output file; however, the latter will contain information for multiple wells whereas the MNWOBS file will only contain information for a single well. Additional information on flows between the aquifer and the well at each node of the MNW will be written if QNDflag &gt; 0. If the GWT process is active, then the solute information to be written is determined by the specification of CONCflag. The type of calculated concentration value for the well that is saved depends on the well flow. For withdrawal wells (Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">net</text><text styleclass="Normal" translate="true"> &lt; 0), the MNWI Package will record the calculated concentration in the well discharge. For high-rate injection wells (Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">net</text><text styleclass="Normal" translate="true"> &gt; 0 and no inflow at any nodes of the MNW), the MNWI Package will record the user-specified source concentration (C&apos;</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">INJ</text><text styleclass="Normal" translate="true">). For nonpumping wells and low-rate injection wells (which include a mix of inflow and outflow nodes in the MNW), the MNWI Package will record the length-weighted average concentration in the borehole.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">Note 17: Although it is expected that a multi-node well will include more than one node in the grid, it is possible and allowable for a single-node well to be included in the list of multi-node wells read by the MNW2 Package. If a single-node injection well is specified for observation in the MNWI Package, then the software will simply record the user-specified source-fluid concentration, which is constant during a stress period. The software will not record the concentration in the aquifer; if those are desired, then concentrations calculated at specific nodes in the grid can be retrieved using the standard Observation Well (OBS) Package available for the MODFLOW–GWT model. Similarly, if a single-node withdrawal well is specified for observation in this package, then the software will record the values of aquifer concentration at the node corresponding to the location of this well [in this case, an identical record would be obtained using the OBS Package (see Konikow and others, 1996, p. 77)].</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

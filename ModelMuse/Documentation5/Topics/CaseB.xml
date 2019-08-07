@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CaseB</title>
+  <keywords>
+    <keyword translate="true">CaseB</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">CaseB</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CaseB</text><text styleclass="Normal" translate="true">(Index, Boolean_Result1, Boolean_Result2, ...) is like </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Case" styleclass="Normal" translate="true">Case</link><text styleclass="Normal" translate="true"> except that the value returned is always a Boolean.</text></para>
+  </body>
+</topic>

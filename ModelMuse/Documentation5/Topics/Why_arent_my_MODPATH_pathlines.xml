@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Why aren&apos;t my MODPATH pathlines visible?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Why aren&apos;t my MODPATH pathlines visible?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The most frequent reason why MODPATH pathlines are not visible is because, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH" anchor="StopOption" styleclass="Normal" style="font-weight:bold;" translate="true">StopOption</link><text styleclass="Normal" translate="true"> in MODPATH 6 has not been set correctly. If you have a steady-state simulation and the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">StopOption</text><text styleclass="Normal" translate="true"> has been set to </text><text styleclass="Strong" translate="true">Stop at beginning or end of simulation (1)</text><text styleclass="Normal" translate="true">, try setting it to </text><text styleclass="Strong" translate="true">Stop at termination points (steady state) (2)</text><text styleclass="Normal" translate="true"> instead.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Inside MODFLOW</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Inside MODFLOW</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This topic explains a little about how MODFLOW is programmed. It is intended for those who wish to explore the source code to understand it better or who wish to modify MODFLOW. The information described in this section is primarily derived from examination of the MODFLOW-2005 source code.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">A Little Bit about Fortran</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW is programmed primarily in Fortran so you need to know at least a little Fortran to read the MODFLOW source code. While a complete description of Fortran is beyond the scope of this document, there are a few things that are &#160;especially helpful to know to someone new to Fortran.</text></para>
+    <list id="28" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In Fortran 77 variable names were limited to 6 characters in length. Beginning with Fortran 90, the length of names could be up to 31 characters. Because MODFLOW predates the adoption of Fortran 90, many of the names used in MODFLOW respect the 6 character limit even though the limit has since been expanded. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Unlike C, Fortran is case insensitive; if a variable is named &quot;AVar&quot;, it can be spelled in any combination of upper and lower case letters. AVAR, avar, AVar, and aVaR would all be acceptable ways to refer to the variable.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In Fortran, the first element of an array is at position 1 not position 0 unless the range is specified otherwise. &#160;An array declared as AnArray(3) would have the following elements AnArray(1), AnArray(2), AnArray(3).</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">You are not required to declare a type for a variable because Fortran has implicit typing. If a variable name begins with I through N, it is automatically an INTEGER unless it is explicitly declared as some other type. A variable name that starts with any other letter is automatically a REAL number unless it is explicitly declared as some other type. &#160;However, in a subroutine that contains the statement &quot;implicit none&quot; all variables must be explicitly declared rather than relying on an implicit declaration. Implicit typing is widely used in MODFLOW. However, implicit typing does have dangers; a misspelled variable name will not be rejected by the compiler when implicit typing is used.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">When reading data from a text file, a Fortran format must be used to tell the program how the data is formatted so it can be read correctly. Two of these are commonly used in MODFLOW &quot;I10&quot; and &quot;F10.0&quot;. I10 means that the data represents a integer represented by 10 characters. &quot;F10.0&apos; means that the data is a real number represented by 10 characters and that if no decimal point is included in those characters, the decimal point belongs at the end of the number.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">For more information on Fortran see </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">http://www.ibiblio.org/pub/languages/fortran/</link><text styleclass="Normal" translate="true"> especially </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">http://www.ibiblio.org/pub/languages/fortran/ch1-8.html</link><text styleclass="Normal" translate="true">.</text></li>
+    </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">MODFLOW Naming Conventions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The primary subroutines in MODFLOW are the subroutines in packages that are called from outside the package. Typically, they are called from the main program. The primary subroutines are named using the following naming convention. &quot;</text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:11pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">The first three characters designate the process. The fourth character is a process version number. The next three characters designate the package, the following character is a package version number, and the last two indicate the procedure.&quot; In MODFLOW-2005, there are two processes: groundwater flow (GWF) and Observation (OBS). In MODFLOW-2000, there are also the Sensitivity (SEN) and Parameter Estimation (PES) processes. The abbreviations for the procedures are as follows.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="13" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Allocate and Read</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">AR</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ST</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read and Prepare</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">RP</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Advance</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">AD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Formulate</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FM</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Approximate</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">AP</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Output Control</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OC</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Water Budget</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Compute Storage Budget Flow Term</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BDS</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Compute Flow Between Adjacent Cells in a Subregion of the Grid</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BDADJ</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Compute Flow from Constant-Head Cells</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BDCH</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Output</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Deallocate</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DA</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Packages typically have subroutines for only some of the above procedures. For example, the &quot;Approximate&quot; procedure is only used by the solver packages.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Secondary subroutines are called from within a package. Typically, they are named similarly to the primary subroutines except that an S is added before the process identification and the abbreviation for the procedure will be something other than one of the ones used for primary subroutines. There are exceptions, however.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">File names typically use the same convention as procedure names except that there is no procedure abbreviation. For example, the subroutines for the WEL package are in the file gwf2wel7.f in MODFLOW-2005. However, the files for the solver packages do not follow this convention and there are a few other exceptions too.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Some variable names follow naming conventions too. For example consider the following variables in the CHD, WEL, DRN, GHB, and RIV packages</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="11" colcount="5" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">CHD</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">WEL</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">DRN</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">GHB</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">RIV</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NCHDS</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NWELLS </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NDRAIN </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NBOUND </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NRIVER </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">MXCHD</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">MXWELL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">MXDRN</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">MXBND</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">MXRIVR</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NCHDVL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NWELVL </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NDRNVL </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NGHBVL </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NRIVVL </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IWELCB </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IDRNCB </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IGHBCB </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IRIVCB </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IPRCHD</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IPRWEL </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IPRDRN</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IPRGHB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IPRRIV </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NPCHD</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NPWEL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NPDRN</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NPGHB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NPRIV</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">ICHDPB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IWELPB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IDRNPB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IGHBPB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">IRIVPB</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NNPCHD</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NNPWEL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NNPDRN</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NNPGHB</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">NNPRIV</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">CHDAUX</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">WELAUX</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">DRNAUX</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">GHBAUX</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">RIVAUX</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">CHDS</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">WELL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">DRAI</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">BNDS</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">RIVR</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note that all of the variable names identify the package in some way. Variables that start with N identify the number of something. Variables starting with NP identify the number of parameters. Variables starting with MX identify the maximum number of something. Variables starting with I and ending with CB identify a unit number on which to save cell-by-cell flows.Variables starting with NNP identify the number of boundaries not associated with parameters.Variables ending in AUX are the names of auxiliary variables.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">MODULES in MODFLOW-2005</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW-2005, each package contains one or Fortran modules that declare the shared data for the package. As an example, here is the module for the WEL package.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;MODULE GWFWELMODULE</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;INTEGER,SAVE,POINTER &#160;::NWELLS,MXWELL,NWELVL,IWELCB,IPRWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;INTEGER,SAVE,POINTER &#160;::NPWEL,IWELPB,NNPWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;CHARACTER(LEN=16),SAVE, DIMENSION(:), &#160; POINTER &#160; &#160; ::WELAUX</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;REAL, &#160; &#160; &#160; &#160; &#160; &#160; SAVE, DIMENSION(:,:), POINTER &#160; &#160; ::WELL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;TYPE GWFWELTYPE</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;INTEGER,POINTER &#160;::NWELLS,MXWELL,NWELVL,IWELCB,IPRWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;INTEGER,POINTER &#160;::NPWEL,IWELPB,NNPWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;CHARACTER(LEN=16), DIMENSION(:), &#160; POINTER &#160; &#160; ::WELAUX</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;REAL, &#160; &#160; &#160; &#160; &#160; &#160; &#160;DIMENSION(:,:), POINTER &#160; &#160; ::WELL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;END TYPE</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;TYPE(GWFWELTYPE), SAVE:: GWFWELDAT(10)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;END MODULE GWFWELMODULE</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note that a new type (</text><text styleclass="Code Example" translate="true">GWFWELTYPE</text><text styleclass="Normal" translate="true">) is declared in the module and that this type has members whose names are the same as all the variables declared previously in the module. There is also an array named </text><text styleclass="Code Example" translate="true">GWFWELDAT</text><text styleclass="Normal" translate="true"> with a length of 10 of </text><text styleclass="Code Example" translate="true">GWFWELTYPE</text><text styleclass="Normal" translate="true">. &#160;The purpose of this array is to save multiple copies of the previously defined variables. There are two subroutines in the well package that use the </text><text styleclass="Code Example" translate="true">GWFWELDAT</text><text styleclass="Normal" translate="true"> array: </text><text styleclass="Code Example" translate="true">SGWF2WEL7PNT</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Code Example" translate="true">SGWF2WEL7PSV</text><text styleclass="Normal" translate="true">. These are shown below. The former copies the data from the array into the variables. </text><text styleclass="Code Example" translate="true">SGWF2WEL7PSV</text><text styleclass="Normal" translate="true"> copies the data in the other direction. In versions of MODFLOW with multiple grids such as MODFLOW-LGR, </text><text styleclass="Code Example" translate="true">GWFWELDAT</text><text styleclass="Normal" translate="true"> is used to store the data for each of the grids. The other packages are designed similarly with a module declaring the shared data for the package, a type with members that repeat the variables for the package and array of that newly defined type to hold data for multiple grids. </text><text styleclass="Code Example" translate="true">SGWF2WEL7PSV</text><text styleclass="Normal" translate="true"> is called at the end of the GWF2WEL7AR (allocate and read) subroutine. </text><text styleclass="Code Example" translate="true">SGWF2WEL7PNT</text><text styleclass="Normal" translate="true"> is called at the beginning of the other primary subroutines.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;SUBROUTINE SGWF2WEL7PNT(IGRID)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">C &#160;Change WEL data to a different grid.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;USE GWFWELMODULE</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">C</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;NWELLS=&gt;GWFWELDAT(IGRID)%NWELLS</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;MXWELL=&gt;GWFWELDAT(IGRID)%MXWELL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;NWELVL=&gt;GWFWELDAT(IGRID)%NWELVL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;IWELCB=&gt;GWFWELDAT(IGRID)%IWELCB</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;IPRWEL=&gt;GWFWELDAT(IGRID)%IPRWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;NPWEL=&gt;GWFWELDAT(IGRID)%NPWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;IWELPB=&gt;GWFWELDAT(IGRID)%IWELPB</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;NNPWEL=&gt;GWFWELDAT(IGRID)%NNPWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;WELAUX=&gt;GWFWELDAT(IGRID)%WELAUX</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;WELL=&gt;GWFWELDAT(IGRID)%WELL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">C</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;RETURN</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;END</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;SUBROUTINE SGWF2WEL7PSV(IGRID)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">C &#160;Save WEL data for a grid.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;USE GWFWELMODULE</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">C</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%NWELLS=&gt;NWELLS</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%MXWELL=&gt;MXWELL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%NWELVL=&gt;NWELVL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%IWELCB=&gt;IWELCB</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%IPRWEL=&gt;IPRWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%NPWEL=&gt;NPWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%IWELPB=&gt;IWELPB</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%NNPWEL=&gt;NNPWEL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%WELAUX=&gt;WELAUX</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160;GWFWELDAT(IGRID)%WELL=&gt;WELL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">C</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;RETURN</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160;END</text></para>
+  </body>
+</topic>

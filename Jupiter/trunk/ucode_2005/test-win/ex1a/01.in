@@ -1,0 +1,55 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options	KEYWORDS
+  Verbose=0
+END Options
+
+# --------------------------------
+# COMMAND FOR APPLICATION MODEL(S)
+# --------------------------------
+
+BEGIN MODEL_COMMAND_LINES FILES
+..\ex1a-files\obs-fwd.command
+END MODEL_COMMAND_LINES
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+   GroupName = MyPars  adjustable=yes TOLPAR=.01  maxchange=2.0	  SENMETHOD=1
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA FILES
+..\ex1a-files\tr.params
+END PARAMETER_DATA 
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN OBSERVATION_GROUPS FILES
+..\ex1a-files\groups.obs
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA FILES
+..\ex1a-files\hed.obs
+..\ex1a-files\flo.obs
+END OBSERVATION_DATA 
+
+# -----------------------------
+# APPLICATION MODEL INFORMATION
+# -----------------------------
+
+BEGIN MODEL_INPUT_FILES	KEYWORDS
+  modinfile=..\..\test-data-win\data-transient\tc1-fwd.sen  
+  templatefile=..\ex1a-files\tc1sen-forward.tpl
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES  KEYWORDS
+  modoutfile=..\..\test-data-win\data-transient\tc1._os  
+  instructionfile=..\ex1a-files\obs.instructions   
+  category=obs
+END MODEL_OUTPUT_FILES

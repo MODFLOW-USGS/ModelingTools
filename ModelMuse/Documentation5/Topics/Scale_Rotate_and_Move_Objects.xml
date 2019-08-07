@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Scale, Rotate, and Move Objects Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Scale, Rotate, and Move Objects Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Scale, Rotate, and Move Objects</text><text styleclass="Normal" translate="true"> dialog box is used to reshape and reposition the selected objects. One reason to use this option would be to rescale objects that are imported from a source that is at a different scale than the scale used in the model. The dialog box is displayed by first selecting one or more objects and then selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Object|Edit|Scale, Rotate, and Move Objects...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The order in which the selected operations is applied is scaling, followed by rotating, followed by moving.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To apply any of the selected operations, check the corresponding check box. For scaling the user must then enter a scaling factor for the X and Y direction. If the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Lock aspect ratio</text><text styleclass="Normal" translate="true"> checkbox is checked, those scaling factors will be identical. For rotation, the user must enter the angle of rotation in degrees measured in the counterclockwise direction. For moving, the user must enter the distance in the X and Y direction that the objects will be moved. For both scaling and rotation, the user must specify a reference point relative to which the scaling or rotation occur. By default, the center of the selected objects is used. However, the user can choose to specify some other reference point.</text></para>
+  </body>
+</topic>

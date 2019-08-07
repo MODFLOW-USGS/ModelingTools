@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="testEts" FileType="bin">
+    <FileName Model_Name="testEts" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="testEts" FileType="ancillary">
+    <FileName Model_Name="testEts" FileType="ancillary">testEts.gpt</FileName>
+  </ancillary>
+  <model Model_Name="testEts" FileType="Model Input">
+    <FileName Model_Name="testEts" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.bas</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.chd</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.dis</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.ets</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.gsf</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.jtf</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.lpf</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.mlt</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.nam.archive</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.oc</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.pcg</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.pval</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">testEts.zon</FileName>
+    <FileName Model_Name="testEts" FileType="Model Input">usgs.testEts.reference</FileName>
+  </model>
+  <output Model_Name="testEts" FileType="Model Output">
+    <FileName Model_Name="testEts" FileType="Model Output">testEts.cbc</FileName>
+    <FileName Model_Name="testEts" FileType="Model Output">testEts.fdn</FileName>
+    <FileName Model_Name="testEts" FileType="Model Output">testEts.fhd</FileName>
+    <FileName Model_Name="testEts" FileType="Model Output">testEts.lst</FileName>
+  </output>
+</Model_Archive_List>

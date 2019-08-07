@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="testRch" FileType="bin">
+    <FileName Model_Name="testRch" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="testRch" FileType="ancillary">
+    <FileName Model_Name="testRch" FileType="ancillary">testRch.gpt</FileName>
+  </ancillary>
+  <model Model_Name="testRch" FileType="Model Input">
+    <FileName Model_Name="testRch" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.bas</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.chd</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.dis</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.gsf</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.lpf</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.nam.archive</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.oc</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.pcg</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">testRch.rch</FileName>
+    <FileName Model_Name="testRch" FileType="Model Input">usgs.testRch.reference</FileName>
+  </model>
+  <output Model_Name="testRch" FileType="Model Output">
+    <FileName Model_Name="testRch" FileType="Model Output">testRch.cbc</FileName>
+    <FileName Model_Name="testRch" FileType="Model Output">testRch.fdn</FileName>
+    <FileName Model_Name="testRch" FileType="Model Output">testRch.fhd</FileName>
+    <FileName Model_Name="testRch" FileType="Model Output">testRch.lst</FileName>
+  </output>
+</Model_Archive_List>

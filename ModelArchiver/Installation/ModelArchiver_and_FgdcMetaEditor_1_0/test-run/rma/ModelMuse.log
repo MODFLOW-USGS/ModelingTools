@@ -1,0 +1,20 @@
+0	 (i)  Log subsystem started in elapsed time mode.
+0	 (i)  Logging [debug info (D), info (i), notices (M), warnings (W), errors (Er), fatal errors (!!)]
+0	 (i)  Buffered mode: False
+0	 (i)  Temporary rendering context created
+0	 (M)  Getting OpenGL entry points and extension
+0	 (M)  
+0	 (i)  OpenGL rendering context information:
+0	 (i)  Renderer     : GeForce GTX 960/PCIe/SSE2
+0	 (i)  Vendor       : NVIDIA Corporation
+0	 (i)  Version      : 4.5.0 NVIDIA 372.54
+0	 (i)  GLSL version : 4.50 NVIDIA
+0	 (M)  
+16	 (i)  Temporary rendering context destroyed
+16	 (M)  Getting OpenGL entry points and extension
+31	 (i)  Temporary rendering context created
+31	 (M)  Getting OpenGL entry points and extension
+47	 (i)  Temporary rendering context destroyed
+47	 (M)  Getting OpenGL entry points and extension
+3065623	 (i)  Logged fatal_errors: 0, errors: 0, warnings: 0, notices: 6, info: 12, debug: 0
+3065638	 (i)  Log session shutdown

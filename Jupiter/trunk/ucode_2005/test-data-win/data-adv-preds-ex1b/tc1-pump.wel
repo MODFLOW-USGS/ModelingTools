@@ -1,0 +1,19 @@
+#Parameter Q1&2 is defined but not used by stress period 1, for which advective
+#travel is calculated
+PARAMETER 1 2                             Item 1: PARAMETER LINE: NPWEL, MXPWEL
+         2         0                      Item 2: MXACTW, IWELCB
+Q1&2      Q -1.1 2                        Item 3: PARNAM, PARTYP, B, NLST
+         1         9        10       1.0       7.0   Item 4: Layer Row Column Qfact abc
+         2         9        10       1.0       8.0
+         2         0                      Item 5: ITMP, NP for Stress Period 1
+         1         9        10      -1.1       7.0   Item 4: Layer Row Column Qfact abc
+         2         9        10      -1.1       8.0
+         0         1                      Item 5: ITMP, NP for Stress Period 2
+Q1&2                                      Item 7: Pname
+
+
+
+
+
+
+

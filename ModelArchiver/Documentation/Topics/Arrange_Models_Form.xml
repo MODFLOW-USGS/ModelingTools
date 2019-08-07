@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Arrange Models Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Arrange Models Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Arrange Models</text><text styleclass="Normal" translate="true"> dialog box is used to rearrange the model folders. It is displayed by selecting &quot;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|</text><text styleclass="Heading2_atoc_" style="font-weight:bold;" translate="true">Change Model Order...</text><text styleclass="Normal" translate="true">&quot; It is used For example, Suppose you had the following models in the archive.</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">FourthModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">ThirdModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">SecondModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">FirstModel</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You might want to have the models listed in a different order. There is an </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Alphabetize</text><text styleclass="Normal" translate="true"> button at the bottom of the dialog box. Clicking it will rearrange the models into the following order.</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">FirstModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">FourthModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">SecondModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">ThirdModel</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-size:12pt;" translate="true">This still might not be the order you want. Next you could select &quot;FourthModel&quot; and drag it to the end of the list resulting in the following order.</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">FirstModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">SecondModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">ThirdModel</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt;" translate="true">FourthModel</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When you click OK, the folders under &quot;model&quot;, &quot;output&quot;, and &quot;ancillary&quot; would be rearranged into the order you specify. It is also possible to rearrange folders by dragging them to new positions in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" style="font-weight:bold;" translate="true">Archive Structure</link><text styleclass="Normal" translate="true"> pane.</text></para>
+  </body>
+</topic>

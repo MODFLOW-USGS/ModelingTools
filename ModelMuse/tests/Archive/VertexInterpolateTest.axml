@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="VertexInterpolateTest" FileType="bin">
+    <FileName Model_Name="VertexInterpolateTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="VertexInterpolateTest" FileType="ancillary">
+    <FileName Model_Name="VertexInterpolateTest" FileType="ancillary">VertexInterpolateTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="VertexInterpolateTest" FileType="Model Input">
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">usgs.VertexInterpolateTest.reference</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.bas</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.dis</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.gsf</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.lpf</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.nam.archive</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.oc</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Input">VertexInterpolateTest.pcg</FileName>
+  </model>
+  <output Model_Name="VertexInterpolateTest" FileType="Model Output">
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Output">VertexInterpolateTest.cbc</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Output">VertexInterpolateTest.fdn</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Output">VertexInterpolateTest.fhd</FileName>
+    <FileName Model_Name="VertexInterpolateTest" FileType="Model Output">VertexInterpolateTest.lst</FileName>
+  </output>
+</Model_Archive_List>

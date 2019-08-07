@@ -1,0 +1,10 @@
+# Multiplier (MULT) File created on 9/9/2009 by ModelMuse version 2.0.0.0.
+ 4 # NML
+HKN1_M1    # MLTNAM
+CONSTANT    1.000000000000E+000  # Multiplier array for HKN1 in Layer 1
+HKN2_M2    # MLTNAM
+CONSTANT    1.000000000000E+000  # Multiplier array for HKN2 in Layer 2
+HKN3_M3    # MLTNAM
+CONSTANT    1.000000000000E+000  # Multiplier array for HKN3 in Layer 3
+HKN4_M4    # MLTNAM
+CONSTANT    1.000000000000E+000  # Multiplier array for HKN4 in Layer 4

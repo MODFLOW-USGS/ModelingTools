@@ -1,0 +1,11 @@
+# WEL: Well package file created on 12/3/2017 by ModelMuse version 3.9.0.23.
+PARAMETER     1     4 # DataSet 1: PARAMETER NPWEL MXL
+     2     9 AUXILIARY IFACE # DataSet 2: MXACTW IWELCB Option
+Q_Par1 Q  1.000000000000E+000      1 # Data Set 3: PARNAM PARTYP Parval NLST
+     1     1     1  1.000000000000E+000      0 # Data Set 4b: Layer Row Column Qfact IFACE Intersected by Object10 with formula: 1
+     1     0 # Data Set 5: ITMP NP Stress period 1
+     1     1     1  1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object10 with formula: 1
+    -1     0 # Data Set 5: ITMP NP Stress period 2
+    -1     0 # Data Set 5: ITMP NP Stress period 3
+     0     1 # Data Set 5: ITMP NP Stress period 4
+Q_Par1 # Data Set 7: PARNAM

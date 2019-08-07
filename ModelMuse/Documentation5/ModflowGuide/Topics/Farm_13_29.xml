@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Farm 13 29</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm 13 29</text></para>
+    </header>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Crop-ID]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Crop type identity, to which the parameters below are attributed.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FIESWP]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="FIESWP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Fraction of in-efficient losses to surface-water related to precipitation (0 ≤ FIESWP ≤ 1)</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FIESWI]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="FIESWI" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Fraction of in-efficient losses to surface-water related to irrigation (0 ≤ FIESWI ≤ 1)</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

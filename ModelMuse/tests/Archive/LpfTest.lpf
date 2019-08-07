@@ -1,0 +1,53 @@
+# LPF: Layer Property Flow package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     9 -1.000000000000E+020      0 # ILPFCB, HDRY, NPLPF
+     1     1     1     1     1     1     0     0 # LAYTYP
+     0     0     2     2     0     0     1     1 # LAYAVG
+    -1    -1    -1    -1    -1    -1    -1    -1 # CHANI
+     0     0     0     0     0     0     0     0 # LAYVKA
+     1     1     1     1     1     1     0     0 # LAYWET
+  5.000000000000E-001      1     1 # WETFCT, IWETIT, IHDWET
+CONSTANT     1.000000000000E-004  # HK Unconfined Layer 1
+CONSTANT     9.000000000000E-001  # HANI Unconfined Layer 1
+CONSTANT     1.000000000000E-005  # VKA Unconfined Layer 1
+CONSTANT     1.000000000000E-005  # SS Unconfined Layer 1
+CONSTANT     2.000000000000E-001  # SY Unconfined Layer 1
+CONSTANT    -5.000000000000E-001  # WETDRY Unconfined Layer 1
+CONSTANT     1.000000000000E-004  # HK Unconfined Layer 2
+CONSTANT     9.000000000000E-001  # HANI Unconfined Layer 2
+CONSTANT     1.000000000000E-005  # VKA Unconfined Layer 2
+CONSTANT     1.000000000000E-005  # SS Unconfined Layer 2
+CONSTANT     2.000000000000E-001  # SY Unconfined Layer 2
+CONSTANT     1.000000000000E-005  # VKCB NonSim1 Layer 2
+CONSTANT    -5.000000000000E-001  # WETDRY Unconfined Layer 2
+CONSTANT     1.000000000000E-004  # HK Convertible Layer 3
+CONSTANT     8.000000000000E-001  # HANI Convertible Layer 3
+CONSTANT     1.000000000000E-005  # VKA Convertible Layer 3
+CONSTANT     1.000000000000E-005  # SS Convertible Layer 3
+CONSTANT     2.000000000000E-001  # SY Convertible Layer 3
+CONSTANT    -5.000000000000E-001  # WETDRY Convertible Layer 3
+CONSTANT     1.000000000000E-004  # HK Convertible Layer 4
+CONSTANT     8.000000000000E-001  # HANI Convertible Layer 4
+CONSTANT     1.000000000000E-005  # VKA Convertible Layer 4
+CONSTANT     1.000000000000E-005  # SS Convertible Layer 4
+CONSTANT     2.000000000000E-001  # SY Convertible Layer 4
+CONSTANT    -5.000000000000E-001  # WETDRY Convertible Layer 4
+CONSTANT     1.000000000000E-004  # HK LimitedConvertible Layer 5
+CONSTANT     7.000000000000E-001  # HANI LimitedConvertible Layer 5
+CONSTANT     1.000000000000E-005  # VKA LimitedConvertible Layer 5
+CONSTANT     1.000000000000E-005  # SS LimitedConvertible Layer 5
+CONSTANT     2.000000000000E-001  # SY LimitedConvertible Layer 5
+CONSTANT    -5.000000000000E-001  # WETDRY LimitedConvertible Layer 5
+CONSTANT     1.000000000000E-004  # HK LimitedConvertible Layer 6
+CONSTANT     7.000000000000E-001  # HANI LimitedConvertible Layer 6
+CONSTANT     1.000000000000E-005  # VKA LimitedConvertible Layer 6
+CONSTANT     1.000000000000E-005  # SS LimitedConvertible Layer 6
+CONSTANT     2.000000000000E-001  # SY LimitedConvertible Layer 6
+CONSTANT    -5.000000000000E-001  # WETDRY LimitedConvertible Layer 6
+CONSTANT     1.000000000000E-004  # HK Confined Layer 7
+CONSTANT     6.000000000000E-001  # HANI Confined Layer 7
+CONSTANT     1.000000000000E-005  # VKA Confined Layer 7
+CONSTANT     1.000000000000E-005  # SS Confined Layer 7
+CONSTANT     1.000000000000E-004  # HK Confined Layer 8
+CONSTANT     6.000000000000E-001  # HANI Confined Layer 8
+CONSTANT     1.000000000000E-005  # VKA Confined Layer 8
+CONSTANT     1.000000000000E-005  # SS Confined Layer 8

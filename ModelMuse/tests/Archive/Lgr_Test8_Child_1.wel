@@ -1,0 +1,75 @@
+# WEL: Well package file created on 12/3/2017 by ModelMuse version 3.9.0.23.
+# Well Package input for test simulation 2
+    10  1009 AUXILIARY IFACE # DataSet 2: MXACTW IWELCB Option
+    10     0 # Data Set 5: ITMP NP Stress period 1
+     2     4     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2     4    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2     7     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2     7    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2    10     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2    10    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2    13     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2    13    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2    16     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+     2    16    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod01_Layer1_1 with formula: ObjectImportedValuesR("WelPump1")
+    -1     0 # Data Set 5: ITMP NP Stress period 2
+    10     0 # Data Set 5: ITMP NP Stress period 3
+     2     4     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2     4    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2     7     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2     7    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2    10     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2    10    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2    13     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2    13    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2    16     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+     2    16    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod03_Layer1_3 with formula: ObjectImportedValuesR("WelPump3")
+    -1     0 # Data Set 5: ITMP NP Stress period 4
+    10     0 # Data Set 5: ITMP NP Stress period 5
+     2     4     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2     4    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2     7     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2     7    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2    10     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2    10    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2    13     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2    13    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2    16     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     2    16    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod05_Layer1_5 with formula: ObjectImportedValuesR("WelPump5")
+     0     0 # Data Set 5: ITMP NP Stress period 6
+    10     0 # Data Set 5: ITMP NP Stress period 7
+     2     4     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2     4    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2     7     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2     7    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2    10     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2    10    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2    13     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2    13    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2    16     7 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     2    16    10 -2.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod07_Layer1_6 with formula: ObjectImportedValuesR("WelPump6")
+     0     0 # Data Set 5: ITMP NP Stress period 8
+    10     0 # Data Set 5: ITMP NP Stress period 9
+     2     4     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2     4    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2     7     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2     7    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2    10     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2    10    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2    13     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2    13    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2    16     7 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     2    16    10 -1.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod09_Layer1_7 with formula: ObjectImportedValuesR("WelPump7")
+     0     0 # Data Set 5: ITMP NP Stress period 10
+    10     0 # Data Set 5: ITMP NP Stress period 11
+     2     4     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2     4    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2     7     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2     7    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2    10     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2    10    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2    13     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2    13    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2    16     7 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     2    16    10 -3.000000000000E+000      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod11_Layer1_8 with formula: ObjectImportedValuesR("WelPump8")
+     0     0 # Data Set 5: ITMP NP Stress period 12

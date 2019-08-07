@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SFR_Note3</title>
+  <body>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 3</text><text styleclass="Normal" translate="true">: The first two variables (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="NSTRM" styleclass="Normal" translate="true">NSTRM</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="NSS" styleclass="Normal" translate="true">NSS</link><text styleclass="Normal" translate="true">) are used for dimensioning arrays, and must be equal to the actual number of stream reaches defined in Item 2 and the number of segments that define the complete stream network, respectively.</text></li>
+    </list>
+  </body>
+</topic>

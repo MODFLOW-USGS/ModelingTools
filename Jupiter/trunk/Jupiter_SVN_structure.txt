@@ -1,0 +1,61 @@
+Proposed SVN repository structure for JUPITER API, UCODE_2005, and other programs
+
+The Jupiter directory below would be stored in CoLab, project USGS-GW-Model-Tools, at URL: https://colab.sc.egov.usda.gov/svn/GWModelTools/Jupiter
+
+Jupiter
+  branches [code in development can go here, to be merged into trunk for release]
+  tags
+  trunk [this directory level would be checked out to a directory on your computer]
+  [Checkout URL: https://colab.sc.egov.usda.gov/svn/GWModelTools/Jupiter/trunk]
+    jupiter_api [all levels: read access for Eileen]
+      doc
+      src
+        api_modules [*.f90 files that comprise official Jupiter API, merged with files in ucode_2005/src/api-modules as needed]
+        group_example
+        jrunner
+        sensitivity_example
+      test
+        group_example
+        sensitivity_example
+          runner1
+          runner2
+      VS2008 [Visual Studio 2008 solution file resides here]
+        group_example
+        jrunner
+        jupiter_api_lib
+        sensitivity_example
+      Web_page
+        code
+          doc
+          WINDOWS
+    ucode_2005 [all levels: read/write access for Eileen]
+      doc
+      src
+        api-modules
+          [*.f90 that comprise Jupiter API, merged with files in jupiter_api/src/api_modules as needed]
+        corfac_plus
+        linear_uncertainty
+        model_linearity
+        model_linearity_adv
+        residual_analysis
+        residual_analysis_adv
+        runner
+        ucode_2005
+      test-data-win
+        data-adv-preds-ex1a
+        data-adv-preds-ex1b
+        data-ss
+        data-transient
+        data-used-by-all
+      test-win
+        ex1a
+        ex1a-files
+        ex1b
+        ex1b-files
+        ex1-ss-sos
+        ex1-true
+        simple-example.1
+          code_dupuit
+          html
+    ucode_2010
+      ...

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Hint Display Time Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Hint Display Time Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the mouse is held over a control in the ModelMuse main window, a small &quot;hint&quot; box will appear in which the purpose of that control is briefly described. A longer hint will also appear on the status bar. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Hint Display Time</text><text styleclass="Normal" translate="true"> dialog box is used to specify how long the small &quot;hint&quot; box is displayed (in seconds). By default, the hint box is displayed for 2.5 seconds. To display the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Hint Display Time</text><text styleclass="Normal" translate="true"> dialog box, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Customize|Hint Display Time…</text></para>
+  </body>
+</topic>

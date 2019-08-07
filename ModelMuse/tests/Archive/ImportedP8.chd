@@ -1,0 +1,26 @@
+# CHD: Time-Variant Specified-Head package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+    22 AUXILIARY IFACE # MXACTC Option
+    22     0 # Data Set 5: ITMP NP Stress period 1
+     6     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     7     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     8     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     9     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    10     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    11     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    12     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    13     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    14     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    15     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    16     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    17     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    18     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    19     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    20     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    21     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    22     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    23     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    24     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    25     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    26     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    27     1    50  5.375000000000E+000   5.375000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     0     0 # Data Set 5: ITMP NP Stress period 2

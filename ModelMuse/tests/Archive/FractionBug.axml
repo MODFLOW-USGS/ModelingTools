@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="FractionBug" FileType="bin">
+    <FileName Model_Name="FractionBug" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="FractionBug" FileType="ancillary">
+    <FileName Model_Name="FractionBug" FileType="ancillary">FractionBug.gpt</FileName>
+  </ancillary>
+  <model Model_Name="FractionBug" FileType="Model Input">
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.bas</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.dis</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.gsf</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.lpf</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.nam.archive</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.oc</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">FractionBug.pcg</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Input">usgs.FractionBug.reference</FileName>
+  </model>
+  <output Model_Name="FractionBug" FileType="Model Output">
+    <FileName Model_Name="FractionBug" FileType="Model Output">FractionBug.cbc</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Output">FractionBug.fdn</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Output">FractionBug.fhd</FileName>
+    <FileName Model_Name="FractionBug" FileType="Model Output">FractionBug.lst</FileName>
+  </output>
+</Model_Archive_List>

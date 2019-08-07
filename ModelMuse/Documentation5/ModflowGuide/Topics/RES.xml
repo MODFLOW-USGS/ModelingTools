@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RES - Reservoir Package</title>
+  <keywords>
+    <keyword translate="true">BRES</keyword>
+    <keyword translate="true">EndstageForm</keyword>
+    <keyword translate="true">HCres</keyword>
+    <keyword translate="true">IRES</keyword>
+    <keyword translate="true">IRESCB</keyword>
+    <keyword translate="true">IRESL</keyword>
+    <keyword translate="true">IRESPT</keyword>
+    <keyword translate="true">NPTS</keyword>
+    <keyword translate="true">NRES</keyword>
+    <keyword translate="true">NRESOP</keyword>
+    <keyword translate="true">Rbthck</keyword>
+    <keyword translate="true">RES</keyword>
+    <keyword translate="true">Ststage</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RES - Reservoir Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">RES</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Reservoir Boundary package simulates leakage between a reservoir and an underlying groundwater system as the reservoir area expands and contracts in response to changes in reservoir stage. &#160;The user can specify beginning and ending stages for the reservoir in each stress period.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Unlike the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true"> package, the head in reservoirs is unaffected by the interaction between the reservoir and the groundwater.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr96364" target="_blank" styleclass="Citation" translate="true">Fenske, J.P., Leake, S.A., and Prudic, D.E., 1996, Documentation of a computer program (RES1) to simulate leakage from reservoirs using the modular finite-difference ground-water flow model (MODFLOW): U.S. Geological Survey Open-File Report 96-364, 51 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head-Dependent_Flux_Boundary_P" styleclass="Normal" translate="true">Head-Dependent Flux Boundary</link><text styleclass="Normal" translate="true"> packages</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="RIV" styleclass="Normal" translate="true">River</link><text styleclass="Normal" translate="true"> package</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true"> package</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for RES1 is read from the file that has file type &quot;RES&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file.</text></para>
+    <para styleclass="Normal"><table rowcount="9" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NRES IRESCB NRESOP IRESPT NPTS</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: I10 I10 I10 I10 I10</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NRES]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NRES" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NRES is the number of reservoirs to be simulated. The minimum number of reservoirs that can be simulated is one and the maximum number is the number of active cells in the model grid.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IRESCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IRESCB is a flag and unit number.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IRESCB &gt; 0, it is the unit number on which cell-by-cell flow terms will be recorded whenever </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is set </text><text styleclass="New Materials" translate="true">or &quot;Save Budget&quot; is specified</text><text styleclass="Normal" translate="true"> in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true"> (see McDonald and Harbaugh, 1988, chap. 4, p. 14–15).</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IRESCB </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, cell-by-cell flow terms will not be recorded.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NRESOP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NRESOP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NRESOP is a flag to determine the layer to which reservoirs are connected.</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NRESOP = 1 all reservoirs are connected to layer 1.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NRESOP = 2 all reservoirs are connected to layer specified in array IRESL.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NRESOP = 3 all reservoirs are connected to the highest active cell in the vertical column of cells at each reservoir location.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IRESPT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IRESPT is a flag.</text></para>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IRESPT &gt; 0 reservoir stage, area, and volume will be printed each time step.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IRESPT </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0 reservoir stage, area, and volume will not be printed each time step.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPTS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NPTS is the number of values in printed table of stage, volume, and area for each reservoir. First and last stage value are minimum and maximum elevations within area of potential inundation. A value of 15 or greater is recommended for detailed representation of stage-volume and stage-area relations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IRES(NCOL,NROW)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Module: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IRES]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="IRES" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IRES is an array that specifies the model cells that are included in each reservoir. Array values of “0&quot; or less indicate the absence of reservoirs at corresponding cell locations. Values greater than “0” indicate that the cell is part of the corresponding reservoir. For example, values of “1” indicate the location of the first of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="NRES" styleclass="Normal" translate="true">NRES</link><text styleclass="Normal" translate="true"> reservoirs and values of “2&quot; indicate the location of the second of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="NRES" styleclass="Normal" translate="true">NRES</link><text styleclass="Normal" translate="true"> reservoirs.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IRESL(NCOL,NROW)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Module: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="NRESOP" styleclass="Normal" translate="true">NRESOP</link><text styleclass="Normal" translate="true"> DOES NOT EQUAL 2, SKIP DATA ITEM 3</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IRESL]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="IRESL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IRESL is an array that specifies the model layer to which each reservoir cell is connected.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BRES(NCOL,NROW)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Module: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BRES]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="BRES" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">BRES is an array that specifies land-surface elevation for all reservoirs. Values in the array are assigned to the reservoir denoted by the corresponding element in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="IRES" styleclass="Normal" translate="true">IRES</link><text styleclass="Normal" translate="true"> array. Values are not used for cells where the corresponding element in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="IRES" styleclass="Normal" translate="true">IRES</link><text styleclass="Normal" translate="true"> array is less than or equal to zero.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HCres(NCOL,NROW)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Module: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HCres]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HCres" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HCres is an array that specifies vertical hydraulic conductivity of the reservoir bed for all reservoirs. Values in the array are assigned to the reservoir denoted by the corresponding element in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="IRES" styleclass="Normal" translate="true">IRES</link><text styleclass="Normal" translate="true"> array. Values are not used for cells where the corresponding element in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="IRES" styleclass="Normal" translate="true">IRES</link><text styleclass="Normal" translate="true"> array is less than or equal to zero.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Rbthck(NCOL,NROW)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Module: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Rbthck]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Rbthck" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Rbthck is an array that specifies thickness of reservoir-bed sediments for all reservoirs. Values in the array are assigned to the reservoir denoted by the corresponding element in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="IRES" styleclass="Normal" translate="true">IRES</link><text styleclass="Normal" translate="true"> array. Values are not used for cells where the corresponding element in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="IRES" styleclass="Normal" translate="true">IRES</link><text styleclass="Normal" translate="true"> array is less than or equal to zero.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH STRESS PERIOD</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH OF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="NRES" styleclass="Normal" translate="true">NRES</link><text styleclass="Normal" translate="true"> RESERVOIRS</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Ststage Endstage</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: F10.0 F10.0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ststage]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Ststage" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Ststage is the value of reservoir stage at the start of the stress period. Because the package assigns stage values on the basis of linear interpolation to the end of each time step, the assigned reservoir stage will never equal Ststage unless Ststage and Endstage are equal. A total of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RES" anchor="NRES" styleclass="Normal" translate="true">NRES</link><text styleclass="Normal" translate="true"> records with values of Ststage and Endstage are read at the start of each stress period. </text><text styleclass="New Materials" translate="true">Stage is measured relative to the same datum used for the groundwater heads.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Endstage]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Endstage is the value of reservoir stage at the end of the stress period. Endstage is the value that will be assigned as stage for the corresponding reservoir for the last time step in the stress period. </text><text styleclass="New Materials" translate="true">Stage is measured relative to the same datum used for the groundwater heads.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

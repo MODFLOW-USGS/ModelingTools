@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 9/21/2017 by ModelMuse Version 3.9.0.15
+LIST             11 WaterSupply.lst REPLACE
+DATA(BINARY)      9 WaterSupply.cbc REPLACE
+DIS              12 WaterSupply.dis OLD
+BAS6             13 WaterSupply.bas OLD
+OC               39 WaterSupply.oc OLD
+DATA             37 WaterSupply.fhd REPLACE
+DATA             38 WaterSupply.fdn REPLACE
+PCG              18 WaterSupply.pcg OLD
+LPF              14 WaterSupply.lpf OLD
+WEL              20 WaterSupply.wel OLD
+RIV              21 WaterSupply.riv OLD
+HOB              41 WaterSupply.ob_hob OLD
+DATA             42 WaterSupply.hob_out REPLACE

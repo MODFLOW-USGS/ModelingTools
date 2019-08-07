@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Farm Parameter Dimensions</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm Parameter Dimensions</text></para>
+    </header>
+    <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Parameter Dimensions </text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXACTW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="MXACTW" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum number of active farm wells including parameter and nonparameter farm wells. Nonparameter farm wells are wells, whose maximum capacity is different for each stress period. In this case, each well-list (layer, location, farm-well farm ID, maximum capacity) would have to be read for each stress period. However, since the maximum capacity in most cases is thought to be constant for the entire simulation, usually the maximum number of nonparameter farm wells will be zero, that is, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="MXL" styleclass="Normal" translate="true">MXL</link><text styleclass="Normal" translate="true"> = MXACTFW.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXACTFWP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Flag indicating the automatic use of parent nonparameter farm-well list entries for the child model (if ILGR&gt;0 and for child model grids where IGRID&gt;1) (only character “P” or blank possible).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If MXACTFWP is set to P after MXACTFW, then the maximum number of parent model nonparameter farm-well list entries may be used as child model nonparameter farm wells in well locations where the child model farm ID coincides with the parent model farm ID. If MXACTFWP =P, then the maximum number of parent model nonparameter farm-well list entries specified for the parent model (MXACTFW of parent model) is added to the maximum of nonparameter wells list entries specified in the child model, MXACTFW, to allocate space for nonparameter farm-wells list entries specified in the child model AND pulled from the parent model. If only the use of parent model nonparameter wells for a child model is desired, and no child model specific nonparameter farm wells exist, MXACTFW still needs to be specified as zero. If only the use of child model nonparameter wells is desired, and no parent model nonparameter farm wells are to be pulled from the parent model, then MXACTFWP is omitted.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NFARMS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="ItemGroup"><anchor id="NFARMS" styleclass="ItemGroup"></anchor><text styleclass="Normal" translate="true">Maximum number of water-balance subregions (farms) specified during the entire simulation.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NCROPS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="NCROPS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of crop types.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NSOILS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="NSOILS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of soil types.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">For child model NFARMS, NCROPS, NSOILS</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">Attributing parent-model list entries to farm IDs, crop IDs, or soil IDs present in the child model domain can be enabled by setting IFID, ICID, and ISID in items </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet7" styleclass="Normal" translate="true">7</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet8" styleclass="Normal" translate="true">8</link><text styleclass="Normal" translate="true">, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet28" styleclass="Normal" translate="true">28</link><text styleclass="Normal" translate="true"> to “P.” If such a derivation of farm, crop-type, or soil-type specific attributes from the parent model is desired, then maximum number of farms, crop types, and soil types in the child model must be equal to the dimension specified in the parent model.</text></para>
+  </body>
+</topic>

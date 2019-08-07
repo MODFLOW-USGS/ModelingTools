@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Saving the Model</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">RMA: Saving the Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the model has not already saved, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Save</text><text styleclass="Normal" translate="true">. In the Save dialog box, there is a checkbox in the lower left labeled </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Create archive</text><text styleclass="Normal" translate="true">. If that check box is checked, ModelMuse will create an archive of your model containing the ModelMuse file, any files imported into your model, the model input and output files, and the MODFLOW executable. The archive will be a zip file. The name of the archive will be the name of the ModelMuse file plus the date. Such archives can be helpful if it is necessary to examine a past version of your model. To include additional files in the archive, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Files to Archive</text><text styleclass="Normal" translate="true">. Then click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Add files</text><text styleclass="Normal" translate="true"> button to select additional files to include in the archive.</text></para>
+  </body>
+</topic>

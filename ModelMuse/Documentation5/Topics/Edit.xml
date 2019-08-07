@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Edit</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Edit</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The menu items under Edit are listed in table 4. The commands under this menu are used for editing the model.</text></para>
+    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 4. Edit Menu</text></para>
+    <para styleclass="Table Header"><table rowcount="15" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:middle">
+        <td colspan="2" style="width:626px; height:5px;">
+          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Menu Item</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Explanation</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2" style="vertical-align:top; width:626px; height:2px;">
+          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><image src="Undo.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Undo button</title></image><text styleclass="Table Header" translate="true"> Undo</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Reverses the last action.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><image src="Redo.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Redo button</title></image><text styleclass="Table Header" translate="true"> Redo</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Cancels undo.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><image src="Cut.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Cut</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Cuts the selected object or objects to the clipboard.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><image src="Copy.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Copy</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Copies the selected object or objects to the clipboard.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><image src="Paste.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Header" translate="true"> Paste</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Pastes the object or objects on the clipboard into ModelMuse. If any of the formulas for data sets are invalid in the model into which the object or objects have been pasted, those formulas will be reset to default values.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Select All</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Allows the user to select all of the visible objects on the top, front, or side view of the model.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Invert Selection</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">If any object is selected, choosing </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Invert Selection</text><text styleclass="Table Cell" style="font-weight:normal;" translate="true"> will cause all of the visible objects on the same view of the model that are not selected to become selected while also cause the selected objects to be de-selected.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Edit Images... </text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Allows the user to edit data related to images that have been imported into ModelMuse. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ImportEdit_Bitmap_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Import/Edit Image</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Show or Hide Image[s]... </text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Allows the user to show or hide background images. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Bitmaps_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Show or Hide Images</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Delete Image</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">If one image has been imported, this command deletes it from the ModelMuse file. If more than one image has been selected, this command allows the user to delete one or more of the images from the ModelMuse file. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Delete_Image_Dialog_Box" styleclass="Strong" translate="true">Delete Image</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:149px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Clear Undo/Redo Stack</text></para>
+        </td>
+        <td style="vertical-align:top; width:477px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Immediately after selecting this option it will not be possible to undo or redo previous actions. However, it will be possible to undo and redo future actions.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2" style="vertical-align:top; width:626px;">
+          <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

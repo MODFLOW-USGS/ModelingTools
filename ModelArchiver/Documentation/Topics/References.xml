@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">References</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">References</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Harbaugh, A.W., 1990, A computer program for calculating subregional water budgets using results from the U.S. Geological Survey modular three-dimensional ground-water flow model: U.S. Geological Survey Open-File Report 90-392, 46 p. </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://water.usgs.gov/nrp/gwsoftware/zonebud3/" target="_blank" styleclass="Normal" translate="true">http://water.usgs.gov/nrp/gwsoftware/zonebud3/</link><text styleclass="Normal" translate="true">zonebudget3.html</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model—The ground-water flow process: U.S. Geological Survey Techniques and Methods 6–A16, variously paged. </text><link displaytype="text" defaultstyle="true" type="weblink" href="&lt;%LINK_CAPTION%&gt;" target="_blank" styleclass="Normal" translate="true">http://pubs.er.usgs.gov/publication/tm6A16</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Pollock, D.W., 2012, User guide for MODPATH version 6—A particle-tracking model for MODFLOW: U.S. Geological Survey Techniques and Methods, book 6, chap. A41, 58 p. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Voss, C. I., and Provost, A.M., 2002 (Version of September 22, 2010), SUTRA, A model for saturated-unsaturated variable-density ground-water flow with solute or energy transport, U.S. Geological Survey Water-Resources Investigations Report 02-4231, 291 p. http://pubs.er.usgs.gov/publication/wri024231</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Winston, R.B., 2009, ModelMuse-A graphical user interface for MODFLOW-2005 and PHAST: U.S. Geological Survey Techniques and Methods 6-A29, 52 p.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Winston, R.B., 2014, Modifications made to ModelMuse to add support for the Saturated-Unsaturated Transport model (SUTRA): U.S. Geological Survey Techniques and Methods, book 6, chap. A49, 6 p., http://dx.doi.org/10.3133/tm6a49. </text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

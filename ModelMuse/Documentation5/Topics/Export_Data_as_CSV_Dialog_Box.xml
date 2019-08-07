@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Export Data as CSV Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Export Data as CSV Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This dialog box is used to export data set values along with their locations to a comma-separated value (CSV) file. Many programs can read such files. To display the dialog box, select </text><text styleclass="Strong" translate="true">File|Export|Data Sets to CSV</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The top part of the dialog box has a tree control in which the data sets are listed. Check the check boxes for any data sets for which you wish to export values. Below the tree control are two sets of radio buttons. They control which data sets are displayed in the tree control. One of the sets of radio buttons is only active for PHAST models.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In addition to data set values, the </text><text styleclass="Strong" translate="true">Data to export</text><text styleclass="Normal" translate="true"> can include the X, Y, and (for 3D data sets) Z coordinates as well as the column, row, and (for 3D data sets) layer numbers. For SUTRA models, the column, row, and layer are replaced by the node or element number. In Models with grids instead of meshes, X_Prime and Y_Prime are also saved following the Y or Z coordinate.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click the </text><text styleclass="Strong" translate="true">Save Data</text><text styleclass="Normal" translate="true"> button to save the data values and associated information.</text></para>
+  </body>
+</topic>

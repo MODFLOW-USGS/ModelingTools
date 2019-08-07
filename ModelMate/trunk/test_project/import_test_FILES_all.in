@@ -1,0 +1,192 @@
+BEGIN Options Keywords
+  Verbose = 5
+END Options
+ 
+BEGIN UCODE_Control_Data
+  ModelName = "Neds model"
+  ModelLengthUnits = furlongs
+  ModelTimeUnits = fortnight
+  ModelMassUnits = slug
+  Sensitivities = yes
+  Optimize = yes
+  Linearity = no
+  LinearityAdv = no
+  NonlinearIntervals = false
+  sossurface = no
+  sosfile = MySOSFile
+  StdErrOne = y
+  EigenValues = n
+  StartRes = no
+  IntermedRes = y
+  FinalRes = no
+  StartSens = allss
+  IntermedSens = all
+  finalSens = all
+  dataExchange = no
+  CreateInitFiles = no
+END UCODE_Control_Data
+
+BEGIN Reg_GN_Controls
+  TolPar = 0.1
+  TolSOSC = 0.02
+  MaxIter = 6
+  MaxChange = 3.4
+  MaxChangeRealm = regression
+  MqrtDirection = 85.111
+  MqrtFactor = 2.99
+  MqrtIncrement = 0.0022
+  QuasiNewton = yes
+  QNiter = 3
+  QNsosr = 0.033
+  OmitDefault = 0
+  Stats_on_nonconverge = no
+  OmitInsensitive = yes
+  MinimumSensRatio = 0.077
+  ReincludeSensRatio = 0.44
+  TolParWtOS = 22
+  TrustRegion = hookstep
+  MaxStep = 0.345
+  ConsecMax = 7
+END Reg_GN_Controls
+ 
+BEGIN Model_Command_Lines Keywords
+  Command = "C:\WRDAPP\MF2005.1_7\bin\mf2005.exe tc1.nam"
+    Purpose = Forward
+    CommandID = ForwardModel
+END Model_Command_Lines
+ 
+BEGIN Parameter_Groups Table
+  NROW=1 NCOL=13 COLUMNLABELS
+  GroupName  Adjustable Transform TolPar MaxChange PerturbAmt LowerValue UpperValue SenMethod Constrain LowerConstraint UpperConstraint ScalePval
+  ParamType1    Yes          No   0.01     2          0.01      -9E-9    6666666        1      No          -7.777E-6        8888888       1E-9
+END Parameter_Groups
+
+BEGIN Parameter_Data FILES
+  import_test_Parameter_Data.txt
+END Parameter_Data
+
+BEGIN Parameter_Values Table
+  NROW=3 NCOL=2 ColumnLabels
+  ParamName   StartValue
+  RIVERS      0.0016
+  RCH_ZONE_1  64.
+  RCH_ZONE_2  32.
+END Parameter_Values
+
+BEGIN Derived_Parameters table
+  NROW=2 NCOL=2 COLUMNLABELS
+  DerParName   DerParEqn
+  HK_Ratio     HK_1/HK_2
+  HK_3         HK_1*3.0
+END Derived_Parameters
+ 
+BEGIN Observation_Groups Table
+  NROW=2 NCOL=3 COLUMNLABELS
+  GroupName     Statistic StatFlag
+  Heads          1.0      sd
+  Head_changes   0.01     sd
+END Observation_Groups
+ 
+BEGIN Observation_Data Table
+  NROW=32 NCOL=3 COLUMNLABELS
+  ObsName GroupName ObsValue
+  B.0 Heads 101.804
+  B.1 Head_changes -0.0289999999999964
+  B.12 Head_changes -0.129000000000005
+  C.0 Heads 128.117
+  C.1 Head_changes -0.0409999999999968
+  C.2 Head_changes -0.556999999999988
+  C.8 Head_changes -11.531
+  C.12 Head_changes -14.184
+  D.0 Heads 156.678
+  D.1 Head_changes -4.381
+  D.12 Head_changes -42.54
+  E.0 Heads 124.893
+  E.1 Head_changes -0.0670000000000073
+  E.12 Head_changes -14.304
+  F.0 Heads 140.961
+  F.1 Head_changes -0.0600000000000023
+  F.12 Head_changes -21.676
+  G.0 Heads 126.537
+  G.1 Head_changes 0.00499999999999545
+  G.12 Head_changes -14.365
+  H.0 Heads 101.112
+  H.1 Head_changes 0.0480000000000018
+  H.12 Head_changes -0.567999999999998
+  I.0 Heads 158.135
+  I.1 Head_changes -5.53299999999999
+  I.12 Head_changes -43.217
+  J.0 Heads 176.374
+  J.1 Head_changes -0.00100000000000477
+  J.12 Head_changes -38.242
+  A.0 Heads 142.02
+  A.1 Head_changes -0.0130000000000052
+  A.12 Head_changes -19.921
+END Observation_Data
+
+#BEGIN Derived_Observations  --  Not yet supported by ModelMate
+#END Derived_Observations
+
+BEGIN Prediction_Groups Table
+  NROW=2 NCOL=5 ColumnLabels
+  GroupName   UseFlag    PlotSymbol   MeasStatistic   MeasStatFlag
+  HeadPreds     yes          8             0.6            sd
+  FlowPreds     NO           9             0.12           cv
+END Prediction_Groups
+
+BEGIN Prediction_Data Table
+  NROW=5  NCOL=5  ColumnLabels
+  PredName   RefValue   MeasStatistic   GroupName   Equation
+  PredHead1   200.0         0.3         HeadPreds      _
+  PredHead2   210.0         0.2         HeadPreds      _
+  PredHead3    10.0         0.05        HeadPreds   PredHead2-PredHead1
+  PredFlow1    11.0         0.11        FlowPreds      _
+  PredFlow2    15.0         0.13        FlowPreds      _
+END Prediction_Data
+
+#BEGIN Derived_Predictions  --  Not yet supported by ModelMate
+#END Derived_Predictions
+
+BEGIN Prior_Information_Groups  Table
+  NROW=2  NCOL=5  ColumnLabels
+  GroupName   UseFlag   PlotSymbol   WtMultiplier   StatFlag
+  PriHyCond      y         14            1.3           sd
+  PriRivCond     n         15            1.9           sd
+END Prior_Information_Groups
+
+BEGIN Linear_Prior_Information Table
+  NROW = 2   NCOL=6   ColumnLabels
+  PriorName   Equation   PriorInfoValue   Statistic   StatFlag   GroupName
+  PriHCond1   HK_1           0.005           .5          cv      PriHyCond
+  PriRCond    RIVERS         0.001           0.0005      sd      PriRivCond
+END Linear_Prior_Information
+
+#BEGIN Matrix_Files  --  Not yet supported by ModelMate
+#END Matrix_Files
+
+BEGIN Model_Input_Files Keywords
+  ModInFile = tc1.pval
+    TemplateFile = tc1_pval.jtf
+END Model_Input_Files
+ 
+BEGIN Model_Output_Files Keywords
+  ModOutFile = tc1._os
+    InstructionFile = tc1_unit_23.jif
+    Category = Obs
+END Model_Output_Files
+ 
+BEGIN Parallel_Control Keywords
+  Parallel = NO
+  Wait = 0.1
+  WaitRunners = 0.05
+  VerboseRunner = 5
+  TimeoutFactor = 2.2
+  AutoStopRunners = no
+END Parallel_Control
+ 
+BEGIN Parallel_Runners Table
+  NROW=2 NCOL=3 COLUMNLABELS
+  RunnerName RunnerDir RunTime
+  Maynard1 \\Igskahcwltcerb\shared\ModelMate\test_project\Maynard1\ 8
+  Runner1 .\Runner1 8
+END Parallel_Runners

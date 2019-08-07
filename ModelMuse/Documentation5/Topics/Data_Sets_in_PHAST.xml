@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets in PHAST</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets in PHAST</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Because PHAST requires that some data be assigned to elements and other data be assigned to nodes, some data sets used in PHAST will have a value for each element and others will have a value for each node. The initial water table in PHAST, which is a 2-D data set, is only defined for one layer of nodes in the model. The remaining data sets required by PHAST are 3-D. Geometrically, a MODFLOW cell is equivalent to a PHAST element.</text></para>
+  </body>
+</topic>

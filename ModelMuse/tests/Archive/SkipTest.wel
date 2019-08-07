@@ -1,0 +1,6 @@
+# WEL: Well package file created on 12/3/2017 by ModelMuse version 3.9.0.23.
+     2     9 AUXILIARY IFACE # DataSet 2: MXACTW IWELCB Option
+     0     0 # Data Set 5: ITMP NP Stress period 1
+     2     0 # Data Set 5: ITMP NP Stress period 2
+     2     3     4 -3.500000000000E+004      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod2_Layer3_1 with formula: ObjectImportedValuesR("WelPump1")
+     2     8     4 -3.500000000000E+004      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Imported_Wel_StressPeriod2_Layer3_1 with formula: ObjectImportedValuesR("WelPump1")

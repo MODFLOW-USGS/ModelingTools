@@ -1,0 +1,679 @@
+object Model: TPhastModel
+  Version = '0.1.0.3'
+  Left = 329
+  Top = 359
+  Width = 649
+  Height = 492
+  FrontHeight = 157
+  SideWidth = 118
+  MagnificationTop = 0.287249775274165600
+  MagnificationFront = 0.101935483870967700
+  MagnificationSide = 0.177208436724565700
+  Exaggeration = 1.000000000000000000
+  TopX = -599.276714739647600000
+  TopY = -56.104926782442190000
+  FrontX = -2089.715189873419000000
+  FrontY = -367.721518987342000000
+  SideX = -57.185990338164290000
+  SideY = -187.338094237905300000
+  TopViewWidth = 526
+  TopViewHeight = 209
+  PhastGrid.ColumnCount = 4
+  PhastGrid.ColumnDirection = cdWestToEast
+  PhastGrid.LayerCount = 1
+  PhastGrid.LayerDirection = ldBottomToTop
+  PhastGrid.RowCount = 4
+  PhastGrid.RowDirection = rdSouthToNorth
+  PhastGrid.SelectedColumn = 0
+  PhastGrid.SelectedLayer = 0
+  PhastGrid.SelectedRow = 0
+  PhastGrid.ColumnPositions = (
+    0.000000000000000000
+    100.000000000000000000
+    200.000000000000000000
+    300.000000000000000000
+    400.000000000000000000)
+  PhastGrid.RowPositions = (
+    0.000000000000000000
+    100.000000000000000000
+    200.000000000000000000
+    300.000000000000000000
+    400.000000000000000000)
+  PhastGrid.LayerElevations = (
+    0.000000000000000000
+    275.000000000000000000)
+  DataSetList = <
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = 'True'
+      DataSet.Name = 'Active'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtBoolean
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.011572'
+      DataSet.Name = 'Kx'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.0011572'
+      DataSet.Name = 'Ky'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '115.72'
+      DataSet.Name = 'Kz'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.15'
+      DataSet.Name = 'Porosity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '8.7034E-10'
+      DataSet.Name = 'Specific_Storage'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '10.'
+      DataSet.Name = 'Long_Dispersivity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '1.'
+      DataSet.Name = 'Horizontal_Transv_Dispersivity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '1.'
+      DataSet.Name = 'Vertical_Transv_Dispersivity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '200'
+      DataSet.Name = 'Initial_Head'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '200'
+      DataSet.Name = 'Initial_Water_Table'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dsoTop
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Solution'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Equilibrium_Phases'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Surface'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Exchange'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Gas_Phase'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Solid_Solutions'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Kinetics'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Print_Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+    end
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Print_XYZ_Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+    end>
+  ObjectList = <
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object0'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecZero
+      Contour.EvaluatedAt = eaBlocks
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 100.000000000000000000
+      Contour.CellSizeUsed = True
+      Contour.InterpValues = <>
+      Points = <
+        item
+        end
+        item
+          X = 400.000000000000000000
+        end
+        item
+          X = 400.000000000000000000
+          Y = 400.000000000000000000
+        end
+        item
+          Y = 400.000000000000000000
+        end
+        item
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object1'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecZero
+      Contour.EvaluatedAt = eaBlocks
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.Selected = False
+      Contour.ViewDirection = vdFront
+      Contour.CellSize = 275.000000000000000000
+      Contour.CellSizeUsed = True
+      Contour.InterpValues = <>
+      Points = <
+        item
+          X = -73.259493670886120000
+        end
+        item
+          X = -73.259493670886120000
+          Y = 275.000000000000000000
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object2'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = True
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.SpecifiedHeadBoundary.Head = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '200'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.SpecifiedHeadBoundary.AssociatedSolution = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '0'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.InterpValues = <>
+      HigherElevationFunction = '300'
+      LowerElevationFunction = '-10'
+      Points = <
+        item
+          X = -42.270186719606700000
+          Y = 23.964761620438700000
+        end
+        item
+          X = 424.222780497178000000
+          Y = 23.964761620438700000
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object3'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = True
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.SpecifiedHeadBoundary.Head = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '150'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.SpecifiedHeadBoundary.AssociatedSolution = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '0'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.InterpValues = <>
+      HigherElevationFunction = '300'
+      LowerElevationFunction = '-10'
+      Points = <
+        item
+          X = -35.307605119356300000
+          Y = 386.019004833465000000
+        end
+        item
+          X = 427.704071297303000000
+          Y = 386.019004833465000000
+        end
+        item
+          X = 427.704071297303000000
+          Y = 379.056423233215000000
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object5'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecOne
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = True
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.Selected = True
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.FluxBoundary.Flux = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '-1.157e-3'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.FluxBoundary.AssociatedSolution = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '0'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.InterpValues = <>
+      ElevationFunction = '275'
+      Points = <
+        item
+          X = -21.382441918855320000
+          Y = 333.799642831586800000
+        end
+        item
+          X = 420.741489697051900000
+          Y = 337.280933631712000000
+        end
+        item
+          X = 420.741489697051900000
+          Y = 79.665414422442790000
+        end
+        item
+          X = -21.382441918855320000
+          Y = 76.184123622317540000
+        end
+        item
+          X = -21.382441918855320000
+          Y = 333.799642831586800000
+        end>
+      SelectedNodes = <
+        item
+          NodeSelected = False
+        end
+        item
+          NodeSelected = True
+        end
+        item
+          NodeSelected = True
+        end
+        item
+          NodeSelected = False
+        end
+        item
+          NodeSelected = False
+        end>
+    end>
+  FlowOnly = True
+  FluidProperties.FluidCompressibility = 0.000000000000005000
+  FluidProperties.FluidDensity = 1000.000000000000000000
+  FluidProperties.FluidDiffusivity = 0.000000001000000000
+  FluidProperties.FluidViscosity = 0.001000000000000000
+  FreeSurface = True
+  PrintFrequency = <
+    item
+      BC_FlowRates = 2.000000000000000000
+      BC_FlowRatesUnits = fuStep
+      BoundaryConditions = False
+      ComponentsUnits = fuDefault
+      ConductancesUnits = fuDefault
+      FlowBalanceUnits = fuDefault
+      ForceChemistryPrintUnits = fuDefault
+      HDF_ChemistryUnits = fuDefault
+      HDF_Heads = 2.000000000000000000
+      HDF_HeadsUnits = fuStep
+      HDF_Velocities = 2.000000000000000000
+      HDF_VelocitiesUnits = fuStep
+      Heads = 4.000000000000000000
+      HeadsUnits = fuStep
+      ProgressStatistics = 1.000000000000000000
+      ProgressStatisticsUnits = fuStep
+      SaveFinalHeads = False
+      Velocities = 4.000000000000000000
+      VelocitiesUnits = fuStep
+      WellsUnits = fuDefault
+      XYZ_ChemistryUnits = fuDefault
+      XYZ_ComponentsUnits = fuDefault
+      XYZ_Heads = 4.000000000000000000
+      XYZ_HeadsUnits = fuStep
+      XYZ_Velocities = 4.000000000000000000
+      XYZ_VelocitiesUnits = fuStep
+      XYZ_WellsUnits = fuDefault
+    end>
+  Title.Strings = (
+    'One dimensional unconfined flow with recharge'
+    'Bear, parabolic analytical solution')
+  Units.DefaultTimeUnits = tuSeconds
+  Units.DefaultHorizontalGridUnits = luMeters
+  Units.DefaultVerticalGridUnits = luMeters
+  Units.DefaultHeadUnits = luMeters
+  Units.DefaultHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultSpecificStorageUnits = iluMeters
+  Units.DefaultDispersivityUnits = luMeters
+  Units.DefaultFluxLengthUnits = luMeters
+  Units.DefaultFluxTimeUnits = tuSeconds
+  Units.DefaultLeakyHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultLeakyHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultLeakyThicknessUnits = luMeters
+  Units.DefaultWellDiameterUnits = luCentimeters
+  Units.DefaultWellFlowVolumnUnits = vuMeters3
+  Units.DefaultWellFlowTimeUnits = tuSeconds
+  Units.DefaultRiverBedHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultRiverBedHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultRiverBedThicknessUnits = luMeters
+  PrintInitial.PrintInitialBoundaryConditions = False
+  PrintInitial.PrintInitialComponents = False
+  PrintInitial.PrintInitialConductance = False
+  PrintInitial.PrintInitialEchoInput = True
+  PrintInitial.PrintInitialFluidProperties = True
+  PrintInitial.PrintInitialForceChemistryPrint = False
+  PrintInitial.PrintInitialHDF_Chemistry = True
+  PrintInitial.PrintInitialHDF_Heads = True
+  PrintInitial.PrintInitialHDF_SteadyFlowVelocites = True
+  PrintInitial.PrintInitialHeads = True
+  PrintInitial.PrintInitialMediaProperties = False
+  PrintInitial.PrintInitialSolutionMethod = True
+  PrintInitial.PrintInitialSteadyFlowVelocities = False
+  PrintInitial.PrintInitialWells = True
+  PrintInitial.PrintInitialXYZ_Chemistry = False
+  PrintInitial.PrintInitialXYZ_Components = False
+  PrintInitial.PrintInitialXYZ_Heads = False
+  PrintInitial.PrintInitialXYZ_SteadyFlowVelocities = False
+  PrintInitial.PrintInitialXYZ_Wells = False
+  Times = <
+    item
+      TimeStepLength = 43200.000000000000000000
+      EndingTime = 172800.000000000000000000
+    end>
+  GridOptions.ChemicalDimensionX = True
+  GridOptions.ChemicalDimensionY = True
+  GridOptions.ChemicalDimensionZ = True
+  GridOptions.PrintOrientation = pgXY
+  SolutionOptions.SolverType = psDirect
+  SolutionOptions.SpaceDifferencing = 0.500000000000000000
+  SolutionOptions.TimeDifferencing = 1.000000000000000000
+  SolutionOptions.CrossDispersion = True
+  SolutionOptions.Tolerance = 0.000000010000000000
+  SteadyFlowOptions.SteadyFlow = False
+  SteadyFlowOptions.HeadTolerance = 0.000000010000000000
+  SteadyFlowOptions.FlowBalanceTolerance = 0.001000000000000000
+  SteadyFlowOptions.MinimumTimeStep = 1.000000000000000000
+  SteadyFlowOptions.MaximumTimeStep = 1000.000000000000000000
+  SteadyFlowOptions.HeadChangeLimit = 1.000000000000000000
+  ChemistryOptions.UseKineticReactants = False
+  ChemistryOptions.UseGasPhases = False
+  ChemistryOptions.UseEquilibriumPhases = False
+  ChemistryOptions.UseExchange = False
+  ChemistryOptions.UseSolidSolution = False
+  ChemistryOptions.UseSurfaceAssemblages = False
+end

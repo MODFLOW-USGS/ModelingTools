@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Online Guide to ZONEBUDGET</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Online Guide to ZONEBUDGET</text></para>
+    </header>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://www.usgs.gov/" target="_blank" styleclass="Image Caption" translate="true">]</link><link displaytype="image" src="water_banner1.png" type="weblink" href="http://www.usgs.gov/" target="_blank"><title translate="true">USGS Home Page</title></link></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Compiled by </text><link displaytype="text" defaultstyle="true" type="weblink" href="mailto:rbwinst@usgs.gov" styleclass="Normal" translate="true">Richard B. Winston</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Revised: </text><var styleclass="Normal">&lt;%DATE%&gt;</var></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The purpose of this document is to provide a brief overview of the operation of ZONEBUDGET. The original documentation presents a more detailed description of ZONEBUDGET. This document reflects the input instructions for ZONEBUDGET version 3.01.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ZONEBUDGET is documented in the following.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://water.usgs.gov/nrp/gwsoftware/zonebud3/ofr90392.pdf" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., 1990, A computer program for calculating subregional water budgets using results from the U.S. Geological Survey modular three-dimensional ground-water flow model: U.S. Geological Survey Open-File Report 90-392, 46 p.</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="zonbud3.pdf" styleclass="Normal" translate="true">zonbud3.pdf</link></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

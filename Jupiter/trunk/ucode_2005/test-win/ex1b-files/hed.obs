@@ -1,0 +1,36 @@
+BEGIN OBSERVATION_DATA TABLE
+NROW=32  NCOL=5  COLUMNLABELS  
+obsname       obsvalue     statistic  statflag  GroupName
+hd01.ss      101.8040         1.0025     var     heads
+hd01.1     -0.2900000E-01     0.0050     var     drawdowns
+hd01.283   -0.1290000         0.0050     var     drawdowns
+hd02.ss      128.1170         1.0025     var     heads
+hd02.1     -0.4100000E-01     0.0050     var     drawdowns
+hd02.4     -0.5570000         0.0050     var     drawdowns
+hd02.10     -11.53100         0.0050     var     drawdowns
+hd02.283    -14.18400         0.0050     var     drawdowns
+hd03.ss      156.6780         1.0025     var     heads
+hd03.1      -4.381000         0.0050     var     drawdowns
+hd03.283    -42.54000         0.0050     var     drawdowns
+hd04.ss      124.8930         1.0025     var     heads
+hd04.1     -0.6700000E-01     0.0050     var     drawdowns
+hd04.283    -14.30400         0.0050     var     drawdowns
+hd05.ss      140.9610         1.0025     var     heads
+hd05.1     -0.6000000E-01     0.0050     var     drawdowns
+hd05.283    -21.67600         0.0050     var     drawdowns
+hd06.ss      126.5370         1.0025     var     heads
+hd06.1      0.5000000E-02     0.0050     var     drawdowns
+hd06.283    -14.36500         0.0050     var     drawdowns
+hd07.ss      101.1120         1.0025     var     heads
+hd07.1      0.4800000E-01     0.0050     var     drawdowns
+hd07.283   -0.5680000         0.0050     var     drawdowns
+hd08.ss      158.1350         1.0025     var     heads
+hd08.1      -5.533000         0.0050     var     drawdowns
+hd08.283    -43.21700         0.0050     var     drawdowns
+hd09.ss      176.3740         1.0025     var     heads
+hd09.1     -1.0000000E-03     0.0050     var     drawdowns
+hd09.283    -38.24200         0.0050     var     drawdowns
+hd10.ss      142.0200         1.0025     var     heads
+hd10.1     -0.1300000E-01     0.0050     var     drawdowns
+hd10.283    -19.92100         0.0050     var     drawdowns
+END OBSERVATION_DATA TABLE

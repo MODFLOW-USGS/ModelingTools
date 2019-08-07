@@ -1,0 +1,88 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options	KEYWORDS
+  Verbose=0
+END Options
+
+# ------------------------------
+# UCODE-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+ModelName=ex1-sos
+#Performance
+  sossurface=yes             # calculate obj func for sets of params: yes/no
+#Printing and output files
+  StartRes=no                # print residuals: yes/no 
+  DataExchange=yes           # create data-exchange files: yes/no 
+END UCODE_CONTROL_DATA 
+
+# --------------------------------
+# COMMAND FOR APPLICATION MODEL(S)
+# --------------------------------
+
+BEGIN MODEL_COMMAND_LINES KEYWORDS
+# Single quotes around 'Command=value' are required if the
+# command includes one or more spaces, but are optional 
+# otherwise
+'Command=..\..\test-data-win\data-ss\tc1-fwd.bat'
+purpose=forward   #forward, derivatives, forwad&der
+CommandId=modflow
+END MODEL_COMMAND_LINES
+
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+   GroupName = MyPars  adjustable=yes 
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA FILES
+sos.params
+END PARAMETER_DATA 
+
+BEGIN Derived_Parameters TABLE
+nrow=6 ncol=2 columnlabels
+DerParName     DerParEqn
+RCH_1       'RCH_Mult * 60.0'    
+RCH_2       RCH_Mult*30.0     
+K_RB        K_Mult*1.2000E-3
+HK_1        K_Mult*3.0000E-4
+VK_CB       K_Mult*1.0000E-7
+HK_2        K_Mult*4.0000E-5   
+END Derived_Parameters
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN OBSERVATION_GROUPS TABLE
+  nrow=2 ncol=4  columnlabels
+  groupname  plotsymbol  useflag   WTMULTIPLIER
+  heads      1           yes         1.0
+  flows      2           yes         1.0
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA FILES
+ex1ss.hed.obs
+ex1ss.flo.obs
+END OBSERVATION_DATA 
+
+# -----------------------------
+# APPLICATION MODEL INFORMATION
+# -----------------------------
+
+BEGIN MODEL_INPUT_FILES	KEYWORDS
+  modinfile=..\..\test-data-win\data-ss\tc1-fwd.sen  
+  templatefile=tc1sen-ss.tpl
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES  KEYWORDS
+  modoutfile=..\..\test-data-win\data-ss\tc1-fwd._os  
+  instructionfile=ex1-ss-standard.instructions   
+  category=obs
+END MODEL_OUTPUT_FILES

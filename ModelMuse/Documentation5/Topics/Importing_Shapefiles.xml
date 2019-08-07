@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Importing Shapefiles</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Importing Shapefiles</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can import Shapefiles (a common format for Geographic Information Systems; Environmental Systems Research Institute, Inc., 1998). Shapefiles can be obtained from many sources such as </text><link displaytype="text" defaultstyle="true" type="weblink" href="<%LINK_CAPTION%>" target="_blank" styleclass="Normal" translate="true">http://nationalatlas.gov/maplayers.html</link><text styleclass="Normal" translate="true">. For the purposes of this exercise, the Shapefile used is unimportant. To import a Shapefile, select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Shapefile_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">File|Import|Shapefile...</link><text styleclass="Normal" translate="true"> Then select a Shapefile to import. After reading the shapes, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Shapefile_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Import Shapefile</link><text styleclass="Normal" translate="true"> dialog box will appear (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">87</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">42</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). The user can decide which attributes of the Shapefile to import. If the coordinates of the shapes in the Shapefile are expressed in degrees, the user can convert them to Universe Transverse Mercator (UTM) coordinates using the Coordinate Conversion tab (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">88</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">43</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). If the user only wants to import some of the shapes, it is possible to restrict the shapes to import using the &quot;Import criterion&quot;. Any shape for which the import criterion evaluates to True will be imported. Any of the attributes of the shapes can be used in the import criterion.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After importing the shapes, it is possible that none of the shapes will be in the field of view. Use the menu item </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Go_To_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Navigation|Go To...</link><text styleclass="Normal" translate="true"> to go to one of the imported shapes.</text></para>
+    <para styleclass="Image Caption" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:48px; margin-left:0px; tabstops:none;"><image src="ShapeFileImport.bmp" scale="75.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:48px; margin-left:0px; tabstops:none;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">87</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">42</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">The </text><text styleclass="Image Caption" style="font-weight:bold;" translate="true">Import Shapefile</text><text styleclass="Image Caption" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:48px; margin-left:0px; tabstops:none;"><image src="ShapeFileCoordinateConversion.bmp" scale="75.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:48px; margin-left:0px; tabstops:none;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">88</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">43</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Coordinate conversion in the </text><text styleclass="Image Caption" style="font-weight:bold;" translate="true">Import Shapefile</text><text styleclass="Image Caption" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

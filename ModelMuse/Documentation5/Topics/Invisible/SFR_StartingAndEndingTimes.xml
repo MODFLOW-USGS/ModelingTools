@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SFR_StartingAndEndingTimes</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Starting time</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Ending time</text><text styleclass="Normal" translate="true"> of each time period is specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Time_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Time</link><text styleclass="Normal" translate="true"> tab</text></para>
+  </body>
+</topic>

@@ -1,0 +1,273 @@
+################################################################################
+
+1.0.0 8/15/2006
+
+Initial release of JUPITER API.
+
+################################################################################
+
+1.0.2 12/11/2006
+
+UTL_SSVD2 was edited to write a more meaningful message and stop execution when 
+ITER==30.  
+
+Added lines to bas.f90 to initialize MODCOMLINE and COMMANDID arrays with ' ' 
+after they are allocated.  
+
+In EQN_INI, changed ACHAR arguments (200-207) to values between 0 & 127 (14-21) 
+to comply with Fortran standard.  Steffen says Gfortran complains and won't 
+compile if argument>127.  See http://www.lookuptables.com/ for ascii chart.
+
+In solution D:\Projects\Jupiter\Solution\Jupiter_solution, for project 
+UCODE_2005 in Property Pages under Linker...System, I changed Stack Commit Size 
+from 0 bytes (the default) to 10,000,000 in response to request from Michael 
+Zygnerski (email from Steffen of 12/1/06).
+
+I edited UTL_SVD to eliminate redundant check for BUFF3<=0.
+In UCODE_2005 main, I replaced RESHAPE with equivalent assignments in DO loops.
+In UTLUCODE_DX_WRITE_SEN, I converted DSS from an automatic array to an 
+allocatable array, to avoid stack overflow when number of observations is large.
+
+In UTLUCODE_DX_WRITE_SEN, new 2-d allocatable array XTRANS is declared and used 
+to store result of TRANSPOSE function, to avoid putting TRANSPOSE function in 
+arguments lists.  TRANSPOSE in arg list caused stack overflow error in Michael 
+Zygnerski's problem.
+
+In ucode_2005.f90, I revised code to avoid use of RESHAPE function, which was 
+not handled correctly by all compilers in this context.
+
+In reg_tr_ucode.f90, I inserted a space before "&" used as a continuation 
+character.  IVF does not interpret "&" as a continuation when it's preceded by a 
+non-blank character.
+
+################################################################################
+
+1.1.0 2/21/2007
+
+In EQUATION module, the ATERM array was converted from PRIVATE to PUBLIC.
+
+Several changes were made to accomodate large problems (e.g. problems with more 
+than about 46,000 observations):
+
+1. To avoid stack errors in storing potentially large arrays, several automatic 
+arrays in the DEPENDENTS, EQUATION, PRIOR_INFORMATION, SENSITIVITY, STATISTICS, 
+and UTILITIES modules were converted to allocatable arrays.
+
+2. To avoid stack errors in functions that return arrays, four subroutines have 
+been added that can be used in place of functions:
+
+  function        subroutine
+  --------------  ------------------
+  UTL_DIAGONAL    UTL_DIAGONAL_SUB
+  UTL_MATMUL      UTL_MATMUL_SUB
+  UTL_MATMULVEC   UTL_MATMULVEC_SUB
+  UTL_SUBSTITUTE  UTL_SUBSTITUTE_SUB
+  
+  The new subroutines are documented in file new_subprograms.pdf in the doc 
+  directory.
+
+3. To increase maximum size of arrays that can be stored in a CDMATRIX 
+structure, in the DATATYPES module, the definition of type CDMATRIX was modified 
+to declare array IPOS as KIND=8.  Numerous references to IPOS and variables used 
+in conjunction with IPOS were modified to use KIND=8 integers.  With this 
+change, the maximum row and column dimension of a square matrix stored in 
+CDMATRIX structure is no longer limited (to 46,340) by the size of an integer 
+that can be stored in IPOS. (Note that the value stored in IPOS for the element 
+at row NR, column NC equals NR*NC.)  Now, the size of a matrix stored in 
+CDMATRIX structure is limited by the size of an integer that can be stored in an 
+integer (KIND=4) variable (approximately 2 billion), or by the amount of memory 
+available for allocation.
+
+4. A new specific subroutine for the UTL_RWORD generic interface has been 
+implemented.  With this addition, the "N" argument can be a KIND=8 integer if 
+the "D" argument is DOUBLE PRECISION.
+
+5. A new subroutine, UTL_INVERT_DIAG, has been added to invert a diagonal 
+matrix stored in a CDMATRIX structure.  UTL_INVERT_DIAG can be invoked instead 
+of UTL_SVD when the matrix to be inverted has no non-zero off-diagonal terms.  
+For situations where this restriction is met, UTL_INVERT_DIAG is dramatically 
+faster than UTL_SVD, especially when the matrix dimension is large.
+
+################################################################################
+
+1.2.2 7/25/2007
+
+I edited comments in UTL_GET_MATRIX_SECTION_CDM according to Eileen's email of 3/9/07.
+
+I edited utl.f90 to declare UTL_ASSIGN_CDM_CDM and UTL_ASSIGN_DAR_CDM as PUBLIC in response to Matt Tonkin's message of today.  Other module procedures may need to be declared as PUBLIC for the same reason.
+
+I replaced pri.f90 with version sent by Eileen 5/21/07, except that I deleted unused Format 100 in PRI_INI_PROCESS and changed several tab characters to spaces.  Eileen said she would document the changes.  In gdt.f90, I changed VERSIONID from '1.1.0' to '1.2.0'.
+
+I have been working on numerous API changes sent by Eileen 6/27/07 (utl.f90, sen.f90, sta.f90, eqn.f90, and pri.f90).  I have made a number of changes to her versions ().  She sent a revised version of dep.f90, but the changes she made are not needed.  New and substantially revised subroutines are documented in subprograms_addendum.doc.  
+
+################################################################################
+
+1.2.3 2/4/2008
+
+I edited UTL_CHAR2NUM_a2d and UTL_CHAR2NUM_a2r to disallow "D" and "E" as numbers, even though they are interpretable as zero.  This change allows parameters named as "D" or "E" to be used in equations.  See email from Eileen, 10/4/07.
+
+I edited SEN_INI_DI to fix bug in loop to check validity of dependent names listed in Derivatives Interface file.
+
+In sen.f90 in SEN_UEV_DX_WRITE_SEN, edited format 601 to insert spaces, as requested by Eileen today.  
+
+In eqn.f90, made minor bug fix in EQN_PARSE_EDIT to make CONVER_DONE=.false. an executable statement.
+
+################################################################################
+
+1.3.0 2/19/2009
+
+VERSIONID of GLOBAL_DATA module changed to "1.3.0".
+
+In UTL: 
+
+Added new public function UTL_ACHAR to return character value for ASCII code in argument. 
+
+Added new private subroutine UTL_DX_WRITE_EIG.
+
+Added support for _eig extension to private function UTL_DX_RECL.
+
+New optional arguments DATAEXCHANGE and OUTNAM at end of argument list for UTL_EIGEN.
+
+UTL_EIGEN revised so that when DATAEXCHANGE and OUTNAM are present in argument list and DATAEXCHANGE is true, new private subroutine UTL_DX_WRITE_EIG is called to write an _eig file.
+
+In MIO: 
+
+Revised MIO_EXT to eliminate writing line of incorrect "Extracted Item Name" and "Extracted Value" (when IVERB>3) for !dum! instructions.
+
+In PLL: 
+
+Fixed minor bug in PLL_READ_DISPAR to initialize ISTAT=0.
+
+################################################################################
+
+1.3.1 8/17/2009
+
+VERSIONID of GLOBAL_DATA module changed to "1.3.1".
+
+In UTL:
+
+Clarified wording of text written by UTL_DX_WRITE_EIG to the _eig file.
+
+In DEP:
+
+Fixed bug in DEP_INI_READ that caused data read from Observation_Groups input block to be handled incorrectly when IDEPTYPE equals 3.
+
+Clarified wording of error message written by DEP_INI_STORE when UTL_SVD returns an error flag.
+
+In STA:
+
+Fixed bug in STA_EVA_COMMENTS to correct condition that generates explanatory text.
+
+In PRI:
+
+Clarified wording of error message written by PRI_INI_PROCESS when UTL_SVD returns an error flag.
+
+Clarified wording and added identification related to weight matrix and square-root of the weight matrix for prior information in PRI_INI_POPX.
+
+################################################################################
+
+1.4.0 3/18/2010
+
+In UTL:
+
+Edited UTL_WRITECDMATRIX to increase field size for output of integers related to number of elements in a CDMATRIX.  Fields of I9 were increased to I12.  This will accommodate matrices up to 1E6 by 1E6.
+
+In DEP:
+
+Edited DEP_INI_READ to use new character array DUMMYCOLS instead of (/' '/) in calls to UTL_READBLOCK.  This fixes compile-time error that happens when "Check routine interfaces" is on.  This change seems not to affect operation of program.
+
+Added a new public array called STATISTIK to hold values of STATISTIC and a new public subroutine called DEP_GET_WTMULTIPLIER.  DEP_GET_WTMULTIPLIER returns WTMULTIPLIER for a specified observation group.
+
+In PRI:
+
+Revised the way 0-length default column-name array is handled, to accomodate the Portland Group pgf90 compiler.
+
+In PLL:
+
+PLL_READ_RUNDEP was revised to be more robust with respect to ensuring that the jrundep.rdy file is deleted without setting IERR=1.
+
+################################################################################
+
+1.5.0 2/24/2011
+
+In UTL:
+
+Added new PUBLIC logical function UTL_SYSTEM_FUNC.  UTL_SYSTEM_FUNC can be used to invoke an operating-system command and return a value and error message indicating the success or failure status of the command.
+
+In PRI:
+
+The argument list of subroutine PRI_INI_STORE_WPRED was modified to add an optional argument called CONVERTED, which is a 1-D logical array with dimension MPR.  The revision correctly handles prior information items that applied to parameters that were transformed but had not been entered as (log10(paramname)) in the prior information equation.
+
+The argument list of subroutine PRI_INI_POPX was modified to add an optional argument called CONVERTED, which is a 1-D logical array with dimension MPR.  The revision correctly handles prior information items that apply to parameters that were transformed but had not been entered as (log10(paramname)) in the prior information equation.
+
+In PLL:
+
+A new PUBLIC logical function called PLL_EXE_FUNC was added.  PLL_EXE_FUNC is like PLL_EXE, except that it returns a value indicating the success or failure status of the command in the argument list and an error message. 
+
+A new variable named WAITRUNNERS was added, which can be specified in the PARALLEL_CONTROL input block.  WAITRUNNERS has the same definition as WAIT, but it applies only to runners.  If WAITRUNNERS is not specified, its value is the value of WAIT, either as specified in the PARALLEL_CONTROL input block or by default.  Parallel model runs may encounter problems caused by delays in opening and closing files, which are jobs handled by the operating system.  Sometimes it helps to specify a value for WAITRUNNERS that is smaller than the value of WAIT.
+
+PLL_READ_RUNDEP and PLL_MAKE_RUNS were revised to change the handling of the case where jrundep.rdy cannot be deleted after dependent values are successfully read from it.  Now, the dependent values are used and the runner is flagged as nonresponsive.  If this happens, a message is written to the screen.
+
+PLL_WRITE_DISRDY was made more robust in writing the jdispatch.rdy file in runner directories.
+
+PLL_READ_DISPAR was edited to be more robust in opening and reading, and detecting and reporting, problems in reading the jdispar.rdy file.
+
+A write statement in PLL_INI_DISPATCHER was edited to improve clarity.
+
+Jrunner.f90 was edited to invoke PLL_EXE_FUNC instead of PLL_EXE and to call PLL_RUNNER_STOP if PLL_EXE_FUNC returns .FALSE.
+
+################################################################################
+
+1.6.0 9/9/2011
+
+In UTL:
+
+Output from subroutine UTL_DX_WRITE_EIG was clarified.
+
+Optional LOGICAL argument PRINTIOUTIN was added to subroutine UTL_EIGEN.  PRINTIOUTIN controls printing of "VARIANCE-COVARIANCE MATRIX SCALED W/ PARAMETERS", eigenvalues, and eigenvectors.
+
+In MIO:
+
+Changed file status specifiers in OPEN and CLOSE statements to uppercase.  May not affect functioning.
+
+In SEN:
+
+Added code to allocate or deallocate arrays as needed.
+
+In PLL:
+
+Changes to improve robustness of parallel processing.
+
+Added new PRIVATE function PLL_CLOSE_AND_DELETE -- no need to document.
+
+################################################################################
+
+1.7.0 11/20/2011
+
+In UTL:
+
+Added new subroutine UTL_COPYLIST to copy data in one linked list into another linked list.
+
+In DEP:
+
+Added public LLIST pointers LLPTRDEPCOPY and LLPTRPREDCOPY.
+
+Added optional logical argument COPYLISTS to DEP_INI_READ.  When COPYLISTS is present and true, LLPTRDEP data are copied to LLPTRDEPCOPY and LLPTRPRED data are copied to LLPTRPREDCOPY.
+
+In PRI:
+
+Changes similar to those for DEP.  See release.txt for details.
+
+################################################################################
+
+1.7.1 2/22/2012
+
+In PRI:
+
+This version includes a correction to the PRIOR_INFORMATION module for the situation when prior information items are applied to parameters that were transformed but had not been entered as (log10(paramname)) in the prior information equation. The programming to convert the prior information to log space was included in Version 1.5.0, but that version only converts the prior weight to log space, the square root of the prior weight was not converted.  Version 1.7.1 also converts the square root of the prior weight.
+
+################################################################################
+
+1.7.3 8/8/2013
+
+Changes to support SVD, provided by Eileen.

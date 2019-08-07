@@ -1,0 +1,45 @@
+object frmHelp: TfrmHelp
+  Left = 0
+  Top = 0
+  Caption = 'ModelArchiver Help'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object tlb1: TToolBar
+    Size.Width = 640.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object btn1: TButton
+      Position.X = 16.000000000000000000
+      Position.Y = 8.000000000000000000
+      StyleLookup = 'priortoolbutton'
+      TabOrder = 0
+      Text = 'btn1'
+      OnClick = btn1Click
+    end
+    object edt1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 1
+      KeyboardType = URL
+      ReturnKeyType = Done
+      Position.X = 112.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 513.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      KillFocusByReturn = True
+      OnChange = edt1Change
+    end
+  end
+  object wb1: TWebBrowser
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 440.000000000000000000
+    Size.PlatformDefault = False
+    OnDidFinishLoad = wb1DidFinishLoad
+  end
+end

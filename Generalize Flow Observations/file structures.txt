@@ -1,0 +1,27 @@
+Name file:
+LIST Listing file name
+DIS Discretization file name
+CBC cell-by-cell-Flow file name
+MAIN input file name
+OUT output file name
+
+Generalized Observations input file structure:
+1. Comments (lines starting with #)
+
+2. Number of cell groups, SINGLE or DOUBLE precision, STRUCTURED or UNSTRUCTURED
+
+(repeat the data sets 3-3 for each cell group)
+3. number of observation times, number of cells, Flow type (use quotes if needed around flow type), [Uniform factor]
+
+4. (One line for each observation time) 
+OBSNAM IREFSP TOFFSET FLWOBS 
+
+5. (One line for each cell)
+(if structured)
+LAYER ROW COLUMN Order [FACTOR] (order is used to distinguish between multiple boundaries of the same type in the same cell. If LAYER is -1, LAYER is not ignored. The latter option is present because SFR streams can change layers if the layer they are in dries out.)
+(if unstructured)
+CELL_NUMBER Order [FACTOR] (order is used to distinguish between multiple boundaries of the same type in the same cell.)
+
+Generalized Observations output file structure:
+(one line for each observation)
+Simulated value, observed value, observation name

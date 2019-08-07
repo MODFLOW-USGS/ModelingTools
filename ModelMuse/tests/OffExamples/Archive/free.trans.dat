@@ -1,0 +1,127 @@
+TITLE
+.      Central Oklahoma aquifer,
+.      demonstration of PHAST
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print false
+      -HDF_chemistry true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_chemistry false
+      -xyz_components false
+      -xyz_heads true
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 1E-9
+UNITS
+      -time seconds
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter in
+      -well_flow_rate liter/days
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 1 2
+      -uniform   Y   0 1 2
+      -uniform   Z   0 4 5
+      -chemistry_dimensions XYZ
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 1 1 4
+            -Kx 0.001
+            -Ky 0.001
+            -Kz 0.001
+            -porosity 0.1
+            -specific_storage 0
+            -longitudinal_dispersivity 0.1
+            -horizontal_dispersivity 0.1
+            -vertical_dispersivity 0.1
+      -zone 0 0 0 1 1 4
+            -active 1
+FREE_SURFACE_BC true
+STEADY_FLOW false
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 1 1 4
+            -head by_node
+            <
+                  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+                  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+            >
+CHEMISTRY_IC
+      -zone 0 0 0 1 1 4
+            -solution 1
+            -equilibrium_phases 1
+            -surface 1
+            -exchange 1
+            -gas_phase 1
+            -solid_solutions 1
+            -kinetics 1
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 1 step
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 1 step
+      -force_chemistry_print 1 step
+      -HDF_chemistry 0 
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads end
+      -progress_statistics 0 
+      -restart 0 
+      -velocities end
+      -wells 0 
+      -xyz_chemistry 1 step
+      -xyz_components 0 
+      -xyz_heads end
+      -xyz_velocities end
+      -xyz_wells 0 years
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 1 1 4
+            -print 1
+      -xyz_chemistry
+      -zone 0 0 0 1 1 4
+            -print 1
+FLUX_BC
+      -zone 0 0 4 1 1 4
+            -face Z
+            -flux
+                  0 -0.01
+                  5 0.01
+            -associated_solution
+                  0 2
+                  5 2
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 0.0001 seconds
+                  0.0001 1 seconds
+                  5 1 seconds
+            -time_end
+                  10 seconds
+END

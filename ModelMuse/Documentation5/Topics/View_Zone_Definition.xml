@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">View Zone Definition</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">View Zone Definition</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To see the zone array for HK_Par1, select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data|Data Visualization|Color Grid...</link><text styleclass="Normal" translate="true"> </text><image src="DataVisualizationButton.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Color Grid button</title></image><text styleclass="Normal" translate="true"> to show the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Color Grid</link><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Visualization_Dialog_Box" styleclass="Strong" translate="true">Data Visualization</link><text styleclass="Normal" translate="true"> dialog box, and then select &quot;HK_Par1_Zone from &quot;Data Sets|Required|HK Parameter&quot; and click </text><text styleclass="Strong" translate="true">Apply</text><text styleclass="Normal" translate="true"> (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">73</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">28</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). The blue zone is the area where HK_Par1 applies (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">74</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">29</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). However, by using the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Show and Hide Objects</link><text styleclass="Normal" translate="true"> dialog box (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object|Show or Hide Objects</link><text styleclass="Normal" style="font-weight:bold;" translate="true"> </text><image src="ShowHideObjectsButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true">) to identify the objects used to define this zone, it can be seen that no such objects exist because no objects are listed for HK_Par1_Zone. To figure out what is happening, select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Value_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data|Show Grid or Mesh Values...</link><text styleclass="Normal" translate="true"> Move the mouse over the top, front, or side view of the grid. When the mouse is over the blue cells, the &quot;Value&quot; is displayed as &quot;True&quot;. When the mouse is over the red cells, the &quot;Value&quot; is displayed as &quot;False&quot;. For both types of cells, the explanation that is shown is &quot;set via default formula: ZoneID = 1&quot; (fig .</text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">75</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">30</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). In this case, the value was set via the default formula for the data set. To see this default formula, switch to the main ModelMuse window and select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data|Edit Data Sets...</link><text styleclass="Normal" translate="true"> In this case the default formula has been set to &quot;ZoneID = 1&quot;. ZoneID is a user-created data set. (Expand &quot;User Defined&quot; to see it.) ZoneID is being used to set the value of two data sets. It is used to set HK_Par1_Zone through its formula: &quot;ZoneID = 1&quot;. It is also being used to set the value of another data set HK_Par2_Zone using a different formula &quot;ZoneID &lt;&gt; 1&quot;. Thus setting a value for ZoneID simultaneously sets values for both HK_Par1_Zone and HK_Par2_Zone. Use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Show and Hide Objects</link><text styleclass="Normal" translate="true"> dialog box to hide all the objects except the one that sets the value of ZoneID. (Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Show and Hide Objects</link><text styleclass="Normal" translate="true"> dialog box if it is not already visible. Uncheck the checkbox next to &quot;All Objects&quot; if it is not already unchecked. Expand &quot;Data Sets|User Defined&quot; and check the check box next to &quot;ZoneID.&quot;) The object is on the front view of the model (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">74B</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">29B</text><conditional-text type="END"/><text styleclass="Normal" translate="true">).</text></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="ColorGrid.bmp" scale="75.00%" width="464" height="329" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">73</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">28</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Selecting the HK_Par1_Zone data set in the Color Grid dialog box.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="3" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="Zone_Array.bmp" scale="50.00%" width="107" height="100" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+        <td style="vertical-align:bottom;">
+          <para styleclass="Image Caption"><image src="ZoneIDObject.bmp" scale="50.00%" width="169" height="69" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Caption" translate="true">A</text></para>
+        </td>
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Caption" translate="true">B</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">74</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">29</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">The blue area represents the area where HK_Par1 applies—(A) Top view, and (B) Front view.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="Value_Explanation.bmp" scale="50.00%" width="146" height="158" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">75</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">30</text><conditional-text type="END"/><text styleclass="Image Number" translate="true"> </text><text styleclass="Image Caption" translate="true">Grid or Mesh Value dialog box.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

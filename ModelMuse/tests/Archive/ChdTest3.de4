@@ -1,0 +1,3 @@
+# DE4: Direct Solver package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     5     0     0     0 # MXUP MXLOW MXBW
+     3     0  1.000000000000E+000   1.000000000000E-003      1 # IFREQ MUTD4 ACCL HCLOSE IPRD4

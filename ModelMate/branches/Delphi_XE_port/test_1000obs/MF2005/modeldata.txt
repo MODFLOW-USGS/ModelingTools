@@ -1,0 +1,3 @@
+3071260  1961860  0.0    XORIG YORIG
+-1.0E20             HNOFLO
+-2.0E20             HDRY

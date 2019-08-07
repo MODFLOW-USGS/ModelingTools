@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SSM: Sink &amp; Source Mixing Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SSM: Sink &amp; Source Mixing Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The SSM: Sink &amp; Source Package pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS</link><text styleclass="Normal" translate="true">. It is used to specify comments related to the SSM package in MT3DMS. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Sinks and sources are specified with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Objects" styleclass="Normal" translate="true">Objects</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

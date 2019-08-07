@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">TextToInt</title>
+  <keywords>
+    <keyword translate="true">TextToInt</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">TextToInt</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">TextToInt</text><text styleclass="Normal" translate="true">(Text_Value) converts Text_Value to an integer. If Text_Value cannot be converted, TextToInt causes an error. See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="TextToIntDef" styleclass="Normal" translate="true">TextToIntDef</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Modpathtimetest" FileType="bin">
+    <FileName Model_Name="Modpathtimetest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="bin">C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Modpathtimetest" FileType="ancillary">
+    <FileName Model_Name="Modpathtimetest" FileType="ancillary">Modpathtimetest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Modpathtimetest" FileType="Model Input">
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.bas</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.chd</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.dis</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.gsf</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.lpf</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.nam.archive</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.oc</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">Modpathtimetest.pcg</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Input">usgs.Modpathtimetest.reference</FileName>
+  </model>
+  <output Model_Name="Modpathtimetest" FileType="Model Output">
+    <FileName Model_Name="Modpathtimetest" FileType="Model Output">Modpathtimetest.cbc</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Output">Modpathtimetest.fdn</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Output">Modpathtimetest.fhd</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Model Output">Modpathtimetest.lst</FileName>
+  </output>
+  <Modpath_Input_Files Model_Name="Modpathtimetest" FileType="Modpath Input">
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">Modpathtimetest.mpm</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">Modpathtimetest.mpn.archive</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">Modpathtimetest.mprsp.archive</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">Modpathtimetest.strt</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">Mp.bat.archive</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">MpIn.txt</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">RunModpath.Bat.archive</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Input">usgs.Modpathtimetest_Modpath.reference</FileName>
+  </Modpath_Input_Files>
+  <Modpath_Output_Files Model_Name="Modpathtimetest" FileType="Modpath Output">
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Output">Modpathtimetest.cbf</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Output">Modpathtimetest.end</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Output">Modpathtimetest.mplst</FileName>
+    <FileName Model_Name="Modpathtimetest" FileType="Modpath Output">Modpathtimetest.ts</FileName>
+  </Modpath_Output_Files>
+</Model_Archive_List>

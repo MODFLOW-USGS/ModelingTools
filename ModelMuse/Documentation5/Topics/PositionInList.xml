@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PositionInList</title>
+  <keywords>
+    <keyword translate="true">PositionInList</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PositionInList</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">PositionInList</text><text styleclass="Normal" translate="true">(TestTextItem, FirstTextItem, SecondTextItem, ...) compares TestTextItem to each of the succeeding items in order until it finds a match and then returns the position of the matching item in the list of items. If no match is found, </text><text styleclass="Strong" translate="true">PositionInList</text><text styleclass="Normal" translate="true"> returns zero.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">PositionInList</text><text styleclass="Normal" translate="true"> is case sensitive.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Examples:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PositionInList(&quot;b&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;) returns 2.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PositionInList(&quot;B&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;) returns 0.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

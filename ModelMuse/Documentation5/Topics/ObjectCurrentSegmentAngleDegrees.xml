@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentSegmentAngleDegrees</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentSegmentAngleDegrees</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectCurrentSegmentAngleDegrees</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleDegrees</text><text styleclass="Normal" translate="true"> returns the angle in degrees of the current segment of an object. The angle is measured in the counterclockwise direction relative to the grid with zero in the direction of positive </text><link displaytype="text" defaultstyle="true" type="topiclink" href="X_Prime" styleclass="Normal" translate="true">X_Prime</link><text styleclass="Normal" translate="true">. In the side view, zero is in the direction of positive </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Y" styleclass="Normal" translate="true">Y</link><text styleclass="Normal" translate="true">. For SUTRA and MODFLOW 6 DISV models, the angle is measured relative to the X-axis. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleDegrees</text><text styleclass="Normal" translate="true"> can range from +180 to -180.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleDegrees</text><text styleclass="Normal" translate="true"> can also be helpful in assigning </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Required_by_SUTRA" anchor="ANGLE1" styleclass="Normal" translate="true">ANGLE_Horizontal</link><text styleclass="Normal" translate="true"> in SUTRA and XT3D_Angle1 MODFLOW 6 models. Both </text><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleDegrees</text><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Required_by_SUTRA" anchor="ANGLE1" styleclass="Normal" translate="true">ANGLE_Horizontal</link><text styleclass="Normal" translate="true"> and XT3D_Angle1 are measured in a counterclockwise direction from the X-axis. </text></para>
+  </body>
+</topic>

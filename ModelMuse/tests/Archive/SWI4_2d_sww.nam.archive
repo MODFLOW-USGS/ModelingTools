@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.SWI4_2d_sww\SWI4_2d_sww.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.SWI4_2d_sww\SWI4_2d_sww.cbc REPLACE
+DIS              12 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.dis OLD
+BAS6             13 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.bas OLD
+OC               39 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.oc OLD
+DATA             37 ..\..\output\output.SWI4_2d_sww\SWI4_2d_sww.fhd REPLACE
+DATA             38 ..\..\output\output.SWI4_2d_sww\SWI4_2d_sww.fdn REPLACE
+PCG              18 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.pcg OLD
+LPF              14 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.lpf OLD
+GHB              19 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.ghb OLD
+WEL              20 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.wel OLD
+SWI2            168 ..\..\model\model.SWI4_2d_sww\SWI4_2d_sww.swi OLD
+DATA(BINARY)    169 ..\..\output\output.SWI4_2d_sww\SWI4_2d_sww.swi_obs REPLACE
+DATA(BINARY)    170 ..\..\output\output.SWI4_2d_sww\SWI4_2d_sww.zta REPLACE

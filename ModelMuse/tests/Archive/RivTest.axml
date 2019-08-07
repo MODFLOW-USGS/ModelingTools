@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RivTest" FileType="bin">
+    <FileName Model_Name="RivTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RivTest" FileType="ancillary">
+    <FileName Model_Name="RivTest" FileType="ancillary">RivTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RivTest" FileType="Model Input">
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.bas</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.chd</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.dis</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.gsf</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.lpf</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.nam.archive</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.oc</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.pcg</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RivTest.riv</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Input">usgs.RivTest.reference</FileName>
+  </model>
+  <output Model_Name="RivTest" FileType="Model Output">
+    <FileName Model_Name="RivTest" FileType="Model Output">RivTest.cbc</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Output">RivTest.fdn</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Output">RivTest.fhd</FileName>
+    <FileName Model_Name="RivTest" FileType="Model Output">RivTest.lst</FileName>
+  </output>
+</Model_Archive_List>

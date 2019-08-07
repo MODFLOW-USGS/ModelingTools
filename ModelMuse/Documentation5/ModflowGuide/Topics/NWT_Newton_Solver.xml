@@ -1,0 +1,471 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">NWT - Newton Solver</title>
+  <keywords>
+    <keyword translate="true">BACKFLAG</keyword>
+    <keyword translate="true">BACKREDUCE</keyword>
+    <keyword translate="true">BACKTOL</keyword>
+    <keyword translate="true">DBDGAMMA</keyword>
+    <keyword translate="true">DBDKAPPA</keyword>
+    <keyword translate="true">DBDTHETA</keyword>
+    <keyword translate="true">EPSRN</keyword>
+    <keyword translate="true">FLUXTOL</keyword>
+    <keyword translate="true">HCLOSEXMD</keyword>
+    <keyword translate="true">HEADTOL</keyword>
+    <keyword translate="true">IACL</keyword>
+    <keyword translate="true">IBOTAV</keyword>
+    <keyword translate="true">IDROPTOL</keyword>
+    <keyword translate="true">ILUMETHOD</keyword>
+    <keyword translate="true">IPRNWT</keyword>
+    <keyword translate="true">IREDSYS</keyword>
+    <keyword translate="true">LEVEL</keyword>
+    <keyword translate="true">LEVFILL</keyword>
+    <keyword translate="true">LINMETH</keyword>
+    <keyword translate="true">MAXBACKITER</keyword>
+    <keyword translate="true">MAXITEROUT</keyword>
+    <keyword translate="true">MAXITINNER</keyword>
+    <keyword translate="true">MOMFACT</keyword>
+    <keyword translate="true">MSDR</keyword>
+    <keyword translate="true">MXITERXMD</keyword>
+    <keyword translate="true">NORDER</keyword>
+    <keyword translate="true">NORTH</keyword>
+    <keyword translate="true">OPTIONS</keyword>
+    <keyword translate="true">RRCTOLS</keyword>
+    <keyword translate="true">STOPTOL</keyword>
+    <keyword translate="true">THICKFACT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">NWT - Newton Solver</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NWT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Newton solver is used to solve the finite difference equations in each step of a MODFLOW-NWT stress period.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A37" target="_blank" styleclass="Citation" translate="true">Niswonger, R.G., Panday, Sorab, and Ibaraki, Motomu, 2011, MODFLOW-NWT, A Newton formulation for MODFLOW-2005: U.S. Geological Survey Techniques and Methods 6-A37, 44 p.</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="NWT_release.txt" styleclass="Normal" translate="true">release.txt</link><text styleclass="Normal" translate="true"> for MODFLOW-NWT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Solvers" styleclass="Normal" translate="true">Solvers</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The NWT solver can only be used with the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" styleclass="Normal" translate="true">Upstream Weighting (UPW)</link><text styleclass="Normal" translate="true"> package</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">All numeric variables are free format if the option “FREE” is specified in the Basic Package input file; otherwise, all variables have 10-character fields. Values in brackets are specified only for some input options. If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> keyword is specified as “</text><text styleclass="Keywords" translate="true">SIMPLE</text><text styleclass="Normal" translate="true">,” “</text><text styleclass="Keywords" translate="true">MODERATE</text><text styleclass="Normal" translate="true">,” or “</text><text styleclass="Keywords" translate="true">COMPLEX</text><text styleclass="Normal" translate="true">,” then all solver input variables following </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> in item 1 are not required to be specified and are set to default values. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> is specified as “</text><text styleclass="Keywords" translate="true">SPECIFIED</text><text styleclass="Normal" translate="true">,” then all input variables are required; however, residual-control variables are only required if &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKFLAG" styleclass="Normal" translate="true">BACKFLAG</link><text styleclass="Normal" translate="true"> is set to one. The residual-control option can only be used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> is specified as “</text><text styleclass="Keywords" translate="true">SPECIFIED</text><text styleclass="Normal" translate="true">.” It is recommended that users refer to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" styleclass="Normal" translate="true">table 2</link><text styleclass="Normal" translate="true"> and the discussion on “Example Input for the NWT Input File” for guidance on values that might be identified for each input variable.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The optional variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="PHIRAMP" styleclass="Normal" translate="true">PHIRAMP</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package can be specified in MODFLOW-NWT.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true"> package is used, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" anchor="MoreIterations" styleclass="Normal" translate="true">more iterations</link><text styleclass="Normal" translate="true"> may be required.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input to the Newton (NWT) Solver Package is read from the file that is type “NWT” in the Name File. </text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="7" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For Each Simulation</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#”character must be in column 1. Lines beginning with # are restricted to the first lines of the file. Text is written to the Listing File.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet1" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Data Set 1.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HEADTOL FLUXTOL MAXITEROUT THICKFACT LINMETH IPRNWT IBOTAV OPTIONS [DBDTHETA] [DBDKAPPA] [DBDGAMMA] [MOMFACT] [BACKFLAG] [MAXBACKITER] [BACKTOL] [BACKREDUCE]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HEADTOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="HEADTOL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HEADTOL (units of length)—is the maximum head change between outer iterations for solution of the nonlinear problem (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FLUXTOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="FLUXTOL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">FLUXTOL (units of length cubed per time)—is the maximum root-mean-squared flux difference between outer iterations for solution of the nonlinear problem (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXITEROUT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MAXITEROUT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MAXITEROUT is the maximum number of iterations to be allowed for solution of the outer (nonlinear) problem (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[THICKFACT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="THICKFACT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">THICKFACT is the portion of the cell thickness (length) used for smoothly adjusting storage and conductance coefficients to zero (symbol Ω in equation 9; real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LINMETH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="LINMETH" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LINMETH is a flag that determines which matrix solver will be used (integer). </text></para>
+                      <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">A value of 1 indicates GMRES will be used </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">A value of 2 indicates χMD will be used. </text><text styleclass="New Materials" translate="true">The χMD can not be used with local grid refinement in MODFLOW-OWHM.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRNWT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IPRNWT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IPRNWT is a flag that indicates whether additional information about solver convergence will be printed to the main listing file (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBOTAV]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IBOTAV" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IBOTAV is a flag that indicates whether corrections will be made to groundwater head relative to the cell-bottom altitude if the cell is surrounded by dewatered cells (integer). A value of 1 indicates that a correction will be made and a value of 0 indicates no correction will be made. This input variable is problem specific and both options (IBOTAV=0 or 1) should be tested.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT provides two different methods for simulating dry cells in the deepest layer, and the option is defined by the NWT input file variable IBOTAV. Head for cells in the deepest layer, and for single-layer models, cannot fall below the cell-bottom altitude if the input variable IBOTAV is set to 1; otherwise, heads in the deepest layer can fall below the cell-bottom altitude. The value of IBOTAV does not affect the solution because dry bottom-layer cells are effectively ignored in the solution (that is, for a cell that does not receive inflow, the coefficients are essentially zero in the row of the matrix in which a bottom-layer cell is the diagonal element). IBOTAV is provided because it can affect convergence behavior for a cell with thin saturated thickness. The value of IBOTAV that provides the fastest convergence rate appears to be problem specific.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OPTIONS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="OPTIONS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">OPTIONS are keywords that activate options:</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">One and only one of the following four options must be specified.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">SPECIFIED</text><text styleclass="Normal" translate="true"> indicates that the optional solver input values listed for items 1 and 2 will be specified in the NWT input file by the user.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">SIMPLE</text><text styleclass="Normal" translate="true"> indicates that default solver input values will be defined that work well for nearly linear models. This would be used for models that do not include nonlinear stress packages, and models that are either confined or consist of a single unconfined layer that is thick enough to contain the water table within a single layer. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" styleclass="Normal" translate="true">table 2</link><text styleclass="Normal" translate="true"> for the solver input values that will be used for this option.)</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">MODERATE</text><text styleclass="Normal" translate="true"> indicates that default solver input values will be defined that work well for moderately nonlinear models. This would be used for models that include nonlinear stress packages, and models that consist of one or more unconfined layers. The “</text><text styleclass="Keywords" translate="true">MODERATE</text><text styleclass="Normal" translate="true">” option should be used when the “</text><text styleclass="Keywords" translate="true">SIMPLE</text><text styleclass="Normal" translate="true">” option does not result in successful convergence. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" styleclass="Normal" translate="true">table 2</link><text styleclass="Normal" translate="true"> for the solver input values that will be used for this option.)</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">COMPLEX</text><text styleclass="Normal" translate="true"> indicates that default solver input values will be defined that work well for highly nonlinear models. This would be used for models that include nonlinear stress packages, and models that consist of one or more unconfined layers representing complex geology and sw/gw interaction. The “</text><text styleclass="Keywords" translate="true">COMPLEX</text><text styleclass="Normal" translate="true">” option should be used when the “</text><text styleclass="Keywords" translate="true">MODERATE</text><text styleclass="Normal" translate="true">” option does not result in successful convergence. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" styleclass="Normal" translate="true">table 2</link><text styleclass="Normal" translate="true"> for the solver input values that will be used for this option.)</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The following option may be specified.</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Keywords" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Keywords"><anchor id="Continue" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">CONTINUE</text><text styleclass="Normal" translate="true"> For this input option, if the model fails to converge during a time step then it will continue to solve the following time step. However, if the &quot;</text><text styleclass="Keywords" translate="true">CONTINUE</text><text styleclass="Normal" translate="true">&quot; is removed from this line then the model will stop after convergence failure. See also: the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="StopError" styleclass="Normal" translate="true">STOPERROR</link><text styleclass="Normal" translate="true"> option in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="Normal" translate="true">Basic</link><text styleclass="Normal" translate="true"> Package</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><anchor id="DataSet1A" styleclass="Normal" style="font-weight:bold;"></anchor><text styleclass="Normal" style="font-weight:bold;" translate="true">Read the following values if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" style="font-weight:bold;" translate="true">OPTIONS</link><text styleclass="Normal" style="font-weight:bold;" translate="true"> = “SPECIFIED.”</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[DBDTHETA]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="DBDTHETA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">DBDTHETA is a coefficient used to reduce the weight applied to the head change between nonlinear iterations (symbol θ in equation 21). DBDTHETA is used to control oscillations in head. Values range between 0.0 and 1.0, and larger values increase the weight (decrease under-relaxation) applied to the head change (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[DBDKAPPA]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="DBDKAPPA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">DBDKAPPA is a coefficient used to increase the weight applied to the head change between nonlinear iterations (symbol κ in equation 22). DBDKAPPA is used to control oscillations in head. Values range between 0.0 and 1.0, and larger values increase the weight applied to the head change (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[DBDGAMMA]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="DBDGAMMA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">DBDGAMMA is a factor (symbol γ in equation 19) used to weight the head change for iterations n–1 and n. Values range between 0.0 and 1.0, and greater values apply more weight to the head change calculated during iteration n (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MOMFACT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MOMFACT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MOMFACT is the momentum coefficient m of equation 20 and ranges between 0.0 and 1.0. Greater values apply more weight to the head change for iteration n (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BACKFLAG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="BACKFLAG" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">BACKFLAG is a flag used to specify whether residual control will be used. A value of 1 indicates that residual control is active and a value of 0 indicates residual control is inactive (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXBACKITER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MAXBACKITER" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MAXBACKITER is the maximum number of reductions (backtracks) in the head change between nonlinear iterations (integer). A value between 10 and 50 works well.</text><text styleclass="New Materials" translate="true"> MAXBACKITER is only read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKFLAG" styleclass="New Materials" translate="true">BACKFLAG</link><text styleclass="New Materials" translate="true"> &gt; 0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BACKTOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="BACKTOL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">BACKTOL is the proportional decrease in the root-mean-squared error of the groundwater-flow equation used to determine if residual control is required at the end of a nonlinear iteration, as applied in equation 23 (real). </text><text styleclass="New Materials" translate="true">BACKTOL is only read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKFLAG" styleclass="New Materials" translate="true">BACKFLAG</link><text styleclass="New Materials" translate="true"> &gt; 0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BACKREDUCE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="BACKREDUCE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">BACKREDUCE is a reduction factor (symbol </text><text styleclass="Normal" style="font-style:italic;" translate="true">B</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-style:italic; vertical-align:sub; color:#000000;" translate="true">r</text><text styleclass="Normal" translate="true"> in equation 23) used for residual control that reduces the head change between nonlinear iterations (real). Values should be between 0.0 and 1.0, where smaller values result in smaller head-change values. </text><text styleclass="New Materials" translate="true">BACKREDUCE is only read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKFLAG" styleclass="New Materials" translate="true">BACKFLAG</link><text styleclass="New Materials" translate="true"> &gt; 0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="LINMETH" styleclass="Normal" translate="true">LINMETH</link><text styleclass="Normal" translate="true"> = 1 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Keywords" translate="true">“SPECIFIED”</text><text styleclass="Normal" translate="true"> read the following line:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet2a" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Data Set 2a.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[MAXITINNER] [ILUMETHOD][LEVFILL][STOPTOL][MSDR]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXITINNER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MAXITINNER" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MAXITINNER is the maximum number of iterations for the linear solution (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ILUMETHOD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ILUMETHOD" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ILUMETHOD is the index for selection of the method for incomplete factorization (ILU) used as a preconditioner. See Kipp and others (2008) for further details (integer). </text></para>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ILUMETHOD=1—ILU with drop tolerance and fill limit. Fill-in terms less than drop tolerance times the diagonal are discarded. The number of fill-in terms in each row of L and U is limited to the fill limit. The fill-limit largest elements are kept in the L and U factors.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ILUMETHOD=2 — ILU(k), Order k incomplete LU factorization. Fill-in terms of higher order than k in the factorization are discarded.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LEVFILL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="LEVFILL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LEVFILL is the fill limit for ILUMETHOD = 1 and is the level of fill for ILUMETHOD = 2. Recommended values: 5-10 for method 1, 0-2 for method 2. See Kipp and others (2008) for further details (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STOPTOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="STOPTOL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">STOPTOL is the tolerance for convergence of the linear solver. This is the residual of the linear equations scaled by the norm of the root mean squared error. Usually 10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-8</text><text styleclass="Normal" translate="true"> to 10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-12</text><text styleclass="Normal" translate="true"> works well. See Kipp and others (2008) for further details (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MSDR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MSDR" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MSDR is the number of iterations between restarts of the GMRES Solver. See Kipp and others (2008) for further details (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="LINMETH" styleclass="Normal" translate="true">LINMETH</link><text styleclass="Normal" translate="true"> = 2 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Keywords" translate="true">“SPECIFIED”</text><text styleclass="Normal" translate="true"> read the following line:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet2b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Data Set 2b.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[IACL][NORDER][LEVEL][NORTH][IREDSYS][RRCTOLS][IDROPTOL][EPSRN] [HCLOSEXMD][MXITERXMD]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IACL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IACL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IACL is a flag for the acceleration method: </text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0 = conjugate gradient; </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">1 = ORTHOMIN; </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">2 = Bi-CGSTAB </text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NORDER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NORDER" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NORDER is a flag for the scheme of ordering the unknowns: </text></para>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0= original ordering;</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">1= RCM ordering; </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">2= Minimum Degree ordering </text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LEVEL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="LEVEL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LEVEL is the level of fill for incomplete LU factorization (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NORTH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NORTH" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NORTH is the number of orthogonalization for the ORTHOMIN acceleration scheme. A number between 4 and 10 is appropriate. Small values require less storage but more iterations may be required. This number should equal 2 for the other acceleration methods (integer).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IREDSYS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IREDSYS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IREDSYS is a flag for reduced system preconditioning (integer): </text></para>
+                      <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0=do not apply reduced system preconditioning </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">1 =apply reduced system preconditioning; </text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RRCTOLS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="RRCTOLS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">RRCTOLS is the residual reduction-convergence criteria (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDROPTOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IDROPTOL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IDROPTOL is a flag for using drop tolerance in the preconditioning (integer).</text></para>
+                      <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0 = don&apos;t use drop tolerance</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">1 = use drop tolerance &#160;</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[EPSRN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="EPSRN" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">EPSRN is the drop tolerance for preconditioning (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HCLOSEXMD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="HCLOSEXMD" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HCLOSEXMD is the head closure criteria for inner (linear) iterations (real).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXITERXMD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MXITERXMD" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MXITERXMD is the maximum number of iterations for the linear solution.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

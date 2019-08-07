@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets Required by PHAST</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Data Sets Required by PHAST</text></para>
+    </header>
+    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 7. Data Sets required by PHAST</text></para>
+    <para styleclass="Normal" style="text-align:center;"><table id="PhastDataSets_srt_" rowcount="21" colcount="4" style="width:655px; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <thead style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Header"><anchor id="_sortable_Phast_DataSets_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Header"><anchor id="_sortable_Phast_Description_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Description</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Header"><anchor id="_sortable_PHAST_equivalent_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">PHAST equivalent</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Header"><anchor id="_sortable_Phast_when_used_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">When used</text></para>
+        </td>
+      </thead>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Active</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies whether an element in PHAST is active or not.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, active</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Kx</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the hydraulic conductivity in the X direction.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, Kx</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Ky</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the hydraulic conductivity in the Y direction.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, Ky</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Kz</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the hydraulic conductivity in the Z direction.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, Kz</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Porosity</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the porosity.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, porosity</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specific_Storage</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the specific storage.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, specific_storage</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Longitudinal_Dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the longitudinal dispersivity.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, longitudinal_­dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px; height:30px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Horizontal_Transverse_­Dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px; height:30px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the horizontal transverse dispersivity.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px; height:30px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, horizontal_­dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px; height:30px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Vertical_Transverse_­Dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the vertical transverse dispersivity.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MEDIA, vertical_dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Initial_Head</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial head.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">HEAD_IC, head</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Neither Use free surface nor Use water table for initial condition checked in PHAST Free Surface Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Initial_Water_Table</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial water table.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">HEAD_IC, water_table</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use free surface and Use water table for initial condition checked in PHAST Free Surface Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_­Solution</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial solution.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, solution</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_­Equilibrium_­Phases</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial equilibrium phases.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, equilibrium_phases</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use equilibrium phases checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Surface</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial surface properties.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, surface</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use surface assemblages checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_­Exchange</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial exchange properties.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, exchange</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use exchange checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Gas_­Phase</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial gas phase properties.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, gas_phase</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use gas phases checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Solid_­Solutions</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial solid-solution properties.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, solid_solution</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use solid solution checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Chemistry_Initial_­Kinetics</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the initial kinetic properties.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">CHEMISTRY_IC, kinetics</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport and Use kinetics checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Print_Chemistry</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the &quot;Print Chemistry&quot; distribution.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">PRINT_LOCATIONS, chemistry</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:143px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Print_XYZ_Chemistry</text></para>
+        </td>
+        <td style="vertical-align:top; width:142px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the &quot;Print XYZ Chemistry&quot; distribution.</text></para>
+        </td>
+        <td style="vertical-align:top; width:130px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">PRINT_LOCATIONS, xyz_chemistry</text></para>
+        </td>
+        <td style="vertical-align:top; width:183px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Use solute transport checked in PHAST Chemistry Options Dialog Box</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

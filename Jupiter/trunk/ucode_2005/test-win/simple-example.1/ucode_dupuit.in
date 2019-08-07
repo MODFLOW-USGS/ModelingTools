@@ -1,0 +1,78 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options
+  Verbose=0
+END Options
+
+# -------------------------
+# REGRESSION-CONTROL INFORMATION
+# -------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+ModelName=Dupuit_Simple.1 
+ModelLengthUnits=meters
+ModelTimeUnits=days
+sensitivities=yes
+optimize=yes
+DataExchange=yes
+END UCODE_CONTROL_DATA 
+
+BEGIN REG_GN_CONTROLS KEYWORDS
+tolpar=0.01              
+maxiter=20     
+maxchange=2.0                         
+stats_on_nonconverge=yes 
+END REG_GN_CONTROLS                  
+
+BEGIN MODEL_COMMAND_LINES
+# Note single quotes around 'Command=value' are required if the
+# command includes one or more spaces, but are optinal otherwise
+'Command=dupuit.bat'
+purpose=forward
+CommandId=dupuit
+END MODEL_COMMAND_LINES
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS     
+  groupname=Default   ADJUSTABLE=yes
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA TABLE
+  nrow=2  ncol=7  columnlabels groupname=default
+  paramname  startvalue   scalepval   ADJUSTABLE  perturbamt transform   tolpar
+  K         0.005           1.0e-5        yes        0.01        yes        0.01
+  W         0.0001          2.0e-7        yes        0.01        yes         0.01
+END PARAMETER_DATA 
+
+BEGIN OBSERVATION_GROUPS 
+  groupname=head  
+  plotsymbol=1
+  groupname=flow  
+  plotsymbol=2
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA TABLE
+NROW=7  NCOL=5  COLUMNLABELS 
+obsname    obsvalue     statistic  statflag    groupname
+h1          5.505       5.0e-4     sd          head       
+h2          5.897       5.0e-4     sd          head       
+h3          5.812       5.0e-4     sd          head       
+h4          5.223       5.0e-4     sd          head       
+h5          3.915       5.0e-4     sd          head     
+qleft       -0.005      1.0e-8     var         flow      
+qright      0.0088      6.4e-7     var         flow      
+END OBSERVATION_DATA TABLE
+
+
+BEGIN MODEL_INPUT_FILES
+  modinfile=dupuit.in  TEMPLATEFILE=dupuit.in.tpl
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES
+  modoutfile=dupuit.out  INSTRUCTIONFILE=ucode_dupuit.ins   category=obs
+END MODEL_OUTPUT_FILES

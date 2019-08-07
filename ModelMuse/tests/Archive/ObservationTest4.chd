@@ -1,0 +1,13 @@
+# CHD: Time-Variant Specified-Head package file created on 9/8/2016 by ModelMuse version 3.8.1.0.
+PARAMETER     2     4 # PARAMETER NPCHD MXL
+     3 AUXILIARY IFACE # MXACTC Option
+CHD_Par1 CHD  1.000000000000E+000      1 # Data Set 3: PARNAM PARTYP Parval NLST
+     1     1     4  2.000000000000E+000   2.000000000000E+000      0 # Data Set 4b: Layer Row Column Shdfact Ehdfact IFACE
+CHD_Par2 CHD  1.000000000000E+000      1 # Data Set 3: PARNAM PARTYP Parval NLST
+     1     4     1  1.000000000000E+000   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Shdfact Ehdfact IFACE
+     1     2 # Data Set 5: ITMP NP Stress period 1
+     1     1     1  1.000000000000E+000   1.000000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+CHD_Par1 # Data Set 7: PARNAM
+CHD_Par2 # Data Set 7: PARNAM
+    -1     1 # Data Set 5: ITMP NP Stress period 2
+CHD_Par2 # Data Set 7: PARNAM

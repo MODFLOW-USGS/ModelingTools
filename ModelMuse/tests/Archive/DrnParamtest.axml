@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DrnParamtest" FileType="bin">
+    <FileName Model_Name="DrnParamtest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DrnParamtest" FileType="ancillary">
+    <FileName Model_Name="DrnParamtest" FileType="ancillary">DrnParamtest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DrnParamtest" FileType="Model Input">
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.bas</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.chd</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.dis</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.drn</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.gsf</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.jtf</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.lpf</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.nam.archive</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.oc</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.pcg</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">DrnParamtest.pval</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Input">usgs.DrnParamtest.reference</FileName>
+  </model>
+  <output Model_Name="DrnParamtest" FileType="Model Output">
+    <FileName Model_Name="DrnParamtest" FileType="Model Output">DrnParamtest.bdn</FileName>
+    <FileName Model_Name="DrnParamtest" FileType="Model Output">DrnParamtest.lst</FileName>
+  </output>
+</Model_Archive_List>

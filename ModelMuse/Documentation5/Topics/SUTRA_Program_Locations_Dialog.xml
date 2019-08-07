@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SUTRA Program Location Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA Program Location Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Program Location</text><text styleclass="Normal" translate="true"> dialog box is used to specify the location of the SUTRA program on the user&apos;s computer. It also provides a link to the web page for SUTRA. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Program Location</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting</text><text styleclass="Normal" style="font-weight:normal;" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|SUTRA Program Location...</text></para>
+  </body>
+</topic>

@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MNW1 - Multi-Node, Drawdown-Limited Well Package</title>
+  <keywords>
+    <keyword translate="true">ADD</keyword>
+    <keyword translate="true">ALLTIME</keyword>
+    <keyword translate="true">BYNODE</keyword>
+    <keyword translate="true">C</keyword>
+    <keyword translate="true">Column</keyword>
+    <keyword translate="true">Cp</keyword>
+    <keyword translate="true">DD</keyword>
+    <keyword translate="true">DEFAULT</keyword>
+    <keyword translate="true">FILE</keyword>
+    <keyword translate="true">FILE</keyword>
+    <keyword translate="true">FILE</keyword>
+    <keyword translate="true">filename</keyword>
+    <keyword translate="true">Hlim</keyword>
+    <keyword translate="true">Href</keyword>
+    <keyword translate="true">ITMP</keyword>
+    <keyword translate="true">iunby</keyword>
+    <keyword translate="true">iunqs</keyword>
+    <keyword translate="true">iunw1</keyword>
+    <keyword translate="true">IWELPT</keyword>
+    <keyword translate="true">Iwgrp</keyword>
+    <keyword translate="true">IWL2CB</keyword>
+    <keyword translate="true">kspref</keyword>
+    <keyword translate="true">Layer</keyword>
+    <keyword translate="true">LOSSTYPE</keyword>
+    <keyword translate="true">MN</keyword>
+    <keyword translate="true">MNW1</keyword>
+    <keyword translate="true">MNWsite</keyword>
+    <keyword translate="true">MULTI</keyword>
+    <keyword translate="true">MXMNW</keyword>
+    <keyword translate="true">PLossMNW</keyword>
+    <keyword translate="true">Q-%CUT</keyword>
+    <keyword translate="true">QCUT</keyword>
+    <keyword translate="true">Qdes</keyword>
+    <keyword translate="true">Qfrcmn</keyword>
+    <keyword translate="true">Qfrcmx</keyword>
+    <keyword translate="true">QSUM</keyword>
+    <keyword translate="true">QWval</keyword>
+    <keyword translate="true">REFerence SP</keyword>
+    <keyword translate="true">Row</keyword>
+    <keyword translate="true">Rw</keyword>
+    <keyword translate="true">SITE</keyword>
+    <keyword translate="true">Skin</keyword>
+    <keyword translate="true">WEL1</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MNW1 - Multi-Node, Drawdown-Limited Well Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MNW1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Multi-Node, Drawdown-Limited Well package is used to simulate wells that extend over more than one cell. &#160;Most commonly, this would represent cells that extend over several layers.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr02293" target="_blank" styleclass="Citation" translate="true">Halford, K.J. and Hanson R.T., 2002, User Guide for the Drawdown-Limited, Multi-Node Well (MNW) Package for the U.S. Geological Survey’s Modular Three-Dimensional Finite-Difference Ground-Water Flow Model, Versions MODFLOW-96 and MODFLOW-2000t: U.S. Geological Survey Open-File Report 02-293, 33 p.</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="MNW7.pdf" styleclass="Normal" translate="true">MNW7.pdf</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="MF2005_release.txt" styleclass="Normal" translate="true">release.txt for MODFLOW-2005</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package</text></para>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000,MODFLOW-2005,MODFLOW-CFP,MODFLOW-LGR,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2" styleclass="Normal" translate="true">MNW2</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">MNW2</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> package</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head-Dependent_Flux_Boundary_P" styleclass="Normal" translate="true">Head-Dependent Flux Boundary</link><text styleclass="Normal" translate="true"> packages</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The MNW1 and </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000,MODFLOW-2005,MODFLOW-CFP,MODFLOW-LGR,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2" styleclass="Normal" translate="true">MNW2</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">MNW2</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> packages can not both be used in the same simulation.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for the multi-node, drawdown-limited well package (MNW Package) is initiated by specifying in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">NAME</link><text styleclass="Normal" translate="true"> file (Harbaugh and McDonald, 1996). Data are read from MNW Package input files as 256-character-wide, alphanumeric records to facilitate the addition of comments within the model input files and the use of keys to identify input variables. All integer, real, and character variables are read from the alphanumeric records. The records are initially read by the subroutine NCREAD. Records that begin with a ‘#’ sign in the first column are treated as comment records, are not passed to any other routines, and are discarded. Once NCREAD has acquired a valid data record, the record is checked for a ‘!!’ sign that designates the beginning of any in-line comments on a data-input record. If a ‘!!’ sign is detected, the ‘!!’ sign and all text to the right of the ‘!!’ sign are removed from the record before passing it to any other routines.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Alphanumeric strings are used in the MNW Package to identify variables (keys) and make logical decisions (flags). Specification of these keys and flags is case insensitive because all letters are capitalized before performing any logical tests. Keys precede the variable to be read, which is acquired by identifying the key and reading the first value that follows the key. Logical decisions are based on the presence (true) or absence (false) of a flag. In this report, bold, upper-case letters are used to denote the part of the key that is tested. Key:data pairs that are not delimited by parentheses are mandatory and must be included, and Key:data pairs that are delimited within parentheses and are optional because default values are used if they are not specified by the user.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MNW Package reads input data for each simulation and for each stress period as follows:</text></para>
+    <para styleclass="Normal"><table rowcount="10" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MXMNW IWL2CB IWELPT [NOMOITER] </text><text styleclass="Keywords" translate="true">REF</text><text styleclass="Normal" translate="true">erence SP: kspref (Required record)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: Integer Integer Integer </text><text styleclass="New Materials" translate="true">[Integer]</text><text styleclass="Normal" translate="true"> Alphanumeric key Integer</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXMNW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MXMNW is the maximum number of well cells to be defined.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWL2CB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IWL2CB is a flag and a unit number.</text></para>
+                      <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWL2CB &gt; 0, it is the unit number on which cell-by-cell flow terms will be recorded whenever </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is set &#160;</text><text styleclass="New Materials" translate="true">or &quot;Save Budget&quot; is specified</text><text styleclass="Normal" translate="true"> in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWL2CB = 0, cell-by-cell flow terms will not be printed or recorded.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWL2CB &lt; 0, </text><text styleclass="New Materials" translate="true">The absolute value of IWL2CB is the unit number on which cell-by-cell flow terms will be recorded whenever </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="New Materials" translate="true">ICBCFL</link><text styleclass="New Materials" translate="true"> is set or &quot;Save Budget&quot; is specified and</text><text styleclass="Normal" translate="true"> well recharge, water-levels in the well and cell, drawdown in the well, and the flow-rate-weighted water-quality value of the IQWGRP will be printed whenever ICBCFL is set </text><text styleclass="New Materials" translate="true">or &quot;Save Budget&quot; is specified</text><text styleclass="Normal" translate="true">.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWELPT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IWELPT is a flag. If IWELPT is not equal to 0, no well information will be printed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NOMOITER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Flow in MNW wells will not be calculated after NOMOITER iterations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[kspref]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="kspref" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">kspref = is the set of water levels in the HNEW matrix at the beginning of the stress period kspref that will be used as default reference values for calculating drawdown. Kspref defaults to 1 if it is not specified by the user.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LOSSTYPE (PLossMNW) (Required record)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: Alpanumeric Real</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LOSSTYPE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="LOSSTYPE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LOSSTYPE is a flag to determine the user-specified model for well loss.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If LOSSTYPE is set to SKIN, head loss is defined with skin. Model is linear.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If LOSSTYPE is set to LINEAR, head loss is defined with coefficient B. Model is linear.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If LOSSTYPE is set to NONLINEAR, head loss is defined with coefficients B and C. Model is nonlinear.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PLossMNW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">If LOSSTYPE is nonlinear, PLossMNW represents the exponent P in equation 5. See equation 5 (p. 8) of Halford and Hanson (2002) for more information regarding PLossMNW.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set Unnumbered</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">PREFIX:</text><text styleclass="New Materials" translate="true">MNWNAME (Optional record)</text></para>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">Format: Alphanumeric header record</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="New Materials"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="New Materials"><caption translate="true"><![CDATA[MNWNAME]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Prefix name of file for outputting time series data from MNW. </text><text styleclass="New Materials" translate="true">MNWNAME may be up to 200 characters in length. MNWNAME may not contain the space character.</text></para>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">If MNWNAME is given as </text><text styleclass="Keywords" translate="true">FILEPREFIX</text><text styleclass="New Materials" translate="true">, the prefix name of the file for outputting time series data from MNW1 will be the same as the prefix name of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="New Materials" translate="true">Name File</link><text styleclass="New Materials" translate="true">.</text></para>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">If this record is omitted, the prefix name of the file for outputting time series data from MNW1 will be the &quot;OUTput_MNW.&quot;</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">FILE:</text><text styleclass="Normal" translate="true">filename &#160;</text><text styleclass="Keywords" translate="true">WEL1:</text><text styleclass="Normal" translate="true">iunw1 (Optional record)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: Alphanumeric header record</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[filename]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><var styleclass="Normal">&lt;%MNWFILENAME%&gt;</var></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[iunw1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">iunw1 = is a unit number. Filename will be written to unit number iunw1. Output is a WEL1 input file with the flow rates specified at the end of each stress period. Including filename in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true"> is optional but both the file name and the unit number must be unique.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">FILE:</text><text styleclass="Normal" translate="true">filename </text><text styleclass="Keywords" translate="true">BYNODE:</text><text styleclass="Normal" translate="true">iunby </text><text styleclass="Keywords" translate="true">ALLTIME</text><text styleclass="Normal" translate="true"> (Optional record)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: Alphanumeric header record Flag</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[filename]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><var styleclass="Normal">&lt;%MNWFILENAME%&gt;</var></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[iunby]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">iunby = is a unit number. Filename will be written to unit number iunby. Output is flow rate at each well node.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="ALLTIME"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3c</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">FILE:</text><text styleclass="Normal" translate="true">filename &#160;</text><text styleclass="Keywords" translate="true">QSUM:</text><text styleclass="Normal" translate="true">iunqs </text><text styleclass="Keywords" translate="true">ALLTIME</text><text styleclass="Normal" translate="true"> (Optional record)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: Alphanumeric header record Flag</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[filename]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><var styleclass="Normal">&lt;%MNWFILENAME%&gt;</var></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[iunqs]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">iunqs = is a unit number. Filename will be written to unit number iunqs. Output is total flow rate from each multi-node well.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="ALLTIME"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH STRESS PERIOD:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ITMP </text><text styleclass="Keywords" translate="true">ADD</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: I10 Alphanumeric key</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITMP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ITMP is a flag.</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP &lt; 0, wells from previous stress period will be reused and input from item 5 will not be read.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP =, 0 no wells will be simulated and input from item 5 will not be read.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP &gt; 0, is the number of records of drawdown-limited well data that will be read for the current stress period. If the key ADD is not detected on record 4, the maximum number of drawdown-limited wells for the current stress period will be ITMP. If the key ADD is detected on record 4, ITMP wells will be added to the existing list of drawdown-limited wells.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[ADD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">ADD</text><text styleclass="Normal" translate="true"> a flag that indicates whether or not the well cells read for the current stress period will augment or replace the well cells that were previously defined.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column Qdes [</text><text styleclass="Keywords" translate="true">MN</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">MULTI</text><text styleclass="Normal" translate="true">] QWval Rw Skin &#160;Hlim Href [</text><text styleclass="Keywords" translate="true">DD</text><text styleclass="Normal" translate="true">] Iwgrp </text><text styleclass="Keywords" translate="true">Cp</text><text styleclass="Normal" translate="true">: C [</text><text styleclass="Keywords" translate="true">QCUT</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">Q-%CUT</text><text styleclass="Normal" translate="true">: Qfrcmn Qfrcmx] </text><text styleclass="Keywords" translate="true">DEFAULT &#160; SITE:</text><text styleclass="Normal" translate="true"> MNWsite</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Format I10 I10 I10 F10.0 Flag Real Real Real Real Real Flag Integer Real Real Real Flag Alphanumeric header record</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NOTE: The first four values in data item 5 for the variables Layer, Row, Column, and Qdes are read initially as a free format. If this fails, the four values are read as fixed format entries from the first 40 columns. In all instances these values must be specified. The following eight values for the remaining variables are optional, space-delimited or comma-delimited entries but must be entered in the sequence specified for item 5. The alphanumeric flags MN and DD can appear anywhere between columns 41 and 256, inclusive. Input item 5 normally consists of one record for each well cell defined or modified. If ITMP is 0 or less, item 5 is not read and should not be specified.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Layer]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer is the layer number of the model cell that contains the well.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Row]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Row is the row number of the model cell that contains the well.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Column]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Column is the column number of the model cell that contains the well.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Qdes]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Qdes" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Qdes is the desired volumetric pumping or recharge rate. A positive value indicates recharge and a negative value indicates discharge. The actual volumetric recharge rate will range from 0 to Qdes and is not allowed to switch directions between discharge and recharge conditions during any stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[MN]]></caption></toggle></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(</text><text styleclass="Keywords" translate="true">MN</text><text styleclass="Normal" translate="true">) a flag that indicates this entry is part of a multi-node well. The flag </text><text styleclass="Keywords" translate="true">MN</text><text styleclass="Normal" translate="true"> is not included on the first entry of a multi-node well and is exclusive of the flag </text><text styleclass="Keywords" translate="true">MULTI</text><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[MULTI]]></caption></toggle></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(</text><text styleclass="Keywords" translate="true">MULTI</text><text styleclass="Normal" translate="true">) a flag that indicates this entry is the end of a multi-node well and all intervening nodes between this entry and the previous </text><text styleclass="Keywords" translate="true">MULTI</text><text styleclass="Normal" translate="true"> flag are part of a multi-node well. Intervening nodes will be assigned the same cell-to-well conductance that was specified in this entry. The flag </text><text styleclass="Keywords" translate="true">MULTI</text><text styleclass="Normal" translate="true"> is not included on the first entry of a multi-node well and is exclusive of the flag </text><text styleclass="Keywords" translate="true">MN</text><text styleclass="Normal" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Both the following examples specify a multi-node well in Column 5, Row 5 that extends from layer 1 to layer 3.</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Example 1</text></para>
+                      <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; 1 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; 0.1</text></para>
+                      <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; 3 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; 0.1 MULTI</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Example 2</text></para>
+                      <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; 1 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; 0.1</text></para>
+                      <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; 2 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; 0.1 MN</text></para>
+                      <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; 3 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; &#160;5 &#160; &#160; &#160; 0.1 MN</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">When </text><text styleclass="New Materials" style="font-style:italic;" translate="true">MULTI</text><text styleclass="New Materials" translate="true"> is used, the well should always be aligned along a column, row, or layer.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QWval]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">QWval is the water-quality value that is to be flow-rate averaged amongst wells in the same </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Iqwgrp" styleclass="Normal" translate="true">Iqwgrp</link><text styleclass="Normal" translate="true">. Negative water-quality values and positive flow terms are not averaged. Water-quality values can be respecified for each stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Rw]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Rw" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Rw is a flag and a variable used to define the cell-to-well conductance.</text></para>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Rw &gt; 0, The variable represents the radius of the well and the cell-to-well conductance is calculated with eq. 5 as formulated by Peaceman (1983).</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Rw = 0, the head in the cell is assumed to be equivalent to the head in the well and the cell-to-well conductance is set to 1,000 times the transmissivity of the cell. The cell is NOT allowed to be part of a multi-node well.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Rw &lt; 0, the absolute value of the variable is the cell-to-well conductance.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Skin]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Skin defines the friction losses to the well owing to the screen and to formation damage. The variable is either a skin or the coefficient B depending on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="LOSSTYPE" styleclass="Normal" translate="true">LOSSTYPE</link><text styleclass="Normal" translate="true">, and is used in eq. 5 when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Rw" styleclass="Normal" translate="true">Rw</link><text styleclass="Normal" translate="true"> &gt; 0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Hlim]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Hlim is the limiting water level, which is a minimum for discharging wells and a maximum for recharging wells. If the flag </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="DD" styleclass="Keywords" translate="true">DD</link><text styleclass="Normal" translate="true"> is set, the value of Hlim read is a drawdown from the reference elevation. For </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Qdes" styleclass="Normal" translate="true">Qdes</link><text styleclass="Normal" translate="true"> &lt; 0, Hlim = Href - Hlim and for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Qdes" styleclass="Normal" translate="true">Qdes</link><text styleclass="Normal" translate="true"> &gt; 0, Hlim = </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Href" styleclass="Normal" translate="true">Href</link><text styleclass="Normal" translate="true"> + Hlim.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Href]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Href" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Href is the reference elevation. If the value of Href read is greater than the maximum water level from the HNEW matrix at the beginning of the stress period </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="kspref" styleclass="Normal" translate="true">kspref</link><text styleclass="Normal" translate="true">, Href is set to the simulated water level at the location of the drawdown-limited well.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="DD" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">DD</text><text styleclass="Normal" translate="true"> a flag that indicates the value of Hlim read is a drawdown or build-up from the reference elevation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iwgrp]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Iqwgrp" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Iqwgrp is a water-quality group identifier. Flow-rate averaged water-quality values are reported for each group of wells with the same lqwgrp and Qwval entries that are not negative.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[Cp:C]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Keywords" translate="true">Cp</text><text styleclass="Normal" translate="true">:C is coefficient for nonlinear head losses (eqn. 2). The variable is used only when the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="LOSSTYPE" styleclass="Normal" translate="true">LOSSTYPE</link><text styleclass="Normal" translate="true"> is NONLINEAR. Default value is 0 if not specified.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[QCUT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">QCUT a flag that indicates pumping limits will be specified as a rate (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true"> /T).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[Q-%CUT:]]></caption></toggle></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Q-%CUT a flag that indicates pumping limits will be specified as a percentage of the specified rate.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Qfrcmn]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Qfrcmn" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Qfrcmn minimum pumping rate that a well must exceed to remain active.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Qfrcmx]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Qfrcmx" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Qfrcmx minimum potential pumping rate that must be exceeded to reactivate a well.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DEFAULT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DEFAULT a flag that sets this entry of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Qfrcmn" styleclass="Normal" translate="true">Qfrcmn</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW" anchor="Qfrcmx" styleclass="Normal" translate="true">Qfrcmx</link><text styleclass="Normal" translate="true"> as the new default values.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SITE: MNWsite]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(</text><text styleclass="Keywords" translate="true">SITE</text><text styleclass="Normal" translate="true">: is an optional label for identifying wells. An individual file of time, discharge, water level MNWsite) in well, concentration, net-inflow, net-outflow, and node-by-node flows will be written for each well with a unique MNWsite label. Individual well files are tab delimited. Only one label should be applied to a multi-node well. </text><text styleclass="New Materials" translate="true">MNWsite can be up to 32 characters in length. MNWsite can not contain space or tab characters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

@@ -1,0 +1,54 @@
+Revision History
+
+Originally named GoPhast.
+Version 1.0.0.0, May 11, 2006:
+Initial release.
+
+Version 1.0.1.0, May 25, 2006:
+Fixed bug that would cause access violations when invalid formulas such as "1 2" were
+specified.
+Fixed bug that would cause unrecoverable access violations if all the verticies in an
+object were deleted
+when it was first created.
+The "hints" for the working area were changed to reflect the currently selected tool.
+
+Version 1.0.2.0 Aug. 11, 2006. 
+Improved rainbow color scheme. 
+Fixed typographical errors in examples. 
+Fixed bug that would cause access violation if a screen object was editted after it
+stopped affecting a
+data set. 
+Fixed bug that could cause a memory leak. 
+
+Version 1.0.3.0 Aug. 23, 2006 
+Fixed the "ObjectIntersectArea" and "ObjectIntersectLength" functions.
+
+Version 1.0.4.0 Sept. 5, 2006 
+Fixed bug that caused access violations if the user edited the data sets that an object
+affected and then
+tried to undo those changes.
+Fixed bug in reading character fields from Shapefiles.
+
+Version 1.0.5.0 Nov. 15, 2006 
+Fixed bug that caused intersection between objects and cells to be performed
+incorrectly.
+Fixed bug that caused access violations when deleting objects.
+Updated memory manager.
+
+Version 1.0.6.0 Dec. 18, 2006
+Fixed bug that caused access violations when closing GoPhast if a dataset had been
+deleted and then restored. 
+Fixed bug that caused certain formulas to be 'decompiled' incorrectly.
+
+Version 1.0.7.0 Jan. 16, 2007
+Fixed bug that caused access violations when editing objects
+that specified boundary conditions via PHAST-style interpolation.
+
+Version 1.0.8.0 Mar. 9, 2007 Fixed "ObjectIntersectArea" function.
+Fixed bug in interpolation.
+
+Version 1.0.9.0 May 13, 2008 Fixed but that prevented new wells from being added.
+
+Version 2.0.0.0 May 1, 2009
+Renamed ModelMuse
+Added support for MODFLOW-2005 and MODPATH.

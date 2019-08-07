@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="testRch3" FileType="bin">
+    <FileName Model_Name="testRch3" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="testRch3" FileType="ancillary">
+    <FileName Model_Name="testRch3" FileType="ancillary">testRch3.gpt</FileName>
+  </ancillary>
+  <model Model_Name="testRch3" FileType="Model Input">
+    <FileName Model_Name="testRch3" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.bas</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.chd</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.dis</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.gsf</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.jtf</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.lpf</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.mlt</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.nam.archive</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.oc</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.pcg</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.pval</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.rch</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">testRch3.zon</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Input">usgs.testRch3.reference</FileName>
+  </model>
+  <output Model_Name="testRch3" FileType="Model Output">
+    <FileName Model_Name="testRch3" FileType="Model Output">testRch3.cbc</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Output">testRch3.fdn</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Output">testRch3.fhd</FileName>
+    <FileName Model_Name="testRch3" FileType="Model Output">testRch3.lst</FileName>
+  </output>
+</Model_Archive_List>

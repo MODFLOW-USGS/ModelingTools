@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="bin">
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="ancillary">
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="ancillary">TestIntersectedAndEnclosedInSameObject.gpt</FileName>
+  </ancillary>
+  <model Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.bas</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.dis</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.gsf</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.lpf</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.nam.archive</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.oc</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">TestIntersectedAndEnclosedInSameObject.pcg</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Input">usgs.TestIntersectedAndEnclosedInSameObject.reference</FileName>
+  </model>
+  <output Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Output">
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Output">TestIntersectedAndEnclosedInSameObject.cbc</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Output">TestIntersectedAndEnclosedInSameObject.fdn</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Output">TestIntersectedAndEnclosedInSameObject.fhd</FileName>
+    <FileName Model_Name="TestIntersectedAndEnclosedInSameObject" FileType="Model Output">TestIntersectedAndEnclosedInSameObject.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 RivTest.lst REPLACE
+DATA(BINARY)      9 RivTest.cbc REPLACE
+DIS              12 RivTest.dis OLD
+BAS6             13 RivTest.bas OLD
+OC               39 RivTest.oc OLD
+DATA             37 RivTest.fhd REPLACE
+DATA             38 RivTest.fdn REPLACE
+PCG              18 RivTest.pcg OLD
+LPF              14 RivTest.lpf OLD
+CHD              17 RivTest.chd OLD
+RIV              21 RivTest.riv OLD

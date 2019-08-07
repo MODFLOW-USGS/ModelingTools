@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 testGlobals.lst REPLACE
+DATA(BINARY)      9 testGlobals.cbc REPLACE
+DIS              12 testGlobals.dis OLD
+BAS6             13 testGlobals.bas OLD
+OC               39 testGlobals.oc OLD
+DATA             37 testGlobals.fhd REPLACE
+DATA             38 testGlobals.fdn REPLACE
+PCG              18 testGlobals.pcg OLD
+LPF              14 testGlobals.lpf OLD

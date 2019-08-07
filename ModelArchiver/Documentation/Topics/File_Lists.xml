@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Archive Lists</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Archive Lists</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse (Winston, 2009, 2014) and potentially other programs, can create &quot;archive lists&quot;. Such lists contain names and paths of the input and output files of a model or models, the name and path of the executable, and some ancillary files for the model. This ensures that no input or output files will be overlooked when creating the archive and that each file is assigned to its proper place in the archive. Archive lists are not required to use ModelArchiver but if they are available, the make setting up the archive easier.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Select Archive List Directory</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If multiple models will be included in the archive and these models are beneath a common parent directory, this command can be used to add all the archive lists under the parent directory to the archive structure. The user selects the parent directory. ModelArchiver then searches that directory and any of its subdirectories for archive lists. All the lists it finds are added to the list on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Lists" styleclass="Normal" style="font-weight:bold;" translate="true">Archive Lists</link><text styleclass="Normal" translate="true"> pane and will be used to include files in the archive structure on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" style="font-weight:bold;" translate="true">Archive Structure</link><text styleclass="Normal" translate="true"> pane.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Select Individual Archive Lists</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command is used to select individual archive lists to add to the list on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Lists" styleclass="Normal" style="font-weight:bold;" translate="true">Archive Lists</link><text styleclass="Normal" translate="true"> pane.</text></para>
+  </body>
+</topic>

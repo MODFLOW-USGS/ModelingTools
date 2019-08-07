@@ -1,0 +1,4 @@
+# LVDA file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     1 # Data Set 1: NPLVDA
+LVDA_Par1 LVDA  1.000000000000E+000      1 # PARNAM, PARTYP, PARVAL, NCLU
+     1 LVDA_Pa_M1  LVDA_Pa_Z1      1 # Layer, MLTARR, ZONARR IZ

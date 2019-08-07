@@ -1,0 +1,49 @@
+object frameCustomMetaData: TframeCustomMetaData
+  Size.Width = 320.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object memoDescription: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Lines.Strings = (
+      'some text')
+    ReadOnly = True
+    StyledSettings = [Family, Style, FontColor]
+    TextSettings.Font.Size = 16.000000000000000000
+    TextSettings.WordWrap = True
+    Align = Top
+    Size.Width = 320.000000000000000000
+    Size.Height = 77.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    OnApplyStyleLookup = memoDescriptionApplyStyleLookup
+    OnResize = memoDescriptionResize
+    Viewport.Width = 316.000000000000000000
+    Viewport.Height = 73.000000000000000000
+  end
+  object splResize: TSplitter
+    Align = Top
+    Cursor = crVSplit
+    MinSize = 20.000000000000000000
+    Position.Y = 77.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 12.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object pnlBottom: TPanel
+    Align = Client
+    Size.Width = 320.000000000000000000
+    Size.Height = 151.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Bottom
+      TabOrder = 0
+      Position.Y = 129.000000000000000000
+      Size.Width = 320.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+end

@@ -1,0 +1,8 @@
+# Specified Temperature/Concentration Boundary Condition File file created on 12/9/2015 by ModelMuse version 3.6.3.5.
+# Data set 1
+'SpecifiedU' # BCSSCH
+# Data set 2
+'Specified Temperature or Concentration'     0     0     0     1 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1
+# Data set 6; Time = 1
+   235  2.000000000000E+001  # Data Set 6: IUBC1, UBC1
+     0

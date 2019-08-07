@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SFR_Note16</title>
+  <body>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 16</text><text styleclass="Normal" translate="true">: If Part 4e or 6d is included (for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ICALC" styleclass="Normal" translate="true">ICALC</link><text styleclass="Normal" translate="true"> = 2), it is assumed that the cross-sectional geometry defined by these data is the same over the entire length of the segment. Similarly, if Part 4f or 6e is included (for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ICALC" styleclass="Normal" translate="true">ICALC</link><text styleclass="Normal" translate="true"> = 4), it is assumed the tabulated relation between streamflow and stream depth and width is the same over the entire length of the segment.</text></li>
+    </list>
+  </body>
+</topic>

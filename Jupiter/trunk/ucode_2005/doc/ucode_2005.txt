@@ -1,0 +1,933 @@
+
+
+U.S. Geological Survey (USGS)                         UCODE_2005(1)
+
+NOTE: Any use of trade, product or firm names is for descriptive
+      purposes only and does not imply endorsement by the U.S.
+      Government.
+
+NAME
+     UCODE_2005 and six post-processors for universal inverse modeling,
+                including sensitivity analysis, data needs assessment,
+                calibration, prediction, and uncertainty analysis
+
+ABSTRACT
+     UCODE_2005 and six post-processors are included in this
+     distribution. These programs can be used with existing process
+     models to perform sensitivity analysis, data needs assessment,
+     calibration, prediction, and uncertainty analysis.  Any
+     process model or set of models can be used; the only requirements
+     are that models have numerical (ASCII or text only) input and
+     output files, that the numbers in these files have sufficient
+     significant digits, that all required models can be run from a
+     single batch file or script, and that simulated values are
+     continuous functions of the parameter values.  Process models
+     can include pre-processors and post-processors as well as one or
+     more models related to the processes of interest (physical,
+     chemical, and so on), making UCODE_2005 extremely powerful.
+     An estimated parameter can be a quantity that appears in the
+     input files of the process model(s), or a quantity used in an
+     equation that produces a value that appears in the input files.
+     In the latter situation, the equation is user-defined.
+
+     UCODE_2005 can compare observations and simulated equivalents. The
+     simulated equivalents can be any simulated value written in the
+     process-model output files or can be calculated from simulated
+     values with user-defined equations. The quantities can be model
+     results, or dependent variables. For example, for ground-water
+     models they can be heads, flows, concentrations, and so on. Prior,
+     or direct, information on estimated parameters also can be
+     considered. Statistics are calculated to quantify the comparison
+     of observations and simulated equivalents, including a weighted
+     least-squares objective function. In addition, data-exchange files
+     are produced that facilitate graphical analysis.
+
+     UCODE_2005 can be used fruitfully in model calibration through
+     its sensitivity analysis capabilities and its ability to
+     estimate parameter values that result in the best possible fit to
+     the observations. Parameters are estimated using nonlinear
+     regression: a weighted least-squares objective function is minimized
+     with respect to the parameter values using a modified Gauss-Newton
+     method or a double-dogleg technique.  Sensitivities needed for the
+     method can be read from files produced by process models that can
+     calculate sensitivities, such as MODFLOW-2000, or can be calculated
+     by UCODE_2005 using a more general, but less accurate, forward- or
+     central-difference perturbation technique. Problems resulting from
+     inaccurate sensitivities and solutions related to the perturbation
+     techniques are discussed in the report. Statistics are calculated
+     and printed for use in (1) diagnosing inadequate data and identifying
+     parameters that probably cannot be estimated; (2) evaluating
+     estimated parameter values; and (3) evaluating how well the model
+     represents the simulated processes.
+
+     Results from UCODE_2005 and codes RESIDUAL_ANALYSIS and
+     RESIDUAL_ANALYSIS_ADV can be used to evaluate how accurately the
+     model represents the processes it simulates. Results from
+     LINEAR_UNCERTAINTY can be used to quantify the uncertainty of model
+     simulated values if the model is sufficiently linear. Results from
+     MODEL_LINEARITY and MODEL_LINEARITY_ADV can be used to evaluate model
+     linearity and, thereby, the accuracy of the LINEAR_UNCERTAINTY results.
+     UCODE_2005 can also be used to calculate nonlinear confidence and
+     predictions intervals, which quantify the uncertainty of model
+     simulated values when the model is not linear. CORFAC_PLUS can be
+     used to produce factors that allow intervals to account for model
+     intrinsic nonlinearity and small-scale variations in system
+     characteristics that are not explicitly accounted for in the model
+     or the observation weighting.
+
+     The six post-processing programs are independent of UCODE_2005 and
+     can use the results of other programs that produce the required
+     data-exchange files.
+
+     UCODE_2005 and the other six codes are intended for use on any computer
+     operating system. The programs consist of algorithms programmed in
+     Fortran 90/95, which efficiently performs numerical calculations.
+     The model runs required to obtain perturbation sensitivities can be
+     performed using multiple processors. The programs are constructed
+     in a modular fashion using JUPITER API conventions and modules. For
+     example, the data-exchange files and input blocks are JUPITER API
+     conventions and many of those used by UCODE_2005 are read or written
+     by JUPITER API modules. UCODE-2005 includes capabilities likely to be
+     required by many applications (programs) constructed using the JUPITER
+     API, and can be used as a starting point for such programs.
+
+
+
+HISTORY (the following list was reversed with release 1.014 to show the
+         most recent changes first)
+         
+      UCODE_2005 Version 1.022 01/31/2011
+                 - Updated ucode version # to 1.022
+                 - Updated to Jupiter API version # 1.5.0
+                 - Corrected reading of prior information in pri.f90. 
+                   If a parameter is transformed in the Parameter_Data block and
+                   is NOT in the form log10(paramname) in the prior block then 
+                   it is assumed the parameter and the statistic are provided in
+                   native space so both are transformed to natural log space.  
+                   An exact solution for converting the native space statistic 
+                   to log space statistics is not available so an iterative
+                   approach is used.
+                 - Corrected treatment of full weight matrix on prior when
+                   parameters are transformed.  It is assumed that the matrix is
+                   entered for the current transformed parameters so no 
+                   conversions are made.  If a full weight matrix is entered
+                   and the code determines that a transformed parameter is not 
+                   entered in the form log10(paramname) in the prior block then
+                   a message is printed and the code terminates.
+                 - Revised messages regarding missing data blocks to print only 
+                   if VERBOSE>1
+                 
+         
+      UCODE_2005 Version 1.021 10/09/2010
+                 - Updated ucode version # to 1.021
+                 - Bypasses writing the final parameter values in the template
+                   input files IF dataexchange = false or no, because the
+                   _paopt file is not available to provide the parameter values 
+         
+      UCODE_2005 Version 1.020 09/09/2010
+                 - Updated ucode version # to 1.020
+                 - Added write statements because when calculating nonlinear
+                   prediction intervals, the output file *._intpred contained 
+                   only the title line and no prediction interval information
+                   was printed.
+                 - Corrected corfac_plus and model_linearity_adv to use the
+                   appropriate CR correction factor for calculating model
+                   linearity when evaluating prediction intervals. The value 
+                   printed is now the same as that printed when evaluating 
+                   confidence intervals. 
+                 - Corrected problem where ucode converged on max change in 
+                   native space even though convergence based on regression 
+                   space was requested
+                 - Added printing of derived parameter equations.  This can be 
+                   controlled in the UCODE_CONTROL_DATA block using keyword 
+                   WriteDerivedParams. WriteDerivedParams defaults to yes/true 
+                   and printing occurs if there are derived parameters. To turn 
+                   off the printing include the keyword WriteDerivedParams in 
+                   the UCODE_CONTROL_DATA block and set it to no or false. When 
+                   this is done the derived parameters will only be printed for
+                   the first iteration.
+                 - Added printing of prior information equations.  This can be 
+                   controlled in the UCODE_CONTROL_DATA block using keyword
+                   WritePriorInfo. WritePriorInfo defaults to yes/true and 
+                   printing occurs if there is prior information. To turn off 
+                   the printing include the keyword WritePriorInfo in the 
+                   UCODE_CONTROL_DATA block and set it to no or false.
+                 - Corrected a problem wherein when optimize=yes and 
+                   dataexchange=no the code still tried to append to the
+                   _summary file
+                 - Modified output to #resan such that when more than 10 
+                   parameters are estimated the table of influential 
+                   observations based on DFBETA will include the same 
+                   observations in each section of the table even if an 
+                   observation is not influential in that particular group of
+                   ten parameters.
+                 - Added the option to assign different root file names 
+                   including folders/paths for the regression and the prediction
+                   phases of ucode. The third arugument on the command line is 
+                   now used for the root of prediction runs and subsequent
+                   analyses related to predictions. If a third argument is not
+                   present then this root is set to the same name as the root of 
+                   the regression output, thus making this back compatible with
+                   previous versions of ucode. Output file that will carry this
+                   3rd argument as a root include the following files: 
+                    from a ucode prediction run:
+                      dmp, mvp, p, prp, pv, sppp, sppr, spsp, spsr, spu, suprip, 
+                      wtprip, gmp, paoptp, #upred
+                    from a linear_uncertainty run:
+                      linp, #linunc
+                    from a corfac run:
+                      cfsu, cfconf, cfpred, b3conf, b3pred, b1advconf, b1advpred, 
+                      #corfac_conf, #corfac_pred
+                    from a ucode model linearity advanced run:
+                      #umodlinadv_conf, #umodlinadv_pred
+                    from a model_linearity_adv run:
+                      #modlinadv, #modlinadv_conf, #modlinadv_pred
+                    from a ucode non-linear uncertainty run:
+                      #unonlinint_conf, #unonlinint_pred, intconf, intpred, 
+                      intconf_wr, intpred_wr, intconf_sum, intpred_sum,
+                      intconf_par, intpred_par, DATE-intconf, DATE-intpred
+         
+      UCODE_2005 Version 1.019 03/18/2010
+                 - Updated ucode version # to 1.019
+                 - Updated to Jupiter API version # 1.4.0
+                 - Revised the equations for applying eta of equation 3 in the
+                   ucode manual.  Eta is now applied to the weight calculated
+                   from both the observed and the simulated equivalent.
+                 - Revised search for lowest sum-of-squared-weighted-residuals 
+                   to only consider values from the highest iterations that all 
+                   used the same weighting once the updating of weights based
+                   on simulated values had been discontinued.
+                          
+      UCODE_2005 Version 1.018 03/13/2010
+                 - Updated ucode version # to 1.018
+                 - Corrected the equations for applying eta of equation 3 in the
+                   ucode manual.  Eta is now applied to the weight calculated
+                   from the simulated equivalent and had been inadvertently
+                   applied to the weight calculated with the observation.
+                 - Corrected contents of output for the case when weights are 
+                   at times calculated with simulated equivalents and the 
+                   lowest sum-of-squared-weighted-residuals occurs for an
+                   iteration other than the final iteration and with different 
+                   weighting.
+                 - Revised calculation of weights based on simulated values to
+                   use simulated values from latest parameter updates (i.e.
+                   iteration x (rather than x-1) for estimating parameters in
+                   iteration x+1.
+                 - This version was not released.
+         
+      UCODE_2005 Version 1.017 08/10/2009
+                 - Updated ucode version # to 1.017
+                 - The only change from 1.016 to 1.017 is that the Jupiter 1.3.0
+                   version of pri.f90 was used with 1.016. The new prior module
+                   has corrected messages regarding prior that are only written 
+                   when verbose>=3.
+
+      UCODE_2005 Version 1.016 08/08/2009
+                 - Updated ucode version # to 1.016
+                 - Compiled with JUPITER API 1.3.1
+                 - Data-exchange file name fn._mv_eig was changed to fn._eig.
+                   This file contains eigenvalues and eigenvectors of the 
+                   Variance-Covariance Matrix of the Parameters scaled by 
+                   parameter values.
+                 - A summary file is now printed when the trustregion option is
+                   selected.
+                 - Messages were added to indicate fit-independent statistics,
+                   the total number of process model runs for a given analysis,
+                   and some guidance on reducing run time.
+                 - Messages regarding final parameter values were clarified
+                 - Model input files are now re-written at the end of all ucode 
+                   modes so the appropriate, unperturbed parameter values are 
+                   listed in the process model input files. Following an
+                   SOSSURFACE run the parameters are those of the final set of
+                   parameters considered in the SOSSURFACE analysis. Otherwise
+                   they are initial values if optimization is not performed, and
+                   optimized values for an optmization run and for subsequent 
+                   more advanced analyses.
+                 - A correction was made so that groups could be used to
+                   define information for observations and predictions when the
+                   LinearityAdv mode is used.
+                 - A minor change was made to reg_tr_ucode.f90 to facilitate
+                   graceful closure when one starts with the optimal values as
+                   the starting values and uses the trustregion algorithm which
+                   is unable to find a lower sum-of-squared-weighted-residuals.
+                 - A minor change was made to ucode_mod.f90 to provide useful
+                   error messages and facilitate graceful closure when the 
+                   input weight matrix is not positive definite.
+                 - A correction was made such that model evaluation criteria
+                   MLOF, AIC, AICc, BIC, and KIC would use the SWSR from the 
+                   optimal parameters in the case where optimal parameters were
+                   not found in the final iteration.
+                 - Corrected text in an error message printed from REG_GNMOD_GEN
+                 - A correction was made such that the proper values appear in
+                   _scgrpmodel in situations where some observations are not 
+                   used.
+                   
+      UCODE_2005 Version 1.015 03/19/2009
+                 - Updated ucode version # to 1.015
+                 - Compiled with JUPITER API 1.3.0
+                 - Shortly after release of 1.014 a problem was found. Version
+                   1.015 includes corrections related to calculation of CSS with
+                   prior, printing of confidence intervals in cases when some
+                   parameters are not adjustable, and substitution of optimal
+                   parameter values in application model input files using
+                   template files.
+                 - If you are updating from a version older than 1.014, please
+                   read information about 1.014 below because substantial
+                   changes have been made.
+
+      UCODE_2005 Version 1.014 03/09/2009
+                 - Compiled with JUPITER API 1.3.0
+                 - An updated version of the MicroSoft Visual Studio 2005, Intel
+                   Fortran Compiler was used for the windows executable of this
+                   version of ucode. Previously the Intel Fortran Compiler 9.1
+                   was used, now Intel Fortran Compiler 11.0 is used. Its
+                   ability to cope with heap arrays has improved performance,
+                   particularly with regard to successfully completing
+                   residual_analysis when a large number of parameters and/or
+                   observations are used. Note this program requires a full
+                   matrix with dimensions equal to number-of-observations by
+                   number-of-observations.  The memory of many computers, even
+                   when paging memory is employed, is not sufficient to evaluate
+                   problems with very large numbers of observations.
+                 - Updated ucode version # to 1.014
+                 - Altered approach when parameters are omitted from the
+                   regression due to low relative sensitivity (using
+                   OmitInsensitive in the Reg_GN_Controls input block) or
+                   parameter constraint (using Constrain=yes in the
+                   Parameter_Data block).
+                 - Details of the altered approach:
+                   New option added to the UCODE_CONTROL_DATA block:
+                   - REACTIVATE = FINAL or STARTING or NO (Default=FINAL)
+                     Applies when parameters have been omitted from the
+                     regression because of insensitivity or reaching a
+                     constraint.
+                   - PREVIOUSLY if parameters had been omitted during the
+                     regression, then when the regression converged (or if
+                     stats_on_nonconverge=yes), the values of all parameters
+                     (including omitted parameters) were set to the values
+                     associated with the iteration having the lowest
+                     sum-of-squared-weighted-residuals. The final sensitivities
+                     and statistics were only generated for the parameters that
+                     were active at the end of the regression.
+                   - NOW if parameters have been omitted during the
+                     regression, then when the regression converges or if
+                     stats_on_nonconverge=yes, ucode proceeds as described below
+                     for REACTIVATE = FINAL. The user can change this by setting
+                     REACTIVATE to STARTING or NO in UCODE_CONTROL_DATA block.
+                   - If REACTIVATE = FINAL then when the regression converges
+                     or if stats_on_nonconverge=yes, all parameters
+                     (including omitted parameters) are set to the values
+                     associated with the iteration having the lowest
+                     sum-of-squared-weighted-residuals. The final sensitivities
+                     and statistics are generated for the parameters that
+                     were defined as adjustable at the start of the regression.
+                   - If REACTIVATE = STARTING then when the regression converges
+                     or if stats_on_nonconverge=yes, all parameters that were
+                     active in the iteration with the lowest
+                     sum-of-squared-weighted-residuals are set to the values
+                     associated with the iteration having the lowest
+                     sum-of-squared-weighted-residuals and omitted parameters
+                     are set to their starting values. The final sensitivities
+                     and statistics are generated for the parameters that
+                     were defined as adjustable at the start of the regression.
+                     * This method has the advantage of using values for omitted
+                     parameters that are more likely to be in the middle of
+                     their expected range. * However, the use of a mixed set of
+                     parameter values (i.e. starting values for the omitted
+                     parameters and altered values for the other parameters)
+                     could result in a set of parameters that produce a poor
+                     model fit. It is advisable to repeat the regression with
+                     the omitted parameters set to adjustable=no. To bring
+                     this to the attention of the user UCODE prints warning
+                     messages if the resulting sum-of-squared-weighted-residuals
+                     is larger than the lowest sum-of-squared-weighted-residuals
+                     identified during the regression.
+                   - If REACTIVATE = NO then when the regression converges
+                     or if stats_on_nonconverge=yes, all parameters
+                     (including omitted parameters) are set to the values
+                     associated with the iteration having the lowest
+                     sum-of-squared-weighted-residuals. The final sensitivities
+                     and statistics are generated only for the parameters that
+                     were active for the iteration with the lowest
+                     sum-of-squared-weighted-residuals.
+                 - In conjunction with the above change of approach, an
+                   additional line was added to the _dm file reporting:
+                   NUMBER ESTIMATED PARAMETERS IN LOWEST SUM OF SQUARES ITERATION:
+                 - Also in conjunction with that change, messages in
+                   the #uout file explain the process as it pertains to a
+                   specific run of a regression.  Also warnings are printed at
+                   the end of the #uout file, the _summary file, and the
+                   command window output.
+                 - Corrected calculation of the % of the objective function
+                   represented by smallest and largest residuals. The objective
+                   function values for the second to the last iteration was
+                   being used rather than the value form the last iteration.
+                 - Corrected printing of data exchange files when prediction=yes
+                   and sensitivity=no. The residual files from the regression
+                   _os, _r, _w, _ws, and _ww were being over written with the
+                   prediction information. Now those are unchanged and the
+                   prediction files _dmp, _gmp, _p, _pv, and _paoptp (if
+                   there are new prior for the prediction mode) are written.
+                 - Corrected printing of the eigenvectors of the
+                   Variance-Covariance Matrix of the Parameters scaled by
+                   parameter values. The column headings are now sequential
+                   numbers instead of parameter names.
+                 - Added a data-exchange file containing eigenvalues and
+                   eigenvectors of the Variance-Covariance Matrix of the
+                   Parameters scaled by parameter values. The file name is
+                   fn._mv_eig (later note: this was changed to fn._eig in 1.016.
+                 - Added a data-exchange file containing the decomposition of
+                   the CSS (with prior if used in the regression) using SVD of
+                   the XTwX matrix scaled by parameter values and the number of
+                   observations plus the number of prior information equations.
+                   The file name is fn._sc_svd. The resulting stacked version of
+                   the CSS in a bar chart provides some indication of parameter
+                   correlation.
+                 - Clarified message related to the inability of ucode to write
+                   the _b1 file for  cases with extremely large parameter
+                   confidence intervals
+                 - Corrected a problem for which an error message related to
+                   writing of derived parameters to final template files was
+                   printed to the screen after completion of all other tasks
+                   and after printing of the successful completion message.
+                 - Corrected a problem in which a parameter that was
+                   specified as constrain=no would be flagged with a "!" when
+                   its value was outside of the constraint bounds. This
+                   occurred if at least one other parameter was defined as
+                   constrain=yes. Also added the "-" in prediction mode for
+                   parameters for prediction. Calculated results are unaffected.
+                 - Corrected a problem for which the Kashyup statistic could
+                   not be calculated for cases with omitted parameters that
+                   included prior information.
+                 - Omitted printing of CSS to the screen and the fn.#upred file
+                   when prediction=yes, and instead included a note referring
+                   the user to the _sp* files as described in Chapter 14 of the
+                   UCODE_2005 documentation.
+                 - Corrected garbled labels of names of parameters for
+                   predictions in underscore files.
+                 - Now the optimal (rather than initial) parameters are printed
+                   at the start of advanced phase "#" output files.
+                 - Omitted printing of some warning messages that were not
+                   relevant to the task. For example there is no longer a
+                   warning that default values for regression controls are used
+                   in prediction mode.
+                 - In UCODE_2005 and all auxiliary codes: changed references to
+                   "underscore" files in error messages to "data-exchange"
+                 - Corfac_Plus: Updated version #, compiled with
+                   Jupiter 1.3.0.
+                 - Linear_Uncertainy: Updated version #, compiled with
+                   Jupiter 1.3.0, added parameter labels that were missing for
+                   parameters for prediction.
+                 - Residual_Analysis_Adv: Updated version #, compiled with
+                   Jupiter 1.3.0, corrected calculation of mean and standard
+                   deviation for simulated weighted residuals for some cases
+                   involving omitted and non-adjustable parameters.
+                 - Made CDUM, IDUM, RDUM global variables in ucode_mod.90
+                 - Model_Linearity: Updated version #, compiled with
+                   Jupiter 1.3.0.
+                 - Model_Linearity_Adv: Updated version #, compiled with
+                   Jupiter 1.3.0, corrected a label in #modlinadv_conf that
+                   indicated weights were being read when sensitivities were
+                   being read, corrected parameters used for calculation of
+                   nonlinearity measures for some cases involving omitted and
+                   non-adjustable parameters.
+
+      UCODE_2005 Version 1.013 08/12/2008
+                 - Updated version # to 1.013
+                 - Support for nearly all of the UCODE_2005 data-exchange files
+                   is now available in GW_Chart, freeware available from
+                   http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html.
+                 - Corrected error for the case when the final parameters did
+                   not yield the lowest sum-of-squared residuals. In that
+                   situation ucode was printing information related to
+                   parameters from the final iteration rather than those that
+                   yielded the lowest sum-of-squared residuals. This can affect
+                   UCODE_2005 output files with filename extensions #uout, _b1,
+                   _b2, _dm, _linp, _mc, _mv, _nm, _os, _pc, _r, _s1, _sc, _sd,
+                   _so, _sppp, _sppr, _spsp, _spsr, _spu, _su, _w, _ws, _ww, and
+                   _wt (if keyword WtOSConstant>0, see page 85 of the
+                   documentation); Residual_Analysis output files with
+                   extentions _rb, _rc, _rd, and _rg; and Residual_Analysis_ADV
+                   output file with extention _rdadv. This correction affects
+                   example ex1a in appendix A of the documentation in that the
+                   values in some of the files listed above are slightly
+                   different.
+                 - Corrected error in which the flag for calculating nonlinear
+                   intervals on a parameter in the parameter_data block
+                   was ignored for mode NonlinearIntervals=yes in the
+                   UCODE_CONTROL_DATA block.
+                 - Added a final substitution of the template files so they
+                   contain the optimal values. Prior to this, the template
+                   files contained values perturbed for sensitivity
+                   calculations.
+                 - To allow multiple runs to be used to calculate nonlinear
+                   intervals (as often is needed because of lengthy runs and
+                   convergence problems), new files with date/time stamps are
+                   produced for files with extentions _intconf, _intconfpar,
+                   _intpred, and _intpredpar to create, for example,
+                   ucode_rootname--2008_06_21--22.17._intconf. For each
+                   UCODE_2005 run, files with extensions _intconf, _intconfpar,
+                   _intpred, and _intpredpar are still produced. As before,
+                   they contain the intervals calculated in the most recent run.
+                   To obtain a full list of inteval limits, values from the
+                   time-stamped files may need to be moved into these files.
+                   The nonlinear intervals can now be plotted in graph form
+                   using GW_Chart.
+                 - Corrected an error in which an additional forward&der run
+                   was executed for the trustregion option when derivatives were
+                   read from process model output
+                 - Corrected value of uncertainty associated with prior
+                   information on "parameters for prediction" (See note for
+                   UCODE_2005 version 1.009). Previously the variance on these
+                   parameters was multiplied by the cev of the regression,
+                   but now the variance is used directly without multiplication.
+                 - Previously parameters that were omitted from the regression
+                   due to parameter constraints were marked with a !. Now
+                   parameters that are omitted due to insensitivity are also
+                   marked with a !.
+                 - Added an underscore file _scgrp that reports composite scaled
+                   sensitivities and the two observations with the largest
+                   sensitivities for each observation group.
+                 - Modified ucode such that regressions with parameters omitted
+                   due to insensitivity or parameter value constraints could be
+                   used for advanced evaluations (e.g. predictive uncertainty,
+                   nonlinear intervals) without rerunning the regression with
+                   those parameters as adjustable=no. The uncertainty measures
+                   include the uncertainty associated with the "parameters for
+                   prediction".
+                 - increased number of significant figures printed in _pasub to
+                   match those printed in _paopt.  Format was changed from
+                   1PE15.7 to 1PE25.16.
+                 - increased number of significant figures printed in #uout for
+                   SUM OF SQUARED, WEIGHTED RESIDUALS.  Format was changed from
+                   G12.5 to G15.7.
+                 - unused subroutine UCODE_DEF_WRITEITER was deleted from
+                   ucode_mod.f90
+                 - removed write statements that are no longer needed from
+                   ucode_2005.f90
+
+                 - Updated Corfac_Plus to version 1.005. Corrected reading of
+                   prior for "parameters for prediction" (See note for
+                   UCODE_2005 version 1.009) in the case where
+                   parameters had been omitted from the regression due to
+                   insensitivity or constraint. This problem caused corfac_plus
+                   to fail in this situation.
+
+                 - Updated Linear_Uncertainty to version 1.006. Increased
+                   format for writing the numbers of items at the start of the
+                   output to accomodate more observations.
+
+                 - Updated Model_Linearity_Adv to version 1.004 to use results
+                   from projects that include parameters for prediction.
+
+     UCODE_2005 Version 1.012 02/05/2008
+                - Updated version # to 1.012
+                - Compiled with JUPITER API 1.2.3
+                - Added option to run prediction=yes with sensitivities=no to
+                  facilitate testing of the predictive mode setup
+                - The above change required that sensitivities be set to yes
+                  in the file 05.in of folder ex1a
+                - Corrected format error for writing large numbers of
+                  predictions
+                - Corrected further error in which _mvp was not written properly
+                  for prediction=yes mode.
+                - In the calculation of the hookstep Marquardt parameter, the
+                  algorithm now uses a scaled Hessian and unscaled Marquardt
+                  parameter. This improves robustness on ill-conditioned
+                  Hessians.
+                - Corrected calculation of ln|F|, log determinant of the Fisher
+                  Information Matrix. Now ln(|XTwX|/(SOSWR/n)) is printed. This
+                  results in a change in the order of variables in the
+                  subroutine REG_GNMOD_EVA_MLOFSTATS. This only changes values
+                  printed for "LN DETERMINANT of Fisher Information Matrix"
+                  with and without prior. The value printed for KIC is not
+                  affected.
+                - Corrected condition in which underscore files for residuals
+                  were not written for sensitivities=no optimize=no
+                  dataexchange=yes.
+                - Corrected condition for which _xyzt file was not written
+                  because unused observation names were not included in the
+                  .xyzt file.  Now only used observations need to be listed in
+                  the .xyzt file in order fo _xyzt to be written.
+                - Cleaned up coding in UTLUCODE_CHECK_PRI. This did not affect
+                  functionality.
+                - Improved error checking and messaging for definition of prior.
+
+                - Corfac_plus was edited. The version number was updated to
+                  1.004.
+                  - there is now a default for Read_cov. The default is no.
+                  - the default for RegressionUsedTrueCov was changed to yes
+
+                - Residual Analysis was edited so that one line of the code
+                  that was longer than 80 characters is now wrapped and thus
+                  does not exceed 80 characters.
+
+                - the documentation pdf was updated to match the version
+                  distributed on the USGS Publication Warehouse web site.
+                  Differences between this pdf and the previously distributed
+                  pdf are:
+                  Page(s) Change from previous to current version
+                  xiv     Missing page number for table 38 added
+                  30-39   Different pagination caused by moving text from
+                          after to before table 3
+                  44      Sentence added at end of last paragraph.
+                  63-64   MAXSTEP description revised
+                  154     Definition for NP added to header
+
+     UCODE_2005 Version 1.011 10/10/2007
+                - Updated version # to 1.011
+                - Adjusted formats for _sc because labels and some numbers ran
+                  together
+                - Corrected error where parameters were not substituted
+                  properly for the base case of a prediction=yes analysis.
+                - Adjusted job definition so that runs with Forward&Der run the
+                  application code only once.
+                - Corrected error in which _paoptp was not read properly for
+                  prediction=yes mode.
+                - Corrected error in which _mvp was not written properly for
+                  prediction=yes mode.
+                - Clarified some of the statements printed to the screen during
+                  execution of ucode
+
+                - Modified Residual_Analysis and updated to version 1.005
+                  to print a message and terminate when the number of
+                  observations exceeds 10,000 because the NxN matrix is too
+                  large.
+
+     UCODE_2005 Version 1.010 08/16/2007
+                - Updated version # to 1.010
+                - Compiled with JUPITER API 1.2.1
+                - Modified such to provide normal termination for cases in which
+                  there are fewer observations than parameters but only
+                  sensitivitity calculations (not optimization) are requested.
+                  In this situation parameter variance cannot be calculated and
+                  related statistics are not printed. If this occurs when
+                  optimization is requested, the message:
+                  CONSIDER WHETHER TOO MANY OBSERVATIONS HAVE BEEN OMITTED
+                  has been changed to
+                  TOO FEW OBSERVATIONS GIVEN THE NUMBER OF PARAMETERS
+
+     UCODE_2005 Version 1.009 07/12/2007
+                - Updated version # to 1.009
+                - Compiled with JUPITER API 1.2.1
+                - Updated to accommodate the use of parameters in predictive
+                  mode that were not included in the calibration. This allows
+                  the user to specify uncertainty for a parameter that
+                  influences predictive uncertainty but cannot be estimate in
+                  the calibration mode. For example the addition of effective
+                  porosity for an advective travel time prediction when the
+                  calibration considers only head and flow observations which
+                  do not contain information about effective porosity. This
+                  change includes a number of new input blocks which are
+                  described in the supplemental pdf:
+                  "Additional_Input_Blocks_ucode_2005.pdf".
+                - Updated input files for ex1b to use the capability to add
+                  parameters for prediction.
+                - Corrected maximum record length on data-exchange files with
+                  long lines in ucode and associated codes. In some cases the
+                  length was not sufficient to write the entire line and the
+                  execution would terminate.
+                - Modified format of header lines in _b* files so parameter
+                  and observation names line up with their values
+                - Heading banners for warnings were changed from !'s to *'s
+                - Added a feature to edit prior information equations in the
+                  case where a log-transformed parameter appears as the only
+                  term of a prior equation but is not included in the
+                  parentheses of a log10 function. If such a parameter occurs in
+                  any form other than log10(param-name) or param-name alone, an
+                  error message is written and the code terminates.
+
+                - Updated Corfac_Plus to version 1.003. This version
+                  considers parameters that are included for the predictive
+                  mode. The level of verbose required to echo input was
+                  increased from 3 to 4 in order to avoid echoing at the
+                  default value of verbose. In addition, a trailer was added
+                  indicating the time of completion and the time required to
+                  execute.
+
+                - Updated Linear_Uncertainty to version 1.005. This version
+                  considers parameters that are included for the predictive
+                  mode. In addition, a trailer was added indicating the time of
+                  completion and the time required to execute.
+
+                - Updated Model_Linearity to version 1.005. Increased maximum
+                  record length for reading _b1 and _b2. Modified output format
+                  for final table to improve readability. In addition, a trailer
+                  was added indicating the time of completion and the time
+                  required to execute.
+
+                - Corrected Model_Linearity_Adv and updated to version 1.003
+                  to properly consider cases in which some parameters are not
+                  adjustable in the regression. This version considers
+                  parameters that are included for the predictive mode. In
+                  addition, a trailer was added indicating the time of
+                  completion and the time required to execute.
+
+                - Corrected Residual_Analysis and updated to version 1.004
+                  to use new api to read supri. In addition, a trailer was
+                  added indicating the time of completion and the time required
+                  to execute.
+
+                - Corrected Residual_Analysis_Adv and updated to version 1.002
+                  to use new api to read supri. In addition, a trailer was
+                  added indicating the time of completion and the time required
+                  to execute.
+
+     UCODE_2005 Version 1.008 was a temporary version that was not released
+
+     UCODE_2005 Version 1.007
+                - updated version # to 1.007
+                - k of Kashyap's measure is now NPE, the number of parameters
+                  estimated for the process model rather than NPE+1 as is used
+                  for other model criteria, where the addition of one reflects
+                  the estimation of sigma-squared
+                - subroutine UTLUCODE_INVERT was modified to scale the matrix
+                  before inverting it and unscale the inverted matrix before
+                  returning it. This makes matrix inversion possible for
+                  difficult problem in which elements of the matrix differ by
+                  many orders of magnitude and in most cases prevents the error
+                  Error:  Failed in UTLUCODE_INVERT
+                - added test to determine if upperconstraint>lowerconstraint for
+                  parameters with constrain=yes, program terminates and
+                  indicates the parameters for which this is not met
+                - extension of the range of DOF in UTL_CHISQ was accomplished by
+                  calling UTLUCODE_CHISQ which allows for appropriate intervals
+                  to be calculated on cev when many observations are included in
+                  the regression
+                - Model_Linearity was corrected to only print the prior weight
+                  matrix if prior information are included in the model being
+                  evaluated. In addition this print was altered so it will only
+                  occur when verbose>4. Version of Model_Linearity was updated
+                  to 1.002
+                - Printing of Residual_analysis was modified to accomodate
+                  cases with more than 99 parameters by allowing 4 spaces for
+                  each parameter and printing strips of 10 parameters at a time.
+                  Version of Residual_Analysis was updated to 1.002
+                - Summary of the progress of the regression is now printed at
+                  the end of *.#uout when the regression does not converge even
+                  if Stats_on_nonconverge=no.
+                - The same summary information is printed after each iteration
+                  to a file named *._summary.  This information is available to
+                  quickly evaluate the progress of the regression should it
+                  terminate prematurely.
+
+     UCODE_2005 Version 1.006 was a temporary version that was not released
+
+     UCODE_2005 Version 1.005
+                - updated version # to 1.005
+                - added version checking for compatibility of UCODE source and
+                  Jupiter API
+                - compiled with JUPITER API 1.1.0
+                - using JUPITER API 1.100 allows up to 2 billion observations
+                  previous limit was 44721
+                - corrected error related to SOSSURFACE when only one parameter
+                  was evaluated, parameter value now varies over the indicated
+                  range
+                - corrected error that led to printing of zero for derived
+                  predictions and variance in _p and _pv
+                - corrected error that at times led to problems with damping
+                  when parameters were constrained
+                - included a check for conditions that at times led to continual
+                  estimation of the same values when parameters were constrained
+                  (this condition is likely to occur if parameters are
+                  over constrained)
+                - added checking and adjustment of input that controls the value
+                  of the Marquardt parameter so as to avoid the potential for
+                  entering an infinite loop in the Gauss-Newton solution
+                - extended message written to *.#uout describing tasks
+                  accomplished when prediction=yes
+                - Label STANDARD ERROR OF THE REGRESSION in #uout was changed to
+                  STANDARD ERROR so as to be applicable when calculated for a
+                  forward model execution.
+                - Maximum Likelihood Objective Function is now reported as
+                    MLOFO = NOBS*ln(SWSR/NOBS) for Observations Only and
+                    MLOFOP = (NOBS+NPR)*ln(SWSRwPri/(NOBS+NPR)) for Obs & Prior
+                      where:
+                      SWSR = sum_weighted_squared_residuals
+                      NOBS = #observations
+                      SWSRwPri = sum_weighted_squared_residuals including prior
+                      NPR = number of prior observations
+                  This change in the calculation of MLOF changes the values of
+                  model evaluation criteria. All criteria were affected by the
+                  same amount, so their relative rankings are not affected.
+                - calculation of the ln determinant of the Fisher Information
+                  Matrix was corrected from ln|XTwX| to:
+                  NPE * ln(SWSR / NOBS) + ln |XTwX|
+                    NPE = # estimated_parameters
+                  When prior are included, the SWSR includes the residuals on
+                  prior information items and NOBS includes the number of
+                  prior  information items.
+                  This change in the calculation of the Fisher Information
+                  Matrix changes the value of Kashyap's measure.
+                - Formula for calculating Kashyap's measure was corrected to
+                  use the normalized Fisher information matrix.
+                - printing of model evaluation criteria was changed to include
+                  values only relative to MLOF, both without prior, and
+                  with prior if prior information equations are included
+                  in the parameter estimation.
+                - changes were made to the _dm file:
+                   1)Maximum Likelihood Objective Function is now reported as
+                     describe above for the #uout file
+                   2)Values of the ln determinant of the Fisher Information
+                     Matrix and model evaluation criteria were corrected as
+                     described above for the #uout file
+                   3)Three lines were added. These contain: 1) the value of ln
+                     determinant of the Kashyap's measure (KIC) for
+                     observations only, 2) the Fisher Information Matrix for
+                     observations only. and 3) an indication of whether any of
+                     the final statistics were calculated with forward
+                     difference perturbation.
+                 - correction was made to ensure the final sum of squared
+                   weighted residuals is printed and used in calculation of the
+                   model measures
+
+     UCODE_2005 Version 1.004
+                - updated version # to 1.004
+                - version numbers were incremented on all auxiliary codes that
+                  had been modified since first release in Feb 2006
+                - added write statements to indicate which version of the
+                  Jupiter API is used
+                - updated the API.  Items known to be specific to ucode_2005
+                  functionality include:
+                - UTL_SSVD2 was revised so that when ITER equals 30, an error
+                  message is printed and UTL_STOP is called to stop execution
+                - write statements reformatted to print SCALEPVAL rather than
+                  BSCAL which is the name of SCALEPVAL in the code. This does
+                  not change the results or the numbers that are printed.
+                - code was made consistent with input manual to allow
+                  SOSSurface to be not only yes or no, but also file. Error
+                  reporting related to that file was improved.
+                - corrections were made to the trust region algorithm  so that
+                  MODVALPREV is passed as an argument so its value is retained.
+                  Also a check was added to the hookstep to prevent an infinite
+                  loop.
+                - a new feature was added to the trust region algorithm adding
+                  the option to not scale the least squares matrix. The keyword
+                  is:
+                  SCALING = none (false, f, no, or n will work as well)
+                  Omitting scaling can, in some cases, improve performance of
+                  the regression.
+                - example files included a few prerelease parameters that are
+                  not part of ucode, these were altered or deleted. (TOL was
+                  changed to TOLPAR, TOLSOSR was changed to TOLSOSC, and
+                  FletcherReeves was deleted).
+                - A couple of errors were found in the examples files. 1) The
+                  ex1a\02.in and 03.in file was modified to use the template
+                  file for the forward model.  2) For some cases, having only
+                  one outer pcg iteration was not enough to obtain convergence.
+                  So, the number of outer iterations was increased in
+                  test-data-win\data-used-by-all\tc1.pcg. These changes alter
+                  the details of the results but not their essence.
+                - the MODFLOW executable for the example problems was updated to
+                  version 1.17
+
+     UCODE_2005 Version 1.003 08/13/2006
+                - updated version # to 1.003
+                - correction to use the absolute value of 1% of the starting
+                  parameter value as the default for ScalePval when it is not
+                  specified, because the value must be positive
+                - replaced STA_UEV_DX_READ_DM in ucode_mod.f90 and
+                  reg_gn_ucode.f90 with UTLUCODE_DX_READ_DM which is a modified
+                  version of STA_UEV_DX_READ_DM that echoes items of the _dm
+                  file as they are read
+                - corrected error for which prior information plot symbol was
+                  always printed as 1 in some underscore files
+                - added check to see if the simulated equivalents for
+                  subsequent Beale parameter sets are identical to the previous
+                  set, and write a warning to the screen, #umodlin, and
+                  #modlin if that is the case (occasionally there is a good
+                  reason for these being the same, but usually it is a failure
+                  of the process model for a given set of parameter values
+                - corrected error that arose when derived predictions were
+                  used. UCODE_2005 would fail if this error occurred.
+                - nullified some pointers in all files which were identified
+                  as problems by some compilers and deleted some unused
+                  variables
+                - corrected error that selected the second to the last iteration
+                  as the one with the lowest sum of squared residuals if model
+                  calculated sensitivities were being used. Note this results
+                  in slightly different results for the test problems.
+                - corrected error that printed sum of squared residuals offset
+                  by one iteration in the penultimate summaries when
+                  intermediate printing was on. Also this output was slightly
+                  reformatted.
+                - corrected error for which maximum fractional parameter change
+                  in regression space was used for convergence as well as for
+                  limiting change when maxchangerealm=regression
+                - added the hookstep option to the trust region method. In
+                  order to use this the user needs to specify
+                  trustregion=hookstep in the REG_GN_CONTROLS input block.
+                  Descriptions of the hookstep method is provided by Dennis and
+                  Schnabel, in their book: "Numerical Methods for Nonlinear
+                  Optimization and Nonlinear Equations"
+                - updated API modules, updating the modules corrected a bug
+                  that limited equations to 40 characters (the limit is now
+                  2000)
+
+                changes were made to all source files for ucode and associated
+                codes
+
+     UCODE_2005 Version 1.002 03/26/2006 - correction to nonlinear confidence
+                limit feature to: avoid an unnecessary final calculation of
+                sensitivities, print the correct set of parameter values,
+                search for and print the values from the iteration closest to
+                the goal, print warnings and suggestions when the result is
+                far from the goal, and to provide a more readable output.
+                - correction to correct error when derived observations were
+                used.  UCODE_2005 would fail if this error occurred.
+                - updated API modules, notable is improvement in the
+                parallel module
+                - echo printing was added to repeat what is read when _dm is
+                read and verbose>4
+                - a format was changed in linear_uncertainty to add a missing "
+
+                changes were made to ucode_2005.f90. ucode_mod.f90
+                reg_gn_ucode.f90 reg_gn_mod.f90 utlucode.f90 and sta.f90
+                pll.f90 utl.f90 and linear_uncertainty
+
+     UCODE_2005 Version 1.001 02/13/2006 - minor adjustment to
+                sta.f90 to accommodate UNIX, distribution files
+                are formatted for UNIX, an example make file is
+                included for UNIX. Minor changes to documentation.
+
+     UCODE_2005 Version 1.000 02/06/2006 - Initial release.
+
+     UCODE_2005 Version history order of listing was reversed starting with
+                version 1.014
+
+DATA REQUIREMENTS
+     In order to use UCODE_2005, the process model needs to be constructed and
+     the main UCODE_2005 input file needs to be created. Input data are read
+     from files.
+
+
+SYSTEM REQUIREMENTS
+     UCODE_2005 is written primarily in Fortran 90. The code has been used on
+     UNIX-based computers and personal computers running various forms of the
+     Microsoft Windows operating system.
+
+
+CONTACTS
+
+    Eileen Poeter
+    International Ground Water Modeling Center and the Colorado School of Mines
+    Golden, Colorado 80401
+    USA
+
+    epoeter@mines.edu
+
+    Mary C. Hill
+    U.S. Geological Survey
+    National Research Program
+    3215 Marine St
+    Boulder, CO 80302
+    USA
+
+    mchill@usgs.gov
+
+
+    See
+
+      http://water.usgs.gov/software/ordering_documentation.html
+
+    for information on ordering printed copies of USGS publications.

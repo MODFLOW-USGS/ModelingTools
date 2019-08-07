@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specifying a Uniform Initial Grid</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Specifying a Uniform Initial Grid</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the user chooses to create a new model, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Grid_Dialog_Box" styleclass="Normal" translate="true">Initial Grid dialog box</link><text styleclass="Normal" translate="true"> gives the user the opportunity to specify a grid with uniformly spaced columns and rows. With PHAST, the layers will also be uniformly spaced. With MODFLOW, the layers will be horizontal but the layer thicknesses will be specified by the user. With </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Footprint_Properties_Dialog_Bo" styleclass="Normal" translate="true">Well Footprints</link><text styleclass="Normal" translate="true">, the grid only contains rows and columns.</text></para>
+  </body>
+</topic>

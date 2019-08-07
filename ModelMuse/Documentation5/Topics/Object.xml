@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Object</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Object</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The object functions return values that are related to the properties of objects. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Objects" styleclass="Normal" translate="true">Objects</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Creating_Selecting_and_Editing" styleclass="Normal" translate="true">Creating, Selecting, and Editing Objects in ModelMuse</link><text styleclass="Normal" translate="true"> for more information.)</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="FractionOfObjectLength" styleclass="Normal" translate="true">FractionOfObjectLength</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectArea" styleclass="Normal" translate="true">ObjectArea</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentSectionIndex" styleclass="Normal" translate="true">ObjectCurrentSectionIndex</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentSegmentAngle" styleclass="Normal" translate="true">ObjectCurrentSegmentAngle</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentSegmentAngleDegrees" styleclass="Normal" translate="true">ObjectCurrentSegmentAngleDegrees</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentSegmentAngleLimitedDegrees" styleclass="Normal" translate="true">ObjectCurrentSegmentAngleLimitedDegrees</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentSegmentLength" styleclass="Normal" translate="true">ObjectCurrentSegmentLength</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentVertexX" styleclass="Normal" translate="true">ObjectCurrentVertexX</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentVertexY" styleclass="Normal" translate="true">ObjectCurrentVertexY</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectCurrentVertexZ" styleclass="Normal" translate="true">ObjectCurrentVertexZ</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectImportedValuesB" styleclass="Normal" translate="true">ObjectImportedValuesB</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectImportedValuesI" styleclass="Normal" translate="true">ObjectImportedValuesI</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectImportedValuesR" styleclass="Normal" translate="true">ObjectImportedValuesR</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectImportedValuesT" styleclass="Normal" translate="true">ObjectImportedValuesT</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectIntersectArea" styleclass="Normal" translate="true">ObjectIntersectArea</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectIntersectLength" styleclass="Normal" translate="true">ObjectIntersectLength</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectLength" styleclass="Normal" translate="true">ObjectLength</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectName" styleclass="Normal" translate="true">ObjectName</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectSectionIntersectLength" styleclass="Normal" translate="true">ObjectSectionIntersectLength</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVertexCount" styleclass="Normal" translate="true">ObjectVertexCount</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVertexDistance" styleclass="Normal" translate="true">ObjectVertexDistance</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVertexX" styleclass="Normal" translate="true">ObjectVertexX</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVertexY" styleclass="Normal" translate="true">ObjectVertexY</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVertexZ" styleclass="Normal" translate="true">ObjectVertexZ</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="SelectedCount" styleclass="Normal" translate="true">SelectedCount</link></li>
+      <li><link displaytype="text" defaultstyle="true" type="topiclink" href="VertexInterpolate" styleclass="Normal" translate="true">VertexInterpolate</link></li>
+      <li></li>
+    </list>
+  </body>
+</topic>

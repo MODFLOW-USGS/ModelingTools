@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">The Grid - MODFLOW, PHAST, and WellFootprint</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">The Grid - MODFLOW, PHAST, and WellFootprint</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW, PHAST, and WellFootprint all use finite-difference techniques for spatial and temporal discretization. A grid is required for spatial discretization, but the grids in MODFLOW, PHAST, and WellFootprint differ in where data are calculated, where data are specified, and how the grid is numbered. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In ModelMuse, the grid can be rotated at an angle to the global coordinate system. The coordinate system for the grid is aligned with the grid lines, but has the same origin as the global coordinate system. The coordinates of a point in the global coordinate system are referred to as X, Y, and Z; the coordinates of a point in the grid coordinate system are referred to as X′, Y′, and Z (XPrime, YPrime, and Z). There is no Z′ because the grid is never rotated away from the horizontal plane. Coordinate values at the cursor location in both the global and grid coordinate system are displayed on the status bar of the main window of ModelMuse. More information about the grids for PHAST and MODFLOW can be found in the PHAST documentation (Parkhurst and others, 2004) and the MODFLOW-2005 documentation (Harbaugh, 2005). </text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Generating_Grids" styleclass="Normal" translate="true">ModelMuse can be used to create the grid; rotate it; and add, move, or remove grid lines</link><text styleclass="Normal" translate="true">. A variety of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid" styleclass="Normal" translate="true">grid functions</link><text styleclass="Normal" translate="true"> can be used in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formulas" styleclass="Normal" translate="true">formulas</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

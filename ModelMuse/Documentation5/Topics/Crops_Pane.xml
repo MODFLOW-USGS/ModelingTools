@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Crops Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Crops Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Crop Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is where the names of the crops are set and where crop properties that do not vary with time are specified. The properties of each crop are defined on one row of the table. The columns on the table depending on the choices the modeler has made on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP_Farm_Process" styleclass="Strong" translate="true">FMP: Farm Process Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first two columns are always present. The first column, </text><text styleclass="Strong" translate="true">Crop ID</text><text styleclass="Normal" translate="true">, is assigned automatically. The next column, </text><text styleclass="Strong" translate="true">Crop Name</text><text styleclass="Normal" translate="true">, is used to identify the crop throughout ModelMuse. The </text><text styleclass="Strong" translate="true">Crop Name</text><text styleclass="Normal" translate="true"> will be used to define a global variable that can be used in assigning the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_ID_in_FMP_Farm_Process" styleclass="Normal" translate="true">spatial distribution of the crops</link><text styleclass="Normal" translate="true"> and to identify the crop to which an </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Efficiencies" styleclass="Normal" translate="true">on-farm efficiency</link><text styleclass="Normal" translate="true"> is being assigned.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><text styleclass="Strong" translate="true">water stacking</text><text styleclass="Normal" translate="true"> is selected for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Water_Policy_Flags" anchor="IDEFFL" styleclass="Strong" translate="true">IDEFFL</link><text styleclass="Normal" translate="true">, the next column will be for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">IFALLOW</link><text styleclass="Normal" translate="true"> which determines whether or not a can be fallowed. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">IFALLOW</link><text styleclass="Normal" translate="true"> must evaluate to True or False. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">IFALLOW</link><text styleclass="Normal" translate="true"> is true, the crop can be fallowed. Otherwise it can not be fallowed. Pecan trees are an example of a crop that can not be fallowed.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Consumptive_Use_Flags" styleclass="Normal" translate="true">Concept 1</link><text styleclass="Normal" translate="true"> is selected, the next 4 columns (</text><text styleclass="Strong" translate="true">PSI(1)</text><text styleclass="Normal" translate="true">, </text><text styleclass="Strong" translate="true">PSI(2)</text><text styleclass="Normal" translate="true">, </text><text styleclass="Strong" translate="true">PSI(3)</text><text styleclass="Normal" translate="true">, and </text><text styleclass="Strong" translate="true">PSI(4)</text><text styleclass="Normal" translate="true">) will be negative or positive values of pressures head that control how the potential transpiration varies with pressure head. If the pressure is too high or two low, transpiration drops to zero because of anoxia or wilting. In between, there is a range of pressure heads over which the potential transpiration is at a maximum. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><text styleclass="Strong" translate="true">Rooting depth (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="When_to_Read_Flags" styleclass="Strong" translate="true">IRTFL</link><text styleclass="Strong" translate="true">)</text><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Strong" translate="true">Calculated (3)</text><text styleclass="Normal" translate="true">, or </text><text styleclass="Strong" translate="true">Consumptive use (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="When_to_Read_Flags" anchor="ICUFL" styleclass="Strong" translate="true">ICUFL</link><text styleclass="Strong" translate="true">)</text><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Strong" translate="true">Calculated (3)</text><text styleclass="Normal" translate="true">, or </text><text styleclass="Strong" translate="true">Precipitation (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="When_to_Read_Flags" styleclass="Strong" translate="true">IPFL</link><text styleclass="Strong" translate="true">)</text><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Strong" translate="true">Spatially distributed (2)</text><text styleclass="Normal" translate="true">, the additional columns will be present. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="References_Cited" anchor="FMP1" styleclass="Reference" translate="true">Schmid and others (2006)</link><text styleclass="Reference" translate="true"> p. 47 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="References_Cited" anchor="FMP2" styleclass="Reference" translate="true">Schmid and Hanson (2009)</link><text styleclass="Reference" translate="true"> p.17 for </text><text styleclass="Normal" translate="true">more information about what they represent. These data are used to calculate Growing Degree Days, Cumulative Growing Degree Days, Crop Coefficients, Crop Evapotranspiration, and Root Depths or to specify irrigation. The additional columns will be the following.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Columns</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Used for calculating</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <list id="4" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Base Temperature (BaseT)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Minimum Cutoff Temperature (MinCutT)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Maximum Cutoff Temperature (MaxCutT)</text></li>
+          </list>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Growing Degree Days</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <list id="5" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 0 (C0)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 1 (C2)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 2 (C3)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Coefficient 3 (C4)</text></li>
+          </list>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Cumulative Growing Degree Days</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <list id="6" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Beginning Root Depth (BegRootD)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Maximum Root Depth (MaxRootD)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Root Growth Coefficient (RootGC)</text></li>
+          </list>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Root Depths</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Irrigated (inverse of NONIRR) (True/false)</text></li>
+          </list>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Irrigation</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Irrigated</text><text styleclass="Normal" translate="true"> must evaluate to True or False. If </text><text styleclass="Strong" translate="true">Irrigated</text><text styleclass="Normal" translate="true"> is True irrigation will be applied.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

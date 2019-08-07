@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Sf6Mf6" FileType="bin">
+    <FileName Model_Name="Sf6Mf6" FileType="bin">..\..\..\..\WRDAPP\mf6.0.4\bin\mf6.exe</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="bin">..\..\..\..\WRDAPP\Zonbud.3_01\Bin\zonbud.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Sf6Mf6" FileType="ancillary">
+    <FileName Model_Name="Sf6Mf6" FileType="ancillary">Sf6Mf6.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Sf6Mf6" FileType="Model Input">
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.chd</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.dis</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.ic</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.nam.archive</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.npf</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.oc</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.sfr</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.sto</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.tdis</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">usgs.Sf6Mf6.reference</FileName>
+  </model>
+  <output Model_Name="Sf6Mf6" FileType="Model Output">
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.bhd</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.cbc</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.dis.grb</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.lst</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.sfr_budget</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.Solution.CSV</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.stage</FileName>
+  </output>
+  <Zonebudget_Input_Files Model_Name="Sf6Mf6" FileType="Zonebudget Input">
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">RunZoneBudget.bat.archive</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">Sf6Mf6.zb.zbnam.archive</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">Sf6Mf6.zb_zones</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">usgs.Sf6Mf6_ZoneBudget.reference</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">..\..\..\..\WRDAPP\mf6.0.4\bin\zbud6.exe</FileName>
+  </Zonebudget_Input_Files>
+  <Zonebudget_Output_Files Model_Name="Sf6Mf6" FileType="Zonebudget Output">
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Output">Sf6Mf6.2.csv</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Output">Sf6Mf6.csv</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Output">Sf6Mf6.zb.lst</FileName>
+  </Zonebudget_Output_Files>
+</Model_Archive_List>

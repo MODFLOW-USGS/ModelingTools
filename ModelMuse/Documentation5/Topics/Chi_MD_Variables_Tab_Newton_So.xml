@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Chi MD Variables Tab: Newton Solver</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Chi MD Variables Tab: Newton Solver</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The options that are required if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Basic_Options_Tab_Newton_Solver" anchor="Options" styleclass="Strong" translate="true">Options</link><text styleclass="Normal" translate="true"> is set to &quot;Specified&quot; and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Basic_Options_Tab_Newton_Solver" anchor="LINMETH" styleclass="Strong" translate="true">LINMETH</link><text styleclass="Normal" translate="true"> is set to Chi MD are on the </text><text styleclass="Strong" translate="true">Chi MD Variables</text><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver_Package_Pane" styleclass="Strong" translate="true">NWT: Newton Solver</link><text styleclass="Normal" translate="true"> pane of the the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Solver_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Solvers</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">IACL</text><text styleclass="Normal" translate="true"> is a flag for the acceleration method: </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">NORDER</text><text styleclass="Normal" translate="true"> is a flag for the scheme of ordering the unknowns: 0= original ordering; </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">LEVEL</text><text styleclass="Normal" translate="true"> is the level of fill for incomplete LU factorization.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">NORTH</text><text styleclass="Normal" translate="true"> is the number of orthogonalization for the ORTHOMIN acceleration scheme. A number between 4 and 10 is appropriate. Small values require less storage but more iterations may be required. This number should equal 2 for the other acceleration methods.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">IREDSYS</text><text styleclass="Normal" translate="true"> is a flag for reduced system preconditioning: =1 apply reduced system preconditioning; = 0 do not apply reduced system preconditioning.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">RRCTOLS</text><text styleclass="Normal" translate="true"> is the residual reduction-convergence criteria.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">IDROPTOL</text><text styleclass="Normal" translate="true"> is a flag for using drop tolerance in the preconditioning.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">EPSRN</text><text styleclass="Normal" translate="true"> is the drop tolerance for preconditioning.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">HCLOSEXMD</text><text styleclass="Normal" translate="true"> is the head closure criteria for inner (linear) iterations.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">MXITERXMD</text><text styleclass="Normal" translate="true"> is the maximum number of iterations for the linear solution.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

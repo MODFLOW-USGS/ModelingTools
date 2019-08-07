@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Description Tab</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Description Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Description</text><text styleclass="Normal" translate="true"> tab on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Options</link><text styleclass="Normal" translate="true"> dialog box is used to record a variety of pertinent information about the model for archival purposes. These include the name of the project, the name of the model, the date the model was created or edited and a description of the project. The description of the project is included in the MODFLOW input for the Basic package as part of the comments at the beginning of the file. Any Unicode characters in the description will be converted to ASCII characters in the MODFLOW Basic package input file. The name, date, and modeler are not included in the MODFLOW input files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If desired, the map projection may be included in the description of the project. However, a better place to do that is in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Geo_Reference_Dialog_Box" styleclass="Strong" translate="true">Geo Reference</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Geo_Reference_Dialog_Box" styleclass="Normal" translate="true"> dialog box</link><text styleclass="Normal" translate="true">. </text></para>
+  </body>
+</topic>

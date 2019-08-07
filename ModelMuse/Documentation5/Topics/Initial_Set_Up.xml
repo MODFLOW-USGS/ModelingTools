@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Set Up</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Initial Set Up</text></para>
+    </header>
+    <list id="2" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Start ModelMuse by double-clicking its icon. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Start_Up_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Start-Up</link><text styleclass="Normal" translate="true"> dialog box will appear. Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Create new PHAST model</text><text styleclass="Normal" translate="true">. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> button. Specify &quot;Not Applicable&quot; for the projection. Then click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> button again.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Initial Grid</link><text styleclass="Normal" translate="true"> dialog box will appear. The grid in this example is too complex to create through </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Initial Grid</link><text styleclass="Normal" translate="true"> dialog box so click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">No grid</text><text styleclass="Normal" translate="true"> button. The grid will be created in a different way.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In the main ModelMuse window select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Title_and_Units_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Title and Units…</link><text styleclass="Normal" translate="true"> Copy the title from ex2.trans.dat to the clipboard and paste it in the title section or enter an appropriate title. Assign the following units. Then click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button to close the dialog box.</text></li>
+    </list>
+    <para styleclass="Normal" style="margin-left:24px;"></para>
+    <para styleclass="Normal" style="text-align:center; margin-left:0px;"><table rowcount="8" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Header" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Header" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Header" translate="true">Units</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Time units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">days</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Horizontal grid units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Vertical grid units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Head units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Hydraulic conductivity units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters/day </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Specific storage units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">1/meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:165px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Dispersivity units</text></para>
+        </td>
+        <td style="width:73px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <list id="3" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="4" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Activate solute transport by selecting </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Chemistry_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Chemistry Options…</link><text styleclass="Normal" translate="true"> and checking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use solute transport</text><text styleclass="Normal" translate="true"> checkbox. Uncheck all the other checkboxes except for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use kinetics</text><text styleclass="Normal" translate="true"> and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

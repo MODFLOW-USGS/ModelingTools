@@ -1,0 +1,762 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CFP - Conduit Flow Process</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CFP - Conduit Flow Process</text></para>
+    </header>
+    <para style="text-indent:27px; line-height:13px;"></para>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td style="vertical-align:top;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> CFP</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The CFP Input File contains most of the information needed to simulate turbulent flow. For example, the location, geometry, and hydraulic properties of conduit flow pipes are held in the CFP Input File, as well as mean void diameters of preferential flow layers. &#160;</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://water.usgs.gov/ogw/cfp/cfp.htm" target="_blank" styleclass="Citation" translate="true">Shoemaker, W.B., Kuniansky, E.L., Birk, S., Bauer, S., and Swain, E.D., 2007, Documentation of a Conduit Flow Process (CFP) for MODFLOW-2005: U.S. Geological Survey Techniques and Methods, Book 6, Chapter A24, 50 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Conduit Recharge Package (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="CRCH" styleclass="Normal" translate="true">CRCH</link><text styleclass="Normal" translate="true">)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Conduit Output Control File (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="COC" styleclass="Normal" translate="true">COC</link><text styleclass="Normal" translate="true">)</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Use convertible layers (LAYCON=2 or 3 in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" styleclass="Normal" translate="true">BCF</link><text styleclass="Normal" translate="true">; LAYTYPE = not 0 in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">LPF</link><text styleclass="Normal" translate="true">; LTHUF = not 0 in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2" styleclass="Normal" translate="true">HUF2</link><text styleclass="Normal" translate="true">)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Use about 10 time steps per stress period to minimize oscillations in turbulent flow. </text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note the data requirements in the CFP Input File change depending upon the desired turbulent flow Mode. Mode 1 (CFPM1) only requires input for conduit flow pipes and nodes, whereas Mode 2 (CFPM2) only requires input for preferential flow layers. Mode 3 (CFPM3) requires input for conduit flow pipes, nodes, and layers. Additionally, the length (LENUNI) and time units (ITMUNI) in the Discretization (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">DIS</link><text styleclass="Normal" translate="true">) File of MODFLOW-2005 are used within CFP to calculate conduit flow terms, such as gravitational acceleration and viscosity. Thus, if using units of feet and day in the MODFLOW laminar flow model datasets, then units used in the CFP Input File also must be entered in feet and day.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For each simulation, all variables, characters, and arrays in the CFP Input File are read using free format. The required comment lines are dimensioned for 80 characters. </text></para>
+    <para style="text-indent:27px; line-height:13px;"></para>
+    <para styleclass="Normal"><table rowcount="48" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is a required comment line —“#” must be in column 1. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable that starts in column 2. Text is generally used to identify input variables and arrays. For example, #Mode for Text labels the underlying integer as the CFP Mode number. &#160;</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MODE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="MODE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MODE—is an integer value that activates conduit pipes and (or) layers. </text></para>
+                <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If MODE=1, only conduit pipes are active.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If MODE=2, only conduit layers are active.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If MODE=3, both conduit pipes and layers are active.</text></li>
+                </list>
+                <para styleclass="Normal"></para>
+                <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If MODE=1, datasets 0–29 have to be specified. </text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If MODE=2, only datasets 0, 1, and 30–39 have to be specified. </text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If MODE=3, datasets 0–39 have to be specified</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data sets 2-29 are used only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP" anchor="MODE" styleclass="Normal" translate="true">Mode</link><text styleclass="Normal" translate="true"> = 1 or 3.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NNODES NPIPES NLAYERS (read 1 line)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NNODES]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NNODES— is an integer value for the total number of nodes in the conduit pipe network. Each node is located at the center of a model cell in plan view.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPIPES]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NPIPES— is an integer value for the total number of pipes in the conduit network.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NLAYERS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NLAYERS— is an integer value for the total number of model layers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TEMPERATURE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">TEMPERATURE—is a real number in degrees Celsius representing the average temperature of ground water in the conduit pipes. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat data set 8 for each node.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_N &#160;MC &#160;MR &#160;ML &#160;NB1 &#160;NB2 &#160;NB3 &#160;NB4 &#160;NB5 &#160;NB6 &#160;PB1 &#160;PB2 &#160;PB3 &#160;PB4 &#160;PB5 &#160;PB6</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NO_N]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_N (column 1)—is the node number. Nodes are at the center of a model cell and define the connections of the pipe network.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MC  MR  ML]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MC, MR, and ML (columns 2 to 4)—are the MOD­FLOW cell column, row, and layer numbers within which node NO_N is located, respectively. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NB1  NB2  NB3  NB4  NB5  NB6]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NB1 to NB6 (columns 5 to 10)—are neighbor node numbers, which are connected by pipes to node NO_N (specified in the first column). As many as six adjacent or diagonal neighboring nodes in three dimensions can be listed. Neighbor nodes must be in adjacent cells. &#160;If there are less than six neighbor nodes, insert zeros for the remaining columns. There will always be at least one node connected to the speci­fied node NO_N. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PB1  PB2  PB3  PB4  PB5  PB6]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PB1 to PB6 (columns 11 to 16)—are the pipe numbers connected to the node NO_N. Each node should be connected to at least 1 pipe, but can be connected to as many as 6 pipes. Pipe numbers represent the pipe seg­ment between nodes. If there are less than six neighbor­ing pipes connected to the node (NO_N), insert zeros in the remaining columns. Again, a zero in the rest of the columns means there are no more pipe connections. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 11</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 12</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GEOHEIGHT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="GEOHEIGHT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">GEOHEIGHT—is the absolute elevation of the pipe nodes. There are two options for entering node elevations. With option 1 the number of lines read is equal to the total number of nodes (NNODES dataset 4). With option 2 only 1 line is read and the first number must equal NNODES in dataset 4.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Option 1—NO_N ELEVATION— Each line will con­tain an integer node number (NO_N) and the respective node elevation (ELEVATION) with respect to the user’s model datum. A CFPM1 simulation with 10 nodes, for example, would require 10 lines, each containing an integer node number and the respective node elevation. If the first node number is less than the total number of nodes, this indicates that option 1 has been selected and the CFP program will expect to read in a total number of lines of data equal to the total number of nodes as speci­fied in dataset 4.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Option 2—NNODES ELEVATION— only one line is read describing the elevation of each pipe node within finite-difference cells. If the first integer in this section of input equals the total number of nodes as specified in dataset 4, then only one line will be read. This option allows for the CFPM1 to set each node elevation to the vertical center of the encompassing model cell, if ELEVATION is assigned a value of 0.0. Assigning val­ues other than 0.0 for ELEVATION will raise or lower the node elevations a distance equal to ELEVATION above or below the vertical center of the encompassing model cell. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 13</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 14</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SA_EXCHANGE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="SA_EXCHANGE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SA_EXCHANGE—is an integer that equals either 0 or 1</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If SA_EXCHANGE = 0, the user assigns the pipe con­ductance for each node in the CFP Input File. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If SA_EXCHANGE = 1, the user assigns the conduit wall permeability, and the CFP will compute the surface areas of pipes when assembling pipe conductances for groundwater exchange between pipes and porous media. &#160;</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 15</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 16</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[EPSILON]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">EPSILON—is a real number for the convergence criterion of the Newton-Raphson iteration for pipe flow equations. Use a very small number, such as 0.0001.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 17</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 18</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NITER]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NITER—is an integer number for the maximum number of Newton-Raphson iterations. If convergence cannot be achieved, the program will stop and a warning will be printed in the MODFLOW listing file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 19</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 20</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RELAX]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">RELAX—is a real number of relaxation that determines the step length of the Newton-Raphson iterations. Changing RELAX to a value slightly less than 1.0 may facilitate convergence of the pipe flow equations. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 21</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 22</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[P_NR]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">P_NR—is an integer print flag for Newton Raphson iterations. If P_NR equals 0, results from these iterations are not printed. If P_NR equals 1, results from these iterations are printed, including the MODFLOW itera­tion number, Newton Raphson iteration number, and the maximum node head change. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 23</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 24</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat data set 25 for each pipe.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 25</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_P &#160;DIAMETER &#160;TORTUOSITY &#160;RHEIGHT &#160;LCRITREY_P &#160;TCRITREY_P</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NO_P]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_P (column 1)—is the integer pipe number.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[DIAMETER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="DIAMETER" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">DIAMETER (column 2)—is a real number for the pipe diameter.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TORTUOSITY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TORTUOSITY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TORTUOSITY (column 3)—is a real number for the pipe tortuosity. A value of 1.0 indicates a straight pipe. If a pipe length greater than the straight-line distance between the two nodes of the pipe is required, a tortuos­ity greater than 1 can be used. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RHEIGHT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="RHEIGHT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">RHEIGHT (column 4)—is a real number for the internal calculation of roughness and is the mean height of the micro-topography of the conduit &#160;wall.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LCRITREY_P]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="LCRITREY_P" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LCRITREY_P (column 5)—is the lower critical Reyn­olds number (turbulent to laminar).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TCRITREY_P]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TCRITREY_P" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TCRITREY_P (column 6)—is the upper critical Reyn­olds number (laminar to turbulent).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 26</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat data set 27 for each node.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 27</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_N &#160; &#160;N_HEAD</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NO_N]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_N (column 1)—is the integer node number.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[N_HEAD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="N_HEAD" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">N_HEAD (column 2)—are piezometric heads for nodes with fixed head (positive values) or a flag (</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; text-decoration:line-through; color:#000000;" translate="true">-1</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="New Materials" translate="true">negative values less than or equal to -1</text><text styleclass="Normal" translate="true">) that indicates that heads will be calculated during simulation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 28</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat data set 29 for each node</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 29</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_N K_EXCHANGE</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NO_N]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NO_N (column 1)—is the node number (in increasing order).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[K_EXCHANGE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="K_EXCHANGE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">K_EXCHANGE (column 2)—is the pipe conductance (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP" anchor="SA_EXCHANGE" styleclass="Normal" translate="true">SA_EXCHANGE</link><text styleclass="Normal" translate="true">=0) or conduit wall permeability (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP" anchor="SA_EXCHANGE" styleclass="Normal" translate="true">SA_EXCHANGE</link><text styleclass="Normal" translate="true">=1). </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data sets 30-39 are used only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP" anchor="MODE" styleclass="Normal" translate="true">Mode</link><text styleclass="Normal" translate="true"> = 2 or 3.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 30</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt;" translate="true">Required comment line —“#” must be in column 1. </text></para>
+          <para styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">Two required text comment lines read only if MODE equals 2 or 3 from Dataset 1. The following variables are required in the CFP Input File for conduit layers. It is important to remember that when MODE equals 2, the following variables are the only variables needed in the CFP Input File. Also, conduit layers must be convertible layers. For example, conduit layers must be specified as LAYCON = 3 in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">BCF</link><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true"> Package, LAYTYPE not equal 0 in the</text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true"> LPF</link><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true"> Package, or LTHUF not equal 0 in the &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">HUF2</link><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true"> Package. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 31</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 32</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NCL]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NCL—is an integer equal to the total number of conduit layers.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 33</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 34</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CL]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CL—is a one-dimensional integer array entered on a single line of the CFP Input File. This array holds the MODFLOW layer numbers that are conduit layers. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 35</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 36</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LTEMP]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LTEMP—is the mean water temperature in degrees Celsius of all conduit layers.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 37</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat lines 38 and 39 for each conduit flow layer. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 38</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Required comment line —“#” must be in column 1. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 39</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">VOID &#160; LCRITREY_L &#160; TCRITREY_L</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VOID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VOID—is the mean void diameter. This value is used in calculating the critical head difference from the speci­fied lower and upper critical Reynolds numbers. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LCRITREY_L]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LCRITREY_L—is the lower critical Reynolds number for switching from turbulent to laminar flow.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TCRITREY_L]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TCRITREY_L—is the upper critical Reynolds number for transitioning from laminar to turbulent flow. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

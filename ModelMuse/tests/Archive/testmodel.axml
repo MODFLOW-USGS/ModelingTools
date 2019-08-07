@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="testmodel" FileType="bin">
+    <FileName Model_Name="testmodel" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="testmodel" FileType="ancillary">
+    <FileName Model_Name="testmodel" FileType="ancillary">testmodel.gpt</FileName>
+  </ancillary>
+  <model Model_Name="testmodel" FileType="Model Input">
+    <FileName Model_Name="testmodel" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.bas</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.dis</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.gsf</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.lpf</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.nam.archive</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.oc</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">testmodel.pcg</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Input">usgs.testmodel.reference</FileName>
+  </model>
+  <output Model_Name="testmodel" FileType="Model Output">
+    <FileName Model_Name="testmodel" FileType="Model Output">testmodel.cbc</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Output">testmodel.fdn</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Output">testmodel.fhd</FileName>
+    <FileName Model_Name="testmodel" FileType="Model Output">testmodel.lst</FileName>
+  </output>
+</Model_Archive_List>

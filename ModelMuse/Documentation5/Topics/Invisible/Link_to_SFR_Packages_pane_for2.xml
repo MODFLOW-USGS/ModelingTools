@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Link to SFR Packages pane for ISFOPT Unsat</title>
+  <body>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[To specify this, the user must have chosen to specify some streambed properties by reach and to simulate unsaturated flow]]></caption></toggle></para>
+  <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This variable can only be specified if the user chooses to specify some streambed properties by reach and chooses to simulate unsaturated flow on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" styleclass="Normal" style="font-weight:bold;" translate="true">SFR: Stream-Flow Routing package</link><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages</link><text styleclass="Normal" translate="true"> dialog box. By specifying a formula that will give different results in different cells, the variable can vary down the length of the segment.</text></para>
+        </td>
+      </tr>
+    </table></para>
+ </body>
+</topic>

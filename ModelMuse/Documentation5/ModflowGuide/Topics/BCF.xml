@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BCF6 - Block-Centered Flow Package</title>
+  <keywords>
+    <keyword translate="true">anisotropy</keyword>
+    <keyword translate="true">BCF6</keyword>
+    <keyword translate="true">HDRY</keyword>
+    <keyword translate="true">HY</keyword>
+    <keyword translate="true">IBCFCB</keyword>
+    <keyword translate="true">IHDWET</keyword>
+    <keyword translate="true">IWDFLG</keyword>
+    <keyword translate="true">IWETIT</keyword>
+    <keyword translate="true">LAYCON</keyword>
+    <keyword translate="true">Ltype</keyword>
+    <keyword translate="true">Sf1</keyword>
+    <keyword translate="true">Sf2</keyword>
+    <keyword translate="true">Tran</keyword>
+    <keyword translate="true">TRPY</keyword>
+    <keyword translate="true">Vcont</keyword>
+    <keyword translate="true">WETDRY</keyword>
+    <keyword translate="true">WETFCT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">BCF6 - Block-Centered Flow Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> BCF6</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Block-Centered Flow package is used to specify properties controlling flow between cells.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></li>
+          </list>
+          <list id="36" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">https://pubs.usgs.gov/tm/2005/tm6A16/</link></li>
+          </list>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/wri/wri924124" target="_blank" styleclass="Citation" translate="true">Goode, D.J., and Appel, C.E., 1992, Finite-difference interblock transmissivity for unconfined aquifers and for aquifers having smoothly varying transmissivity: U.S. Geological Survey Water-Resources Investigations Report 92-4124, 79 p.</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr91536" target="_blank" styleclass="Citation" translate="true">McDonald, M.G., Harbaugh, A.W., Orr, B.R., and Ackerman, D.J., 1992, A method of converting no-flow cells to variable-head cells for the U.S. Geological Survey modular finite-difference ground-water flow model: U.S. Geological Survey Open-File Report 91-536, 99 p.</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/twri/twri06A1" target="_blank" styleclass="Citation" translate="true">McDonald, M.G., and Harbaugh, A.W., 1988, A modular three-dimensional finite-difference ground-water flow model: U.S. Geological Survey Techniques of Water-Resources Investigations, book 6, chap. A1, 586 p.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">Layer-Property Flow package (LPF)</link><text styleclass="Normal" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2" styleclass="Normal" translate="true">Hydrogeologic-Unit Flow package (HUF2)</link><text styleclass="Normal" translate="true"> are two other packages that can be used to specify properties controlling flow between cells.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HFB6" styleclass="Normal" translate="true">Horizontal Flow Barrier (HFB)</link><text styleclass="Normal" translate="true"> package modifies the horizontal conductances between certain, specified pairs of cells.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Flow_Package_Requirement"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></para>
+          <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">If the BCF package is used together with the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="New Materials" translate="true">UZF</link><text styleclass="New Materials" translate="true"> package, &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFOPT" styleclass="New Materials" translate="true">IUZFOPT</link><text styleclass="New Materials" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="New Materials" translate="true">UZF</link><text styleclass="New Materials" translate="true"> package must be set to 1.</text></li>
+          </list>
+          <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><conditional-text type="END"/></li>
+          </list>
+          <para styleclass="Normal"><snippet src="RefToReadBinary"/></para>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:8pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><link displaytype="text" defaultstyle="true" type="topiclink" href="SOR" styleclass="Normal" translate="true">SOR</link><text styleclass="Normal" translate="true">&#32;</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">SOR </text><conditional-text type="END"/><text styleclass="Normal" translate="true">solver </text><conditional-text type="IF" value="MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">(not included in MODFLOW-22005 or versions of MODFLOW derived from MODFLOW-2005) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">doesn&apos;t work well with the wetting capability. </text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This version of the Block-Centered Flow (BCF) Package combines the capabilities documented in McDonald and Harbaugh (1988), McDonald and others (1992), and Goode and Appel (1992). Input for the BCF Package is read from the file that is type &quot;BCF6&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. The file type has been changed from that used in MODFLOW-96, which was “BCF”, because the input data are not compatible.</text></para>
+    <para styleclass="Normal"><table rowcount="11" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IBCFCB HDRY IWDFLG &#160;WETFCT IWETIT IHDWET</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">These 6 variables are free format if the option “FREE” is specified in the Basic Package input file; otherwise, the variables all have 10-character fields.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBCFCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IBCFCB—is a flag and a unit number.</text></para>
+                      <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBCFCB &gt; 0, it is the unit number to which cell-by-cell flow terms will be written when &quot;SAVE BUDGET&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">. The terms that are saved are storage, constant-head flow, and flow between adjacent cells.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBCFCB = 0, cell-by-cell flow terms will not be written.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBCFCB &lt; 0, cell-by-cell flow for constant-head cells will be written in the listing file when &quot;SAVE BUDGET&quot; or a non-zero value for ICBCFL is specified in Output Control. Cell-by-cell flow to storage and between adjacent cells will not be written to any file.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The flow terms that will be saved are the flows through the right, front, and lower cell face. Positive values represent flows toward higher column, row, or layer numbers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">&#32;</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HDRY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HDRY—is the head that is assigned to cells that are converted to dry during a simulation. Although this value plays no role in the model calculations, it is useful as an indicator when looking at the resulting heads that are output from the model. HDRY is thus similar to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="HNOFLO" styleclass="Normal" translate="true">HNOFLO</link><text styleclass="Normal" translate="true"> in the Basic Package, which is the value</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWDFLG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IWDFLG" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IWDFLG—is a flag that determines if the wetting capability is active.</text></para>
+                      <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWDFLG = 0, the wetting capability is inactive.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWDFLG is not 0, the wetting capability is active.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WETFCT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="WETFCT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">WETFCT—is a factor that is included in the calculation of the head that is initially established at a cell when it is converted from dry to wet. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="IHDWET" styleclass="Normal" translate="true">IHDWET</link><text styleclass="Normal" translate="true">.)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">&#32;</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWETIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IWETIT—is the iteration interval for attempting to wet cells. Wetting is attempted every IWETIT iteration. If using the PCG solver (Hill, 1990), this applies to outer iterations, not inner iterations. If IWETIT is less than or equal to 0, it is changed to 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHDWET]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IHDWET" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IHDWET—is a flag that determines which equation is used to define the initial head at cells that become wet:</text></para>
+                      <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IHDWET = 0, equation 33A (equation 3a in McDonald and others, 1992) is used:</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">h = BOT + </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="WETFCT" styleclass="Normal" translate="true">WETFCT</link><text styleclass="Normal" translate="true"> (hn - BOT)</text></para>
+                      <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IHDWET is not 0, equation 33B (equation 3b in McDonald and others, 1992) is used:</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">h = BOT + </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="WETFCT" styleclass="Normal" translate="true">WETFCT</link><text styleclass="Normal" translate="true"> (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="WETDRY" styleclass="Normal" translate="true">WETDRY</link><text styleclass="Normal" translate="true">)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Ltype(NLAY)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read one value for each layer. These values are free format if the word FREE is specified in Item 1 of the Basic Package input file; otherwise, they have fixed-format fields. The fixed format fields are each 2 characters wide with 40 values per line. Use only as many lines as required for the number of model layers.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></para>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">In MODFLOW-2005 v 1.5 and earlier versions of MODFLOW-2005, Ltype must always be in free format.</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ltype]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Ltype" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Ltype—contains a combined code for each layer that specifies both the layer type (LAYCON) and the method of computing interblock conductance. Use as many records as needed to enter a value for each layer. Values are two-digit numbers:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The left digit defines the method of calculating interblock transmissivity. The methods are described by Goode and Appel (1992).</text></para>
+                <list id="24" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0 or blank—harmonic mean (the method used in MODFLOW-88). (This is most appropriate for confined and unconfined aquifers with abrupt boundaries in transmissivity at the cell boundaries or for confined aquifers with uniform hydraulic conductivity.)</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">1—arithmetic mean (This is most appropriate for unconfined aquifers with uniform hydraulic conductivities.)</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">2—logarithmic mean (This is most appropriate for confined aquifers with gradually varying transmissivities.)</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">3—arithmetic mean of saturated thickness and logarithmic-mean hydraulic conductivity. (This is most appropriate for unconfined aquifers with gradually varying transmissivities.) &#160;</text><text styleclass="New Materials" translate="true">If the transmissivity method is 3 and LAYCON (see below) is 0 or 2, the transmissivity method will be changed to 2 (logarithmic).</text></li>
+                </list>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The right digit defines the layer type (LAYCON), which is the same as in MODFLOW-88:</text></para>
+                <list id="25" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—confined—Transmissivity and storage coefficient of the layer are constant for the entire simulation.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">1—unconfined—Transmissivity of the layer varies. It is calculated from the saturated thickness and hydraulic conductivity. The storage coefficient is constant. This type code is valid only for layer 1.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">2—confined/unconfined—Transmissivity of the layer is constant. The storage coefficient may alternate between confined and unconfined values. Vertical flow from above is limited if the layer desaturates.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">3—confined/unconfined—Transmissivity of the layer varies. It is calculated from the saturated thickness and hydraulic conductivity. The storage coefficient may alternate between confined and unconfined values. Vertical flow from above is limited if the aquifer desaturates.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TRPY(NLAY) -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U1DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TRPY]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="TRPY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TRPY—is a one-dimensional variable containing a horizontal anisotropy factor for each layer. It is the ratio of transmissivity or hydraulic conductivity (whichever is being used) along a column to transmissivity or hydraulic conductivity along a row. Set to 1.0 for isotropic conditions. This is a single variable with one value per layer. Do not read a variable for each layer—that is, include only one array control record for the entire variable. Note that the LPF Package can be used to represent horizontal anisotropy that varies in magnitude within a model layer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2" style="height:18px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A subset of the following two-dimensional variables are used to describe each layer. The variables needed for each layer depend on the layer-type code (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true">, which is defined as part of the Item-2 </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">Ltype</link><text styleclass="Normal" translate="true">), whether the simulation has any transient stress periods (at least one stress period defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">Discretization File</link><text styleclass="Normal" translate="true"> specifies Ss/Tr as “TR”), and if the wetting capability is active (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="IWDFLG" styleclass="Normal" translate="true">IWDFLG</link><text styleclass="Normal" translate="true"> not 0). If a variable is not needed, it must be omitted. In no situation will all variables be required. The required variables (Items 4-9) for layer 1 are read first; then the variables for layer 2 and so forth.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[Sf1(NCOL,NROW)]--</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If there is at least one transient stress period.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Sf1]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Sf1" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Sf1—is the primary storage coefficient. Read only if there are one or more transient stress periods specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">Discretization</link><text styleclass="Normal" translate="true"> File. For </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> equal to 1, Sf1 will always be specific yield, whereas for &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> equal to 2 or 3, Sf1 will always be confined storage coefficient. For </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> equal to 0, Sf1 would normally be confined storage coefficient; however, a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> value of 0 can also be used to simulate water-table conditions where drawdowns are expected to remain everywhere a small fraction of the saturated thickness, and where there is no layer above, or flow from above is negligible. In this case, specific yield values would be entered for Sf1. </text><text styleclass="New Materials" translate="true">(The confined storage coefficient is specific storage times the layer thickness.)</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[Tran(NCOL,NROW)] -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> is 0 or 2 (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">Ltype</link><text styleclass="Normal" translate="true"> ), then read item 5.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Tran]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Tran" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Tran—is the transmissivity along rows. Tran is multiplied by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="TRPY" styleclass="Normal" translate="true">TRPY</link><text styleclass="Normal" translate="true"> to obtain transmissivity along columns. Read only for layers where </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> is 0 or 2.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[HY(NCOL,NROW)] -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Otherwise, if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> is 1 or 3 (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">Ltype</link><text styleclass="Normal" translate="true">), read item 6.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HY]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HY—is the hydraulic conductivity along rows. HY is multiplied by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="TRPY" styleclass="Normal" translate="true">TRPY</link><text styleclass="Normal" translate="true"> to obtain hydraulic conductivity along columns. Read only for layers where LAYCON is 1 or 3.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[Vcont(NCOL,NROW)] -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If not the bottom layer.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Vcont]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Vcont" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Vcont—is the vertical hydraulic conductivity divided by the thickness from a layer to the layer below. The value for a cell is the hydraulic conductivity divided by thickness for the material between the node in that cell and the node in the cell below. Because there is not a layer beneath the bottom layer, Vcont cannot be specified for the bottom layer. &#160;See p 5-16 to 5-17 of the MODFLOW-2005 documentation for more details.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[Sf2(NCOL,NROW)] -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If there is at least one transient stress period and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">Ltype</link><text styleclass="Normal" translate="true">) is 2 or 3.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Sf2]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Sf2" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Sf2—is the secondary storage coefficient. Read only for layers where </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> is 2 or 3 and only if there are one or more transient stress periods specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">Discretization</link><text styleclass="Normal" translate="true"> File. The secondary storage coefficient is always specific yield.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">[WETDRY(NCOL,NROW)] -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="IWDFLG" styleclass="Normal" translate="true">IWDFLG</link><text styleclass="Normal" translate="true"> is not 0 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> is 1 or 3 (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">Ltype</link><text styleclass="Normal" translate="true">).</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WETDRY]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="WETDRY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">WETDRY—is a combination of the wetting threshold and a flag to indicate which neighboring cells can cause a cell to become wet.</text></para>
+                <list id="26" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If WETDRY &lt; 0, only the cell below a dry cell can cause the cell to become wet.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If WETDRY &gt; 0, the cell below a dry cell and the four horizontally adjacent cells can cause a cell to become wet.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If WETDRY is 0, the cell cannot be wetted.</text></li>
+                </list>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The absolute value of WETDRY is the wetting threshold. When the sum of BOT and the absolute value of WETDRY at a dry cell is equaled or exceeded by the head at an adjacent cell, the cell is wetted. Read only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="Ltype" styleclass="Normal" translate="true">LAYCON</link><text styleclass="Normal" translate="true"> is 1 or 3 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" anchor="IWDFLG" styleclass="Normal" translate="true">IWDFLG</link><text styleclass="Normal" translate="true"> is not 0.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true"> package requires that WETDRY be set to 0 in Lakes.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

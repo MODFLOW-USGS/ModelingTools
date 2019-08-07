@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Number and Operator Buttons</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Numb</text><text styleclass="Heading1" translate="true">er and Operator Buttons</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The number and operator buttons in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Normal" style="font-weight:bold;" translate="true">Formula Editor</link><text styleclass="Normal" translate="true"> all work the same way: when the user clicks one of the buttons, the text displayed on the button will be inserted in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Text_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Formula text box</link><text styleclass="Normal" translate="true"> at the position of the cursor. If any text in the formula is selected, it will be replaced. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Operators" styleclass="Normal" translate="true">Operators</link><text styleclass="Normal" translate="true"> for more information on the meanings of the operators.</text></para>
+  </body>
+</topic>

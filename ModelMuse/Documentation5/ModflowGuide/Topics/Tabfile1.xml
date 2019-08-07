@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Tabfile1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Tabfile1</text></para>
+    </header>
+    <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TABFILE</text><text styleclass="Normal" translate="true"> NTAB FILEIO TIMEOPTION]</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TABFILE]]></caption></toggle></para>
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">TABFILE</text><text styleclass="Normal" translate="true"> is a keyword that triggers reading subsequent tabfile information.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NTAB]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NTAB is the number of tabfiles that will be read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FILEIO]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FILIO is a flag that determines if the tabfile is loaded entirely into memory or if only the portion that pertains to the current timestep is read in. If FILEIO is set to 0, then the entire tabfile is loaded into memory. If it is set to a nonzero value, then only the portion of the tabfile that pertains to the current time step is loaded into memory.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TIMEOPTION]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">TIMEOPTION is a required flag that must be one of the two following keywords.</text></para>
+                <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Keywords" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Keywords"><text styleclass="Keywords" translate="true">SIMTIME </text><text styleclass="Normal" translate="true">The keyword “SIMTIME” (without quotes) specifies that tabfile times use the model simulated time with time units specified by the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">DIS</link><text styleclass="Normal" translate="true"> and a starting point of 0. This is the default operation and will occur if TIMEOPTION is not specified.</text></li>
+                  <li styleclass="Keywords"><text styleclass="Keywords" translate="true">REALTIME </text><text styleclass="Normal" translate="true">The keyword “REALTIME” (without quotes) specifies that tabfile times use decimal years that begin with the date specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">DIS</link><text styleclass="Normal" translate="true"> with the keyword </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="STARTTIME" styleclass="Keywords" translate="true">STARTTIME</link><text styleclass="Normal" translate="true">. IF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="STARTTIME" styleclass="Keywords" translate="true">STARTTIME</link><text styleclass="Normal" translate="true"> is not specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">DIS</link><text styleclass="Normal" translate="true">, then MODFLOW will raise an error message and stop the program.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+  </body>
+</topic>

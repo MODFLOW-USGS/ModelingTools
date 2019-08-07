@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 drttest.lst REPLACE
+DATA(BINARY)      9 drttest.cbc REPLACE
+DIS              12 drttest.dis OLD
+BAS6             13 drttest.bas OLD
+OC               39 drttest.oc OLD
+DATA             37 drttest.fhd REPLACE
+DATA             38 drttest.fdn REPLACE
+PCG              18 drttest.pcg OLD
+LPF              14 drttest.lpf OLD
+CHD              17 drttest.chd OLD
+DRT              23 drttest.drt OLD

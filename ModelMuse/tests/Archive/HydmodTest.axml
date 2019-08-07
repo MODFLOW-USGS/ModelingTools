@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="HydmodTest" FileType="bin">
+    <FileName Model_Name="HydmodTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="HydmodTest" FileType="ancillary">
+    <FileName Model_Name="HydmodTest" FileType="ancillary">HydmodTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="HydmodTest" FileType="Model Input">
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.bas</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.chd</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.dis</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.gsf</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.hyd</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.lpf</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.nam.archive</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.oc</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.pcg</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.sfr</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">HydmodTest.sub</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Input">usgs.HydmodTest.reference</FileName>
+  </model>
+  <output Model_Name="HydmodTest" FileType="Model Output">
+    <FileName Model_Name="HydmodTest" FileType="Model Output">HydmodTest.cbc</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Output">HydmodTest.fdn</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Output">HydmodTest.fhd</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Output">HydmodTest.lst</FileName>
+    <FileName Model_Name="HydmodTest" FileType="Model Output">HydmodTest.hyd_out</FileName>
+  </output>
+</Model_Archive_List>

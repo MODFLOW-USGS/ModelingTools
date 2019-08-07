@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Column</title>
+  <keywords>
+    <keyword translate="true">Column</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Column</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW, PHAST, and WellFootprint models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Column</text><text styleclass="Normal" translate="true"> returns the column number of the node or element for which the formula is being calculated. For SUTRA &#160;and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Column</text><text styleclass="Normal" translate="true"> returns the node, element, or cell number for the two-dimensional mesh on the top view of the model.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ParentColumn" styleclass="Strong" translate="true">ParentColumn</link></para>
+  </body>
+</topic>

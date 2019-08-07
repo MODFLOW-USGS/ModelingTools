@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ConfinedLayer</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ConfinedLayer</text></para>
+    </header>
+    <para><text styleclass="Strong" translate="true">ConfinedLayer</text><text styleclass="Normal" translate="true">({Layer}) returns returns a True or False value depending on whether the layer is confined or not. </text></para>
+  </body>
+</topic>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="linear_bc" FileType="bin">
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="linear_bc" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="linear_bc" FileType="ancillary">
+    <FileName Model_Name="linear_bc" FileType="ancillary">linear_bc.gpt</FileName>
+  </ancillary>
+  <model Model_Name="linear_bc" FileType="Model Input">
+    <FileName Model_Name="linear_bc" FileType="Model Input">linear_bc.chem.dat</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Input">linear_bc.trans.dat</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Input">phast.dat</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Input">usgs.linear_bc.reference</FileName>
+  </model>
+  <output Model_Name="linear_bc" FileType="Model Output">
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.h5</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.log</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.O.chem</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.O.comps</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.O.probdef</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.O.wel</FileName>
+    <FileName Model_Name="linear_bc" FileType="Model Output">linear_bc.xyz.chem</FileName>
+  </output>
+</Model_Archive_List>

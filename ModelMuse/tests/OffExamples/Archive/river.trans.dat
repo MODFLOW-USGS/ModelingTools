@@ -1,0 +1,249 @@
+TITLE
+.      Simple river
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -HDF_heads true
+      -HDF_steady_flow_velocities true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -steady_flow_velocities false
+      -wells true
+      -xyz_components false
+      -xyz_heads false
+      -xyz_steady_flow_velocities false
+      -xyz_wells false
+SOLUTE_TRANSPORT false
+UNITS
+      -time seconds
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 400 17
+      -uniform   Y   0 400 17
+      -uniform   Z   0 275 12
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 400 400 275
+            -Kx 0.01
+            -Ky 0.01
+            -Kz 0.01
+            -porosity 0.15
+            -specific_storage 1E-10
+      -zone 0 0 0 400 400 275
+            -active 1
+FREE_SURFACE_BC true
+STEADY_FLOW true
+      -head_tolerance 1E-8
+      -flow_balance_tolerance 0.001
+      -iterations 100
+SOLUTION_METHOD
+      -iterative_solver true
+      -tolerance 1E-10
+      -save_directions 10
+      -maximum_iterations 500
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 400 400 275
+            -head 200
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 5 step
+      -progress_statistics 1 step
+      -restart 0 
+      -save_final_heads false
+      -velocities 0 
+      -wells 0 
+      -xyz_components 0 
+      -xyz_heads 5 step
+      -xyz_velocities 5 step
+      -xyz_wells 0 
+      -end_of_period_default false
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 400 12.5 275
+            -head
+                  0 200
+      -zone 0 387.5 0 400 400 275
+            -head
+                  0 200
+RIVER 1 Platte River
+      point 0 300 # x and y location of point on river
+            -head
+            0      240
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 25 300 # x and y location of point on river
+            -head
+            0      238
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 50 300 # x and y location of point on river
+            -head
+            0      236
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 75 300 # x and y location of point on river
+            -head
+            0      234
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 100 300 # x and y location of point on river
+            -head
+            0      232
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 125 300 # x and y location of point on river
+            -head
+            0      230
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 150 300 # x and y location of point on river
+            -head
+            0      228
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 175 300 # x and y location of point on river
+            -head
+            0      226
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 300 # x and y location of point on river
+            -head
+            0      224
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 275 # x and y location of point on river
+            -head
+            0      222
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 250 # x and y location of point on river
+            -head
+            0      220
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 225 # x and y location of point on river
+            -head
+            0      218
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 200 # x and y location of point on river
+            -head
+            0      216
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 175 # x and y location of point on river
+            -head
+            0      214
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 150 # x and y location of point on river
+            -head
+            0      212
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 125 # x and y location of point on river
+            -head
+            0      210
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 100 # x and y location of point on river
+            -head
+            0      208
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 75 # x and y location of point on river
+            -head
+            0      206
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 50 # x and y location of point on river
+            -head
+            0      204
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 25 # x and y location of point on river
+            -head
+            0      202
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+      point 200 0 # x and y location of point on river
+            -head
+            0      200
+            -width 20
+            -depth 5
+            -bed_hydraulic_conductivity 0.01
+            -bed_thickness 1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 1000 seconds
+            -time_end
+                  5000 seconds
+END

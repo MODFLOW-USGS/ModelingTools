@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Chain3D" FileType="bin">
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="Chain3D" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="Chain3D" FileType="ancillary">
+    <FileName Model_Name="Chain3D" FileType="ancillary">Chain3D.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Chain3D" FileType="Model Input">
+    <FileName Model_Name="Chain3D" FileType="Model Input">Chain3D.chem.dat</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Input">Chain3D.trans.dat</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Input">phast.dat</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Input">usgs.Chain3D.reference</FileName>
+  </model>
+  <output Model_Name="Chain3D" FileType="Model Output">
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.h5</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.log</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.O.bal</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.O.chem</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.O.head</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.O.probdef</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.O.wel</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.xyz.chem</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.xyz.head</FileName>
+    <FileName Model_Name="Chain3D" FileType="Model Output">Chain3D.xyz.vel</FileName>
+  </output>
+</Model_Archive_List>

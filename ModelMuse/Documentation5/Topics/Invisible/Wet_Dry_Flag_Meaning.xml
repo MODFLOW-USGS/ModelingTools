@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Wet_Dry_Flag_Meaning</title>
+  <body>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Table Cell" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Table Cell"><text styleclass="Table Cell" translate="true">If Wet_Dry_Flag &gt; 0, any cell adjacent to the dry cell, except the cell above the dry cell, can cause the dry cell to convert to an active cell.</text></li>
+      <li styleclass="Table Cell"><text styleclass="Table Cell" translate="true">If Wet_Dry_Flag = 0, the dry cell can not convert to an active cell.</text></li>
+      <li styleclass="Table Cell"><text styleclass="Table Cell" translate="true">If Wet_Dry_Flag &lt; 0, only the cell below the dry cell can cause the dry cell to convert to an active cell. </text></li>
+    </list>
+  </body>
+</topic>

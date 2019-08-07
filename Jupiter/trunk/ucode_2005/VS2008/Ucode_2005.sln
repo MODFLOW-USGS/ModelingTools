@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "jupiter_api_lib", "jupiter_api_lib\jupiter_api_lib.vfproj", "{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}"
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "ucode_2005", "ucode_2005\ucode_2005.vfproj", "{CC15ED63-E607-4514-BEE3-A832009B1F77}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3} = {F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}
+	EndProjectSection
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Residual_Analysis", "Residual_Analysis\Residual_Analysis.vfproj", "{FFCFAD11-0B82-4692-B7E0-8850E2EA8A28}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3} = {F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}.Debug|Win32.Build.0 = Debug|Win32
+		{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}.Release|Win32.ActiveCfg = Release|Win32
+		{F9010F7E-7DDF-4BCA-BA45-B49C081CB1A3}.Release|Win32.Build.0 = Release|Win32
+		{CC15ED63-E607-4514-BEE3-A832009B1F77}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CC15ED63-E607-4514-BEE3-A832009B1F77}.Debug|Win32.Build.0 = Debug|Win32
+		{CC15ED63-E607-4514-BEE3-A832009B1F77}.Release|Win32.ActiveCfg = Release|Win32
+		{CC15ED63-E607-4514-BEE3-A832009B1F77}.Release|Win32.Build.0 = Release|Win32
+		{FFCFAD11-0B82-4692-B7E0-8850E2EA8A28}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FFCFAD11-0B82-4692-B7E0-8850E2EA8A28}.Debug|Win32.Build.0 = Debug|Win32
+		{FFCFAD11-0B82-4692-B7E0-8850E2EA8A28}.Release|Win32.ActiveCfg = Release|Win32
+		{FFCFAD11-0B82-4692-B7E0-8850E2EA8A28}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

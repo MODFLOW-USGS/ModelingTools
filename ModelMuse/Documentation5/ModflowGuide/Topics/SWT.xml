@@ -1,0 +1,1489 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SWT - Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers</title>
+  <keywords>
+    <keyword translate="true">Cr</keyword>
+    <keyword translate="true">Cr</keyword>
+    <keyword translate="true">GL0</keyword>
+    <keyword translate="true">ICRCC</keyword>
+    <keyword translate="true">IESTFL</keyword>
+    <keyword translate="true">IESTFM</keyword>
+    <keyword translate="true">Ifl1</keyword>
+    <keyword translate="true">Ifl2</keyword>
+    <keyword translate="true">Ifl26</keyword>
+    <keyword translate="true">Ifl3</keyword>
+    <keyword translate="true">Ifm1</keyword>
+    <keyword translate="true">Ifm13</keyword>
+    <keyword translate="true">Ifm2</keyword>
+    <keyword translate="true">Ifm3</keyword>
+    <keyword translate="true">IGLFL</keyword>
+    <keyword translate="true">IGLFM</keyword>
+    <keyword translate="true">IPCSFL</keyword>
+    <keyword translate="true">IPCSFM</keyword>
+    <keyword translate="true">ISP1</keyword>
+    <keyword translate="true">ISP2</keyword>
+    <keyword translate="true">ISTFL</keyword>
+    <keyword translate="true">ISTFM</keyword>
+    <keyword translate="true">ISTPCS</keyword>
+    <keyword translate="true">ISWTCB</keyword>
+    <keyword translate="true">ISWTOC</keyword>
+    <keyword translate="true">ITHK</keyword>
+    <keyword translate="true">ITS1</keyword>
+    <keyword translate="true">ITS2</keyword>
+    <keyword translate="true">Iun1</keyword>
+    <keyword translate="true">Iun13</keyword>
+    <keyword translate="true">Iun2</keyword>
+    <keyword translate="true">Iun3</keyword>
+    <keyword translate="true">IVOID</keyword>
+    <keyword translate="true">IZCFL</keyword>
+    <keyword translate="true">IZCFM</keyword>
+    <keyword translate="true">LNWT</keyword>
+    <keyword translate="true">NSYSTM</keyword>
+    <keyword translate="true">PCS</keyword>
+    <keyword translate="true">PCSOFF</keyword>
+    <keyword translate="true">SGM</keyword>
+    <keyword translate="true">SGS</keyword>
+    <keyword translate="true">Sse</keyword>
+    <keyword translate="true">Ssv</keyword>
+    <keyword translate="true">SUB</keyword>
+    <keyword translate="true">SWT</keyword>
+    <keyword translate="true">THICK</keyword>
+    <keyword translate="true">VOID</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SWT - Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SWT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">SWT simulates vertical compaction in models of regional groundwater flow. The program simulates groundwater storage changes and compaction in discontinuous interbeds or in extensive confining units, accounting for stress-dependent changes in storage properties. Several features of the program make it useful for application in shallow, unconfined flow systems. Geostatic stress can be treated as a function of water-table elevation, and compaction is a function of computed changes in effective stress at the bottom of a model layer. Thickness of compressible sediments in an unconfined model layer can vary in proportion to saturated thickness. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2007/06A23/" target="_blank" styleclass="Citation" translate="true">Leake, S.A., and Galloway, D.L., 2007, MODFLOW ground-water model -- User guide to the Subsidence and Aquifer-System Compaction Package (SUB-WT) for Water-Table Aquifers: U.S. Geological Survey Techniques and Methods, Book 6, Chap. A23, 42 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">Interbed Storage</link><text styleclass="Normal" translate="true"> package</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" styleclass="Normal" translate="true">Subsidence</link><text styleclass="Normal" translate="true"> package</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="41" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="42" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="43" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="44" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="RefToReadBinary"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">Input for the SUB-WT Package is read from the file that has the type </text><text styleclass="Normal" translate="true">“</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">SWT</text><text styleclass="Normal" translate="true">”</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true"> in the name file. Optional variables are shown in brackets. All single-valued variables in data items 1, 3, 16, and 17, and layer assignments for systems of interbeds in data item 2 are read in free format. Data items 1, 2, 3, and 16 consist of, at most, one record. Two-dimensional arrays in data items 4</text><text styleclass="Normal" translate="true">–</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">15 are read with MODFLOW utility array readers </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">U2DREL</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">. For instructions on use of array readers, refer to Harbaugh and others (2000) or Harbaugh (2005). </text></para>
+    <para><table rowcount="21" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="New Materials"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="New Materials"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ISWTCB ISWTOC NSYSTM ITHK IVOID ISTPCS ICRCC</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISWTCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISWTCB is a flag and unit number. </text></para>
+                      <list id="45" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWTCB &gt; 0, it is the unit number to which cell-by-cell flow terms will be written when “SAVE BUDGET” or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in MODFLOW Output Control (for example, Harbaugh and others, 2000, p. 52–55). </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWTCB ≤ 0, cell-by-cell flow terms will not be recorded. </text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISWTOC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ISWTOC" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ISWTOC is a flag</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:line-through; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true"> and unit number</text><text styleclass="Normal" translate="true">.</text></para>
+                      <list id="46" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWTOC &gt; 0, it is the number of repetitions of item 17 to be read, each repetition of which defines a set of times steps and associated flags for printing and saving subsidence, compaction by layer, compaction by interbed system, vertical displacement, preconsolidation stress, change in preconsolidation stress, geostatic stress, change in geostatic stress, effective stress, change in effective stress, void ratio, thickness of interbeds, and layer-center elevation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWTOC </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, subsidence, compaction, vertical displacement, preconsolidation stress, change in preconsolidation stress, geostatic stress, change in geostatic stress, effective stress, change in effective stress, void ratio, thickness of interbeds, and layer-center elevation will not be printed or saved.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NSYSTM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NSYSTM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NSYSTM is the number of systems of interbeds.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITHK]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="ITHK" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ITHK is a flag to determine how thicknesses of compressible sediments vary in response to changes in saturated thickness.</text></para>
+                      <list id="47" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITHK </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, thickness of compressible sediments is constant.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITHK &gt; 0, thickness of compressible sediments varies in response to changes in saturated thickness.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IVOID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="IVOID" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IVOID is a flag to determine how void ratios of compressible sediments vary in response to changes in saturated thickness.</text></para>
+                      <list id="48" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IVOID </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, void ratio will be treated as a constant.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IVOID &gt; 0, void ratio will be treated as a variable.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISTPCS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ISTPCS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ISTPCS is a flag to determine how initial preconsolidation stress will be obtained.</text></para>
+                      <list id="49" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISTPCS </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, an array of offset values will be read in for each model layer. The offset values will be added to the initial effective stress to get initial preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISTPCS = 0, an array with initial preconsolidation stress values will be read in.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ICRCC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ICRCC" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ICRCC is a flag to determine how recompression and compression indices will be obtained.</text></para>
+                      <list id="50" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICRCC </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, arrays of elastic specific storage and inelastic skeletal specific storage will be read for each system of interbeds. The recompression index and compression index will not be read.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICRCC = 0, arrays of recompression index and compression index will be read for each system of interbeds. Elastic skeletal specific storage and inelastic skeletal specific storage will not be read.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> LNWT(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="NSYSTM" styleclass="Normal" translate="true">NSYSTM</link><text styleclass="Normal" translate="true">)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(Enter </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="NSYSTM" styleclass="Normal" translate="true">NSYSTM</link><text styleclass="Normal" translate="true"> integers separated by one or more spaces or by commas.)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LNWT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LNWT is a one-dimensional array specifying the model-layer assignments for each system of interbeds. The array has </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="NSYSTM" styleclass="Normal" translate="true">NSYSTM</link><text styleclass="Normal" translate="true"> values.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IZCFL IZCFM IGLFL IGLFM IESTFL IESTFM IPCSFL IPCSFM ISTFL ISTFM</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IZCFL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IZCFL is a flag to specify whether or not initial calculated values of layer-center elevation will be printed.</text></para>
+                      <list id="51" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IZCFL &gt; 0, array will be printed using format code specified by variable IZCFM.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IZCFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, array will not be printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IZCFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IZCFM is a code for the format in which layer-center elevation will be printed. </text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IGLFL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IGLFL is a flag to specify whether or not initial calculated values of geostatic stress will be printed.</text></para>
+                      <list id="52" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IGLFL &gt; 0, array will be printed using format specified by variable IGLFM.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IGLFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, array will not be printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IGLFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para><text style="font-family:Times; font-size:12pt; text-decoration:underline; color:#000000;" translate="true">IGLFM </text><text style="font-family:Times; font-size:12pt; color:#000000;" translate="true">is a code for the format in which geostatic stress will be printed. </text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IESTFL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IESTFL is a flag to specify whether or not initial calculated values of effective stress will be printed.</text></para>
+                      <list id="53" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IESTFL &gt; 0, array will be printed using format specified by variable IESTFM.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IESTFL = 0, array will not be printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IESTFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IESTFM is a code for the format in which effective stress will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPCSFL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IPCSFL is a flag to specify whether or not initial calculated values of preconsolidation stress will be printed.</text></para>
+                      <list id="54" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IPCSFL &gt; 0, array will be printed using format specified by variable IPCSFM.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IPCSFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, array will not be printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPCSFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IPCSFM is a code for the format in which preconsolidation stress will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISTFL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTFL is a flag to specify whether or not initial equivalent storage properties will be printed for each system of interbeds. If ICRCC</text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true">0, the equivalent storage properties that can be printed are recompression and compression indices (Cr and Cc), which are calculated from elastic and inelastic skeletal specific storage (Sske and Sskv). If ICRCC=0, equivalent storage properties that can be printed are elastic and inelastic skeletal specific storage, which are calculated from the recompression and compression indices.</text></para>
+                      <list id="55" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISTFL &gt; 0, array will be printed using format specified by variable ISTFM.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISTFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, array will not be printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISTFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTFM is a code for the format in which equivalent storage properties will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GL0(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GL0]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="GL0" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">GL0 is an array specifying the geostatic stress above model layer 1. If the top of model layer 1 is the land surface, enter values of zero for this array.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SGM(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGM]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="SGM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SGM is an array specifying the specific gravity of moist or unsaturated sediments.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SGS(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGS]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="SGS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SGS is an array specifying the specific gravity of saturated sediments.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The arrays in data items 7–13 are read for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="NSYSTM" styleclass="Normal" translate="true">NSYSTM</link><text styleclass="Normal" translate="true"> systems of interbeds. Read all arrays for system 1 first, then all arrays for system 2, and so on for each system.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">THICK(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[THICK]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="THICK" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">THICK is an array specifying the thickness of compressible sediments.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Sse(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ICRCC" styleclass="Normal" translate="true">ICRCC</link><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true">0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Sse]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Sse" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Sse is an array specifying the initial elastic skeletal specific storage of compressible beds.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Ssv(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ICRCC" styleclass="Normal" translate="true">ICRCC</link><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true">0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ssv]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Ssv" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Ssv is an array specifying the initial inelastic skeletal specific storage of compressible beds.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Cr(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ICRCC" styleclass="Normal" translate="true">ICRCC</link><text styleclass="Normal" translate="true">=0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Cr]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Cr" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Cr is an array specifying the recompression index of compressible beds.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 11</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Cc(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ICRCC" styleclass="Normal" translate="true">ICRCC</link><text styleclass="Normal" translate="true">=0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Cc]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Cc" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Cc is an array specifying the compression index of compressible beds.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 12</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">VOID(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VOID]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="VOID" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VOID is an array specifying the initial void ratio of compressible beds.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 13</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SUB(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SUB]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="SUB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SUB is an array specifying the initial compaction in each system of interbeds. Compaction values computed by the package are added to values in this array so that printed or stored values of compaction and land subsidence may include previous components. Values in this array do not affect calculations of storage changes or resulting compaction. For simulations in which output values will reflect compaction and subsidence since the start of the simulation, enter zero values for all elements of this array.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The arrays in data items 14 and 15 are read for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">NLAY</link><text styleclass="Normal" translate="true"> model layers. Depending on the value of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISTPCS" styleclass="Normal" translate="true">ISTPCS</link><text styleclass="Normal" translate="true">, read item 14 or item 15 sequentially from layer 1 to layer </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" styleclass="Normal" translate="true">NLAY</link><text styleclass="Normal" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 14</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> [PCSOFF(NCOL,NROW)] </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISTPCS" styleclass="Normal" translate="true">ISTPCS</link><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PCSOFF]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="PCSOFF" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">PCSOFF is an array specifying the offset from initial effective stress to initial preconsolidation stress at the bottom of the model layer in units of height of a column of water.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 15</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> [PCS(NCOL,NROW)] </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISTPCS" styleclass="Normal" translate="true">ISTPCS</link><text styleclass="Normal" translate="true"> = 0</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PCS]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="PCS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">PCS is an array specifying the initial preconsolidation stress, in units of height of a column of water, at the bottom of the model layer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="height:53px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 16</text></para>
+        </td>
+        <td style="height:53px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Ifm1 Iun1 Ifm2 Iun2 Ifm3 Iun3 … Ifm13 Iun13] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISWTOC" styleclass="Normal" translate="true">ISWTOC</link><text styleclass="Normal" translate="true"> &gt; 0 </text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(Data item 16 consists of one record with 26 integers separated by one or more spaces or by commas.) </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm1 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">subsidence</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun1 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">subsidence</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm2 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by layer</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun2 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by layer</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm3]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm3 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by system</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun3]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun3 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by system</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm4]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm4 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">vertical displacement</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun4]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun4 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">vertical displacement</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm5]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm5 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">preconsolidation stress</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun5]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun5 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">preconsolidation stress</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm6]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm6 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in preconsolidation stress</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun6]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun6 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in preconsolidation stress</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm7]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm7 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">geostatic stress</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun7]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun7 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">geostatic stress</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm8]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm8 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in geostatic stress</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun8]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun8 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in geostatic stress</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm9]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm9 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">effective stress</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun9]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun9 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">effective stress</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm10]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm10 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in effective stress</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun10]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun10 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in effective stress</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm11]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm11 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">void ratio</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun11]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun11 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">void ratio</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm12]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm12 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">thickness of compressible sediments</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun12]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun12 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">thickness of compressible sediments</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifm13]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifm13 is a code for the format in which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">layer-center elevation</text><text styleclass="Normal" translate="true"> will be printed.</text></para>
+                      <para styleclass="Normal"><snippet src="SwF_Format_Codes"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iun13]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iun13 is the unit number to which </text><text styleclass="Normal" style="font-weight:bold;" translate="true">layer-center elevation</text><text styleclass="Normal" translate="true"> will be written if it is saved on disk.</text></para>
+                      <para styleclass="Normal"><snippet src="SubBinary"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="14" colcount="2" style="width:auto; cell-padding:1px; cell-spacing:1px; page-break-inside:auto; border-width:2px; border-spacing:1px; cell-border-width:2px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Iun or Ifm #</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Data set</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">1</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">subsidence</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">2</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">compaction by layer</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">3</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">compaction by system</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">4</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">vertical displacement</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">5</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">preconsolidation stress</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">6</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">change in preconsolidation stress</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">7</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">geostatic stress</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">8</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">change in geostatic stress</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">9</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">effective stress</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">10</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">change in effective stress</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">11</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">void ratio</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">12</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">thickness of compressible sediments</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">13</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">layer-center elevation</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 17</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> [ISP1 ISP2 ITS1 ITS2 Ifl1 Ifl2 Ifl3 … Ifl26] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISWTOC" styleclass="Normal" translate="true">ISWTOC</link><text styleclass="Normal" translate="true"> &gt; 0</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(Data item 17 consists of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISWTOC" styleclass="Normal" translate="true">ISWTOC</link><text styleclass="Normal" translate="true"> records with 30 integers separated by one or more spaces or by commas. See the section entitled “Package Output” for a detailed explanation of the use of data item 17.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISP1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISP1 is the starting stress period in the range of stress periods to which output flags Ifl1---Ifl26 apply. If the value of ISP1 is less than 1, the SUB-WT Package will change the number to 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISP2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISP2 is the ending stress period in the range of stress periods and time steps to which output flags Ifl1---Ifl26 apply. If the value of ISP2 is greater than NPER (the number of stress periods in the simulation), the SUB-WT Package will change the number to NPER.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITS1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ITS1 is the starting time step in the range of time steps in each of the stress periods ISP1 through ISP2 to which output flags Ifl1 through Ifl26 apply. If the value of ITS1 is less than 1, the SUB-WT Package will change the number to 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITS2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ITS2 is the ending time step in the range of time steps in each of stress periods ISP1---ISP2 to which output flags Ifl1 through Ifl26 apply. If the value of ITS2 is greater than the number of time steps in a given stress period, the SUB-WT Package will change the number to the number of time steps in that stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl1 is the output flag for printing </text><text styleclass="Normal" style="font-weight:bold;" translate="true">subsidence</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="56" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl1 &lt; 0, use default or previously defined settings of Ifl1 for printing subsidence.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl1 = 0, do not print subsidence.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl1 &gt; 0, print subsidence.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl2 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">subsidence</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="57" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl2 &lt; 0, use default or previously defined settings of Ifl2 for saving subsidence.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl2 = 0, do not save subsidence.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl2 &gt; 0, save subsidence.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl3]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl3 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by layer</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="58" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl3 &lt; 0, use default or previously defined settings of Ifl3 for printing compaction by layer.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl3 = 0, do not print compaction by layer.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl3 &gt; 0, print compaction by layer.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl4]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl4 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by layer</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="59" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl4 &lt; 0, use default or previously defined settings of Ifl4 for saving compaction by layer.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl4 = 0, do not save compaction by layer.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl4 &gt; 0, save compaction by layer.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl5]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl5 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by interbed system</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="60" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl5 &lt; 0, use default or previously defined settings of Ifl5 for printing compaction by interbed system.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl5 = 0, do not print compaction by interbed system.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl5 &gt; 0, print compaction by interbed system.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl6]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl6 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">compaction by interbed system</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="61" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl6 &lt; 0, use default or previously defined settings of Ifl6 for saving compaction by interbed system.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl6 = 0, do not save compaction by interbed system.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl6 &gt; 0, save compaction by interbed system.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl7]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl7 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">vertical displacement</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="62" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl7 &lt; 0, use default or previously defined settings of Ifl7 for printing vertical displacement.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl7 = 0, do not print vertical displacement.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl7 &gt; 0, print vertical displacement.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl8]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl8 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">vertical displacement</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="63" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl8 &lt; 0, use default or previously defined settings of Ifl8 for saving vertical displacement.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl8 = 0, do not save vertical displacement.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl8 &gt; 0, save vertical displacement.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl9]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl9 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">preconsolidation stress</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="64" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl9 &lt; 0, use default or previously defined settings of Ifl9 for printing preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl9 = 0, do not print preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl9 &gt; 0, print preconsolidation stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl10]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl10 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">preconsolidation stress</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="65" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl10 &lt; 0, use default or previously defined settings of Ifl10 for saving preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl10 = 0, do not save preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl10 &gt; 0, save preconsolidation stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl11]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl11 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in preconsolidation stress</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="66" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl11 &lt; 0, use default or previously defined settings of Ifl11 for printing change in preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl11 = 0, do not print change in preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl11 &gt; 0, print change in preconsolidation stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl12]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl12 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in preconsolidation stress</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="67" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl12 &lt; 0, use default or previously defined settings of Ifl12 for saving change in preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl12 = 0, do not save change in preconsolidation stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl12 &gt; 0, save change in preconsolidation stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl13]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl13 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">geostatic stress</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="68" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl13 &lt; 0, use default or previously defined settings of Ifl13 for printing geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl13 = 0, do not print geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl13 &gt; 0, print geostatic stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl14]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl14 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">geostatic stress</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="69" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl14 &lt; 0, use default or previously defined settings of Ifl14 for saving geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl14 = 0, do not save geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl14 &gt; 0, save geostatic stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl15]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl15 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in geostatic stress</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="70" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl15 &lt; 0, use default or previously defined settings of Ifl15 for printing change in geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl15 = 0, do not print change in geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl15 &gt; 0, print change in geostatic stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl16]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl16 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in geostatic stress</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="71" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl16 &lt; 0, use default or previously defined settings of Ifl16 for saving change in geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl16 = 0, do not save change in geostatic stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl16 &gt; 0, save change in geostatic stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl17]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl17 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">effective stress</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="72" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl17 &lt; 0, use default or previously defined settings of Ifl17 for printing effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl17 = 0, do not print effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl17 &gt; 0, print effective stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl18]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl18 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">effective stress</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="73" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl18 &lt; 0, use default or previously defined settings of Ifl18 for saving effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl18 = 0, do not save effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl18 &gt; 0, save effective stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl19]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl19 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in effective stress</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="74" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl19 &lt; 0, use default or previously defined settings of Ifl19 for printing change in effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl19 = 0, do not print change in effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl19 &gt; 0, print change in effective stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl20]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl20 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">change in effective stress</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="75" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl20 &lt; 0, use default or previously defined settings of Ifl20 for saving change in effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl20 = 0, do not save change in effective stress.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl20 &gt; 0, save change in effective stress.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl21]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl21 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">void ratio</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="76" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl21 &lt; 0, use default or previously defined settings of Ifl21 for printing void ratio.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl21 = 0, do not print void ratio.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl21 &gt; 0, print void ratio.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl22]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl22 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">void ratio</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="77" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl22 &lt; 0, use default or previously defined settings of Ifl22 for saving void ratio.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl22 = 0, do not save void ratio.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl22 &gt; 0, save void ratio.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl23]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl23 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">compressible bed thickness</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="78" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl23 &lt; 0, use default or previously defined settings of Ifl23 for printing compressible bed thickness.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl23 = 0, do not print compressible bed thickness.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl23 &gt; 0, print compressible bed thickness.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl24]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl24 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">compressible bed thickness</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="79" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl24 &lt; 0, use default or previously defined settings of Ifl24 for saving compressible bed thickness.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl24 = 0, do not save compressible bed thickness.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl24 &gt; 0, save compressible bed thickness.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl25]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl25 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">printing</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">layer-center elevation</text><text styleclass="Normal" translate="true"> for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="80" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl25 &lt; 0, use default or previously defined settings of Ifl25 for printing layer-center elevation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl25 = 0, do not print layer-center elevation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl25 &gt; 0, print layer-center elevation.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ifl26]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Ifl26 is the output flag for </text><text styleclass="Normal" style="font-weight:bold;" translate="true">saving</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" style="font-weight:bold;" translate="true">layer-center elevation</text><text styleclass="Normal" translate="true"> to an unformatted disk file for the set of time steps specified by ISP1, ISP2, ITS1, and ITS2.</text></para>
+                      <list id="81" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl26 &lt; 0, use default or previously defined settings of Ifl26 for saving layer-center elevation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl26 = 0, do not save layer-center elevation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ifl26 &gt; 0, save layer-center elevation.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="14" colcount="3" style="width:auto; cell-padding:1px; cell-spacing:1px; page-break-inside:auto; border-width:2px; border-spacing:1px; cell-border-width:2px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Data Set</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Print ifl #</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">Save ifl #</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">subsidence</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">1</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">2</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">compaction by layer</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">3</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">4</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">compaction by interbed system</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">5</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">6</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">vertical displacement</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">7</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">8</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">preconsolidation stress</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">9</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">10</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">change in preconsolidation stress</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">11</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">12</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">geostatic stress</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">13</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">14</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">change in geostatic stress</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">15</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">16</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">effective stress</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">17</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">18</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">change in effective stress</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">19</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">20</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">void ratio</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">21</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">22</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">compressible bed thickness</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">23</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">24</text></para>
+                    </td>
+                  </tr>
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">layer-center elevation</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">25</text></para>
+                    </td>
+                    <td>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">26</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

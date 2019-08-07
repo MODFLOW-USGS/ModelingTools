@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SEN - Sensitivity Process Input File</title>
+  <keywords>
+    <keyword translate="true">B</keyword>
+    <keyword translate="true">BL</keyword>
+    <keyword translate="true">BSCAL</keyword>
+    <keyword translate="true">BU</keyword>
+    <keyword translate="true">IPRINTS</keyword>
+    <keyword translate="true">ISENALL</keyword>
+    <keyword translate="true">ISENFM</keyword>
+    <keyword translate="true">ISENPU</keyword>
+    <keyword translate="true">ISENS</keyword>
+    <keyword translate="true">ISENSU</keyword>
+    <keyword translate="true">IUHEAD</keyword>
+    <keyword translate="true">LN</keyword>
+    <keyword translate="true">MXSEN</keyword>
+    <keyword translate="true">NPLIST</keyword>
+    <keyword translate="true">PARNAM</keyword>
+    <keyword translate="true">SEN</keyword>
+    <keyword translate="true">Text</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SEN - Sensitivity Process Input File</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SEN</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Sensitivity Process is used to calculate the sensitivity of model results to variations in parameter values.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr00184" target="_blank" styleclass="Citation" translate="true">Hill, M.C., Banta, E.R., Harbaugh, A.W., and Anderman, E.R., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to the Observation, Sensitivity, and Parameter-Estimation Processes and three post-processing programs: U.S. Geological Survey Open-File Report 00-184, 210 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="ofr-00-184-errata.pdf" styleclass="Normal" translate="true">ofr-00-184-errata.pdf</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><text styleclass="Normal" translate="true">The PVAL input file in MODFLOW-2005 and MODFLOW-LGR provides a little of the functionality of the Sensitivity process in MODFLOW-2000.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">The &quot;Model-Layer Variable-Direction Horizontal Anisotropy&quot; capability is incompatible with the Sensitivity process when convertible layers are used.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Parameters in the Streamflow Routing (SFR) package can not be specified in the Sensitivity process input file.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The Sensitivity Process is not included in MODFLOW-2005 or MODFLOW-LGR. &#160;External programs such as </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://typhoon.mines.edu/freeware/ucode/" target="_blank" styleclass="Normal" translate="true">UCODE</link><text styleclass="Normal" translate="true"> must be used instead.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Sensitivity Process</text></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for the Sensitivity Process is read from a file that is specified with “SEN” as the file type listed in the name file.</text></para>
+    <para styleclass="Normal"><table rowcount="4" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional and can include as many lines as desired. Each line needs to begin with the “#” character in the first column.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character string (maximum of 79 characters per line) that starts in column 2. Any characters can be included in Text. The “#” character needs to be in column 1. Text is printed when the file is read and provides an opportunity for the user to include information about the model both in the input file and the associated output file. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NPLIST ISENALL IUHEAD MXSEN (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPLIST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NPLIST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NPLIST—is the number of named parameters listed in the Sensitivity Process input file. Parameters need to be listed in this file for sensitivities to be calculated and for the parameter value to be estimated by the Parameter-Estimation Process, but whether or not the sensitivities are calculated or the parameter is estimated depends on the value of ISENALL and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENS" styleclass="Normal" translate="true">ISENS</link><text styleclass="Normal" translate="true">, as described below.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISENALL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ISENALL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ISENALL—is a flag that can override values of ISENS listed for each parameter in the input file and can deactivate the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Parameter_Estimation_Process" styleclass="Normal" translate="true">Parameter-Estimation Process</link><text styleclass="Normal" translate="true">.</text></para>
+                      <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENALL = 0, use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENS" styleclass="Normal" translate="true">ISENS</link><text styleclass="Normal" translate="true"> flags listed for each parameter.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENALL &gt; 0, set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENS" styleclass="Normal" translate="true">ISENS</link><text styleclass="Normal" translate="true"> to 1 for all listed parameters and deactivate the Parameter-Estimation Process if it is active. Use this option to evaluate sensitivities for all listed parameters without losing the notation that governs which parameters are to be estimated.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENALL &lt; 0, Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENS" styleclass="Normal" translate="true">ISENS</link><text styleclass="Normal" translate="true"> to 0 for all listed parameters so that no sensitivities are calculated, but use the parameter values specified in this file. Deactivate the Parameter-Estimation Process if a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" styleclass="Normal" translate="true">PES</link><text styleclass="Normal" translate="true"> file is listed in the name file. This option might be used, for example, to perform a forward model run using parameter values from an intermediate parameter-estimation iteration.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IUHEAD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IUHEAD—is a flag that allows the user to choose between using scratch (temporary) files or memory for storage of grid sensitivities. If IUHEAD &gt; 0, it is also the first of a series of file unit numbers.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IUHEAD &gt; 0, one temporary scratch file is opened for each of MXSEN parameters. File unit numbers in the range IUHEAD through IUHEAD+MXSEN-1 are used for the scratch files and may not be used in the name file. This range of unit numbers also must not include the numbers 96 through 99, because these unit numbers are reserved for other uses.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IUHEAD </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, sensitivities are stored in memory. &#160;“Any negative integer or zero can be used.” If the program has been converted to comply with FORTRAN 77 standards, the amount of allocated storage may need to be modified; see the ‘Memory Requirements’ section of Appendix B. When the parallel computing capability is used, IUHEAD needs to be less than or equal to zero.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXSEN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MXSEN—is the maximum number of parameters for which sensitivities are to be calculated.MXSEN needs to equal or exceed the number of parameters for which ISENS is greater than zero. If ISENALL&gt;0, MXSEN needs to equal or exceed </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="NPLIST" styleclass="Normal" translate="true">NPLIST</link><text styleclass="Normal" translate="true">; the program will stop if this condition is not satisfied. If IUHEAD &gt; 0, make MXSEN as small as possible to reduce the computer memory requirements.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRINTS ISENSU ISENPU ISENFM (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRINTS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRINTS—is a flag that indicates how the saving and printing of sensitivity arrays are controlled if ISENSU and (or) ISENPU, below, are greater than zero. The arrays are saved (to unit ISENSU) and printed (to unit ISENPU) only when the Sensitivity Process is active and the Parameter-Estimation Process is inactive. The sensitivities are for parameters for which </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENS" styleclass="Normal" translate="true">ISENS</link><text styleclass="Normal" translate="true"> &gt; 0 unless </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENALL" styleclass="Normal" translate="true">ISENALL</link><text styleclass="Normal" translate="true"> &gt; 0, in which case the sensitivities are for all parameters listed in the Sensitivity Process input file. These are arrays for the entire grid and can be contoured to obtain sensitivity maps. They are one-percent scaled sensitivities; that is, they are scaled by multiplying by the parameter value and dividing by 100. An exception is described under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="BSCAL" styleclass="Normal" translate="true">BSCAL</link><text styleclass="Normal" translate="true">.</text></para>
+                      <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPRINTS = 0, Printing of sensitivity arrays is controlled by the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="IHDDFL" styleclass="Normal" translate="true">IHDDFL</link><text styleclass="Normal" translate="true"> and &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="Hdpr" styleclass="Normal" translate="true">Hdpr</link><text styleclass="Normal" translate="true"> variables of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true"> option of the Basic Package, which also control printing of heads in the Groundwater Flow Process.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPRINTS = 1, Print and save sensitivity arrays for all model layers and all time steps.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISENSU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISENSU—is a flag that controls whether sensitivity arrays are to be saved and, if so, to what file. The file format is controlled by the user through the Output Control input file. The output is written as text if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="CHEDFM" styleclass="Normal" translate="true">CHEDFM</link><text styleclass="Normal" translate="true"> is defined in the Output Control input file, and is binary otherwise. The file needs to be opened in the NAME file with the appropriate file type (Harbaugh and others, 2000). &#160;The arrays are one-percent scaled sensitivities unless the parameter type is &quot;CHD&quot;, in which case unscaled sensitivities are printed.</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENSU = 0, sensitivity arrays are not saved.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENSU &gt; 0, sensitivity arrays are saved on unit ISENSU.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISENPU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISENPU—is a flag identifying whether sensitivity arrays are to be printed and, if so, to what file. Sensitivity arrays are written as text to unit ISENPU using format number ISENFM (see below). ISENPU can be set equal to the GLOBAL file unit number, the LIST file unit number, or another unit opened in the name file using the DATA file type. To avoid inadvertently producing enormous output files, sensitivity arrays are only printed when the Parameter-Estimation Process is not active.</text></para>
+                      <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENPU = 0, sensitivity arrays are not printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENPU &gt; 0, sensitivity arrays are printed on unit ISENPU.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISENFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISENFM—is a code indicating the format for printing sensitivity arrays as described for ISENPU. If ISENFM is less than zero, the arrays are not printed. Permissible values of ISENFM and corresponding formats are:</text></para>
+                      <para styleclass="Normal"><table rowcount="23" colcount="2" style="width:100%; cell-padding:2px; cell-spacing:1px; page-break-inside:auto; border-width:1px; border-spacing:1px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:middle">
+                          <td>
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">ISENFM</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">FORMAT</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">0</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10G11.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">1</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">11G10.3 </text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">2</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">9G13.6</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">3</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">15F7.1</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">4</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">15F7.2</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">5</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">15F7.3</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">6</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">15F7.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">7</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20F5.0</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">8</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20F5.1</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">9</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20F5.2</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">10</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20F5.3</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">11</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20F5.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">12</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10G11.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">13</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10F6.0</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">14</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10F6.1</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">15</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10F6.2</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">16</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10F6.3</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">17</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10F6.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">18</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10F6.5</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">19</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5G12.5</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">20</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">6G11.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para styleclass="Table Header" style="text-align:center;"><text styleclass="Table Header" translate="true">21</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">7G9.2</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PARNAM ISENS LN B BL BU BSCAL (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="NPLIST" styleclass="Normal" translate="true">NPLIST</link><text styleclass="Normal" translate="true"> repetitions of item 3.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PARNAM—is a parameter name (up to 10 nonblank characters) that matches one of the parameter names specified in input for one of the Groundwater Flow Process packages. Matching is performed in a case-insensitive manner.</text></para>
+                      <para styleclass="Normal"><snippet src="Unique_Param_Name"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISENS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ISENS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ISENS—is a flag identifying whether or not sensitivities are to be calculated for parameter PARNAM. If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" styleclass="Normal" translate="true">PES</link><text styleclass="Normal" translate="true"> process is active, ISENS also identifies whether or not the parameter is to be estimated by regression. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" anchor="ISENALL" styleclass="Normal" translate="true">ISENALL</link><text styleclass="Normal" translate="true">, above, is not zero, ISENS is ignored.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENS </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, Sensitivities are not calculated and the parameter is not estimated.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISENS &gt; 0, Sensitivities are calculated and, if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" styleclass="Normal" translate="true">PES</link><text styleclass="Normal" translate="true"> process is active, the parameter is estimated by regression.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LN—is a flag identifying whether parameter PARNAM is to be log-transformed for parameter estimation.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LN </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, Estimate the native, untransformed parameter.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LN &gt; 0, Estimate the log transform of the parameter.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[B]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">B—is the starting value for parameter PARNAM. This value always replaces the value listed in the Flow-Process package input file. See the section “Starting Parameter Values” for a discussion of things to consider about starting parameter values.</text></para>
+                      <para styleclass="Normal"><snippet src="SenB_BL_BU_BSCAL"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">BL—is the minimum reasonable parameter value for parameter PARNAM. BL does not restrict the estimated parameter value. BL is printed in the output to facilitate comparison with the estimated value.</text></para>
+                      <para styleclass="Normal"><snippet src="SenB_BL_BU_BSCAL"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">BU—is the maximum reasonable parameter value for parameter PARNAM. BU does not restrict the estimated parameter value. BU is printed in the output to facilitate comparison with the estimated value.</text></para>
+                      <para styleclass="Normal"><snippet src="SenB_BL_BU_BSCAL"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BSCAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="BSCAL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">BSCAL—is an alternate scaling factor for parameter PARNAM, and always needs to be a positive number. In MODFLOW-2000, dimensionless and one-percent scaled sensitivities are calculated using the scaling discussed in Hill (1998, p. 14-17, eq. 8, 9, and 11), except that the absolute value of the current parameter value is used. When the parameter value equals 0.0, however, which can occur for parameters that are not log-transformed, this scaling results in scaled sensitivities that equal 0.0. MODFLOW-2000 accommodates this situation using BSCAL. If the absolute value of the parameter is less than BSCAL, BSCAL is used in the scaling. The best value to use for BSCAL is problem dependent. Good choices are the smallest (in absolute value) reasonable value of the parameter or a value two to three orders of magnitude smaller than the value specified by B. If the smallest reasonable value is 0.0, a reasonable non-zero value needs to be used. BSCAL has no effect on the scaled sensitivities for log-transformed parameters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Example Input File</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Example SEN file</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">#</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">11 0 -36 11 ITEM 1: NPLIST ISENALL IUHEAD MXSEN</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">0 0 0 0 ITEM 2: IPRINTS ISENSU ISENPU ISENFM</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">WQ_1 1 0 45. 40. 50. 10. ITEMS 3: PARNAM ISENS LN B BL BU BSCAL</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">WQ_2 1 0 420. 320. 520. 100.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">WQ_3 1 0 -9.7E4 –1.1E5 -9.0E4 9.0E4</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">WQ_4 1 0 -5.1E4 -6.1E4 -4.1E4 4.1E4</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">RCH_ZONE_1 1 0 0.4E-3 0.4E-4 0.4E-2 0.4E-2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">RCH_ZONE_2 1 0 -0.2E-3 -0.2E-2 -0.2E-4 0.2E-4</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">RCH_ZONE_3 1 0 0.17E-3 0.17E-4 0.17E-2 0.17E-4</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">rivers 1 1 0.8E-1 0.7E-1 0.9E-1 0.7E-1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK_1 1 1 70. 40. 100. 0.1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK_2 1 1 420. 320. 520. 1.0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK_3 1 1 15. 10. 20. 0.01</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this example, WQ_1, WQ_2, WQ_3, WQ_4, RCH_ZONE_1, RCH_ZONE_2, RCH_ZONE_3, rivers, HK_1, HK_2, and HK_3 are the names of parameters defined in Groundwater Flow Process input files. The Sensitivity Process matches parameter names with those defined in the Groundwater Flow Process input files in a case-insensitive manner. </text></para>
+  </body>
+</topic>

@@ -1,0 +1,11 @@
+# DIS file for test case tc1
+#
+  2  18  18  1  1  2      Item 1:  NLAY NROW NCOL NPER ITMUNI LENUNI
+  1   0                   Item 2:  LAYCBD
+CONSTANT  1000.           Item 3:  DELR
+CONSTANT  1000.           Item 4:  DELC
+CONSTANT   100.           Item 5:  Top
+CONSTANT    50.           Item 6:  BOTM, layer 1
+CONSTANT    40.           Item 6:  BOTM, confining bed
+CONSTANT   -10.           Item 6:  BOTM, layer 2
+       1.0  1  1.0  SS    Item 7:  PERLEN NSTP TSMULT SS/TR, stress period 1

@@ -1,0 +1,11 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 DoubleWellTest.lst REPLACE
+DATA(BINARY)      9 DoubleWellTest.cbc REPLACE
+DIS              12 DoubleWellTest.dis OLD
+BAS6             13 DoubleWellTest.bas OLD
+OC               39 DoubleWellTest.oc OLD
+DATA             37 DoubleWellTest.fhd REPLACE
+DATA             38 DoubleWellTest.fdn REPLACE
+PCG              18 DoubleWellTest.pcg OLD
+LPF              14 DoubleWellTest.lpf OLD
+WEL              20 DoubleWellTest.wel OLD

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportedP4" FileType="bin">
+    <FileName Model_Name="ImportedP4" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportedP4" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportedP4" FileType="ancillary">
+    <FileName Model_Name="ImportedP4" FileType="ancillary">ImportedP4.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportedP4" FileType="Model Input">
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.bas</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.bcf</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.chd</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.dis</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.gsf</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.lmt</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.nam.archive</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.oc</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.sip</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">ImportedP4.wel</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Input">usgs.ImportedP4.reference</FileName>
+  </model>
+  <output Model_Name="ImportedP4" FileType="Model Output">
+    <FileName Model_Name="ImportedP4" FileType="Model Output">ImportedP4.cbc</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Output">ImportedP4.fdn</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Output">ImportedP4.fhd</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Output">ImportedP4.ftl</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Model Output">ImportedP4.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="ImportedP4" FileType="Mt3dms Input">
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">ImportedP4.adv</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">ImportedP4.btn</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">ImportedP4.dsp</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">ImportedP4.gcg</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">ImportedP4.mt_nam.archive</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">ImportedP4.ssm</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Input">usgs.ImportedP4_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="ImportedP4" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Output">ImportedP4.cnf</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Output">ImportedP4.mls</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Output">ImportedP4_Comp1._mas</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Output">ImportedP4_Comp1.mto</FileName>
+    <FileName Model_Name="ImportedP4" FileType="Mt3dms Output">ImportedP4_Comp1.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

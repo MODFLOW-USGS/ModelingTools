@@ -1,0 +1,5 @@
+# DRT: Drain Return package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     2     9     0     0 AUXILIARY IFACE RETURNFLOW # DataSet 1: MXADRT IDRTCB NPDRT MXL Option
+     2     0 # Data Set 4: ITMP NP Stress period 1
+     1     1     6 -1.000000000000E+000   1.000000000000E+000      0     0     0  0.000000000000E+000      0 # Data Set 4: Layer Row Column Elevation Cond  LayR RowR ColR Rfprop IFACE
+     2     1     6 -1.000000000000E+000   1.000000000000E+000      0     0     0  0.000000000000E+000      0 # Data Set 4: Layer Row Column Elevation Cond  LayR RowR ColR Rfprop IFACE

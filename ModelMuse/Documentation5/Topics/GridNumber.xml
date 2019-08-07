@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GridNumber</title>
+  <keywords>
+    <keyword translate="true">GridNumber</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GridNumber</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GridNumber</text><text styleclass="Normal" translate="true"> returns 1 for the parent grid, 2 for the first child grid, 3 for the second child grid and so on.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GridNumber</text><text styleclass="Normal" translate="true"> is used in formulas for model results.</text></para>
+  </body>
+</topic>

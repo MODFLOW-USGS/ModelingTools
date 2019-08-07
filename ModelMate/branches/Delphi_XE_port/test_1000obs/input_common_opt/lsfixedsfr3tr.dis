@@ -1,0 +1,36 @@
+# Data read from D:\Projects\DenverBasin\Model\Model_12\lsfixed.dis
+# References files generated using FIXTHICKLS to correct elevations so they
+# aren't above land surface.
+12 124 84 16 4 1         Item 1: NLAY NROW NCOL NPER ITMUNI LENUNI
+0 0 0 0 0 0 0 0 0 0 0 0  Item 2: LAYCBD
+CONSTANT  5280.0         Item 3: DELR
+CONSTANT  5280.0         Item 4: DELC
+OPEN/CLOSE  ..\input_common_opt\new300.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new301.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new302.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new303.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new304.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new305.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new306.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new307.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new308.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new309.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new310.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new311.txt  1.0  (FREE)  12
+OPEN/CLOSE  ..\input_common_opt\new312.txt  1.0  (FREE)  12
+1.0          1  1.0   SS   Item 7: PERLEN NSTP TSMULT Ss/Tr
+9.861E+3 6 1.2 TR
+4.748E+3 5 1.2 TR
+7.305E+3 5 1.2 TR
+5.114E+3 5 1.2 TR
+1.096E+3 5 1.2 TR
+1.826E+3 5 1.2 TR
+1.096E+3 5 1.2 TR
+2.556E+3 5 1.2 TR
+7.310E+2 5 1.2 TR
+1.826E+3 5 1.2 TR
+2.192E+3 5 1.2 TR
+7.300E+2 5 1.2 TR
+2.922E+3 5 1.2 TR
+1.826E+3 5 1.2 TR
+1.461E+3 5 1.2 TR

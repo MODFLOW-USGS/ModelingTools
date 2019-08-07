@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BCF6: Block-Centered Flow Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">BCF6: Block-Centered Flow Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">Block-Centered Flow (BCF6)</link><text styleclass="Normal" translate="true"> package is one of several packages in MODFLOW that can be used to simulate flow in the saturated zone. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Flow Packages</link><text styleclass="Normal" translate="true">. The BCF package input file can not include comments so any comments entered here will be retained in the ModelMuse file but not exported.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">Block-Centered Flow (BCF6)</link><text styleclass="Normal" translate="true"> package is selected, three new data sets may be created: Confined_Storage_Coefficient, Transmissivity, and Vertical_Conductance. All three have default formulas that set their values automatically based on the model geometry along with Specific_Storage, Kx, Kz, and Confining_Bed_Kz. Thus, it usually makes sense to set the values of those other data sets rather than to set Confined_Storage_Coefficient, Transmissivity, or Vertical_Conductance directly.</text></para>
+  </body>
+</topic>

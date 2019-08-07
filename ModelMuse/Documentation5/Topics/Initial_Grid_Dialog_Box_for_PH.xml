@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Grid Dialog Box for PHAST</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Grid Dialog Box for PHAST</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">With PHAST, the user specifies the dimensions of the grid (the number of columns, rows, and layers of nodes) and the spacing between nodes in the column, row, and layer directions. The user must also specify the X, Y, and Z coordinates of the grid origin. The grid origin is the location of the node in the first column, row, and layer. Columns are numbered from left to right. Rows are numbered from front to back. Layers are numbered from bottom to top. Thus the grid origin is the node at the left, front, bottom corner of the grid. The grid angle must also be specified. The angle is measured in degrees counterclockwise from the X-axis. The vertical exaggeration may also be specified. If it is not specified, a reasonable default value will be calculated.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ActiveOnLayer</title>
+  <keywords>
+    <keyword translate="true">ActiveOnLayer</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ActiveOnLayer</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW and PHAST models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ActiveOnLayer</text><text styleclass="Normal" translate="true">(Layer) returns true if the Active data set has a value of true at the current column and row on the specified layer. </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ActiveOnLayer</text><text styleclass="Normal" translate="true"> is used in the formula for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">UZF_Layer</text><text styleclass="Normal" translate="true"> data set in MODFLOW. </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ActiveOnLayer</text><text styleclass="Normal" translate="true"> can only be used when it is being evaluated at cells (MODFLOW) or elements (PHAST). It can not be used when it is being evaluated at nodes in PHAST. In SUTRA models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ActiveOnLayer</text><text styleclass="Normal" translate="true"> always returns true.</text></para>
+  </body>
+</topic>

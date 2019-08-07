@@ -1,0 +1,1 @@
+call mp.bat /wait

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specified Flux</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Specified Flux</text></para>
+    </header>
+    <para styleclass="Normal"><var styleclass="Normal">&lt;%SPECFLUXDESC%&gt;</var></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH_Recharge_Package_Pane" styleclass="Normal" translate="true">Recharge</link><text styleclass="Normal" translate="true"> package allows the user to specify a recharge rate over an area. The total flux entering each cell will be the rate times the horizontal area of the cell. (The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated_Zone_Flow_Package" styleclass="Normal" translate="true">UZF package</link><text styleclass="Normal" translate="true"> can also simulate recharge but in a somewhat different way.)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL_Well_Package_Pane" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package allows the user to specify a volumetric rate of fluid withdrawal or injection.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB_Flow_and_Head_Boundary_Pac" styleclass="Normal" translate="true">Flow and Head Boundary (FHB)</link><text styleclass="Normal" translate="true"> package allows the user to specify heads and flow rates in cells that vary in time in a manner independent of the stress periods.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

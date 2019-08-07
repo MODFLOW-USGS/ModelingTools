@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentSegmentAngleLimitedDegrees</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentSegmentAngleLimitedDegrees</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectCurrentSegmentAngleLimitedDegrees</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleLimitedDegrees</text><text styleclass="Normal" translate="true"> returns the angle in degrees of the current segment of an object. The angle is measured in the counterclockwise direction relative to the grid with zero in the direction of positive </text><link displaytype="text" defaultstyle="true" type="topiclink" href="X_Prime" styleclass="Normal" translate="true">X_Prime</link><text styleclass="Normal" translate="true">. In the side view zero is in the direction of positive </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Y" styleclass="Normal" translate="true">Y</link><text styleclass="Normal" translate="true">. For SUTRA and MODFLOW 6 DISV models, the angle is measured relative to the X-axis. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleLimitedDegrees</text><text styleclass="Normal" translate="true"> can range from +90 to -90. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngleLimitedDegrees</text><text styleclass="Normal" translate="true"> can be helpful in assigning the anisotropy direction in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LVDA" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">LVDA</link><text styleclass="Normal" translate="true"> option of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">HUF</link><text styleclass="Normal" translate="true"> package. However, the angle is measured in the opposite direction from that used in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LVDA" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">LVDA</link><text styleclass="Normal" translate="true">. </text></para>
+  </body>
+</topic>

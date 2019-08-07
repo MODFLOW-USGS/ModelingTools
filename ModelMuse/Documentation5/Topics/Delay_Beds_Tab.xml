@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Delay Beds Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Delay Beds Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Delay Beds</text><text styleclass="Normal" translate="true"> tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">Delay Beds</text><text styleclass="Normal" translate="true"> tab, the user enters the name of a system of interbeds that respond without a time delay to the loss of water. The name will be used to create eight data sets. The name of each data set will begin with the name of the system of interbeds and end with one of the values in the following table.</text></para>
+    <para styleclass="Normal"><table rowcount="9" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Data Set suffix</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Associated MODFLOW input data</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Equivalent_Number</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="RNB" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">RNB</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Vertical_Hydraulic_Conductivity</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="DP" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">DP</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="NZ" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">NZ</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Elastic_Specific_Storage</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="DP" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">DP</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="NZ" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">NZ</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Inelastic_Specific_Storage</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="DP" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">DP</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="NZ" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">NZ</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Interbed_Starting_Head</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="Dstart" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">Dstart</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Interbed_Preconsolidation_Head</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="DHC" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">DHC</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Interbed_Starting_Compaction</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="DCOM" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">DCOM</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Delay_Interbed_Equivalent_Thickness</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" anchor="DZ" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">DZ</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><snippet src="Handling_Discretization_in_SUB"/></para>
+  </body>
+</topic>

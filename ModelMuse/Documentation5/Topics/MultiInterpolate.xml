@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MultiInterpolate</title>
+  <keywords>
+    <keyword translate="true">MultiInterpolate</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">MultiInterpolate</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">MultiInterpolate</text><text styleclass="Normal" translate="true">(Position, Value1, Distance1, [Value2, Distance2,] ...). If Position is less than or equal to Distance1, MultiInterpolate returns Value1. If Position is greater than or equal to DistanceN, MultiInterpolate returns ValueN. If Position is between any two adjacent distances, linear interpolation between the associated values will be used to determine the value that will be returned. Each distance after Distance1 must be greater than its predecessor. See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Interpolate" styleclass="Normal" translate="true">Interpolate</link><text styleclass="Normal" translate="true">. </text></para>
+  </body>
+</topic>

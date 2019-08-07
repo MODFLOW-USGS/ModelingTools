@@ -1,0 +1,545 @@
+MODULE REG_TR_UCODE
+  !
+  USE GLOBAL_DATA, ONLY: IVERB, MAX_STRING_LEN
+  USE DATATYPES
+  USE UTILITIES
+  !
+  USE UTLUCODE, ONLY: &
+  ! PROGRAMS
+  UTLUCODE_INVERT
+  !
+  USE UCODEMOD, ONLY: &
+  ! VARIABLES
+    MODELVAL
+  !
+  USE REG_GN_UCODE, ONLY: &
+  ! VARIABLES
+    CONSECMAX, MAXSTEP, MINSENRAT, OMIT_INSENS, QNITER, QNSOSR, &
+    QUASINEWTON, PAREST, PINC, REINCSENRAT, SCALING, STEPTYPE
+  !
+  USE REG_GNMOD, ONLY: &
+  ! PROGRAMS
+    REG_GNMOD_GEN_QUASINEWTON_C, REG_GNMOD_INI1, REG_GNMOD_INI2, &
+  !VARIABLES
+    CMAT, DD, DMXA, GG, NPAREST, NPARSTAR, NPERD, NPMAXCHG, NPTR, &
+    PINCBND, PINCSEN, PSTATUS, RADCHG, SCLE, STEPUSED, TRAD, &
+    WTADJFINAL, XPTR
+  !
+  USE REG_TRUSTMOD
+  !
+  IMPLICIT NONE
+  PRIVATE
+  ! PUBLIC SUBPROGRAMS
+  PUBLIC  REG_TR_GEN
+  !   PUBLIC DATA
+  PUBLIC &
+  COUNTCONSEC, FCN, FCN2, MACHEPS, MODVALPREV, MU, PHI, PHID, PVAL2RD, &
+  PVALC, PVALCRD, R, RPREV, SCLERD, TYPX
+  !
+  INTEGER                                           :: COUNTCONSEC
+  DOUBLE PRECISION                                  :: FCN
+  DOUBLE PRECISION                                  :: FCN2
+  DOUBLE PRECISION                                  :: MACHEPS
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)       :: MODVALPREV
+  DOUBLE PRECISION                                  :: MU
+  DOUBLE PRECISION                                  :: PHI
+  DOUBLE PRECISION                                  :: PHID
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)       :: PVAL2RD
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)       :: PVALC
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)       :: PVALCRD
+  DOUBLE PRECISION                                  :: R
+  DOUBLE PRECISION                                  :: RPREV
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)       :: SCLERD
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)       :: TYPX
+  SAVE
+  !
+  CONTAINS
+!
+!=======================================================================
+!======================================================================
+   SUBROUTINE REG_TR_GEN (IFAIL,MPR,NOBS,NEOBS,NDOBS, &
+!eppsvd changes to accomodate svd added npetmp svdloop
+                         NPE,NPETMP,SVDLOOP,NPS,IOUT,CSS, &
+!eppsvd end changes to accomodate svd
+                         DATAEXCHANGE,MAXITER,IOMIT, &
+                         IPTR,LN,CREATEINITFILES,OPTIM,OUTNAM,PADJ,PARNAM, &
+                         PRIWTMAT,PTOLPAR,PVALINIT, &
+                         RESIDS,RESIDSPRI,RSQALL,WTMATSQR,PRIWTMATSQR, &
+                         WTFULL,XPRI,XSENST, &
+                         FINALSTATS,GNUDONE,IFO,ITERP, &
+                         ISENMETHOD,PVAL)
+! SWM: NOTE: CAN I PASS IN RSQALL  INSTEAD OF CALCULATING OBJ ON FIRST ITER?
+!     VERSION 20061107 SWM
+!******************************************************************
+!
+  !-------ASSEMBLE LEAST-SQUARES MATRIX (C) AND GRADIENT VECTOR (G)
+  !----------INITIALIZE C AND CONVERT LN PARAMETERS
+  !     UPDATE PARAMETER VALUES VIA TRUST REGION GAUSS-NEWTON
+  !******************************************************************
+  !        SPECIFICATIONS:
+  !------------------------------------------------------------------
+    !
+    IMPLICIT NONE
+    !   ARGUMENT-LIST VARIABLES
+    INTEGER,                         INTENT(IN)    :: MPR
+    INTEGER,                         INTENT(IN)    :: NOBS
+    INTEGER,                         INTENT(IN)    :: NDOBS
+    INTEGER,                         INTENT(IN)    :: NEOBS
+    INTEGER,                         INTENT(IN)    :: NPE
+!eppsvd changes to accomodate svd
+    INTEGER,                         INTENT(IN)    :: NPETMP
+    INTEGER,                         INTENT(IN)    :: SVDLOOP
+!eppsvd end changes to accomodate svd
+    INTEGER,                         INTENT(IN)    :: NPS
+    INTEGER,                         INTENT(INOUT) :: IFAIL
+    INTEGER,                         INTENT(IN)    :: IOUT
+    DOUBLE PRECISION,                INTENT(IN)    :: CSS(NPE)
+    LOGICAL,                         INTENT(IN)    :: DATAEXCHANGE
+    INTEGER,                         INTENT(IN)    :: MAXITER
+    !
+    INTEGER,                         INTENT(IN)    :: IOMIT
+    INTEGER,                         INTENT(IN)    :: IPTR(NPE)
+    !
+    INTEGER,                         INTENT(IN)    :: LN(NPS)
+    LOGICAL,                         INTENT(IN)    :: CREATEINITFILES
+    LOGICAL,                         INTENT(IN)    :: OPTIM
+    CHARACTER(LEN=MAX_STRING_LEN),   INTENT(IN)    :: OUTNAM
+    LOGICAL,                         INTENT(IN)    :: PADJ(NPS)
+    CHARACTER(LEN=12),               INTENT(IN)    :: PARNAM(NPS)
+    TYPE (CDMATRIX),                 INTENT(IN)    :: PRIWTMAT
+    DOUBLE PRECISION,                INTENT(IN)    :: PTOLPAR(NPS)
+    DOUBLE PRECISION,                INTENT(IN)    :: PVALINIT(NPS)
+    DOUBLE PRECISION,                INTENT(IN)    :: RESIDS(NOBS)
+    DOUBLE PRECISION,                INTENT(IN)    :: RESIDSPRI(MPR)
+    DOUBLE PRECISION,                INTENT(IN)    :: RSQALL(MAXITER+2)
+    TYPE (CDMATRIX),                 INTENT(IN)    :: WTFULL
+    TYPE (CDMATRIX),                 INTENT(IN)    :: WTMATSQR
+    TYPE (CDMATRIX),                 INTENT(IN)    :: PRIWTMATSQR
+    DOUBLE PRECISION,                INTENT(IN)    :: XPRI(NPE,MPR)
+    DOUBLE PRECISION,                INTENT(INOUT) :: XSENST(NPE,NOBS)
+    LOGICAL,                         INTENT(INOUT) :: FINALSTATS
+    LOGICAL,                         INTENT(INOUT) :: GNUDONE
+    INTEGER,                         INTENT(INOUT) :: IFO
+    INTEGER,                         INTENT(INOUT) :: ITERP
+    INTEGER,                         INTENT(INOUT) :: ISENMETHOD(NPS)
+    DOUBLE PRECISION,                INTENT(INOUT) :: PVAL(NPS)
+    !
+    ! LOCAL VARIABLES
+    DOUBLE PRECISION                                  :: BU
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:,:)  :: BUFF
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:,:)  :: CMATRD
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:)    :: GGRD
+    INTEGER                                           :: I
+    INTEGER                                           :: IOSTAR = 0  ! set = 1 to suppress screen printing
+    INTEGER                                           :: IIPP
+    INTEGER                                           :: IP
+    INTEGER                                           :: J
+    !!!!DOUBLE PRECISION                              :: L(NPE,NPE)
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:,:)  :: L
+    DOUBLE PRECISION                                  :: MAXADD
+    INTEGER                                           :: MAXTAKEN
+    DOUBLE PRECISION                                  :: MUC
+    INTEGER                                           :: NIM
+!    LOGICAL                                           :: RECALCDDV
+    CHARACTER(LEN=MAX_STRING_LEN)                     :: OUTNAMTMP
+    INTEGER                                           :: RETCODE
+    !!!!DOUBLE PRECISION                              :: SNEWT(NPE)
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:)    :: SNEWT
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:)    :: SRD
+    CHARACTER(LEN=27)                                 :: STEPTAKEN
+    !!!!DOUBLE PRECISION                              :: TEMPC(NPE,NPE)
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:,:)  :: TEMPC
+    !!!!DOUBLE PRECISION                              :: WTDRESIDS(NOBS)
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:)    :: WTDRESIDS
+    !!!!DOUBLE PRECISION                              :: WTDRESIDSPRI(MPR)
+    DOUBLE PRECISION, ALLOCATABLE,    DIMENSION(:)    :: WTDRESIDSPRI
+    !
+    ALLOCATE(L(NPE,NPE),SNEWT(NPE),TEMPC(NPE,NPE),WTDRESIDS(NOBS), &
+             WTDRESIDSPRI(MPR))
+    !
+    ! FORMATS
+    300 FORMAT(/,1X,'MAXSTEP SET TO',1PG10.3)
+    400 FORMAT(//,80('='),/,80('='))
+    401 FORMAT(/,1X,'UCODE TRUST REGION GAUSS-NEWTON: ', &
+                    'PARAMETER-ESTIMATION ITERATION#:',I5)
+    500 FORMAT (/,'  LEAST-SQUARES MATRIX :')
+    505 FORMAT (/,'  GRADIENT VECTOR :')
+    515 FORMAT (/,' VALUES FROM SOLVING THE NORMAL EQUATION :',/, &
+        2X,' MRQT PARAMETER ------------------- = ',G11.5,/,  &
+        7X,' MAXIMUM FRACTIONAL CHANGE OCCURRED FOR PARAMETER:  "',A,'"',/, &
+        7X,'               MAXIMUM FRACTIONAL PARAMETER CHANGE     = ',1PG10.3,/, &
+        7X,' CONVERGENCE TOLERANCE FOR THIS PARAMETER (TOLPAR)     = ',1PG10.3,/)
+    520 FORMAT (/,' STEP TAKEN IS: "',A,'"')
+    521 FORMAT (/,' MU VALUE FROM HOOKSTEP = ',1PG10.3,1X, &
+                    '(FULL NEWTON STEP USED WHEN MU=0.00)')
+    522 FORMAT (/,' RADIUS OF TRUST REGION = ',1PG10.3,/)
+    525 FORMAT (6(A1,A12))
+    530 FORMAT (6(2X,1PG11.4))
+    545 FORMAT (/,' STARTING VALUES OF REGRESSION PARAMETERS :',/)
+    546 FORMAT (/,' STARTING VALUES OF REGRESSION PARAMETERS :',/, &
+                  '  "!" PRECEDING PARAMETER NAME INDICATES OMISSION FROM ', &
+                  'THE REGRESSSION',/)
+    547 FORMAT (/,' UPDATED ESTIMATES OF REGRESSION PARAMETERS :',/)
+    548 FORMAT (/,' UPDATED ESTIMATES OF REGRESSION PARAMETERS :',/, &
+                1X,' "!" PRECEEDING THE PARAMETER NAME INDICATES ', &
+                'OMISSION FROM THE REGRESSION',/)
+! INITIALIZE
+    IFAIL = 0
+!    RECALCDDV = .FALSE.
+    !
+    IF(ITERP .EQ. 0)THEN
+      CALL REG_GNMOD_INI1(MAXITER,MPR,NPE)
+      IF(ALLOCATED(PVALC)) DEALLOCATE(PVALC)
+      IF(ALLOCATED(SCLE)) DEALLOCATE(SCLE)
+      IF(ALLOCATED(TYPX)) DEALLOCATE(TYPX)
+!eppsvd changes to accomodate svd
+      IF(ALLOCATED(MODVALPREV)) THEN
+        ALLOCATE(PVALC(NPE),SCLE(NPE),TYPX(NPE))
+      ELSE
+!eppsvd following line was present here before svd changes
+        ALLOCATE(PVALC(NPE),SCLE(NPE),TYPX(NPE),MODVALPREV(NOBS))
+      ENDIF
+!eppsvd end changes to accomodate svd
+    ENDIF
+    ITERP = ITERP + 1
+  !
+  ! PUT PARAMETERS TO BE ESTIMATED INTO CURRENT PARAMETER VECTOR
+    DO IP = 1,NPE
+      IIPP = IPTR(IP)
+      PVALC(IP) = PVAL(IIPP)
+      !----------CONVERT LN PARAMETERS
+      IF (LN(IIPP).GT.0) PVALC(IP) = LOG(PVALC(IP))
+    ENDDO
+    !
+    ! START FIRST ITERATION  - INTIALIZE SCALING AND TRUST REGION VALUES
+    IF (ITERP.EQ.1) THEN
+      DO IP=1,NPE
+        IF(SCALING .EQ. 'NONE')THEN
+          SCLE(IP) = 1.D0
+        ELSEIF(SCALING .EQ. 'DEFAULT')THEN
+          IF(PVALC(IP) .NE. 0.D0)THEN
+            SCLE(IP) = 1.D0/ABS(PVALC(IP))
+          ELSE
+            SCLE(IP) = 1.D0
+          ENDIF
+        ENDIF
+        TYPX(IP) = 1.D0/SCLE(IP)
+      ENDDO
+      R=-1
+      MACHEPS=EPSILON(1.D0)
+      MODVALPREV=MODELVAL
+      IF(MAXSTEP .LT. 0)THEN
+        MAXSTEP = 1000.D0 * MAX(REG_TR_L2NORM(NPE,1.D0,SCLE,PVALC), &
+                                REG_TR_L2NORM(NPE,1.0D0,SCLE,SCLE,1))
+        WRITE(IOUT,300) MAXSTEP
+      ENDIF
+      COUNTCONSEC = 0
+      !-----------CALCULATE INITIAL VALUE OF OBJECTIVE FUNCTION
+      CALL UTL_MATMULVEC_SUB(NOBS,WTMATSQR,RESIDS,WTDRESIDS)
+      CALL UTL_MATMULVEC_SUB(MPR,PRIWTMATSQR,RESIDSPRI,WTDRESIDSPRI)
+      FCN=0.D0
+      DO I = 1,NOBS
+        FCN =  FCN + WTDRESIDS(I)**2
+      ENDDO
+      DO I = 1,MPR
+        FCN =  FCN + WTDRESIDSPRI(I)**2
+      ENDDO
+      FCN = 0.5D0 * FCN
+    ENDIF   ! END FIRST ITERATION INITIALIZATIONS
+  !
+  !     PRINT ITERATION HEADING
+    WRITE(IOUT,400)
+    IF (.NOT. FINALSTATS) WRITE(IOUT,401) ITERP
+!    DO WHILE(RECALCDDV)
+!      NP1 = NPE - 1
+!      IF(.NOT. WTADJFINAL) THEN
+! note wtadj and wtadjf have been removed from the rest of the code Poeter Sep 2011
+!        WTADJF = .FALSE.
+!        IF(.NOT. WTADJNEXT) WTADJ = .FALSE.
+!      ENDIF
+    !
+    ! DETERMINE IF PARAMETERS ARE TO BE REMOVED FROM THE REGRESSION.
+    CALL REG_GNMOD_INI2 (IOUT,MPR,NOBS,NPE,NPS,CSS,IOMIT,IPTR,MINSENRAT, &
+                         OMIT_INSENS,PADJ,PARNAM,REINCSENRAT,XPRI,XSENST)
+      !-----------PRINT OUTPUT FOR OMITTING INITIAL INSENSITIVE PARAMETERS
+    IF(ITERP .EQ. 1)THEN
+      IF(OMIT_INSENS) THEN
+        WRITE (IOUT,546)
+      ELSE
+        WRITE (IOUT,545)
+      ENDIF
+      WRITE (IOUT,525) (PSTATUS(IP),PARNAM(IPTR(IP)),IP=1,NPE)
+      WRITE (IOUT,'(1X)')
+      WRITE (IOUT,530) (PVALINIT(IPTR(IP)),IP=1,NPE)
+    ENDIF
+    NIM = NOBS-IOMIT+MPR
+
+    !  REALLOCATE MATRICES AND VECTORS FOR NORMAL EQUATIONS BASED ON
+    !  REDUCED PARAMETER SET. (NPERD)
+    IF(ALLOCATED(CMAT)) DEALLOCATE(CMAT)
+    IF(ALLOCATED(GG)) DEALLOCATE(GG)
+    IF(ALLOCATED(BUFF)) DEALLOCATE(BUFF)
+    IF(ALLOCATED(SCLERD)) DEALLOCATE(SCLERD)
+    IF(ALLOCATED(PVALCRD)) DEALLOCATE(PVALCRD)
+    IF(ALLOCATED(PVAL2RD)) DEALLOCATE(PVAL2RD)
+    IF(ALLOCATED(CMATRD)) DEALLOCATE(CMATRD)
+    IF(ALLOCATED(GGRD)) DEALLOCATE(GGRD)
+    IF(ALLOCATED(SRD)) DEALLOCATE(SRD)
+    ALLOCATE(CMAT(NPE,NPE),GG(NPE),BUFF(NPERD,NPERD),SCLERD(NPERD), &
+             PVALCRD(NPERD),PVAL2RD(NPERD),CMATRD(NPERD,NPERD), &
+             GGRD(NPERD),SRD(NPERD))
+
+    ! UPDATE PARAMETER AND SCALING VECTOR BASED ON NPERD
+    DO I=1,NPERD
+      SCLERD(I) = SCLE(XPTR(I))
+      PVALCRD(I) = PVALC(XPTR(I))
+    ENDDO
+    IF(NPERD < NPE)NPARSTAR(ITERP) = '*'
+    !
+    !-------ASSEMBLE LEAST-SQUARES MATRIX (CMAT) AND GRADIENT VECTOR (GG)
+    CALL REG_TR_BUILDCMAT(MPR,NOBS,NPE,PRIWTMAT,RESIDS,RESIDSPRI, &
+                          WTFULL,XPRI,XSENST,CMAT,GG)
+    !
+    GG=-1.D0*GG
+    !
+    IF((ITERP == 1 .AND. DATAEXCHANGE) .OR. CREATEINITFILES) THEN
+    ! WRITE COVARIANCE MATRIX _mv
+      BUFF = 0.D0
+      CALL UTLUCODE_INVERT(IFAIL,CMAT,NPERD,BUFF,IOUT,BU)
+      IFAIL = 0    !------KEEP GOING EVEN IF MATRIX IS SINGULAR
+      BUFF = BUFF*RSQALL(ITERP)/REAL(NIM-NPERD)
+      OUTNAMTMP = TRIM(OUTNAM)//'._init'
+      CALL UTL_DX_WRITE_MCMV('_mv',NPE,NPS,IPTR,OUTNAMTMP,PARNAM,BUFF)
+    ENDIF
+    !
+    !-----QUASI-NEWTON ADDITION TO COEFFICIENT MATRIX
+    IF (QUASINEWTON .AND. IFO .EQ. 0) CALL REG_GNMOD_GEN_QUASINEWTON_C &
+                            (IFAIL,ITERP,MAXITER,QNITER,NOBS,NPE, &
+                             RESIDS,RSQALL,QNSOSR,WTFULL,XSENST, &
+                             IOUT,CMAT)
+    !
+    !-----REDUCE CMAT AND GG TO ONLY THE PARAMETERS THAT ARE BEING ESTIMATED
+    DO I=1,NPERD
+       DO J=1, NPERD
+         CMATRD(I,J) = CMAT(XPTR(I),XPTR(J))
+       ENDDO
+       GGRD(I) = GG(XPTR(I))
+    ENDDO
+    !
+    !-----PRINT AS INDICATED BY IVERB
+    IF (IVERB.GE.5) THEN
+      WRITE (IOUT,500)
+      DO J = 1, NPERD
+        WRITE (IOUT,530) (CMATRD(I,J),I=1,NPERD)
+      ENDDO
+      WRITE (IOUT,505)
+      WRITE (IOUT,530) (GGRD(I),I=1,NPERD)
+    ENDIF
+!
+    CALL REG_TR_MODELHESS(MAXADD,MACHEPS,NPERD,SCLERD,CMATRD,L,TEMPC) !FORM MODEL HESSIAN
+    CALL REG_TR_CHOLSOLVE(NPERD,GGRD,L,SNEWT) ! CALCULATE NEWTON STEP
+    !
+    !-----COMPUTE PARAMETER STEP LENGTHS FOR TRUST REGION MODIFIED G-N
+!eppsvd changes to accomodate svd added npetmp and svdloop
+    IF(STEPTYPE .EQ. 'DOGLEG') &
+      CALL REG_TR_DOGDRIVE(MPR,NDOBS,NEOBS,NOBS,NPE,NPETMP,SVDLOOP,NPERD,NPS, &
+                           FCN,GGRD,IOUT,IPTR,L,LN,MAXSTEP,NPTR,PARNAM, &
+                           PTOLPAR,SCLERD,SNEWT,STEPTYPE,XPTR,R,FCN2, &
+                           MAXTAKEN,MODVALPREV,PVALC,PVALCRD,PVAL2RD, &
+                           RETCODE,SRD,STEPTAKEN) ! FIND DOGLEG STEP
+    IF(STEPTYPE .EQ. 'HOOKSTEP') &
+      CALL REG_TR_HOOKDRIVE(MPR,NDOBS,NEOBS,NOBS,NPE,NPETMP,SVDLOOP,NPERD,NPS, &
+                           FCN,GGRD,IOUT,IPTR,ITERP,LN,MACHEPS, &
+                           MAXSTEP,NPTR,PARNAM,PTOLPAR,SCLERD,SNEWT, &
+                           STEPTYPE,XPTR,CMATRD,L,MU,MUC,PHI,PHID,R, &
+                           RPREV,FCN2,MAXTAKEN,MODVALPREV,PVALC, &
+                           PVALCRD,PVAL2RD,RETCODE,SRD) ! FIND HOOKSTEP
+!eppsvd end changes to accomodate svd added npetmp and svdloop
+
+    ! IF OPTIMIZATION IS IN PROGRESS, UPDATE FLAGS, OTHERWISE THESE SETTINGS
+    ! WILL INTERFERE WITH PREDICTION OR LINEARITY EXECUTIONS SO BYPASS
+    IF(OPTIM) THEN
+      J=0
+      DO I=1,NPS
+        IF(.NOT. PADJ(I)) THEN
+          PINC(ITERP,I) = -1
+        ELSE
+          J = J + 1
+!BOUND CONSTRAINTS NOT SUPPORTED YET            IF(PINCSEN(J) .EQ. 0 .AND. PINCBND(J) .EQ. 0) THEN
+          IF(PINCSEN(J) .EQ. 0) THEN
+            PINC(ITERP,I) = 1
+          ELSE
+            PINC(ITERP,I) = 0
+          ENDIF
+        ENDIF
+      ENDDO
+    ENDIF
+    !
+    ! CHECK CONVERGENCE AND SET IFO ACCORDINGLY
+    CALL REG_TR_STOP(CONSECMAX,FCN2,ITERP,MAXITER, &
+                     MAXTAKEN,NPERD,NPS,NPTR,PTOLPAR,PVALCRD, &
+                     PVAL2RD,RETCODE,COUNTCONSEC,DMXA,IFO,NPMAXCHG)
+   !
+   ! UPDATE FUNCTION VALUE, PARAMETER VALUES, AND PARAMETER CHANGE VECTOR
+    FCN=FCN2
+    DD = 0.D0   !RESET DD
+    DO IP=1,NPERD
+      PVAL(NPTR(IP)) = PVAL2RD(IP)
+      DD(XPTR(IP)) = SRD(IP)
+    ENDDO
+    ! STORE THE NUMBER OF PARAMETERS ESTIMATED THIS ITERATION AND
+    ! TRUSTREGION VALUES
+    NPAREST(ITERP) = NPERD
+    TRAD(ITERP) = R
+    IF (ITERP .GT. 1) THEN
+      IF(TRAD(ITERP-1) .GT. R) THEN
+        RADCHG(ITERP) = 'DECREASED'
+      ELSEIF(TRAD(ITERP-1) .LT. R) THEN
+        RADCHG(ITERP) = 'INCREASED'
+      ELSE
+        RADCHG(ITERP) = 'NONE'
+      ENDIF
+    ENDIF
+    IF(STEPTYPE .EQ. 'DOGLEG') THEN
+      IF(TRIM(STEPTAKEN) .EQ. 'FULL NEWTON') STEPUSED(ITERP) = 'FN'
+      IF(TRIM(STEPTAKEN) .EQ. 'RESTRICTED NEWTON') STEPUSED(ITERP) = 'RN'
+      IF(TRIM(STEPTAKEN) .EQ. 'RESTRICTED STEEPEST DESCENT') &
+                              STEPUSED(ITERP) = 'RSD'
+      IF(TRIM(STEPTAKEN) .EQ. 'DOUBLE-DOGLEG') STEPUSED(ITERP) = 'DD'
+    ENDIF
+    IF(STEPTYPE .EQ. 'HOOKSTEP') THEN
+      IF(MUC .EQ. 0.) THEN
+        STEPUSED(ITERP) =  'FN'
+      ELSE
+        STEPUSED(ITERP) =  'HS'
+      ENDIF
+    ENDIF
+    ! FINAL VALUES ESTABLISHED FOR THIS ITERATION
+    DO IP = 1,NPS
+      PAREST(ITERP,IP) = PVAL(IP)
+    ENDDO
+    !
+    ! PRINT TO THE LISTING FILE
+    WRITE (IOUT,515) MAXADD,PARNAM(NPMAXCHG(ITERP)),DMXA(ITERP), &
+                     PTOLPAR(NPMAXCHG(ITERP))
+    IF(STEPTYPE .EQ. 'DOGLEG') WRITE (IOUT,520) TRIM(STEPTAKEN)
+    IF(STEPTYPE .EQ. 'HOOKSTEP') WRITE (IOUT,521) MUC
+    WRITE (IOUT,522) R
+!    IF(OMIT_INSENS .OR. CONSTRAINL) THEN  ! constraints not supported yet
+    IF(OMIT_INSENS)THEN
+      WRITE (IOUT,548)
+    ELSE
+      WRITE (IOUT,547)
+    ENDIF
+    WRITE (IOUT,525) (PSTATUS(IP),PARNAM(IPTR(IP)),IP=1,NPE)
+    WRITE (IOUT,'(1X)')
+    WRITE (IOUT,530) (PVAL(IPTR(IP)),IP=1,NPE)
+    !
+    ! PRINT TO THE SCREEN
+    IF(IOSTAR .NE. 1)THEN
+    WRITE (*,515) MAXADD,PARNAM(NPMAXCHG(ITERP)),DMXA(ITERP), &
+                     PTOLPAR(NPMAXCHG(ITERP))
+      IF(STEPTYPE .EQ. 'DOGLEG') WRITE (*,520) TRIM(STEPTAKEN)
+      IF(STEPTYPE .EQ. 'HOOKSTEP') WRITE (*,521) MUC
+      WRITE (*,522) R
+!    IF(OMIT_INSENS .OR. CONSTRAINL) THEN  ! constraints not supported yet
+      IF(OMIT_INSENS)THEN
+        WRITE (*,548)
+      ELSE
+        WRITE (*,547)
+      ENDIF
+      WRITE (*,525) (PSTATUS(IP),PARNAM(IPTR(IP)),IP=1,NPE)
+      WRITE (*,'(1X)')
+      WRITE (*,530) (PVAL(IPTR(IP)),IP=1,NPE)
+    ENDIF
+    !
+    !IF CONVERGED, SET FLAGS TO FINALIZE W/ CENTERED PERTURBATIONS
+    IF(IFO .NE. 0)THEN
+      GNUDONE = .TRUE.
+      IF(IFO .LT. 4)THEN
+        DO IP = 1,NPS
+          IF(ISENMETHOD(IP) .EQ. 1) ISENMETHOD(IP) =2
+        ENDDO
+      ENDIF
+    ENDIF
+!
+    DEALLOCATE(L,SNEWT,TEMPC,WTDRESIDS,WTDRESIDSPRI)
+    RETURN
+  END SUBROUTINE REG_TR_GEN
+!=======================================================================
+!=======================================================================
+    SUBROUTINE REG_TR_BUILDCMAT(MPR,NOBS,NPE,PRIWTMAT,RESIDS,RESIDSPRI, &
+                                WTFULL,XPRI,XSENST,CMAT,GG)
+!     VERSION 20050720 SWM
+!******************************************************************
+!
+  !-------ASSEMBLE LEAST-SQUARES MATRIX (C) AND GRADIENT VECTOR (G)
+  !******************************************************************
+  !        SPECIFICATIONS:
+  !------------------------------------------------------------------
+    USE DATATYPES
+    USE UTILITIES
+    !
+    IMPLICIT NONE
+    ! ARGUMENT-LIST VARIABLES
+    INTEGER,                         INTENT(IN)    :: MPR
+    INTEGER,                         INTENT(IN)    :: NOBS
+    INTEGER,                         INTENT(IN)    :: NPE
+    TYPE (CDMATRIX),                 INTENT(IN)    :: PRIWTMAT
+    DOUBLE PRECISION,                INTENT(IN)    :: RESIDS(NOBS)
+    DOUBLE PRECISION,                INTENT(IN)    :: RESIDSPRI(MPR)
+    DOUBLE PRECISION,                INTENT(IN)    :: XPRI(NPE,MPR)
+    DOUBLE PRECISION,                INTENT(IN)    :: XSENST(NPE,NOBS)
+    TYPE (CDMATRIX),                 INTENT(IN)    :: WTFULL
+    DOUBLE PRECISION,                INTENT(INOUT) :: CMAT(NPE,NPE)
+    DOUBLE PRECISION,                INTENT(INOUT) :: GG(NPE)
+    ! LOCAL VARIABLES
+    INTEGER                                        :: I,J
+    DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)    :: RESIDSWPRI
+    TYPE (CDMATRIX)                                :: WTFULLPRI
+    DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:,:)  :: XSENSTWPRI
+    DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:,:)  :: XTW
+    !
+    !----------INITIALIZE CMAT AND GG
+    CALL TYP_NULL(WTFULLPRI)
+    CMAT = 0.D0
+    GG = 0.D0
+    !----------CALCULATE SENSITIVITY CONTRIBUTIONS TO CMAT AND GG.
+    IF (MPR.GT.0) THEN
+      IF(ALLOCATED(RESIDSWPRI)) DEALLOCATE(RESIDSWPRI)
+      IF(ALLOCATED(XSENSTWPRI)) DEALLOCATE(XSENSTWPRI)
+      IF(ALLOCATED(XTW)) DEALLOCATE(XTW)
+      ALLOCATE(RESIDSWPRI(NOBS+MPR),XSENSTWPRI(NPE,NOBS+MPR), &
+               XTW(NPE,NOBS+MPR))
+      DO I=1,NPE
+        DO J=1,NOBS
+          XSENSTWPRI(I,J) = XSENST(I,J)
+          RESIDSWPRI(J) = RESIDS(J)
+        ENDDO
+        DO J=1,MPR
+          XSENSTWPRI(I,NOBS+J) = XPRI(I,J)
+          RESIDSWPRI(NOBS+J) = RESIDSPRI(J)
+        ENDDO
+      ENDDO
+      CALL UTL_COMBINESQMATRIX(WTFULL,PRIWTMAT,WTFULLPRI)
+      ! CALCULATE XTW
+      CALL UTL_MATMUL_SUB(NPE,NOBS+MPR,XSENSTWPRI,WTFULLPRI,XTW)
+      ! XTWX
+      CMAT = MATMUL(XTW,TRANSPOSE(XSENSTWPRI))
+      ! GG = XTW(RESIDUALS)
+      GG =  MATMUL(XTW,RESIDSWPRI)
+      DEALLOCATE(RESIDSWPRI,XSENSTWPRI)
+      CALL TYP_DEALLOC (WTFULLPRI)
+    ELSE
+      IF(ALLOCATED(XTW)) DEALLOCATE(XTW)
+      ALLOCATE(XTW(NPE,NOBS))
+    ! CALCULATE XTW
+      CALL UTL_MATMUL_SUB(NPE,NOBS,XSENST,WTFULL,XTW)
+    ! XTWX
+      CMAT = MATMUL(XTW,TRANSPOSE(XSENST))
+    ! GG = XTW(RESIDUALS)
+      GG =  MATMUL(XTW,RESIDS)
+    ENDIF
+    RETURN
+  END SUBROUTINE REG_TR_BUILDCMAT
+END MODULE REG_TR_UCODE

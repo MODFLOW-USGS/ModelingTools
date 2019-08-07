@@ -1,0 +1,21 @@
+# DRN: Drain package file created on 5/14/2018 by ModelMuse version 3.10.0.13.
+PARAMETER     2     4 # DataSet 1: PARAMETER NPDRN MXL
+     3     9 AUXILIARY IFACE # DataSet 2: MXACTD IDRNCB Option
+DRN_Par1 DRN  1.000000000000E+000      1 INSTANCES     2 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+DRN_Par1_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+     1     7     1 -2.000000000000E+000   2.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+DRN_Par1_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+     1     7     1 -2.000000000000E+000   0.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+DRN_Par2 DRN  1.000000000000E+000      1 INSTANCES     2 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+DRN_Par2_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+     1    10     4 -2.000000000000E+000   2.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+DRN_Par2_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+     1    10     4 -3.000000000000E+000   3.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1     2 # Data Set 5: ITMP NP Stress period 1
+     1    10     1 -1.000000000000E+000   1.000000000000E+000      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+DRN_Par1 DRN_Par1_1 # Data Set 7: PARNAM Iname
+DRN_Par2 DRN_Par2_1 # Data Set 7: PARNAM Iname
+     1     2 # Data Set 5: ITMP NP Stress period 2
+     1    10     1 -2.000000000000E+000   2.000000000000E+000      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+DRN_Par1 DRN_Par1_2 # Data Set 7: PARNAM Iname
+DRN_Par2 DRN_Par2_2 # Data Set 7: PARNAM Iname

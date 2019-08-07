@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Archive</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Archive</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The items in the Archive menu are intended to be used after the archive structure is complete and descriptions have been assigned to everything in the archive structure. </text></para>
+    <para styleclass="Normal"><snippet src="CreateArchiveHidden"/></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Export Model Descriptions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each folder under &quot;model&quot; in the archive structure will have a description associated with it. This command will export those descriptions to a text file. This command can be useful if the user wishes to update the readme file that has already been put in an archive without creating an entirely new archive.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Export Complete Descriptions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Every folder and file in the archive structure will have a description associated with it. This command will export those descriptions to a text file. This command can be useful if the user wishes to update the readme file that has already been put in an archive without creating an entirely new archive.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Show Uncompressed Archive Size</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command will show the user the sum of the sizes of all the files in the archive.</text></para>
+    <para styleclass="Normal"><snippet src="Move_Files_to_Archive_Director"/></para>
+    <para styleclass="Heading2_atoc_"><snippet src="Update_Metadata"/></para>
+    <para styleclass="Heading2_atoc_"><snippet src="Update_Readme.txt"/></para>
+  </body>
+</topic>

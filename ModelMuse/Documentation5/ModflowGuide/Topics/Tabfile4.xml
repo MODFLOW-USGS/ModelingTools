@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Tabfile4</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Tabfile4</text></para>
+    </header>
+    <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">[ISEG TABNAM TSFAC]</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> READ NLNK TIMES IF NLNK&gt;0</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISEG]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ISEG is the segment number that will have its flow overwritten with the tabfile TABNAM.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Tabfile5"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+  </body>
+</topic>

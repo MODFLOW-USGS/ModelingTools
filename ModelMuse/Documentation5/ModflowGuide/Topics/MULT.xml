@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MULT - Multiplier File</title>
+  <keywords>
+    <keyword translate="true">FUNCTION</keyword>
+    <keyword translate="true">MLTNAM</keyword>
+    <keyword translate="true">MLTNAM1</keyword>
+    <keyword translate="true">MULT</keyword>
+    <keyword translate="true">NML</keyword>
+    <keyword translate="true">op1</keyword>
+    <keyword translate="true">RMLT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MULT - Multiplier File</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td style="vertical-align:top;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MULT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Multiplier File &#160;is used to specify multiplier arrays which can be used to calculate layer variables from parameter values.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="ofr-00-92-errata.pdf" styleclass="Normal" translate="true">ofr-00-92-errata.pdf</link></li>
+          </list>
+          <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">https://pubs.usgs.gov/tm/2005/tm6A16/</link></li>
+          </list>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Multiplier arrays are used in the </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><link displaytype="text" defaultstyle="true" type="topiclink" href="ADV2" styleclass="Normal" translate="true">ADV2</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">ADV2 (MODFLOW-2000)</text><conditional-text type="END"/><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ETS" styleclass="Normal" translate="true">ETS</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="EVT" styleclass="Normal" translate="true">EVT</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2" styleclass="Normal" translate="true">HUF2</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="KDEP" styleclass="Normal" translate="true">KDEP</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">LPF</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LVDA" styleclass="Normal" translate="true">LVDA</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" styleclass="Normal" translate="true">RCH</link><text styleclass="Normal" translate="true">, and </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" styleclass="Normal" translate="true">UPW</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">UPW (MODFLOW-NWT)</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> input files.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> Input to define multiplier arrays is read from the file that is specified with &quot;MULT&quot; as the file type. Multiplier arrays can be used to calculate layer variables from parameter values.</text></para>
+    <para styleclass="Normal"><table rowcount="8" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">NML </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">[MULTPRINT]</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NML]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NML" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NML—is the number of multiplier arrays to be defined. &#160;</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">In MODFLOW-2000, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Miscellaneous" styleclass="Normal" translate="true">the maximum number of multiplier arrays is 1000.</link><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MULTPRINT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">an optional print flag that when set &gt;0 writes all multiplier arrays, vectors, or scalars to file called “MULT_Arrays.txt.” This will not occur if MULTPRINT is not present or set to &lt;1. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MULTPRINT is only available in MODFLOW-OWHM.</text><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat Item 2 with Items 3 or 4</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true"> or 5</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> until </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MULT" anchor="NML" styleclass="Normal" translate="true">NML</link><text styleclass="Normal" translate="true"> multiplier arrays, vectors, or scalars have been defined.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MLTNAM [ </text><text styleclass="Keywords" translate="true">FUNCTION</text><text styleclass="Normal" translate="true">] </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true">]</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MLTNAM]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MLTNAM—is the name of a multiplier array. This name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case are equivalent. The name “NONE” should not be used for a multiplier array because it is a reserved word.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true"> For further restrictions, see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MULT" anchor="Algebraic_Expression" styleclass="Normal" translate="true">Algebraic_Expression</link><text styleclass="Normal" translate="true">.</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[FUNCTION]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The optional keyword, </text><text styleclass="Keywords" translate="true">FUNCTION</text><text styleclass="Normal" translate="true">, indicates that the multiplier array will be constructed from other multiplier arrays that have already been defined. Construction is by arithmetic combinations of the multipliers; see the explanation below for variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MULT" anchor="op1" styleclass="Normal" translate="true">op1, op2, op3 ....</link></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[EXPRESSION]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">is an optional keyword, which indicates that the multiplier array will be constructed from other multiplier arrays, vectors, or scalars that have already been defined. Construction is different from the FUNCTION keyword in that it follows mathematical order of operations with parenthetic support. See explanation for variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MULT" anchor="Algebraic_Expression" styleclass="Normal" translate="true">Algebraic_Expression</link><text styleclass="Normal" translate="true">.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[RMLT(NCOL,NROW)] - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If Item 2 does not contain the optional </text><text styleclass="Keywords" translate="true">FUNCTION</text><text styleclass="Normal" translate="true"> key word</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true"> or optional </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> key word</text><conditional-text type="END"/><text styleclass="Normal" translate="true">, read item 3. </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">Item 2 cannot have both key words </text><text styleclass="Keywords" translate="true">FUNCTION</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> at the same time.</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RMLT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">RMLT—is a multiplier array.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[MLTNAM1 [op1 MLTNAM2] [op2 MLTNAM3] [op3 MLTNAM4] ... ] [IPRN]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 4 is only read if Item 3 contains the optional </text><text styleclass="Keywords" translate="true">FUNCTION</text><text styleclass="Normal" translate="true"> key word.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MLTNAM1, op1, MLTNAM2, op2, MLTNAM3, ...]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="op1" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MLTNAM1, MLTNAM2, MLTNAM3, ...—are the names of multiplier arrays that have already been defined. op1, op2, op3, ...—are arithmetic operators used to define a multiplier array based on other multiplier arrays. Each operator can be either “+”, “-”, “*”, or “/”. Operations are applied from left to right to each array element. The operators must be separated from the multiplier array names by at least one space. </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">In MODFLOW-OWHM, &quot;^&quot; can be used as the exponentiation operator.</text><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRN is a flag that indicates if the array defined in Item 4 should be printed (written to the listing file) after it has been generated and a code for indicating the format that should be used when it is printed.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IPRN &lt; 0, printing of the multiplier array is suppressed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IPRN </text><text styleclass="Normal" style="font-family:Symbol; text-decoration:underline;" translate="true">³</text><text styleclass="Normal" translate="true"> 0, The array is </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">printed using the formats defined for IPRN in the U2DREL Array Reading Utility Module</link><text styleclass="Normal" translate="true">.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Heading2_atoc_" translate="true">Data Set 5 </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Heading2_atoc_" translate="true">(Only supported in MODFLOW-OWHM)</text><conditional-text type="END"/><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><anchor id="Algebraic_Expression" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">[Algebraic_Expression]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 5 is only read if Item 3 contains the optional </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> key word. It is a single mathematical expression composed of previously defined multiplier arrays.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Algebraic_Expression]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Algebraic_Expression is a single line with a maximum length of 500 characters that contains an algebraic expression composed of multiplier arrays, vectors, or scalars that have already been defined (that is, MLTNAM). The expression is evaluated by following mathematical order of operations (also called operator precedence).</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The expression calculates the result using the following algebraic operators “+,” “–,” “*,” “/,” “^,” and parentheses “(“, “)” for multinomial expressions. Decimal (for example, 1.4 and 2.33) and integer (for example, 1 and 2) numbers can be included in the expression, but NOT exponential notation (for example, 1E–5).</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The expression parser has an additional set of keywords, that CAN NOT appears anywhere in a variable names that is used in the expression (that is, MLTNAM). The keywords operate on what is inside the ( ) and are as follows:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ABS() for absolute value ( |x| )</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">EXP() for solving the natural exponential function ( e</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">x</text><text styleclass="Normal" translate="true"> )</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LOG() for solving the natural logarithm ( log</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:sub; color:#000000;" translate="true">e</text><text styleclass="Normal" translate="true"> )</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">L10() for solving the base 10 logarithm ( log</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:sub; color:#000000;" translate="true">10</text><text styleclass="Normal" translate="true"> )</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NEG() for multiplying the function by negative one ( NEG(x) = –x )</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SQRT() for solving the square root ( √ ) of positive values only</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Heading2_atoc_" translate="true">Example Multiplier Array Input Using the FUNCTION and EXPRESSION Keywords in MODFLOW-OWHM.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The following two example inputs illustrate the use of the </text><text styleclass="Keywords" translate="true">FUNCTION</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> keywords to construct a multiplier array from other multiplier arrays. In the first example, a model layer that has 5 rows and 4 columns has six multiplier arrays, vectors, or scalars to be defined, and, accordingly, the first line of the file contains “6.” The first two arrays (named M1 and M2) are read using the U2DREL utility array reader (Item 3), the third array (named POW) is a multiplier array set to the number 2. The fourth array (named M4) is defined by using the FUNCTION key word, which follows left to right order of operations. This results in calculating M4 as the sum of M1 and M2, which is then raised to power POW (that is, (M1+M2)</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">POW</text><text styleclass="Normal" translate="true">). Note that the &quot;^&quot; operator is only &#160;supported in MODFLOW-OWHM. The fifth matrix (named M5) is defined by using the </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> key word, which follows mathematical order of operations and produces an identical multiplier to M4. The sixth matrix (named M6) is defined by using the </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> key word that calculations M2</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">POW</text><text styleclass="Normal" translate="true"> first and then sums the result with M1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The second example is a more complex application of the </text><text styleclass="Keywords" translate="true">EXPRESSION</text><text styleclass="Normal" translate="true"> key word that constructs a multiplier matrix composed of a weighted power mean, </text><image src="ExpressionEquation1.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true"> and </text><image src="ExpressionEquation2.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true">, of two multiplier matrices (n = 2). In this second example there are eight multiplier arrays, vectors, or scalars to be defined, and accordingly the first line of the file contains “8”. The first two multiplier arrays, vectors, or scalars (named X1 and X2) define x1 and x2. The third multiplier array (named POW) defines the power mean power, p, which for this case is –1 to represent a harmonic mean. The fourth multiplier matrix is a matrix composed of all ones. The fifth multiplier (named W1) is the first weight, w1, read from a free formatted external file. The sixth multiplier (named W2) is the second weight, w2 = 1 – w1, which is constructed using the FUNCTION key word (left to right order of operations). The seventh multiplier (named PowerMean1) solves the power mean using W2 with the EXPRESSION key word. The eighth multiplier (named PowerMean2) solves the power mean without using W2 via the EXPRESSION key word.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">EXAMPLE 1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">7</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">INTERNAL 1.0 (4F6.0) 0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">1.0 1.1 1.2 1.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">1.0 1.1 1.2 1.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">2.0 2.2 2.4 2.6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">2.0 2.2 2.4 2.6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">1.0 1.1 1.2 1.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">INTERNAL 1.0 (4F6.0) 0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">5.0 5.1 5.2 5.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">5.0 5.1 5.2 5.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">6.0 6.1 6.2 6.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">6.0 6.1 6.2 6.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">5.0 5.1 5.2 5.3</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">POW</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">CONSTANT 2.0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M3 FUNCTION</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M1 + M2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M4 FUNCTION</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M1 + M2 ^ POW</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M5 EXPRESSION</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">(M1+M2)^POW</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M6 EXPRESSION</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">M1+M2^POW</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The resulting values for multiplier M3 are:</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">6.0 6.2 6.4 6.6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">6.0 6.2 6.4 6.6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">8.0 8.3 8.6 8.9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">8.0 8.3 8.6 8.9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">6.0 6.2 6.4 6.6</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The resulting values for multipliers M4 and M5 are:</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">36.00 38.44 40.96 43.56</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">36.00 38.44 40.96 43.56</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">64.00 68.89 73.96 79.21</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">64.00 68.89 73.96 79.21</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">36.00 38.44 40.96 43.56</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The resulting values for multiplier M6 is:</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">26.00 27.11 28.24 29.39</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">26.00 27.11 28.24 29.39</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">38.00 39.41 40.84 42.29</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">38.00 39.41 40.84 42.29</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">26.00 27.11 28.24 29.39</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">EXAMPLE 2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">X1 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; #FIRST NUMBER X1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">CONSTANT 25.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">X2 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; #SECOND NUMBER X2</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">CONSTANT 0.01</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">POW &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;#POWER USED IN POWER MEAN, p</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">CONSTANT -1.0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">ONES &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; #MATRIX OF ALL ONES</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">CONSTANT 1.0</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">W1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">OPEN/CLOSE FIRST_WEIGHT.TXT 1.0 (FREE) -1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">W2 FUNCTION &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;#CALCULATE SECOND WEIGHT AS</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">ONES - W1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PowerMean1 EXPRESSION &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;#POWER MEAN</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">(W1*X1^POW + W2*X2^POW)^(ONES/POW)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PowerMean2 EXPRESSION &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;#POWER MEAN (DOES NOT REQUIRE W2)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">(W1*X1^POW + (ONES-W1)*X2^POW)^(ONES/POW)</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">KeywordEx EXPRESSION &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; # </text><image src="ExpressionEquation3.png" scale="100.00%" styleclass="Image Caption"></image></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">3.14 * SQRT( EXP(POW) + LOG(M1) - NEG(M2) + 10^POW )</text></para>
+    <para styleclass="Code Example"><conditional-text type="END"/></para>
+  </body>
+</topic>

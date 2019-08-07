@@ -1,0 +1,37 @@
+# CHD: Time-Variant Specified-Head package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     4 AUXILIARY IFACE # MXACTC Option
+     4     0 # Data Set 5: ITMP NP Stress period 1
+     1    10     4  0.000000000000E+000   0.000000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     1    10     5  0.000000000000E+000   0.000000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     1    10     6  0.000000000000E+000   0.000000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     1    10     7  0.000000000000E+000   0.000000000000E+000      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    -1     0 # Data Set 5: ITMP NP Stress period 2
+    -1     0 # Data Set 5: ITMP NP Stress period 3
+    -1     0 # Data Set 5: ITMP NP Stress period 4
+    -1     0 # Data Set 5: ITMP NP Stress period 5
+    -1     0 # Data Set 5: ITMP NP Stress period 6
+    -1     0 # Data Set 5: ITMP NP Stress period 7
+    -1     0 # Data Set 5: ITMP NP Stress period 8
+    -1     0 # Data Set 5: ITMP NP Stress period 9
+    -1     0 # Data Set 5: ITMP NP Stress period 10
+    -1     0 # Data Set 5: ITMP NP Stress period 11
+    -1     0 # Data Set 5: ITMP NP Stress period 12
+    -1     0 # Data Set 5: ITMP NP Stress period 13
+    -1     0 # Data Set 5: ITMP NP Stress period 14
+    -1     0 # Data Set 5: ITMP NP Stress period 15
+    -1     0 # Data Set 5: ITMP NP Stress period 16
+    -1     0 # Data Set 5: ITMP NP Stress period 17
+    -1     0 # Data Set 5: ITMP NP Stress period 18
+    -1     0 # Data Set 5: ITMP NP Stress period 19
+    -1     0 # Data Set 5: ITMP NP Stress period 20
+    -1     0 # Data Set 5: ITMP NP Stress period 21
+    -1     0 # Data Set 5: ITMP NP Stress period 22
+    -1     0 # Data Set 5: ITMP NP Stress period 23
+    -1     0 # Data Set 5: ITMP NP Stress period 24
+    -1     0 # Data Set 5: ITMP NP Stress period 25
+    -1     0 # Data Set 5: ITMP NP Stress period 26
+    -1     0 # Data Set 5: ITMP NP Stress period 27
+    -1     0 # Data Set 5: ITMP NP Stress period 28
+    -1     0 # Data Set 5: ITMP NP Stress period 29
+    -1     0 # Data Set 5: ITMP NP Stress period 30
+    -1     0 # Data Set 5: ITMP NP Stress period 31

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">FHB Time</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">FHB Time</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Time</text><text styleclass="Normal" translate="true"> is the starting time for the specified flow rate or head. The times need not correspond to the times when stress periods or time steps start or end. The FHB package will interpolate flow rates and heads between the times that are specified by the user. For example, if the user has specified a flow rate of 1 at time 0 and a flow rate of 2 at time 1, the FHB package will calculate a flow rate of 1.1 at time 0.1.</text></para>
+  </body>
+</topic>

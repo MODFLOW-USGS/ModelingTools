@@ -1,0 +1,28 @@
+# DRN: Drain package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+PARAMETER     2    12 # DataSet 1: PARAMETER NPDRN MXL
+     3     9 AUXILIARY IFACE # DataSet 2: MXACTD IDRNCB Option
+DRN_Par1 DRN  1.000000000000E+000      2 INSTANCES     4 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+DRN_Par1_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+     1     4     7  3.000000000000E+000   3.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1     1     1  0.000000000000E+000   0.000000000000E+000      0 # Data Set 4b: Layer Row Column Stage Condfact IFACE (Dummy boundary)
+DRN_Par1_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+     1     5     3 -1.000000000000E+000   2.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1     4     7  3.000000000000E+000   3.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+DRN_Par1_3 # Data Set 4a: INSTNAM (Parameter instance for stress period 3)
+     1     5     3 -1.000000000000E+000   2.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1     4     7  3.000000000000E+000   3.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+DRN_Par1_4 # Data Set 4a: INSTNAM (Parameter instance for stress period 4)
+     1     4     7  3.000000000000E+000   3.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1     1     1  0.000000000000E+000   0.000000000000E+000      0 # Data Set 4b: Layer Row Column Stage Condfact IFACE (Dummy boundary)
+DRN_Par2 DRN  1.000000000000E+000      1 # Data Set 3: PARNAM PARTYP Parval NLST
+     1     8    10 -1.000000000000E+000   3.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1     1 # Data Set 5: ITMP NP Stress period 1
+     1     4     7 -1.000000000000E+000   1.000000000000E+000      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+DRN_Par1 DRN_Par1_1 # Data Set 7: PARNAM Iname
+     0     1 # Data Set 5: ITMP NP Stress period 2
+DRN_Par1 DRN_Par1_2 # Data Set 7: PARNAM Iname
+     0     1 # Data Set 5: ITMP NP Stress period 3
+DRN_Par1 DRN_Par1_3 # Data Set 7: PARNAM Iname
+     0     2 # Data Set 5: ITMP NP Stress period 4
+DRN_Par1 DRN_Par1_4 # Data Set 7: PARNAM Iname
+DRN_Par2 # Data Set 7: PARNAM

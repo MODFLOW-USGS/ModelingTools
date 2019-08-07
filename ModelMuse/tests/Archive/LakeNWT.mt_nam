@@ -1,0 +1,13 @@
+# Name File for MT3DMS created on 8/1/2019 by ModelMuse
+LIST 16 LakeNWT.mls
+FTL 10 LakeNWT.ftl
+DATA 17 LakeNWT.cnf
+LKT 18 LakeNWT.lkt
+DATA 81 LakeNWT.lktobs
+BTN 1 LakeNWT.btn
+DATA(BINARY) 201 LakeNWT_Conc.ucn
+DATA 601 LakeNWT_Conc._mas
+ADV 2 LakeNWT.adv
+DSP 3 LakeNWT.dsp
+SSM 4 LakeNWT.ssm
+GCG 9 LakeNWT.gcg

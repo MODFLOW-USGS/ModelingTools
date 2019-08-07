@@ -1,0 +1,7 @@
+{TODO -cSUTRA : Consider supporting SUTRA-MS.}
+{TODO -cSUTRA : consider coloring the grid with user specified mappings between the colors and the values.}
+{TODO -cSUTRA : Plot permeability vectors}
+{TODO -cSUTRA : Plot flow vectors}
+{TODO -cSUTRA : There needs to be an easy way to specify all 3 permeability directions: for example by drawing lines in the appropriate directions.}
+{TODO -cSUTRA : Consider creating a replacement for SutaPlot}
+{TODO -cSUTRA : Import old SUTRA models}

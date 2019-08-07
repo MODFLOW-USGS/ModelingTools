@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SwtTest" FileType="bin">
+    <FileName Model_Name="SwtTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SwtTest" FileType="ancillary">
+    <FileName Model_Name="SwtTest" FileType="ancillary">SwtTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SwtTest" FileType="Model Input">
+    <FileName Model_Name="SwtTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.bas</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.chd</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.dis</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.gsf</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.lpf</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.nam.archive</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.oc</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.sip</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.swt</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">SwtTest.wel</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Input">usgs.SwtTest.reference</FileName>
+  </model>
+  <output Model_Name="SwtTest" FileType="Model Output">
+    <FileName Model_Name="SwtTest" FileType="Model Output">SwtTest.cbc</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Output">SwtTest.fdn</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Output">SwtTest.fhd</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Output">SwtTest.lst</FileName>
+    <FileName Model_Name="SwtTest" FileType="Model Output">SwtTest.Swt_Out</FileName>
+  </output>
+</Model_Archive_List>

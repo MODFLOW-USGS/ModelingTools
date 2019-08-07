@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Layer Property Flow Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Layer Property Flow Package</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Source file]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwf2lpf7.f</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Module]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[GWFLPFMODULE]]></caption></toggle></para>
+          <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ILPFCB - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">is a flag and a unit number for saving cell-by-cell flows</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IWDFLG - is a flag indicating whether the wetting capability is active in any layer</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - not active</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - active</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IWETIT - Wetting Iteration Interval</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHDWET - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">is a flag that determines which equation is used to define the initial head at cells that become wet:</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISFAC - flag to use storage coefficient rather than specific storage</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - don&apos;t use storage coefficient</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - use storage coefficient</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ICONCV - flag to use constant vertical conductance for convertible layers</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - don&apos;t use constant vertical conductance</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - use constant vertical conductance</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ITHFLG - indicates that layers having a negative LAYTYP are confined, and their cell thickness for conductance calculations will be computed as STRT-BOT rather than TOP-BOT.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - don&apos;t treat convertible layers with negative LAYTYP as confined</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - treat convertible layers with negative LAYTYP as confined</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NOCVCO - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">indicates that vertical conductance is not corrected when the vertical flow correction is applied.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">vertical conductance is corrected when the vertical flow correction is applied.</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">vertical conductance is not corrected when the vertical flow correction is applied.</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NOVFC - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">indicates that </text><text styleclass="Normal" translate="true">the vertical flow correction </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">is not applied</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - vertical flow correction </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">is applied</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - vertical flow correction </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">is not applied</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">WETFCT - Wetting factor</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYTYP(NLAY) - a flag indicating layer typd</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYAVG(NLAY) - a flag indicating the method of calculating interblock transmissivity</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CHANI(NLAY) - a flag indicating that HANI should be used or the horizontal anisotropy</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYVKA(NLAY) - a flag that indicates the meaning of the variable VKA </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYWET(NLAY) - a flag indicates if wetting is active</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYSTRT(NLAY) - a flag indicating that a convertible layer is to be treated as confined.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - don&apos;t treat convertible layer as confined.</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - treat convertible layer as confined.</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYFLG(6,NLAY)</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">LAYFLG(1,*) - Print code for HK when HK parameters are used</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">LAYFLG(2,*) - Print code for VKA when VK or VANI parameters are used</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">LAYFLG(3,*) - Print code for SS when SS parameters are used</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">LAYFLG(4,*) - Print code for SY when SY parameters are used</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">LAYFLG(5,*) - Print code for VKCB when VKCB parameters are used</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">LAYFLG(6,*) - Print code for HANI when HANI parameters are used and CHANI(*) is less than or equal to zero</text></para>
+                      <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VKA(NCOL,NROW,NLAY) - is either vertical hydraulic conductivity or the ratio of horizontal to vertical hydraulic conductivity depending on the value of LAYVKA</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VKCB(NCOL,NROW,NCNFBD) - is the vertical hydraulic conductivity of a Quasi-three-dimensional confining bed below a layer.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">SC1(NCOL,NROW,NLAY) - Specific Storage or Storage Coefficient</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">SC2(NCOL,NROW,NCNVRT) (NCNVRT = number of convertible layers) - Specific Yield</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HANI(NCOL,NROW,NHANI) (NHANI = number of layers for which HANI is used)- Horizontal anisotropy</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">WETDRY(NCOL,NROW,NWETD) (NWETD = number of layers for which WETDRY is used) - WETDRY is a combination of the wetting threshold and a flag to indicate which neighboring cells can cause a cell to become wet.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HK(NCOL,NROW,NLAY) - horizontal hydraulic conductivity</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GWFLPFDAT(10) - an array of GWFLPFTYPE for multiple grids</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Types]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GWFLPFTYPE</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Subroutines]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7AR - Allocate and Read Data for Layer Property Flow Package</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7AD - Set Hold to BOTM Whenever a Wettable Cell is Dry</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7FM - Add Leakage Correction and Storage to HCOF and RHS, and Calculate Conductance as Required.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7N - Initialize and Check LPF Data</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7BDADJ - Compute Flow Between Adjacent Cells in a Subregion of the Grid</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7BDS - Compute Storage Budget Flow Term for LPF</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7BDCH - Compute Flow from Constant-Head Cells</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7SC - Compute Storage Capacity</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7HCOND - Compute Horizontal Branch Conductance for One Layer</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7WET - Convert Dry Cells to Wet.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7WDMSG - Print Message When Cells Convert Between Wet and Dry.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7HHARM - Compute Horizontal Branch Conductance Using Harmonic Mean of Block Conductances (Distance Weighted Harmonic Mean of Transmissivity). Cell Thickness is in CC Upon Entry.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7HLOG - Compute Horizontal Conductance Using Logarithmic Mean Transmissivity -- Activated By LAYAVG=1 Cell Saturated Thickness is in CC.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7HUNCNF - Compute Horizontal Conductance Using Arithmetic Mean Saturated Thickness and Logarithmic Mean Hydraulic Conductivity. Cell Saturated Thickness is in CC. Activated By LAYAVG=2</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7VCOND - Compute Vertical Branch Conductance Between a Layer and the Next Lower Layer from Vertical Hydraulic Conductivity.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7CK - Check That Just-defined Parameter of Type &apos;VK&apos; or &apos;VANI&apos; is Used Consistently With LAYVKA Entries for Layers Listed in Clusters for the Parameter</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7DA - Deallocate LPF Data</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2LPF7PNT - Point to LPF data for a grid.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2LPF7PSV - Save LPF data for a grid.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

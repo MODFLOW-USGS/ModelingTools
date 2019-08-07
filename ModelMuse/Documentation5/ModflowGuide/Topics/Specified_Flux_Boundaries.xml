@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specified Flux Boundaries</title>
+  <keywords>
+    <keyword translate="true">Specified Flux</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Specified Flux Boundaries</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Specified flux boundaries can be specified with &#160;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_and_Head_Boundary_Packag2" styleclass="Normal" translate="true">Flow and Head Boundary</link><text styleclass="Normal" translate="true"> package,</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" styleclass="Normal" translate="true">Recharge</link><text styleclass="Normal" translate="true"> package, or</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_and_Head_Boundary_Packag2" styleclass="Normal" translate="true">Flow and Head Boundary</link><text styleclass="Normal" translate="true"> package, the user enters a series of times and corresponding flux rates at specific cells. Linear interpolation is used to determine the flux rates at intervening times. &#160;The times do not need to be a the beginnings or ends of stress periods.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" styleclass="Normal" translate="true">Recharge</link><text styleclass="Normal" translate="true"> package, the user enters an array of flux values covering the entire upper surface of the model. &#160;The rates can be positive, negative or zero. &#160;There are several options for determining to which &#160;layer the recharge will be applied. &#160;The flux rate is in units of L/T instead of L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T as in the the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_and_Head_Boundary_Packag2" styleclass="Normal" translate="true">Flow and Head Boundary</link><text styleclass="Normal" translate="true"> or the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> packages.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package, the user enters a flux rate for particular cells in particular stress periods.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Parameters can be used with the Recharge and Well packages but not the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_and_Head_Boundary_Packag2" styleclass="Normal" translate="true">Flow and Head Boundary</link><text styleclass="Normal" translate="true"> package.</text></para>
+  </body>
+</topic>

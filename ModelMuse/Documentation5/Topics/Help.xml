@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Help</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Help</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The menu items under Help are listed in table 14.</text></para>
+    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 14. Help Menu</text></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="11" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Menu Item</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Explanation</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Contents </text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show the contents page of the help system for ModelMuse.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Help On Main Window</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show help for the main window of ModelMuse.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">MODFLOW Reference</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Shows the Online Guide to MODFLOW with detailed descriptions of the input file formats for MODFLOW</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Introductory Video</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show a video describing some of the features of ModelMuse.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">All Videos</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">ModelMuse will display the web page on the ModelMuse web site where </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseVideos.html" target="_blank" styleclass="Table Cell" translate="true">videos about ModelMuse</link><text styleclass="Table Cell" translate="true"> are listed.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Examples</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Show instructions for recreating examples.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px; height:15px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Use Local Help</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px; height:15px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When displaying help, the help in the file ModelMuse.chm will be used. This may not work if ModelMuse is not being run on a Windows</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:super;" translate="true">®</text><text styleclass="Table Cell" translate="true"> computer.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px; height:15px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Use Online Help</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px; height:15px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When displaying help, the online version of the help will be used. This should work regardless of the operating system used. Users who are operating ModelMuse on Linux using WINE may be able to use this option. An internet connection is required to use this option. Although some users report success on using ModelMuse on Linux using WINE, ModelMuse is only tested on Windows</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:super;" translate="true">®</text><text styleclass="Table Cell" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px; height:15px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">File Types</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px; height:15px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display a list of file types handled by ModelMuse in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File_Types_Dialog_Box" styleclass="Table Cell" translate="true">File Types</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:148px; height:15px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">About</text></para>
+        </td>
+        <td style="vertical-align:top; width:310px; height:15px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Shows the </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">About</text><text styleclass="Table Cell" translate="true"> box for ModelMuse.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are a number of ways to display help on a topic. Most dialog boxes have a help button. Clicking it will display the help for that dialog box. The Help menu in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Main_Window" styleclass="Normal" translate="true">Main Window</link><text styleclass="Normal" translate="true"> can also be used to access the help. Pressing the F1 key will also display help.</text></para>
+  </body>
+</topic>

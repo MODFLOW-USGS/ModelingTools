@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">The Position Tab</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">The Position Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Position</text><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Go_To_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Go To</link><text styleclass="Normal" translate="true"> dialog box is always visible. In it, the user specifies the coordinates of the location to be made visible. The user also specifies the views of the model to be changed. Depending on which view of the model the user selects, some of the edit boxes in which the coordinates are specified will be enabled or disabled.</text></para>
+  </body>
+</topic>

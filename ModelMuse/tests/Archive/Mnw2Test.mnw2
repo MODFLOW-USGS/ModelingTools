@@ -1,0 +1,85 @@
+# MNW2: Multi-Node Well package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+    -9    30     9     2 AUXILIARY IFACE # DataSet 1: MNWMAX, NODTOT, IWL2CB, MNWPRNT, OPTION
+MyWell     -1 # Data Set 2A: WELLID, NNODES
+THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  3.000000000000E-001  # Data Set 2C; Rw
+  0.000000000000E+000  -3.000000000000E+001      7     7 # Data Set 2D; Ztop, Zbotm, ROW, COL
+Well2     -2 # Data Set 2A: WELLID, NNODES
+SKIN      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+ -1.000000000000E+000  -1.000000000000E+000  -1.000000000000E+000  # Data Set 2C; Rw, Rskin, Kskin
+  0.000000000000E+000  -5.000000000000E+000      8    17  4.000000000000E-001   1.000000000000E+000   1.000000000000E-003  # Data Set 2D; Ztop, Zbotm, ROW, COL, Rw, Rskin, Kskin
+ -1.500000000000E+001  -2.500000000000E+001      8    17  4.000000000000E-001   8.000000000000E-001   1.000000000000E-003  # Data Set 2D; Ztop, Zbotm, ROW, COL, Rw, Rskin, Kskin
+Well3     -1 # Data Set 2A: WELLID, NNODES
+GENERAL      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  5.000000000000E-001   1.000000000000E-001   1.000000000000E-001   2.000000000000E+000  # Data Set 2C; Rw, B, C, P
+  0.000000000000E+000  -2.000000000000E+001      3    13 # Data Set 2D; Ztop, Zbotm, ROW, COL
+well4      1 # Data Set 2A: WELLID, NNODES
+NONE      0     0     1     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+     1     5    19  8.000000000000E-001  # Data Set 2D; LAY, ROW, COL, PP
+well5     -1 # Data Set 2A: WELLID, NNODES
+SPECIFYcwc      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-003  # Data Set 2C; CWC
+  0.000000000000E+000  -1.900000000000E+001      3    24 # Data Set 2D; Ztop, Zbotm, ROW, COL
+"H Well1"      6 # Data Set 2A: WELLID, NNODES
+THIEM      1     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  2.000000000000E+000  # Data Set 2C; Rw
+     2     2     3 # Data Set 2D; LAY, ROW, COL
+     2     2     4 # Data Set 2D; LAY, ROW, COL
+     2     2     5 # Data Set 2D; LAY, ROW, COL
+     2     2     6 # Data Set 2D; LAY, ROW, COL
+     2     2     7 # Data Set 2D; LAY, ROW, COL
+     2     2     8 # Data Set 2D; LAY, ROW, COL
+     2     2     3 # Data Set 2E: PUMPLAY, PUMPROW, PUMPCOL
+"H Well2"      3 # Data Set 2A: WELLID, NNODES
+SKIN      0     0     0     2 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E+000   2.000000000000E+000   1.000000000000E-005  # Data Set 2C; Rw, Rskin, Kskin
+     2     7     2 # Data Set 2D; LAY, ROW, COL
+     2     8     2 # Data Set 2D; LAY, ROW, COL
+     2     8     3 # Data Set 2D; LAY, ROW, COL
+  0.000000000000E+000   5.000000000000E+000   1.000000000000E+000   1.000000000000E+000  Data Set 2G: Hlift, LIFTq0, LIFTqmax, HWtol
+  4.000000000000E+000   2.000000000000E+000  Data Set 2H: LIFTn, Qn
+  2.000000000000E+000   3.000000000000E+000  Data Set 2H: LIFTn, Qn
+"H Well3"      3 # Data Set 2A: WELLID, NNODES
+GENERAL      0     1     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  4.000000000000E-001   1.000000000000E-001   1.000000000000E-001   2.000000000000E+000  # Data Set 2C; Rw, B, C, P
+     2     5    11 # Data Set 2D; LAY, ROW, COL
+     2     6    11 # Data Set 2D; LAY, ROW, COL
+     2     7    11 # Data Set 2D; LAY, ROW, COL
+ -8.000000000000E+000     -1  1.000000000000E-001   2.000000000000E-001  # Data Set 2F: Hlim, QCut, Qfrcmn, Qfrcmx
+"H Well4"      5 # Data Set 2A: WELLID, NNODES
+SPECIFYcwc      0     0     1     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-003  # Data Set 2C; CWC
+     2     5    27  1.000000000000E-001  # Data Set 2D; LAY, ROW, COL, PP
+     2     6    27  1.000000000000E+000  # Data Set 2D; LAY, ROW, COL, PP
+     2     6    26  1.000000000000E+000  # Data Set 2D; LAY, ROW, COL, PP
+     2     7    26  1.000000000000E+000  # Data Set 2D; LAY, ROW, COL, PP
+     2     8    26  1.000000000000E+000  # Data Set 2D; LAY, ROW, COL, PP
+     9 # Data Set 3, Stress Period 1: ITMP
+MyWell  -1.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+Well2  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+Well3  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+well4  -1.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+well5  -3.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well1"  -4.000000000000E-005      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well2"  -3.000000000000E-005   9.000000000000E-001      0 # Data Set 4A: WELLID, QDes, CapMult, IFACE
+"H Well3"  -3.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well4"  -3.000000000000E-005      0 # Data Set 4A: WELLID, QDes, IFACE
+     8 # Data Set 3, Stress Period 2: ITMP
+Well2  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+Well3  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+well4  -1.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+well5  -3.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well1"  -4.000000000000E-005      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well2"  -3.000000000000E-005   9.000000000000E-001      0 # Data Set 4A: WELLID, QDes, CapMult, IFACE
+"H Well3"  -3.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well4"  -3.000000000000E-005      0 # Data Set 4A: WELLID, QDes, IFACE
+     9 # Data Set 3, Stress Period 3: ITMP
+MyWell  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+Well2  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+Well3  -3.000000000000E-003      0 # Data Set 4A: WELLID, QDes, IFACE
+well4  -1.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+well5  -3.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well1"  -4.000000000000E-005      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well2"  -3.000000000000E-005   9.000000000000E-001      0 # Data Set 4A: WELLID, QDes, CapMult, IFACE
+"H Well3"  -3.000000000000E-004      0 # Data Set 4A: WELLID, QDes, IFACE
+"H Well4"  -3.000000000000E-005      0 # Data Set 4A: WELLID, QDes, IFACE

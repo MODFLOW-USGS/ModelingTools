@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SfrTabFiles</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SfrTabFiles</text></para>
+    </header>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TABFILES]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="TABFILES" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">An optional character variable that is a flag to indicate that inflows to one or more stream segments will be specified with tabular inflow files. </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NUMTAB]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="NUMTAB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">An integer value equal to the number of tabular inflow files that will be read if TABFILES is specified. A separate input file is required for each segment that receives specified inflow. Thus, the maximum value of NUMTAB that can be specified is equal to the total number of segments specified in Item 1c with variables NSS. The name (Fname) and unit number (Nunit) of each tabular file must be specified in the MODFLOW-2005 Name File using tile type (Ftype) DATA.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXVAL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="MAXVAL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">An integer value equal to the largest number of rows of specified inflows for any of the tabular inflow files if TABFILES is specified. MAXVAL is used for memory allocation. For example, if there are two tabular inflow files and the files contain 100 and 200 inflow values, respectively, then MAXVAL would be specified as 200.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

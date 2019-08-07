@@ -1,0 +1,350 @@
+ 
+  VERBOSE=3 -- Warnings, notes, and selected input will be written
+ 
+  Reading input from file: tc1_main.in
+ 
+ 
+  ******************************************************************************
+  ******************************************************************************
+ 
+                Output from program UCODE_2005, Version:   1.019
+ 
+               Constructed using the JUPITER API, Version:  1.4.0
+ 
+  ******************************************************************************
+  ******************************************************************************
+ 
+  *********************************************************
+          NOTE UCODE_CONTROL_DATA BLOCK NOT FOUND
+                  DEFAULTS ARE USED
+          IF YOU INTENDED TO READ THIS BLOCK
+         CHECK THE SPELLING OF THE BLOCK NAME
+    JUPITER CODES IGNORE BLOCKS WITH MISSPELLED NAMES
+  *********************************************************
+ 
+ 
+ -------------------------------------------------------------------------------
+  ECHO UCODE CONTROLS INPUT:
+ 
+  MODEL NAME =   GENERIC
+  MODEL LENGTH UNITS =   NA
+  MODEL TIME UNITS =   NA
+  MODEL MASS UNITS =   NA
+ 
+  OPTIMIZATION WILL NOT BE PERFORMED
+  NONLINEAR INTERVALS WILL NOT BE PERFORMED (BY DEFAULT)
+  SENSITIVITIES WILL NOT BE CALCULATED (BY DEFAULT)
+  ONLY RESIDUAL ANALYSIS FOR STARTING PARAMETER VALUES
+  DATA EXCHANGE FILES WILL BE PRODUCED
+ 
+ 
+  ECHO MODEL COMMAND LINES:
+ 
+  Command ID    Purpose       Command Line
+  ------------  ------------  --------------------------------------------------
+  ForwardModel  Forward       C:\WRDAPP\MF2005.1_8\bin\mf2005.exe "D:\Delphi_Projects\ModelMate\temp\ModelMate_0_19\Example\tc1.nam"
+ 
+ *******************************************************
+        NOTE DERIVED_PARAMETERS BLOCK NOT FOUND
+         NO DERIVED PARAMETERS ARE CONSIDERED
+         IF YOU INTENDED TO READ THIS BLOCK
+        CHECK THE SPELLING OF THE BLOCK NAME
+   JUPITER CODES IGNORE BLOCKS WITH MISSPELLED NAMES
+ *******************************************************
+ 
+  
+
+ PARAMETER INFORMATION:
+
+ No.  Param. name     Group        Value       Lower value   Upper value    Adj?
+ ---- ------------ ------------  ------------  ------------  ------------  -----
+    1 SS_1         ParamDefault  1.300000E-03 -1.000000E+39  1.000000E+39   Y
+    2 HK_1         HydCond       3.000000E-04 -1.000000E+39  1.000000E+39   Y
+    3 VERT_ANI_1   Fixed          1.00000     -1.000000E+39  1.000000E+39   N
+    4 VERT_K_CB    HydCond       1.000000E-07 -1.000000E+39  1.000000E+39   Y
+    5 SS_2         ParamDefault  2.000000E-04 -1.000000E+39  1.000000E+39   Y
+    6 HK_2         HydCond       4.000000E-05 -1.000000E+39  1.000000E+39   Y
+    7 VERT_ANI_2   Fixed          1.00000     -1.000000E+39  1.000000E+39   N
+    8 WELLS_TR     ParamDefault  -1.10000     -1.000000E+39  1.000000E+39   Y
+    9 RIVERS       HydCond       1.200000E-03 -1.000000E+39  1.000000E+39   Y
+   10 RCH_ZONE_1   ParamDefault   63.1000     -1.000000E+39  1.000000E+39   Y
+   11 RCH_ZONE_2   ParamDefault   31.5000     -1.000000E+39  1.000000E+39   Y
+
+ No.  Param. name   LN   SCALEPVAL   PERTURB    MAXCHANGE    TOLPAR
+ ---- ------------  --  ----------  ----------  ---------  ---------
+    1 SS_1           0   1.300E-05   1.000E-02   2.00      1.000E-02
+    2 HK_1           1   3.000E-06   1.000E-02   2.00      1.000E-02
+    3 VERT_ANI_1     0   1.000E-02   1.000E-02   2.00      1.000E-02
+    4 VERT_K_CB      1   1.000E-09   1.000E-02   2.00      1.000E-02
+    5 SS_2           0   2.000E-06   1.000E-02   2.00      1.000E-02
+    6 HK_2           1   4.000E-07   1.000E-02   2.00      1.000E-02
+    7 VERT_ANI_2     0   1.000E-02   1.000E-02   2.00      1.000E-02
+    8 WELLS_TR       0   1.100E-02   1.000E-02   2.00      1.000E-02
+    9 RIVERS         1   1.200E-05   1.000E-02   2.00      1.000E-02
+   10 RCH_ZONE_1     0   0.631       1.000E-02   2.00      1.000E-02
+   11 RCH_ZONE_2     0   0.315       1.000E-02   2.00      1.000E-02
+  
+
+ INFORMATION FOR ADJUSTABLE PARAMETERS:
+
+ Param. name     Group          Value       Lower value    Upper value  Par. no.
+ ------------ ------------  -------------  -------------  -------------  -------
+ SS_1         ParamDefault   1.300000E-03  -1.000000E+39   1.000000E+39       1
+ HK_1         HydCond        3.000000E-04  -1.000000E+39   1.000000E+39       2
+ VERT_K_CB    HydCond        1.000000E-07  -1.000000E+39   1.000000E+39       4
+ SS_2         ParamDefault   2.000000E-04  -1.000000E+39   1.000000E+39       5
+ HK_2         HydCond        4.000000E-05  -1.000000E+39   1.000000E+39       6
+ WELLS_TR     ParamDefault   -1.10000      -1.000000E+39   1.000000E+39       8
+ RIVERS       HydCond        1.200000E-03  -1.000000E+39   1.000000E+39       9
+ RCH_ZONE_1   ParamDefault    63.1000      -1.000000E+39   1.000000E+39      10
+ RCH_ZONE_2   ParamDefault    31.5000      -1.000000E+39   1.000000E+39      11
+
+               Sens
+ Param. name   Method  LN   SCALEPVAL   PERTURB    MAXCHANGE    TOLPAR
+ ------------  ------  --  ----------  ----------  ---------  ----------
+ SS_1              2    0   1.300E-05   1.000E-02   2.00       1.000E-02
+ HK_1              2    1   3.000E-06   1.000E-02   2.00       1.000E-02
+ VERT_K_CB         2    1   1.000E-09   1.000E-02   2.00       1.000E-02
+ SS_2              2    0   2.000E-06   1.000E-02   2.00       1.000E-02
+ HK_2              2    1   4.000E-07   1.000E-02   2.00       1.000E-02
+ WELLS_TR          2    0   1.100E-02   1.000E-02   2.00       1.000E-02
+ RIVERS            2    1   1.200E-05   1.000E-02   2.00       1.000E-02
+ RCH_ZONE_1        2    0   0.631       1.000E-02   2.00       1.000E-02
+ RCH_ZONE_2        2    0   0.315       1.000E-02   2.00       1.000E-02
+
+ OBSERVATIONS
+  Total number of observations read---------    32
+  Number of directly extracted observations-    32
+  Number of observations to be derived------     0
+  Number of observations to be used---------    32
+
+
+ Number of linear prior-information equations =    1
+  
+
+ OBSERVATION INFORMATION:
+
+ OBSERVATION NAME         GROUP       OBS. VALUE      WEIGHT
+ --------------------  ------------  ------------  ------------
+ B.0                   Heads           101.80       0.99751    
+ B.1                   Head_Changes  -0.29000E-01    400.00    
+ B.12                  Head_Changes  -0.12900        400.00    
+ C.0                   Heads           128.12       0.99751    
+ C.1                   Head_Changes  -0.41000E-01    400.00    
+ C.2                   Head_Changes  -0.55700        400.00    
+ C.8                   Head_Changes   -11.531        400.00    
+ C.12                  Head_Changes   -14.184        400.00    
+ D.0                   Heads           156.68       0.99751    
+ D.1                   Head_Changes   -4.3810        400.00    
+ D.12                  Head_Changes   -42.540        400.00    
+ E.0                   Heads           124.89       0.99751    
+ E.1                   Head_Changes  -0.67000E-01    400.00    
+ E.12                  Head_Changes   -14.304        400.00    
+ F.0                   Heads           140.96       0.99751    
+ F.1                   Head_Changes  -0.60000E-01    400.00    
+ F.12                  Head_Changes   -21.676        400.00    
+ G.0                   Heads           126.54       0.99751    
+ G.1                   Head_Changes   0.50000E-02    400.00    
+ G.12                  Head_Changes   -14.365        400.00    
+ H.0                   Heads           101.11       0.99751    
+ H.1                   Head_Changes   0.48000E-01    400.00    
+ H.12                  Head_Changes  -0.56800        400.00    
+ I.0                   Heads           158.13       0.99751    
+ I.1                   Head_Changes   -5.5330        400.00    
+ I.12                  Head_Changes   -43.217        400.00    
+ J.0                   Heads           176.37       0.99751    
+ J.1                   Head_Changes  -0.10000E-02    400.00    
+ J.12                  Head_Changes   -38.242        400.00    
+ A.0                   Heads           142.02       0.99751    
+ A.1                   Head_Changes  -0.13000E-01    400.00    
+ A.12                  Head_Changes   -19.921        400.00    
+  
+
+ OBSERVATION-GROUP INFORMATION:
+
+               NUM. OF         PLOT     WEIGHT    COV. MATRIX     DEP.
+ GROUP NAME    MEMBERS  USE?  SYMBOL  MULTIPLIER  IF CORRELATED   TYPE
+ ------------  -------  ----  ------  ----------  -------------  ------
+ Heads              10   T         1    1.00                     OBS   
+ Head_Changes       22   T         1    1.00                     OBS   
+
+               NUM. OF         PLOT     WEIGHT    COV. MATRIX,
+ GROUP NAME    MEMBERS  USE?  SYMBOL  MULTIPLIER  IF CORRELATED
+ ------------  -------  ----  ------  ----------  -------------
+ DefaultPrior        1  YES        1    1.00                  
+  
+  
+ PRIOR INFORMATION
+  (TRANSFROMED PARAMETERS ARE REPORTED IN NATURAL LOG SPACE)
+
+ NAME                  GROUP         VALUE         WEIGHT
+ --------------------  ------------  ------------  ------------
+ Pri_K1                DefaultPrior   -7.8240        16.495    
+  
+  
+PRIOR INFORMATION WEIGHTS (for a log-transformed parameter, the values relate to
+the NATURAL LOG of the parameter)
+
+Weight matrix:
+
+ Full matrix generated from compressed structure "Prior Weight":
+
+                    Pri_K1      
+ Pri_K1           16.49494825762203    
+
+Square-root of the weight matrix:
+
+ Full matrix generated from compressed structure "Prior Weight":
+
+                    Pri_K1      
+ Pri_K1           4.061397328213780    
+
+
+ MODEL-INPUT AND CORRESPONDING TEMPLATE FILES:
+
+ Model-input file: tc1.pval   Template file: tc1_pval.jtf
+
+
+ MODEL-OUTPUT AND CORRESPONDING INSTRUCTION FILES:
+
+ Model-output file: tc1._os   Instruction file: tc1._os.jif   Category: OBS   
+
+********************************************************************************
+ END ECHO OF INPUT - REPORT RESULTS OF SIMULATION
+********************************************************************************
+
+
+ -------------------------------------------------------------------
+ FIT OF SIMULATED EQUIVALENTS TO OBSERVATIONS
+
+ OBSERVATION            MEASURED      SIMULATED                            WEIGHTED
+    NAME                 VALUE          VALUE      RESIDUAL   WEIGHT**.5   RESIDUAL
+
+ B.0                     101.804       100.177       1.627       0.999       1.625    
+ B.1                   -2.900000E-02 -8.392334E-05 -2.8916E-02    20.0     -0.5783    
+ B.12                  -0.129000     -8.406067E-02 -4.4939E-02    20.0     -0.8988    
+ C.0                     128.117       126.832       1.285       0.999       1.283    
+ C.1                   -4.100000E-02 -3.369141E-02 -7.3086E-03    20.0     -0.1462    
+ C.2                   -0.557000     -0.543465     -1.3535E-02    20.0     -0.2707    
+ C.8                    -11.5310      -11.5520      2.1040E-02    20.0      0.4208    
+ C.12                   -14.1840      -14.1918      7.7877E-03    20.0      0.1558    
+ D.0                     156.678       156.718     -4.0201E-02   0.999     -4.0151E-02
+ D.1                    -4.38100      -4.31841     -6.2595E-02    20.0      -1.252    
+ D.12                   -42.5400      -42.5913      5.1286E-02    20.0       1.026    
+ E.0                     124.893       126.832      -1.939       0.999      -1.937    
+ E.1                   -6.700000E-02 -5.139923E-02 -1.5601E-02    20.0     -0.3120    
+ E.12                   -14.3040      -14.2503     -5.3741E-02    20.0      -1.075    
+ F.0                     140.961       140.651      0.3102       0.999      0.3098    
+ F.1                   -6.000000E-02 -9.867859E-02  3.8679E-02    20.0      0.7736    
+ F.12                   -21.6760      -21.6572     -1.8850E-02    20.0     -0.3770    
+ G.0                     126.537       127.041     -0.5037       0.999     -0.5030    
+ G.1                    5.000000E-03 -3.838348E-02  4.3383E-02    20.0      0.8677    
+ G.12                   -14.3650      -14.3663      1.2872E-03    20.0      2.5745E-02
+ H.0                     101.112       101.197     -8.4571E-02   0.999     -8.4466E-02
+ H.1                    4.800000E-02 -2.738953E-03  5.0739E-02    20.0       1.015    
+ H.12                  -0.568000     -0.649841      8.1841E-02    20.0       1.637    
+ I.0                     158.135       156.700       1.435       0.999       1.433    
+ I.1                    -5.53300      -5.53479      1.7900E-03    20.0      3.5801E-02
+ I.12                   -43.2170      -43.1033     -0.1137        20.0      -2.275    
+ J.0                     176.374       176.118      0.2557       0.999      0.2553    
+ J.1                   -1.000000E-03 -0.101578      0.1006        20.0       2.012    
+ J.12                   -38.2420      -38.3626      0.1206        20.0       2.411    
+ A.0                     142.020       140.756       1.264       0.999       1.262    
+ A.1                   -1.300000E-02 -1.672363E-02  3.7236E-03    20.0      7.4473E-02
+ A.12                   -19.9210      -19.8760     -4.5008E-02    20.0     -0.9002    
+ Pri_K1                 4.000000E-04  3.000000E-04  0.2877        4.06       1.168    
+
+ STATISTICS FOR ALL RESIDUALS :
+ AVERAGE WEIGHTED RESIDUAL  : 0.223E+00
+ # RESIDUALS >= 0. :     19
+ # RESIDUALS < 0.  :     14
+ NUMBER OF RUNS  :   17  IN   32 OBSERVATIONS
+
+ STATISTICS FOR THESE RESIDUALS:
+ MAXIMUM WEIGHTED RESIDUAL:  0.241E+01  Observation: J.12                
+ MINIMUM WEIGHTED RESIDUAL: -0.227E+01  Observation: I.12                
+ AVERAGE WEIGHTED RESIDUAL:  0.223E+00
+ # RESIDUALS >= 0.  :      19
+ # RESIDUALS <  0.  :      14
+ NUMBER OF RUNS:       17  IN       33 OBSERVATIONS
+
+ SUM OF SQUARED WEIGHTED RESIDUALS           :    38.476    
+
+ SUM OF SQUARED WEIGHTED RESIDUALS WITH PRIOR:    39.841    
+
+ SUMS OF SQUARED, WEIGHTED RESIDUALS:
+   DEPENDENT VARIABLES:              38.47603    
+   DEPENDENT VARIABLES AND PRIOR:    39.84117    
+
+ NUMBER OF INCLUDED DEPENDENTS =      32 OF      32
+ NUMBER OF PRIOR =                     1
+
+********************************************************************************
+********************************************************************************
+
+ SUM OF SQUARED WEIGHTED RESIDUALS           :    38.476    
+
+ SUM OF SQUARED WEIGHTED RESIDUALS WITH PRIOR:    39.841    
+
+ SMALLEST AND LARGEST WEIGHTED RESIDUALS
+
+             SMALLEST WEIGHTED RESIDUALS
+                      WEIGHTED   PERCENT OF   
+ NAME                 RESIDUAL    OBJ FUNC
+ I.12                    -2.27        12.99
+ E.0                     -1.94         9.42
+ D.1                     -1.25         3.93
+ E.12                    -1.07         2.90
+ A.12                   -0.900         2.03
+
+             LARGEST  WEIGHTED RESIDUALS
+                      WEIGHTED   PERCENT OF   
+ NAME                 RESIDUAL    OBJ FUNC
+ J.12                     2.41        14.59
+ J.1                      2.01        10.16
+ H.12                     1.64         6.72
+ B.0                      1.63         6.63
+ I.0                      1.43         5.16
+
+ CORRELATION BETWEEN ORDERED WEIGHTED RESIDUALS AND NORMAL ORDER STATISTICS
+ FOR OBSERVATIONS =    0.988    
+
+ CORRELATION BETWEEN ORDERED WEIGHTED RESIDUALS AND NORMAL ORDER STATISTICS
+ FOR OBSERVATIONS AND PRIOR INFORMATION =    0.988    
+
+--------------------------------------------------------------------------------
+ COMMENTS ON THE INTERPRETATION OF THE CORRELATION BETWEEN
+ WEIGHTED RESIDUALS AND NORMAL ORDER STATISTICS:
+
+ Generally, IF the reported CORRELATION is LESS than the critical value,
+ at the selected significance level (usually 5 or 10%), the hypothesis
+ that the weighted residuals are INDEPENDENT AND NORMALLY DISTRIBUTED
+ would be REJECTED.  HOWEVER, in this case, conditions are outside of
+ the range of published critical values as discussed below.
+
+ The sum of the number of observations and prior information items is    33
+ which is less than 35, the minimum value for which critical values are
+ published.  Therefore, the critical values for the 5 and 10% significance
+ levels are less than 0.943 and 0.952, respectively.
+
+ CORRELATIONS GREATER than these critical values indicate that, probably, the 
+ weighted residuals ARE INDEPENDENT AND NORMALLY DISTRIBUTED.
+
+ Correlations LESS than these critical values MAY BE ACCEPTABLE, and
+ rejection of the hypothesis is not necessarily warranted.
+
+ The Kolmogorov-Smirnov test can be used to further evaluate the residuals.
+ --------------------------------------------------------------------------
+
+
+  NUMBER OF PROCESS MODEL RUNS CONDUCTED FOR THIS ANALYSIS:       1
+
+********************************************************************************
+             Normal termination of UCODE,   Version:   1.019
+********************************************************************************
+
+
+
+ Run end date and time (yyyy/mm/dd hh:mm:ss): 2010/07/23  9:46:48
+ Elapsed run time:  0.328 Seconds
+

@@ -1,0 +1,7 @@
+# PES file for test case tc1
+#
+   10  2.0 0.01  0.0                       ITEM 1: ITMXP DMAX TOL SOSC
+    0    0    0    0   0  0.0  0.001  1.5 0 ITEM 2: IBEFLG IYCFLG IOSTAR NOPT NFIT SOSR RMAR RMARM
+    2    0    0                            ITEM 3: IPRC IPRINT LPRINT
+ 0.08  0.0    0                            ITEM 4: CSA FCONV LASTX
+    0    0    0                            ITEM 5: NPNG IPR MPR

@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 HfbTest.lst REPLACE
+DATA(BINARY)      9 HfbTest.cbc REPLACE
+DIS              12 HfbTest.dis OLD
+BAS6             13 HfbTest.bas OLD
+OC               39 HfbTest.oc OLD
+DATA             37 HfbTest.fhd REPLACE
+DATA             38 HfbTest.fdn REPLACE
+PCG              18 HfbTest.pcg OLD
+LPF              14 HfbTest.lpf OLD
+CHD              17 HfbTest.chd OLD
+HFB6             43 HfbTest.hfb OLD

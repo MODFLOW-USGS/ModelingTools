@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+  <head>
+    <title>ModelMate&mdash;A GUI for Model Analysis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="publisher" content="USGS" >
+    <link href="/style/common.css" rel="stylesheet" type="text/css" >
+    <link href="/style/custom.css" rel="stylesheet" type="text/css" >
+    <link href="/style/styles.css" rel="stylesheet" type="text/css" >
+    <link href="/style/body.css"   rel="stylesheet" type="text/css" >
+    <link href="/software/software.css" rel="stylesheet" type="text/css" >
+
+    <meta name="description" content="A graphical user interface (GUI) for model analysis.
+            ModelMate supports UCODE_2005 or UCODE_2014 (UCODE), MODFLOW-2005 (MODFLOW), and ModelMuse.">
+    <meta name="title" content="ModelMate">
+    <meta name="version" content="1.0.3">
+    <meta name="os" content="DOS/Win">
+    <meta name="category" content="groundwater:50_gui-and-postproc, general">
+    <meta name="lastupdated" content="2016/2/16">
+      <!--#include virtual="/includes/google-analytics.html" --> 
+<!--#include virtual="/SSI/google_analytics_head.html"-->
+  </head>
+
+  <body>
+    <!--#include virtual="/inc/header.html" -->
+    <!-- water navigation bar -->
+
+    <div id="navmain" class="noprint">
+      <ul class="navmain">
+        <li><a href="/" title="Home">Home</a></li>
+        <li><a href="/data/" title="Water Resources Data">Data</a></li>
+        <li><a href="/maps.html" title="Water Resources Maps and GIS Information">Maps</a></li>
+        <li class="chosentopic">
+          <a href="/software/" title="Water Resources Applications Software">Software</a></li>
+        <li><a href="/pubs/" title="Water Resources Reports">Publications</a></li>
+        <li><a href="/programs.html" title="Water Resources Projects">Programs</a></li>
+        <li><a href="/user_feedback_form.html" title="Send Feedback">Contact</a></li>
+      </ul>
+
+    </div>
+    <!-- END water navigation bar -->
+
+
+    <h2>ModelMate</h2>
+
+    <h3>A Graphical User Interface (GUI) for Model Analysis</h3>
+    <hr >
+
+    <h3>Information</h3>
+    <p>ModelMate is a graphical user interface (GUI) designed to facilitate model
+    analysis by software applications that invoke model simulations as external
+    processes.  This version of ModelMate supports one model-analysis
+    program, <a href="http://igwmc.mines.edu/freeware/ucode/">UCODE</a>,
+    and one model software program,
+    <a href="http://water.usgs.gov/ogw/modflow/MODFLOW.html">MODFLOW&ndash;2005</a>.
+    ModelMate can be used to prepare input files for UCODE_2005 or UCODE_2014 (UCODE), run UCODE,
+    and display analysis results.  ModelMate stores data to define parameters,
+    observations, predictions, prior information, derived parameters, and
+    various settings to control UCODE execution.  A link to the
+    <a href="http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html">GW_Chart</a>
+    graphing program facilitates visual interpretation of results.  ModelMate
+    includes capabilities for organizing directories used with the
+    parallel-processing capabilities of UCODE and for maintaining files
+    in those directories to be identical to a set of files in a master directory.
+    The interface itself can be configured to allow users to define attributes
+    of parameters, observations, predictions, and prior-information items either
+    by groups or by individual items and to generate UCODE input
+    accordingly.  ModelMate can be used on its own or in conjunction with
+    <a href="http://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuse.html">ModelMuse</a>,
+    a graphical user interface for MODFLOW&ndash;2005.
+    ModelMate is designed to be enhanced to support other model-analysis
+    software and other simulation-model software.  </p>
+    <ul>
+      <li><a href="code/doc/readme.txt">Readme file</a> (Includes installation instructions.)</li>
+    <li>Current version is 1.0.3 (2/16/2016). Please see
+    <a href="code/doc/release.txt">release notes</a>.</li>
+
+    </ul>
+
+    <hr />
+    <h3><a href="./faq.html">Frequently Asked Questions</a></h3>
+    <hr />
+
+    <h3>ModelMate main window</h3>
+    <table border="0">
+        <tr>
+          <td><img src="illustrations/ModelMate-main-window.jpg"
+               alt="ModelMate main window" width="800" height="675"><br>
+          </td>
+        </tr>
+
+    </table>
+    <hr>
+
+    <h3>ModelMate compiled for...</h3>
+    <ul>
+      <li class="binary">Microsoft Windows: <a href="code/WINDOWS/ModelMate_1_0_3.exe">ModelMate ver. 1.0.3</a> (4.0 MB)
+      <br><br>
+      <b><big>Please note:</big></b> For convenience, executable files for UCODE_2014 and MODFLOW-2005 are
+        included in the ModelMate distribution.
+        However, the files in the ModelMate distribution may not be the most recent versions of those
+        programs.
+        For best results using ModelMate, please ensure that you have up-to-date versions of
+        <a href="http://igwmc.mines.edu/freeware/ucode/">UCODE</a> and
+        <a href="http://water.usgs.gov/ogw/modflow/MODFLOW.html">MODFLOW&ndash;2005</a>.
+        <br><br>
+        <b><big>Note regarding UCODE version:</big></b>
+        UCODE input files created by the current version of ModelMate are compatible with either UCODE_2005 or UCODE_2014. 
+        Therefore, references to "UCODE" or "UCODE_2005" in the GUI can be taken to refer to either UCODE_2005 
+        or UCODE_2014.        In ModelMate, use the <b>Project</b> menu to open the <b>Program Locations</b> dialog, 
+        then revise the pathname for "UCODE" to point to the UCODE executable of your choice.
+        <br><br>
+      </li>
+    </ul>
+
+    <hr />
+
+    <h3>Documentation</h3>
+    <ul>
+      <li><a href="/software/help/documentation">How to order</a> U.S.
+        Geological Survey printed documentation</li>
+
+      <li><a href="http://pubs.usgs.gov/tm/tm6e4/">Banta, E.R., 2011,
+      ModelMate&mdash;A Graphical User Interface for Model Analysis: U.S. Geological Survey Techniques and Methods, book 6, chap. E4, 31 p.</a></li>
+
+    </ul>
+
+    <hr />
+    <h3>Support</h3>
+
+    <p>Support is provided for correcting bugs and clarification of how ModelMate
+         is intended to work.  </p>
+
+    <p>For support, contact: </p>
+      <ul>
+        <li> Ned Banta,
+          <script language="JavaScript" type="text/javascript">
+                <!--
+                    emailname = "erbanta";
+                emailserver = "usgs.gov";
+                    document.write("<a href='mailto:" + emailname + "@" + emailserver +"'>");
+                document.write(emailname + "@" + emailserver);
+                    document.write("</a>");
+                //-->
+          </script></li>
+      </ul>
+
+    <hr />
+    <h3>Notification of Releases</h3>
+
+    <p>If you would like to be notified by email when each new version of
+       ModelMate is released, please send your request by email to Ned Banta,
+       <script language="JavaScript" type="text/javascript">
+              <!--
+                  emailname = "erbanta";
+              emailserver = "usgs.gov";
+                  document.write("<a href='mailto:" + emailname + "@" + emailserver +"'>");
+              document.write(emailname + "@" + emailserver);
+                  document.write("</a>");
+              //-->
+       </script>.
+    </p>
+
+    <hr />
+    <h3>Related Programs</h3>
+    <ul>
+      <li><a href="http://water.usgs.gov/ogw/modflow/MODFLOW.html">MODFLOW&ndash;2005</a></li>
+      <li><a href="http://igwmc.mines.edu/freeware/ucode/">UCODE</a></li>
+      <li><a href="http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html">GW_Chart</a></li>
+      <li><a href="http://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuse.html">ModelMuse</a></li>
+    </ul>
+    <hr >
+
+    <p>Point of contact for ModelMate -- <a href="http://answers.usgs.gov/cgi-bin/gsanswers?pemail=erbanta&subject=ModelMate">Ned Banta</a> <br ></p>
+
+    <hr>
+    <!--#include virtual="/inc/footer_water.html" -->
+    <!--#include virtual="/inc/footer.html" -->
+  </body>
+</html>

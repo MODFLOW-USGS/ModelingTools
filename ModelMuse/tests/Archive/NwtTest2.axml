@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="NwtTest2" FileType="bin">
+    <FileName Model_Name="NwtTest2" FileType="bin">C:\WRDAPP\MODFLOW-NWT_1.1.3\bin\MODFLOW-NWT_64.exe</FileName>
+  </bin>
+  <ancillary Model_Name="NwtTest2" FileType="ancillary">
+    <FileName Model_Name="NwtTest2" FileType="ancillary">NwtTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="NwtTest2" FileType="Model Input">
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.bas</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.dis</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.evt</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.gag</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.ghb</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.gsf</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.nam.archive</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.nwt</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.oc</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.rch</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.sfr</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.upw</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">NwtTest2.wel</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Input">usgs.NwtTest2.reference</FileName>
+  </model>
+  <output Model_Name="NwtTest2" FileType="Model Output">
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.cbc</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.fdn</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.fhd</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.lst</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg1</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg10</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg11</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg12</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg2</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg3</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg4</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg5</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg6</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg7</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg8</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.sfrg9</FileName>
+    <FileName Model_Name="NwtTest2" FileType="Model Output">NwtTest2.wel_dewater.txt</FileName>
+  </output>
+</Model_Archive_List>

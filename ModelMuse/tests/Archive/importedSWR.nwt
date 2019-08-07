@@ -1,0 +1,3 @@
+# NWT: Newton Solver file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+      0.001        1.5    30     1E-006     2     1     1 SPECIFIED       0.75     0.0001          0        0.1     0     1          0          0 # Data Set 1, HEADTOL FLUXTOL MAXITEROUT THICKFACT LINMETH IPRNWT IBOTAV OPTIONS DBDTHETA DBDKAPPA DBDGAMMA MOMFACT BACKFLAG MAXBACKITER BACKTOL BACKREDUCE
+     1     0     3     7     0          0     1     0.0001      0.001   100 # Data set 2b, IACL NORDER LEVEL NORTH IREDSYS RRCTOLS IDROPTOL EPSRN HCLOSEXMD MXITERXMD

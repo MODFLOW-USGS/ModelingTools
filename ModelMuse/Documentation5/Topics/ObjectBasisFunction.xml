@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectBasisFunction</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectBasisFunction</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectBasisFunction</text><text styleclass="Normal" translate="true">(Key [, DefaultValue]) used a finite element basis function to interpolate a value based on vertex values at the corners of triangular or quadrilateral polygons. Key is the used to identify the values associated with each vertex of the object. There must be a vertex value associated with each corner of the object. Values associated with Key are defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values Dialog Box</link><text styleclass="Normal" translate="true">. If the object is not a triangular or quadrilateral polygon or if there are not vertex values associated with each corner of the polygon or if the formula is used outside of an object, DefaultValue will be returned. If DefaultValue has not been defined, zero will be used as the default value.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Vertex Values dialog box</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

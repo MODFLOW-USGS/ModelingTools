@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">The Mesh - SUTRA</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">The Mesh - SUTRA</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">SUTRA uses a finite element mesh composed either of quadrilateral elements for two-dimensional models or hexahedral elements for three-dimensional models. Some properties such as permeability are defined in elements whereas others such as the initial pressure are defined for nodes. The boundary conditions, such as specified pressures, are defined at nodes. For two-dimensional (2D) SUTRA models, the mesh consists of quadrilateral elements on the top view of the model. For three-dimensional (3D) SUTRA models, the mesh consists of vertically aligned hexahedral elements such that layers of nodes are also vertically aligned. Layers of elements pinch out if the vertical thickness of a layer is less than or equal to zero. Pinchouts can leave holes in the mesh if neither the underlying nor overlying units pinch out. The user can specify a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Layer_Groups_Dialog_Box" anchor="MinimumThickness" styleclass="Normal" translate="true">minimum thickness</link><text styleclass="Normal" translate="true"> to prevent pinchouts.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="2" colcount="2">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image"><image src="SUTRA_2D_Mesh.png" scale="100.00%" styleclass="Image"></image></para>
+        </td>
+        <td>
+          <para styleclass="Image"><image src="SUTRA_3D_Mesh.bmp" scale="47.49%" width="427" height="246" styleclass="Image"></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Image Caption"><text styleclass="Table Image Caption" translate="true">Example of a two-dimensional SUTRA Mesh.</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Image Caption"><text styleclass="Table Image Caption" translate="true">Example of a three-dimensional SUTRA mesh.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

@@ -1,0 +1,13 @@
+# Name File for MT3DMS created on 8/1/2019 by ModelMuse
+LIST 16 ..\..\output\output.LakeNWT_MT3DMS\LakeNWT.mls
+FTL 10 ..\..\output\output.LakeNWT\LakeNWT.ftl
+DATA 17 ..\..\output\output.LakeNWT_MT3DMS\LakeNWT.cnf
+LKT 18 ..\..\model\model.LakeNWT_MT3DMS\LakeNWT.lkt
+DATA 81 ..\..\output\output.LakeNWT_MT3DMS\LakeNWT.lktobs
+BTN 1 ..\..\model\model.LakeNWT_MT3DMS\LakeNWT.btn
+DATA(BINARY) 201 ..\..\output\output.LakeNWT_MT3DMS\LakeNWT_Conc.ucn
+DATA 601 ..\..\output\output.LakeNWT_MT3DMS\LakeNWT_Conc._mas
+ADV 2 ..\..\model\model.LakeNWT_MT3DMS\LakeNWT.adv
+DSP 3 ..\..\model\model.LakeNWT_MT3DMS\LakeNWT.dsp
+SSM 4 ..\..\model\model.LakeNWT_MT3DMS\LakeNWT.ssm
+GCG 9 ..\..\model\model.LakeNWT_MT3DMS\LakeNWT.gcg

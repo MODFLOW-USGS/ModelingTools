@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "jupiter_api_lib", "jupiter_api_lib\jupiter_api_lib.vfproj", "{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}"
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "group_example", "group_example\group_example.vfproj", "{1F00E338-AA1A-4B2B-8B3D-7201C1E962C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FE64F08A-92B1-4BE9-83D3-AEBEE974CA50} = {FE64F08A-92B1-4BE9-83D3-AEBEE974CA50}
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B} = {DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}
+	EndProjectSection
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "jrunner", "jrunner\jrunner.vfproj", "{1E03B648-713C-400A-A493-29D0C5339960}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B} = {DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}
+	EndProjectSection
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "sensitivity_example", "sensitivity_example\sensitivity_example.vfproj", "{FE64F08A-92B1-4BE9-83D3-AEBEE974CA50}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1E03B648-713C-400A-A493-29D0C5339960} = {1E03B648-713C-400A-A493-29D0C5339960}
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B} = {DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}.Debug|Win32.Build.0 = Debug|Win32
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}.Release|Win32.ActiveCfg = Release|Win32
+		{DF96C0AA-3E9E-4059-95F5-6A8D115E2F5B}.Release|Win32.Build.0 = Release|Win32
+		{1F00E338-AA1A-4B2B-8B3D-7201C1E962C8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1F00E338-AA1A-4B2B-8B3D-7201C1E962C8}.Debug|Win32.Build.0 = Debug|Win32
+		{1F00E338-AA1A-4B2B-8B3D-7201C1E962C8}.Release|Win32.ActiveCfg = Release|Win32
+		{1F00E338-AA1A-4B2B-8B3D-7201C1E962C8}.Release|Win32.Build.0 = Release|Win32
+		{1E03B648-713C-400A-A493-29D0C5339960}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1E03B648-713C-400A-A493-29D0C5339960}.Debug|Win32.Build.0 = Debug|Win32
+		{1E03B648-713C-400A-A493-29D0C5339960}.Release|Win32.ActiveCfg = Release|Win32
+		{1E03B648-713C-400A-A493-29D0C5339960}.Release|Win32.Build.0 = Release|Win32
+		{FE64F08A-92B1-4BE9-83D3-AEBEE974CA50}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FE64F08A-92B1-4BE9-83D3-AEBEE974CA50}.Debug|Win32.Build.0 = Debug|Win32
+		{FE64F08A-92B1-4BE9-83D3-AEBEE974CA50}.Release|Win32.ActiveCfg = Release|Win32
+		{FE64F08A-92B1-4BE9-83D3-AEBEE974CA50}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,6 @@
+# PVAL file created on 5/2/2011 by ModelMuse version 2.8.0.29.
+4
+HydCond 0.050000001
+DRT_COND 2
+recharge 0.001
+ETS_Max 0.0099999998

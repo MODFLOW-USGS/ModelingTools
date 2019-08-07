@@ -1,0 +1,16 @@
+# MODPATH Basic Data file file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+  1.000000000000E+030   1.000000000000E+020  # Data Set 1: HNOFLO  HDRY
+     1 # Data Set 2: DefaultIFaceCount
+        RECHARGE
+     6
+     1     0     0     0     0
+CONSTANT        1 # Data Set 6: IBOUND Layer 1
+CONSTANT        1 # Data Set 6: IBOUND Layer 2
+CONSTANT        1 # Data Set 6: IBOUND Layer 3
+CONSTANT        1 # Data Set 6: IBOUND Layer 4
+CONSTANT        1 # Data Set 6: IBOUND Layer 5
+CONSTANT     2.500000000000E-001  # Data Set 7: Porosity Layer 1: Layer 1
+CONSTANT     2.500000000000E-001  # Data Set 7: Porosity Layer 2: Layer 2
+CONSTANT     2.500000000000E-001  # Data Set 7: Porosity Layer 3: Layer 3
+CONSTANT     2.500000000000E-001  # Data Set 7: Porosity Layer 4: Layer 4
+CONSTANT     2.500000000000E-001  # Data Set 7: Porosity Layer 5: Layer 5

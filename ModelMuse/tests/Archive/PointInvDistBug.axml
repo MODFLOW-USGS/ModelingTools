@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="PointInvDistBug" FileType="bin">
+    <FileName Model_Name="PointInvDistBug" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="PointInvDistBug" FileType="ancillary">
+    <FileName Model_Name="PointInvDistBug" FileType="ancillary">PointInvDistBug.gpt</FileName>
+  </ancillary>
+  <model Model_Name="PointInvDistBug" FileType="Model Input">
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.bas</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.dis</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.gsf</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.lpf</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.nam.archive</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.oc</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">PointInvDistBug.pcg</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Input">usgs.PointInvDistBug.reference</FileName>
+  </model>
+  <output Model_Name="PointInvDistBug" FileType="Model Output">
+    <FileName Model_Name="PointInvDistBug" FileType="Model Output">PointInvDistBug.cbc</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Output">PointInvDistBug.fdn</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Output">PointInvDistBug.fhd</FileName>
+    <FileName Model_Name="PointInvDistBug" FileType="Model Output">PointInvDistBug.lst</FileName>
+  </output>
+</Model_Archive_List>

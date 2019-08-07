@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Generating the Grid</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">RMA: Generating the Grid</text></para>
+    </header>
+    <para styleclass="Figure Referrer"><text styleclass="Figure Referrer" translate="true">It is now possible to generate the grid. Generate it by clicking the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Generate</text><text styleclass="Figure Referrer" translate="true"> grid button </text><image src="GenerateGrid.png" scale="100.00%" styleclass="Figure Referrer"><title translate="true">Generate Grid button</title></image><text styleclass="Figure Referrer" translate="true">. Uncheck the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Calculate grid angle automatically</text><text styleclass="Figure Referrer" translate="true"> check box and click the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">OK</text><text styleclass="Figure Referrer" translate="true"> button. The grid should appear similar to figure 102. The green lines indicate that the first row is selected. The blue lines indicate that the first column is selected.</text></para>
+    <para styleclass="Image"><image src="RmaGridGeneration.bmp" scale="100.00%" styleclass="Image"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 102</text><text styleclass="Image Caption" translate="true">. Grid generated for the Rocky Mountain Arsenal.</text></para>
+  </body>
+</topic>

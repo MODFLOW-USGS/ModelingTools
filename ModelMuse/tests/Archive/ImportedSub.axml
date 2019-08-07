@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportedSub" FileType="bin">
+    <FileName Model_Name="ImportedSub" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportedSub" FileType="ancillary">
+    <FileName Model_Name="ImportedSub" FileType="ancillary">ImportedSub.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportedSub" FileType="Model Input">
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.bas</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.bcf</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.chd</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.dis</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.gsf</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.nam.archive</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.oc</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.sip</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.sub</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">ImportedSub.wel</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Input">usgs.ImportedSub.reference</FileName>
+  </model>
+  <output Model_Name="ImportedSub" FileType="Model Output">
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.cbc</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.fdn</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.fhd</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.lst</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.SubComIsOut</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.SubComMlOut</FileName>
+    <FileName Model_Name="ImportedSub" FileType="Model Output">ImportedSub.SubSubOut</FileName>
+  </output>
+</Model_Archive_List>

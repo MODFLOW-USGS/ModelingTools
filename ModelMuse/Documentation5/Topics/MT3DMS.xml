@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The various MT3DMS packages can be selected on the can be selected in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. These packages are:</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="BTN_Basic_Transport_Package" styleclass="Normal" translate="true">Basic Transport Package (BTN)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ADV_Advection_Package_Pane" styleclass="Normal" translate="true">Advection Package (ADV)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DSP_Dispersion_Package_Pane" styleclass="Normal" translate="true">Dispersion Package (DSP)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SSM_Sink__Source_Mixing_Packag" styleclass="Normal" translate="true">Sink &amp; Source Mixing Package (SSM)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" styleclass="Normal" translate="true">Chemical Reactions Package (RCT)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GCG_Generalized_Conjugate_Grad" styleclass="Normal" translate="true">Generalized Conjugate Gradient Solver (GCG)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="TOB_Transport_Observation_Pack" styleclass="Normal" translate="true">Transport Observation Package (TOB)</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="UZT_Unsaturated-Zone_Transport" styleclass="Normal" translate="true">UZT: Unsaturated-Zone Transport Package (MT3D-USGS)</link></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BTN_Basic_Transport_Package" styleclass="Normal" translate="true">BTN</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GCG_Generalized_Conjugate_Grad" styleclass="Normal" translate="true">GCG</link><text styleclass="Normal" translate="true"> packages are always used in MT3DMS.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Additional data related to MT3DMS are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Dispersion_Tab" styleclass="Strong" translate="true">MODFLOW Layer Groups</link><text styleclass="Strong" translate="true">,</text><text styleclass="Normal" translate="true"> the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" anchor="MT3DMS" styleclass="Strong" translate="true">MODFLOW Time</link><text styleclass="Normal" translate="true">, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS_Pane" styleclass="Strong" translate="true">MODFLOW Output Control</link><text styleclass="Strong" translate="true">&#32;</text><text styleclass="Normal" translate="true">and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Flux_Observations" styleclass="Strong" translate="true">Manage Flow Observations</link><text styleclass="Normal" translate="true"> dialog boxes.</text></para>
+  </body>
+</topic>

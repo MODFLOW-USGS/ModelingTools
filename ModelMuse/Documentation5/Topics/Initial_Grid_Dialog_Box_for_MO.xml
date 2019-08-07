@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Grid Dialog Box for MODFLOW</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Grid Dialog Box for MODFLOW</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">With MODFLOW, the user specifies the version of MODFLOW to use, the dimensions of the grid (the number of columns, rows, and layers) and the width of the columns and rows. The user must also specify the X, Y, and Z coordinates of the grid origin. The grid origin is the location of the node in the first column, row, and layer. Columns are numbered from left to right. Rows are numbered from back to front. Layers are numbered from top to bottom. Thus the grid origin is the node at the left, back, top corner of the grid. The grid angle must also be specified. The angle is measured in degrees counterclockwise from the X-axis. The vertical exaggeration may also be specified. If it is not specified, a reasonable default value will be calculated. The user also specifies the elevation of the top of the model, the names of the aquifers, and the elevations of the bottoms of those aquifers. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user may choose not to define the grid by clicking the </text><text styleclass="Strong" translate="true">No Grid</text><text styleclass="Normal" translate="true"> button. The user will then need to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Generating_Grids" styleclass="Normal" translate="true">specify the rest of the grid</link><text styleclass="Normal" translate="true"> later.</text></para>
+  </body>
+</topic>

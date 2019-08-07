@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 GhbTest.lst REPLACE
+DATA(BINARY)      9 GhbTest.cbc REPLACE
+DIS              12 GhbTest.dis OLD
+BAS6             13 GhbTest.bas OLD
+OC               39 GhbTest.oc OLD
+DATA             37 GhbTest.fhd REPLACE
+DATA             38 GhbTest.fdn REPLACE
+PCG              18 GhbTest.pcg OLD
+LPF              14 GhbTest.lpf OLD
+CHD              17 GhbTest.chd OLD
+GHB              19 GhbTest.ghb OLD

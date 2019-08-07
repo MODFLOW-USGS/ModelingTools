@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">DSP: Dispersion Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DSP: Dispersion Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The DSP: Dispersion Package pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS</link><text styleclass="Normal" translate="true">. It is used to specify data for the DSP package in MT3DMS. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Only a single variable is specified on the DSP: Dispersion Package pane, </text><text styleclass="Strong" translate="true">MultiDiffusion</text><text styleclass="Normal" translate="true">. If this option is selected, the user must specify a separate molecular diffusion coefficient for each mobile chemical species at each cells. Otherwise, the same molecular diffusion coefficient will apply to all the mobile chemical species and the data will be defined for each layer rather than for each cell.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Other data related to the Dispersion package are specified through </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets" styleclass="Normal" translate="true">data sets</link><text styleclass="Normal" translate="true"> or in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Dispersion_Tab" styleclass="Strong" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

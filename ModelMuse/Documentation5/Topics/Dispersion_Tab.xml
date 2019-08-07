@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Dispersion Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Dispersion Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Dispersion</text><text styleclass="Normal" translate="true"> tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Dispersion</text><text styleclass="Normal" translate="true"> tab is only visible if the Dispersion package in MT3DMS is selected.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Dispersion</text><text styleclass="Normal" translate="true"> tab is used to specify the transverse dispersivity ratios in the horizontal (TRPT) and vertical (TRTV) directions and the diffusion coefficients for each layer (DMCOEF) in a layer group. Longitudinal dispersivity is defined on a cell-by-cell basis using a data set (Required|MT3DMS|Longitudinal_Dispersivity). The dispersivity and diffisuion coefficients help determine the movements of solutes. </text></para>
+  </body>
+</topic>

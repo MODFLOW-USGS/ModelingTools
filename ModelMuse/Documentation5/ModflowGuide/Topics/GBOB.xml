@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GBOB - General-Head-Boundary Observation Package</title>
+  <keywords>
+    <keyword translate="true">COLUMN</keyword>
+    <keyword translate="true">EVFGB</keyword>
+    <keyword translate="true">FACTOR</keyword>
+    <keyword translate="true">FLWOBS</keyword>
+    <keyword translate="true">FMTIN</keyword>
+    <keyword translate="true">GBOB</keyword>
+    <keyword translate="true">HOBS</keyword>
+    <keyword translate="true">IOWTQGB</keyword>
+    <keyword translate="true">IPRN</keyword>
+    <keyword translate="true">IREFSP</keyword>
+    <keyword translate="true">IUGBOBSV</keyword>
+    <keyword translate="true">LAYER</keyword>
+    <keyword translate="true">NQCGB</keyword>
+    <keyword translate="true">NQCLGB</keyword>
+    <keyword translate="true">NQGB</keyword>
+    <keyword translate="true">NQOBGB</keyword>
+    <keyword translate="true">NQTGB</keyword>
+    <keyword translate="true">OBSNAM</keyword>
+    <keyword translate="true">PLOT-SYMBOL</keyword>
+    <keyword translate="true">ROW</keyword>
+    <keyword translate="true">STAT-FLAG</keyword>
+    <keyword translate="true">STATISTIC</keyword>
+    <keyword translate="true">Text</keyword>
+    <keyword translate="true">TOFFSET</keyword>
+    <keyword translate="true">TOMULTGB</keyword>
+    <keyword translate="true">WTQ</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GBOB - General-Head-Boundary Observation Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GBOB</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The General-Head-Boundary Observation input file is used to specify observations of flow through </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB" styleclass="Normal" translate="true">General-Head Boundaries</link><text styleclass="Normal" translate="true"> for use in the Observation process.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr00184" target="_blank" styleclass="Citation" translate="true">Hill, M.C., Banta, E.R., Harbaugh, A.W., and Anderman, E.R., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to the Observation, Sensitivity, and Parameter-Estimation Processes and three post-processing programs: U.S. Geological Survey Open-File Report 00-184, 210 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="OBS.pdf" styleclass="Normal" translate="true">OBS.pdf</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation Process</link><text styleclass="Normal" translate="true"> input files,</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB" styleclass="Normal" translate="true">General-Head Boundary</link><text styleclass="Normal" translate="true"> package.</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB" styleclass="Normal" translate="true">General-Head Boundary</link><text styleclass="Normal" translate="true"> package package must be used in models in which the General-Head-Boundary Observation input file is used.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for the General-Head-Boundary Observation input file is read from a file that is specified with &quot;GBOB&quot; as the file type listed in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file.</text></para>
+    <para styleclass="Normal"><anchor id="MultipleCells" styleclass="Normal"></anchor></para>
+    <para styleclass="Normal"><snippet src="Multiple_Observations_at_the_S"/></para>
+    <para styleclass="Normal"><table rowcount="10" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional and can include as many lines as desired. Each line needs to begin with the “#” character in the first column.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character string (maximum of 79 characters) that starts in column 2. Any characters can be included in Text. The “#” character needs to be in column 1. Text is printed when the file is read and provides an opportunity for the user to include information about the model both in the input file and the associated output file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><table rowcount="3" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">NQGB NQCGB NQTGB (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">NQGB NQCGB NQTGB IUGBOBSV </text><text styleclass="Keywords" translate="true">[NOPRINT]</text><text styleclass="Normal" translate="true"> (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">NQGB NQCGB NQTGB IUGBOBSV (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NQGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NQGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NQGB—is the number of cell groups for which general-head-boundary observations are listed. A group consists of the cells needed to represent one flow measurement (eq. 9).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NQCGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NQCGB—is greater than or equal to the total number of cells in all cell groups. NQCGB must be greater than or equal to the sum of all |</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQCLGB" styleclass="Normal" translate="true">NQCLGB</link><text styleclass="Normal" translate="true">|.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NQTGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NQTGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NQTGB—is the total number of general-head-boundary observations for all cell groups. NQTGB must equal the sum of all </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQOBGB" styleclass="Normal" translate="true">NQOBGB</link><text styleclass="Normal" translate="true">, which are specified in repetitions of item 3 in the input file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IUGBOBSV]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IUGBOBSV—File unit for saving observation data in a file. Specify 0 for no observation output file. The file for this unit must be included as type “DATA” in the Name File.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[NOPRINT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">NOPRINT</text><text styleclass="Normal" translate="true">—is an option keyword that turns off printing of input and output data in the Listing File.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><table rowcount="2" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">TOMULTGB &#160;EVFGB IOWTQGB (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">TOMULTGB (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TOMULTGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TOMULTGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TOMULTGB—is the time-offset multiplier for general-head-boundary observations [-- or T/T]. The product of TOMULTGB and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="TOFFSET" styleclass="Normal" translate="true">TOFFSET</link><text styleclass="Normal" translate="true"> must produce a time value in units consistent with other model input. TOMULTGB can be dimensionless or can be used to convert the units of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="TOFFSET" styleclass="Normal" translate="true">TOFFSET</link><text styleclass="Normal" translate="true"> to the time unit used in the simulation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[EVFGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="EVFGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">EVFGB—is the error variance multiplier for observations represented by the General-Head Boundary Package and is used to calculate the weights as described below in the explanation of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="STATISTIC" styleclass="Normal" translate="true">STATISTIC</link><text styleclass="Normal" translate="true">. EVFGB makes it easy to change the weights uniformly for all flow observations represented using the General-Head Boundary Package.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IOWTQGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IOWTQGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IOWTQGB—is a flag that indicates that the variance-covariance matrix on general-head-boundary observations is to be read into array WTQ of item 7. If IOWTQGB equals zero, weights are calculated using </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="STATISTIC" styleclass="Normal" translate="true">STATISTIC</link><text styleclass="Normal" translate="true"> of item 4; if it is greater than zero, items 6 and 7 are read and used to calculate the weights.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read items 3, 4, and 5 for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQGB" styleclass="Normal" translate="true">NQGB</link><text styleclass="Normal" translate="true"> groups of cells for which general-head-boundary observations are to be specified.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NQOBGB NQCLGB (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NQOBGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NQOBGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NQOBGB—is the number of times at which flows are observed for the group of cells.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NQCLGB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NQCLGB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NQCLGB—is a flag, and the absolute value of NQCLGB is the number of cells in the group. If NQCLGB is less than zero, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="FACTOR" styleclass="Normal" translate="true">FACTOR</link><text styleclass="Normal" translate="true"> = 1.0 for all cells in the group.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><table rowcount="2" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">OBSNAM IREFSP TOFFSET HOBS STATISTIC STAT-FLAG PLOT-SYMBOL (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">OBSNAM IREFSP TOFFSET FLWOBS (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read item 4 for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQOBGB" styleclass="Normal" translate="true">NQOBGB</link><text styleclass="Normal" translate="true"> observation times for this group of cells. </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">STATISTIC and STAT-FLAG are ignored if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="IOWTQGB" styleclass="Normal" translate="true">IOWTQGB</link><text styleclass="Normal" translate="true"> is greater than zero.</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OBSNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">OBSNAM—is a string of 1 to 12 nonblank characters used to identify the observation. &#160;The current version of MODFLOW-2000 (v 1.17.02) accepts duplicate observation names, but if duplicate names are found, a warning concerning the duplication is written to the Global file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IREFSP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IREFSP—is the reference stress period to which the observation time is referenced. The reference point is the beginning of the stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TOFFSET]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TOFFSET" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TOFFSET—is the time from the beginning of stress period IREFSP to the time of the observation [T]. TOFFSET must be in units such that the product of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="TOMULTGB" styleclass="Normal" translate="true">TOMULTGB</link><text styleclass="Normal" translate="true"> and TOFFSET is in time units consistent with other model input. TOFFSET and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="TOMULTGB" styleclass="Normal" translate="true">TOMULTGB</link><text styleclass="Normal" translate="true"> from the GBOB file and values of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="PERLEN" styleclass="Normal" translate="true">PERLEN</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="NSTP" styleclass="Normal" translate="true">NSTP</link><text styleclass="Normal" translate="true">, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="TSMULT" styleclass="Normal" translate="true">TSMULT</link><text styleclass="Normal" translate="true"> from the Discretization file (Harbaugh and others, 2000) are used to determine the stress period, time step, and time during the time step for the observation. To specify that an observation is for a steady-state model solution, specify IREFSP as the stress-period number of the steady-state stress period, and specify TOFFSET such that the product </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="TOMULTGB" styleclass="Normal" translate="true">TOMULTGB</link><text styleclass="Normal" translate="true">*TOFFSET is less than or equal to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="PERLEN" styleclass="Normal" translate="true">PERLEN</link><text styleclass="Normal" translate="true"> for the stress period; if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="PERLEN" styleclass="Normal" translate="true">PERLEN</link><text styleclass="Normal" translate="true"> is zero, set TOFFSET to zero. If the observation falls within a time step, the simulated equivalent is calculated by linearly interpolating between values for the beginning and end of the time step. If the first stress period is transient and the observation falls within the first time step, the simulated equivalent from the end of the time step is used because no flow from the beginning of the time step is available for interpolation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HOBS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HOBS—is the observed general-head-boundary gain (if HOBS is negative) or loss (if HOBS is positive) [L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T]. The terms “gain” and “loss” are from the perspective of the surface-water body, so that gains occur when water leaves the groundwater system, and losses occur when water flows into the groundwater system.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FLWOBS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">FLWOBS—is the observed flow from the general-head boundary into the aquifer (positive) or the flow from the aquifer into the boundary (negative) [L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T].</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STATISTIC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="STATISTIC" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">STATISTIC—is the value from which the weight for the observation is calculated as determined using STAT-FLAG. STATISTIC is ignored if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="IOWTQGB" styleclass="Normal" translate="true">IOWTQGB</link><text styleclass="Normal" translate="true"> is greater than zero, in which case </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="WTQ" styleclass="Normal" translate="true">WTQ</link><text styleclass="Normal" translate="true"> of item 7 is used to define the weighting.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STAT-FLAG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG—is a flag identifying what STATISTIC is and how the weight is calculated.</text></para>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG is ignored if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="IOWTQGB" styleclass="Normal" translate="true">IOWTQGB</link><text styleclass="Normal" translate="true"> is greater than zero.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 0, STATISTIC is a scaled variance [(L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">], weight = 1/(STATISTIC * EVFGB),</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 1, STATISTIC is a scaled standard deviation [L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T], weight = 1/(STATISTIC</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">* EVFGB), and</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 2, STATISTIC is a scaled coefficient of variation [--], weight = 1/[(STATISTIC * HOBS)</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">* EVFGB].</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PLOT-SYMBOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PLOT-SYMBOL—is an integer that will be written to output files intended for graphical analysis to allow control of the symbols used when plotting data.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LAYER ROW COLUMN FACTOR (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read item 5 for each of |</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQCLGB" styleclass="Normal" translate="true">NQCLGB</link><text styleclass="Normal" translate="true">| cells in this group.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LAYER—is the layer index of a general-head-boundary cell included in the cell group.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ROW—is the row index of a general-head-boundary cell included in the cell group.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[COLUMN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">COLUMN—is the column index of a general-head-boundary cell included in the cell group.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FACTOR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="FACTOR" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">FACTOR—is the portion of the simulated gain or loss in the cell that is included in the total simulated gain or loss for this cell group (f</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">n</text><text styleclass="Normal" translate="true"> of eq. 9).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">Read items 6 and 7 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="IOWTQGB" styleclass="Normal" translate="true">IOWTQGB</link><text styleclass="Normal" translate="true"> is greater than 0. </text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">Items 6 and 7 are not available in MODFLOW-2005 and MODFLOW-LGR.</text><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">FMTIN IPRN (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="FMTIN" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal"><snippet src="ObsFmtinIprn"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">WTQ(1,1), WTQ(1,2), WTQ(1,3), ... , WTQ(1,</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">) (format: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="FMTIN" styleclass="Normal" translate="true">FMTIN</link><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" styleclass="Normal" translate="true">TIN</link><text styleclass="Normal" translate="true">)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WTQ(2,1), WTQ(2,2), WTQ(2,3), ... , WTQ(2,</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">...</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WTQ(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">,1), WTQ(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">,2), WTQ(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">,3), ... , WTQ(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">,</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true">)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WTQ]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="WTQ" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">WTQ—is an </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true"> by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB" anchor="NQTGB" styleclass="Normal" translate="true">NQTGB</link><text styleclass="Normal" translate="true"> array containing the variance-covariance matrix on general-head-boundary flow observations [(L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T)</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">]. For elements WTQ(I,J), if I </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> J, WTQ(I,J) is the covariance between observations I and J; if I = J, WTQ(I,J) is the variance of observation I. Note that the variance-covariance matrix is symmetric, but the entire matrix (upper and lower parts) must be entered.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

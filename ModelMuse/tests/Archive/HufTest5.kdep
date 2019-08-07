@@ -1,0 +1,4 @@
+# KDEP file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     1     0 # Data Set 1: NPKDEP, IFKDEP
+KDEP_Par1  KDEP       9.000000000000E-001      1 # Data set 3: PARNAM PARTYP Parval NCLU
+HGU1       HGU1KDEPM  HGU1KDEPZ   1 # Data Set 4: HGUNAM Mltarr Zonarr IZ

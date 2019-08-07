@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Solid Matrix, Adsorption Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Solid Matrix, Adsorption Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Solid Matrix, Adsorption</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Solid matrix properties:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">COMPMA</text><text styleclass="Normal" translate="true"> is the solid matrix compressibility which is related to the storativity.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CS</text><text styleclass="Normal" translate="true"> is the solid grain specific heat. It is not used for solute transport.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">SIGMAS</text><text styleclass="Normal" translate="true"> is the solid grain diffusivity. It represents thermal conductivity of a solid grain. It is not used for solute transport.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">RHOS</text><text styleclass="Normal" translate="true"> is the density of a solid grain. It is not used for solute transport.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Adsorption parameters:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ADSMOD</text><text styleclass="Normal" translate="true"> is the sorption model. It is only used for solute transport.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CHI1</text><text styleclass="Normal" translate="true"> is the value of linear, Freundlich or Langmuir distribution coefficient, depending on sorption model chosen.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CHI2</text><text styleclass="Normal" translate="true"> is the value of Freundlich or Langmuir coefficient, depending on sorption model chosen. It is not used for linear sorption.</text></para>
+  </body>
+</topic>

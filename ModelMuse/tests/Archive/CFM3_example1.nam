@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 CFM3_example1.lst REPLACE
+DATA(BINARY)      9 CFM3_example1.cbc REPLACE
+DIS              12 CFM3_example1.dis OLD
+BAS6             13 CFM3_example1.bas OLD
+OC               39 CFM3_example1.oc OLD
+DATA             37 CFM3_example1.fhd REPLACE
+DATA             38 CFM3_example1.fdn REPLACE
+PCG              18 CFM3_example1.pcg OLD
+LPF              14 CFM3_example1.lpf OLD
+CHD              17 CFM3_example1.chd OLD
+RCH              24 CFM3_example1.rch OLD
+CFP             165 CFM3_example1.cfp OLD
+CRCH            166 CFM3_example1.crch OLD
+COC             167 CFM3_example1.coc OLD

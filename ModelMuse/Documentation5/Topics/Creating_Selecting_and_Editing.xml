@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Creating, Selecting, and Editing Objects in ModelMuse</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Creating, Selecting, and Editing Objects in ModelMuse</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The five types of objects in ModelMuse are:</text></para>
+    <para styleclass="Normal"><image src="CreatePoint.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Point Object button</title></image><text styleclass="Normal" translate="true"> Points,</text></para>
+    <para styleclass="Normal"><image src="CreatePolyline.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Polyline button</title></image><text styleclass="Normal" translate="true"> Polylines,</text></para>
+    <para styleclass="Normal"><image src="CreatePolygon.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Polygon button</title></image><text styleclass="Normal" translate="true"> Polygons,</text></para>
+    <para styleclass="Normal"><image src="CreateStraightLine.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Straight-Line button</title></image><text styleclass="Normal" translate="true"> Straight-Lines, and</text></para>
+    <para styleclass="Normal"><image src="CreateRectangle.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Rectanble button</title></image><text styleclass="Normal" translate="true"> Rectangles.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each object consists of one or more vertices and has properties associated with it. The properties of an object determine how it is used to specify spatial properties of the model. Each object is associated with one of the three views of the model (top, front, or side). </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">An object can have one or more sections. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" anchor="Add_Section" styleclass="Normal" translate="true">Editing Objects</link><text styleclass="Normal" translate="true">.</text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Creating_Objects" styleclass="Normal" translate="true">Creating Objects</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Selecting_Objects" styleclass="Normal" translate="true">Selecting Objects</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_Objects" styleclass="Normal" translate="true">Editing Objects</link></li>
+    </list>
+    <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><conditional-text type="END"/></para>
+  </body>
+</topic>

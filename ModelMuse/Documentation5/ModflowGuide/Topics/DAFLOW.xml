@@ -1,0 +1,1099 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">DAF, DAFG - DAFLOW with MODFLOW</title>
+  <keywords>
+    <keyword translate="true">A0</keyword>
+    <keyword translate="true">A1</keyword>
+    <keyword translate="true">A2</keyword>
+    <keyword translate="true">DAF</keyword>
+    <keyword translate="true">DAFG</keyword>
+    <keyword translate="true">DT</keyword>
+    <keyword translate="true">F</keyword>
+    <keyword translate="true">I</keyword>
+    <keyword translate="true">I</keyword>
+    <keyword translate="true">IENG</keyword>
+    <keyword translate="true">IOUT</keyword>
+    <keyword translate="true">JGO</keyword>
+    <keyword translate="true">JNCD</keyword>
+    <keyword translate="true">JNCU</keyword>
+    <keyword translate="true">JTS</keyword>
+    <keyword translate="true">N</keyword>
+    <keyword translate="true">NBC</keyword>
+    <keyword translate="true">NBRCH</keyword>
+    <keyword translate="true">NHR</keyword>
+    <keyword translate="true">NJNCT</keyword>
+    <keyword translate="true">NXSEC</keyword>
+    <keyword translate="true">PF</keyword>
+    <keyword translate="true">QP</keyword>
+    <keyword translate="true">SL</keyword>
+    <keyword translate="true">TITLE</keyword>
+    <keyword translate="true">TRB</keyword>
+    <keyword translate="true">W1</keyword>
+    <keyword translate="true">W2</keyword>
+    <keyword translate="true">X</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DAF, DAFG - DAFLOW with MODFLOW</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Abbreviations in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Table Header" translate="true">Name file</link></para>
+        </td>
+        <td>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">DAF</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">DAFG</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">To simulate surface-water/groundwater interaction. To facilitate the simulation of this interaction, the surface-water flow model (DAFLOW) has been coupled to the modular, finite-difference, groundwater flow model (MODFLOW). The DAFLOW model routes flows through a system of inter-connected one-dimensional channels and subdivides the system into a series of branches, with each branch divided into a number of subreaches.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr99217" target="_blank" styleclass="Citation" translate="true">Jobson, H.E., and Harbaugh, A.W., 1999, Modifications to the diffusion analogy surface-water flow model (DAFLOW) for coupling to the modular finite-difference ground-water flow model (MODFLOW): U.S. Geological Survey Open-File Report 99-217, 107 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="daf.txt" styleclass="Normal" translate="true">daf.txt</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">Stream (STR)</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">Streamflow-Routing (SFR)</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head-Dependent_Flux_Boundary_P" styleclass="Normal" translate="true">Head-Dependent Flux Boundary Packages</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Two separate input files are required to use DAFLOW with MODFLOW. &#160;One is for the surface-water flow; the other is for the groundwater interaction.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">An output file must be specified in the name file with type DATA and a unit number one greater than that applied to the DAFG file. &#160;The file is normally named bltm.flw.</text></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Package_Incompatibilities" styleclass="Normal" translate="true">Package Incompatibilities</link></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading1"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Input Instructions for Input File DAF]]></caption></toggle></para>
+    <para styleclass="Heading1" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Two input files are necessary to run DAFLOW with MODFLOW. One file is identical to the input file needed to run DAFLOW alone. It defines the physical system to be modeled, specifies model options used for the simulation, and contains the boundary conditions as a function of time. In DAFLOW without MODFLOW, this file must be named flow.in, and throughout this report, it will be referred to as the flow.in file. But in the coupled version of DAFLOW and MODFLOW, this file can have any name. The name of the flow.in file is specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. The MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file specifies all of the files used in a MODFLOW simulation. One line is used for each file, and this line consists of the file type, file unit, and file name. The file type for the flow.in file must be DAF. For example, the following line indicates that the flow.in file will be named test.inf:</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DAF 42 test.inf .</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The information contained in flow.in is divided into three data groups: (1) general information, (2) branch information, and (3) boundary conditions.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Table 1 is a summary description of the input data records as required in the file flow.in.</text></para>
+          <para styleclass="Table Header"><table rowcount="35" colcount="4" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td colspan="4">
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Table 1.--Input format for the Diffusion Analogy Flow Model</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td colspan="4">
+                <para styleclass="Table Header" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Table Header"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Data Group 1 - General information]]></caption></toggle></para>
+                <para styleclass="Table Header" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The first data group consists of nine records that define parameters to control the simulation. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Record </text></para>
+              </td>
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Field </text></para>
+              </td>
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Variable </text></para>
+              </td>
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Format </text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TITLE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Title of simulation</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TITLE - The title is specified as any combination of letters, symbols, or numbers of up to 80 characters in length. It will be printed in the output file for identification purposes but otherwise is not used. The remaining lines of the general information are read as formatted input so it is important that the numbers be placed in columns 21 to 30.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">A80</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NBRCH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of branches</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NBRCH and NJNCT - The number of branches is self evident and only the number of interior junctions, not total junctions, is input as the third record. An interior junction is one that connects two or more branches.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,I10</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NJNCT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of interior junctions</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NBRCH and NJNCT - The number of branches is self evident and only the number of interior junctions, not total junctions, is input as the third record. An interior junction is one that connects two or more branches.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,I10</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">4</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NHR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of time steps to be modeled</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NHR - The number of time steps in the simulation is calculated as the duration of the simulation divided by the SW time-step size, expressed in hours.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,I10</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">5</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[JTS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of time steps between midnight and the start of the simulation</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">JTS The time reference for the simulation is midnight of the first day of the simulation. This is specified to the model as the number of time steps from midnight to the start of the simulation. For example, if the simulation is to begin at 06:00 hours and the time-step size is 0.5 hours, the value specified for JTS is 6 divided by 0.5, which equals 12 time steps.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,I10</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">6</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[JGO]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of time steps between printouts in FLOW.OUT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">JGO The printout frequency is specified in terms of the number of time steps between printouts. For example, if tabular flow information is desired every 3 hours and the time-step size is 0.5 hours, the value of JGO is specified as 3 divided by 0.5, which equals 6 time steps.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,I10</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">7</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IENG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IENG" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Input units [0 = metric (length unit is meters except for river miles), 1 = English (length unit is feet except river miles)]. </text><text styleclass="New Materials" translate="true">Make IENG consistent with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="LENUNI" styleclass="New Materials" translate="true">LENUNI</link><text styleclass="New Materials" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IENG - The length units are specified as either 1 = English (ft) or 0 = metric (meter), except that the distance to node points (specified in data group 2) is input as either miles or kilometers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,I10</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">8</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[DT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Time-step size in hours</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DT The time-step size is input in hours. DAFLOW uses an iterative solution scheme, such that its solutions must converge to a given tolerance.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,F10.3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">9</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Maximum discharge of interest (“peak discharge”), discharge below QP/100000.0 will be considered to be zero</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">QP - DAFLOW assumes that discharges (cubic feet or meter per second), differences in discharges, and water volumes divided by the time-step size, which are less than a tolerance, to be insignificant (nearly zero). The model calculates the tolerance from a given “peak” discharge divided by 100,000. This peak discharge should be larger than the maximum discharge expected during the simulation. It follows that the accuracy of the model results can be no better than this tolerance value. If the tolerance value is set too small, the program may not converge because the tolerance is smaller than the round-off error of flows carried in computer memory.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">20X,F10.0</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td colspan="4">
+                <para styleclass="Table Header" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Table Header"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Data Group 2 - Branch information(one set required for each branch) (Record 3 is repeated for each node in the branch)]]></caption></toggle></para>
+                <para styleclass="Table Header" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Data group two consists of two types of records: (1) branch record, (2) node/subreach records. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="height:15px;">
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Record</text></para>
+              </td>
+              <td style="height:15px;">
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Field</text><text styleclass="Normal" translate="true">&#32;</text></para>
+              </td>
+              <td style="height:15px;">
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Variable</text><text styleclass="Normal" translate="true">&#32;</text></para>
+              </td>
+              <td style="height:15px;">
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Format</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NXSEC(N)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of nodes (cross sections) in branch N</text></para>
+                      <para styleclass="Normal"><snippet src="Branch_Record"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">13X,I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PF (N)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Fraction of flow at upstream junction to enter branch N</text></para>
+                      <para styleclass="Normal"><snippet src="Branch_Record"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">16X,F5.2</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[JNCU (N)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Junction number at upstream end of branch N</text></para>
+                      <para styleclass="Normal"><snippet src="Branch_Record"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">16X,I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">4</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[JNCD (N)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Junction number at downstream end of branch N</text></para>
+                      <para styleclass="Normal"><snippet src="Branch_Record"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">8X,I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[A Header card for information only]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Header A header line follows the branch information to define the columns of data for the nodes or subreaches. The model ignores this line so it could be simply a blank line.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[I]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Node of data in record</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[X (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Distance of node I of branch N from reference point in miles</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">G11.4</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IOUT (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Output flag (equal 1 if output in BLTM.OUT is desired for this node, 0 otherwise)</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">I2</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">4</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[F (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Initial flow in subreach I (between node I and I+1)</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">G11.4</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">5</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[A1 (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Constant A1 in equation 3 for subreach I</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">G10.3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">6</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[A2 (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Constant A2 in equation 3 for subreach I</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">G10.3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">7</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[A0 (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Constant A0 in equation 3 for subreach I</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">G10.3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">8</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SL (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Bed slope of subreach, in ft/ft or m/m</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">G10.3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">9</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[W1 (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Constant W1 in equation 4 for subreach I</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">F7.1</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">10</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[W2 (N,I)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Constant W2 in equation 4 for subreach I</text></para>
+                      <para styleclass="Normal"><snippet src="NodeSubreach_Records."/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">F7.6</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td colspan="4">
+                <para styleclass="Table Header" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Table Header"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Data Group 3 – Boundary condition (one set for each time step)]]></caption></toggle></para>
+                <para styleclass="Table Header" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Boundary conditions must represent the average flow during the time step. For example, the first boundary condition should represent the average flow between time 0 and the end of the first time step. For the first time step, all boundary conditions should be entered because DAFLOW assumes all unspecified boundary conditions to be zero. After the first time step, however, DAFLOW assumes all boundary conditions remain constant unless specifically changed. The third data group is used to input boundary conditions and consists of two types of records. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Record </text></para>
+              </td>
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Field </text></para>
+              </td>
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Variable </text></para>
+              </td>
+              <td>
+                <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Format </text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NBC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of new boundary conditions to be input for this time step</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NBC The first record for each time step specifies the number of boundary conditions that have changed for this time step (NBC). A line for each boundary condition that has changed must follow. For example, if NBC=0, no records are required but if NBC = 5, five records must follow.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">18X,I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[N]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Branch number for new boundary condition</text></para>
+                      <para styleclass="Normal"><snippet src="Daflow_Boundary_condition"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">10X,I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[I]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Node number for new boundary condition</text></para>
+                      <para styleclass="Normal"><snippet src="Daflow_Boundary_condition"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">5X,I3</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TRB(I,N)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">New boundary flow for branch N, node I</text></para>
+                      <para styleclass="Normal"><snippet src="Daflow_Boundary_condition"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3X,G14.5</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><table rowcount="1" colcount="1" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:0px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:lowered-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;Example input &quot;flow.in&quot; for example shown in figure 2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">2 No. of Branches &#160; &#160; &#160; &#160; &#160; 3 *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">3 No. of Internal &#160; &#160; &#160; &#160; &#160; 1 * Junctions</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">4 No. Time Steps &#160; &#160; &#160; &#160; &#160; &#160;5 * Modeled</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">5 Model Starts &#160; &#160; &#160; &#160; &#160; &#160; &#160;0 time steps after midnight.</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">6 Output Given Every &#160; &#160; &#160; &#160;1 Time Steps in &quot;flow.out&quot;</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">7 0=Metric,1=Englis &#160; &#160; &#160; &#160; 1 *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">8 Time Step Size &#160; &#160; &#160; &#160;1.000 Hours.</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">9 Peak Discharge &#160; &#160; &#160;100000. *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Branch &#160;1 has 9 xsects &amp; routes 1.00 of flow at JNCT &#160;2 To JNCT &#160;1</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Grd &#160;Mi/Km IOUT &#160;Disch &#160; &#160; &#160;A1 &#160; &#160; &#160; &#160;A2 &#160; &#160; &#160; &#160;AO &#160; &#160; &#160;Slope &#160; &#160; &#160; W1 &#160; &#160;W2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 0.0000 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 0.7000 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160;1.500 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;4 &#160;1.600 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;5 &#160;2.400 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;6 &#160;2.500 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;7 &#160;3.000 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;8 &#160;3.150 &#160; &#160;0 &#160;5000. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.800E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;9 &#160;3.160 &#160; &#160;0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; </text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Branch &#160;2 has 8 xsects &amp; routes 1.00 of flow at JNCT &#160;3 To JNCT &#160;1</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Grd R Mile IOUT &#160;Disch &#160; &#160; &#160;A1 &#160; &#160; &#160; &#160;A2 &#160; &#160; &#160; &#160;AO &#160; &#160; &#160;Slope &#160; &#160; &#160; W1 &#160; &#160;W2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160;3.000 &#160; &#160;0 &#160;50.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160;3.400 &#160; &#160;0 &#160;50.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160;4.000 &#160; &#160;0 &#160;50.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;4 &#160;4.600 &#160; &#160;1 &#160;25.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;5 &#160;5.500 &#160; &#160;0 &#160;25.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;6 &#160;6.000 &#160; &#160;0 &#160;25.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;7 &#160;6.490 &#160; &#160;0 &#160;25.00 &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.150E-02 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;8 &#160;6.500 &#160; &#160;0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Branch &#160;3 has 8 xsects &amp; routes 1.00 of flow at JNCT &#160;1 To JNCT &#160;4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Grd R Mile IOUT &#160;Disch &#160; &#160; &#160;A1 &#160; &#160; &#160; &#160;A2 &#160; &#160; &#160; &#160;AO &#160; &#160; &#160;Slope &#160; &#160; &#160; W1 &#160; &#160;W2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160;6.500 &#160; &#160;0 &#160;5025. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160;7.000 &#160; &#160;0 &#160;5025. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160;7.800 &#160; &#160;0 &#160;5025. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;4 &#160;8.300 &#160; &#160;0 &#160;5050. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;5 &#160;8.900 &#160; &#160;0 &#160;5050. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;6 &#160;9.500 &#160; &#160;0 &#160;5050. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;7 &#160;10.40 &#160; &#160;1 &#160;5050. &#160; &#160;7.00 &#160; &#160; 0.660 &#160; &#160; 0.000 &#160; &#160; 0.700E-03 &#160; 50.0 0.260</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;8 &#160;11.00 &#160; &#160;0 &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; </text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">for Time &#160; 1 NBC= &#160;4 *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;1 Node &#160;1 Q= &#160; &#160;5000.0 &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;2 Node &#160;1 Q= &#160; &#160;50.000 &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;2 Node &#160;4 Q= &#160; -25.000 &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;3 Node &#160;4 Q= &#160; &#160;25.000 &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">for Time &#160; 2 NBC= &#160;1 *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;1 Node &#160;1 Q= &#160; &#160;50000. &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">for Time &#160; 3 NBC= &#160;0 *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">for Time &#160; 4 NBC= &#160;2 *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;1 Node &#160;1 Q= &#160; &#160;5000.0 &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Branch &#160; &#160;2 Node &#160;4 Q= &#160; 0.00000 &#160; &#160; *</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">for Time &#160; 5 NBC= &#160;0 *</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Figure 6. Input file, flow.in, to run the example shown in figure 2.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading1"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Input Instructions for Input File DAFG]]></caption></toggle></para>
+    <para styleclass="Heading1" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TITLE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="Datflow_Title"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TITLE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="Datflow_Title"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TITLE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="Datflow_Title"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 4</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">N, I, BEL(I,N), BTH, CND, NLY, NRW, NCL</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat data set 4 for each interior node within each branch.</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[N]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[I]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BEL(I,N)]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BTH]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CND]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NLY]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NRW]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NCL]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><snippet src="Daflow_linkage"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 5</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TITLE2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TITLE2 - Following the bed properties and linkage information is another line of text information that can be used to identify the three parameters that are input as the last line of the file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 6</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IDAFCB, IDBG, IDAFBK</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDAFCB]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the first parameter (IDAFCB) is an integer less than zero, the cell-by-cell flows will be printed to the output file, if it is an integer greater than zero they will be saved to a file</text><text styleclass="New Materials" translate="true"> in binary format and the value of IDAFCB is the value of Nunit of the file in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="New Materials" translate="true">name</link><text styleclass="New Materials" translate="true"> file to which the flows will be saved.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDBG]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">If the second parameter (IDBG) is set to 1, extra debugging information will be written to the output file, otherwise it will not. This parameter should normally be set to zero (not 1) because the debug information generates a large volume of output.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDAFBK]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The third parameter (IDAFBK) specifies whether central or backwards differencing will be used for groundwater heads in MODFLOW. Enter a zero if central differencing is to be used. Any integer, other than zero, causes backwards differencing to occur. These integers can be placed in any column as long as they are separated by at least one blank space.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Figure 7 contains an example DAFG file that could be used to run the example problem shown in figure 2. The streambed elevations for this example are computed on the basis of the assumption that the elevation of node 1, in branch 1 is 100 ft, and the bed slopes are as shown in figure 6. For example, figure 2 shows that the subreach upstream of node 2 in branch 1 should be in communication with row 1, column 1 of the aquifer, and it is assumed that only one layer is involved. The elevation of the bed for this subreach is estimated as the elevation of the midpoint of the subreach. So it should be the elevation of node 1 (100) minus the slope (0.0008 = 4.224 ft/mile) times one-half the subreach length (0.7 - 0.0 mile), or 98.522 ft.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Also, notice that there is no connection for node 2, branch 2 (subreach 1) with the aquifer so zeros are entered for the layer, row, and column of the interaction. Leakage from all three branches interact with cell 3,3. The thickness of the streambed layer is assumed to be 1.0 ft, and the hydraulic conductivity of the bed layer is assumed to be 0.00120 ft/s for all subreaches.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Because IDAFCB is greater than zero, the cell-by-cell flows will be saved to a separate file rather than printed to the output file. The code IDBG is not equal to 1 so the extensive debug printout will not be listed. Because IDAFBK is not equal to zero, backwards differencing will be used in MODFLOW.</text></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Figure 7. Example input file for DAFG</text></para>
+          <para styleclass="Normal"><table rowcount="1" colcount="1" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Example &quot;DAFG&quot; input for example shown in figure 2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; &#160; &#160; &#160; &#160; &#160; Bed &#160; &#160; &#160; &#160;Bed &#160; &#160; &#160; &#160; Bed &#160; &#160; &#160;GW node of exchange</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> Brch &#160;Node &#160; &#160;Elev &#160; &#160; Thickness &#160;Conductivity Layer &#160; Row Column</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 2 &#160; &#160; 98.522 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;1 &#160; &#160; 1</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 3 &#160; &#160; 95.354 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;1 &#160; &#160; 2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 4 &#160; &#160; 93.453 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;2 &#160; &#160; 2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 5 &#160; &#160; 91.522 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;2 &#160; &#160; 3</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 6 &#160; &#160; 89.651 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;2 &#160; &#160; 2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 7 &#160; &#160; 88.384 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;3 &#160; &#160; 2</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 8 &#160; &#160; 86.652 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;3 &#160; &#160; 3</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160; &#160; 2 &#160; &#160;112.788 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 0 &#160; &#160; &#160;0 &#160; &#160; 0</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160; &#160; 3 &#160; &#160;108.828 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;1 &#160; &#160; 5</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160; &#160; 4 &#160; &#160;104.076 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;1 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160; &#160; 5 &#160; &#160; 98.136 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;2 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160; &#160; 6 &#160; &#160; 92.592 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;3 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;2 &#160; &#160; 7 &#160; &#160; 88.672 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;3 &#160; &#160; 3</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160; &#160; 2 &#160; &#160; 85.728 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;3 &#160; &#160; 3</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160; &#160; 3 &#160; &#160; 83.326 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;3 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160; &#160; 4 &#160; &#160; 80.923 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;4 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160; &#160; 5 &#160; &#160; 78.891 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;4 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160; &#160; 6 &#160; &#160; 76.673 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;5 &#160; &#160; 4</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;3 &#160; &#160; 7 &#160; &#160; 73.901 &#160; &#160; 1.0 &#160; &#160; &#160; &#160;1.20E-01 &#160; &#160; &#160; 1 &#160; &#160; &#160;5 &#160; &#160; 5</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true">IDAFCB IDBG IDAFBK</text></para>
+                <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160;1 &#160; &#160; 0 &#160; &#160; 1</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1" style="text-indent:-18px; margin-left:18px;"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

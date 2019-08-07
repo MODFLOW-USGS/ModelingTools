@@ -1,0 +1,151 @@
+
+# -------
+# OPTIONS
+# -------
+
+BEGIN OPTIONS KEYWORDS
+  verbose=3
+#   VERBOSE meanings are:
+#      0 - No extraneous output
+#      1 - Write warnings only
+#      2 - Write warnings and notes
+#      3 - Write warnings and notes, and echo selected input (default)
+#      4 - Write warnings and notes, and echo all input
+#      5 - Write warnings, notes, echoed input, and miscellaneous information
+  Derivatives_Interface = "tc1.jdi"  <-- DERIVATIVES INTERFACE FILE SPECIFIED HERE
+END OPTIONS
+
+# --------------------------------
+# APPLICATION-SPECIFIC INFORMATION
+# --------------------------------
+
+BEGIN Control_Data
+  outname = tc1_sen_example_out
+END control_data                           
+
+# -------------------------
+# MODEL-COMMAND INFORMATION
+# -------------------------
+
+BEGIN Model_Command_Lines
+  Command = "tc1-fwd-script-local"
+    CommandID = tc1-fwd
+    Purpose=forward 
+  Command = "tc1-sen-script-local"
+    CommandID = tc1-sens
+    Purpose = forward&der                            
+END Model_Command_Lines
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+  groupname=P-Group
+    adjustable=yes
+    ModelCommandName = tc1-fwd
+  groupname=S-Group
+    adjustable=true
+    ModelCommandName = tc1-fwd
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA TABLE  
+  nrow=9  ncol=10  columnlabels
+  paramname  STARTVALUE  lowerbound upperbound   bscal   adjustable  perturbrat  perturbmin  groupname  isenmethod
+  Wells_TR   -1.1000          -1.4       -0.8     1.0E-3     y        0.03        1.0e-4     P-Group       2
+  RCH_Zone_2  3.1536E+1       20.0       60.0     1.0E-2     y        0.03        1.0e-2     S-Group       2
+  RCH_Zone_1  6.3072E+1       30.0       80.0     1.0E-2     NO       0.03        1.0e-2     P-group       1
+  SS_1        1.3000E-3      1.3E-4     1.3E-2    1.0E-6     y        0.01        1.0e-8     P-Group       2
+  HK_1        3.0000E-4      3.0E-5     3.0E-3    1.0E-7     y        0.01        1.0e-8     P-Group       1
+  SS_2        2.0000E-4      2.0E-5     2.0E-3    1.0E-3     y        0.03        1.0e-8     S-Group       2
+  Vert_K_CB   1.0000E-7      1.0E-8     1.0E-6    1.0E-6     y        0.10        1.0e-10    S-Group       2
+  HK_2        4.0000E-5      4.0E-6     4.0E-4    1.0E-8     y        0.01        1.0e-12    P-Group       2
+  Rivers      1.2000E-3      1.2E-4     1.2E-2    1.0E-6     t        0.03        1.0e-8     S-Group       2
+END PARAMETER_DATA 
+
+BEGIN Parameter_Values TABLE
+# These values override values listed in ParameterInfo input block.  
+  nrow=9  ncol=2  columnlabels
+  paramname  STARTVALUE
+  Wells_TR   -1.074     
+  Rivers      1.3824E-3  
+  SS_1        1.1383E-3  
+  HK_1        4.2556E-4  
+  RCH_Zone_1  34.12
+  RCH_Zone_2  50.48  
+  Vert_K_CB   2.1651E-7
+  SS_2        6.1957E-5  
+  HK_2        4.8237E-5  
+END Parameter_Values
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN Observation_Groups KEYWORDS
+  groupname=Heads1  
+    STATISTIC=0.5  STATFLAG=WT  
+    plotsymbol=1  useflag=1   obsvalue=8.8  printeach=no  wtmultiplier=1.0
+  groupname=Heads2
+    STATISTIC=0.5  STATFLAG=WT  <-- statistic=0.5 and statflag=wt are
+                                 ignored because CovMatrix is defined for this group
+    CovMatrix = CovHeads2
+    plotsymbol=1  useflag=1   obsvalue=8.8  printeach=no  wtmultiplier=1.0
+  groupname=Heads3  
+    STATISTIC=0.5  STATFLAG=WT  
+    plotsymbol=1  useflag=1   obsvalue=8.8  printeach=no  wtmultiplier=1.0
+  groupname=Flows  
+    statistic = 0.000000093  statflag = cv  !!! This is a bogus value, which should be ignored 
+                                            !!! because the Flows group has a var-cov matrix
+    plotsymbol=2  useflag=1   obsvalue=8.8  CovMatrix=CovFlows  printeach=no  wtmultiplier=1.0
+END Observation_Groups
+
+BEGIN Observation_Data FILES
+  tc1.hed
+  tc1.flo
+END Observation_Data
+
+# ---------------------------------------------
+# VARIANCE-COVARIANCE MATRICES FOR OBSERVATIONS
+# ---------------------------------------------
+
+BEGIN MATRIX_FILES
+  matrixfile = matrices1.in  NMATRICES=2
+  matrixfile = matrices2.in  NMATRICES=1
+END MATRIX_FILES
+
+# ----------------------------
+# MODEL INPUT AND OUTPUT FILES
+# ----------------------------
+
+BEGIN Model_Input_Files
+  modinfile=tc1fwd.sen  templatefile=tc1fwdsen.tpl
+  modinfile=tc1sen.sen  templatefile=tc1sensen.tpl
+END Model_Input_Files
+
+BEGIN Model_Output_Files
+  modoutfile=tc1._os  instructionfile=tc1.ins  category=obs
+END Model_Output_Files
+
+# -------------------------------
+# PARALLEL-PROCESSING INFORMATION
+# -------------------------------
+
+BEGIN PARALLEL_CONTROL
+  PARALLEL=no          (default=false)
+  WAIT=0.001           (default=0.001)
+  VERBOSERUNNER=3      (default=3)
+  AUTOSTOPRUNNERS=t    (default=true)
+  OPERATINGSYSTEM = WINDOWS
+END PARALLEL_CONTROL
+
+BEGIN PARALLEL_RUNNERS TABLE
+# RUNNERDIR must end with the correct directory separator for
+#   the OS -- "\" for Windows and "/" for Unix and Linux.  
+#
+  NROW=2  NCOL=3  COLUMNLABELS
+  RUNNERNAME   RUNNERDIR    RUNTIME  
+  Runner1      .\runner1\      1.0
+  Runner2      .\runner2\      1.0
+END PARALLEL_RUNNERS
+

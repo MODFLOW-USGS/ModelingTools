@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BFH - Boundary Flow and Head Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">BFH - Boundary Flow and Head Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BFH when used with MODFLOW-LGR1</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BFH2 when used with MODFLOW-LGR2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Boundary Flow and Head Package allows the child and parent models to be simulated independently using the boundary conditions obtained through the iterative process of LGR.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2006/tm6a12/" target="_blank" styleclass="Normal" translate="true">Mehl, S.W. and Hill, M.C., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- documentation of shared node local grid refinement (LGR) and the Boundary Flow and Head (BFH) Package: U.S. Geological Survey Techniques and Methods 6-A12, 68 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The BFH package input is not created manually. &#160;Instead, it is created by running MODFLOW-LGR with both a parent and child model and then is used in a subsequent simulation in which either only the child or only the parent model is used.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The BFH Package and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" styleclass="Normal" translate="true">LGR</link><text styleclass="Normal" translate="true"> cannot be used simultaneously. Thus, when using </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" styleclass="Normal" translate="true">LGR</link><text styleclass="Normal" translate="true">, the Name file specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" styleclass="Normal" translate="true">LGR</link><text styleclass="Normal" translate="true"> control file cannot use file type BFH.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Boundary Flow and Head (BFH) Package reads input data from the file indicated in the Name file as described by Harbaugh and others (2000, p. 7, 43) using the File Type BFH. Input for the BFH Package is created by LGR and requires that the coupling boundary conditions calculated by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" styleclass="Normal" translate="true">LGR</link><text styleclass="Normal" translate="true"> be saved using variable &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBHSV" styleclass="Normal" translate="true">IUCBHSV</link><text styleclass="Normal" translate="true"> and (or) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBFSV" styleclass="Normal" translate="true">IUPBFSV</link><text styleclass="Normal" translate="true"> of the LGR input file. For an independent child model simulation, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBHSV" styleclass="Normal" translate="true">IUCBHSV</link><text styleclass="Normal" translate="true"> needs to be nonzero; for an independent parent model simulation, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBFSV" styleclass="Normal" translate="true">IUPBFSV</link><text styleclass="Normal" translate="true"> needs to be nonzero.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The BFH Package and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" styleclass="Normal" translate="true">LGR</link><text styleclass="Normal" translate="true"> cannot be used simultaneously. Thus, when using LGR, the Name file specified in the LGR control file cannot use file type BFH.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The procedure needed to run independent child or parent models with LGR boundary conditions is as follows:</text></para>
+    <list id="5" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Use LGR to calculate and save the coupling boundary conditions.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Activate the BFH Package in the Name file with a file name that corresponds to the file saved on </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBHSV" styleclass="Normal" translate="true">IUCBHSV</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBFSV" styleclass="Normal" translate="true">IUPBFSV</link><text styleclass="Normal" translate="true"> for child and parent simulations, respectively.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">As discussed in the Running the Parent and Child Model Independently Using the Boundary Flow and Head (BFH) Package section, the BFH package can be used to evaluate the effects of model changes on the boundary conditions. In this case, the complementary boundary conditions also need to be saved when running LGR. For the child model, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBFSV" styleclass="Normal" translate="true">IUPBFSV</link><text styleclass="Normal" translate="true"> needs be nonzero; for the parent model, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBHSV" styleclass="Normal" translate="true">IUCBHSV</link><text styleclass="Normal" translate="true"> needs to be nonzero. If the file containing the complementary boundary conditions for the child or parent models is opened in the Name file on the unit number corresponding to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBFSV" styleclass="Normal" translate="true">IUPBFSV</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IUPBHSV" styleclass="Normal" translate="true">IUCBHSV</link><text styleclass="Normal" translate="true">, respectively, then the BFH package will evaluate the discrepancies in the complementary boundary conditions.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each of these files contains a header record and a list of the child and parent cells involved in the coupling, indicated by the layer, row, and column. For the child models, the corresponding adjoining parent cells and a node index is listed with each child cell. This is followed by a listing of the boundary head or flux values, corresponding to these cells, for each time step.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Example BFH Inputs</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The options for the BFH Package can be controlled through inputs to LGR and the Name files. Using the three-dimensional example 3 in Appendix 1, a simulation using LGR is performed first. For an independent simulation of the child grid, the coupling boundary condition (specified head) is saved on unit 80 and the complementary boundary condition (boundary flux) is saved on unit 81.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Name file for the child grid for the LGR simulation is:</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">LIST 26 ex3_child.out</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BAS6 2 ex3_child.ba6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BCF6 21 ex3_child.bc6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DIS 29 ex3_child.dis</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">OC 20 ex3_child.oc</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DATA(BINARY) 31 ex3_child.hed</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DATA(BINARY) 41 ex3_child.flw</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PCG 22 ex3_child_3.pcg</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">RIV 25 ex3_child.riv</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" style="font-weight:bold;" translate="true">DATA 80 ex3_child_bfh.hed</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" style="font-weight:bold;" translate="true">DATA 81 ex3_child_bfh.flw</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DATA 51 ex3_child.bot</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After successful completion of an LGR simulation, the child model can be simulated independently using the BFH Package. Only the Name file of the child grid needs to be modified. Activate BFH with a file name corresponding to the file where the coupling boundary conditions were saved. Although not required, in the example above, the complimentary boundary conditions were saved. If this file is opened in the Name file on the same unit number on which it was saved, the BFH Package will report any changes in the boundary fluxes of the child model. This is done in the example below. Use of # in the first column results in the line being ignored. This example is for MODFLOW-LGR1. For MODFLOW-LGR2, The file type </text><text styleclass="Keywords" translate="true">BFH</text><text styleclass="Normal" translate="true"> would be replaces with </text><text styleclass="Keywords" translate="true">BFH2</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">LIST 26 ex3_child.out</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BAS6 2 ex3_child.ba6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">BCF6 21 ex3_child.bc6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DIS 29 ex3_child.dis</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">OC 20 ex3_child.oc</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DATA(BINARY) 31 ex3_child.hed</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DATA(BINARY) 41 ex3_child.flw</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PCG 22 ex3_child_3.pcg</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">RIV 25 ex3_child.riv</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" style="font-weight:bold;" translate="true">BFH 80 ex3_child_bfh.hed</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" style="font-weight:bold;" translate="true">#DATA 80 ex3_child_bfh.hed</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" style="font-weight:bold;" translate="true">DATA 81 ex3_child_bfh.flw</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DATA 51 ex3_child.bot</text></para>
+  </body>
+</topic>

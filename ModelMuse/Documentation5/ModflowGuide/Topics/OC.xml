@@ -1,0 +1,589 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">OC - Output Control Option</title>
+  <keywords>
+    <keyword translate="true">AUX</keyword>
+    <keyword translate="true">AUXILIARY</keyword>
+    <keyword translate="true">BUDGET</keyword>
+    <keyword translate="true">CBOUFM</keyword>
+    <keyword translate="true">CDDNFM</keyword>
+    <keyword translate="true">CHEDFM</keyword>
+    <keyword translate="true">COMPACT</keyword>
+    <keyword translate="true">Ddpr</keyword>
+    <keyword translate="true">DDREFERENCE</keyword>
+    <keyword translate="true">Ddsv</keyword>
+    <keyword translate="true">DRAWDOWN</keyword>
+    <keyword translate="true">FORMAT</keyword>
+    <keyword translate="true">Hdpr</keyword>
+    <keyword translate="true">Hdsv</keyword>
+    <keyword translate="true">HEAD</keyword>
+    <keyword translate="true">IBOUND</keyword>
+    <keyword translate="true">IBOUUN</keyword>
+    <keyword translate="true">IBUDFL</keyword>
+    <keyword translate="true">ICBCFL</keyword>
+    <keyword translate="true">IDDNFM</keyword>
+    <keyword translate="true">IDDNUN</keyword>
+    <keyword translate="true">IHDDFL</keyword>
+    <keyword translate="true">IHEDFM</keyword>
+    <keyword translate="true">IHEDUN</keyword>
+    <keyword translate="true">INCODE</keyword>
+    <keyword translate="true">IPEROC</keyword>
+    <keyword translate="true">ITSOC</keyword>
+    <keyword translate="true">LABEL</keyword>
+    <keyword translate="true">OC</keyword>
+    <keyword translate="true">PERIOD</keyword>
+    <keyword translate="true">PRINT</keyword>
+    <keyword translate="true">SAVE</keyword>
+    <keyword translate="true">STEP</keyword>
+    <keyword translate="true">UNIT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">OC - Output Control Option</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OC</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Output Control Option is used to specify which head, drawdown, or budget data should be printed or saved.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></li>
+          </list>
+          <list id="41" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">https://pubs.usgs.gov/tm/2005/tm6A16/</link></li>
+          </list>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="ofr-00-92-errata.pdf" styleclass="Normal" translate="true">ofr-00-92-errata.pdf</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="modpath.txt" styleclass="Normal" translate="true">modpath.txt</link></li>
+          </list>
+          <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">&#32;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="HYD" styleclass="Normal" translate="true">HYDMOD</link><text styleclass="Normal" translate="true"> Package</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Output Control Option is optional.</text></para>
+          <para styleclass="Normal"><snippet src="RefToReadBinary"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input to the Output Control Option of the Groundwater Flow Process is read from the file that is specified as type &quot;OC&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. If no &quot;OC&quot; file is specified, default output control is used. Under the default, head and overall budget are written to the listing file (printed) at the end of every stress period. The default printout format for head and drawdown is 10G11.4.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are two ways to specify Output Control data: words or numeric codes. One of these methods must be used throughout any simulation.</text></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Output Control Using Words]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Recognized words are shown in bold italics; these words must be entered exactly as shown except that they may be entered in either uppercase or lowercase. Optional parts of records are shown in brackets. One or more spaces must separate each word or variable, and the total record length must not exceed 199 characters.</text></para>
+          <para styleclass="Normal"><table rowcount="7" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td colspan="2">
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 0</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true"># Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Any combination of the following records:</text></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Keywords" translate="true">HEAD PRINT FORMAT</text><text styleclass="Normal" translate="true"> IHEDFM</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHEDFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IHEDFM" styleclass="Normal"></anchor></para>
+                      <para styleclass="Normal"><snippet src="IHEDFM"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">HEAD SAVE FORMAT</text><text styleclass="Normal" translate="true"> CHEDFM [ </text><text styleclass="Keywords" translate="true">LABEL</text><text styleclass="Normal" translate="true">] Omit to obtain an unformatted file.</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CHEDFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="CHEDFM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">CHEDFM—is a character value that specifies the format for saving heads, and can only be specified if the word method of output control is used. The format must contain 20 characters or less and must be a valid Fortran format that is enclosed in parentheses. The format must be enclosed in apostrophes if it contains one or more blanks or commas. The optional word </text><text styleclass="Keywords" translate="true">LABEL</text><text styleclass="Normal" translate="true"> after the format is used to indicate that each layer of output should be preceded with a line that defines the output (simulation time, the layer being output, and so forth). If there is no record specifying CHEDFM, then heads are written to a binary (unformatted) file. Binary files are usually more compact than text files, but they are not generally transportable among different computer operating systems or different Fortran compilers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Keywords" translate="true">HEAD SAVE UNIT</text><text styleclass="Normal" translate="true"> &#160;IHEDUN</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHEDUN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IHEDUN—is the unit number on which heads will be saved.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">DRAWDOWN PRINT FORMAT</text><text styleclass="Normal" translate="true"> IDDNFM</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDDNFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IDDNFM—is a code for the format in which drawdowns will be printed. The codes are the same as for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="IHEDFM" styleclass="Normal" translate="true">IHEDFM</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">DRAWDOWN SAVE FORMAT</text><text styleclass="Normal" translate="true"> CDDNFM [ </text><text styleclass="Keywords" translate="true">LABEL</text><text styleclass="Normal" translate="true">] Omit to obtain an unformatted file.</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CDDNFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">CDDNFM—is a character value that specifies the format for saving drawdown, and can only be specified if the word method of output control is used. The format must contain 20 characters or less and must be a valid Fortran format that is enclosed in parentheses. The format must be enclosed in apostrophes if it contains one or more blanks or commas. The optional word </text><text styleclass="Keywords" translate="true">LABEL</text><text styleclass="Normal" translate="true"> after the format is used to indicate that each layer of output should be preceded with a line that defines the output (simulation time, the layer being output, and so forth). If there is no record specifying CDDNFM, then drawdown is written to a binary (unformatted) file. Binary files are usually more compact than text files, but they are not generally transportable among different computer operating systems or different Fortran compilers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">DRAWDOWN SAVE UNIT</text><text styleclass="Normal" translate="true"> IDDNUN</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDDNUN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IDDNUN—is the unit number on which drawdowns will be saved.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">IBOUND SAVE FORMAT</text><text styleclass="Normal" translate="true"> CBOUFM [ </text><text styleclass="Keywords" translate="true">LABEL</text><text styleclass="Normal" translate="true">]</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CBOUFM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">CBOUFM—is a character value that specifies the format for saving IBOUND, and can only be specified if the word method of output control is used. The format must contain 20 characters or less and must be a valid Fortran format that is enclosed in parentheses. The format must be enclosed in apostrophes if it contains one or more blanks or commas. The optional word </text><text styleclass="Keywords" translate="true">LABEL</text><text styleclass="Normal" translate="true"> is used to indicate that each layer of output should be preceded with a line that defines the output (simulation time, the layer being output, and so forth). If there is no record specifying CBOUFM, then IBOUND is written using format (20I4). IBOUND is never written as a binary (unformatted) file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">IBOUND SAVE UNIT</text><text styleclass="Normal" translate="true"> IBOUUN</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBOUUN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IBOUUN—is the unit number on which the IBOUND array will be saved.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Keywords" translate="true">COMPACT BUDGET</text><text styleclass="Normal" translate="true"> [ </text><text styleclass="Keywords" translate="true">AUX</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">AUXILIARY</text><text styleclass="Normal" translate="true">]</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[COMPACT BUDGET]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="COMPACT_BUDGET" styleclass="Keywords"></anchor><text styleclass="Normal" translate="true">If the final </text><text styleclass="Keywords" translate="true">“COMPACT BUDGET”</text><text styleclass="Normal" translate="true"> option is used, cell-by-cell budget files produced require less disk space than files written by MODFLOW-88; however, programs that read these data using the specifications of MODFLOW-88 will need to be modified. If this option is not used, MODFLOW-2000 will write the files using the MODFLOW-88 method. The optional word </text><text styleclass="Keywords" translate="true">“AUX”</text><text styleclass="Normal" translate="true"> (or </text><text styleclass="Keywords" translate="true">“AUXILIARY”</text><text styleclass="Normal" translate="true">) after </text><text styleclass="Keywords" translate="true">“COMPACT BUDGET”</text><text styleclass="Normal" translate="true"> indicates that auxiliary data that are defined in packages (see input data for the RIV, WEL, DRN, and GHB Packages) should be saved in the budget file along with budget data. &#160;When using MODPATH, the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">COMPACT BUDGET</text><text styleclass="Normal" translate="true"> option with </text><text styleclass="Normal" style="font-weight:bold;" translate="true">AUX</text><text styleclass="Normal" translate="true"> is required.</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">If the “COMPACT BUDGET” option is used, the time step size, the elapsed time in the current stress period and the total elapsed time will be saved in the budget file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:42px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/></para>
+                <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">WBGT SAVE UNIT </text><text styleclass="Normal" translate="true">UnitNumber</text></li>
+                </list>
+                <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:42px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[UnitNumber]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">UnitNumber is the unit number of a file to which the groundwater summary budgets will be written. The unit number should be included in the name with with the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" anchor="Ftype" styleclass="Normal" translate="true">FTYPE</link><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Keywords" translate="true">DATA</text><text styleclass="Normal" translate="true">. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">This option is only included in MODFLOW-OWHM.</text><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><conditional-text type="END"/><text styleclass="Keywords" translate="true">PRINT</text><text styleclass="Normal" translate="true"> indicates that the model output is written to the LIST file.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">SAVE</text><text styleclass="Normal" translate="true"> indicates that output is written to the indicated file unit. Drawdown and head are saved as text files if the </text><text styleclass="Keywords" translate="true">SAVE FORMAT</text><text styleclass="Normal" translate="true"> record is included. If the </text><text styleclass="Keywords" translate="true">SAVE FORMAT</text><text styleclass="Normal" translate="true"> record is not used, then the file is written as a binary (unformatted) file. Binary files are usually more compact than text files, but they are not generally transportable among different computer operating systems or different Fortran compilers.</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td colspan="2">
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH TIME STEP FOR WHICH OUTPUT IS DESIRED</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">PERIOD</text><text styleclass="Normal" translate="true"> IPEROC </text><text styleclass="Keywords" translate="true">STEP</text><text styleclass="Normal" translate="true"> ITSOC [</text><text styleclass="Keywords" translate="true">DDREFERENCE</text><text styleclass="Normal" translate="true">]</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPEROC]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">IPEROC—is the stress period number at which output is desired.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITSOC]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">ITSOC—is the time step number (within a stress period) at which output is desired.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[DDREFERENCE]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">DDREFERENCE—indicates that the heads calculated at the associated stress period and time step are to be used as the reference heads for calculating drawdown for all subsequent time steps up to the next occurrence of DDREFERENCE. &#160;Prior to the first occurrence (if any) of DDREFERENCE the initial heads will be used as the reference heads for calculating drawdown. </text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Any combination of the following records:</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">PRINT HEAD</text><text styleclass="Normal" translate="true"> [list layers if all layers not desired]</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">PRINT DRAWDOWN</text><text styleclass="Normal" translate="true"> [list layers if all layers not desired]</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">PRINT BUDGET</text><text styleclass="Normal" translate="true"> Write overall volumetric budget to the LIST file.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">SAVE HEAD</text><text styleclass="Normal" translate="true"> [list layers if all layers not desired]</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">SAVE DRAWDOWN</text><text styleclass="Normal" translate="true"> [list layers if all layers not desired]</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">SAVE IBOUND</text><text styleclass="Normal" translate="true"> [list layers if all layers not desired]</text></para>
+                <para styleclass="Normal"><anchor id="SaveBudget" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">SAVE BUDGET</text><text styleclass="Normal" translate="true"> Write cell-by-cell budget data to a file.</text></para>
+                <para styleclass="Keywords"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Keywords" translate="true">SAVE WBGT</text><text styleclass="Normal" translate="true"> Write the groundwater summary budget to a file. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">This option is only included in MODFLOW-OWHM.</text><conditional-text type="END"/><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td colspan="2">
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 2 and one or more item-3 records are specified for each time for which output is desired. These records must be in the order of increasing simulation time.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Example Output Control Input Using Words</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The first line cannot be blank, but after the first line blank lines are ignored when the word method is used to specify Output Control data. Indented lines are allowed because of the use of free format input.</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HEAD PRINT FORMAT 15</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HEAD SAVE FORMAT (20F10.3) LABEL</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HEAD SAVE UNIT 30</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">COMPACT BUDGET FILES</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DRAWDOWN PRINT FORMAT 14</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PERIOD 1 STEP 1</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; PRINT HEAD 2 6</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; PRINT DRAWDOWN</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; PRINT BUDGET</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; SAVE BUDGET</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; SAVE HEAD</text></para>
+          <para styleclass="Code Example"></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PERIOD 1 STEP 7</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; SAVE HEAD 1 3 5</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; PRINT DRAWDOWN</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; SAVE BUDGET</text></para>
+          <para styleclass="Code Example"></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true">PERIOD 2 STEP 5</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; PRINT HEAD</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; PRINT BUDGET</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; SAVE BUDGET</text></para>
+          <para styleclass="Code Example"><text styleclass="Code Example" translate="true"> &#160; &#160; SAVE HEAD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Output Control Using Numeric Codes]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">All variables are free format if the word </text><text styleclass="Keywords" translate="true">FREE</text><text styleclass="Normal" translate="true"> is specified in Item 1 of the Basic Package input file; otherwise, the variables all have 10-character fields.</text></para>
+          <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td colspan="2">
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 0</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true"> [#Text]</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 1</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IHEDFM IDDNFM IHEDUN IDDNUN</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHEDFM]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><anchor id="IHEDFM2" styleclass="Normal"></anchor></para>
+                            <para styleclass="Normal"><snippet src="IHEDFM"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDDNFM]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">IDDNFM—is a code for the format in which drawdowns will be printed. The codes are the same as for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="IHEDFM2" styleclass="Normal" translate="true">IHEDFM</link><text styleclass="Normal" translate="true">.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHEDUN]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">IHEDUN—is the unit number on which heads will be saved.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDDNUN]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">IDDNUN—is the unit number on which drawdowns will be saved.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td colspan="2">
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH TIME STEP</text></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 2</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">INCODE IHDDFL IBUDFL ICBCFL</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[INCODE]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">INCODE—is the code for reading Item 3.</text></para>
+                            <list id="24" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If INCODE &lt; 0, Item 3 flags are used from the last time step. Item 3 is not read.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If INCODE = 0, all layers are treated the same way. Item 3 will consist of one record.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If INCODE &gt; 0, Item 3 will consist of one record for each layer.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHDDFL]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><anchor id="IHDDFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IHDDFL—is a head and drawdown output flag. This flag allows Item 3 flags to be specified in an early time step and then used or not used in subsequent time steps. Thus, it may be possible to use IHDDFL to avoid resetting Item 3 flags every time step.</text></para>
+                            <list id="25" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If IHDDFL = 0, no heads or drawdowns will be printed or saved regardless of which Item 3 flags are specified.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If IHDDFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, heads and drawdowns will be printed or saved according to the Item 3 flags.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBUDFL]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">IBUDFL—is a budget print flag.</text></para>
+                            <list id="26" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBUDFL = 0, overall volumetric budget will not be printed.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBUDFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, overall volumetric budget will be printed.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ICBCFL]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><anchor id="ICBCFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ICBCFL—is a flag for writing cell-by-cell flow data.</text></para>
+                            <list id="27" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICBCFL = 0, cell-by-cell flow terms are not written to any file.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICBCFL </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, cell-by-cell flow terms are written to the LIST file or a budget file depending on flags set in the component of flow packages, that is, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="IWELCB" styleclass="Normal" translate="true">IWELCB</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" anchor="IRCHCB" styleclass="Normal" translate="true">IRCHCB</link><text styleclass="Normal" translate="true">, and so forth. </text><text styleclass="New Materials" translate="true">This is equivalent to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="New Materials" translate="true">SAVE BUDGET</link></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 3</text></para>
+              </td>
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Hdpr Ddpr Hdsv Ddsv</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">(Item 3 is read 0, 1, or NLAY times, depending on the value of INCODE.)</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Hdpr]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><anchor id="Hdpr" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Hdpr—is the output flag for head printout.</text></para>
+                            <list id="28" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Hdpr = 0, head is not printed for the corresponding layer.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Hdpr </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, head is printed for the corresponding layer.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ddpr]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Ddpr—is the output flag for drawdown printout.</text></para>
+                            <list id="29" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ddpr = 0, drawdown is not printed for the corresponding layer.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ddpr </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, drawdown is printed for the corresponding layer.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Hdsv]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Hdsv—is the output flag for head save.</text></para>
+                            <list id="30" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Hdsv = 0, head is not saved for the corresponding layer.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Hdsv </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, head is saved for the corresponding layer.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ddsv]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Ddsv—is the output flag for drawdown save.</text></para>
+                            <list id="31" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ddsv = 0, drawdown is not saved for the corresponding layer.</text></li>
+                              <li styleclass="Normal"><text styleclass="Normal" translate="true">If Ddsv </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, drawdown is saved for the corresponding layer.</text></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

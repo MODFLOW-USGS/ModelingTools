@@ -1,0 +1,11 @@
+# Name File for MODFLOW created on 9/1/2009 by ModelMuse
+LIST 11 LayWet.lst REPLACE
+DATA(BINARY) 9 LayWet.cbc REPLACE
+DIS 12 LayWet.dis OLD
+BAS6 13 LayWet.bas OLD
+OC 39 LayWet.oc OLD
+DATA 37 LayWet.fhd REPLACE
+DATA 38 LayWet.fdn REPLACE
+PCG 18 LayWet.pcg OLD
+LPF 14 LayWet.lpf OLD
+CHD 17 LayWet.chd OLD

@@ -1,0 +1,4 @@
+# RIV: River package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     1     9 AUXILIARY IFACE # DataSet 2: MXACTC IRIVCB Option
+     1     0 # Data Set 5: ITMP NP Stress period 1
+     1     5     5 -1.000000000000E+000   1.000000000000E-003  -2.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE

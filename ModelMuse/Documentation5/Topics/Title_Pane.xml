@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Title Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Title Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Title</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first 80 characters of the first two lines in the edit box will be </text><text styleclass="Normal" style="font-weight:bold;" translate="true">TITLE1</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">TITLE2</text><text styleclass="Normal" translate="true"> in data set 1 of the SUTRA input file. They will be printed in the SUTRA listing file. The remaining text in the edit box will be treated as comments. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Although the edit box does not prevent lines from being more than 80 characters in length, a vertical gray line appears in the edit box to indicate where the 80 character cut-off is located.</text></para>
+  </body>
+</topic>

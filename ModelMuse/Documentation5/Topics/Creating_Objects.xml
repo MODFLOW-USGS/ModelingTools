@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Creating Objects</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Creating Objects</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Objects are created by drawing them on the top, front, or side </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Working_Area" styleclass="Normal" translate="true">Working Areas</link><text styleclass="Normal" translate="true">. The following sections describe how to create each type of object.</text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Normal" translate="true">Points</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Polylines" styleclass="Normal" translate="true">Polylines</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Polygons" styleclass="Normal" translate="true">Polygons</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Straight-Lines" styleclass="Normal" translate="true">Straight-Lines</link></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><link displaytype="text" defaultstyle="true" type="topiclink" href="Rectangles" styleclass="Normal" translate="true">Rectangles</link></li>
+    </list>
+    <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><conditional-text type="END"/></para>
+  </body>
+</topic>

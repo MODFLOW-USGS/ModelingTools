@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Data Sets</text></para>
+    </header>
+    <list id="2" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="6" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data|Edit Data Sets…</link><text styleclass="Normal" translate="true"> and enter the following values for the default formulas.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="14" colcount="2" style="cell-padding:2px; cell-spacing:0px; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Header" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Header" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Header" translate="true">Default Formula</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Kx</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">1.5E-5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Ky</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">1.5E-5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Kz</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">1.5E-7</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Porosity</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">0.22</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Specific_Storage</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">0</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Longitudinal_Dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">2000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Horizontal_Transverse_Dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">50</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Vertical_Transverse_Dispersivity</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">50</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Initial_Head</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">380</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Solution</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Equilibrium_Phases</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Surface</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:232px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">Chemistry_Initial_Exchange</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px;">
+          <para styleclass="Table Cell" style="text-indent:-12px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Table Cell" translate="true">2</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <list id="3" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="7" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">In this example, the bottom layer to the east of an X coordinate of 48000 is inactive. To set this, draw an object on the top view of the model enclosing this area (fig. 53). In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box, leave the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Elements</text><text styleclass="Normal" translate="true"> radio button checked, set the object’s </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Name</text><text styleclass="Normal" translate="true"> to “Inactive_Area”, check the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Set values of enclosed elements</text><text styleclass="Normal" translate="true"> checkbox and set the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Higher Z-coordinate</text><text styleclass="Normal" translate="true"> to 100. On the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</text><text styleclass="Normal" translate="true"> tab, check the checkbox for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Active</text><text styleclass="Normal" translate="true"> data set (under &quot;Required|Hydrology&quot;) and set its formula to “False.” After closing the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" style="font-weight:bold;" translate="true"> </text><text styleclass="Normal" translate="true">dialog box, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Normal" translate="true">color the grid</link><text styleclass="Normal" translate="true"> with the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Active</text><text styleclass="Normal" translate="true"> data set and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Normal" translate="true">set the selected layer to the bottom layer</link><text styleclass="Normal" translate="true">. Check that the inactive area is restricted to the bottom layer (fig. 53). Using the mouse cursor, right click on the top view of the model and select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Hide Selected Objects</text><text styleclass="Normal" translate="true"> to hide the “Inactive_Area” object.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Ex3InactiveArea.bmp" scale="75.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 53.</text><text styleclass="Image Caption" translate="true"> Active (blue) and inactive (red) areas in example.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

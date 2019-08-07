@@ -1,0 +1,7 @@
+jtf @
+# PVAL file created on 5/2/2011 by ModelMuse version 2.8.0.29.
+4
+HydCond @HydCond                  @
+DRT_COND @DRT_COND                  @
+recharge @recharge                  @
+ETS_Max @ETS_Max                  @

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Farms Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farms Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farms</text><text styleclass="Normal" translate="true"> dialog box is used to specify properties of the farms. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">Model|Farm Process|Farms...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the left is a list of farms identified by the Farm ID (</text><text styleclass="Strong" translate="true">FID</text><text styleclass="Normal" translate="true">) and an optional </text><text styleclass="Strong" translate="true">Farm name</text><text styleclass="Normal" translate="true">. The main part of the dialog box contains 7 tabs each of which are used to define properties of a farm. Farms can be edited individually by selecting a single farm from the list on the left. Multiple farms can be edited by selecting more than one farm from the list on the left. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This dialog box has several tabs that are used to define the properties of farms. Only those tabs that can be used in the current model will be visible.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Crop_Efficiencies" styleclass="Normal" translate="true">Crop Efficiencies</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Costs" styleclass="Normal" translate="true">Costs</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Diversion_Location" styleclass="Normal" translate="true">Diversion Location</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Return_Flow_Location" styleclass="Normal" translate="true">Return Flow Location</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Non_Routed_Delivery" styleclass="Normal" translate="true">Non-Routed Delivery</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Water_Rights" styleclass="Normal" translate="true">Water Rights</link><text styleclass="Normal" translate="true"> tab</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GW_Allocation_Tab" styleclass="Normal" translate="true">GW Allocation</link><text styleclass="Normal" translate="true"> tab</text></li>
+    </list>
+  </body>
+</topic>

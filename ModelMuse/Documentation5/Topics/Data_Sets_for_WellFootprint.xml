@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets for WellFootprint</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets for WellFootprint</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Data sets for WellFootprint will typically be two-dimensional data sets because WellFootprint is two-dimensional. Values are assigned at cell centers.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{CC15ED63-E607-4514-BEE3-A832009B1F77}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" AdditionalIncludeDirectories="..\jupiter_api_lib\Debug" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool" CommandLine="copy ..\jupiter_api_lib\$(ConfigurationName)\jupiter_api_lib.lib ..\jupiter_api_lib\Current" Description="Copy debug jupiter_api_lib.lib into Current"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" AdditionalIncludeDirectories="..\jupiter_api_lib\Release"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool" CommandLine="copy ..\jupiter_api_lib\$(ConfigurationName)\jupiter_api_lib.lib ..\jupiter_api_lib\Current" Description="Copy release jupiter_api_lib.lib into Current"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		<File RelativePath="..\jupiter_api_lib\Current\jupiter_api_lib.lib"/></Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath="..\..\src\ucode_2005\reg_gn_mod.f90"/>
+		<File RelativePath="..\..\src\ucode_2005\reg_gn_ucode.f90"/>
+		<File RelativePath="..\..\src\ucode_2005\reg_tr_ucode.f90"/>
+		<File RelativePath="..\..\src\ucode_2005\reg_trustmod.f90"/>
+		<File RelativePath="..\..\src\ucode_2005\ucode_2005.f90"/>
+		<File RelativePath="..\..\src\ucode_2005\ucode_mod.f90"/>
+		<File RelativePath="..\..\src\ucode_2005\utlucode.f90"/></Filter></Files>
+	<Globals/></VisualStudioProject>

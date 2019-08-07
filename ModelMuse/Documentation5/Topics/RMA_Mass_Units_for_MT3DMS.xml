@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Mass Units for MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Mass Units for MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The mass units used in MT3DMS are specified in the </text><text styleclass="Strong" translate="true">MODFLOW Options</text><text styleclass="Normal" translate="true"> dialog box. Select </text><text styleclass="Strong" translate="true">Model|MODFLOW Options</text><text styleclass="Normal" translate="true"> and go to the </text><text styleclass="Strong" translate="true">Options</text><text styleclass="Normal" translate="true"> tab. You can leave the units set to grams.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma10MassUnits.png" scale="60.00%" width="337" height="294" styleclass="Image Caption"><title translate="true">MODFLOW Options dialog box showing mass units for MT3DMS.</title></image></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.UzfAdd\UzfAdd.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.UzfAdd\UzfAdd.cbc REPLACE
+DIS              12 ..\..\model\model.UzfAdd\UzfAdd.dis OLD
+BAS6             13 ..\..\model\model.UzfAdd\UzfAdd.bas OLD
+OC               39 ..\..\model\model.UzfAdd\UzfAdd.oc OLD
+DATA             37 ..\..\output\output.UzfAdd\UzfAdd.fhd REPLACE
+DATA             38 ..\..\output\output.UzfAdd\UzfAdd.fdn REPLACE
+PCG              18 ..\..\model\model.UzfAdd\UzfAdd.pcg OLD
+LPF              14 ..\..\model\model.UzfAdd\UzfAdd.lpf OLD
+RCH              24 ..\..\model\model.UzfAdd\UzfAdd.rch OLD
+UZF              31 ..\..\model\model.UzfAdd\UzfAdd.uzf OLD

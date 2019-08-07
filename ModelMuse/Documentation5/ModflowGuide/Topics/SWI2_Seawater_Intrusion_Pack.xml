@@ -1,0 +1,570 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SWI2 - Seawater Intrusion Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SWI2 - Seawater Intrusion Package</text></para>
+    </header>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SWI2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The SWI2 Package allows three-dimensional vertically integrated variable-density groundwater flow and seawater intrusion in coastal multiaquifer systems to be simulated using MODFLOW-2005.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Bakker, M., Schaars, F., Hughes, J.D., Langevin, C.D., Dausman, A.M., 2013, Documentation of the seawater intrusion (SWI2) package for MODFLOW: U.S. Geological Survey Techniques and Methods, book 6, chap. A46, 47 p., </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/6a46/" target="_blank" styleclass="Normal" translate="true">https://pubs.usgs.gov/tm/6a46/</link><text styleclass="Normal" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The SWI2 package is not intended for the simulation of the combined flow of freshwater and brines, because variations in viscosity are neglected.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">It is important to recognize that the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="Sstr" styleclass="Normal" translate="true">steady-state head option</link><text styleclass="Normal" translate="true"> does not mean that the steady-state density distribution is computed. The steady-state density distribution can only be computed by running the simulation until the density distribution is no longer changing.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Starting heads (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="STRT" styleclass="Normal" translate="true">STRT</link><text styleclass="Normal" translate="true">) should be modified to represent the freshwater head at the top of each layer.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">All standard MODFLOW packages may be used with the SWI2 Package. When the package requires specification of a head, for example the General Head Boundary (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB" styleclass="Normal" translate="true">GHB</link><text styleclass="Normal" translate="true">) Condition Package, this head must be the freshwater head at the top of the layer.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Similar to constant- and initial-head (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="STRT" styleclass="Normal" translate="true">STRT</link><text styleclass="Normal" translate="true">) values in the Basic (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="Normal" translate="true">BAS</link><text styleclass="Normal" translate="true">) Package, time-variant specified head values for cells representing fluid densities greater than freshwater should be modified to represent the freshwater head at the top of each cell.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The SWI2 documentation contains tips for designing MODFLOW-2005 models using the SWI2 package.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Simulation of vertically integrated variable-density groundwater flow using the seawater intrusion (SWI2) Package is activated by including a record in the MODFLOW name file using the file type (Ftype) “SWI2” to indicate that relevant calculations are to be made in the model and to specify the related input data file. The NAM file should also be modified to include the appropriate information for saving interface (ZETA) elevations, SWI2 cell-by-cell budget data, and (or) SWI2 observation well data, if necessary.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The SWI2 file contains solver variables, data values for the different zones, algorithm parameters, the initial positions of the surfaces, the type of sources and sinks, and ZETA observation locations. In the body of the report, the number of surfaces are defined as being equal to the number of zones plus one. This number includes overlying and underlying surfaces corresponding to the layer top and bottom. In the input and output described here, however, only active ZETA surfaces are read and written. Active surfaces include only those surfaces between zones, and do not include the surfaces corresponding to the layer top and bottom. Thus, the number of active surfaces is equal to the number of zones minus one. Optional variables are indicated in [brackets].</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="20" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="New Materials" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="New Materials"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="New Materials"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NSRF ISTRAT NOBS ISWIZT ISWIBD ISWIOBS [OPTIONS]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NSRF]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NSRF" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of active surfaces (interfaces). This equals the number of zones minus one.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISTRAT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ISTRAT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Flag indicating density distribution.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0 – density varies linearly between surfaces.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">1 – density is constant between surfaces.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NOBS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NOBS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of OBS observation locations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISWIZT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Flag and a unit number for ZETA output.</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIZT &gt; 0, unit number for ZETA output</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIZT ≤ 0, ZETA will not be recorded.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIZT &gt; 0, ZETA output is written with the same frequency as HEAD output specified in the Output Control (OC) file.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISWIBD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Flag and a unit number for BUDGET output. When this option is selected, corrections to the cell by cell flows computed by MODFLOW will be written to the same or different file (depending on the unit number). Corrections are called SWIADDTOFLF, SWIADDTOFRF, and SWIADDTOFFF, for the lower face (LF), right face (RF) and front face (FF), respectively</text></para>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIBD &gt; 0, unit number for BUDGET</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIBD ≤ 0, BUDGET will not be recorded.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISWIOBS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ISWIOBS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Flag and a unit number for OBS output</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIOBS &gt; 0, unit number for ASCII OBS</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIOBS = 0, OBS will not be recorded.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISWIOBS &lt; 0, |ISWIOBS| unit number for binary OBS.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[OPTIONS]]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="OPTIONS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Is an optional list of character values</text></para>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">“ADAPTIVE”</text><text styleclass="Normal" translate="true"> —defines that adaptive SWI2 time step variables will be specified in dataset 3b.</text></li>
+                        <li><text styleclass="Keywords" translate="true">&quot;FSSSOPT&quot;</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="New Materials" translate="true">DEBUG OPTION - ADDITION DATA DURING TIP/TOE</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 2a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NSOLVER IPRSOL MUTSOL</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NSOLVER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NSOLVER" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Flag indicating solver used to solve for ZETA surfaces</text></para>
+                      <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NSOLVER = 1, the MODFLOW DE4 solver will be used.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NSOLVER = 2, the MODFLOW PCG solver will be used. The PCG solver should be used for large problems when the time required for the DE4 solver to obtain a solution is excessive.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRSOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the printout interval for printing convergence information. If IPRSOL is equal to zero, it is changed to 999. The maximum ZETA change (positive or negative) and residual change are printed for each iteration of a time step whenever the time step is an even multiple of IPRSOL.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MUTSOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is a flag that controls printing of convergence information from the solver.</text></para>
+                      <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If MUTSOL = 0, tables of maximum head change and residual will be printed each iteration.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If MUTSOL = 1, only the total number of iterations will be printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If MUTSOL = 2, no information will be printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If MUTSOL = 3, information will only be printed if convergence fails.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSOLVER" styleclass="Normal" translate="true">NSOLVER</link><text styleclass="Normal" translate="true"> = 2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 2b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MXITER ITER1 NPCOND ZCLOSE RCLOSE RELAX NBPOL DAMP [DAMPT]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXITER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Maximum number of outer iterations—that is, calls to the solution routine.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITER1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Maximum number of inner iterations—that is, iterations within the solution routine.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPCOND]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NPCOND" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">flag used to select the matrix conditioning method for the MODFLOW PCG solver (NSOLVER = 2).</text></para>
+                      <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NPCOND = 1, is for Modified Incomplete Cholesky (for use on scalar computers).</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NPCOND = 2, is for Polynomial (for use on vector computers or to conserve computer memory).</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ZCLOSE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ZCLOSE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">is the ZETA change criterion for convergence, in units of length. When the maximum absolute value of ZETA change from all nodes during an iteration is less than or equal to ZCLOSE, and the criterion for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="RCLOSE" styleclass="Normal" translate="true">RCLOSE</link><text styleclass="Normal" translate="true"> is also satisfied (see below), iteration stops.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RCLOSE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="RCLOSE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">is the residual criterion for convergence, in units of cubic length per time. The units for length and time are the same as established for all model data. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="LENUNI" styleclass="Normal" translate="true">LENUNI</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="Normal" translate="true">ITMUNI</link><text styleclass="Normal" translate="true"> input variables in the Discretization File.) When the maximum absolute value of the residual at all nodes during an iteration is less than or equal to RCLOSE, and the criterion for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="ZCLOSE" styleclass="Normal" translate="true">ZCLOSE</link><text styleclass="Normal" translate="true"> is also satisfied (see above), iteration stops.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RELAX]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the relaxation parameter used with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NPCOND" styleclass="Normal" translate="true">NPCOND</link><text styleclass="Normal" translate="true"> = 1. Usually, RELAX = 1.0, but for some problems a value of 0.99, 0.98, or 0.97 will reduce the number of iterations required for convergence. RELAX is only used if NSOLVER is 2 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NPCOND" styleclass="Normal" translate="true">NPCOND</link><text styleclass="Normal" translate="true"> is 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NBPOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is only specified when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSOLVER" styleclass="Normal" translate="true">NSOLVER</link><text styleclass="Normal" translate="true"> = 2 and used when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NPCOND" styleclass="Normal" translate="true">NPCOND</link><text styleclass="Normal" translate="true"> = 2 to indicate whether the estimate of the upper bound on the maximum eigenvalue is 2.0, or whether the estimate will be calculated. NBPOL = 2 is used to specify the value is 2.0; for any other value of NBPOL, the estimate is calculated. Convergence is generally insensitive to this parameter. NBPOL is not used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NPCOND" styleclass="Normal" translate="true">NPCOND</link><text styleclass="Normal" translate="true"> is not 2.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[DAMP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="DAMP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">is the damping factor and is only specified when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSOLVER" styleclass="Normal" translate="true">NSOLVER</link><text styleclass="Normal" translate="true"> = 2. It is typically set equal to one, which indicates no damping. A value less than 1.0 and greater than 0.0 causes damping.</text></para>
+                      <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If DAMP &gt; 0, applies to both steady-state and transient stress periods.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If DAMP &lt; 0, applies to steady-state periods. The absolute value if used as the dampening factor.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[DAMPT]]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the damping factor for transient stress periods and is only specified when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSOLVER" styleclass="Normal" translate="true">NSOLVER</link><text styleclass="Normal" translate="true"> = 2. DAMPT is enclosed in brackets indicating that it is an optional variable that only is read when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="DAMP" styleclass="Normal" translate="true">DAMP</link><text styleclass="Normal" translate="true"> is specified as a negative value. If DAMPT is not read, then the single damping factor, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="DAMP" styleclass="Normal" translate="true">DAMP</link><text styleclass="Normal" translate="true">, is used for both transient and steady-state stress periods.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 3a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TOESLOPE TIPSLOPE [ALPHA] [BETA]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TOESLOPE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TOESLOPE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum slope of toe cells.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TIPSLOPE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TIPSLOPE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum slope of tip cells.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[ALPHA]]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ALPHA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Fraction of threshold used to move the tip and toe to adjacent empty cells when the slope exceeds user-specified </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TOESLOPE" styleclass="Normal" translate="true">TOESLOPE</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TIPSLOPE" styleclass="Normal" translate="true">TIPSLOPE</link><text styleclass="Normal" translate="true"> values. If ALPHA is not specified, a default value of 0.1 is used. ALPHA must be greater than 0.0 and less than or equal to 1.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[BETA]]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Fraction of threshold used to move the toe to adjacent non-empty cells when the surface is below a minimum value defined by the user-specified </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TOESLOPE" styleclass="Normal" translate="true">TOESLOPE</link><text styleclass="Normal" translate="true"> value. A default BETA value of 0.1 is used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="ALPHA" styleclass="Normal" translate="true">ALPHA</link><text styleclass="Normal" translate="true"> is not specified. BETA must be greater than 0.0 and less than or equal to 1.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="OPTIONS" styleclass="Normal" translate="true">OPTIONS</link><text styleclass="Normal" translate="true"> = ADAPTIVE</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 3b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NADPTMX NADPTMN ADPTFCT</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NADPTMX]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NADPTMX" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum number of SWI2 time steps per MODFLOW time step. If NADPTMX is less than 1, it is changed to 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NADPTMN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NADPTMN" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Minimum number of SWI2 time steps per MODFLOW time step. If NADPTMN is less than 1, it is changed to 1. NADPTMN must be less than or equal to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NADPTMX" styleclass="Normal" translate="true">NADPTMX</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ADPTFCT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the factor used to evaluate tip and toe thicknesses and control the number of SWI2 time steps per MODFLOW time step. When the maximum tip or toe thickness exceeds the product of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TOESLOPE" styleclass="Normal" translate="true">TOESLOPE</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TIPSLOPE" styleclass="Normal" translate="true">TIPSLOPE</link><text styleclass="Normal" translate="true"> the cell size and ADPTFCT, the number of SWI2 time steps are increased to a value less than or equal to NADPT. When the maximum tip or toe thickness is less than the product of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TOESLOPE" styleclass="Normal" translate="true">TOESLOPE</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="TIPSLOPE" styleclass="Normal" translate="true">TIPSLOPE</link><text styleclass="Normal" translate="true"> the cell size and ADPTFCT, the number of SWI2 time steps is decreased in the next MODFLOW time step to a value greater than or equal to 1. ADPTFCT must be greater than 0.0 and is reset to 1.0 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NADPTMX" styleclass="Normal" translate="true">NADPTMX</link><text styleclass="Normal" translate="true"> is equal to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NADPTMN" styleclass="Normal" translate="true">NADPTMN</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NU(ISTRAT=0: NSRF+2, ISTRAT=1: NSRF+1)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NU]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Values of the dimensionless density</text></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="ISTRAT" styleclass="Normal" translate="true">ISTRAT</link><text styleclass="Normal" translate="true"> = 1 – Density of each zone (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSRF" styleclass="Normal" translate="true">NSRF</link><text styleclass="Normal" translate="true">+1 values).</text></li>
+                  <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="ISTRAT" styleclass="Normal" translate="true">ISTRAT</link><text styleclass="Normal" translate="true"> = 0 – Density along top of layer, each surface, and bottom of layer (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSRF" styleclass="Normal" translate="true">NSRF</link><text styleclass="Normal" translate="true">+2 values)</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SURFACE (FROM 1 to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NSRF" styleclass="Normal" translate="true">NSRF</link><text styleclass="Normal" translate="true">)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH LAYER</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ZETA(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ZETA]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="ZETA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Initial elevations of the active surfaces.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH LAYER</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SSZ(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SSZ]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="SSZ" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Effective porosity</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH LAYER</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ISOURCE(NCOL,NROW) </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISOURCE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="ISOURCE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Source type of any external sources or sinks, specified with any outside package (i.e. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">WEL</link><text styleclass="Normal" translate="true"> Package, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" styleclass="Normal" translate="true">RCH</link><text styleclass="Normal" translate="true"> Package, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB" styleclass="Normal" translate="true">GHB</link><text styleclass="Normal" translate="true"> Package). There are three options:</text></para>
+                <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISOURCE &gt; 0 – Sources and sinks have the same fluid density as the zone ISOURCE. If such a zone is not present in the cell, sources and sinks have the same fluid density as the active zone at the top of the aquifer.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISOURCE = 0 – Sources and sinks have the same fluid density as the active zone at the top of the aquifer.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If ISOURCE &lt; 0 – Sources have the same fluid density as the zone with a number equal to the absolute value of ISOURCE. Sinks have the same fluid density as the active zone at the top of the aquifer. This option is useful for the modeling of the ocean bottom where infiltrating water is salt, yet exfiltrating water is of the same type as the water at the top of the aquifer.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NOBS" styleclass="Normal" translate="true">NOBS</link><text styleclass="Normal" translate="true"> &gt; 0</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="NOBS" styleclass="Normal" translate="true">NOBS</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OBSNAM LAYER ROW COLUMN</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OBSNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="OBSNAM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">is a string of 1 to 12 nonblank characters used to identify the observation. The identifier need not be unique; however, identification of observations in the output files is facilitated if each observation is given a unique OBSNAM.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the layer index of the cell in which the ZETA observation is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the row index of the cell in which the ZETA observation is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[COLUMN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">is the column index of the cell in which the ZETA observation is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

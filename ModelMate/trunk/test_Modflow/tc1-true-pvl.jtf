@@ -1,0 +1,15 @@
+jtf %
+# Pval file for tc1-true example
+#
+11                                  Item 1: NP
+WELLS_TR    %WELLS_TR            %  Item 2: PARNAM Parval
+SS_1        %SS_1                %
+HK_1        %HK_1                % 
+VERT_ANI_1  %VERT_ANI_1          %
+VERT_K_CB   %VERT_K_CB           %
+SS_2        %SS_2                %
+HK_2        %HK_2                %
+VERT_ANI_2  %VERT_ANI_2          %
+RCH_ZONE_1  %RCH_ZONE_1          %
+RCH_ZONE_2  %RCH_ZONE_2          %
+RIVERS      %RIVERS              %

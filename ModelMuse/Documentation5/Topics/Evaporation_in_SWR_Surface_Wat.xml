@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Evaporation in SWR: Surface-Water Routing Process</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Evaporation in SWR: Surface-Water Routing Process</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Evaporation in SWR: Surface-Water Routing Process</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Starting time</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Ending time</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> are explained in the help for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" anchor="Times" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Normal"><anchor id="EVAP" styleclass="Strong"></anchor><text styleclass="Strong" translate="true">SWR Evaporation (EVAP/EVAP2D)</text><text styleclass="Normal" translate="true">: EVAP and EVAP2D represent the volumetric rate per unit area of water removed by evaporation directly from the reach (in units of length per time). EVAP and EVAP2D are positive values.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

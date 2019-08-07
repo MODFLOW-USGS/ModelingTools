@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Type Problem Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Data Type Problem Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data Type Problem</text><text styleclass="Normal" translate="true"> dialog box appears when the user has entered a formula in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true"> dialog box</link><text styleclass="Normal" translate="true"> whose result is of the wrong type for the data set in question. For user-created data sets, there are two ways of handling this.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The type of the data set can be changed to match the type returned by the formula. For example, if the type of the data set is an integer, and the formula is &quot;0.5&quot;, the type of the data set could be changed to real.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The formula could be adjusted to match the type of the data. For example, if the type of the data set is an integer, and the formula is &quot;0.5&quot;, the formula could be changed to &quot;Round(0.5).” (In this case, &quot;Round(0.5)&quot; would then be converted to &quot;0&quot; because Round(0.5) is a constant.)</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The built-in data sets for ModelMuse cannot have their type changed because the type must match the type of the corresponding data set in PHAST, MODFLOW, SUTRA, or Well Footprint. Thus, for these data sets, only the second option is available.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

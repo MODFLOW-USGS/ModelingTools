@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DrainElevDemo" FileType="bin">
+    <FileName Model_Name="DrainElevDemo" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DrainElevDemo" FileType="ancillary">
+    <FileName Model_Name="DrainElevDemo" FileType="ancillary">DrainElevDemo.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DrainElevDemo" FileType="Model Input">
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.bas</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.dis</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.drn</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.gsf</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.lpf</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.nam.archive</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.ob_drob</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.oc</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">DrainElevDemo.pcg</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Input">usgs.DrainElevDemo.reference</FileName>
+  </model>
+  <output Model_Name="DrainElevDemo" FileType="Model Output">
+    <FileName Model_Name="DrainElevDemo" FileType="Model Output">DrainElevDemo.cbc</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Output">DrainElevDemo.drob_out</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Output">DrainElevDemo.fdn</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Output">DrainElevDemo.fhd</FileName>
+    <FileName Model_Name="DrainElevDemo" FileType="Model Output">DrainElevDemo.lst</FileName>
+  </output>
+</Model_Archive_List>

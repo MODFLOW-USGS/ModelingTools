@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PosEx</title>
+  <keywords>
+    <keyword translate="true">PosEx</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">PosEx</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">PosEx</text><text styleclass="Normal" translate="true">(SubText, Text_Value, Offset) returns the position of the first instance of SubText within Text_Value that starts on or after Offset. If SubText does not occur within Text_Value, on or after Offset, PosEx returns zero. If Offset equals one, PosEx is equivalent to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pos" styleclass="Normal" translate="true">Pos</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

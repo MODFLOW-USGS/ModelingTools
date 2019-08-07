@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Acknowledgments</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Acknowledgments</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Heading2_atoc_" translate="true">Version 1 (GoPhast)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Scott R. Charlton (USGS), Peter Engesgaard (Geologisk Institut - Københavns Universitet), Rasmus Jakobsen (Technical University of Denmark), Kenneth L. Kipp (USGS), Peter Kroopnick (Brown and Caldwell), Paul Misut (USGS), and David Parkhurst (USGS) provided numerous helpful suggestions during the development of GoPhast. The author also appreciates the thorough and thoughtful reviews of draft versions of this publication that were provided by David Parkhurst, Paul Misut, and Alden M. Provost (USGS). Ward E. Sanford (USGS), Brendan A. Zinn (USGS), Dorothy Tepper (USGS), Barbara Korzendorfer (USGS), and Leonard F. Konikow (USGS) are appreciated for helpful comments on the GoPhast publication. John A. Passehl (formerly of the USGS) is thanked for providing the data used in the Biscayne Bay Aquifer example.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Version 2 (ModelMuse)</text></para>
+    <para styleclass="Normal"><conditional-text type="END"/><text styleclass="Normal" translate="true">The author appreciates the thorough and thoughtful reviews of draft versions of this publication and software suggestions that were provided by Eileen Poeter of the Colorado School of Mines and the International Ground-Water Modeling Center and Arlen Harbaugh, Scientist Emeritus, USGS. Thanks also go to the beta testers and the members of the ModelMuse class at the U.S. Geological Survey 2008 Ground-Water Workshop for their feedback on ModelMuse. Iris Collies of USGS is thanked for careful and thorough editing. Anthony Winston Jr. provided advice on improving the sound quality on the ModelMuse videos, C Justin Mayers of USGS provided numerous helpful suggestions and Leonard Konikow and Paul Barlow both of USGS provided suggestions for improving the software and documentation.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Version 3</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Alden Provost and Clifford I. Voss (USGS), and Jeffrey McKenzie (Department of Earth and Planetary Sciences, McGill University) are gratefully acknowledged for testing and making suggestions for improving ModelMuse. Thanks are also extended to Alden Provost and Clifford I. Voss for their helpful review comments.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE Nodes [
+
+<!ENTITY % NameValue "CDATA">
+<!ENTITY % PropType "(I|S|D|L|H|B)">
+<!ENTITY % VersionValue "CDATA">
+
+<!ELEMENT Prp (#PCDATA)>
+<!ELEMENT Node (Node|Prp)*>
+<!ELEMENT Nodes (Node)+>
+
+<!ATTLIST Nodes version CDATA "1">
+
+<!ATTLIST Node name CDATA #REQUIRED>
+
+<!ATTLIST Prp name CDATA #REQUIRED>
+<!ATTLIST Prp type CDATA #REQUIRED>
+<!ATTLIST Prp value CDATA #REQUIRED>
+]>
+<Nodes version="1">
+	<Node name="root">
+		<Node name="config"/>
+		<Node name="llp">
+			<Node name="llevent0">
+				<Prp name="delay" type="I" value="1000"/>
+				<Prp name="index" type="I" value="0"/>
+				<Prp name="message" type="I" value="512"/>
+				<Prp name="mousedata" type="I" value="102"/>
+				<Prp name="type" type="I" value="0"/>
+				<Prp name="x" type="I" value="63"/>
+				<Prp name="y" type="I" value="71"/>
+			</Node>
+			<Node name="llevent1">
+				<Prp name="delay" type="I" value="1000"/>
+				<Prp name="index" type="I" value="1"/>
+				<Prp name="message" type="I" value="513"/>
+				<Prp name="mousedata" type="I" value="102"/>
+				<Prp name="type" type="I" value="0"/>
+				<Prp name="x" type="I" value="63"/>
+				<Prp name="y" type="I" value="71"/>
+			</Node>
+			<Node name="llevent2">
+				<Prp name="delay" type="I" value="1000"/>
+				<Prp name="index" type="I" value="2"/>
+				<Prp name="message" type="I" value="514"/>
+				<Prp name="mousedata" type="I" value="102"/>
+				<Prp name="type" type="I" value="0"/>
+				<Prp name="x" type="I" value="63"/>
+				<Prp name="y" type="I" value="71"/>
+			</Node>
+		</Node>
+		<Node name="settings"/>
+		<Prp name="signature" type="S" value="{62402E6C-6E6D-4AA5-9AFF-5A20AD691C44}"/>
+		<Prp name="version" type="S" value="7.0"/>
+	</Node>
+</Nodes>

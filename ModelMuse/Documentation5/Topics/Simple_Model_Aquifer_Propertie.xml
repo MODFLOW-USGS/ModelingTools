@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Simple Model: Aquifer Properties</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Simple Model: Aquifer Properties</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The only aquifer properties that need to be specified are the horizontal and vertical hydraulic conductivities as shown in the table below. The horizontal hydraulic conductivity only needs to be simulated for the simulated layers. The vertical hydraulic conductivity needs to specified in both the simulated and nonsimulated layers.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="6" colcount="3" style="width:300px; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="width:149px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Layer</text></para>
+        </td>
+        <td style="width:59px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Kx</text></para>
+        </td>
+        <td style="width:64px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Kz</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:149px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Upper Aquifer</text></para>
+        </td>
+        <td style="width:59px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">0.001</text></para>
+        </td>
+        <td style="width:64px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:149px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Upper Confining Bed</text></para>
+        </td>
+        <td style="width:59px;">
+          <para styleclass="Table Cell" style="text-align:right;"></para>
+        </td>
+        <td style="width:64px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">1e-6</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:149px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Middle Aquifer</text></para>
+        </td>
+        <td style="width:59px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">0.0001</text></para>
+        </td>
+        <td style="width:64px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:149px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Lower Confining Bed</text></para>
+        </td>
+        <td style="width:59px;">
+          <para styleclass="Table Cell" style="text-align:right;"></para>
+        </td>
+        <td style="width:64px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">5e-7</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:149px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Lower Aquifer</text></para>
+        </td>
+        <td style="width:59px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">0.0002</text></para>
+        </td>
+        <td style="width:64px;">
+          <para styleclass="Table Cell" style="text-align:right;"><text styleclass="Table Cell" translate="true">1</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To illustrate different methods of assigning properties, objects will be used to assign Kx whereas a formula will be used to assign Kz. First confirm that the selected layer is the top layer. One way to do that is to move the cursor over the red </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Normal" style="font-weight:bold;" translate="true">Selection cube</link><text styleclass="Normal" translate="true"> on the top view of the model. The selected layer will be displayed on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Hints_and_the_Status_Bar" styleclass="Normal" style="font-weight:bold;" translate="true">Status bar</link><text styleclass="Normal" translate="true">. Next select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rectangles" styleclass="Normal" style="font-weight:bold;" translate="true">Object|Create|Rectangle</link><text styleclass="Normal" translate="true"> </text><image src="CreateRectangle.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true"> and click twice on the top view of the model to create a rectangle that completely encloses the grid. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box will appear. Change the name of the object to &quot;Upper_Aquifer_Kx&quot;. Examine the formulas for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Higher Z coordinate</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Lower Z coordinate</text><text styleclass="Normal" translate="true"> and verify that they are &quot;Model_Top&quot; and &quot;Upper_Aquifer_Bottom&quot;. Select the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</text><text styleclass="Normal" translate="true"> tab, expand &quot;Required|Hydrology&quot; and check the check box next to &quot;Kx&quot;. Change the formula for the Kx data set to &quot;0.001&quot; and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next change the selected layer to layer 3 (the middle aquifer). One way to do that is to click twice beneath the red square on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Normal" style="font-weight:bold;" translate="true">Selection cube</link><text styleclass="Normal" translate="true"> on the top view of the model to move the selected layer down. You will need to click twice to move the selected layer down two layers from layer 1 to layer 3. Create another rectangle object that completely surround the grid. In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box, change the name of the object to &quot;Middle_Aquifer_Kx&quot;. Examine the formulas for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Higher Z coordinate</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Lower Z coordinate</text><text styleclass="Normal" translate="true"> and verify that they are &quot;Upper_Confining_Bed_Bottom&quot; and &quot;Middle_Aquifer_Bottom&quot;. These formulas mean that the top of the object is at the top of layer 3 and the bottom of the object is at the bottom of layer 3. On the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</text><text styleclass="Normal" translate="true"> tab, check the check box for the Kx data set and leave the formula for the Kx data set to &quot;0.0001&quot; and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button. Repeat this process again to assign Kx a value of </text><text styleclass="Table Cell" translate="true">0.0002 in layer 5. (Be sure to change the selected layer to the bottom layer before creating the object used to specify Kx for the bottom layer.)</text></para>
+    <para styleclass="Normal"><text styleclass="Table Cell" translate="true">To define different values of Kz for each layer, select </text><text styleclass="Table Cell" style="font-weight:bold;" translate="true">Data|Edit Data Sets...</text><text styleclass="Table Cell" translate="true"> Expand &quot;Required|Hydrology&quot; and select Kz. The default formula for the Kz data set </text><text styleclass="Normal" translate="true">is &quot;Kx / 10&quot;. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit formula</text><text styleclass="Normal" translate="true"> button to display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Normal" style="font-weight:bold;" translate="true">Formula Editor</link><text styleclass="Normal" translate="true">. Expand &quot;Functions|Logical&quot; and double click on </text><text styleclass="Normal" style="font-weight:bold;" translate="true">CaseR</text><text styleclass="Normal" translate="true">.The formula will change to &quot;CaseR(Index, Real_Result1, Real_Result2, ...)&quot;. In the formula, double-click on &quot;Index&quot; to select it. In the list of formulas, close &quot;Logical&quot; and expand &quot;Grid&quot;. Then double click on &quot;Layer&quot;. The formula should now be &quot;CaseR(Layer, Real_Result1, Real_Result2, ...)&quot;. Type in the values of Kz for each layer so that the formula becomes &quot;CaseR(Layer, 1., 1e-6, 1., 5e-7, 1.)&quot;. This formula will assign a different value to Kz for each layer. Kz in layers 1, 3, and 5 will be assigned a value of 1; Kz in layer 2 will be assigned a value of 1e-6; and Kz in layer 4 will be assigned a value of 5e-7. Click OK to close the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Normal" style="font-weight:bold;" translate="true">Formula Editor</link><text styleclass="Normal" translate="true">. Then click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Apply</text><text styleclass="Normal" translate="true"> to make the change in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+  </body>
+</topic>

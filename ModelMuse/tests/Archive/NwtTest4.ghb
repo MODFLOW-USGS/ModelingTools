@@ -1,0 +1,6 @@
+# GHB: General-Head Boundary package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     2     9 AUXILIARY IFACE # DataSet 2: MXACTC IGHBCB Option
+     2     0 # Data Set 5: ITMP NP Stress period 1
+     1    13     1  9.880000000000E+002   3.799999900000E-002      0 # Data Set 6: Layer Row Column Bhead Cond IFACE
+     1    14     9  1.045000000000E+003   3.799999900000E-002      0 # Data Set 6: Layer Row Column Bhead Cond IFACE
+    -1     0 # Data Set 5: ITMP NP Stress period 2

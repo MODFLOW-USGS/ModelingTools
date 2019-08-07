@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Dialog Boxes</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Dialog Boxes</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the user first starts ModelMuse, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Start_Up_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Start-Up</link><text styleclass="Normal" translate="true"> dialog box is displayed. If the user chooses to create a new model in the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Start-Up</text><text styleclass="Normal" translate="true"> dialog box, either the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Initial Grid</link><text styleclass="Normal" translate="true"> dialog box or the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Model_Area_Dialog_Box" styleclass="Strong" translate="true">Initial Model Area</link><text styleclass="Normal" translate="true"> dialog box is displayed. After both these dialog boxes are closed, the main window of ModelMuse is displayed </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Main_Window" styleclass="Normal" translate="true">(fig. 4)</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

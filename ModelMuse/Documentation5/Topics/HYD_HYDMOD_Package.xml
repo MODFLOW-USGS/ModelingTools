@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HYD: HYDMOD Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">HYD: HYDMOD Package</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The HYDMOD package is used to define specified locations at which data will be written to a binary file at every time stp of a simulation. A separate program, hydfmt.exe, which is distributed with MODFLOW-2005 can be used to convert the binary data to normal text. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Output" styleclass="Strong" translate="true">Output</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The only information specified on the HYDMOD pane is </text><text styleclass="Strong" translate="true">HYDNOH</text><text styleclass="Normal" translate="true"> which is the value that will be saved to file if a value for a specified location can not be determined.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The output file for HYDMOD will have the extension &quot;.hyd_out&quot;. A typical hydfmt is illustrated below. It is a good idea to use a root for the HYDFMT output that is different from the root for the model or some of the output files may overwrite input files for the model.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Hydfmt.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

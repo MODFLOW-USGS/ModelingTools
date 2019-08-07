@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 9/1/2009 by ModelMuse
+LIST 11 SfrImportTest.lst REPLACE
+DATA(BINARY) 9 SfrImportTest.cbc REPLACE
+DIS 12 SfrImportTest.dis OLD
+BAS6 13 SfrImportTest.bas OLD
+OC 39 SfrImportTest.oc OLD
+DATA 37 SfrImportTest.fhd REPLACE
+DATA 38 SfrImportTest.fdn REPLACE
+PCG 18 SfrImportTest.pcg OLD
+LPF 14 SfrImportTest.lpf OLD
+CHD 17 SfrImportTest.chd OLD
+SFR 29 SfrImportTest.sfr OLD

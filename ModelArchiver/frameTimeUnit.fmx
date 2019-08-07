@@ -1,0 +1,24 @@
+inherited frameTime: TframeTime
+  Size.Width = 322.000000000000000000
+  Size.Height = 309.000000000000000000
+  inherited memoDescription: TMemo
+    Size.Width = 322.000000000000000000
+    Viewport.Width = 322.000000000000000000
+    Viewport.Height = 77.000000000000000000
+  end
+  object spl1: TSplitter
+    Align = Top
+    Cursor = crVSplit
+    MinSize = 20.000000000000000000
+    Position.Y = 77.000000000000000000
+    Size.Width = 322.000000000000000000
+    Size.Height = 4.000000000000000000
+    Size.PlatformDefault = False
+  end
+  inline frameTimeEdits: TframeTimeEdits
+    Align = Client
+    Size.Width = 322.000000000000000000
+    Size.Height = 228.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

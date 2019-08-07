@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RotatedVertexInterpolateTest" FileType="bin">
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RotatedVertexInterpolateTest" FileType="ancillary">
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="ancillary">RotatedVertexInterpolateTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.bas</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.dis</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.gsf</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.lpf</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.nam.archive</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.oc</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RotatedVertexInterpolateTest.pcg</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Input">usgs.RotatedVertexInterpolateTest.reference</FileName>
+  </model>
+  <output Model_Name="RotatedVertexInterpolateTest" FileType="Model Output">
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Output">RotatedVertexInterpolateTest.cbc</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Output">RotatedVertexInterpolateTest.fdn</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Output">RotatedVertexInterpolateTest.fhd</FileName>
+    <FileName Model_Name="RotatedVertexInterpolateTest" FileType="Model Output">RotatedVertexInterpolateTest.lst</FileName>
+  </output>
+</Model_Archive_List>

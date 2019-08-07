@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="UzfAdd" FileType="bin">
+    <FileName Model_Name="UzfAdd" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="UzfAdd" FileType="ancillary">
+    <FileName Model_Name="UzfAdd" FileType="ancillary">UzfAdd.gpt</FileName>
+  </ancillary>
+  <model Model_Name="UzfAdd" FileType="Model Input">
+    <FileName Model_Name="UzfAdd" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">usgs.UzfAdd.reference</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.bas</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.dis</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.gsf</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.lpf</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.nam.archive</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.oc</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.pcg</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.rch</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Input">UzfAdd.uzf</FileName>
+  </model>
+  <output Model_Name="UzfAdd" FileType="Model Output">
+    <FileName Model_Name="UzfAdd" FileType="Model Output">UzfAdd.cbc</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Output">UzfAdd.fdn</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Output">UzfAdd.fhd</FileName>
+    <FileName Model_Name="UzfAdd" FileType="Model Output">UzfAdd.lst</FileName>
+  </output>
+</Model_Archive_List>

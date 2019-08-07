@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Activating MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Activating MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MT3DMS is used to simulate solute transport. In this case, we will use it to simulate transport of solute from the disposal pond.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To activate MT3DMS, select </text><text styleclass="Strong" translate="true">Model|MODFLOW Packages and Programs...</text><text styleclass="Normal" translate="true"> and then expand MT3DMS. Check the check box for the MT3DMS Basic Transport package (BTN). The GCG Generalized Conjugate Gradient Solver will also be activated; it is required with MT3DMS. You should also activate the Advection, Dispersion, and Sink and Source Mixing packages for MT3DMS.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You must define at least one mobile species. In this case, we will use chloride.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click OK to close the dialog box. You will get a message telling you that you will need to run MODFLOW again before you can run MT3DMS.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma1.png" scale="60.00%" width="479" height="356" styleclass="Image Caption"><title translate="true">MT3DMS BTN package page with Cl as the solute</title></image></para>
+  </body>
+</topic>

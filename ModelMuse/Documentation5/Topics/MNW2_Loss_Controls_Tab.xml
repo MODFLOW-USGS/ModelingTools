@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Loss Controls Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Loss Controls Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Table Cell" translate="true">Loss Controls</text><text styleclass="Normal" translate="true"> tab on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2_Object_Pane" styleclass="Strong" translate="true">MNW2 pane</link><text styleclass="Normal" translate="true"> contains controls relating to the parameters required for the selected well loss model (unless the well screens are defined on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Well_Screens" styleclass="Strong" translate="true">Well Screens</link><text styleclass="Normal" translate="true"> tab instead). The </text><text styleclass="Strong" translate="true">Loss Controls</text><text styleclass="Normal" translate="true"> tab will be visible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2_Basic_Tab" anchor="LOSSTYPE" styleclass="Strong" translate="true">LOSSTYPE</link><text styleclass="Normal" translate="true"> specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2_Basic_Tab" styleclass="Strong" translate="true">Basic</link><text styleclass="Normal" translate="true"> tab is anything other than &quot;None&quot;. The user can specify a formula for each required parameter. The formula will be evaluated at each cell that makes up the well to determine the correct value to apply to that cell.</text></para>
+    <para styleclass="Normal"><snippet src="MNW_Loss_Terms"/></para>
+  </body>
+</topic>

@@ -1,0 +1,51 @@
+ModelMuse/ModelMate interaction to-do list
+
+1. (Done) In ModelMuse: When ModelMuse asks for a ModelMate file name, check for the .mtc extension.  If not present, add it.
+
+2. (Already present. Uncheck the "Execute model" checkbox when prompted for the name file.) In ModelMuse: There will be situations where it is desirable to have ModelMuse export MODFLOW input files without starting a model run.  Need a way to do this.
+
+3. (Done) In ModelMuse: It would make sense to add a couple of columns to the Object Properties form, MODFLOW Features tab, HOB panel to allow the user to define Statistic and StatFlag for each head observation (similar to frmObservation in ModelMate).  I think this would be more intuitive for the user than using ModelMate to define Statistic and StatFlag, although doing it in ModelMate is an option.  I assume the panel for flow observations would need these to be added too, although I have not defined any flow observations.
+
+4. (Done, a template file is also created by ModelMuse.) In ModelMuse: Preparation of template files for Ucode would be simplified if, when exporting MODFLOW-2005 input files, ModelMuse would create a PVAL file and include it in the name file.
+
+5. (Done) In ModelMate: Add a way to delete parameters, parameter groups, observations, and observation groups.  (It should only be possible to delete unused parameter and observation groups).
+
+6. (Done) In ModelMate: Add a way to edit parameter and observation names.
+
+7. (Done) In ModelMate: Make sure that observation and parameter names are valid.  Right now you can add names that contain spaces or begin with a digit.  Those names aren't valid.  The StringReplace command comes in helpful here.
+
+8. (Done) In ModelMate: Add an "Add an observation" button to the Observations form.
+
+9. (Done) In ModelMuse: In the "ModelMate Interface" form, for the filename edit control, anchor the right side so it expands when form is expanded.
+
+10. (Done) In ModelMuse: Assign TProject.MIFiles.ModelFile and TProject.MIFiles.AppFile to contain names of PVAL and template files written by ModelMuse.
+
+11. (Done) In ModelMate, when the OpenFile dialog box is invoked for a model input file or template file, the dialog box should have the file name that is displayed in the cell from which it was called already set as the file name in the dialog box.
+
+12. (Done) In ModelMuse, bad things happen if I try to close the introductory window by clicking X...Had to kill app in Task Manager.  Needs to be fixed.
+
+13. (Done) In ModelMuse, when importing a Modflow-2005 model, read the HOB file, create point objects at observation well locations, and define head observations.
+
+14. (Done, can open underscore files listed on the command line.) In GW_Chart, add ability to open a file listed on the command-line as an option.
+
+15. (Done) In ModelMuse: Populate TProject.ProgramLocations.Modflow2005Location.
+
+16. (Done) In ModelMuse: Populate TProject.UcProject.ModelLengthUnits, .ModelTimeUnits, and maybe .ModelName.
+
+17. (Done; Flux is still used (appropriately) in some places.) In ModelMuse: In menu and window name, change "Manage Flux Observations" to "Manage Flow Observations".  Are there other uses of "flux" that really should be "flow"?
+
+18. (Done) In ModelMuse: ModelMuse needs to store all file names other than ModelMateProject.ProgramLocations as relative pathnames.  These need to be relative to the directory where the .mtc file is stored.  For this to function correctly, GlobalBasicData.ProjectDirectory needs to be defined as the directory where the .mtc file is stored.  This would be best done in TfrmModelMateInterface.SetData.  After doing this, it may be necessary to reassign ModelMateProject.MIFiles and ModelMateProject.ModflowNameFile to themselves somewhere in  TfrmGoPhast.acExportModelMateExecute.  There may be other file names that this would affect and which would need to be reassigned.
+
+19.  Need to fix problem where if new observations are added in ModelMuse and then a ModelMate file is re-exported, the instruction file(s) are messed up because of incorrect instruction order.  The fix needs to be in ModelMate: Model | Create instruction files for observations from ModelMuse, which needs to be more robust.  Read observation names from the _os file to determine instruction order.
+
+20.  Management of Heads vs Head_Changes needs to be checked.  When ITT=2, the first head observation in each group of head observations (at the same location) need to be assigned to group Heads, and the second and later head observations in the same group need to be assigned to group Head_Changes.
+
+21.  In ModelMate is it possible to select a group of observations in the Observation Window and assign them in bulk to a different group or add them to a new group? I see that I can highlight/select a group of observations but it seems that I can't do more with that selection. I can change them individually of course but I'd like to change a few hundred in bulk. It would be handy to then also be able to change properties of Observation Groups as a group such as changing the statistic. -- Thomas Mack, 3/27/2015
+
+22.  Need to fix problem: In Observations window (other windows), if I select cells and click Delete Selected Observation(s), then click Cancel, then reopen Observations window, the observations do not reappear.
+
+23. Need to be able to select multiple observations by using shift-click or ctrl-click in "Obs #" column.
+
+24. Should add a Copy button to Observations and all other tables, to copy selected observations.
+
+25. See Bug_reports\bug_report_from_Jana_Ringleb.txt.

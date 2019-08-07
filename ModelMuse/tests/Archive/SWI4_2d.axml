@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SWI4_2d" FileType="bin">
+    <FileName Model_Name="SWI4_2d" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SWI4_2d" FileType="ancillary">
+    <FileName Model_Name="SWI4_2d" FileType="ancillary">SWI4_2d.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SWI4_2d" FileType="Model Input">
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.bas</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.dis</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.ghb</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.gsf</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.lpf</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.nam.archive</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.oc</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.pcg</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.swi</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">SWI4_2d.wel</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Input">usgs.SWI4_2d.reference</FileName>
+  </model>
+  <output Model_Name="SWI4_2d" FileType="Model Output">
+    <FileName Model_Name="SWI4_2d" FileType="Model Output">SWI4_2d.cbc</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Output">SWI4_2d.fdn</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Output">SWI4_2d.fhd</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Output">SWI4_2d.lst</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Output">SWI4_2d.swi_obs</FileName>
+    <FileName Model_Name="SWI4_2d" FileType="Model Output">SWI4_2d.zta</FileName>
+  </output>
+</Model_Archive_List>

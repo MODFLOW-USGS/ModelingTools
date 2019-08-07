@@ -1,0 +1,87 @@
+object frmMetaData: TfrmMetaData
+  Left = 0
+  Top = 0
+  Caption = 'FgdcMetaEditor'
+  ClientHeight = 588
+  ClientWidth = 625
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  FormFamily = 'TForm'
+  OnCreate = FormCreate
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object dlgSaveMetadata: TSaveDialog
+    DefaultExt = '.xml'
+    Filter = 'XML files (*.xml)|*.xml'
+    Left = 352
+    Top = 192
+  end
+  object MenuBar1: TMenuBar
+    Align = MostTop
+    Size.Width = 625.000000000000000000
+    Size.Height = 24.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object miFile: TMenuItem
+      Text = 'File'
+      object miOpen: TMenuItem
+        Locked = True
+        Text = 'Open'
+        OnClick = miOpenClick
+      end
+      object miSave: TMenuItem
+        Locked = True
+        Text = 'Save'
+        OnClick = btnSaveXmlClick
+      end
+      object miExit: TMenuItem
+        Locked = True
+        Text = 'Exit'
+        OnClick = miExitClick
+      end
+    end
+    object miValidation: TMenuItem
+      Text = 'Quality Control'
+      object miValidationService: TMenuItem
+        Locked = True
+        Text = 'Open Geospatial Metadata Validation Service'
+        OnClick = miValidationServiceClick
+      end
+    end
+    object miSearch: TMenuItem
+      Text = 'Search'
+      OnClick = miSearchClick
+    end
+    object miAbout: TMenuItem
+      Text = 'About'
+      OnClick = miAboutClick
+    end
+  end
+  object dlgOpenMetaData: TOpenDialog
+    Filter = 'XML files (*.xml)|*.xml'
+    Left = 384
+    Top = 272
+  end
+  inline frameMetaDataEditor: TframeMetaDataEditor
+    Align = Client
+    DragMode = dmAutomatic
+    Size.Width = 625.000000000000000000
+    Size.Height = 564.000000000000000000
+    Size.PlatformDefault = False
+    OnDragDrop = frameMetaDataEditorDragDrop
+    inherited tvMetaData: TTreeView
+      Size.Height = 483.000000000000000000
+      OnDragDrop = frameMetaDataEditorDragDrop
+      Viewport.Width = 285.000000000000000000
+      Viewport.Height = 479.000000000000000000
+    end
+    inherited spl1: TSplitter
+      Size.Height = 483.000000000000000000
+    end
+    inherited pnl1: TPanel
+      Position.Y = 483.000000000000000000
+    end
+  end
+end

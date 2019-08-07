@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MNW1: Multi-Node Well Package (Version 1) Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MNW1: Multi-Node Well Package (Version 1) Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Multi-Node Well (version 1) package simulates wells whose open intervals extend beyond a single model cell. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Dependant_Flux" styleclass="Normal" style="font-weight:bold;" translate="true">Head Dependant Flux</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In addition to comments that will be printed at the beginning of the MNW1 input file, the user can specify several variables that are used in MNW1. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MNW 1 package will use up to </text><text styleclass="Strong" translate="true">NOMOITER</text><text styleclass="Normal" translate="true"> iterations to calculate the head and flow in a multinode well.</text></para>
+    <para styleclass="Strong"><anchor id="LOSSTYPE" styleclass="Strong"></anchor><text styleclass="Strong" translate="true">LOSSTYPE</text><text styleclass="Normal" translate="true">: identifies the model of well loss to be used. There are three options, &quot;Skin&quot;, &quot;Linear&quot; and &quot;Nonlinear&quot;. </text></para>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">If you choose &quot;Nonlinear&quot;, you can specify a loss exponent (</text><text styleclass="Strong" translate="true">PLossMNW</text><text styleclass="Normal" translate="true">).</text></para>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">The flow between the the well and the cell is defined by the following equation.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text><text styleclass="Normal" translate="true"> = (h</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">WELL</text><text styleclass="Normal" translate="true"> - h</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text><text styleclass="Normal" translate="true">)CWC</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="9" colcount="3">
+      <tr style="vertical-align:top">
+        <td colspan="2" style="vertical-align:middle; width:646px; height:12px;">
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:61px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text><text styleclass="Normal" translate="true"> </text></para>
+        </td>
+        <td colspan="2" style="vertical-align:top; width:585px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is flow between the nth cell and the well (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true"> / T).</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:61px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">h</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">WELL</text><text styleclass="Normal" translate="true"> </text></para>
+        </td>
+        <td colspan="2" style="vertical-align:top; width:585px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is the head in the well (L).</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:61px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">h</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text><text styleclass="Normal" translate="true"> </text></para>
+        </td>
+        <td colspan="2" style="vertical-align:top; width:585px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is the head in the nth cell (L).</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:61px; height:13px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CWC</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text></para>
+        </td>
+        <td colspan="2" style="vertical-align:top; width:585px; height:13px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is the nth cell-to-well conductance (L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true"> / T), which can be specified directly by the user or defined by: CWC = (A + B + CQ</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">n</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">P-1</text><text styleclass="Normal" translate="true">)</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-1</text><text styleclass="Normal" style="font-size:12pt; vertical-align:baseline;" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:bottom; width:61px; height:13px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A</text></para>
+        </td>
+        <td colspan="2" style="vertical-align:bottom; width:585px; height:13px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is a function of the well radius, the cell size and the transmissivity (T / L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true">).</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:61px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">B </text></para>
+        </td>
+        <td colspan="2" style="vertical-align:top; width:585px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is linear well-loss coefficient (T / L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true">). It is a function of a skin factor and the transmissivity</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:61px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">C </text></para>
+        </td>
+        <td colspan="2" style="vertical-align:top; width:585px; height:9px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is nonlinear well-loss coefficient (T</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">P</text><text styleclass="Normal" translate="true"> / L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">(3P-1)</text><text styleclass="Normal" translate="true">), and </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle; width:61px; height:7px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">P </text></para>
+        </td>
+        <td colspan="2" style="vertical-align:middle; width:585px; height:7px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">is power of the nonlinear discharge component of well loss that usually varies between 1.5 and 3.5 (Rorabaugh, 1953) </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For each </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW1_Multi_Node_Well_Package_2" styleclass="Normal" translate="true">multinode well</link><text styleclass="Normal" translate="true">, the user either specifies </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW1_Multi_Node_Well_Package_2" anchor="Conductance" styleclass="Normal" translate="true">CWC</link><text styleclass="Normal" translate="true"> directly (usually for a horizontal well), or specifies the well radius and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW1_Multi_Node_Well_Package_2" anchor="Skin" styleclass="Normal" translate="true">skin factor</link><text styleclass="Normal" translate="true">. If the non-linear option is chosen, the user will also specifies the nonlinear well-loss coefficient for each multinode well. The exponent (P) is specified here as </text><text styleclass="Strong" translate="true">PLossMNW.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are three output files that can be generated by MNW1: </text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">an input file for the well package which can be used in post-processing programs such as MODPATH. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Water-level, discharge, and water-quality information for plotting time series for each cell in each multinode well.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Water-level, discharge, and water-quality information for plotting time series for each multinode well taken as a whole.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For the latter two files, the data can be printed either at every time step or only when other data are printed as specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Output_Control_Dialog_Box" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true"> file.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Formula Errors Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Formula Errors Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user has entered a formula that is invalid, the formula will be reset to a default value when an attempt is made to evaluate it. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Formula Errors</text><text styleclass="Normal" translate="true"> dialog box shows what formulas have been reset. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Formula Errors</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">View|Show Formula Errors </text><text styleclass="Normal" translate="true">It is also shown automatically if an invalid formula is detected. </text><text styleclass="Normal" style="font-weight:normal;" translate="true">The messages can be copied to the clipboard by clicking the </text><text styleclass="Strong" translate="true">Copy</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> button or saved to a text file by clicking the </text><text styleclass="Strong" translate="true">Save</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> button. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Normally, ModelMuse prevents the user from entering an invalid formula; however, a formula that was valid can become invalid if the data type or evaluation location of a data set that is included in the formula is changed or if the ModelMuse project file is edited outside of ModelMuse.</text></para>
+  </body>
+</topic>

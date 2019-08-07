@@ -1,0 +1,581 @@
+PROGRAM LINEAR_UNCERTAINTY
+  USE GLOBAL_DATA
+  USE BASIC
+  USE DATATYPES
+  USE STATISTICS, ONLY: STA_UEV_DX_READ_DM
+  USE UTILITIES
+  USE UTLUCODE
+  USE LINEAR_UNCERTAINTY_MOD, ONLY: &
+  ! subroutines
+  YCINT_TSTAT, YCINT_BSTAT, YCINT_FSTT, YCINT_PRTOTA, YCINT_PRTOTX, &
+  YCINT_UPARPM, STATS_OPEN
+  !
+  ! CALCULATE LINEAR CONFIDENCE INTERVALS ON SIMULATED VALUES
+  !
+  ! MARY C. HILL     15DEC1992
+  !     MODIFIED FROM AN UNPUBLISHED PROGRAM CALLED RELIAB BY
+  !     RICHARD L. COOLEY (WRITTEN COMMUN., 1992)
+  ! Modified to work with MODFLOW-2000 by E.R. Banta, 8/24/1999
+  !
+  ! Modified for JUPITER E.P. Poeter, JULY 2004
+  ! Differences no longer needed
+  !
+  IMPLICIT NONE
+  CHARACTER(LEN=40) VERSION
+  PARAMETER (VERSION='1.009') ! 05/2012
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:,:)  :: C
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:,:)  :: CFULL
+  CHARACTER(LEN=10)                              :: CHDATE
+  CHARACTER(LEN=10)                              :: CHTIME
+  CHARACTER(LEN=10)                              :: CHZONE
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:,:)  :: CP
+  CHARACTER (LEN=12)                             :: CDUM
+  DOUBLE PRECISION                               :: CEV
+  CHARACTER(LEN=200)                             :: CHECK
+  CHARACTER (LEN=3)                              :: CONVERGE
+  DOUBLE PRECISION                               :: CRITB
+  DOUBLE PRECISION                               :: CRITS
+  CHARACTER(LEN=LENDNAM), ALLOCATABLE, DIMENSION(:) :: DID
+  CHARACTER(LEN=LENDNAM)                         :: DIDV
+  CHARACTER(LEN=MAX_STRING_LEN)                  :: FN
+  DOUBLE PRECISION                               :: FSTAT
+  DOUBLE PRECISION                               :: FSTATSI
+  CHARACTER(LEN=12), ALLOCATABLE, DIMENSION(:)   :: GPNAM
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)    :: H
+  DOUBLE PRECISION                               :: HL
+  DOUBLE PRECISION                               :: HU
+  INTEGER                                        :: I
+  INTEGER                                        :: IBDT(8)
+  INTEGER                                        :: ID
+  INTEGER                                        :: IDOF
+  INTEGER                                        :: IDUM
+  INTEGER                                        :: IERR
+  INTEGER                                        :: IFAIL
+  INTEGER                                        :: IFLG
+  INTEGER                                        :: IIN
+  INTEGER                                        :: IIN1
+  INTEGER                                        :: IIN2
+  INTEGER                                        :: IIN3
+  INTEGER                                        :: ILAB
+  CHARACTER(LEN=MAX_STRING_LEN)                  :: INNAM
+  CHARACTER(LEN=MAX_STRING_LEN)                  :: INNAMV
+  INTEGER                                        :: INT
+  INTEGER                                        :: IOS
+  INTEGER                                        :: IOUT
+  INTEGER                                        :: IYOUT
+  INTEGER                                        :: IPRED
+  INTEGER                                        :: ISTAT
+  INTEGER, ALLOCATABLE, DIMENSION(:)             :: ISYM
+  INTEGER                                        :: ITAB
+  CHARACTER(LEN=60)                              :: LABEL(6)
+  INTEGER                                        :: LENMESS
+  LOGICAL                                        :: LEX = .FALSE.
+  TYPE (LLIST), POINTER                          :: LUHEAD
+  INTEGER                                        :: LUN
+  CHARACTER(LEN=18)                              :: MESSAGE
+  CHARACTER(LEN=12)                              :: MODELNAME
+  INTEGER                                        :: MORE
+  INTEGER                                        :: ND
+  INTEGER                                        :: NVAR
+  INTEGER                                        :: NVARP
+  INTEGER                                        :: J
+  INTEGER                                        :: JJ
+  INTEGER                                        :: K
+  INTEGER                                        :: MPR
+  INTEGER                                        :: N
+  INTEGER                                        :: NPRED
+  INTEGER, ALLOCATABLE, DIMENSION(:)             :: NPREDLUN
+  INTEGER                                        :: NPREDGP
+  INTEGER                                        :: NPREDGPS
+  INTEGER                                        :: NPS
+  CHARACTER(LEN=12), ALLOCATABLE, DIMENSION(:)   :: PARNAM
+  CHARACTER(LEN=12), ALLOCATABLE, DIMENSION(:)   :: PARNAMFULL
+  CHARACTER(LEN=12), ALLOCATABLE, DIMENSION(:)   :: PARNAMP
+  CHARACTER(LEN=MAX_STRING_LEN), ALLOCATABLE, DIMENSION(:) :: PPATHFILE
+  DOUBLE PRECISION                               :: RDUM
+  CHARACTER(LEN=MAX_STRING_LEN)                  :: ROOT
+  CHARACTER(LEN=MAX_STRING_LEN)                  :: ROOTPRED
+  CHARACTER (LEN=3)                              :: SENTYPE
+  DOUBLE PRECISION                               :: S2
+  DOUBLE PRECISION                               :: STAT
+  DOUBLE PRECISION                               :: STATIND
+  DOUBLE PRECISION                               :: STATSF
+  DOUBLE PRECISION                               :: STATS(3)
+  TYPE (LLIST), POINTER                          :: TAIL
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:)    :: V
+  CHARACTER(LEN=20)                              :: VERSIONMIN
+  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:,:)  :: X
+  !   For LINEAR_UNCERTAINTY_FILES input
+  INTEGER,           PARAMETER                   :: LUCOLS = 1
+  CHARACTER(LEN=40), DIMENSION(LUCOLS)   :: LUCOL  = &
+             (/'PREDICTION_PATH_FILE'/)
+  !
+  DATA LABEL/' "INDIVIDUAL 95% CONFIDENCE INTERVALS"', &
+             ' "SIMULTANEOUS 95% CONFIDENCE INTERVALS"', &
+             ' "UNDEFINED NUMBER OF SIMULTANEOUS 95% CONFIDENCE INTERVALS"', &
+             ' "INDIVIDUAL 95% PREDICTION INTERVALS"', &
+             ' "SIMULTANEOUS 95% PREDICTION INTERVALS"', &
+             ' "UNDEFINED NUMBER OF SIMULTANEOUS 95% PREDICTION INTERVALS"'/
+  !VERSN = '$Id: ycint.f,v 3.1 1997/07/24 15:14:34 rsregan Exp rsregan $'
+  !VERSN = '@(#)YCINT - MODFLOWP UTILITY TO CALCULATE LINEAR CONFIDENCE INTERVALS ON'
+  !VERSN = '@(#)YCINT - SIMULATED HYDRAULIC HEADS AND FLOWS ALONG HEAD-DEPENDENT BOUNDARIES'
+  !VERSN = '@(#)YCINT - MODIFIED BY M.C. HILL FROM UNPUBLISHED PROGRAM RELIAB BY R.L COOLEY'
+  !VERSN = '@(#)YCINT - CONTACT: H2OSOFT@USGS.GOV'
+  !VERSN = '@(#)YCINT - VERSION: 3.1x 1997/07/24'
+  !
+  !-----FORMAT LIST
+  480 FORMAT (29X,'LINEAR_UNCERTAINTY',//, &
+      24X,'CONSTRUCTED USING THE JUPITER API',/, &
+      19X,'UCODE POST-PROCESSING PROGRAM TO CALCULATE',/, &
+      18X,'LINEAR CONFIDENCE AND PREDICTION INTERVALS',/, &
+      34X,'Version ',A/)
+  500 FORMAT (//,1X,78('*'),/,11X, &
+            'WARNING SOME OF THE STATISTICS IN THE DATA-EXCHANGE FILES',/,11X, &
+            'WERE GENERATED USING FORWARD DIFFERENCE SENSITIVITIES.',/,11X, &
+            'THEY MAY BE INACCURATE AND CAUSE INACCURARCIES IN THE',/,11X, &
+            'UNCERTAINTIES CALCULATED BY THIS PROGRAM.',/,11X, &
+            'CONSIDER REGENERATING THE FILES WITH CENTRAL DIFFERENCES',/,11X, &
+            'OR EXACT DERIVATIVES.',/,1X,78('*'),//)
+  510 FORMAT (' MODEL NAME..................................... = ',A,/, &
+              ' NUMBER OF INTERVALS............................ =',I10,/, &
+              ' NUMBER OF PREDICTION GROUPS.................... =',I10,/, &
+              ' NUMBER OF PARAMETERS ESTIMATED IN REGRESSION... =',I10,/, &
+              ' NUMBER OF PARAMETERS CONSIDERED FOR PREDICTIONS =',I10,/, &
+              ' NUMBER OF OBSERVATIONS USED IN REGRESSION...... =',I10,/, &
+              ' NUMBER OF PRIOR INFORMATION.................... =',I10,/, &
+              ' DEGREES OF FREEDOM............................. =',I10)
+!
+  520 FORMAT (/,3X,'VALUES COMPUTED WITH OPTIMUM PARAMETERS FOR PREDICTIVE ', &
+              'CONDITIONS',/,4X,2(4X,'OBSERVATION',17X),/, &
+              4X,2('NO.    NAME              VALUE',9X))
+  535 FORMAT (/, &
+      ' SENSITIVITIES AT OPTIMUM PARAMETER VALUES FOR PREDICTIVE CONDITIONS')
+  560 FORMAT (/,' VARIANCE-COVARIANCE MATRIX FOR ESTIMATED PARAMETERS')
+  570 FORMAT (/,4X,'CRITICAL VALUE FOR THE INTERVALS',A,'= ',G11.5,///, &
+      9X,'OBSERVATION           SIMULATED',/, &
+      '  NO.',7X,'NAME',15X,'VALUE',7X,'STD. DEV.',7X,'CONFIDENCE INTERVAL')
+  575 FORMAT (1X,I5,3X,A,G13.6,2(1X,G13.6),';',G13.6,A,2(G13.6,1X), &
+              G13.6,';',G13.6)
+  600 FORMAT (/,4X,'CRITICAL VALUE FOR THE INTERVALS',A,'= ',G11.5,///, &
+      9X,'OBSERVATION           SIMULATED'/, &
+      '  NO.       NAME',15X,'VALUE',7X,'STD. DEV.',7X, &
+      'PREDICTION INTERVAL')
+  630 FORMAT (/,1X,79('*'),/,1X,79('*'))
+  660 FORMAT (A)
+  661 FORMAT (' "PREDICTION NAME"    "PREDICTED VALUE"    "LOWER LIMIT" ', &
+              '  "UPPER LIMIT"     "STANDARD DEVIATION"  "PLOT SYMBOL"')
+  670 FORMAT (1X,A20,4(G18.8,1X),I5)
+  721 FORMAT(/,' INDIVIDUAL 95% CONFIDENCE INTERVALS' &
+       ,//,4X,'UNCERTAINTY ON EACH PREDICTION IS CONSIDERED SEPARATELY' &
+       ,/,4X,'IF SIMULTANEOUS UNCERTAINTY IS DESIRED, GO TO NEXT TABLE')
+  722 FORMAT(/,I5,' BONFERRONI SIMULTANEOUS 95% CONFIDENCE INTERVALS' &
+       ,//,'    UNCERTAINTY ON EACH PREDICTION IS CONSIDERED JOINTLY' &
+      ,/,'    IF UNCERTAINTY OVER AN AREA IS DESIRED, GO TO NEXT TABLE')
+  723 FORMAT(/,' UNDEFINED NUMBER OF SIMULTANEOUS 95% CONFIDENCE INTERV' &
+      ,'ALS',//,4X,'UNCERTAINTY IS CONSIDERED OVER AN AREA', &
+      ' (I.E. AN INFINITE NUMBER OF POINTS)')
+  724 FORMAT(/,' INDIVIDUAL 95% PREDICTION INTERVALS' &
+       ,//,4X,'UNCERTAINTY ON EACH PREDICTION IS CONSIDERED SEPARATELY' &
+       ,/,4X,'IF SIMULTANEOUS UNCERTAINTY IS DESIRED, GO TO NEXT TABLE')
+  725 FORMAT(/,I5,' BONFERRONI SIMULTANEOUS 95% PREDICTION INTERVALS ' &
+       ,//,'    UNCERTAINTY ON EACH PREDICTION IS CONSIDERED JOINTLY' &
+      ,/,'    IF UNCERTAINTY OVER AN AREA IS DESIRED, GO TO NEXT TABLE')
+  726 FORMAT(/,' UNDEFINED NUMBER OF SIMULTANEOUS 95% PREDICTION INTERV' &
+      ,'ALS',//,4X,'UNCERTAINTY IS CONSIDERED OVER AN AREA', &
+      ' (I.E. AN INFINITE NUMBER OF POINTS)')
+  733 FORMAT(/,'    PREDICTION INTERVALS INCLUDE MEASUREMENT ERROR,' &
+            ,/,'        I.E. GIVEN THE VARIANCE LISTED IN THE' &
+            ,/,'        OBSERVATION INPUT FILES USED TO DEFINE THE' &
+            ,/,'        PREDICTIONS, THERE IS A 95% PROBABILITY' &
+            ,/,'        THAT THE MEASUREMENT WILL FALL WITHIN THE' &
+            ,/,'        INDICATED RANGE')
+  735 FORMAT(/,'    95% CONFIDENCE INTERVALS INDICATE THAT THERE IS' &
+             ,/,'        95% PROBABILITY THAT THE ACTUAL VALUE WILL BE ' &
+             ,/,'        WITHIN THE INDICATED RANGE')
+  740 FORMAT(/,I5,' d=NP SCHEFFE SIMULTANEOUS 95% CONFIDENCE INTERVALS' &
+       ,//,'    UNCERTAINTY ON EACH PREDICTION IS CONSIDERED JOINTLY' &
+        ,/,'    IF UNCERTAINTY OVER AN AREA IS DESIRED, GO TO NEXT TABLE')
+  741 FORMAT(/,I5,' d=k SCHEFFE SIMULTANEOUS 95% CONFIDENCE INTERVALS' &
+       ,//,'    UNCERTAINTY ON EACH PREDICTION IS CONSIDERED JOINTLY' &
+        ,/,'    IF UNCERTAINTY OVER AN AREA IS DESIRED, GO TO NEXT TABLE')
+  742 FORMAT(/,I5,' d=NP SCHEFFE SIMULTANEOUS 95% PREDICTION INTERVALS' &
+       ,//,'    UNCERTAINTY ON EACH PREDICTION IS CONSIDERED JOINTLY' &
+        ,/,'    IF UNCERTAINTY OVER AN AREA IS DESIRED, GO TO NEXT TABLE')
+  743 FORMAT(/,I5,' d=k SCHEFFE SIMULTANEOUS 95% PREDICTION INTERVALS' &
+       ,//,'    UNCERTAINTY ON EACH PREDICTION IS CONSIDERED JOINTLY' &
+        ,/,'    IF UNCERTAINTY OVER AN AREA IS DESIRED, GO TO NEXT TABLE')
+  823 FORMAT(/,4X,'BONFERRONI CONFIDENCE INTERVALS ARE USED')
+  824 FORMAT(/,4X,'SCHEFFE CONFIDENCE INTERVALS ARE USED')
+  825 FORMAT(/,4X,'BONFERRONI PREDICTION INTERVALS ARE USED')
+  826 FORMAT(/,4X,'SCHEFFE PREDICTION INTERVALS ARE USED')
+  900 FORMAT(/,1X,70('*'),/, &
+             '  Normal termination of LINEAR_UNCERTAINTY, Version: ',A, &
+             /,1X,70('*'),//)
+  901 FORMAT(/,1X,78('!'),/, &
+             '  Unsatisfactory termination of LINEAR_UNCERTAINTY, Version: ', &
+             A,/,1X,78('!'),//)
+  1150 FORMAT(//,' ERROR OPENING FILE "',A,'" -- STOP EXECUTION',//)
+  !
+  !     WRITE PROGRAM NAME AND VERSION TO SCREEN
+  WRITE (*,*)
+  WRITE (*,480) VERSION
+  VERSIONMIN = '1.7.3'
+  ! CHECK VERSION OF API COMPATIBILITY WITH CODE
+  CALL UTL_VERSION_CHECK(VERSIONMIN,ISTAT)
+  !
+  !-----DEFINE INPUT FILE, OUTPUT FILE, AND ARRAY DIMENSION
+  ! GET ROOT NAME
+  ROOT = UTL_GETARG(1)
+  IF(ROOT .EQ. ' ') THEN
+    WRITE(*,*) &
+    ' !!!! ERROR MISSING ROOTFILENAME ON LINEAR_UNCERTAINTY COMMAND LINE !!!'
+    CALL UTL_STOP &
+    (' PLEASE INCLUDE A ROOTFILENAME on the LINEAR_UNCERTAINTY COMMAND LINE')
+  ENDIF
+  ROOTPRED = UTL_GETARG(2)
+  IF(ROOTPRED .EQ. ' ') ROOTPRED = ROOT
+  !     OPEN OUTPUT FILE
+  FN = TRIM(ROOTPRED)//'.#linunc'
+  IOUT = UTL_GETUNIT(101,150)
+  CALL STATS_OPEN(IFAIL,FN,'REPLACE','WRITE',IOUT)
+  WRITE (IOUT,480) VERSION
+  IF(ISTAT < 0) THEN
+    AMESSAGE = ' Programming error:  Version '//TRIM(VERSIONMIN)//   &
+               ' of JUPITER API is required.  Version in use is '   &
+               //TRIM(VERSIONID)//' -- Please download newer version '   &
+               //'of JUPITER API from U.S. Geological Survey'//   &
+               ' JUPITER web site.'
+    CALL UTL_WRITE_MESSAGE(IOUT,'yes','yes','yes')
+    CLOSE(IOUT)
+    CALL UTL_STOP()
+  ENDIF
+  CALL DATE_AND_TIME(CHDATE,CHTIME,CHZONE,IBDT)
+  !Initialize
+  NULLIFY(LUHEAD,TAIL)
+  ! Optional user input file
+  ! from user created LINEAR_UNCERTAINTY input file fn.lu)
+  LUN = 0
+  FN = TRIM(ROOTPRED)//'.lu'
+  INQUIRE(FILE=TRIM(FN),EXIST=LEX)
+  IF(LEX) THEN
+    IIN = UTL_GETUNIT(101,150)
+    OPEN (IIN,FILE=FN,STATUS='OLD',ACCESS='SEQUENTIAL', &
+          FORM='FORMATTED',ERR=10,IOSTAT=IOS)
+    CALL UTL_READBLOCK(LUCOLS,'LINEAR_UNCERTAINTY_FILES',LUCOL,IIN,IOUT, &
+                       'PREDICTION_PATH_FILE',.FALSE.,LUHEAD,TAIL,LUN)
+    IF (LUN>0) THEN
+      ALLOCATE(PPATHFILE(LUN),NPREDLUN(LUN))
+      CALL UTL_FILTERLIST(LUHEAD,IOUT,'PREDICTION_PATH_FILE',LUN,IERR, &
+                          PPATHFILE,MORE,MORE)
+    ENDIF
+    CLOSE(IIN)
+  ENDIF
+  ! Read # of parameters estimated in last iteration and # of iterations
+  CALL UTLUCODE_DX_READ_DM(IFAIL,ROOT, &
+                           RDUM,RDUM,RDUM,RDUM, &
+                           CONVERGE,IDUM,RDUM,RDUM,RDUM, &
+                           CDUM,CDUM,MODELNAME,CDUM, &
+                           MPR,IDUM,IDUM,NVAR,NPS,ND, &
+                           RDUM,RDUM,RDUM,CEV,IOUT,RDUM,RDUM,SENTYPE)
+  IFAIL = 0
+  IF(CEV .EQ. 1.E+30) CALL UTL_STOP &
+         ('Failed based on _dm: Linearity=yes requires a converged regression')
+  !
+  !     OPEN ._linp FILEs
+  FN = TRIM(ROOTPRED)//'._linp'
+  CALL STATS_OPEN(IFAIL,FN,'REPLACE','WRITE',IYOUT)
+  ! NPRED IS NUMBER OF PREDICTED VALUES
+  NPRED = 0
+  NPREDGPS = 0
+  IF(LUN .EQ. 0) THEN
+    INNAM = TRIM(ROOTPRED)//'._pv'
+    CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN2,IYOUT)
+    IF(IFAIL == -999) GO TO 9000
+    ! READ HEADER for # of groups
+    READ(IIN2,*,END=800)
+    DO
+      READ (IIN2,*,END=800)RDUM
+      NPRED = NPRED + 1
+    ENDDO
+    800 CLOSE(UNIT=IIN2)
+    INNAM = TRIM(ROOTPRED)//'._dmp'
+    CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN3,IYOUT)
+    IF(IFAIL == -999) GO TO 9000
+    ! READ HEADER for # of groups
+    READ(IIN3,*,END=801)CHECK,NPREDGPS
+    READ(IIN3,*,END=801)CHECK,NVARP
+    801 CLOSE(UNIT=IIN3)
+  ELSE
+  ! COUNT # of predictions as NPRED
+    DO I=1,LUN
+      !     OPEN ._pv FILE
+      INNAM = TRIM(ROOTPRED)//'._dmp'
+      CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN3,IYOUT)
+      IF(IFAIL == -999) GO TO 9000
+      ! READ HEADER for # of groups
+      READ(IIN3,*,END=802)CHECK,NPREDGP
+      READ(IIN3,*,END=802)CHECK,NVARP
+      802 CLOSE(UNIT=IIN3)
+      NPREDGPS = NPREDGPS + NPREDGP
+      INNAM = TRIM(PPATHFILE(I))//'._pv'
+      CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN2,IYOUT)
+      IF(IFAIL == -999) GO TO 9000
+      ! READ HEADER
+      READ(IIN2,*,END=701)CHECK
+      DO
+        READ (IIN2,*,END=701)RDUM
+        NPRED = NPRED + 1
+      ENDDO
+      701 CLOSE(UNIT=IIN2)
+      IF(I .EQ. 1) THEN
+        NPREDLUN(I) = NPRED
+      ELSE
+        NPREDLUN(I) = NPRED - NPREDLUN(I-1)
+      ENDIF
+    ENDDO
+  ENDIF
+  ! CALCULATE DEGREES OF FREEDOM GIVEN CALIBRATION VALUES
+  IDOF = ND + MPR - NVARP
+  !     DYNAMICALLY ALLOCATE ARRAYS
+  ALLOCATE (DID(NPRED), GPNAM(NPRED), PARNAMFULL(NVARP))
+  IF(NVARP > NVAR) THEN
+    ALLOCATE(PARNAM(NVAR), PARNAMP(NVARP-NVAR))
+    PARNAM = ' '
+    PARNAMP = ' '
+    ALLOCATE(C(NVAR,NVAR), CP(NVARP-NVAR,NVARP-NVAR))
+    C = 0.D0
+    CP = 0.D0
+  ENDIF
+  ALLOCATE (CFULL(NVARP,NVARP), H(NPRED), ISYM(NPRED), V(NPRED), X(NVARP,NPRED))
+  CFULL = 0.D0
+  PARNAMFULL = ' '
+  !
+  !-----INITIALIZE V
+  V = 0.D0
+  !
+  !-----READ FILE ._p - PREDICTIVE CONDITIONS
+  IF(LUN .EQ. 0) THEN
+    !     OPEN ._pv FILE
+    INNAM = TRIM(ROOTPRED)//'._p'
+    INNAMV = TRIM(ROOTPRED)//'._pv'
+    CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN1,IYOUT)
+    IF(IFAIL == -999) GO TO 9000
+    CALL STATS_OPEN(IFAIL,INNAMV,'OLD    ','READ ',IIN2,IYOUT)
+    IF(IFAIL == -999) GO TO 9000
+    READ(IIN1,*)CHECK
+    READ(IIN2,*)CHECK
+    DO N=1,NPRED
+      READ (IIN1,*)H(N),ISYM(N),DID(N)
+      READ (IIN2,*)V(N),DIDV,GPNAM(N)
+      IF(TRIM(DIDV) /= TRIM(DID(N))) THEN
+        AMESSAGE = 'Names or Plotsymbols do not match in _p and _pv files'
+        CALL UTL_WRITE_MESSAGE()
+        AMESSAGE = 'Rerun codes that generated prediction information'
+        CALL UTL_WRITE_MESSAGE()
+        CALL UTL_STOP(' ')
+      ENDIF
+    ENDDO
+    CLOSE(UNIT=IIN1)
+    INNAM = TRIM(ROOTPRED)//'._dmp'
+    INQUIRE(FILE=INNAM,EXIST=LEX)
+    IF(LEX) THEN
+      CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN3,IYOUT)
+      IF(IFAIL == -999) GO TO 9000
+      ! READ HEADER for # of groups
+      READ(IIN3,*,END=803)CHECK,NPREDGP
+      READ(IIN3,*,END=803)CHECK,NVARP
+      803 CLOSE(UNIT=IIN3)
+      ! UPDATE # PRIOR
+      MPR = MPR + (NVARP - NVAR)
+      IDOF = ND + MPR - NVARP
+      ! READ PREDICTION  SENSITIVITY _SPU
+      CALL UTLUCODE_DX_READ_SPU (ROOTPRED,NVARP,NPRED,DID,PARNAMFULL,ISYM,X)
+    ENDIF
+  ELSE
+    J = 1
+    JJ = 0
+    DO I = 1,LUN
+      !     OPEN ._p FILEs
+      INNAM = TRIM(PPATHFILE(I))//'._p'
+      INNAMV = TRIM(PPATHFILE(I))//'._pv'
+      CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN1,IYOUT)
+      IF(IFAIL == -999) GO TO 9000
+      CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN2,IYOUT)
+      IF(IFAIL == -999) GO TO 9000
+      ! READ HEADER
+      READ(IIN1,*)CHECK
+      READ(IIN2,*)CHECK
+      IF(I > 1) J = J + NPREDLUN(I-1)
+      JJ = JJ + NPREDLUN(I)
+      DO N=J,JJ
+        READ (IIN1,*)H(N),ISYM(N),DID(N)
+        READ (IIN2,*)V(N),DIDV,GPNAM(N)
+        IF(TRIM(DIDV) /= TRIM(DID(N))) THEN
+          AMESSAGE = 'Names or Plotsymbols do not match in _p and _pv files'
+          CALL UTL_WRITE_MESSAGE()
+          AMESSAGE = 'Rerun codes that generated prediction information'
+          CALL UTL_WRITE_MESSAGE()
+          CALL UTL_STOP(' ')
+        ENDIF
+      ENDDO
+      CLOSE(UNIT=IIN1)
+      CLOSE(UNIT=IIN2)
+      INNAM = TRIM(PPATHFILE(I))//'._dmp'
+      INQUIRE(FILE=INNAM,EXIST=LEX)
+      IF(LEX) THEN
+        CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN3,IYOUT)
+        IF(IFAIL == -999) GO TO 9000
+        ! READ HEADER for # of groups
+        READ(IIN3,*,END=804)CHECK,NPREDGP
+        READ(IIN3,*,END=804)CHECK,NVARP
+        804 CLOSE(UNIT=IIN3)
+        ! UPDATE # PRIOR
+        MPR = MPR + (NVARP - NVAR)
+        IDOF = ND + MPR - NVARP
+      ENDIF
+      INNAM = TRIM(PPATHFILE(I))//'._spu'
+      CALL STATS_OPEN(IFAIL,INNAM,'OLD    ','READ ',IIN1,IYOUT)
+      IF(IFAIL == -999) GO TO 9000
+      READ (IIN1,*)CHECK
+      DO N = J, JJ
+        READ (IIN1,*)CHECK,IDUM,(X(K,N),K=1,NVARP)
+      ENDDO
+      CLOSE(UNIT=IIN1)
+    ENDDO
+  ENDIF
+  !-----READ OR CALCULATE STATISTICS
+  MESSAGE = ' '
+  LENMESS = 1
+  !-------CALCULATE STATISTICS
+  !       STATISTIC FOR INDIVIDUAL CONFIDENCE INTERVALS
+  CALL YCINT_TSTAT(IDOF,STATIND)
+  !       TEST FOR SMALLEST CRITICAL VALUE FOR SIMULTANEOUS INTERVALS
+  CALL YCINT_BSTAT(NPRED,IDOF,CRITB,IOUT)
+  ID = NVARP
+  IF (NPRED < NVARP) ID=NPRED
+  CALL YCINT_FSTT(ID,IDOF,CRITS)
+  CRITS = SQRT (ID*CRITS)
+  STATSF = CRITB
+  IF (CRITS < CRITB) THEN
+    STATSF = CRITS
+  ENDIF
+  !       STATISTIC FOR UNDEFINED NUMBER OF INTERVALS
+  CALL YCINT_FSTT(NVARP,IDOF,STAT)
+  FSTATSI = SQRT (NVARP * STAT)
+  STATS(1) = STATIND
+  STATS(2) = STATSF
+  STATS(3) = FSTATSI
+  ! START WRITING GENERAL OUTPUT FILE
+  IF(SENTYPE .EQ. "YES")WRITE(IOUT,500)
+  WRITE (IOUT,510) TRIM(MODELNAME), NPRED, NPREDGPS, NVAR, NVARP, ND, MPR, IDOF
+  !
+  !-----READ FILE ._mv - VARIANCE-COVARIANCE MATRIX ON THE PARAMETERS FROM
+  !     THE CALIBRATION.  MUST BE PRODUCED USING THE STRESSES AND
+  !     OBSERVATIONS FROM THE CALIBRATION.
+  IF(NVARP > NVAR) THEN
+    CALL UTL_DX_READ_MCMV('_mv',NVAR,ROOT,PARNAM,C)
+    CALL UTL_DX_READ_MCMV('_mvp',NVARP-NVAR,ROOTPRED,PARNAMP,CP)
+    DO I=1,NVAR
+      PARNAMFULL(I) = PARNAM(I)
+      DO J=1,NVAR
+        CFULL(I,J) = C(I,J)
+      ENDDO
+    ENDDO
+    DO I=NVAR+1,NVARP
+      PARNAMFULL(I) = PARNAMP(I-NVAR)
+      DO J=NVAR+1,NVARP
+        CFULL(I,J) = CP(I-NVAR,J-NVAR)
+      ENDDO
+    ENDDO
+  ELSE
+    CALL UTL_DX_READ_MCMV('_mv',NVARP,ROOT,PARNAMFULL,CFULL)
+  ENDIF
+  WRITE (IOUT,560)
+  CALL YCINT_UPARPM(NVARP,NVARP,8,IOUT,CFULL,PARNAMFULL)
+  WRITE (IOUT,520)
+  CALL YCINT_PRTOTA(NPRED,DID,H,IOUT)
+  WRITE (IOUT,535)
+  CALL YCINT_PRTOTX(NVARP,NPRED,NVARP,DID,PARNAMFULL,X,IOUT)
+  !
+  ! GENERATE CONFIDENCE (IPRED=0) AND PREDICTION (IPRED=1) INTERVAL TABLES
+  IFLG = 0
+  DO IPRED = 0,1
+    DO ITAB = 1,3
+      IF (IFLG .EQ. 1) CYCLE
+      INT = ITAB + 3*IPRED
+      ILAB = ITAB + 3*IPRED
+      FSTAT = STATS(ITAB)
+      WRITE (IOUT,630)
+  !----CALCULATE AND PRINT THE INTERVALS
+  !    WRITE TABLE TYPE AND DESCRIPTION OF INTERVALS
+      IF (INT.EQ.1) WRITE(IOUT,721)
+      IF (INT.EQ.2) THEN
+        IF(CRITB <= CRITS) THEN
+          WRITE(IOUT,722) NPRED
+        ELSEIF(NPRED > NVARP) THEN
+          WRITE(IOUT,740) NVARP
+        ELSE
+          WRITE(IOUT,741) NPRED
+        ENDIF
+      ENDIF
+      IF (INT.EQ.3) WRITE(IOUT,723)
+      IF (INT.EQ.4) WRITE(IOUT,724)
+      IF (INT.EQ.5) THEN
+        IF(CRITB <= CRITS) THEN
+          WRITE(IOUT,725) NPRED
+        ELSEIF(NPRED > NVARP) THEN
+          WRITE(IOUT,742) NVARP
+        ELSE
+          WRITE(IOUT,743) NPRED
+        ENDIF
+      ENDIF
+      IF (INT.EQ.6) WRITE(IOUT,726)
+      IF (INT.GE.4.AND.INT.LE.6) THEN
+        WRITE (IOUT,733)
+      ELSEIF (INT.GE.10.AND.INT.LE.12) THEN
+        WRITE (IOUT,733)
+      ELSE
+      WRITE (IOUT,735)
+      ENDIF
+      IF (INT.EQ.2.OR.INT.EQ.8) THEN
+        IF (CRITB <= CRITS) WRITE(IOUT,823)
+        IF (CRITB >  CRITS) WRITE(IOUT,824)
+      ELSEIF (INT.EQ.5.OR.INT.EQ.11) THEN
+        IF (CRITB <= CRITS) WRITE(IOUT,825)
+        IF (CRITB >  CRITS) WRITE(IOUT,826)
+      ENDIF
+      IF (IPRED.EQ.0) THEN
+        WRITE (IOUT,570) MESSAGE(1:LENMESS), FSTAT
+      ELSE
+        WRITE (IOUT,600) MESSAGE(1:LENMESS), FSTAT
+      ENDIF
+      WRITE (IYOUT,660) TRIM(LABEL(ILAB))
+      WRITE (IYOUT,661) 
+      DO N = 1, NPRED
+        S2 = 0.0
+        DO I = 1, NVARP
+          DO J = 1, NVARP
+            S2 = S2 + X(I,N)*CFULL(I,J)*X(J,N)
+          ENDDO
+        ENDDO
+        IF (IPRED.EQ.1) S2 = S2 + CEV * V(N)
+        S2 = S2**.5
+        HL = H(N) - FSTAT*S2
+        HU = H(N) + FSTAT*S2
+        WRITE (IOUT,575) N, DID(N), H(N), S2, HL, HU
+        WRITE (IYOUT,670) DID(N), H(N), HL, HU, S2, ISYM(N)
+      ENDDO
+    ENDDO
+  ENDDO
+  GO TO 9001
+  9000 WRITE(*,901)VERSION
+  GO TO 9002
+  9001 WRITE(*,900)VERSION
+  9002 CALL UTL_ENDTIME(IBDT,IOUT)
+  STOP
+  10 IF (IOS.NE.0) THEN
+    WRITE (*,1150) TRIM(FN)
+    CALL UTL_ENDTIME(IBDT,IOUT)
+    STOP
+  ENDIF
+END PROGRAM LINEAR_UNCERTAINTY

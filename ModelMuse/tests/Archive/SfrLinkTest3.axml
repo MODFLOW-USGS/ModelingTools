@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SfrLinkTest3" FileType="bin">
+    <FileName Model_Name="SfrLinkTest3" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SfrLinkTest3" FileType="ancillary">
+    <FileName Model_Name="SfrLinkTest3" FileType="ancillary">SfrLinkTest3.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SfrLinkTest3" FileType="Model Input">
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.bas</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.dis</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.gsf</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.lgr.archive</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.lpf</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.nam.archive</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.oc</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.pcg</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">SfrLinkTest3.sfr</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Input">usgs.SfrLinkTest3.reference</FileName>
+  </model>
+  <model Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.bas</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.dis</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.gsf</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.lpf</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.nam.archive</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.oc</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.pcg</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Input">SfrLinkTest3_Child_1.sfr</FileName>
+  </model>
+  <output Model_Name="SfrLinkTest3" FileType="Model Output">
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Output">SfrLinkTest3.bfh_flux</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Output">SfrLinkTest3.bfh_head</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Output">SfrLinkTest3.cbc</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Output">SfrLinkTest3.fdn</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Output">SfrLinkTest3.fhd</FileName>
+    <FileName Model_Name="SfrLinkTest3" FileType="Model Output">SfrLinkTest3.lst</FileName>
+  </output>
+  <output Model_Name="SfrLinkTest3_Child_1" FileType="Model Output">
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Output">SfrLinkTest3_Child_1.cbc</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Output">SfrLinkTest3_Child_1.fdn</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Output">SfrLinkTest3_Child_1.fhd</FileName>
+    <FileName Model_Name="SfrLinkTest3_Child_1" FileType="Model Output">SfrLinkTest3_Child_1.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,16 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportMt3dmsTob.mls
+FTL 10 ImportMt3dmsTob.ftl
+DATA 17 ImportMt3dmsTob.cnf
+BTN 1 ImportMt3dmsTob.btn
+DATA(BINARY) 201 ImportMt3dmsTob_Chem1.ucn
+DATA 601 ImportMt3dmsTob_Chem1._mas
+DATA 401 ImportMt3dmsTob_Chem1.mto
+ADV 2 ImportMt3dmsTob.adv
+DSP 3 ImportMt3dmsTob.dsp
+SSM 4 ImportMt3dmsTob.ssm
+GCG 9 ImportMt3dmsTob.gcg
+TOB 7 ImportMt3dmsTob.tob
+DATA 21 ImportMt3dmsTob.ocn
+DATA 22 ImportMt3dmsTob.mfx
+DATA(BINARY) 23 ImportMt3dmsTob.pst

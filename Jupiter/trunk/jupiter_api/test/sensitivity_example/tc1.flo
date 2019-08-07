@@ -1,0 +1,7 @@
+BEGIN observation_Data TABLE
+  NROW=3  NCOL=2  COLUMNLABELS  GROUPNAME=FLOWS
+  obsname  obsvalue 
+  ss        -4.4           
+  TR3       -4.1           
+  TR12      -2.2           
+END observation_Data

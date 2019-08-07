@@ -1,0 +1,11 @@
+interp_fac10.txt       # Interpolation factor file
+f                      # formatted or unformatted?
+pilot4_pts10.txt       # pilot points file
+s                      # lower limit: array or single value?
+1.0e-10
+s                      # upper limit: array or single value?
+1.0e+10
+K_sd_lka.txt           # File for interpolated values
+f                      # formatted or unformatted?
+0.1701412E+39
+

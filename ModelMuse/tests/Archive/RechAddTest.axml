@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RechAddTest" FileType="bin">
+    <FileName Model_Name="RechAddTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RechAddTest" FileType="ancillary">
+    <FileName Model_Name="RechAddTest" FileType="ancillary">RechAddTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RechAddTest" FileType="Model Input">
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.bas</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.dis</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.gsf</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.jtf</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.lpf</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.mlt</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.nam.archive</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.oc</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.pcg</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.pval</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.rch</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RechAddTest.zon</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Input">usgs.RechAddTest.reference</FileName>
+  </model>
+  <output Model_Name="RechAddTest" FileType="Model Output">
+    <FileName Model_Name="RechAddTest" FileType="Model Output">RechAddTest.cbc</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Output">RechAddTest.fdn</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Output">RechAddTest.fhd</FileName>
+    <FileName Model_Name="RechAddTest" FileType="Model Output">RechAddTest.lst</FileName>
+  </output>
+</Model_Archive_List>

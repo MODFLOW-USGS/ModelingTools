@@ -1,0 +1,392 @@
+ 
+  VERBOSE=3 -- Warnings, notes, and selected input will be written
+ 
+  Reading input from file: tc1_pred.in
+ 
+ 
+  ******************************************************************************
+  ******************************************************************************
+ 
+                Output from program UCODE_2005, Version:   1.019
+ 
+               Constructed using the JUPITER API, Version:  1.4.0
+ 
+  ******************************************************************************
+  ******************************************************************************
+ 
+ 
+ -------------------------------------------------------------------------------
+  ECHO UCODE CONTROLS INPUT:
+ 
+  PREDICTION WILL BE PERFORMED
+  THE FOLLOWING FILES WILL BE WRITTEN
+  _p contains predictions; _pv prediction variance
+  _gmp contains prediction names by group
+  _dmp contains the number of prediction groups and the
+   number of parameters considered for the predictive run
+  _spu unscaled sensitivities
+  _spsr _spsp _sppr & _sppp WILL BE WRITTEN, see the UCODE
+  manual for descriptions of these scaled sensitivities
+ 
+  OPTIMIZATION IS NOT PERFORMED DURING PREDICTION
+  MODEL NAME =   GENERIC
+  MODEL LENGTH UNITS =   NA
+  MODEL TIME UNITS =   NA
+  MODEL MASS UNITS =   NA
+ 
+  OPTIMIZATION WILL NOT BE PERFORMED
+  NONLINEAR INTERVALS WILL NOT BE PERFORMED (BY DEFAULT)
+  SENSITIVITIES WILL NOT BE CALCULATED (BY USER CHOICE)
+   THIS IS ONLY A FORWARD SIMULATION OF PREDICTIVE MODELS FOR OPTIMAL
+   PARAMETER VALUES, ALLOWING FOR A CHECK OF THE PREDICTIVE SETUP
+  DATA EXCHANGE FILES WILL BE PRODUCED
+ 
+ 
+  ECHO MODEL COMMAND LINES:
+ 
+  Command ID    Purpose       Command Line
+  ------------  ------------  --------------------------------------------------
+  ForwardModel  Forward       C:\WRDAPP\MF2005.1_8\bin\mf2005.exe "D:\Delphi_Projects\ModelMate\temp\ModelMate_0_19\Example\tc1pred.nam"
+ 
+
+ *******************************************************
+
+  NOTE PARAMETER_GROUPS_FOR_PREDICTION BLOCK NOT FOUND
+
+   NO NEW PARAMETER GROUPS CONSIDERED FOR PREDICTION
+
+         IF YOU INTENDED TO READ THIS BLOCK
+
+        CHECK THE SPELLING OF THE BLOCK NAME
+
+   JUPITER CODES IGNORE BLOCKS WITH MISSPELLED NAMES
+
+ *******************************************************
+ 
+ 
+
+ *******************************************************
+
+  NOTE PARAMETER_DATA_FOR_PREDICTION BLOCK NOT FOUND 
+
+ NO ADDITIONAL PARAMETERS ARE CONSIDERED FOR PREDICTION 
+
+         IF YOU INTENDED TO READ THIS BLOCK
+
+        CHECK THE SPELLING OF THE BLOCK NAME
+
+   JUPITER CODES IGNORE BLOCKS WITH MISSPELLED NAMES
+
+ *******************************************************
+ 
+ 
+ *******************************************************
+        NOTE DERIVED_PARAMETERS BLOCK NOT FOUND
+         NO DERIVED PARAMETERS ARE CONSIDERED
+         IF YOU INTENDED TO READ THIS BLOCK
+        CHECK THE SPELLING OF THE BLOCK NAME
+   JUPITER CODES IGNORE BLOCKS WITH MISSPELLED NAMES
+ *******************************************************
+ 
+ 
+ *******************************************************
+ NOTE DERIVED_PARAMETERS_FOR_PREDICTION BLOCK NOT FOUND
+ NO NEW DERIVED PARAMETERS ARE CONSIDERED FOR PREDICTION
+         IF YOU INTENDED TO READ THIS BLOCK
+        CHECK THE SPELLING OF THE BLOCK NAME
+   JUPITER CODES IGNORE BLOCKS WITH MISSPELLED NAMES
+ *******************************************************
+ 
+  
+
+ PARAMETER INFORMATION:
+
+ No.  Param. name     Group        Value       Lower value   Upper value    Adj?
+ ---- ------------ ------------  ------------  ------------  ------------  -----
+    1 SS_1         ParamDefault  1.113037E-03 -1.000000E+39  1.000000E+39   Y
+    2 HK_1         HydCond       4.156149E-04 -1.000000E+39  1.000000E+39   Y
+    3 VERT_ANI_1   Fixed          1.00000     -1.000000E+39  1.000000E+39   N
+    4 VERT_K_CB    HydCond       2.117500E-07 -1.000000E+39  1.000000E+39   Y
+    5 SS_2         ParamDefault  5.914511E-05 -1.000000E+39  1.000000E+39   Y
+    6 HK_2         HydCond       4.707013E-05 -1.000000E+39  1.000000E+39   Y
+    7 VERT_ANI_2   Fixed          1.00000     -1.000000E+39  1.000000E+39   N
+    8 WELLS_TR     ParamDefault  -1.04842     -1.000000E+39  1.000000E+39   Y
+    9 RIVERS       HydCond       1.326701E-03 -1.000000E+39  1.000000E+39   Y
+   10 RCH_ZONE_1   ParamDefault   33.4529     -1.000000E+39  1.000000E+39   Y
+   11 RCH_ZONE_2   ParamDefault   49.2302     -1.000000E+39  1.000000E+39   Y
+
+ No.  Param. name   LN   SCALEPVAL   PERTURB    MAXCHANGE    TOLPAR
+ ---- ------------  --  ----------  ----------  ---------  ---------
+    1 SS_1           0   1.300E-05   1.000E-02   2.00      1.000E-02
+    2 HK_1           1   3.000E-06   1.000E-02   2.00      1.000E-02
+    3 VERT_ANI_1     0   1.000E-02   1.000E-02   2.00      1.000E-02
+    4 VERT_K_CB      1   1.000E-09   1.000E-02   2.00      1.000E-02
+    5 SS_2           0   2.000E-06   1.000E-02   2.00      1.000E-02
+    6 HK_2           1   4.000E-07   1.000E-02   2.00      1.000E-02
+    7 VERT_ANI_2     0   1.000E-02   1.000E-02   2.00      1.000E-02
+    8 WELLS_TR       0   1.100E-02   1.000E-02   2.00      1.000E-02
+    9 RIVERS         1   1.200E-05   1.000E-02   2.00      1.000E-02
+   10 RCH_ZONE_1     0   0.631       1.000E-02   2.00      1.000E-02
+   11 RCH_ZONE_2     0   0.315       1.000E-02   2.00      1.000E-02
+  
+
+ INFORMATION FOR ADJUSTABLE PARAMETERS:
+
+ Param. name     Group          Value       Lower value    Upper value  Par. no.
+ ------------ ------------  -------------  -------------  -------------  -------
+ SS_1         ParamDefault   1.113037E-03  -1.000000E+39   1.000000E+39       1
+ HK_1         HydCond        4.156149E-04  -1.000000E+39   1.000000E+39       2
+ VERT_K_CB    HydCond        2.117500E-07  -1.000000E+39   1.000000E+39       4
+ SS_2         ParamDefault   5.914511E-05  -1.000000E+39   1.000000E+39       5
+ HK_2         HydCond        4.707013E-05  -1.000000E+39   1.000000E+39       6
+ WELLS_TR     ParamDefault   -1.04842      -1.000000E+39   1.000000E+39       8
+ RIVERS       HydCond        1.326701E-03  -1.000000E+39   1.000000E+39       9
+ RCH_ZONE_1   ParamDefault    33.4529      -1.000000E+39   1.000000E+39      10
+ RCH_ZONE_2   ParamDefault    49.2302      -1.000000E+39   1.000000E+39      11
+
+               Sens
+ Param. name   Method  LN   SCALEPVAL   PERTURB    MAXCHANGE    TOLPAR
+ ------------  ------  --  ----------  ----------  ---------  ----------
+ SS_1              2    0   1.300E-05   1.000E-02   2.00       1.000E-02
+ HK_1              2    1   3.000E-06   1.000E-02   2.00       1.000E-02
+ VERT_K_CB         2    1   1.000E-09   1.000E-02   2.00       1.000E-02
+ SS_2              2    0   2.000E-06   1.000E-02   2.00       1.000E-02
+ HK_2              2    1   4.000E-07   1.000E-02   2.00       1.000E-02
+ WELLS_TR          2    0   1.100E-02   1.000E-02   2.00       1.000E-02
+ RIVERS            2    1   1.200E-05   1.000E-02   2.00       1.000E-02
+ RCH_ZONE_1        2    0   0.631       1.000E-02   2.00       1.000E-02
+ RCH_ZONE_2        2    0   0.315       1.000E-02   2.00       1.000E-02
+
+
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           NOTE: SENSITIVITIES OF THE PREDICTIONS WILL BE
+           CALCULATED USING FORWARD DIFFERENCE PERTURBATION.
+           THEY ARE LESS ACCURATE THAN SENSITIVITIES 
+           CALCULATED BY CENTRAL DIFFERENCES.
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+ PREDICTIONS
+  Total number of predictions read----------    32
+  Number of directly extracted predictions--    32
+  Number of predictions to be derived-------     0
+  Number of predictions to be used----------    32
+
+
+ Number of linear prior-information equations =    1
+  
+
+ PREDICTION INFORMATION: 
+
+ PREDICTION NAME          GROUP       REF. VALUE     VARIANCE
+ --------------------  ------------  ------------  ------------
+ Bp.0                  Heads           0.0000        1.0025    
+ Bp.1                  Head_Changes    0.0000       0.25000E-02
+ Bp.12                 Head_Changes    0.0000       0.25000E-02
+ Cp.0                  Heads           0.0000        1.0025    
+ Cp.1                  Head_Changes    0.0000       0.25000E-02
+ Cp.2                  Head_Changes    0.0000       0.25000E-02
+ Cp.8                  Head_Changes    0.0000       0.25000E-02
+ Cp.12                 Head_Changes    0.0000       0.25000E-02
+ Dp.0                  Heads           0.0000        1.0025    
+ Dp.1                  Head_Changes    0.0000       0.25000E-02
+ Dp.12                 Head_Changes    0.0000       0.25000E-02
+ Ep.0                  Heads           0.0000        1.0025    
+ Ep.1                  Head_Changes    0.0000       0.25000E-02
+ Ep.12                 Head_Changes    0.0000       0.25000E-02
+ Fp.0                  Heads           0.0000        1.0025    
+ Fp.1                  Head_Changes    0.0000       0.25000E-02
+ Fp.12                 Head_Changes    0.0000       0.25000E-02
+ Gp.0                  Heads           0.0000        1.0025    
+ Gp.1                  Head_Changes    0.0000       0.25000E-02
+ Gp.12                 Head_Changes    0.0000       0.25000E-02
+ Hp.0                  Heads           0.0000        1.0025    
+ Hp.1                  Head_Changes    0.0000       0.25000E-02
+ Hp.12                 Head_Changes    0.0000       0.25000E-02
+ Ip.0                  Heads           0.0000        1.0025    
+ Ip.1                  Head_Changes    0.0000       0.25000E-02
+ Ip.12                 Head_Changes    0.0000       0.25000E-02
+ Jp.0                  Heads           0.0000        1.0025    
+ Jp.1                  Head_Changes    0.0000       0.25000E-02
+ Jp.12                 Head_Changes    0.0000       0.25000E-02
+ Ap.0                  Heads           0.0000        1.0025    
+ Ap.1                  Head_Changes    0.0000       0.25000E-02
+ Ap.12                 Head_Changes    0.0000       0.25000E-02
+  
+
+ PREDICTION-GROUP INFORMATION:
+
+               NUM. OF         PLOT     WEIGHT    COV. MATRIX     DEP.
+ GROUP NAME    MEMBERS  USE?  SYMBOL  MULTIPLIER  IF CORRELATED   TYPE
+ ------------  -------  ----  ------  ----------  -------------  ------
+ Heads              10   T         1    1.00                     PRED  
+ Head_Changes       22   T         1    1.00                     PRED  
+
+               NUM. OF         PLOT     WEIGHT    COV. MATRIX,
+ GROUP NAME    MEMBERS  USE?  SYMBOL  MULTIPLIER  IF CORRELATED
+ ------------  -------  ----  ------  ----------  -------------
+ DefaultPrior        1  YES        1    1.00                  
+  
+  
+ PRIOR INFORMATION
+  (TRANSFROMED PARAMETERS ARE REPORTED IN NATURAL LOG SPACE)
+
+ NAME                  GROUP         VALUE         WEIGHT
+ --------------------  ------------  ------------  ------------
+ Pri_K1                DefaultPrior   -7.8240        16.495    
+  
+  
+PRIOR INFORMATION WEIGHTS (for a log-transformed parameter, the values relate to
+the NATURAL LOG of the parameter)
+
+Weight matrix:
+
+ Full matrix generated from compressed structure "Prior Weight":
+
+                    Pri_K1      
+ Pri_K1           16.49494825762203    
+
+Square-root of the weight matrix:
+
+ Full matrix generated from compressed structure "Prior Weight":
+
+                    Pri_K1      
+ Pri_K1           4.061397328213780    
+
+
+ MODEL-INPUT AND CORRESPONDING TEMPLATE FILES:
+
+ Model-input file: tc1pred.pval   Template file: tc1pred_pval.jtf
+
+
+ MODEL-OUTPUT AND CORRESPONDING INSTRUCTION FILES:
+
+ Model-output file: tc1pred._os   Instruction file: tc1pred._os.jif   Category: PRED  
+
+********************************************************************************
+ END ECHO OF INPUT - REPORT RESULTS OF SIMULATION
+********************************************************************************
+
+ 
+ Substituting Optimal parameter values for predictions: 
+  - indicates parameter was not adjustable
+  ! indicates parameter was omitted due to insensitivity or bounding contraints
+ 
+ SS_1         HK_1        -VERT_ANI_1   VERT_K_CB    SS_2         HK_2        
+   0.1113E-02   0.4156E-03    1.000       0.2118E-06   0.5915E-04   0.4707E-04
+ HK_2        -VERT_ANI_2   WELLS_TR     RIVERS       RCH_ZONE_1   RCH_ZONE_2  
+   0.4707E-04    1.000       -1.048       0.1327E-02    33.45        49.23    
+ RCH_ZONE_2  
+    49.23    
+ 
+ ********************************************************************************
+ 
+ THIS EXECUTION OF UCODE was made for PREDICT=yes SENSITIVITIES=no
+ 
+ CONFIRM THAT THE PROCESS MODELS FOR THE PREDICTIVE PHASE RAN CORRECTLY
+   and THAT THE CORRECT MODEL VALUES ARE EXTRACTED
+   once confirmed, proceed in the predictive mode with sensitivities=yes
+  
+ EXTRACTED ITEM NAME   EXTRACTED VALUE 
+ Bp.0                  1.0009277E+02
+ Bp.1                  7.6293945E-06
+ Bp.12                 5.8959961E-02
+ Cp.0                  1.1264983E+02
+ Cp.1                  9.3688965E-03
+ Cp.2                  3.5991669E-01
+ Cp.8                  8.0976944E+00
+ Cp.12                 9.9536896E+00
+ Dp.0                  1.1565057E+02
+ Dp.1                  1.5505981E+00
+ Dp.12                 2.8539429E+01
+ Ep.0                  1.1259762E+02
+ Ep.1                  1.5747070E-02
+ Ep.12                 9.9891739E+00
+ Fp.0                  1.1902452E+02
+ Fp.1                  3.1410217E-02
+ Fp.12                 1.5174698E+01
+ Gp.0                  1.1268522E+02
+ Gp.1                  1.1032104E-02
+ Gp.12                 1.0075211E+01
+ Hp.0                  1.0054758E+02
+ Hp.1                  8.6975098E-04
+ Hp.12                 4.5571899E-01
+ Ip.0                  1.1555096E+02
+ Ip.1                  1.9887924E+00
+ Ip.12                 2.8475449E+01
+ Jp.0                  1.3778833E+02
+ Jp.1                  3.3157349E-02
+ Jp.12                 2.6923981E+01
+ Ap.0                  1.2088185E+02
+ Ap.1                  1.9378662E-03
+ Ap.12                 1.3931946E+01
+  
+ ********************************************************************************
+
+
+
+ PREDICTION SUMMARY STATISTICS:
+
+   == SUMMARY STATISTICS FOR PREDICTION GROUPS ==
+
+
+ ------------------  ------------------  ------------------  ------------------
+     GROUP NAME           LARGEST             SMALLEST            AVERAGE
+ ------------------  ------------------  ------------------  ------------------
+   Heads                  137.7883            100.0928            114.7469    
+   Head_Changes           28.53943           7.6293945E-06        7.076309    
+
+
+ ------------------  ------------------  ------------------  ------------------
+     GROUP NAME           DIFF-MAX            DIFF-MIN            DIFF-AVG
+ ------------------  ------------------  ------------------  ------------------
+   Heads                  137.7883            100.0928            114.7469    
+   Head_Changes           28.53943           7.6293945E-06        7.076309    
+
+
+ ------------------  ------------------  ------------------  ------------------
+     GROUP NAME          %DIFF-MAX           %DIFF-MIN           %DIFF-AVG
+ ------------------  ------------------  ------------------  ------------------
+   Heads             Group statistics cannot be calculated, too many Obsvalues=0
+   Head_Changes      Group statistics cannot be calculated, too many Obsvalues=0
+
+
+ ------------------  ------------------  ------------------  ------------------
+     GROUP NAME           # < REF            # > REF
+ ------------------  ------------------  ------------------  ------------------
+   Heads                         0                  10
+   Head_Changes                  0                  22
+
+
+     *INTERPRETING STATISTICS FOR PREDICTION GROUPS*           
+
+  Statistics are presented for each PREDICTION GROUP             
+    Statistics are of three types:                               
+                                                                 
+     ABSOLUTE    - LARGEST, SMALLEST, AVERAGE                    
+     DEVIATIONAL - deviation from user specified reference value 
+                   DIFF-MAX, DIFF-MIN, DIFF-AVG                  
+     RELATIVE    - % deviation relative to reference value       
+                   %DIFF-MAX, %DIFF-MIN, %-DIFF-AVG            
+                                                                 
+  This summary table can be used to indicate the deviation of    
+  simulated predictions from reference values. HOWEVER - if      
+  there is no supportable basis for specifying a reference       
+  value, DEVIATIONAL and RELATIVE statistics are meaningless.    
+  THUS use only ABSOLUTE statistics for PREDICTIONS.             
+  (Refer to MOD-PREDICT documentation for discussion, (Tonkin et 
+  al., 2003, USGS OFR03-385)).                                   
+
+
+  NUMBER OF PROCESS MODEL RUNS CONDUCTED FOR THIS ANALYSIS:       1
+
+********************************************************************************
+             Normal termination of UCODE,   Version:   1.019
+********************************************************************************
+
+
+
+ Run end date and time (yyyy/mm/dd hh:mm:ss): 2010/05/05 16:19:21
+ Elapsed run time:  0.234 Seconds
+

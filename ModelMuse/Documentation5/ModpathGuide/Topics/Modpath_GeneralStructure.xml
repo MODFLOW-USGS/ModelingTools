@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">General Structure of Input Data</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">General Structure of Input Data</text></para>
+    </header>
+    <para><text styleclass="Heading 2" translate="true">Free-Format Input</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Free format is used unless otherwise noted. Free format is similar to FORTRAN</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s list directed input. With free format, the spacing of values within a record is not fixed. Each value can consist of any number of characters. One or more spaces, or a single comma optionally combined with spaces, must separate adjacent values. A value of 0 must be explicitly represented with 0 and not by one or more spaces because there is no way to detect the difference between a space that represents a 0 value and one that represents a value separator. Two capabilities included in FORTRAN</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s list directed input are not included. First, null values are not allowed in an input list. Second, a &quot;/&quot; cannot be used to terminate an input record; data values for all input items must be explicitly specified. For character data, MODPATH</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s free format implementation is less stringent than FORTRAN</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s list directed input. Fortran requires character data to be delineated by apostrophes. MODPATH does not require apostrophes if the character data item contains no spaces. If the character data item contains spaces, the data item must be enclosed in apostrophes.</text></para>
+  </body>
+</topic>

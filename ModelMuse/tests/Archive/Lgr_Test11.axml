@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Lgr_Test11" FileType="bin">
+    <FileName Model_Name="Lgr_Test11" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Lgr_Test11" FileType="ancillary">
+    <FileName Model_Name="Lgr_Test11" FileType="ancillary">Lgr_Test11.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Lgr_Test11" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.bas</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.bcf</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.chd</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.dis</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.drn</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.gsf</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.hfb</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.lgr.archive</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.oc</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.rch</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.sip</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">Lgr_Test11.wel</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Input">usgs.Lgr_Test11.reference</FileName>
+  </model>
+  <model Model_Name="Lgr_Test11_Child_1" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.bas</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.bcf</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.chd</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.dis</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.drn</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.gsf</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.hfb</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.oc</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.pcg</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.rch</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Input">Lgr_Test11_Child_1.wel</FileName>
+  </model>
+  <output Model_Name="Lgr_Test11" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test11" FileType="Model Output">Lgr_Test11.cbc</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Output">Lgr_Test11.fdn</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Output">Lgr_Test11.fhd</FileName>
+    <FileName Model_Name="Lgr_Test11" FileType="Model Output">Lgr_Test11.lst</FileName>
+  </output>
+  <output Model_Name="Lgr_Test11_Child_1" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Output">Lgr_Test11_Child_1.cbc</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Output">Lgr_Test11_Child_1.fdn</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Output">Lgr_Test11_Child_1.fhd</FileName>
+    <FileName Model_Name="Lgr_Test11_Child_1" FileType="Model Output">Lgr_Test11_Child_1.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Surface-Water Flags</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Surface-Water Flags</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is a subpane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP_Farm_Process" styleclass="Strong" translate="true">FMP: Farm Process</link><text styleclass="Normal" translate="true"> pane on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Farm process, there is a distinction between routed deliveries, semi-routed deliveries, and non-routed deliveries.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Routed deliveries of water are from streams flowing through a farm. It is assumed that the water is extracted from the reach that is furthest upstream.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Semi routed deliveries of water are also from streams but the point of diversion need not be in a cell in a farm. The modeler specifies from which reach water is diverted.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Non-routed deliveries are not associated with streams or with any other particular method for transporting the water to the farm.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A farm can have either routed or semi-routed deliveries but not both. A farm can have any number of non-routed deliveries.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Routed surface-water delivery (IRDFL)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IRDFL allows the modeler to decide how routed surface water deliveries should be handled. Modelers have three choices:</text></para>
+    <list id="3" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Emphasis" translate="true">None (0):</text><text styleclass="Normal" translate="true"> No routed deliveries will be simulated. Semi-routed deliveries may still be simulated.</text></li>
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">From a diversion segment (1):</text><text styleclass="Normal" translate="true"> Routed deliveries will only be from segments that are diversions.</text></li>
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">From any segment (-1):</text><text styleclass="Normal" translate="true"> Routed deliveries can be from from any segment.</text></li>
+    </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Routed surface-water runoff returnflow (IRRFL)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IRRFL allows the modeler to decide how the return flow from routed surface water deliveries should be handled. Modelers have two choices:</text></para>
+    <list id="4" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Emphasis" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">To a nondiversion segment (1):</text></li>
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">To any segment (-1):</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">(If no routed deliveries are simulated (IRDFL = 0) or the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> package is not used, IRRFL will be automatically set to 0 meaning &quot;no return flow.&quot;)</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="IALLOTSW" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Surface water allotment (IALLOTSW)</text></para>
+    <list id="5" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Emphasis" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">None (0):</text><text styleclass="Normal" translate="true"> No surface water is available for irrigation</text></li>
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">Equal (1):</text><text styleclass="Normal" translate="true"> An equal allotment height will be available to all farms. The allotments are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Allotment_Dialog_Box" styleclass="Normal" translate="true">Farm Allotment</link><text styleclass="Normal" translate="true"> dialog box.</text></li>
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">Prior appropriation with calls (2):</text><text styleclass="Normal" translate="true"> A prior appropriation system will be used to allocate surface water. Each farm will have a maximum amount that it can use. Upstream farms with more junior rights must reduce their diversions to allow the more senior farm to divert this amount.</text></li>
+      <li styleclass="Emphasis"><text styleclass="Emphasis" translate="true">Prior appropriation without calls (3):</text><text styleclass="Normal" translate="true"> A prior appropriation system will be used to allocate surface water. However, there is no set amount that each farm can use.</text></li>
+    </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Diversion closure criterion (PCLOSE)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">An iterative process is used to allocate water among farms when a prior appropriate system is used. PCLOSE is the closure criterion for that process. PCLOSE has units of L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T.</text></para>
+  </body>
+</topic>

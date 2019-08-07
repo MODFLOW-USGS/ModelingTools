@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ModelArchiver Main Form</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ModelArchiver Main Form</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The main form of ModelArchiver (Fig. 1) has a menu at the top and a list of panes on the left-hand side. The list can be used to navigate between panes. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Next</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Back</text><text styleclass="Normal" translate="true"> buttons on the lower-right can also be used to navigate between the panes in a logical sequence. Each pane has a set of controls that can be used to help set up one section of the archive and an explanation of what data needs to be included in that section of the archive. At the bottom of the main form is a button that will open a web browser with the USGS groundwater model archiving web site. It is recommended that users read the complete web site before starting their model archive and, if possible, before starting to create their models.</text></para>
+    <para styleclass="Normal"><image src="MainForm.png" scale="60.00%" width="506" height="327" styleclass="Image Caption"><title translate="true">View of the main form of ModelArchiver.</title><caption translate="true"><![CDATA[Figure 1. View of the main form of ModelArchiver.]]></caption></image></para>
+  </body>
+</topic>

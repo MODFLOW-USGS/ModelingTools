@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SFR_4b_6a</title>
+  <body>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NSEG]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NSEG An integer value of the stream segment for which information is given to identify inflow, outflow, and computation of stream depth.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ICALC]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ICALC An integer value used to indicate method used to calculate stream depth in this segment.</text></para>
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICALC ≤ 0, stream depth in each reach is specified at the beginning of a stress period and remains unchanged unless flow at the midpoint of a reach is zero, then depth is set to zero in that reach. No unsaturated flow is allowed.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICALC &gt; 0, stream depth is calculated and updated each iteration of the MODFLOW solver within a time step.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICALC = 1, stream depth is calculated using Manning’s equation and assuming a wide rectangular channel. Unsaturated flow is simulated when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ISFROPT" styleclass="Normal" translate="true">ISFROPT</link><text styleclass="Normal" translate="true"> &gt; 1 and the value of ICALC must remain 1 for the specified segment during the simulation.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICALC = 2, stream depth is calculated using Manning’s equation and assuming an eight-point channel cross section for each segment (which allows for the computation of a wetted perimeter and for changing hydraulic conductance of the streambed in relation to changes in flow). Unsaturated flow is simulated when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ISFROPT" styleclass="Normal" translate="true">ISFROPT</link><text styleclass="Normal" translate="true"> &gt; 1 and the value of ICALC must remain 2 for the specified segment during the simulation.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICALC = 3, stream depth and width are calculated using a power function relating each to streamflow (Q) using equations 8 and 9 where &#160;DEPTH(y) = CDPTH × Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">FDPTH</text><text styleclass="Normal" translate="true"> and WIDTH(w) = AWDTH × Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">BWDTH</text><text styleclass="Normal" translate="true">. Unsaturated flow is not allowed.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If ICALC = 4, stream depth and width are calculated using a table relating streamflow to depth and width (the table is defined in Part 4f). Unsaturated flow is not allowed.</text></li>
+          </list>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The option to simulate unsaturated flow beneath streams is not available when using ICALC = 0, 3, or 4.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OUTSEG]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">OUTSEG An integer value of the downstream stream segment that receives tributary inflow from the last downstream reach of this segment. If this segment (identified by NSEG) does not feed (or discharge into) another downstream (tributary) segment, then enter a value of &quot;0&quot; for this variable (Segment 7 in figure 3 in Prudic and others, 2004 is an example for which OUTSEG = 0). If the segment ends within the modeled grid and OUTSEG = 0, outflow from the segment is not routed anywhere and is no longer part of the stream network. One may wish to use this if all flow in the stream gets diverted into a lined canal or into a pipe. If the flow out of this segment discharges into a lake, set OUTSEG equal to the negative value of the lake identification number (where the minus sign is used as a flag to tell the model that flow enters a lake rather than a tributary stream segment).</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[figure 3]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="SFR_Fig3"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IUPSEG]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">An integer value of the upstream segment from which water is diverted (or withdrawn) to supply inflow to this stream segment if this segment originates as a diversion from an upstream segment. If the source of a stream segment is discharge from a lake, set IUPSEG equal to the negative value of the lake identification number (where the minus sign is used as a flag to tell the model that streamflow into this segment is derived from a lake rather than a stream segment). If this stream segment (identified by NSEG) does not receive inflow as a diversion from an upstream segment, then set IUPSEG = 0.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRIOR]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRIOR An integer value that only is specified if IUPSEG &gt; 0 (do not specify a value in this field if IUPSEG = 0 or IUPSEG &lt; 0). IPRIOR defines the prioritization system for diversion, such as when insufficient water is available to meet all diversion stipulations, and is used in conjunction with the value of FLOW (specified below).</text></para>
+          <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">When IPRIOR = 0, then if the specified diversion flow (FLOW) is greater than the flow available in the stream segment from which the diversion is made, the diversion is reduced to the amount available, which will leave no flow available for tributary flow into a downstream tributary of segment IUPSEG.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">When IPRIOR = -1, then if the specified diversion flow (FLOW) is greater than the flow available in the stream segment from which the diversion is made, no water is diverted from the stream. This approach assumes that once flow in the stream is sufficiently low, diversions from the stream cease, and is the “priority” algorithm that originally was programmed into the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR1</link><text styleclass="Normal" translate="true"> Package (Prudic, 1989).</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">When IPRIOR = -2, then the amount of the diversion is computed as a fraction of the available flow in segment IUPSEG; in this case, 0.0 &lt; FLOW &lt; 1.0.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">When IPRIOR = -3, then a diversion is made only if the streamflow leaving segment IUPSEG exceeds the value of FLOW. If this occurs, then the quantity of water diverted is the excess flow and the quantity that flows from the last reach of segment IUPSEG into its downstream tributary (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="OUTSEG" styleclass="Normal" translate="true">OUTSEG</link><text styleclass="Normal" translate="true">) is equal to FLOW. This represents a flood-control type of diversion, as described by Danskin and Hanson (2002).</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NSTRPTS]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NSTRPTS An integer value specified only when ICALC = 4. It is used to dimension a table relating streamflow with stream depth and width as specified in Items 4e and 6d. NSTRPTS must be at least 2 but not more than 50. If the table exceeds 3 × 50 (for streamflow, stream depth, and width) values, then MAXPTS in the allocation subroutine GWF1SFR1ALP will need to be increased from 3 × 50 to 3 × (the desired maximum value).</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FLOW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FLOW A real number that is the streamflow (in units of volume per time) entering or leaving the upstream end of a stream segment (that is, into the first reach).</text></para>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If the stream is a headwater stream, FLOW defines the total inflow to the first reach of the segment. The value can be any number </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">³</text><text styleclass="Normal" translate="true"> 0.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If the stream is a tributary stream, FLOW defines additional specified inflow to or withdrawal from the first reach of the segment (that is, in addition to the discharge from the upstream segment of which this is a tributary). This additional flow does not interact with the groundwater system. For example, a positive number might be used to represent direct outflow into a stream from a sewage treatment plant, whereas a negative number might be used to represent pumpage directly from a stream into an intake pipe for a municipal water treatment plant. (Also see additional explanatory notes below.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If the stream is a diversionary stream, and the diversion is from another stream segment, FLOW defines the streamflow diverted from the last reach of stream segment IUPSEG into the first reach of this segment. The diversion is computed or adjusted according to the value of IPRIOR.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If the stream is a diversionary stream, and the diversion is from a lake, FLOW defines a fixed rate of discharge diverted from the lake into the first reach of this stream segment (unless the lake goes dry) and flow from the lake is not dependent on the value of ICALC. However, if FLOW = 0, then the lake outflow into the first reach of this segment will be calculated on the basis of lake stage relative to the top of the streambed for the first reach using one of the methods defined by ICALC.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RUNOFF]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="RUNOFF" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">RUNOFF A real number that is the volumetric rate of the diffuse overland runoff that enters the stream segment (in units of volume per time). The specified rate is apportioned to each reach of the segment in direct relation to the fraction of the total length of the stream channel in the segment that is present in each reach.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If the Farm process in MODFLOW-OWHM is used, RUNOFF should be set to zero because it will be overwritten by runoff calculated by the Farm Process.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ETSW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ETSW A real number that is the volumetric rate per unit area of water removed by evapotranspiration directly from the stream channel (in units of length per time). ETSW is defined as a positive value.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PPTSW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PPTSW A real number that is the volumetric rate per unit area of water added by precipitation directly on the stream channel (in units of length per time).</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROUGHCH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ROUGHCH A real number that is Manning’s roughness coefficient for the channel in all reaches in this segment. This variable is only specified if ICALC = 1 or 2.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROUGHBK]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ROUGHBK A real number that is Manning’s roughness coefficient for the overbank areas in all reaches in this segment. This variable is only specified if ICALC = 2.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CDPTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CDPTH A real number that is the coefficient used in the equation:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(DEPTH = CDPTH × Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">FDPTH</text><text styleclass="Normal" translate="true">) that relates stream depth in all reaches in this segment to streamflow. This variable is only specified if ICALC = 3.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FDPTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FDPTH A real number that is the exponent used in the equation:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DEPTH = CDPTH × Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">FDPTH</text><text styleclass="Normal" translate="true"> that relates stream depth in all reaches in this segment to streamflow. This variable is only specified if ICALC = 3.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[AWDTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">AWDTH A real number that is the coefficient used in the equation:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WIDTH = AWDTH × Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">BWDTH</text><text styleclass="Normal" translate="true"> that relates stream width in all reaches in this segment to streamflow. This variable is only specified if ICALC = 3.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BWDTH]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BWDTH A real number that is the exponent used in the equation:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WIDTH = AWDTH × Q</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">BWDTH</text><text styleclass="Normal" translate="true"> that relates stream width in all reaches in this segment to streamflow. This variable is only specified if ICALC = 3.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

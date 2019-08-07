@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true"> GMRES Variables Tab: Newton Solver</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true"> GMRES Variables Tab: Newton Solver</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The options that are required if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Basic_Options_Tab_Newton_Solver" anchor="Options" styleclass="Strong" translate="true">Options</link><text styleclass="Normal" translate="true"> is set to &quot;Specified&quot; and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Basic_Options_Tab_Newton_Solver" anchor="LINMETH" styleclass="Strong" translate="true">LINMETH</link><text styleclass="Normal" translate="true"> is set to GMRES are on the </text><text styleclass="Strong" translate="true">GMRES Variables</text><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver_Package_Pane" styleclass="Strong" translate="true">NWT: Newton Solver</link><text styleclass="Normal" translate="true"> pane of the the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Solver_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Solvers</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">MAXITINNER</text><text styleclass="Normal" translate="true"> is the maximum number of iterations for the linear solution (integer).</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ILUMETHOD</text><text styleclass="Normal" translate="true"> is the index for selection of the method for incomplete factorization (ILU) used as a preconditioner. See Kipp and others (2008) for further details (integer). </text></para>
+    <list id="6" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ILUMETHOD=1—ILU with drop tolerance and fill limit. Fill-in terms less than drop tolerance times the diagonal are discarded. The number of fill-in terms in each row of L and U is limited to the fill limit. The fill-limit largest elements are kept in the L and U factors. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">ILUMETHOD=2 — ILU(k), Order k incomplete LU factorization. Fill-in terms of higher order than k in the factorization are discarded. </text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">LEVFILL</text><text styleclass="Normal" translate="true"> is the fill limit for ILUMETHOD = 1 and is the level of fill for ILUMETHOD = 2. Recommended values: 5-10 for method 1, 0-2 for method 2. See Kipp and others (2008) for further details.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">STOPTOL</text><text styleclass="Normal" translate="true"> is the tolerance for convergence of the linear solver. This is the residual of the linear equations scaled by the norm of the root mean squared error. Usually 10-8 to 10-12 works well. See Kipp and others (2008) for further details.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">MSDR</text><text styleclass="Normal" translate="true"> is the number of iterations between restarts of the GMRES Solver. See Kipp and others (2008) for further details (integer).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

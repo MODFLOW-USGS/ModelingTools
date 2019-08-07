@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Readme.txt File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Readme.txt File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each model archive must contain a file named &quot;readme.txt&quot; that describes the model archive. The user creates this file in a text editor and specifies its location on the computer in the edit box. The user can edit the file in ModelArchiver by clicking the &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Edit_Readme_File_Dialog_Box" styleclass="Normal" translate="true">Edit Readme file</link><text styleclass="Normal" translate="true">&quot; button. Among other things, the readme.txt file should contain a the digital object identifiers for the archive and the model report. You don&apos;t have to already have the model report or archive on the web before creating digital object identifiers for them. The button on this pane can be used to open a web browser with the USGS Digital Object Identifier creation tool. Non-USGS users may specify the URL of a different tool for creating DOIs.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The readme.txt file is a &quot;text file that provides a description of the archive folder structure and of the files contained in each subfolder, instructions for running the model(s), instructions for reconstructing the model archive from the downloaded model files, and a brief description of each model run.&quot;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelArchiver can create the description of the archive folder structure and the files in each subfolder for you and append it to your readme.txt file when transferring it to the model archive. It will do this if the &quot;</text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">Automatically add file descriptions to readme.txt&quot;</text><text styleclass="Normal" translate="true"> checkbox on this pane is checked. By default, it is checked.</text></para>
+  </body>
+</topic>

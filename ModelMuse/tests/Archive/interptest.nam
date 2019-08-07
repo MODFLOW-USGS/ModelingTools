@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 interptest.lst REPLACE
+DATA(BINARY)      9 interptest.cbc REPLACE
+DIS              12 interptest.dis OLD
+BAS6             13 interptest.bas OLD
+OC               39 interptest.oc OLD
+DATA             37 interptest.fhd REPLACE
+DATA             38 interptest.fdn REPLACE
+PCG              18 interptest.pcg OLD
+LPF              14 interptest.lpf OLD

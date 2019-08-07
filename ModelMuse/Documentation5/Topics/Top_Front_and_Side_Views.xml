@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Top, Front, and Side Views</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Top, Front, and Side Views</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The main ModelMuse window includes four panes. Three of these panes contain the top, front, and side views of the model. The other pane is a 3-D view of the model. Each pane can be resized by clicking on the space between the panes, moving the mouse while holding the mouse button down, and releasing the mouse button at the new position. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA models, the side view is not used. SUTRA profile models, are displayed on the top view even though they may represent a vertical cross section. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The top, front, and side views of the model are each composed of several parts (fig. 6):</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Normal" translate="true">Selection Cube</link><text styleclass="Normal" translate="true">, (also sometimes called the Model Cube)</text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Ruler" styleclass="Normal" translate="true">Rulers</link><text styleclass="Normal" translate="true">, and </text></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Working_Area" styleclass="Normal" translate="true">Working Area</link><text styleclass="Normal" translate="true">.</text></li>
+    </list>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="TopView.ipp" scale="100.00%" styleclass="Image Caption"><title translate="true">Top view of model with working area, ruler and selection cube labeled</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 6.</text><text styleclass="Image Caption" translate="true"> The parts of the top, front, or side views of the model.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In three-dimensional SUTRA models and MODFLOW 6 DISV models, a cross section line is drawn in purple on the top view of the model and the cross section itself is displayed on the front view. The cross section line can be rotated to any angle and can be moved to any location within the mesh (see figure). Purple squares mark the centers of elements intersected by the cross section. For more information, see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh" anchor="MoveCrossSection" styleclass="Normal" style="font-weight:bold;" translate="true">Mesh|Move Cross Section</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh" anchor="RotateCrossSection" styleclass="Normal" style="font-weight:bold;" translate="true">Mesh|Rotate Cross Section</link><text styleclass="Normal" translate="true">, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mesh" anchor="SpecifyCrossSection" styleclass="Normal" style="font-weight:bold;" translate="true">Mesh|Specify Cross Section...</link></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="2" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><image src="SutraCrossSection.png" scale="50.00%" width="389" height="283" styleclass="Image"></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Image Number" translate="true">Figure</text><text styleclass="Normal" translate="true"> A three-dimensional SUTRA model showing the location of the cross section on the top view and the cross section itself on the front view.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Well Tab Files</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Well Tab Files</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="New Materials" translate="true">Tab files for wells in MODFLOW-NWT 1.1 can have optional header lines starting with the &quot;#&quot; character.</text></para>
+    <para styleclass="Normal"><text styleclass="New Materials" translate="true">The remainder of the table consists of a series of lines. Each line has a simulation time and a pumping rate in that order.</text></para>
+    <para styleclass="Normal"><text styleclass="New Materials" translate="true">The rates for each time step will be determined as a weighted average of the rates specified in the table for the time periods that are included in the time step.</text></para>
+  </body>
+</topic>

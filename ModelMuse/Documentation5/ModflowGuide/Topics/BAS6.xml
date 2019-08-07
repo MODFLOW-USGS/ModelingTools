@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BAS6 - Basic Package</title>
+  <keywords>
+    <keyword translate="true">BAS6</keyword>
+    <keyword translate="true">CHTOCH</keyword>
+    <keyword translate="true">HNOFLO</keyword>
+    <keyword translate="true">IBOUND</keyword>
+    <keyword translate="true">Options</keyword>
+    <keyword translate="true">PRINTTIME</keyword>
+    <keyword translate="true">SHOWPROGRESS</keyword>
+    <keyword translate="true">STRT</keyword>
+    <keyword translate="true">XSECTION</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">BAS6 - Basic Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="7" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td style="vertical-align:top;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> BAS6</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Basic package is used to specify certain data used in all models. These include</text></para>
+          <list id="8" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">the locations of active, inactive, and specified head cells,</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">the head stored in inactive cells, and</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">the initial heads in all cells.</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></li>
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">https://pubs.usgs.gov/tm/2005/tm6A16/</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16, variously p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="RevisedMF2005Input.pdf" styleclass="Normal" translate="true">RevisedMF2005Input.pdf</link></li>
+          </list>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="CHOB" styleclass="Normal" translate="true">Specified-Head Flow Observation</link><text styleclass="Normal" translate="true"> input file</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" styleclass="Normal" translate="true">Flow and Head Boundary package</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD" styleclass="Normal" translate="true">Time-Variant Specified-Head package</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Common Errors</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">There should be a hydraulic connection between all active cells.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The Basic package input file is required in all models.</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="IBOUND" styleclass="Normal" translate="true">IBOUND</link><text styleclass="Normal" translate="true"> may require special treatment in some cases.</text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">Specified heads specified in the Basic package can be overridden by those specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD" styleclass="New Materials" translate="true">Time-Variant Specified-Head</link><text styleclass="New Materials" translate="true"> package and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" styleclass="New Materials" translate="true">Flow and Head Boundary</link><text styleclass="New Materials" translate="true"> package.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Basic Package Input for the Groundwater Flow Process Basic (BAS) Package except for output control input is read from the file that is specified with “BAS6” as the file type. The file type has been changed from that used in MODFLOW-96, which was “BAS”, because the input data are not compatible. </text></para>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable that starts in column 2. The first two comment lines will become variable HEADNG, which is used as a printout title throughout the program. (If there are no comment lines, then HEADNG will be blank.) HEADNG is limited to 80 columns, but subsequent Text lines can be up to 199 columns. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Options (199 text characters)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If there are no options to specify, then a blank record must be included for Item 1.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Options]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">&#32;</text><anchor id="Options" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Options—is a character variable that is scanned for words (separated by one or more spaces) that specify program options. Three options are currently recognized. Unrecognized words are ignored, and a word may be specified in either uppercase or lowercase. A blank record is acceptable and indicates no options.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">XSECTION</text><text styleclass="Normal" translate="true"> indicates that the model is a 1-row cross section for which STRT and IBOUND should each be read as single two-dimensional variables with dimensions of NCOL and NLAY. Likewise, head and drawdown should be printed and saved in disk files as single two-dimensional variables.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">CHTOCH</text><text styleclass="Normal" translate="true"> indicates that flow between adjacent constant-head cells should be calculated.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">FREE</text><text styleclass="Normal" translate="true"> indicates that free format is used for input variables throughout the Basic Package and other packages as indicated in their input instructions. Be sure that all variables read using free format have a non-blank value and that a comma or at least one blank separates all adjacent values.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">PRINTTIME</text><text styleclass="Normal" translate="true"> indicates that the start time, end time, and elapsed time required to execute MODFLOW-2000 are to be written to the global output file. &#160;When the program is used in batch mode, these times are determined and written for each simulation, that is, for each name file listed in modflow.bf. &#160;This capability is expected to be particularly useful in evaluating performance of the program in different serial- and parallel-processing environments.</text></para>
+                <para styleclass="Normal"><text styleclass="Keywords" translate="true">SHOWPROGRESS</text><text styleclass="Normal" translate="true"> indicates that the stress period, time step, and the equation currently being solved should be displayed on the monitor. &#160;Unfortunately, support for this option is processor-dependent; as a result, when this option is selected on some systems, lines showing progress will not be overwritten by subsequent lines. &#160;In these cases, use of this option will cause the display to scroll as the progress line is updated. (MODFLOW-2000 only)</text></para>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-FMP2,MODFLOW-NWT"/><anchor id="StopError" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">STOPERROR</text><text styleclass="Normal" translate="true"> is an optional keyword that can be specified in the options list. &#160;The real number, STOPER, must follow the keyword. &#160;STOPER is a percent discrepancy that is compared to the budget percent discrepancy when the solver convergence criteria are not met. &#160;Execution will continue unless the budget percent discrepancy is greater than STOPER. &#160;See also the </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="Continue" styleclass="Normal" translate="true">CONTINUE</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">CONTINUE</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> option in the NWT solver.</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Keywords" translate="true">STOPERROR</text><text styleclass="Normal" translate="true"> is only available in MODFLOW-2005, MODFLOW-NWT and MODFLOW-OWHM.</text><conditional-text type="END"/><conditional-text type="END"/></para>
+                <para styleclass="Keywords"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Keywords" translate="true">MAXPARAM</text><text styleclass="Normal" translate="true"> allows the modeler to specify the maximum number of parameters (MXPAR), parameter clusters (MXCLST) and parameter instances (MXINST). </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">This option is only available in MODFLOW-OWHM.</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> This is specified in Data Item 1 (Options) of the BAS package with the Option “MAXPARAM” followed by MXPAR, MXCLST, and MXINST. The minimum allowable size for the three arrays is 1. MXPAR is the maximum size of the parameter names and values used by parameters; MXCLST is the maximum size of the clusters associated with parameters (for example, zone number, multiplier name, layer/row/col); MXINST is the maximum size of the instance parameter names. If MAXPARAM is not specified then the default values are MXPAR=2000, MXCLST=2000000, MXINST=50000.</text></para>
+                <para styleclass="Keywords"><text styleclass="Normal" translate="true">An important note to prevent problems—MXCLST should be greater than MXPAR + MXINST, and MXPAR should be greater than MXINST (that is, MXCLTST ≥ MXPAR + MXINST and MXPAR ≥ MXINST). This is advantageous for highly parameterized models that require additional parameter storage space or models that do not use parameters/instances to save memory. For example, to save memory, a model that does not use instances can set MXINST to 1. If there are any problems with the storage requirements, an error flag is raised printing the current inadequate storage, and the program is stopped.</text></para>
+                <para styleclass="Keywords"><text styleclass="Keywords" translate="true">PERCENTERROR</text><text styleclass="Normal" translate="true">&#32;</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">This option is only available in MODFLOW-OWHM.</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> The Basic package (BAS) was modified to calculate the rate mass balance at every time step. A new integer variable, PDIFFPRT, represents the maximum acceptable rate mass balance error before triggering a warning to the command prompt and prints the rate mass balance to the list file. The default value of PDIFFPRT is set to 50 (that is, 50 percent) and can be adjusted on Data Item 1 (Options) of the BAS package with the Option “PERCENTERROR” followed by PDIFFPRT. Acceptable values for PDIFFPRT are any integer greater than 0. If PDIFFPRT is set to zero, then a volumetric budget is printed, without the command prompt warning, for every time step.</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IBOUND(NCOL,NROW) or (NCOL,NLAY) -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If not a cross section, a layer variable is read for each layer in the grid. If a cross section, NLAY rows of NCOL values are read.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBOUND]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="IBOUND" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IBOUND—is the boundary variable. One value is read for every model cell. Usually, these values are read a layer at a time; however, when the XSECTION option is specified, a single variable for the cross section is read. Note that although IBOUND is read as one or more two-dimensional variables, it is stored internally as a three-dimensional variable.</text></para>
+                <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBOUND(J,I,K) &lt; 0, cell J,I,K has a constant head.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBOUND(J,I,K) = 0, cell J,I,K is inactive.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If IBOUND(J,I,K) &gt; 0, cell J,I,K is active.</text></li>
+                </list>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">Note: Some packages (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD" styleclass="New Materials" translate="true">CHD</link><text styleclass="New Materials" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" styleclass="New Materials" translate="true">FHB</link><text styleclass="New Materials" translate="true">) change the value of IBOUND used by the program. &#160;In addition the Groundwater Transport (GWT) process uses the absolute value of IBOUND as an index into an array of concentrations and thus uses it to specify the concentration at the cell. &#160;MODPATH &#160;also uses a copy of IBOUND in it&apos;s input and uses the absolute value of IBOUND to indicate special zones.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true"> package requires that IBOUND be set to 0 in Lakes.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></para>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="New Materials" translate="true">UZF</link><text styleclass="New Materials" translate="true"> package is used, any cells with IBOUND values less than or equal to 0 should have </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFBND" styleclass="New Materials" translate="true">IUZFBND</link><text styleclass="New Materials" translate="true"> set to zero.</text><conditional-text type="END"/></para>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-LGR"/><text styleclass="New Materials" translate="true">In MODFLOW-LGR, the value of IBOUND in child grids at the interface to the parent grid should be set to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LGR_Control_File" anchor="IBFLG" styleclass="New Materials" translate="true">IBFLG</link><text styleclass="New Materials" translate="true">.</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HNOFLO (10-character field unless Item 1 contains ‘FREE’.)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HNOFLO" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HNOFLO—is the value of head to be assigned to all inactive (no flow) cells (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="IBOUND" styleclass="Normal" translate="true">IBOUND</link><text styleclass="Normal" translate="true"> = 0) throughout the simulation. Because head at inactive cells is unused in model calculations, this does not affect model results but serves to identify inactive cells when head is printed. This value is also used as drawdown at inactive cells if the drawdown option is used. Even if the user does not anticipate having inactive cells, a value for HNOFLO must be entered.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">STRT(NCOL,NROW) or (NCOL,NLAY) -- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If not a cross section, a layer variable is read for each layer in the grid. If a cross section, NLAY rows of NCOL values are read.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STRT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="STRT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">STRT—is initial (starting) head—that is, head at the beginning of the simulation. STRT must be specified for all simulations, including steady-state simulations. One value is read for every model cell. Usually, these values are read a layer at a time. When the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="Options" styleclass="Normal" translate="true">XSECTION option</link><text styleclass="Normal" translate="true"> is specified, however, a single array for the cross section is read. For simulations in which the first stress period is steady state, the values used for STRT generally do not affect the simulation (exceptions may occur if cells go dry and (or) rewet). The execution time, however, will be less if STRT includes hydraulic heads that are close to the steady-state solution.</text></para>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="Normal" translate="true">In MODFLOW-NWT, if the head solution from one simulation will be used as starting heads for a subsequent simulation, or if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation</link><text styleclass="Normal" translate="true"> Process is used (Harbaugh and others, 2000), then </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HDRY" styleclass="Normal" translate="true">HDRY</link><text styleclass="Normal" translate="true"> should not be printed to the output file for dry cells (that is, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" styleclass="Normal" translate="true">UPW</link><text styleclass="Normal" translate="true"> Package input variable should be set as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="IPHDRY" styleclass="Normal" translate="true">IPHDRY</link><text styleclass="Normal" translate="true">=0).</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

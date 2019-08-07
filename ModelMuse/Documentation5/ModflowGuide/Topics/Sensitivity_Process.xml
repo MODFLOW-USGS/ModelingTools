@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Sensitivity Process</title>
+  <keywords>
+    <keyword translate="true">sensitivity</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Sensitivity Process</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Sensitivity Process is used to calculate the sensitivity of model results to variations in parameter values. It does this by computing the partial derivative of the objective function with respect to each parameter of interest. &#160;This is in contrast to the method used by </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://typhoon.mines.edu/freeware/ucode/" target="_blank" styleclass="Normal" translate="true">UCODE</link><text styleclass="Normal" translate="true"> in which parameters are varied experimentally and the resulting effect on the objective function is observed directly.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SEN" styleclass="Normal" translate="true">Sensitivity process input file</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Sensitivity Process is not included in MODFLOW-2005 or MODFLOW-LGR. &#160;External programs such as </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://typhoon.mines.edu/freeware/ucode/" target="_blank" styleclass="Normal" translate="true">UCODE</link><text styleclass="Normal" translate="true"> must be used instead.</text></para>
+  </body>
+</topic>

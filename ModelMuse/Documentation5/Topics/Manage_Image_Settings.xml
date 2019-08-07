@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Manage Image Settings Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Manage Image Settings Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Manage Image Settings</text><text styleclass="Normal" translate="true"> dialog box is used to delete or rename image settings that have previously been defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" styleclass="Strong" translate="true">Export Image</link><text styleclass="Normal" translate="true"> dialog box. The </text><text styleclass="Strong" translate="true">Manage Image Settings</text><text styleclass="Normal" translate="true"> dialog box is displayed by clicking the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" anchor="Manage_settings" styleclass="Strong" translate="true">Manage settings</link><text styleclass="Normal" translate="true"> button on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" styleclass="Strong" translate="true">Export Image</link><text styleclass="Normal" translate="true"> dialog box. To rename one of the image settings, type the new name in the table. To delete an image setting, select it in the table and click the </text><text styleclass="Strong" translate="true">Delete</text><text styleclass="Normal" translate="true"> button.</text></para>
+  </body>
+</topic>

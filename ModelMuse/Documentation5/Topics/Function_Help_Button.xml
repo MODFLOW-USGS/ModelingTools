@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Function Help Button</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Function Help Button</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Function Help</text><text styleclass="Normal" translate="true"> button in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Normal" style="font-weight:bold;" translate="true">Formula Editor</link><text styleclass="Normal" translate="true"> is used to obtain help on a particular function. If a function is selected in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_of_Data_Sets_and_Function" styleclass="Normal" style="font-weight:bold;" translate="true">List of Data Sets, Global Variables, and Functions</link><text styleclass="Normal" translate="true">, the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Function Help</text><text styleclass="Normal" translate="true"> button will become enabled. Clicking the button will bring up a description of the function that was selected. The functions are also described in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Functions" styleclass="Normal" translate="true">Functions</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

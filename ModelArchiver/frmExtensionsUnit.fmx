@@ -1,0 +1,120 @@
+object frmExtensions: TfrmExtensions
+  Left = 0
+  Top = 0
+  Caption = 'File Extensions'
+  ClientHeight = 480
+  ClientWidth = 800
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  DesignerMasterStyle = 0
+  object sgExtensions: TStringGrid
+    Align = Client
+    CanFocus = True
+    ClipChildren = True
+    Size.Width = 800.000000000000000000
+    Size.Height = 440.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 16.000000000000000000
+    StyledSettings = [Family, Style, FontColor]
+    TabOrder = 0
+    OnHeaderClick = sgExtensionsHeaderClick
+    OnSelectCell = sgExtensionsSelectCell
+    Viewport.Width = 780.000000000000000000
+    Viewport.Height = 399.000000000000000000
+    object scolExt: TStringColumn
+      Header = 'Extension'
+    end
+    object scolFileType: TStringColumn
+      Header = 'File type'
+      Size.Width = 160.000000000000000000
+    end
+    object scolDescription: TStringColumn
+      Header = 'Description'
+      Size.Width = 607.000000000000000000
+    end
+  end
+  object comboExtensions: TComboBox
+    Items.Strings = (
+      'Model input'
+      'Model output'
+      'Modpath input'
+      'Modpath output'
+      'Zonebudget input'
+      'Zonebudget output'
+      'MT3D input'
+      'MT3D output'
+      'Other input'
+      'Other output'
+      'Ancillary')
+    Position.X = 64.000000000000000000
+    Position.Y = 192.000000000000000000
+    Size.Width = 160.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    OnChange = comboExtensionsChange
+  end
+  object Panel1: TPanel
+    Align = Bottom
+    Position.Y = 440.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object sbExtensionCount: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 0
+      Cursor = crIBeam
+      Value = 100.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      StyledSettings = [Family, Style, FontColor]
+      OnChange = sbExtensionCountChange
+    end
+    object btnOK: TButton
+      Anchors = [akTop, akRight]
+      ModalResult = 1
+      Position.X = 624.000000000000000000
+      Position.Y = 10.000000000000000000
+      TabOrder = 2
+      Text = 'OK'
+      OnClick = btnOKClick
+    end
+    object btnCancel: TButton
+      Anchors = [akTop, akRight]
+      ModalResult = 2
+      Position.X = 712.000000000000000000
+      Position.Y = 10.000000000000000000
+      TabOrder = 1
+      Text = 'Cancel'
+    end
+    object Label1: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 112.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 193.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      Text = 'Number of extensions'
+    end
+    object btnHelp: TButton
+      Anchors = [akTop, akRight]
+      HelpContext = 220
+      HelpKeyword = 'file_extensions_form.htm'
+      HelpType = htKeyword
+      Position.X = 536.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'Help'
+      OnClick = btnHelpClick
+    end
+  end
+end

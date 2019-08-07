@@ -1,0 +1,11 @@
+# GBOB: General-Head-Boundary Observation package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+3 3 2 47 # Data Set 1: NQGB NQCGB NQTGB IUGBOBSV
+1 # Data Set 2: TOMULTGB
+1 1 # Data Set 3: NQOBGB NQCLGB
+Gbob1_1 2  0.000000000000E+000 -1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment 7
+1 10 10  1.000000000000E+000  # Data Set 5: Layer Row Column Factor
+0 1 # Data Set 3: NQOBGB NQCLGB
+1 7 10  1.000000000000E+000  # Data Set 5: Layer Row Column Factor
+1 1 # Data Set 3: NQOBGB NQCLGB
+Gbob3_1 1  5.000000000000E-002 -1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment 9
+1 10 7  1.000000000000E+000  # Data Set 5: Layer Row Column Factor

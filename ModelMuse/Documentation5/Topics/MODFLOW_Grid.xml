@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW Grid</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW Grid</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The grid in MODFLOW uses block-centered nodes; the locations at which calculations are made are at the centers of blocks. Unlike PHAST, in MODFLOW the layers are not required to be flat. Instead, the top and bottom of each cell can be different (fig. 2). In MODFLOW the grid is numbered with 1, 1, 1 in the furthest upper left corner (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Grid" anchor="Figure3" styleclass="Normal" translate="true">fig. 3</link><text styleclass="Normal" translate="true">).</text></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><image src="ModflowGrid.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Side view of MODFLOW grid</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 2.</text><text styleclass="Image Caption" translate="true"> Side view of a MODFLOW grid showing non-uniform layer boundaries.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image"><image src="GridNumbering.bmp" scale="20.00%" styleclass="Image Caption"></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><anchor id="Figure3" styleclass="Image Number"></anchor><text styleclass="Image Number" translate="true">Figure 3</text><text styleclass="Image Caption" translate="true">. Difference in grid numbering between PHAST and MODFLOW.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In ModelMuse, groups of layers can be defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box. Each group of layers shares a variety of common properties. If the model is to be a quasi-3-D model, some layer groups can be designated as nonsimulated in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets" styleclass="Normal" translate="true">Data sets</link><text styleclass="Normal" translate="true"> (described in the next section) are used to define the bottom of each layer group. An additional </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets" styleclass="Normal" translate="true">data set</link><text styleclass="Normal" translate="true"> is used to define the top of the model.</text></para>
+  </body>
+</topic>

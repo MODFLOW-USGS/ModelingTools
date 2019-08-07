@@ -1,0 +1,131 @@
+TITLE
+.      Kindred and Celia, WRR, 1989, v. 25, p. 1154
+.      Problem 4.1. Aerobic Biodegradation
+PRINT_INITIAL
+      -boundary_conditions false
+      -components true
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print false
+      -HDF_chemistry true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_chemistry false
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 1E-9
+UNITS
+      -time days
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -nonuniform   X    0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 5
+             5.5 6 6.5 7 7.5 8 8.5 9 9.5 10
+             10.5 11 11.5 12 12.5 13 13.5 14 14.5 15
+             15.5 16 16.5 17 17.5 18 18.5 19 19.5 20
+             20.5 21 21.5 22 22.5 23 23.5 24 24.5 25
+             25.5 26 26.5 27 27.5 28 28.5 29 29.5 30
+             30.5 31 31.5 32 32.5 33 33.5 34 34.5 35
+             35.5 36 36.5 37 37.5 38 38.5 39 39.5 40
+             40.5 41 41.5 42 42.5 43 43.5 44 44.5 45
+             45.5 46 46.5 47 47.5 48 48.5 49 49.5 50
+      -uniform   Y   0 1 2
+      -uniform   Z   0 1 2
+      -chemistry_dimensions X
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 50 1 1
+            -Kx 0.0001
+            -Ky 0.0001
+            -Kz 0.0001
+            -porosity 0.38
+            -specific_storage 0
+            -longitudinal_dispersivity 0.2
+            -horizontal_dispersivity 0.2
+            -vertical_dispersivity 0.2
+      -zone 0 0 0 50 1 1
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW false
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0.5
+      -time_differencing 0.5
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 50 1 1
+            -head X 2.199074 0 0 50
+CHEMISTRY_IC
+      -zone 0 0 0 0.25 1 1
+            -solution 1
+            -kinetics 2
+      -zone 0.25 0 0 50 1 1
+            -solution 1
+            -kinetics 1
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 0 
+      -HDF_chemistry 1 day
+      -HDF_heads 0 
+      -HDF_velocities 1 day
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 0 
+      -wells 0 
+      -xyz_chemistry 10 day
+      -xyz_components 0 
+      -xyz_heads 0 
+      -xyz_velocities 0 
+      -xyz_wells 0 
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 50 1 1
+            -print 1
+      -xyz_chemistry
+      -zone 0 0 0 50 1 1
+            -print 1
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 0.25 1 1
+            -head
+                  0 2.199074
+            -associated_solution
+                  0 2
+      -zone 49.75 0 0 50 1 1
+            -head
+                  0 0
+            -associated_solution
+                  0 1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 0.2 days
+            -time_end
+                  37 days
+END

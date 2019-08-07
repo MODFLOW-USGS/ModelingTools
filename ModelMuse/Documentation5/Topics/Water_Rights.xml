@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Water Rights</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Water Rights</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Font Style" style="font-family:'Times New Roman'; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Farms</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Surface_Water_Flags" anchor="IALLOTSW" styleclass="Normal" translate="true">IALLOTSW</link><text styleclass="Normal" translate="true"> is set to use a priority system with water rights calls, the allowed </text><text styleclass="Strong" translate="true">Water Rights Call</text><text styleclass="Normal" translate="true"> for each farm is specified in on this tab with units of L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T.</text></para>
+  </body>
+</topic>

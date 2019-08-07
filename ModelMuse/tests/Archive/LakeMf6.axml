@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="LakeMf6" FileType="bin">
+    <FileName Model_Name="LakeMf6" FileType="bin">..\..\..\..\WRDAPP\mf6.0.4\bin\mf6.exe</FileName>
+    <FileName Model_Name="LakeMf6" FileType="bin">..\..\..\..\WRDAPP\mt3dusgs1.1.0\MySrc\MT3D_USGS\bin\Debug\MT3D_USGS.exe</FileName>
+  </bin>
+  <ancillary Model_Name="LakeMf6" FileType="ancillary">
+    <FileName Model_Name="LakeMf6" FileType="ancillary">LakeMf6.gpt</FileName>
+  </ancillary>
+  <model Model_Name="LakeMf6" FileType="Model Input">
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.chd</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.dis</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.ic</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.lak6</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.nam.archive</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.npf</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.ob_lak</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.oc</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.rch</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">LakeMf6.tdis</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Input">usgs.LakeMf6.reference</FileName>
+  </model>
+  <output Model_Name="LakeMf6" FileType="Model Output">
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.bhd</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.cbc</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.dis.grb</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.lak_stage_ob.csv</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.lak_volume_ob.csv</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.lst</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.Solution.CSV</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="LakeMf6" FileType="Mt3dms Input">
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.adv</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.bhd</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.btn</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.cbc</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.dis.grb</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.dsp</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.gcg</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.lkt</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.mt_nam.archive</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.ssm</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">usgs.LakeMf6_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="LakeMf6" FileType="Mt3dms Output">
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6.cnf</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6.lktobs</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6.mls</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6_Conc._mas</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6_Conc.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

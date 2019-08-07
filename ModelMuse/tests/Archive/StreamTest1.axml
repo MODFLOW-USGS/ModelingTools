@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="StreamTest1" FileType="bin">
+    <FileName Model_Name="StreamTest1" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="StreamTest1" FileType="ancillary">
+    <FileName Model_Name="StreamTest1" FileType="ancillary">StreamTest1.gpt</FileName>
+  </ancillary>
+  <model Model_Name="StreamTest1" FileType="Model Input">
+    <FileName Model_Name="StreamTest1" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.bas</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.dis</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.gsf</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.lpf</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.nam.archive</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.oc</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.pcg</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">StreamTest1.str</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Input">usgs.StreamTest1.reference</FileName>
+  </model>
+  <output Model_Name="StreamTest1" FileType="Model Output">
+    <FileName Model_Name="StreamTest1" FileType="Model Output">StreamTest1.cbc</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Output">StreamTest1.fdn</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Output">StreamTest1.fhd</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Output">StreamTest1.lst</FileName>
+    <FileName Model_Name="StreamTest1" FileType="Model Output">StreamTest1.str_flow</FileName>
+  </output>
+</Model_Archive_List>

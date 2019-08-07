@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 SWI6-1.lst REPLACE
+DATA(BINARY)      9 SWI6-1.cbc REPLACE
+DIS              12 SWI6-1.dis OLD
+BAS6             13 SWI6-1.bas OLD
+OC               39 SWI6-1.oc OLD
+DATA             37 SWI6-1.fhd REPLACE
+DATA             38 SWI6-1.fdn REPLACE
+PCG              18 SWI6-1.pcg OLD
+LPF              14 SWI6-1.lpf OLD
+GHB              19 SWI6-1.ghb OLD
+WEL              20 SWI6-1.wel OLD
+SWI2            168 SWI6-1.swi OLD
+DATA(BINARY)    170 SWI6-1.zta REPLACE

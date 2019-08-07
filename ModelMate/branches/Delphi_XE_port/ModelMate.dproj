@@ -1,0 +1,345 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{353986F4-CD14-4A1E-A276-005E6F50C7B9}</ProjectGuid>
+			<MainSource>ModelMate.dpr</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Application</AppType>
+			<FrameworkType>VCL</FrameworkType>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.2</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UsePackage>vcl;vclx;VclSmp;rtl;vclimg;svnui;svn;bdertl;TeeUI;TeeDB;Tee;vclactnband;vcldb;dbrtl;vcldbx;vcltouch;xmlrtl;dsnap;dsnapcon;vclib;ibxpress;adortl;IndyCore;IndySystem;IndyProtocols;inet;intrawebdb_110_150;Intraweb_110_150;vclie;inetdb;webdsnap;websnap;inetdbbde;inetdbxpress;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;dbexpress;dbxcds;CodeSiteExpressVcl;JclDeveloperTools;Jcl;JclVcl;JclContainers;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;siComboBoxPkgXE;RbwDataGridPkgXE</DCC_UsePackage>
+			<DCC_E>false</DCC_E>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_F>false</DCC_F>
+			<DCC_S>false</DCC_S>
+			<DCC_N>false</DCC_N>
+			<DCC_K>false</DCC_K>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_MapFile>3</DCC_MapFile>
+			<DCC_UnitSearchPath>D:\Delphi_Projects\Components\datagrid;D:\Delphi_Projects\Components\RbwDataGrid;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_Define>DEBUG;madExcept;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="ModelMate.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="FastMM497\FastMM\FastMM4Messages.pas"/>
+			<DCCReference Include="FastMM497\FastMM\FastMM4.pas"/>
+			<DCCReference Include="frmStartUp.pas">
+				<Form>FormStartUp</Form>
+			</DCCReference>
+			<DCCReference Include="frmMainUnit.pas">
+				<Form>FormMain</Form>
+			</DCCReference>
+			<DCCReference Include="frmUcodeSettingsUnit.pas">
+				<Form>frmUcodeSettings</Form>
+			</DCCReference>
+			<DCCReference Include="frmParEstSettingsUnit.pas">
+				<Form>frmParEstSettings</Form>
+			</DCCReference>
+			<DCCReference Include="GlobalData.pas"/>
+			<DCCReference Include="CustomFileWriterUnit.pas"/>
+			<DCCReference Include="ModelMateUtilities.pas"/>
+			<DCCReference Include="frmHelpUcodeMethodsUnit.pas">
+				<Form>frmHelpUcodeMethods</Form>
+			</DCCReference>
+			<DCCReference Include="DataFileWriterUnit.pas"/>
+			<DCCReference Include="DataItemUnit.pas"/>
+			<DCCReference Include="frmConfigureParTablesUnit.pas">
+				<Form>FormConfigureParTables</Form>
+			</DCCReference>
+			<DCCReference Include="frmAddGroupUnit.pas">
+				<Form>frmAddGroup</Form>
+			</DCCReference>
+			<DCCReference Include="frmAddParOrDepUnit.pas">
+				<Form>frmAddParOrDep</Form>
+			</DCCReference>
+			<DCCReference Include="JupiterUnit.pas"/>
+			<DCCReference Include="UcodeUnit.pas"/>
+			<DCCReference Include="GlobalTypesUnit.pas"/>
+			<DCCReference Include="ModelMateClassesUnit.pas"/>
+			<DCCReference Include="Utilities.pas"/>
+			<DCCReference Include="frmProjectName.pas">
+				<Form>frmProjName</Form>
+			</DCCReference>
+			<DCCReference Include="GlobalBasicData.pas"/>
+			<DCCReference Include="frmModelCommandsUnit.pas">
+				<Form>FormModelCommands</Form>
+			</DCCReference>
+			<DCCReference Include="frmModelIO.pas">
+				<Form>FormModelIO</Form>
+			</DCCReference>
+			<DCCReference Include="frmObservations.pas">
+				<Form>FormObservations</Form>
+			</DCCReference>
+			<DCCReference Include="DependentsUnit.pas"/>
+			<DCCReference Include="frmConfigureObsTablesUnit.pas">
+				<Form>FormConfigureObsTables</Form>
+			</DCCReference>
+			<DCCReference Include="frmProgramLocationsUnit.pas">
+				<Form>FormProgramLocations</Form>
+			</DCCReference>
+			<DCCReference Include="Modflow2005Unit.pas"/>
+			<DCCReference Include="frmModelSettings.pas">
+				<Form>FormModflow</Form>
+			</DCCReference>
+			<DCCReference Include="frmParEstAdvancedUnit.pas">
+				<Form>FormParEstAdvanced</Form>
+			</DCCReference>
+			<DCCReference Include="ModflowUnit.pas"/>
+			<DCCReference Include="frmOutput.pas">
+				<Form>FormOutput</Form>
+			</DCCReference>
+			<DCCReference Include="frmAbout.pas">
+				<Form>FormAbout</Form>
+			</DCCReference>
+			<DCCReference Include="sskutils.pas"/>
+			<DCCReference Include="frmModelDirectories.pas">
+				<Form>FormModelDir</Form>
+			</DCCReference>
+			<DCCReference Include="frmSelectDirectory.pas">
+				<Form>FormSelectDirectory</Form>
+			</DCCReference>
+			<DCCReference Include="Link_Jupiter.pas"/>
+			<DCCReference Include="frmParallelJupiter.pas">
+				<Form>FormParallelJupiter</Form>
+			</DCCReference>
+			<DCCReference Include="frmPredictions.pas">
+				<Form>FormPredictions</Form>
+			</DCCReference>
+			<DCCReference Include="frmConfigurePredTablesUnit.pas">
+				<Form>FormConfigurePredTables</Form>
+			</DCCReference>
+			<DCCReference Include="frmEditor.pas">
+				<Form>FormEditor</Form>
+			</DCCReference>
+			<DCCReference Include="frmUcodeBasicSettingsUnit.pas">
+				<Form>FormUcodeFileNames</Form>
+			</DCCReference>
+			<DCCReference Include="frmPriorInfo.pas">
+				<Form>FormPriorInfo</Form>
+			</DCCReference>
+			<DCCReference Include="PriorInfoUnit.pas"/>
+			<DCCReference Include="frmConfigurePriTablesUnit.pas">
+				<Form>FormConfigPriTables</Form>
+			</DCCReference>
+			<DCCReference Include="frmParamSetsByIter.pas">
+				<Form>FormParamSetsByIter</Form>
+			</DCCReference>
+			<DCCReference Include="frmDerivedParameters.pas">
+				<Form>FormDerivedParameters</Form>
+			</DCCReference>
+			<DCCReference Include="ParallelControlUnit.pas"/>
+			<DCCReference Include="ParallelRunnerUnit.pas"/>
+			<DCCReference Include="frmParallelControl.pas">
+				<Form>FormParallelControl</Form>
+			</DCCReference>
+			<DCCReference Include="frmParallelRunners.pas">
+				<Form>FormParallelRunners</Form>
+			</DCCReference>
+			<DCCReference Include="frmRunnerFiles.pas">
+				<Form>FormRunnerFiles</Form>
+			</DCCReference>
+			<DCCReference Include="frmPriorInfoControl.pas">
+				<Form>FormPriorInfoControl</Form>
+			</DCCReference>
+			<DCCReference Include="frmRenameGroup.pas">
+				<Form>FormRenameGroup</Form>
+			</DCCReference>
+			<DCCReference Include="..\ModelMuse\IniFileUtilities.pas"/>
+			<DCCReference Include="frmNamingConvention.pas">
+				<Form>FormNamingConvention</Form>
+			</DCCReference>
+			<None Include="ModelSupport_ModelMate\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmHelpUcodeMethodsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\Utilities\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ModelMate\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\FileIO\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmUcodeSettingsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmParEstSettingsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmMainUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\GlobalData\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\GlobalData\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\ModelMate\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmParEstSettingsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmMainUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\CustomFileWriterUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmSelParColsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\DataFileWriterUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\DataItemUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\FileIO\default.txvpck"/>
+			<None Include="ModelMate.todo"/>
+			<None Include="ModelSupport_ModelMate\frmAddGroupUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\JupiterUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmAddParameterUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\Utilities\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmSelParColsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\JupiterUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\DataFileWriterUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\DataItemUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmUcodeSettingsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmHelpUcodeMethodsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\CustomFileWriterUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmAddGroupUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmAddParameterUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\UcodeUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ModelMateClassesUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\GlobalTypesUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ModelMateClassesUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\UcodeUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\GlobalTypesUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\CustomFileWriterUnit\Class Diagram1.txvcls"/>
+			<None Include="ModelSupport_ModelMate\GlobalBasicData\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ModelMateUtilities\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmProjectName\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ModelMateUtilities\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmModelCommandsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmObsColsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmModelIO\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\DependentsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmObservations\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmModflow\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmProgramLocationsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\Modflow2005Unit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\FastMM4\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\FastMM4Messages\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\Modflow2005Unit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmModflow\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\FastMM4\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmModelIO\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmProjectName\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\FastMM4Messages\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmObservations\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmProgramLocationsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\DependentsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmModelCommandsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmObsColsUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\GlobalBasicData\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmProjectDirectories\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\sskutils\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmConfigureObsTablesUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmConfigureParTablesUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmParEstAdvancedUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmOutput\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmSelectDirectory\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmAbout\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmStartUp\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ModflowUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmProjectDirectories\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\sskutils\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmConfigureParTablesUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmOutput\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmSelectDirectory\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmAbout\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmConfigureObsTablesUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmParEstAdvancedUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmStartUp\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\ModflowUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmParallelJupiter\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmAddParOrDepUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\Link_Jupiter\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmAddParOrDepUnit\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmParallelJupiter\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\Link_Jupiter\default.txvpck"/>
+			<None Include="ModelSupport_ModelMate\frmConfigurePriTablesUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmParamSetsByIter\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmUcodeBasicSettingsUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmModelSettings\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmPredictions\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmEditor\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmConfigurePredTablesUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\PriorInfoUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmPriorInfo\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ParallelRunnerUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmParallelControl\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmDerivedParameters\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmRenameGroup\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmPriorInfoControl\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\ParallelControlUnit\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmParallelRunners\default.txaPackage"/>
+			<None Include="ModelSupport_ModelMate\frmRunnerFiles\default.txaPackage"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">ModelMate.dpr</Source>
+					</Source>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">0</VersionInfo>
+						<VersionInfo Name="MinorVer">26</VersionInfo>
+						<VersionInfo Name="Release">1</VersionInfo>
+						<VersionInfo Name="Build">1244</VersionInfo>
+						<VersionInfo Name="Debug">True</VersionInfo>
+						<VersionInfo Name="PreRelease">True</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName">U.S. Geological Survey</VersionInfoKeys>
+						<VersionInfoKeys Name="FileDescription">ModelMate pre-release beta</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">0.26.1.1244</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName">ModelMate</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName">ModelMate</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">pre-release</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+				</Delphi.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

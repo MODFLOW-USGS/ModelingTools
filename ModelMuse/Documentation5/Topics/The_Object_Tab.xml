@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">The Object Tab</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">The Object Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Object</text><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Go_To_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Go To</link><text styleclass="Normal" translate="true"> dialog box is visible when one or more objects have been created and are visible. In it, the user selects the object to be displayed on the screen. Because objects are associated with particular views of the model, the user does not specify the view of the model to be changed. If the user checks the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Select object</text><text styleclass="Normal" translate="true"> checkbox, the object will become selected as well as being brought into view when the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button is clicked.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentSegmentLength</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentSegmentLength</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectCurrentSegmentLength</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectCurrentSegmentLength</text><text styleclass="Normal" translate="true"> returns the length of the segment that intersects the cell or element. If the object being evaluated does not intersect the cell or element being evaluated, ObjectCurrentSegmentLength returns zero. If two or more segments of the same object intersect the cell or element, ObjectCurrentSegmentLength returns the length of the last one to intersect the cell or element. </text></para>
+  </body>
+</topic>

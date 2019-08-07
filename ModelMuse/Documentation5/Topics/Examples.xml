@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Examples/Tutorials</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Example</text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Heading1" translate="true">s</text><conditional-text type="END"/><text styleclass="Heading1" translate="true">/Tutorials</text></para>
+    </header>
+    <para styleclass="Normal"><conditional-text type="IFNOT" value="USER1"/><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER2,USER3"/><text styleclass="Normal" translate="true">Example models for MODFLOW, PHAST, and SUTRA are presented here.</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">An example model for MODFLOW is presented here. The ModelMuse help system has additional examples for both MODFLOW and PHAST.</text><conditional-text type="END"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Some users may choose to use this manual by starting with this section. Such users would benefit from reading the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Basic_Concepts" styleclass="Normal" translate="true">Basic Concepts</link><text styleclass="Normal" translate="true"> section first.</text><conditional-text type="IF" value="CHM,HTML"/></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Phast_Examples" styleclass="Normal" translate="true">PHAST Examples</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Examples" styleclass="Normal" translate="true">MODFLOW Examples</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Examples" styleclass="Normal" translate="true">SUTRA Examples</link><conditional-text type="END"/></li>
+    </list>
+    <para styleclass="Normal"><conditional-text type="IF" value="PRINT,PDF,EBOOK"/></para>
+    <para styleclass="Normal"><snippet src="Example_Model"/><conditional-text type="END"/><conditional-text type="END"/></para>
+  </body>
+</topic>

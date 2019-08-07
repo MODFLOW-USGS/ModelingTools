@@ -1,0 +1,14 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportedP2_nonlinear.mls
+FTL 10 ImportedP2_nonlinear.ftl
+DATA 17 ImportedP2_nonlinear.cnf
+BTN 1 ImportedP2_nonlinear.btn
+DATA(BINARY) 201 ImportedP2_nonlinear_Comp1.ucn
+DATA(BINARY) 301 ImportedP2_nonlinear_Comp1_S.ucn
+DATA 601 ImportedP2_nonlinear_Comp1._mas
+DATA 401 ImportedP2_nonlinear_Comp1.mto
+ADV 2 ImportedP2_nonlinear.adv
+DSP 3 ImportedP2_nonlinear.dsp
+SSM 4 ImportedP2_nonlinear.ssm
+RCT 8 ImportedP2_nonlinear.rct
+GCG 9 ImportedP2_nonlinear.gcg

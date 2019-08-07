@@ -1,0 +1,24 @@
+# RCH: Recharge package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+PARAMETER     1 # PARAMETER NPRCH
+     1     9 # DataSet 2: NRCHOP IRCHCB
+RCH_Par1 RCH  8.000000000000E-001      1 INSTANCES     5 # Data Set 3: PARNAM PARTYP Parval NCLU INSTANCES NUMINST
+RCH_Par1_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+R_Mult_1 ALL
+RCH_Par1_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+R_Mult_2 ALL
+RCH_Par1_3 # Data Set 4a: INSTNAM (Parameter instance for stress period 3)
+R_Mult_3 ALL
+RCH_Par1_4 # Data Set 4a: INSTNAM (Parameter instance for stress period 4)
+R_Mult_4 ALL
+RCH_Par1_5 # Data Set 4a: INSTNAM (Parameter instance for stress period 5)
+R_Mult_5 ALL
+     1     1 # Data Set 5: INRECH INIRCH Stress period 1
+RCH_Par1 RCH_Par1_1 12 # Data Set 7: PARNAM Iname IRCHPF
+     1     1 # Data Set 5: INRECH INIRCH Stress period 2
+RCH_Par1 RCH_Par1_2 12 # Data Set 7: PARNAM Iname IRCHPF
+     1     1 # Data Set 5: INRECH INIRCH Stress period 3
+RCH_Par1 RCH_Par1_3 12 # Data Set 7: PARNAM Iname IRCHPF
+     1     1 # Data Set 5: INRECH INIRCH Stress period 4
+RCH_Par1 RCH_Par1_4 12 # Data Set 7: PARNAM Iname IRCHPF
+     1     1 # Data Set 5: INRECH INIRCH Stress period 5
+RCH_Par1 RCH_Par1_5 12 # Data Set 7: PARNAM Iname IRCHPF

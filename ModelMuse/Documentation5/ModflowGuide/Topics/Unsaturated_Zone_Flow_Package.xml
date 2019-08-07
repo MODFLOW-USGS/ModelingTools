@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Unsaturated Zone Flow Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Unsaturated Zone Flow Package</text></para>
+    </header>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Source files]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwf2uzf1.f</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwfuzfmodule.f</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Module]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[GWFUZFMODULE]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parameters]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL,PARAMETER :: CLOSEZERO=1.0E-15</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,PARAMETER :: NEARZERO=1.0D-30</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,PARAMETER :: ZEROD15=1.0D-15, </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,PARAMETER :: ZEROD9=1.0D-09</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,PARAMETER :: ZEROD6=1.0D-06</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,PARAMETER :: ZEROD7=1.0D-07</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,PARAMETER :: IRUNBIG = 10000</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">CHARACTER(LEN=64) :: Version_uzf</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER :: NUMCELLS</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER :: TOTCELLS</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER :: Iseepsupress: Set to 1 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="NOSURFLEAK" styleclass="Normal" translate="true">NOSURFLEAK</link><text styleclass="Normal" translate="true"> is specified</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER :: IPRCNT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER :: ITHTIFLG: Set to 1 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="SPECIFYTHTI" styleclass="Normal" translate="true">SPECIFYTHTI</link><text styleclass="Normal" translate="true"> is specified.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER :: ITHTRFLG: Set to 1 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="SPECIFYTHTR" styleclass="Normal" translate="true">SPECIFYTHTR</link><text styleclass="Normal" translate="true"> is specified.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,SAVE :: THETAB</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,SAVE :: FLUXB</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,SAVE :: FLUXHLD2</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION,SAVE,DIMENSION(NWAV),POINTER :: CHECKTIME</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,DIMENSION(NWAV),POINTER :: MORE</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,DIMENSION((NCOL,NROW)),POINTER :: LAYNUM</text></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="NUZTOP" styleclass="Normal" translate="true">NUZTOP</link></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFOPT" styleclass="Normal" translate="true">IUZFOPT</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IRUNFLG" styleclass="Normal" translate="true">IRUNFLG</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IETFLG" styleclass="Normal" translate="true">IETFLG</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::IUZM = The number of values in IUZFBND that are greater than 1 if IUZFOPT = 1 or 2</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFCB1" styleclass="Normal" translate="true">IUZFCB1</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFCB2" styleclass="Normal" translate="true">IUZFCB2</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::NTRAIL: The internal equivalent of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="NTRAIL2" styleclass="Normal" translate="true">NTRAIL2</link><text styleclass="Normal" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::NWAV = NTRAIL*(NSETS+1) if IUZFOPT = 1 or 2</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::NSETS: The internal equivalent of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="NSETS2" styleclass="Normal" translate="true">NSETS2</link><text styleclass="Normal" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::IUZFB22</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::IUZFB11</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="NUZGAG" styleclass="Normal" translate="true">NUZGAG</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::NUZGAGAR = the larger of NUZGAG and 1.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::NUZCL = &#160;NCOL if IUZFOPT = 1 or 2</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::NUZRW = &#160;NROW if IUZFOPT = 1 or 2</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::IGSFLOW</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE,POINTER &#160; ::RTSOLUTE: Set to 0. A line to read RTSOLUTE after SURFDEP is commented out. RTSOLUTE = 1 means solute transport is simulated</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NWAV), &#160; &#160;POINTER :: ITRLSTH</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IRUNBND" styleclass="Normal" translate="true">IRUNBND</link><text styleclass="Normal" translate="true"> if IRUNFLG &gt; 0</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFBND" styleclass="Normal" translate="true">IUZFBND</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(4, NUZGAGAR), &#160;POINTER :: IUZLIST: IUZLIST(1,:)=</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZROW" styleclass="Normal" translate="true">IUZROW</link><text styleclass="Normal" translate="true">; IUZLIST(2,:)=</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZCOL" styleclass="Normal" translate="true">IUZCOL</link><text styleclass="Normal" translate="true">; &#160;IUZLIST(3,:)=</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IFTUNIT" styleclass="Normal" translate="true">IFTUNIT</link><text styleclass="Normal" translate="true">; &#160;IUZLIST(4,:)=</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZOPT" styleclass="Normal" translate="true">IUZOPT</link><text styleclass="Normal" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NUZCL,NUZRW), &#160;POINTER :: NWAVST</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(2, NCOL*NROW), &#160;POINTER :: IUZHOLD IUZHOLD(1,:) is filled with row numbers. &#160;IUZHOLD(2,:) is filled with column numbers</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NWAV,IUZM), &#160;POINTER :: LTRLIT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NWAV,IUZM), &#160;POINTER :: LTRLST</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NWAV,IUZM), &#160;POINTER :: ITRLIT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INTEGER,SAVE, &#160;DIMENSION(NWAV,IUZM), &#160;POINTER :: ITRLST</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE,POINTER &#160; ::TOTRUNOFF</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE,POINTER &#160; ::</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="SURFDEP" styleclass="Normal" translate="true">SURFDEP</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(52), &#160; &#160;POINTER :: FBINS = infiltration rate bins. &#160;The first value(FBINS(1)) is 1.0E-4 m/day. The highest (FBINS(51)) is 86400 m/day.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: SEEPOUT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: EXCESPP: Excess precipitation to be routed to streams or lakes in units of volume/time</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="VKS" styleclass="Normal" translate="true">VKS</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: AIR_ENTRY if RTSOLUTE &gt; 0. However, RTSOLUTE is set to 0.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: H_ROOT if RTSOLUTE &gt; 0. However, RTSOLUTE is set to 0.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: REJ_INF</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(:,:), &#160;POINTER :: TO_CFP: not used in MODFLOW-2005.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NUZCL,NUZRW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="EPS" styleclass="Normal" translate="true">EPS</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NUZCL,NUZRW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="THTS" styleclass="Normal" translate="true">THTS</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NUZCL,NUZRW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="THTI" styleclass="Normal" translate="true">THTI</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NUZCL,NUZRW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="THTR" styleclass="Normal" translate="true">THTR</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: PETRATE: The internal equivalent of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="PET" styleclass="Normal" translate="true">PET</link><text styleclass="Normal" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: ROOTDPTH: The internal equivalent of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="EXTDP" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">EXTDP</link><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: WCWILT: The internal equivalent of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="EXTWC" styleclass="Normal" translate="true">EXTWC</link><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="FINF" styleclass="Normal" translate="true">FINF</link></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: UZFETOUT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: GWET</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">REAL, &#160; SAVE, &#160;DIMENSION(NCOL,NROW), &#160;POINTER :: FNETEXFIL</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(5), &#160;POINTER :: CUMUZVOL </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(7), &#160;POINTER :: UZTSRAT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NCOL,NROW),POINTER :: UZFLWT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NUZCL,NUZRW),POINTER :: UZSTOR</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZDPIT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZDPST: UZDPST(1) set to the distance from the top of the cell to the water table.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZTHIT, </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZTHST: initialized to residual water content</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZSPIT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZSPST</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZFLIT</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NWAV,IUZM),POINTER :: UZFLST</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NUZCL,NUZRW),POINTER :: DELSTOR</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NCOL,NROW),POINTER :: UZOLSFLX</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NCOL,NROW),POINTER :: HLDUZF = head in the top active cell or the bottom of the model if none is active.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NCOL,NROW,7),POINTER :: UZTOTBAL</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NCOL,NROW,NLAY),POINTER :: GRIDSTOR if RTSOLUTE &gt; 0</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">DOUBLE PRECISION, SAVE, DIMENSION(NCOL,NROW,NLAY),POINTER :: GRIDET</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Type]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">GWFUZFTYPE</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Subroutines]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2UZF1AR Allocate array storage for unsaturated flow, recharge, and et read and check variables that remain constant. Calls SGWF2UZF1VKS, SGWF2UZF1PSV</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2UZF1VKS Assign saturated vertical hydraulic conductivity array (VKS) in UZF to equal vertical hydraulic conductivity in layer property flow package</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2UZF1RP read and check variables each stress period. Calls SGWF2UZF1PNT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2UZF1FM Compute unsaturated zone flow and storage, recharge, et, and surface leakage and add or subtract terms RHS and HCOF. Calls SGWF2UZF1PNT, UZFLOW2, SGWF2UZF1OLF</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2UZF1OLF </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">Assign overland runoff as inflow to streams and lakes</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">GWF2UZF1BD Calculate volumetric budgets for recharge, et, and surface leakage. Calls SGWF2UZF1PNT, INITARRAY, UZFLOW2, CELL_AVERAGE</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">UZFLOW2 Compute wave interaction within an unsaturated flow cell. Calls LEADWAVE2, TRAILWAVE2, TRANSPIRATION</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">LEADWAVE2 Create lead wave when the surface flux increases and route waves.</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">TRAILWAVE2 Initialize new set of trail waves when surface flux decreases</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">TRANSPIRATION Remove water from unsaturated zone caused by evapotranspiration. Calls Rate_ET_Z, CAPH</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">CELL_AVERAGE Average water content and flux for MT3DMS</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">INITARRAY Fill an array with a value</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">GWF2UZF1DA Deallocate UZF data</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">SGWF2UZF1PNT Set UZF pointers for grid.</text></li>
+            <li styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">SGWF2UZF1PSV Save UZF pointers for grid. </text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Functions]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">Rate_ET_Z</text></para>
+          <para styleclass="Normal"><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">CAPH</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+  </body>
+</topic>

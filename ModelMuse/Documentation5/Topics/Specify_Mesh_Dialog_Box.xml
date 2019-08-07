@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specify Mesh Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Specify Mesh Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Specify Mesh</text><text styleclass="Normal" translate="true"> dialog box is used to edit either the two-dimensional SUTRA mesh seen on the top view of the model or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Fishnet_Mesh_Quadrilater" styleclass="Normal" translate="true">fishnet-mesh quadrilaterals</link><text styleclass="Normal" translate="true"> used to define the two-dimensional SUTRA mesh. The dialog box is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Mesh|Specify Mesh...</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Mesh|Specify Fishnet-Mesh Quadrilaterals...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The dialog box contains two tabs: one for node coordinates and the other for the node numbers that define the elements. When specifying fishnet-mesh quadrilaterals, two additional columns are used for specifying the number of elements in the first and second directions respectively. The first direction is between nodes 1 and 2. The second direction is between nodes 2 and 3.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It is the user&apos;s responsibility to specify a valid mesh in the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Specify Mesh</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The element order (and numbering) can be changed by dragging a row on the elements tab to a new position in the table.</text></para>
+  </body>
+</topic>

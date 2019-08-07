@@ -1,0 +1,10 @@
+# GHB: General-Head Boundary package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+PARAMETER     1     4 # DataSet 1: PARAMETER NPGHB MXL
+     4  1009 AUXILIARY IFACE # DataSet 2: MXACTC IGHBCB Option
+GHB GHB  1.000000000000E+000      4 # Data Set 3: PARNAM PARTYP Parval NLST
+     2     4     4  3.500000000000E+002   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Bhead Condfact IFACE
+     2     4    19  5.000000000000E+002   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Bhead Condfact IFACE
+     2     7    19  5.000000000000E+002   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Bhead Condfact IFACE
+     2    10    19  5.000000000000E+002   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Bhead Condfact IFACE
+     0     1 # Data Set 5: ITMP NP Stress period 1
+GHB # Data Set 7: PARNAM

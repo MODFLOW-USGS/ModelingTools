@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportMt3dmsMultidiffusion" FileType="bin">
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportMt3dmsMultidiffusion" FileType="ancillary">
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="ancillary">ImportMt3dmsMultidiffusion.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.bas</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.bcf</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.chd</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.dis</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.gsf</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.lmt</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.nam.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.oc</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.sip</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">ImportMt3dmsMultidiffusion.wel</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Input">usgs.ImportMt3dmsMultidiffusion.reference</FileName>
+  </model>
+  <output Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Output">
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Output">ImportMt3dmsMultidiffusion.cbc</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Output">ImportMt3dmsMultidiffusion.fdn</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Output">ImportMt3dmsMultidiffusion.fhd</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Output">ImportMt3dmsMultidiffusion.ftl</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Model Output">ImportMt3dmsMultidiffusion.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">ImportMt3dmsMultidiffusion.adv</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">ImportMt3dmsMultidiffusion.btn</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">ImportMt3dmsMultidiffusion.dsp</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">ImportMt3dmsMultidiffusion.gcg</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">ImportMt3dmsMultidiffusion.mt_nam.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">ImportMt3dmsMultidiffusion.ssm</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Input">usgs.ImportMt3dmsMultidiffusion_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion.cnf</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion.mls</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp1._mas</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp1.mto</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp1.ucn</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp2._mas</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp2.mto</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp2.ucn</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp3._mas</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp3.mto</FileName>
+    <FileName Model_Name="ImportMt3dmsMultidiffusion" FileType="Mt3dms Output">ImportMt3dmsMultidiffusion_Comp3.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

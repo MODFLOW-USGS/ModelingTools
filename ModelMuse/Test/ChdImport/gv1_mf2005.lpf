@@ -1,0 +1,76 @@
+# MODFLOW2000 Layer Property Flow (LPF) Package
+        50  -1.000000e+030         0 NOCVCORRECTION
+  3  3  0  0  0  0  0  0  0  0
+  0  0  0  0  0  0  0  0  0  0
+  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000
+ 0 0 0 0 0 0 0 0 0 0
+ 1 1 0 0 0 0 0 0 0 0
+ 1.000000  1  0
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   1
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   1
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   1
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11     1.000(10e12.4)                   -1     Sy Layer   1
+  2.0000e-01  2.0000e-01  2.0000e-01  2.0000e-01  2.0000e-01
+        11     1.000(10E12.4)                   -1     WETDRY Layer   1
+  0.0000e+00  0.0000e+00  1.0000e-01  0.0000e+00  0.0000e+00
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   2
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   2
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   2
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11     1.000(10e12.4)                   -1     Sy Layer   2
+  2.0000e-01  2.0000e-01  2.0000e-01  2.0000e-01  2.0000e-01
+        11     1.000(10E12.4)                   -1     WETDRY Layer   2
+  0.0000e+00  0.0000e+00  1.0000e-01  0.0000e+00  0.0000e+00
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   3
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   3
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   3
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   4
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   4
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   4
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   5
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   5
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   5
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   6
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   6
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   6
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   7
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   7
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   7
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   8
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   8
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   8
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer   9
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer   9
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer   9
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05
+        11 1.0000000(10e12.4)                   -1     HYDRAULIC CONDUCTIVITY Layer  10
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11 1.0000000(10e12.4)                   -1     VERTICAL HYDRAULIC CONDUCTIVITY Layer  10
+  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02  1.0000e+02
+        11     1.000(10e12.4)                   -1     PRIMARY STORAGE Layer  10
+  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05  1.0000e-05

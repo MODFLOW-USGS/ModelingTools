@@ -1,0 +1,12 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportMt3dmsReinject.mls
+FTL 10 ImportMt3dmsReinject.ftl
+DATA 17 ImportMt3dmsReinject.cnf
+BTN 1 ImportMt3dmsReinject.btn
+DATA(BINARY) 201 ImportMt3dmsReinject_Chem1.ucn
+DATA 601 ImportMt3dmsReinject_Chem1._mas
+DATA 401 ImportMt3dmsReinject_Chem1.mto
+ADV 2 ImportMt3dmsReinject.adv
+DSP 3 ImportMt3dmsReinject.dsp
+SSM 4 ImportMt3dmsReinject.ssm
+GCG 9 ImportMt3dmsReinject.gcg

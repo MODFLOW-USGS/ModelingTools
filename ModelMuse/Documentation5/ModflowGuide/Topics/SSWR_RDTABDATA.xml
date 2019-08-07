@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SWR1 Time Series Utility Subroutine SSWR_RDTABDATA</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SWR1 Time Series Utility Subroutine SSWR_RDTABDATA</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Subroutine SSWR_RDTABDATA reads time series data from external ASCII (formatted) and binary (unformatted) files and can be used to define rainfall (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" anchor="RAIN" styleclass="Normal" translate="true">RAIN</link><text styleclass="Normal" translate="true">), evaporation (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" anchor="EVAP" styleclass="Normal" translate="true">EVAP</link><text styleclass="Normal" translate="true">), lateral flow (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" anchor="QLATFLOW" styleclass="Normal" translate="true">QLATFLOW</link><text styleclass="Normal" translate="true">), constant-stage reach stages (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" anchor="STAGE" styleclass="Normal" translate="true">STAGE</link><text styleclass="Normal" translate="true">), structure data (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" anchor="STRCRIT" styleclass="Normal" translate="true">STRCRIT</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" anchor="STRVAL" styleclass="Normal" translate="true">STRVAL</link><text styleclass="Normal" translate="true">) for operable surface water control structures, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" styleclass="Normal" translate="true">SWR1</link><text styleclass="Normal" translate="true"> time-step lengths. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" styleclass="Normal" translate="true">SWR1</link><text styleclass="Normal" translate="true"> input item that uses this subroutine is item 4d.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><text styleclass="Citation" translate="true">Hughes, J.D., Langevin, C.D., Chartier, K.L., and White, J.T., 2012, Documentation of the Surface-Water Routing (SWR1) Process for modeling surface-water flow with the U.S. Geological Survey Modular Ground-Water Model (MODFLOW-2005): U.S. Geological Survey Techniques and Methods, book 6, chap. A40 (Version 1.0), 113 p. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A40" target="_blank" styleclass="Normal" translate="true">https://pubs.er.usgs.gov/publication/tm6A40</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" styleclass="Normal" translate="true">Surface-Water Routing (SWR)</link><text styleclass="Normal" translate="true"> process</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notres</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For binary (unformatted) external time series files, Items 0 and 1 must not be included and variables in Item 2 must be written as single precision variables.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0. [#Text] </text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—# must be in column 1. Item 0 can be repeated multiple times.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 1 is optional.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">TIMEOFFSET</text><text styleclass="Normal" translate="true"> TIMEOFFSETVAL </text><text styleclass="Keywords" translate="true">TIMESCALE</text><text styleclass="Normal" translate="true"> TIMESCALEVAL </text><text styleclass="Keywords" translate="true">OFFSET</text><text styleclass="Normal" translate="true"> OFFSETVAL </text><text styleclass="Keywords" translate="true">SCALE</text><text styleclass="Normal" translate="true"> SCALEVAL</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TIMEOFFSET TIMEOFFSETVAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TIMEOFFSETVAL—an optional real value that defines the offset to apply to the simulation time (SIMTIME) specified in item 2. If TIMEOFFSETVAL is defined, it must be preceeded by the keyword </text><text styleclass="Keywords" translate="true">TIMEOFFSET</text><text styleclass="Normal" translate="true">. If TIMEOFFSETVAL is not defined, a default value of 0.0 is used. The SIMTIME used by the SWR1 Process is the product ofTIMESCALEVAL (defined below) and sum of SIMTIME and TIMEOFFSETVAL. TIMEOFFSETVAL can be used to modify the time for a dataset (for example, convert SIMTIME data from one relative starting point to another).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TIMESCALE TIMESCALEVAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TIMESCALEVAL—an optional real value that defines the scaling factor to apply to the adjusted SIMTIME (the sum of SIMTIME and TIMEOFFSETVAL) derived from the values specified in item 2. If TIMESCALEVAL is defined, it must be preceeded by the keyword </text><text styleclass="Keywords" translate="true">TIMESCALE</text><text styleclass="Normal" translate="true">. If TIMESCALEVAL is not defined, a default value of 1.0 is used. The SIMTIME used by the SWR1 Process is the product of TIMESCALEVAL and the sum of SIMTIME and TIMEOFFSETVAL (defined above). TIMESCALEVAL can be used to perform a unit conversion on the SIMTIME in a dataset (for example, convert SIMTIME data from hours to days).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OFFSET OFFSETVAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">OFFSETVAL—an optional real value that defines the offset to apply to the values (VALUE) specified in item 2. IfOFFSETVAL is defined, it must be preceeded by the keyword </text><text styleclass="Keywords" translate="true">OFFSET</text><text styleclass="Normal" translate="true">. If OFFSETVAL is not defined, a default value of 0.0 is used. The value used by the SWR1 Process is the product of SCALEVAL (defined below) and the sum of VALUE and OFFSETVAL. OFFSETVAL can be used to modify the datum for a dataset (for example, convert stage data from one vertical datum to another).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SCALE SCALEVAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SCALEVAL—an optional real value that defines the scaling factor to apply to the adjusted values (the sum of VALUE and OFFSETVAL) derived from the values specified in item 2. If SCALEVAL is defined, it must be preceeded by the key­word </text><text styleclass="Keywords" translate="true">SCALE</text><text styleclass="Normal" translate="true">. If SCALEVAL is not defined, a default value of 1.0 is used. The value used by the SWR1 Process is the product of SCALEVAL and the sum of VALUE and OFFSETVAL (defined above). SCALEVAL can be used to perform a unit conversion on the values in a dataset (for example, convert stage data from feet to meters).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SIMTIME(1) VALUE(1)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SIMTIME(2) VALUE(2) </text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">. . .</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">SIMTIME(N) VALUE(N)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SIMTIME]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SIMTIME—a real value that defines the time of the VALUE specified on the same line. Times are relative to the model simulation time (TOTIM). The last line of the must have a SIMTIME value that exceeds the total model simulation time.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VALUE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VALUE—a real value that defines the value at the select simulation time for the data type specified in Item 4d. The units must be consistent with the data type (CTABTYPE) specified in Item 4d.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

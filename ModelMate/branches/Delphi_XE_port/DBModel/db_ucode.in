@@ -1,0 +1,197 @@
+# ----------------------------------
+# UCODE input for Denver Basin model
+# ----------------------------------
+
+BEGIN Options
+  Verbose=0
+END Options
+
+# ------------------------------
+# REGRESSION-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+  ModelName=Denver_Basin
+  ModelLengthUnits=feet
+  ModelTimeUnits=days
+  sensitivities=yes
+  optimize=no
+  StartSens=allss
+  FinalSens=allss
+  DataExchange=yes
+END UCODE_CONTROL_DATA 
+
+BEGIN REG_GN_CONTROLS KEYWORDS
+  tolpar=0.01              
+  maxiter=20     
+  maxchange=2.0                         
+  stats_on_nonconverge=yes 
+END REG_GN_CONTROLS                  
+
+BEGIN MODEL_COMMAND_LINES
+  Command=model.bat
+  purpose=forward
+  CommandId=fwd_model
+END MODEL_COMMAND_LINES
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS TABLE
+  nrow=7 ncol=5  columnlabels
+  groupname  SENMETHOD  CONSTRAIN  PERTURBAMT  MAXCHANGE
+  pg_HK         1         YES        0.01         2.0
+  pg_VKA        1         YES        0.01         2.0
+  pg_SS         1         YES        0.01         2.0
+  pg_SY         1         YES        0.01         2.0
+  pg_RCH        1         YES        0.01         2.0
+  pg_Misc       1         YES        0.01         2.0
+  pg_Q          1         YES        0.01         2.0
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA TABLE
+  nrow=77  ncol=9  columnlabels
+  paramname       startvalue    GROUPNAME  transform  ADJUSTABLE  LOWERVALUE  UPPERVALUE  LOWERCONSTRAINT  UPPERCONSTRAINT
+  VANI_QPlat      9.927141       pg_VKA      no          yes        1.0          1.0e+6       1.0                1.0e+6      
+  VANI_Qbas       10.00000       pg_VKA      no          yes        1.0          1.0e+6       1.0                1.0e+6      
+  VANI_BR         1.000000       pg_VKA      no          yes        1.0          1.0e+6       1.0                1.0e+6      
+  SY_Qal         0.1650000       pg_SY       no          yes        1.0e-4       0.5          1.0e-4             0.5         
+  SY_TDW         0.1520000       pg_SY       no          yes        1.0e-4       0.5          1.0e-4             0.5         
+  SY_TKD         0.1330000       pg_SY       no          yes        1.0e-4       0.5          1.0e-4             0.5         
+  SY_KA          0.1780000       pg_SY       no          yes        1.0e-4       0.5          1.0e-4             0.5         
+  SY_KLF         0.1860000       pg_SY       no          yes        1.0e-4       0.5          1.0e-4             0.5         
+  SS_coarse      5.2000000E-07   pg_SS       no          yes        1.0e-8       1.0e-4       1.0e-8             1.0e-4
+  SS_fine        1.7000000E-06   pg_SS       no          yes        1.0e-8       1.0e-4       1.0e-8             1.0e-4
+  ET_MAX          45.00000       pg_Misc     no          yes        1.0e-5       100.0        1.0e-5             100.0       
+  DRN_COND        1500.000       pg_Misc     no          yes        1.0e-2       1.0e7        1.0e-2             1.0e7       
+  RIV_LAKES       2.250000       pg_Misc     no          yes        1.0e-3       1.0e7        1.0e-3             1.0e7       
+  GHB_BS_CK       113.0000       pg_Misc     no          yes        1.0e-2       1.0e7        1.0e-2             1.0e7       
+  GHB_Nuss        10.000         pg_Misc     no          yes        1.0e-2       1.0e7        1.0e-2             1.0e7       
+  SFR_PLATTE     0.7570898       pg_Misc     no          yes        1.0e-5       1.0e7        1.0e-5             1.0e7       
+  SFR_TRIBS      2.0571836E-02   pg_Misc     yes         yes        1.0e-5       1.0e7        1.0e-5             1.0e7       
+  RCH_Qal        7.0000000E-02   pg_RCH      no          yes        1.0e-3       0.3          1.0e-3             0.3         
+  RCH_Tdw        2.0258132E-02   pg_RCH      no          yes        1.0e-3       0.3          1.0e-3             0.3         
+  RCH_TKd        1.0861378E-02   pg_RCH      no          yes        1.0e-4       0.2          1.0e-4             0.2         
+  RCH_Ka         1.3672291E-02   pg_RCH      no          yes        1.0e-4       0.2          1.0e-4             0.2         
+  RCH_Klf        1.3672291E-02   pg_RCH      no          yes        1.0e-4       0.2          1.0e-4             0.2         
+  RCH_Resid       2.500000       pg_RCH      no          yes        1.0e-4       20.0         1.0e-4             20.0        
+  RCH_AgIrr       10.00000       pg_RCH      no          yes        1.0e-4       40.0         1.0e-4             40.0        
+  K_Q_Platte      200.0000       pg_HK       no          yes        1.E-6        1.E5         1.E-6              1.E5         layer 1 K
+  K_Q_bas         5.000000       pg_HK       no          yes        1.E-6        1.E5         1.E-6              1.E5         layer 1 K
+  K_utdw          4.738779       pg_HK       yes         yes        1.E-4        1.E2         1.E-4              1.E2         layer 2 K
+  K_tdwc         1.4229625E-05   pg_HK       yes         yes        1.E-8        1.E-1        1.E-8              1.E-1        layer 3 K
+  K_ltdw         0.2661902       pg_HK       yes         yes        1.E-4        1.E2         1.E-4              1.E2         layer 4 K
+  K_tkduc        1.5974679E-05   pg_HK       yes         yes        1.E-8        1.E-1        1.E-8              1.E-1        layer 5 K
+  p6_01          3.9430396E-04   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2         layer 6 K
+  p6_02          6.3169157E-05   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p6_03          9.6829513E-04   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p6_04          8.8154434E-05   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p6_05          2.2201419E-02   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p6_06          8.3956355E-05   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p6_07          4.2581300E-03   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p6_08          2.6178965E-05   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  K_tkdlc        9.7308937E-05   pg_HK       yes         yes        1.E-8        1.E-1        1.E-8              1.E-1        layer 7 K
+  pKa_02         1.6350160E-02   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3         layers 8 & 10 K
+  pKa_07          21.82543       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  pKa_08          3.172329       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  pKa_09         2.3867778E-04   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  pKa_10         0.8548844       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  pKa_11         1.4688726E-03   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  pKa_12         1.0000000E-04   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p8_01           95.90432       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3         layer 8 K
+  p8_03           3.305453       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p8_04           619.6551       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p8_05          0.2236226       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p8_06           8.731991       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  K_kac          1.2845332E-03   pg_HK       yes         yes        1.E-8        1.E-1        1.E-8              1.E-1        layer 9 K
+  p10_01         4.0127821E-04   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3         layer 10 K
+  p10_03         7.6979703E-03   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p10_04          5.923479       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p10_05         5.4340548E-04   pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  p10_06          4.425060       pg_HK       yes         yes        1.E-4        1.E3         1.E-4              1.E3           |
+  K_klc          1.3137457E-05   pg_HK       yes         yes        1.E-8        1.E-1        1.E-8              1.E-1        layer 11 K
+  p12_01          52.17523       pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2         layer 12 K
+  p12_02          44.60157       pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_03          2.585963       pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_04         3.0535194E-04   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_05         6.1765649E-02   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_06          9.489471       pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_07         4.5298429E-02   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_08         9.4795347E-05   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_09          40.39241       pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_10         1.1498528E-05   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  p12_11         3.0011281E-03   pg_HK       yes         yes        1.E-5        1.E2         1.E-5              1.E2           |
+  Skin            2.000000       pg_HK       no          yes        0.001        100.0        0.001              100.0        MNW loss coefficient
+  FLWG_WELLS      14.00451       pg_HK       yes         yes        0.01         10000.       0.01               10000.      
+  Q_Qal_IR       -4890.240       pg_Q        no          yes        -9000.       -100.        -9000.             -100.       
+  Q_Qal_MU       -1.000000       pg_Q        no          yes        -9000.       -100.        -9000.             -100.       
+  Q_Qal_CI       -1071.360       pg_Q        no          yes        -9000.       -100.        -9000.             -100.       
+  Q_BR_IR        -4890.240       pg_Q        no          yes        -9000.       -100.        -9000.             -100.       
+  Q_BR_MU        -1.000000       pg_Q        no          yes        -9000.       -100.        -9000.             -100.       
+  Q_BR_CI        -1071.360       pg_Q        no          yes        -9000.       -100.        -9000.             -100.       
+END PARAMETER_DATA 
+
+BEGIN OBSERVATION_GROUPS 
+  groupname=heads  plotsymbol=1  statflag=sqrwt
+  groupname=flows  plotsymbol=2  statflag=sqrwt
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA TABLE
+  NROW=5157  NCOL=4  COLUMNLABELS  DATAFILES=1
+  obsname    obsvalue     statistic    groupname
+  obs_data.txt
+END OBSERVATION_DATA TABLE
+
+BEGIN MODEL_INPUT_FILES  TABLE
+  NROW=6  NCOL=2  COLUMNLABELS
+  TEMPLATEFILE        MODINFILE       
+  mod16pest_sen.tpl   mod16pest.sen
+  ppt06.tpl           pilot3_pts06.txt
+  ppt08.tpl           pilot4_pts08.txt
+  ppt10.tpl           pilot4_pts10.txt
+  ppt12.tpl           pilot4_pts12.txt
+  db_mnw.tpl          db.mnw
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES  TABLE
+  NROW=9  NCOL=3  COLUMNLABELS
+  INSTRUCTIONFILE      MODOUTFILE        CATEGORY
+  mod16trosom_om.jin   mod16trosom._om     obs
+  gage03tr.jin         gage03.flows        obs
+  gage04tr.jin         gage04.flows        obs
+  gage05tr.jin         gage05.flows        obs
+  gage06tr.jin         gage06.flows        obs
+  gage07tr.jin         gage07.flows        obs
+  gage10tr.jin         gage10.flows        obs
+  gage11tr.jin         gage11.flows        obs
+  gage12tr.jin         gage12.flows        obs
+END MODEL_OUTPUT_FILES
+
+BEGIN PARALLEL_CONTROL
+  parallel=yes
+  wait=0.005
+  verboserunner=5
+  autostoprunners=no
+  timeoutfactor=2.5
+END PARALLEL_CONTROL
+
+BEGIN PARALLEL_RUNNERS TABLE
+  NROW=14 NCOL=3  COLUMNLABELS
+  RUNNERNAME   RUNNERDIR                                        RUNTIME
+  Jumbo      \\Igskahcwwsc154\Shared\DenverBasin\Jumbo\        16500  
+  Mumbo	     \\Igskahcwwsc154\Shared\DenverBasin\Mumbo\        16500  
+  Frodo      \\Igskahcwltcsp2\Shared\DenverBasin\Frodo\        16500
+  Bilbo      \\Igskahcwltcsp2\Shared\DenverBasin\Bilbo\        16500
+  Ditto      \\Igskahcwwsc140\Shared\DenverBasin\Ditto\        10060
+  Gomez      \\Igskahcwwsc069\Shared\DenverBasin\Gomez\        16560
+  Morticia   \\Igskahcwwsc069\Shared\DenverBasin\Morticia\     16560
+  Toto       \\Igskahcwwsc012\Shared\DenverBasin\Toto\         16560
+  Fez        \\Igskahcwwsc064\Shared\DenverBasin\Fez\          16560
+  Kelso      \\Igskahcwwsc064\Shared\DenverBasin\Kelso\        16560
+  Hyde       \\Igskahcwwsc064\Shared\DenverBasin\Hyde\         16560
+  Jackie     \\Igskahcwwsc064\Shared\DenverBasin\Jackie\       16560
+  Clouseau   \\Igskahcwwsc118\Shared\DenverBasin\Clouseau\     16560
+  Kato       \\Igskahcwwsc118\Shared\DenverBasin\Kato\         16560 
+END PARALLEL_RUNNERS
+

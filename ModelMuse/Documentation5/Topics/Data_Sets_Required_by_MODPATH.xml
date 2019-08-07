@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets Required by MODPATH</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets Required by MODPATH</text></para>
+    </header>
+    <para styleclass="Normal"><table id="ModpathDataSets_srt_" styleclass="Default" rowcount="5" colcount="4" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <thead style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MODPATH_DataSets_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MODPATH_Description_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Description</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MODPATH_Equivialent_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">MODPATH Equivalent</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_MODPATH_WhenUsed_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">When used</text></para>
+        </td>
+      </thead>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Porosity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies the porosity.</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Basic Data File: Item 7: POR</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Modpath_Zone</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies zone numbers in MODPATH</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">IBOUND</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When the user </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH" anchor="ZoneArrayOption" styleclass="Table Cell" translate="true">chooses to use zones</link><text styleclass="Table Cell" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Modpath_Budget</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specifies cells for which detailed budgets should be printed.</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODPATH Simulation file, Item 27</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH" anchor="BudgetOutputOption" styleclass="Table Cell" translate="true">user requests budgets for specific cells</link><text styleclass="Table Cell" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Modpath_Retardation</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">retardation factors</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Simulation file, Items 32 and 33: RetardationFactor and RetardationFactorCB</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">When </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH" anchor="RetardationOption" styleclass="Table Cell" translate="true">the user chooses to specify retardation</link><text styleclass="Table Cell" translate="true">.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

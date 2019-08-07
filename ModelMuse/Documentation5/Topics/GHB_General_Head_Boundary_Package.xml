@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GHB: General-Head Boundary Package Pane</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">GHB: General-Head Boundary Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the General Head Boundary package, there is a linear relationship between the head in the general head boundary cell and the flow of water into or out of the groundwater system at the boundary. </text><text styleclass="Normal" style="font-weight:normal;" translate="true">This linear characteristic is advantageous for automated calibration of models. </text><text styleclass="Normal" translate="true">The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Dependant_Flux" styleclass="Normal" style="font-weight:bold;" translate="true">Head Dependant Flux</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">GHB: General-Head Boundary package pane</text><text styleclass="Normal" translate="true">, the user can define parameters for the general-head boundaries. These parameters will be multiplied by user-specified </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB_Object_Pane" styleclass="Normal" translate="true">multipliers</link><text styleclass="Normal" translate="true"> to determine the general-head conductances defined by parameters. The user can also set up general-head boundaries that do not involve parameters. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Objects" styleclass="Normal" translate="true">Objects</link><text styleclass="Normal" translate="true"> must be used to define the locations of the general-head boundaries.</text></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="LinkToManageParameters"/></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectVertexY</title>
+  <keywords>
+    <keyword translate="true">ObjectVertexY</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectVertexY</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectVertexY</text><text styleclass="Normal" translate="true">(VertexIndex) returns the Y coordinate of the vertex in the object indicated by VertexIndex. For objects drawn on the front view, ObjectVertexY returns zero.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Lake</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Lake</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Lake</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Sutra Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. It is used to specify Lake boundaries in SUTRA 3.0.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:normal;" translate="true">The </text><text styleclass="Strong" translate="true">Lake</text><text styleclass="Normal" translate="true"> pane is only visible if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Properties_Tab" anchor="EvaluatedAt" styleclass="Normal" style="font-weight:bold;" translate="true">Evaluated at</link><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Nodes</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are four formulas that can be set on the </text><text styleclass="Strong" translate="true">Lake</text><text styleclass="Normal" translate="true"> pane.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Initial stage (STGI)</text><text styleclass="Normal" translate="true"> Initial stage in the lake to which the specification applies. If STGI is below the lowest point in the lake bathymetry, the lake is initially dry. [L]</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Initial concentration or temperature (UWI)</text><text styleclass="Normal" translate="true"> Initial lake-water concentration or temperature in the lake to which the specification applies. [Ms/M or C°]</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Fraction of recharge diverted (FRRO)</text><text styleclass="Normal" translate="true"> Value of the fraction of groundwater recharge diverted as runoff from generalized-flow nodes within the basin of the lake to which the specification applies.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Fraction of discharge diverted (FDRO)</text><text styleclass="Normal" translate="true"> Value of the fraction of groundwater discharge diverted as runoff from generalized-flow nodes within the basin of the lake to which the specification applies.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">These formulas set the values of four data sets. The data sets are classified under &quot;Required|SUTRA_Lake&quot;. The mesh can be colored with these data sets but because values may not be assigned to all nodes, these data sets can not be used in formulas for other data sets and contouring the mesh with these data sets is not allowed.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

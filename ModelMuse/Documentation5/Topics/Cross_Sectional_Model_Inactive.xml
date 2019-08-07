@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Inactive Cells</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Inactive Cells</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The cells that represent the portions of the geologic units that have been eroded away should be inactive cells. On the front view of the model, draw a polygon around those cells (Object|Create|Polygon </text><image src="CreatePolygon.png" scale="100.00%" styleclass="Normal"><title translate="true">Create Polygon Object button</title></image><text styleclass="Normal" translate="true">). However, be sure to to surround the center of the lowermost cell in the first column because that cell will be one of the constant head boundaries. In the Object Properties dialog box, set the formula for the &quot;Active&quot; (Required|Hydrology|Active) data set to &quot;False&quot;. Then click OK. If you wish </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Normal" translate="true">color the grid</link><text styleclass="Normal" translate="true"> with the Active data set. The cells whose centers are surrounded by the polygon should be inactive.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection9.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Row and Column Numbering in MODFLOW and PHAST</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PHAST and MODFLOW differ in how rows and layers are numbered as shown in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Grid" anchor="Figure3" styleclass="Normal" translate="true">figure 3</link><text styleclass="Normal" translate="true">. PHAST uses a standard right-hand coordinate system with the 1, 1, 1 layer, row, column in the closest lower left corner of the grid. MODFLOW is oriented with 1, 1, 1 in the furthest upper left corner.</text></para>
+  </body>
+</topic>

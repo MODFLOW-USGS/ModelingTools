@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 AssignementTestModflow.lst REPLACE
+DATA(BINARY)      9 AssignementTestModflow.cbc REPLACE
+DIS              12 AssignementTestModflow.dis OLD
+BAS6             13 AssignementTestModflow.bas OLD
+OC               39 AssignementTestModflow.oc OLD
+DATA             37 AssignementTestModflow.fhd REPLACE
+DATA             38 AssignementTestModflow.fdn REPLACE
+PCG              18 AssignementTestModflow.pcg OLD
+LPF              14 AssignementTestModflow.lpf OLD

@@ -1,0 +1,29 @@
+# NAME file for test case tc1-true
+# Modified for use with MODFLOW-2005
+#
+# NOTE: Forward slashes (/) in pathnames may need to be converted
+#       to back slashes (\) in some computing environments
+#
+# Output files
+list            12  ..\test_Modflow\tc1-true.lst
+data            50  ..\test_Modflow\tc1-true.obsout
+#
+# Obs process input files
+hob             22  ..\test_Modflow\tc1-true.hob
+rvob            23  ..\test_Modflow\tc1-true.orv
+#
+# Global input files
+dis             31  ..\test_Modflow\tc1-true.dis
+zone            32  ..\test_Modflow\tc1-true.zon
+mult            33  ..\test_Modflow\tc1-true.mlt
+pval            34  ..\test_Modflow\tc1-true.pvl
+#
+# Flow process input files
+bas6            41  ..\test_Modflow\tc1-true.bas          
+lpf             42  ..\test_Modflow\tc1-true.lpf
+wel             43  ..\test_Modflow\tc1-true.wel       
+pcg             45  ..\test_Modflow\tc1-true.pcg
+oc              46  ..\test_Modflow\tc1-true.oc
+ghb             47  ..\test_Modflow\tc1-true.ghb       
+riv             48  ..\test_Modflow\tc1-true.riv       
+rch             49  ..\test_Modflow\tc1-true.rch

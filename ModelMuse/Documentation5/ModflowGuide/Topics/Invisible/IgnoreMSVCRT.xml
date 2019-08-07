@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">IgnoreMSVCRT</title>
+  <body>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the compiler reports errors of the form:</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> &#160; &#160; &#160; &#160; &#160; &#160;Error 16 error LNK2005: _calloc already defined in LIBCMT.lib(calloc.obj) MSVCRT.lib(MSVCR80.dll)</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">then set Ignore Specific Library to &quot;MSVCRT&quot; as shown. </text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><image src="IgnoreMSVCRT.gif" scale="100.00%" styleclass="Image Caption"><title translate="true">illustration showing how to ignore the MSVCRT library.</title></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

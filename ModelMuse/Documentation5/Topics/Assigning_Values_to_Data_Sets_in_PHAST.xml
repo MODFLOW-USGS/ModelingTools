@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Assigning Values to Data Sets in PHAST</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Assigning Values to Data Sets in PHAST</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse assigns values to data sets at nodes or elements in PHAST models using the following procedure.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">First, a default value is assigned to every node or element by using either PHAST-style interpolation or mixtures (see &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PHAST-Style_Interpolation" styleclass="Normal" translate="true">PHAST-Style Interpolation</link><text styleclass="Normal" translate="true">&quot;), the selected interpolation method (see &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Interpolation_Methods" styleclass="Normal" translate="true">Interpolation Methods</link><text styleclass="Normal" translate="true">&quot;), or the default formula for the data set (see &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formulas" styleclass="Normal" translate="true">Formulas</link><text styleclass="Normal" translate="true">&quot; and &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets Dialog Box</link><text styleclass="Normal" translate="true">&quot;</text><conditional-text type="IF" value="PRINT,PDF,EBOOK"/><text styleclass="Normal" translate="true"> in the help system</text><conditional-text type="END"/><text styleclass="Normal" translate="true">).</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Next, each object that affects the data set is processed, and nodes or elements that are intersected or enclosed by each object are assigned values on the basis of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PHAST-Style_Interpolation" styleclass="Normal" translate="true">PHAST-style interpolation or mixtures</link><text styleclass="Normal" translate="true"> or by using the object’s formula for the data set. Each object replaces values assigned previously by the default formula or by a previous object.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">For a few data sets, the value may be further modified. For example, any negative values of Kx will be set to zero.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In PHAST, interpolation can be useful to specify the boundaries between geologic units (see example in fig. 4). To do this, the user first creates a data set for each interface between adjacent geologic units. Then the user creates point objects to specify the elevations of the interfaces at known locations. Interpolation can then be used to specify the elevations throughout the grid. These data sets for the elevations can then be used in the formulas for the upper and lower surfaces of “3-D Objects” that define properties of aquifers.</text></para>
+    <para styleclass="Normal"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="Elevations.tif" scale="75.08%" width="507" height="438" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-align:left;"><text styleclass="Image Number" translate="true">Figure 4</text><text styleclass="Image Caption" translate="true">. Example of 2-D data sets used to define the top and bottom of a geologic unit in PHAST—(A) Top view, (B) Side view, (C) Front view, (D) Three-dimensional view. In the top view (A), point objects (black squares) were used to specify the top and bottom of a geologic unit by interpolation. Polygons were then used to define the value of the hydraulic conductivity of that unit. The colored cells represent the different values of hydraulic conductivity. Note the sloping surfaces of the geologic unit visible in the front (C) and side (B) views of the model.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets Dialog Box</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

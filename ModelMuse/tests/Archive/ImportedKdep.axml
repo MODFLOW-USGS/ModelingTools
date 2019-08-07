@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportedKdep" FileType="bin">
+    <FileName Model_Name="ImportedKdep" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportedKdep" FileType="ancillary">
+    <FileName Model_Name="ImportedKdep" FileType="ancillary">ImportedKdep.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportedKdep" FileType="Model Input">
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.bas</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.dis</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.drn</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.evt</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.ghb</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.gsf</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.huf</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.jtf</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.kdep</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.mlt</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.nam.archive</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.ob_drob</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.ob_gbob</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.ob_hob</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.oc</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.pcg</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.pval</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.rch</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.wel</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">ImportedKdep.zon</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Input">usgs.ImportedKdep.reference</FileName>
+  </model>
+  <output Model_Name="ImportedKdep" FileType="Model Output">
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.cbc</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.drob_out</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.fdn</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.fhd</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.gbob_out</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.hob_out</FileName>
+    <FileName Model_Name="ImportedKdep" FileType="Model Output">ImportedKdep.lst</FileName>
+  </output>
+</Model_Archive_List>

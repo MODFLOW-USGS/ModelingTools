@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">If</title>
+  <keywords>
+    <keyword translate="true">If</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">If</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">If</text><text styleclass="Normal" translate="true">(Boolean_Value, If_True_Result, If_False_Result). If uses Boolean_Value to determine whether If_True_Result or If_False_Result is returned as a result. If Boolean_Value is true, If_True_Result returned; if Boolean_Value is false, If_False_Result is returned. Only “Boolean_Value”, constant expressions, and the result that is returned will be evaluated. The types of If_True_Result and If_False_Result must be the same but they can be of any type. The type that is returned will be the same as the type of If_True_Result and If_False_Result.</text></para>
+  </body>
+</topic>

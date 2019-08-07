@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="CFM3_example2" FileType="bin">
+    <FileName Model_Name="CFM3_example2" FileType="bin">C:\WRDAPP\CFP\mf2005cfp.exe</FileName>
+  </bin>
+  <ancillary Model_Name="CFM3_example2" FileType="ancillary">
+    <FileName Model_Name="CFM3_example2" FileType="ancillary">CFM3_example2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="CFM3_example2" FileType="Model Input">
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.bas</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.cfp</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.chd</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.coc</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.crch</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.dis</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.gsf</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.lpf</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.nam.archive</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.oc</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.pcg</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">CFM3_example2.rch</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Input">usgs.CFM3_example2.reference</FileName>
+  </model>
+  <output Model_Name="CFM3_example2" FileType="Model Output">
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">CFM3_example2.cbc</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">CFM3_example2.fdn</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">CFM3_example2.fhd</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">CFM3_example2.lst</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">NODE0001.OUT</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">NODE0002.OUT</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">TUBE0001.OUT</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="Model Output">turblam.txt</FileName>
+  </output>
+</Model_Archive_List>

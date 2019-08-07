@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Adjust Times Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Adjust Times Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Adjust Times</text><text styleclass="Normal" translate="true"> dialog box is displayed when the user attempts to open an object in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box that defines an </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SutraObservations" styleclass="Normal" translate="true">observation location</link><text styleclass="Normal" translate="true"> in SUTRA and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Time_Controls_Dialog_Box" styleclass="Normal" translate="true">time schedule</link><text styleclass="Normal" translate="true"> for that observation does not match the times that were defined when that object was last edited. The user must decide how to resolve this discrepancy. There are two choices.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The user can update the times to match the time schedule as it is currently defined.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The user can retain the original times. In this case, ModelMuse will indicate that a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SutraObservations" anchor="OBSSCH" styleclass="Normal" style="font-weight:bold;" translate="true">Custom</link><text styleclass="Normal" translate="true"> time schedule will be used for this object.</text></li>
+    </list>
+  </body>
+</topic>

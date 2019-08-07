@@ -1,0 +1,154 @@
+BEGIN Options Keywords
+  Verbose = 3
+END Options
+ 
+BEGIN Model_Command_Lines Keywords
+  Command = Debug\Rxrate.exe
+    Purpose = Forward
+    CommandID = ForwardModel
+END Model_Command_Lines
+ 
+BEGIN Parameter_Groups Table
+  NROW=3 NCOL=5 COLUMNLABELS
+  GroupName Adjustable Transform MaxChange SenMethod
+  ERatio       No         No        2.0        1
+  Fixed        No         No        2.0        1
+  RateConst    No         No        2.0        1
+END Parameter_Groups
+ 
+BEGIN Parameter_Data Table
+  NROW=5 NCOL=3 COLUMNLABELS
+  ParamName GroupName StartValue
+  k1b       RateConst   0.5
+  k2b       RateConst   0.5
+  E1ratio   ERatio      10
+  E2ratio   ERatio      10
+  TempB     Fixed       25
+END Parameter_Data
+ 
+BEGIN Observation_Groups Table
+  NROW=6 NCOL=3 COLUMNLABELS
+  GroupName Statistic StatFlag
+  Ca1       0.1       CV
+  Ca2       0.1       CV
+  Ca3       0.1       CV
+  Cb1       0.1       CV
+  Cb2       0.1       CV
+  Cb3       0.1       CV
+END Observation_Groups
+ 
+BEGIN Observation_Data Table
+  NROW=96 NCOL=3 COLUMNLABELS
+  ObsName GroupName ObsValue
+  Ca1.0     Ca1      1
+  Ca1.0.24  Ca1      0.8669
+  Ca1.0.48  Ca1      0.559
+  Ca1.0.71  Ca1      0.5385
+  Ca1.0.95  Ca1      0.3472
+  Ca1.1.19  Ca1      0.3345
+  Ca1.1.43  Ca1      0.2157
+  Ca1.1.67  Ca1      0.2078
+  Ca1.1.9   Ca1      0.134
+  Ca1.2.14  Ca1      0.1291
+  Ca1.2.38  Ca1      0.0832
+  Ca1.2.62  Ca1      0.0802
+  Ca1.2.86  Ca1      0.0517
+  Ca1.3.1   Ca1      0.0498
+  Ca1.3.33  Ca1      0.0321
+  Ca1.3.57  Ca1      0.0309
+  Ca1.3.81  Ca1      0.0199
+  Ca1.4.05  Ca1      0.0192
+  Ca1.4.29  Ca1      0.0124
+  Ca1.4.52  Ca1      0.0119
+  Ca1.4.76  Ca1      0.0077
+  Ca1.5     Ca1      0.0074
+  Ca2.0     Ca2      0.95
+  Ca2.0.24  Ca2      0.7467
+  Ca2.0.48  Ca2      0.4147
+  Ca2.0.71  Ca2      0.344
+  Ca2.0.95  Ca2      0.1911
+  Ca2.1.19  Ca2      0.1586
+  Ca2.1.43  Ca2      0.0881
+  Ca2.1.67  Ca2      0.0731
+  Ca2.1.9   Ca2      0.0406
+  Ca2.2.14  Ca2      0.0337
+  Ca2.2.38  Ca2      0.0187
+  Ca2.2.62  Ca2      0.0155
+  Ca2.2.86  Ca2      0.0086
+  Ca2.3.1   Ca2      0.0071
+  Ca2.3.33  Ca2      0.004
+  Ca3.0     Ca3      1.03
+  Ca3.0.24  Ca3      0.5969
+  Ca3.0.48  Ca3      0.265
+  Ca3.0.71  Ca3      0.1758
+  Ca3.0.95  Ca3      0.078
+  Ca3.1.19  Ca3      0.0518
+  Ca3.1.43  Ca3      0.023
+  Ca3.1.67  Ca3      0.0152
+  Ca3.1.9   Ca3      0.0068
+  Ca3.2.14  Ca3      0.0045
+  Ca3.2.38  Ca3      0.002
+  Cb1.0     Cb1      0.5
+  Cb1.0.24  Cb1      0.7075
+  Cb1.0.48  Cb1      0.6552
+  Cb1.0.71  Cb1      0.8471
+  Cb1.0.95  Cb1      0.7031
+  Cb1.1.19  Cb1      0.8475
+  Cb1.1.43  Cb1      0.6701
+  Cb1.1.67  Cb1      0.7796
+  Cb1.1.9   Cb1      0.6002
+  Cb1.2.14  Cb1      0.6838
+  Cb1.2.38  Cb1      0.5177
+  Cb1.2.62  Cb1      0.582
+  Cb1.2.86  Cb1      0.4358
+  Cb1.3.1   Cb1      0.4855
+  Cb1.3.33  Cb1      0.3608
+  Cb1.3.57  Cb1      0.3993
+  Cb1.3.81  Cb1      0.295
+  Cb1.4.05  Cb1      0.325
+  Cb1.4.29  Cb1      0.2392
+  Cb1.4.52  Cb1      0.2626
+  Cb1.4.76  Cb1      0.1927
+  Cb1.5     Cb1      0.2109
+  Cb2.0     Cb2      0.53
+  Cb2.0.24  Cb2      0.7905
+  Cb2.0.48  Cb2      0.7285
+  Cb2.0.71  Cb2      0.9045
+  Cb2.0.95  Cb2      0.7106
+  Cb2.1.19  Cb2      0.8055
+  Cb2.1.43  Cb2      0.5972
+  Cb2.1.67  Cb2      0.6507
+  Cb2.1.9   Cb2      0.4692
+  Cb2.2.14  Cb2      0.501
+  Cb2.2.38  Cb2      0.3558
+  Cb2.2.62  Cb2      0.3755
+  Cb2.2.86  Cb2      0.2643
+  Cb2.3.1   Cb2      0.2771
+  Cb2.3.33  Cb2      0.194
+  Cb3.0     Cb3      0.47
+  Cb3.0.24  Cb3      0.8858
+  Cb3.0.48  Cb3      0.7777
+  Cb3.0.71  Cb3      0.8916
+  Cb3.0.95  Cb3      0.6418
+  Cb3.1.19  Cb3      0.6662
+  Cb3.1.43  Cb3      0.4532
+  Cb3.1.67  Cb3      0.4545
+  Cb3.1.9   Cb3      0.3025
+  Cb3.2.14  Cb3      0.2991
+  Cb3.2.38  Cb3      0.1972
+END Observation_Data
+ 
+BEGIN Model_Input_Files Keywords
+  ModInFile = pars.txt
+    TemplateFile = pars.jtf
+END Model_Input_Files
+ 
+BEGIN Model_Output_Files Keywords
+  ModOutFile = rxrate.out.csv
+    InstructionFile = Ca.jif
+    Category = Obs
+  ModOutFile = rxrate.out.csv
+    InstructionFile = Cb.jif
+    Category = Obs
+END Model_Output_Files
+ 

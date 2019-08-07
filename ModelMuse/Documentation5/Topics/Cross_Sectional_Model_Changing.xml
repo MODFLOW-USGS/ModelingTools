@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Changing the Row Width</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Changing the Row Width</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Once the grid has been created, we see that it would be more convenient to work with a larger row width. To change it select &quot;Grid|Specify Grid Lines&quot;, Switch to the &quot;Rows (Y&apos;)&quot; tab, and change the second row position from -1000 to -5000</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection2.bmp" scale="50.00%" width="401" height="280" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">&#32;</text><image src="CrossSection3.bmp" scale="50.00%" width="228" height="246" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

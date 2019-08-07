@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="StreamTest2" FileType="bin">
+    <FileName Model_Name="StreamTest2" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="StreamTest2" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="StreamTest2" FileType="ancillary">
+    <FileName Model_Name="StreamTest2" FileType="ancillary">StreamTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="StreamTest2" FileType="Model Input">
+    <FileName Model_Name="StreamTest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.bas</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.dis</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.gsf</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.lmt</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.lpf</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.nam.archive</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.oc</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.pcg</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">StreamTest2.str</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Input">usgs.StreamTest2.reference</FileName>
+  </model>
+  <output Model_Name="StreamTest2" FileType="Model Output">
+    <FileName Model_Name="StreamTest2" FileType="Model Output">StreamTest2.cbc</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Output">StreamTest2.fdn</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Output">StreamTest2.fhd</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Output">StreamTest2.ftl</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Output">StreamTest2.lst</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Model Output">StreamTest2.str_flow</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="StreamTest2" FileType="Mt3dms Input">
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">StreamTest2.adv</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">StreamTest2.btn</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">StreamTest2.dsp</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">StreamTest2.gcg</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">StreamTest2.mt_nam.archive</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">StreamTest2.ssm</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Input">usgs.StreamTest2_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="StreamTest2" FileType="Mt3dms Output">
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Output">StreamTest2.cnf</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Output">StreamTest2.mls</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Output">StreamTest2_abc._mas</FileName>
+    <FileName Model_Name="StreamTest2" FileType="Mt3dms Output">StreamTest2_abc.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

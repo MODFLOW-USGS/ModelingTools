@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ActiveOnLayerTest" FileType="bin">
+    <FileName Model_Name="ActiveOnLayerTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ActiveOnLayerTest" FileType="ancillary">
+    <FileName Model_Name="ActiveOnLayerTest" FileType="ancillary">ActiveOnLayerTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ActiveOnLayerTest" FileType="Model Input">
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.bas</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.dis</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.gsf</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.lpf</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.nam.archive</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.oc</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">ActiveOnLayerTest.pcg</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Input">usgs.ActiveOnLayerTest.reference</FileName>
+  </model>
+  <output Model_Name="ActiveOnLayerTest" FileType="Model Output">
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Output">ActiveOnLayerTest.cbc</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Output">ActiveOnLayerTest.fdn</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Output">ActiveOnLayerTest.fhd</FileName>
+    <FileName Model_Name="ActiveOnLayerTest" FileType="Model Output">ActiveOnLayerTest.lst</FileName>
+  </output>
+</Model_Archive_List>

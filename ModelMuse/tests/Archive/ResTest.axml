@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ResTest" FileType="bin">
+    <FileName Model_Name="ResTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ResTest" FileType="ancillary">
+    <FileName Model_Name="ResTest" FileType="ancillary">ResTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ResTest" FileType="Model Input">
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.bas</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.chd</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.dis</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.gsf</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.lpf</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.nam.archive</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.oc</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.pcg</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">ResTest.res</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Input">usgs.ResTest.reference</FileName>
+  </model>
+  <output Model_Name="ResTest" FileType="Model Output">
+    <FileName Model_Name="ResTest" FileType="Model Output">ResTest.cbc</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Output">ResTest.fdn</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Output">ResTest.fhd</FileName>
+    <FileName Model_Name="ResTest" FileType="Model Output">ResTest.lst</FileName>
+  </output>
+</Model_Archive_List>

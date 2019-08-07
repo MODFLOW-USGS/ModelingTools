@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Grid Unit Array File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Grid Unit Array File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Grid unit data can be provided in two forms: (1) as an integer array of grid unit numbers, or (2) as an array of real numbers that MODPATH-PLOT converts to an integer array of grid unit numbers using interval ranges specified by the user. An interactive option is provided to display a legend for grid unit array data. The grid unit array file has the following structure:</text></para>
+    <para styleclass="Normal"><table rowcount="8" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="TableTitle"><text styleclass="TableTitle" translate="true">Data Set</text></para>
+        </td>
+        <td>
+          <para styleclass="TableTitle"><text styleclass="TableTitle" translate="true">Description</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Option]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Option-- is a keyword code:</text></para>
+                <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Keyword" translate="true">ZONES</text><text styleclass="Normal" translate="true"> indicates that an integer array of grid unit numbers will be read.</text></para>
+                <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Keyword" translate="true">RANGES</text><text styleclass="Normal" translate="true"> indicates that a real-number array will be read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Title]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Title-- is a text string that will be used as the legend title when a legend is displayed</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GUarray]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="margin-left:72px;"><text styleclass="Normal" translate="true">Format: 2-D array reader (U2DINT or U2DREL)</text></para>
+                <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">GUarray-- is an integer array of grid unit numbers if the ZONES option is in effect, or an array of real numbers if the RANGES option is in effect. For a standard 3-D model, GUarray is read as a series of 2-D arrays, one layer at a time. If the model is a 1-row cross section specified with the XSECTION option, GUarray is read as a single 2-D array for the cross section. When an integer array is entered, a value of 0 designates a grid cell that should not be shaded. </text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><text styleclass="Keyword" translate="true">RANGES</text><text styleclass="Normal" translate="true"> option is in effect, include the following data items that define the ranges used to compute the integer grid unit array used by MODPATH-PLOT:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GUnumber MinValue MaxValue</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVALUES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GUnumber]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">GUnumber-- is the grid unit number (&gt; 0) assigned to values of GUarray that fall in this range.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MinValue]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MinValue-- defines the minimum value of the range.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MaxValue]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MaxValue-- defines the maximum value of the range.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Open-ended ranges can be specified using the symbols &lt; and &gt; in place of the minimum and maximum values, respectively. Specifying &quot;&lt;&quot; for the minimum value sets the minimum = -10</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">30</text><text styleclass="Normal" translate="true">. Specifying &quot;&gt;&quot; for the maximum value sets the maximum = 10</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">30</text><text styleclass="Normal" translate="true">. The minimum and maximum values specified for each grid unit number will be used to generate legend entries when a legend is displayed.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" style="text-decoration:underline;" translate="true">Or, if the </text><text styleclass="Keyword" translate="true">ZONES</text><text styleclass="Normal" style="text-decoration:underline;" translate="true"> option is in effect</text><text styleclass="Normal" translate="true">, include the following data items that define the legend entries that will be displayed for the grid unit data when a legend is displayed:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GUnumber LegendText</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVALUES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GUnumber]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">GUnumber-- is the grid unit number (&gt; 0) that corresponds to the legend entry.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LegendText]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LegendText-- text string for the legend entry.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The number of legend entries defined can be less than the total number of zones in the grid unit data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The color and hatch style associated with each grid unit number is set in the settings file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

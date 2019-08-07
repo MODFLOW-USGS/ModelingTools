@@ -1,0 +1,12 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportedP6.mls
+FTL 10 ImportedP6.ftl
+DATA 17 ImportedP6.cnf
+BTN 1 ImportedP6.btn
+DATA(BINARY) 201 ImportedP6_Comp1.ucn
+DATA 601 ImportedP6_Comp1._mas
+DATA 401 ImportedP6_Comp1.mto
+ADV 2 ImportedP6.adv
+DSP 3 ImportedP6.dsp
+SSM 4 ImportedP6.ssm
+GCG 9 ImportedP6.gcg

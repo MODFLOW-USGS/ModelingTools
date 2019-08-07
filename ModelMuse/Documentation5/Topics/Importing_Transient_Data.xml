@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Importing Transient Data</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Importing Transient Data</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">One common task in modeling is specifying transient data. For example, there may be a well whose pumping rate changes from time to time. An example of such a spreadsheet, PumpingRates.xls, is distributed with ModelMuse in the &quot;My Documents\ModelMuse Examples\examples\data\Example&quot; folder. ModelMuse makes it easy to copy such data from a spreadsheet into the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. For example, with a spreadsheet such as the one in figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">90</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">45</text><conditional-text type="END"/><text styleclass="Normal" translate="true">, the user could simply select the block of data to import and copy it to the clipboard. Then the user could select the upper left cell in the table of well pumping rates in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">91</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">46</text><conditional-text type="END"/><text styleclass="Normal" translate="true">) and press Ctrl-V on the clipboard to import the entire block of data into the model. If required, the number of rows in the table will automatically increase to accommodate the number of rows of data. It is not necessary to redefine the stress periods in the model. ModelMuse will determine the appropriate stress periods using all the transient data in the model. The example model has a single well (with a pumping rate of zero).</text></para>
+    <para styleclass="Image Caption" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><image src="Spreadsheet.bmp" scale="75.00%" width="296" height="244" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:48px; margin-left:0px; tabstops:none;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">90</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">45</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Spreadsheet containing transient data.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><image src="SpreadsheetDataImported.bmp" scale="75.00%" width="596" height="395" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:48px; margin-left:0px; tabstops:none;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">91</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">46</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Transient data transferred to ModelMuse.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">WellFootprint Program Location Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">WellFootprint Program Location Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">WellFootprint Program Location</text><text styleclass="Normal" translate="true"> dialog box is used to specify the location of the WellFootprint program on the user&apos;s computer. It also provides a link to the web page for WellFootprint. The </text><text styleclass="Strong" translate="true">WellFootprint Program Location</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|</text><text styleclass="Strong" translate="true">Well</text><text styleclass="Normal" style="font-weight:bold;" translate="true">Footprint Program Location...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can also specify the location of the text editor in which the WellFootprint listing file will be opened when WellFootprint finishes running. The text editor will only be used if the appropriate check box on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Footprint_Properties_Dialog_Bo" styleclass="Strong" translate="true">Footprint Properties</link><text styleclass="Normal" translate="true"> dialog box is checked.</text></para>
+  </body>
+</topic>

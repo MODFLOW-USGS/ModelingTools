@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 TestGHB.lst REPLACE
+DATA(BINARY)      9 TestGHB.cbc REPLACE
+DIS              12 TestGHB.dis OLD
+BAS6             13 TestGHB.bas OLD
+OC               39 TestGHB.oc OLD
+DATA             37 TestGHB.fhd REPLACE
+DATA             38 TestGHB.fdn REPLACE
+PCG              18 TestGHB.pcg OLD
+LPF              14 TestGHB.lpf OLD
+CHD              17 TestGHB.chd OLD
+GHB              19 TestGHB.ghb OLD
+WEL              20 TestGHB.wel OLD
+RIV              21 TestGHB.riv OLD
+DRN              22 TestGHB.drn OLD
+DRT              23 TestGHB.drt OLD
+PVAL             52 TestGHB.pval OLD

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Importing the Background Image</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Importing the Background Image</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next we will import the background image to help us in editing the layer elevations. Select &quot;File|Import|Image...&quot; Click the &quot;Select image&quot; button and select CrossSection.bmp. You will find it in the </text><text styleclass="Figure Referrer" translate="true">My Documents\ModelMuse Examples\</text><text styleclass="Normal" translate="true">Data\CrossSection subdirectory of the ModelMuse directory. You will be prompted to click on the image and enter the real-world coordinates of the point. First specify that the image should be viewed from the front of the model. Click near the crest of the hill and enter Coordinates of X = 5000 and Z = 100. Click on the river at the right and enter values of X =30000 and Z = 50. Then click OK to close the &quot;Import Images dialog box.&quot;</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection4.bmp" scale="70.00%" width="562" height="503" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

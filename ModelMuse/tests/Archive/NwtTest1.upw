@@ -1,0 +1,28 @@
+# UPW: Upstream Weighting package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     9  1.000000000000E+030      5     1 # Data Set 1, IUPWCB HDRY NPUPW IPHDRY
+     1     0     0 # LAYTYP
+     0     0     0 # LAYAVG
+    -1    -1    -1 # CHANI
+     0     0     0 # LAYVKA
+     0     0     0 # LAYWET
+HK1 HK  1.000000000000E-003      1 # PARNAM, PARTYP, PARVAL, NCLU
+     1 HK1_M1  ALL      1 # Layer, MLTARR, ZONARR IZ
+HK2 HK  9.999999700000E-005      1 # PARNAM, PARTYP, PARVAL, NCLU
+     2 HK2_M2  ALL      1 # Layer, MLTARR, ZONARR IZ
+HK3 HK  1.999999900000E-004      1 # PARNAM, PARTYP, PARVAL, NCLU
+     3 HK3_M3  ALL      1 # Layer, MLTARR, ZONARR IZ
+VKCB1 VKCB  1.000000000000E+000      1 # PARNAM, PARTYP, PARVAL, NCLU
+     1 VKCB1_M1  ALL      1 # Layer, MLTARR, ZONARR IZ
+VKCB2 VKCB  5.000000000000E-001      1 # PARNAM, PARTYP, PARVAL, NCLU
+     2 VKCB2_M2  ALL      1 # Layer, MLTARR, ZONARR IZ
+    12 # HK Layer 1 Layer 1
+CONSTANT     1.000000000000E+000  # HANI Layer 1 Layer 1
+CONSTANT     1.000000000000E+000  # VKA Layer 1 Layer 1
+    12 # VKCB Confining Bed 2 Layer 1
+    12 # HK Layer 3 Layer 2
+CONSTANT     1.000000000000E+000  # HANI Layer 3 Layer 2
+CONSTANT     1.000000000000E+000  # VKA Layer 3 Layer 2
+    12 # VKCB Confining Bed 4 Layer 2
+    12 # HK Layer 5 Layer 3
+CONSTANT     1.000000000000E+000  # HANI Layer 5 Layer 3
+CONSTANT     1.000000000000E+000  # VKA Layer 5 Layer 3

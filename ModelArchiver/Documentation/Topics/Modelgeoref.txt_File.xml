@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Modelgeoref.txt File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Modelgeoref.txt File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The modelgeoref.txt file is a text file that describes the geographic location of the model by giving the coordinates in decimal degrees of the four corners of the model. The user creates this file outside of ModelArchiver and selects it on this pane. The user can edit the file in ModelArchiver by clicking the &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Edit_Readme_File_Dialog_Box" styleclass="Normal" translate="true">Edit modelgeoref.txt file</link><text styleclass="Normal" translate="true">&quot; button. &#160;The description on this pane gives an example of a modelgeoref.txt file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The content required in the file is explained on pages 12 and 13 of the Office of Groundwater Technical Memorandum 2015.02 (</text><link displaytype="text" defaultstyle="true" type="weblink" href="https://water.usgs.gov/admin/memo/GW/gw2015.02.pdf" target="_blank" styleclass="Normal" translate="true">https://water.usgs.gov/admin/memo/GW/gw2015.02.pdf</link><text styleclass="Normal" translate="true">) with an additional note on page 15.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Algorithms for converting from map coordinates to decimal degree coordinates are given by Snyder (1982, </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/pp1395" target="_blank" styleclass="Normal" translate="true">https://pubs.er.usgs.gov/publication/pp1395</link><text styleclass="Normal" translate="true">).</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Here is an example of a modelgeoref.txt between the dashed lines.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">-----------------------------------------------------------------------------</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"># Reference 1</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"># Include the reference to the model documentation report and doi.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"># Reference 2</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"># Include the reference to the model data release and doi.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"># Datum</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">upper_left &#160;-80.605485 26.040685 </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">upper_right -80.097930 26.040685</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">lower_right -80.097930 25.185154</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">lower_left &#160;-80.605485 25.185154</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">-----------------------------------------------------------------------------</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

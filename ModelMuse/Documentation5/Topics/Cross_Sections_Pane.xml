@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sections Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sections Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Cross Sections</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Visualization_Dialog_Box" styleclass="Strong" translate="true">Data Visualization</link><text styleclass="Normal" translate="true"> dialog box. It can only be used with MODFLOW models and only with data sets that contain real-number data.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Cross Sections</text><text styleclass="Normal" translate="true"> pane allows the user to select one or more data sets to plot as cross sections. If a data set is plotted as a cross section, its value will be interpreted as an elevation and then be used to plot a line or lines on the front or side view of the model. Not all data sets are suitable for plotting as cross sections. Examples of data sets that are suitable include heads, the water table and Zeta surfaces from the Seawater Intrusion package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To plot a data set as a cross section, select it in the list on the left and click the right-arrow button to add it to the list of </text><text styleclass="Strong" translate="true">Data sets to plot</text><text styleclass="Normal" translate="true"> on the right. If the data set is a 3D data set, the </text><text styleclass="Strong" translate="true">Layers to plot</text><text styleclass="Normal" translate="true"> can be used to select individual layers to be plotted. The width of the lines in pixels used to draw the cross sections can be set in the </text><text styleclass="Strong" translate="true">Line thickness</text><text styleclass="Normal" translate="true"> edit box.</text></para>
+  </body>
+</topic>

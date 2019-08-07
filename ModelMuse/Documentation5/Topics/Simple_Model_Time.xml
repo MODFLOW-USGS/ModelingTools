@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Simple Model: Time</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Simple Model: Time</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a single, steady-state stress period with a length of 86400 seconds. To specify it, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|MODFLOW Time...</text><text styleclass="Normal" translate="true"> In the dialog box, set the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Starting time</text><text styleclass="Normal" translate="true"> to 0, the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Ending time</text><text styleclass="Normal" translate="true"> to 86400 and the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Max first time step length</text><text styleclass="Normal" translate="true"> to 86400. Together, the length of the stress period, the maximum length of the first time step, and the time step multiplier control the number of time steps in the stress period. Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you would prefer to set the number of time steps rather than the length of the first time step, click the cell in the table for the length of the first time step. Then click the &quot;F()&quot; button that appears in that cell to display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Time_Step_Length_Calculator" styleclass="Normal" style="font-weight:bold;" translate="true">Time Step Length Calculator</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

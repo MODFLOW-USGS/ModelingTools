@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GridName</title>
+  <keywords>
+    <keyword translate="true">GridName</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GridName</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GridName</text><text styleclass="Normal" translate="true"> returns &quot;Parent Grid&quot; for the parent grid in a MODFLOW-LGR model. For child models, </text><text styleclass="Strong" translate="true">GridName</text><text styleclass="Normal" translate="true"> returns the name assigned to the grid by the user.</text></para>
+  </body>
+</topic>

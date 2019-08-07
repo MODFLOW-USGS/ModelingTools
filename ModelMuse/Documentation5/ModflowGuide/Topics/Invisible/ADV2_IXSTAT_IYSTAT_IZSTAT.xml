@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">ADV2_IXSTAT_IYSTAT_IZSTAT</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IXSTAT, IYSTAT, IZSTAT – are flags to indicate what XSTAT, YSTAT, and ZSTAT are and how the observation weights are calculated. If the variable STATISTIC represents XSTAT, YSTAT, or ZSTAT and the variable STAT-FLAG represents IXSTAT, IYSTAT, or IZSTAT, respectively, the following definitions apply:</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 0, STATISTIC is a scaled variance [L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">], weight = 1/STATISTIC,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 1, STATISTIC is a scaled standard deviation [L], weight = 1/STATISTIC</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">, and</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 2, STATISTIC is a scaled coefficient of variation [dimensionless], weight = 1/(STATISTIC × Observation value)</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">. The observation value is calculated as the distance in the x-, y-, or z-coordinate directions between particle starting position, as defined in input item 3, and the observation positions, as defined in item 4.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GW Allocation</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GW Allocation</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The GW Allocation tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Normal" translate="true">Farms</link><text styleclass="Normal" translate="true"> dialog box. It is used to specify </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ALLOTGW" domain="ModflowGuide.hmxp" styleclass="Strong" translate="true">ALLOTGW</link><text styleclass="Normal" translate="true">, the maximum pumping limit for a particular farm&apos;s total allowable pumping. That is the sum of all the farm wells rates specified for a farm are reduced evenly to equal ALLOTGW if they exceed it.</text></para>
+  </body>
+</topic>

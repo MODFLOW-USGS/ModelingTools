@@ -1,0 +1,26 @@
+# RIV: River package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+    19     9 AUXILIARY IFACE # DataSet 2: MXACTC IRIVCB Option
+    19     0 # Data Set 5: ITMP NP Stress period 1
+     1     6    14  2.000000000000E+001   1.776575798358E+005   1.900000000000E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     7    14  1.967494757998E+001   2.381410155803E+005   1.867494757998E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     8    15  1.925351312101E+001   1.625436514858E+005   1.825351312101E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     9    15  1.896809406186E+001   2.058915482699E+005   1.796809406186E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     9    16  1.871450404063E+001   2.511348122985E+005   1.771450404063E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    10    16  1.850415637908E+001   4.006856947615E+005   1.750415637908E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    11    16  1.816886536969E+001   4.006856947615E+005   1.716886536969E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    12    16  1.783357436030E+001   4.006856947615E+005   1.683357436030E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    13    16  1.749828335091E+001   4.006856947615E+005   1.649828335091E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    14    16  1.700000000000E+001   3.951249852127E+005   1.600000000000E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    14    16  1.700000000000E+001   5.878557593197E+003   1.600000000000E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    15    16  1.647091086429E+001   4.235887367865E+005   1.547091086429E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    16    16  1.572561939562E+001   1.896530168200E+005   1.472561939562E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    16    15  1.521081904176E+001   2.339357199665E+005   1.421081904176E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    17    15  1.441170944888E+001   4.235887367865E+005   1.341170944888E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    18    15  1.338210874118E+001   4.235887367865E+005   1.238210874118E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    19    15  1.270384149404E+001   1.345040544696E+005   1.170384149404E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    19    14  1.218904114019E+001   2.890846823170E+005   1.118904114019E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1    20    14  1.100000000000E+001   3.446418938485E+005   1.000000000000E+001      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+    -1     0 # Data Set 5: ITMP NP Stress period 2
+    -1     0 # Data Set 5: ITMP NP Stress period 3
+    -1     0 # Data Set 5: ITMP NP Stress period 4
+    -1     0 # Data Set 5: ITMP NP Stress period 5

@@ -1,0 +1,28 @@
+inherited frameNumeric: TframeNumeric
+  inherited memoDescription: TMemo
+    Viewport.Width = 320.000000000000000000
+    Viewport.Height = 77.000000000000000000
+  end
+  inherited pnlBottom: TPanel
+    inherited Edit1: TEdit
+      TabOrder = 1
+    end
+    object numbxValue: TNumberBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 0
+      Cursor = crIBeam
+      DecimalDigits = 15
+      ValueType = Float
+      TextSettings.Font.Size = 16.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 305.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      StyledSettings = [Family, Style, FontColor]
+      OnChange = numbxValueChange
+      OnPaint = numbxValuePaint
+    end
+  end
+end

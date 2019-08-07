@@ -1,0 +1,773 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SFR_Table</title>
+  <body>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="25" colcount="12" style="cell-padding:2px; cell-spacing:2px; border-width:1px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:middle">
+        <td colspan="12">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">Table Illustrating when Each Data Value in Data Set 6b and 6c is Required</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">Controlling parameters</text></para>
+        </td>
+        <td colspan="9">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">Data Values</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ISFROPT" styleclass="New Materials" translate="true">ISFROPT</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ICALC2" styleclass="New Materials" translate="true">ICALC</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">Stress Period</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">HCOND1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">HCOND2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">THICKM1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">THICKM2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">ELEVUP</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">ELEVDN</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">WIDTH1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">WIDTH2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">DEPTH1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">DEPTH2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">THTS1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">THTS2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">THTI1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">THTI2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">EPS1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">EPS2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">UHC1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">UHC2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">not read</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">£</text><text styleclass="New Materials" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">not read</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">not read</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">³</text><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">£</text><text styleclass="New Materials" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">³</text><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2 or 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">£</text><text styleclass="New Materials" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2 or 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2 or 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">&gt;1</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2 or 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">³</text><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">£</text><text styleclass="New Materials" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">&gt;1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">&gt;1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">³</text><text styleclass="New Materials" translate="true">3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">£</text><text styleclass="New Materials" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">&gt;1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">&gt;1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" style="font-family:Symbol;" translate="true">³</text><text styleclass="New Materials" translate="true">3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">any</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="New Materials" translate="true">x</text></para>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

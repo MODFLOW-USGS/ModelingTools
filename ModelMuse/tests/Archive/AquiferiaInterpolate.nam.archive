@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.AquiferiaInterpolate\AquiferiaInterpolate.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.AquiferiaInterpolate\AquiferiaInterpolate.cbc REPLACE
+DIS              12 ..\..\model\model.AquiferiaInterpolate\AquiferiaInterpolate.dis OLD
+BAS6             13 ..\..\model\model.AquiferiaInterpolate\AquiferiaInterpolate.bas OLD
+OC               39 ..\..\model\model.AquiferiaInterpolate\AquiferiaInterpolate.oc OLD
+DATA             37 ..\..\output\output.AquiferiaInterpolate\AquiferiaInterpolate.fhd REPLACE
+DATA             38 ..\..\output\output.AquiferiaInterpolate\AquiferiaInterpolate.fdn REPLACE
+PCG              18 ..\..\model\model.AquiferiaInterpolate\AquiferiaInterpolate.pcg OLD
+LPF              14 ..\..\model\model.AquiferiaInterpolate\AquiferiaInterpolate.lpf OLD

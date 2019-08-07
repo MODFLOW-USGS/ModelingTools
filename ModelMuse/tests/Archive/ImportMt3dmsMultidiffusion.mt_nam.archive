@@ -1,0 +1,18 @@
+# Name File for MT3DMS created on 10/11/2018 by ModelMuse
+LIST 16 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.mls
+FTL 10 ..\..\output\output.ImportMt3dmsMultidiffusion\ImportMt3dmsMultidiffusion.ftl
+DATA 17 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.cnf
+BTN 1 ..\..\model\model.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.btn
+DATA(BINARY) 201 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp1.ucn
+DATA(BINARY) 202 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp2.ucn
+DATA(BINARY) 203 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp3.ucn
+DATA 601 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp1._mas
+DATA 602 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp2._mas
+DATA 603 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp3._mas
+DATA 401 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp1.mto
+DATA 402 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp2.mto
+DATA 403 ..\..\output\output.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion_Comp3.mto
+ADV 2 ..\..\model\model.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.adv
+DSP 3 ..\..\model\model.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.dsp
+SSM 4 ..\..\model\model.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.ssm
+GCG 9 ..\..\model\model.ImportMt3dmsMultidiffusion_MT3DMS\ImportMt3dmsMultidiffusion.gcg

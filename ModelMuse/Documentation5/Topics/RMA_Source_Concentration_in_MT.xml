@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Source Concentration in MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Source Concentration in MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The source of solutes in this model is the disposal pond. Open the object that defines the disposal pond in the Object Properties dialog box. The disposal pond is simulated as an injection well. The Concentration we specify for the Sink and Source Mixing package will be the concentration of the chloride in the injection well. We will use a concentration of 1000.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma4SourceConcentration.png" scale="60.00%" width="476" height="365" styleclass="Image Caption"><title translate="true">Object Properties dialog box showing the source concentration</title></image></para>
+  </body>
+</topic>

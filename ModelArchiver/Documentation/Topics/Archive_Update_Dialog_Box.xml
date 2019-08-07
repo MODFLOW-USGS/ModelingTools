@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Archive Update Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Archive Update Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Archive Update</text><text styleclass="Normal" translate="true"> dialog box is used to make changes to an existing model archive. The Archive Update dialog box is displayed by clicking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Update Archive</text><text styleclass="Normal" translate="true"> button on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Create_Archive" styleclass="Normal" style="font-weight:bold;" translate="true">Create Archive</link><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ModelArchiver_Main_Form" styleclass="Normal" style="font-weight:bold;" translate="true">ModelArchiver</link><link displaytype="text" defaultstyle="true" type="topiclink" href="ModelArchiver_Main_Form" styleclass="Normal" translate="true"> main form</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The dialog box displays the files both on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" translate="true">Archive Structure</link><text styleclass="Normal" translate="true"> pane and the files in the archive itself. The background color is used to indicate which files will be added, removed, or updated in the archive. Red indicates files that will be removed from the archive. Blue indicates files that will be added to the archive. Yellow indicates files that have different times in the archive and archive structure and will be updated in the archive.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To update the archive, click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Update and Close</text><text styleclass="Normal" translate="true"> button.</text></para>
+  </body>
+</topic>

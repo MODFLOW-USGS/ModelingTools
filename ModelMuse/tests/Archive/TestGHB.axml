@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="TestGHB" FileType="bin">
+    <FileName Model_Name="TestGHB" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="TestGHB" FileType="ancillary">
+    <FileName Model_Name="TestGHB" FileType="ancillary">TestGHB.gpt</FileName>
+  </ancillary>
+  <model Model_Name="TestGHB" FileType="Model Input">
+    <FileName Model_Name="TestGHB" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.bas</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.chd</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.dis</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.drn</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.drt</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.ghb</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.gsf</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.jtf</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.lpf</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.nam.archive</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.oc</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.pcg</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.pval</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.riv</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">TestGHB.wel</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Input">usgs.TestGHB.reference</FileName>
+  </model>
+  <output Model_Name="TestGHB" FileType="Model Output">
+    <FileName Model_Name="TestGHB" FileType="Model Output">TestGHB.cbc</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Output">TestGHB.fdn</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Output">TestGHB.fhd</FileName>
+    <FileName Model_Name="TestGHB" FileType="Model Output">TestGHB.lst</FileName>
+  </output>
+</Model_Archive_List>

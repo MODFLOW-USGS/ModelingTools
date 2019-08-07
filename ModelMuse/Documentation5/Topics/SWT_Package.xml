@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SWT: Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SWT: Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers Pane</text></para>
+    </header>
+    <para style="margin-top:7px; margin-bottom:7px;"><text styleclass="Font Style" style="font-family:'Times New Roman'; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">The Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers (SWT) package simulates vertical compaction in models of regional ground-water flow. The program simulates ground-water storage changes and compaction in discontinuous interbeds or in extensive confining units, accounting for stress-dependent changes in storage properties. Several features of the program make it useful for application in shallow, unconfined flow systems. Geostatic stress can be treated as a function of water-table elevation, and compaction is a function of computed changes in effective stress at the bottom of a model layer. Thickness of compressible sediments in an unconfined model layer can vary in proportion to saturated thickness. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pane for the </text><text styleclass="Strong" translate="true">SWT</text><text styleclass="Normal" translate="true"> package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Subsidence_MM" styleclass="Normal" translate="true">Subsidence</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user defines the layers with which the interbeds are associated in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ITHK" domain="ModflowGuide.hmxp" styleclass="Strong" translate="true">ITHK</link><text styleclass="Normal" translate="true"> The SWT package gives the user the option to have the thickness of the interbeds vary in proportion to the saturated thickness of the layer.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="IVOID" domain="ModflowGuide.hmxp" styleclass="Strong" translate="true">IVOID</link><text styleclass="Normal" translate="true"> The void ratio can either be treated as a function of effective stress or remain constant. </text></para>
+    <para styleclass="Normal"><anchor id="ISTPCS" styleclass="Strong"></anchor><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ISTPCS" domain="ModflowGuide.hmxp" styleclass="Strong" translate="true">ISTPCS</link><text styleclass="Normal" translate="true"> Preconsolidation stress is the minimum effective stress at which sediments will compact inelastically. Initial preconsolidation stress can be defined in one of two ways. First, arrays of initial preconsolidation stress can be read into the SUB-WT Package for each model cell. Definition of an internally consistent distribution of initial preconsolidation stress over an entire model domain can be difficult. For this reason, a second method of defining the distribution is provided. This method allows initial preconsolidation stress to be defined as an increment above initial effective stress at each cell. The computation is made by using an array of offset values for each cell and computed effective stress at each cell. Because preconsolidation stress is always greater than or equal to effective stress, initial values are changed to equal the initial effective stress for cells at which the preconsolidation stress is below the initial effective stress. The preconsolidation stress is changed to the effective stress at the end of each time step for model cells where the preconsolidation stress has been exceeded.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="ICRCC" domain="ModflowGuide.hmxp" styleclass="Strong" translate="true">ICRCC</link><text styleclass="Normal" translate="true"> An option is available to read in either (A) inelastic and elastic skeletal specific storage, or (B) recompression and compression index. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Binary output choice</text><text styleclass="Normal" translate="true"> determines whether all the binary output selected on the </text><text styleclass="Strong" translate="true">Print/Save</text><text styleclass="Normal" translate="true"> tab is saved to a single file or to multiple files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The tables on the </text><text styleclass="Strong" translate="true">Print/Save</text><text styleclass="Normal" translate="true"> tab is used to choose what initial or transient data to print or save. The upper table is for initial data. The lower table is for transient data during the specified time periods. However those time periods need not correspond to stress periods. The first row of the lower table is used to choose the format with which various types of data are printed. The user can set the values of several cells in the lower table at one time by selecting multiple cells and then using the combobox of the </text><text styleclass="Strong" translate="true">Set multiple checkboxes</text><text styleclass="Normal" translate="true"> checkbox above the table. The extensions for the binary output files that can be generated by the SWT package are listed in the table below.</text></para>
+    <para styleclass="Normal"><table rowcount="15" colcount="4" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td rowspan="2">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Data type</text></para>
+        </td>
+        <td rowspan="2">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Variables</text></para>
+        </td>
+        <td colspan="2">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Output file extension</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Single file</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Multiple files</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Subsidence</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun1, Ifl2</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtSubOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Compaction by model layer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun2, Ifl4</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtComMLOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Compaction by interbed system</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun3, Ifl6</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtComIsOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Vertical displacement</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun4, Ifl8</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtVDOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Preconsolidation stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun5, Ifl10</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtPreConStrOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change in preconsolidation stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun6, Ifl12</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtDeltaPreConStrOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Geostatic stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun7, Ifl14</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtGeoStatOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change in geostatic stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun8, Ifl16</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtDeltaGeoStatOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Effective stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun9, Ifl18</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtEffStressOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Change in effective stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun10, Ifl20</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtDeltaEffStressOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Void ratio</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun11, Ifl22</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtVoidRatioOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Compressible bed thickness</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun12, Ifl24</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtThickCompSedOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Layer-center elevation</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun13, Ifl26</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Swt_Out</text></para>
+        </td>
+        <td style="width:190px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SwtLayerCentElevOut</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the </text><text styleclass="Strong" translate="true">SWT</text><text styleclass="Normal" translate="true"> package is activated, several data sets are created. Some of these are associated with particular layer groups in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT_Tab" styleclass="Strong" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box. In addition some of the following data sets are created. Which ones are created depend on the options selected in this pane. The data sets are listed in the table below.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Data Set Name</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Associated MODFLOW input data</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Geostatic_Stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="GL0" domain="ModflowGuide.hmxp" styleclass="Table Cell" translate="true">GL0</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specific_Gravity_Unsaturated</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="SGM" domain="ModflowGuide.hmxp" styleclass="Table Cell" translate="true">SGM</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specific_Gravity_Saturated</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="SGS" domain="ModflowGuide.hmxp" styleclass="Table Cell" translate="true">SGS</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Initial_Preconsolidation_Stress_Offset</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="PCSOFF" domain="ModflowGuide.hmxp" styleclass="Table Cell" translate="true">PCSOFF</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Initial_Preconsolidation_Stress</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" anchor="PCS" domain="ModflowGuide.hmxp" styleclass="Table Cell" translate="true">PCS</link></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

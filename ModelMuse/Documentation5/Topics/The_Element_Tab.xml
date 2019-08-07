@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">The Block or Element Tab</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">The Block or Element Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Block</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Element</text><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Go_To_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Go To</link><text styleclass="Normal" translate="true"> dialog box is visible when a grid has been created. In it, the user specifies the column, row, and layer number to be made visible. The user also specifies the views of the model to be changed. Depending on which views of the model the user selects, some of the edit boxes in which the column, row, and layer numbers are specified will be enabled or disabled.</text></para>
+  </body>
+</topic>

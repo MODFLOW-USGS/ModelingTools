@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE Nodes [
+
+<!ENTITY % NameValue "CDATA">
+<!ENTITY % PropType "(I|S|D|L|H|B)">
+<!ENTITY % VersionValue "CDATA">
+
+<!ELEMENT Prp (#PCDATA)>
+<!ELEMENT Node (Node|Prp)*>
+<!ELEMENT Nodes (Node)+>
+
+<!ATTLIST Nodes version CDATA "1">
+
+<!ATTLIST Node name CDATA #REQUIRED>
+
+<!ATTLIST Prp name CDATA #REQUIRED>
+<!ATTLIST Prp type CDATA #REQUIRED>
+<!ATTLIST Prp value CDATA #REQUIRED>
+]>
+<Nodes version="1">
+	<Node name="root">
+		<Node name="parameters">
+			<Prp name="key" type="S" value="{15F2D305-DECD-4B78-B88E-D5D0F90CABBE}"/>
+		</Node>
+		<Node name="settings">
+			<Prp name="settingsversion" type="S" value="7.10"/>
+		</Node>
+		<Node name="testdata">
+			<Node name="children">
+				<Node name="child0">
+					<Node name="data">
+						<Node name="parameters"/>
+						<Prp name="description" type="S" value="Runs all the tested applications."/>
+						<Prp name="isalltestedapps" type="B" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{66F32D5F-A5DB-420E-9CB4-3DB7CADE2692}"/>
+				</Node>
+				<Node name="child1">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmStartUp.pcStartup.tabModelChoice.rgChoice.TGroupButton1"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child10">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGridColor.virttreecomboDataSets"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="454"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="8"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child11">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree.VScroll"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="12"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Pos"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="2"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child12">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="50"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="7"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child13">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGridColor.btnOK"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child14">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGridColor.btnOK"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child15">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGridColor.btnCancel"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child16">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGoPhast.ToolButton1"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="7"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="11"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child17">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmContourData.virttreecomboDataSets"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="332"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="9"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child18">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="13"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="30"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child19">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="29"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="45"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child2">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmStartUp.pnlBottom.btnNext"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child20">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="48"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="69"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child21">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="64"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="81"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child22">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TTntExDropDownPanel.DropDownTree"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="141"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="102"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child23">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmContourData.btnOK"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child24">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmContourData.btnOK"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child25">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmContourData.btnCancel"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child26">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGoPhast"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="Close"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child27">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.TMessageForm.No"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child3">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.dlgOpenModelMuseFile.ComboBoxEx32.ComboBox.Edit"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="108"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="5"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child4">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.dlgOpenModelMuseFile.ComboBoxEx32.ComboBox.Edit"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="6"/>
+								<Prp name="valuevalue" type="S" value="D:\Colab\GWModelTools\ModelMuse\Test\SimpleModelTest\SimpleModelTest.gpt"/>
+								<Prp name="vartype" type="I" value="8"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Keys"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child5">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.dlgOpenModelMuseFile.btnOpen"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child6">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGoPhast"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="12"/>
+								<Prp name="name" type="S" value="Item"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="6"/>
+								<Prp name="valuevalue" type="S" value="File|[4]|[7]"/>
+								<Prp name="vartype" type="I" value="8"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="description" type="S" value="Moves the mouse cursor to the menu item specified and then simulates a single click."/>
+						<Prp name="menutype" type="I" value="0"/>
+					</Node>
+					<Prp name="type" type="S" value="{CE294ABA-E13B-4B94-AFC8-FA8F4249123D}"/>
+				</Node>
+				<Node name="child7">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.dlgSelectModelFile.btnOpen"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child8">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmSelectResultToImport.btnOK"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters"/>
+						<Prp name="action" type="S" value="ClickButton"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Node name="child9">
+					<Node name="data">
+						<Node name="objectsyntax">
+							<Prp name="code" type="S" value="Aliases.ModelMuse.frmGoPhast.tbColorGrid"/>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Node name="parameters">
+							<Node name="parameter0">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param1"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="9"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Node name="parameter1">
+								<Prp name="defvartype" type="I" value="0"/>
+								<Prp name="name" type="S" value="Param2"/>
+								<Prp name="paramtype" type="S" value="{EFBF9355-5127-43E4-B03E-D06E65C8181F}"/>
+								<Prp name="valuetype" type="I" value="1"/>
+								<Prp name="valuevalue" type="I" value="14"/>
+								<Prp name="vartype" type="I" value="3"/>
+							</Node>
+							<Prp name="langid" type="S" value="{9E432E59-33EF-4EAA-95C6-63FC35AF69EE}"/>
+						</Node>
+						<Prp name="action" type="S" value="Click"/>
+						<Prp name="initialized" type="B" value="-1"/>
+						<Prp name="invokekind" type="I" value="-1"/>
+					</Node>
+					<Prp name="type" type="S" value="{575D0372-CCEB-4D0F-AFE8-D2004F108913}"/>
+				</Node>
+				<Prp name="childcount" type="I" value="28"/>
+			</Node>
+			<Node name="data">
+				<Node name="extenders">
+					<Node name="{800193e8-4656-48c9-a7dc-10ff396c56a4}">
+						<Node name="bitmap0">
+							<Prp name="bitmap" type="H" value="617162696E00000001000000360400007801C591CB0D8330104437520A48091C73E4942B56EEA921EE8416E820A584CEC89BB5516C08129CB268ECF56796D9F1FD713B9BC78DF10A2E19276BC8887C9E16699CA6C9FE8D52CF56DEB6ADC5184DF352AF590F6D4AE8C9E9C9516C1B1E0CC360E338AE6AECE3074AFCAE61D6F16FFD0C74E4D22090CEDB66F043F09758EAF0BBB3E68D5E1A4A894F15D72F2F0479B1872F9E3C48B3ECF9BE7BA5B9145DF492788C78A0A8F8B43ADB5FCA4FCDA34F87CE0BDE031BC7F9D93B79B0E277EC488350E6E5025EE0581E282AFDAC9F90F545383D6F2744FA7F5353E8A91B44CC63C957AE78E5BB2FEEA66A75BD203F37F8738D8EFF0A0D77991C0D9A58395283B5FEA59623EB0F54AA8166"/>
+							<Prp name="name" type="S" value="Aliases.ModelMuse"/>
+						</Node>
+					</Node>
+				</Node>
+			</Node>
+			<Prp name="description" type="S" value=""/>
+			<Prp name="key" type="S" value="{CCE789FB-CD02-4466-B7EC-27152E21EA90}"/>
+			<Prp name="type" type="S" value="{79147B28-EE20-4294-B773-1D3787FBF37B}"/>
+		</Node>
+		<Node name="variables">
+			<Node name="datav3"/>
+			<Prp name="key" type="S" value="{244B6F68-D1B0-4E5B-93AE-0ED64F446FB4}"/>
+			<Prp name="version" type="I" value="3"/>
+		</Node>
+		<Prp name="signature" type="S" value="{B9D9273E-7266-43E0-BF02-97F168593604}"/>
+		<Prp name="version" type="S" value="7.0"/>
+	</Node>
+</Nodes>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="WellTest" FileType="bin">
+    <FileName Model_Name="WellTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="WellTest" FileType="ancillary">
+    <FileName Model_Name="WellTest" FileType="ancillary">WellTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="WellTest" FileType="Model Input">
+    <FileName Model_Name="WellTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">usgs.WellTest.reference</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.bas</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.chd</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.dis</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.gsf</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.lpf</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.nam.archive</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.oc</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.pcg</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Input">WellTest.wel</FileName>
+  </model>
+  <output Model_Name="WellTest" FileType="Model Output">
+    <FileName Model_Name="WellTest" FileType="Model Output">WellTest.cbc</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Output">WellTest.fdn</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Output">WellTest.fhd</FileName>
+    <FileName Model_Name="WellTest" FileType="Model Output">WellTest.lst</FileName>
+  </output>
+</Model_Archive_List>

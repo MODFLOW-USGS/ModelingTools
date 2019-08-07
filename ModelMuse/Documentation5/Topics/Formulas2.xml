@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Formulas</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Formulas</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Formulas</text><text styleclass="Normal" translate="true"> are used to help define the distribution of values in data sets. One simple example of a formula would be just the name of another data set. For example, a valid formula for the Ky data set (which defines the hydraulic conductivity in the Y direction) would be “Kx.” (Kx is the data set that defines the hydraulic conductivity in the X direction.) Setting the formula for Ky to “Kx” would mean that the value of Ky in a given element would be equal to the value of Kx within that element.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Another simple example of a formula would be to set the formula for the Kz data set (Kz defines the hydraulic conductivity in the Z direction) to “Kx/10.” This formula would mean that in a given element, the value of Kz would be equal to the value of Kx in that element divided by 10.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each data set has a &quot;default formula&quot; that is used to assign a value to each cell, node, or element when such values are not defined in some other way.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">These examples only hint at the power of formulas. In addition to simple arithmetic operations, it is possible to use mathematical functions such as “sin” and “ln.” Geographic Information System (GIS) functions, logic functions, and functions related to the grid and objects are also available in formulas.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formulas" styleclass="Normal" translate="true">Formulas</link><text styleclass="Normal" translate="true">&quot;, &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Functions" styleclass="Normal" translate="true">Functions</link><text styleclass="Normal" translate="true">&quot;, and &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Normal" translate="true">Formula Editor Dialog Box</link><text styleclass="Normal" translate="true">&quot; </text><conditional-text type="IF" value="PRINT,PDF,EBOOK"/><text styleclass="Normal" translate="true">in the help system </text><conditional-text type="END"/><text styleclass="Normal" translate="true">for more information about formulas.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,583 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Array Reading Utility Modules</title>
+  <keywords>
+    <keyword translate="true">CNSTNT</keyword>
+    <keyword translate="true">CONSTANT</keyword>
+    <keyword translate="true">EXTERNAL</keyword>
+    <keyword translate="true">FMTIN</keyword>
+    <keyword translate="true">FNAME</keyword>
+    <keyword translate="true">IPRN</keyword>
+    <keyword translate="true">LOCAT</keyword>
+    <keyword translate="true">Nunit</keyword>
+    <keyword translate="true">OPEN/CLOSE</keyword>
+    <keyword translate="true">U1DREL</keyword>
+    <keyword translate="true">U2DINT</keyword>
+    <keyword translate="true">U2DREL</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Array Reading Utility Modules</text></para>
+    </header>
+    <para styleclass="Table Header"><table rowcount="3" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Array Reading Utility Modules are used to read arrays of data in a variety of packages. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Array Reading Utility Modules are never used independently from packages so they do not have a separate symbol in the name file.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The array reading utility modules provide a common way for all packages to read variables that have multiple values. The term “array” is simply a programming term for a variable that contains multiple values. There are three modules: U2DREL, U2DINT, and U1DREL. U2DREL reads real two-dimensional variables, U2DINT reads integer two-dimensional variables, and U1DREL reads real one-dimensional variables. All of these modules work similarly. They read one array-control record and, optionally, a data array in a format specified on the array-control record. Several alternate structures for the control record are provided. The original </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="Fixed" styleclass="Normal" translate="true">fixed-format control records</link><text styleclass="Normal" translate="true"> work as documented in McDonald and Harbaugh (1988), and four </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="Free" styleclass="Normal" translate="true">free-format</link><text styleclass="Normal" translate="true"> versions have been added. The free-format versions are described first because they are easier to use.</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="Free" styleclass="Heading2" style="font-family:Arial; font-size:10pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;"></anchor><text styleclass="Heading2_atoc_" translate="true">FREE-FORMAT CONTROL RECORDS FOR ARRAY READERS:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Values in bold italics are keywords that can be specified as uppercase or lowercase. Each control record is limited to a length of 199 characters.</text></para>
+    <para styleclass="Table Header"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For each array, specify the values for the array using one of the four methods below.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">CONSTANT</text><text styleclass="Normal" translate="true"> CNSTNT</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">All values in the array are set equal to CNSTNT.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CNSTNT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="CNSTNT"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">INTERNAL</text><text styleclass="Normal" translate="true"> CNSTNT FMTIN IPRN</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The individual array elements will be read from the same file that contains the control record.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CNSTNT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="CNSTNT"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FMTIN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="FMTIN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="IPRN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Keywords" translate="true">EXTERNAL</text><text styleclass="Normal" translate="true"> Nunit CNSTNT FMTIN IPRN</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The individual array elements will be read from the file unit number specified by Nunit. The name of the file associated with this file unit must be contained in the name file.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Nunit]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Nunit—is the unit for reading the array when the EXTERNAL free-format control record is used.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CNSTNT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="CNSTNT"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FMTIN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="FMTIN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="IPRN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><anchor id="Open_Close" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">OPEN/CLOSE</text><text styleclass="Normal" translate="true"> FNAME CNSTNT FMTIN IPRN</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The array will be read from the file whose name is specified by FNAME. This file will be opened on unit 99 just prior to reading the array and closed immediately after the array is read. This file should not be included in the name file. A file that is read using this control record can contain only a single array. The OPEN/CLOSE option is particularly useful for running simulations that require more than 99 files using a computer that allows only 99 files to be opened simultaneously.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CNSTNT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="CNSTNT"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FMTIN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="FMTIN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="IPRN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><anchor id="Fixed" styleclass="Heading2" style="font-family:Arial; font-size:10pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;"></anchor><text styleclass="Heading2_atoc_" translate="true">FIXED-FORMAT CONTROL RECORD FOR ARRAY READERS:</text></para>
+    <para styleclass="Normal"><table rowcount="1" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A fixed-format control record contains the following variables:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LOCAT CNSTNT FMTIN IPRN</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">These variables are explained below. LOCAT, CNSTNT, and IPRN are 10-character numeric fields. For U2DREL and U1DREL, CNSTNT is a real number. For U2DINT, CNSTNT is an integer and must not include a decimal. FMTIN is a 20-character text field. All four variables are always read when the control record is fixed format; however, some of the variables are unused in some situations. For example when LOCAT = 0, FMTIN and IPRN are not used.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LOCAT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LOCAT—indicates the location of the array values for a fixed-format array control record. If LOCAT = 0, all elements are set equal to CNSTNT. If LOCAT &gt; 0, it is the unit number for reading formatted records using FMTIN as the format. If LOCAT &lt; 0, it is the unit number for binary (unformatted) records, and FMTIN is ignored. Also, when LOCAT is not 0, the array values are multiplied by CNSTNT after they are read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CNSTNT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="CNSTNT"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FMTIN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="FMTIN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="IPRN"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><anchor id="IPRN_Table" styleclass="Heading1"></anchor><text styleclass="Heading2_atoc_" translate="true">Table of IPRN Values</text></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="23" colcount="4" style="width:auto; cell-padding:0px; cell-spacing:1px; page-break-inside:auto; border-width:1px; border-spacing:1px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:middle">
+        <td>
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">IPRN</text><text styleclass="Normal" translate="true">&#32;</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">U2DREL</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">U2DINT</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">U1DREL</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10G11.4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10I11</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10G12.5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">11G10.3 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">60I1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">5G12.5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">9G13.6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">40I2</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">15F7.1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">30I3</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">15F7.2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">25I4</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">15F7.3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">20I5</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">15F7.4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10I11</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">20F5.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">25I2</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">20F5.1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">15I4</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">20F5.2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10I6</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">20F5.3</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">11</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">20F5.4</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">12</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10G11.4</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">13</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10F6.0</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">14</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10F6.1</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10F6.2</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">16</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10F6.3</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">17</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10F6.4</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">18</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">10F6.5</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">19</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">5G12.5</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">20</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">6G11.4</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Table Header" translate="true">21</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">7G9.2</text></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+        <td style="background-color:#c0c0c0;">
+          <para styleclass="Normal" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

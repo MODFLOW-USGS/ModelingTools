@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="testGlobal" FileType="bin">
+    <FileName Model_Name="testGlobal" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="testGlobal" FileType="ancillary">
+    <FileName Model_Name="testGlobal" FileType="ancillary">testGlobal.gpt</FileName>
+  </ancillary>
+  <model Model_Name="testGlobal" FileType="Model Input">
+    <FileName Model_Name="testGlobal" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.bas</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.dis</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.gsf</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.lpf</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.nam.archive</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.oc</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">testGlobal.pcg</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Input">usgs.testGlobal.reference</FileName>
+  </model>
+  <output Model_Name="testGlobal" FileType="Model Output">
+    <FileName Model_Name="testGlobal" FileType="Model Output">testGlobal.cbc</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Output">testGlobal.fdn</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Output">testGlobal.fhd</FileName>
+    <FileName Model_Name="testGlobal" FileType="Model Output">testGlobal.lst</FileName>
+  </output>
+</Model_Archive_List>

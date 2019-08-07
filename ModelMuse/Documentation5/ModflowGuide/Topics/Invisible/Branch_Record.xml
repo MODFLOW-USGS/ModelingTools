@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Branch Record</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">NXSEC, PF, &#160;JNCU, and &#160;JNCD - The branch record specifies the number of nodes (cross sections) in the branch, the fraction of flow at the upstream junction that enters the branch, and the upstream and downstream junction numbers. When more than one branch originates at a junction, the water that enters the junction is split between these outgoing branches. This is specified to the model as the fraction of flow to enter the branch. For example, if two branches receive equal amounts of flow from the junction, this value should be specified as 0.5 for each branch. If only one branch receives flow from a junction (the most common case), this value is specified as 1.0.</text></para>
+  </body>
+</topic>

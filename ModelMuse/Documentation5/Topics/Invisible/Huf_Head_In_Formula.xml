@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Huf Head In Formula</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The &quot;Head&quot; used in this function helps determine the thickness of the hydrogeologic unit in convertible layers. If the head is below the top of the unit in a convertible layer, the thickness of the unit is reduced.</text></para>
+  </body>
+</topic>

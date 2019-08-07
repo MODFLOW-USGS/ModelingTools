@@ -1,0 +1,13 @@
+# Name File for MODFLOW created on 5/18/2019 by ModelMuse Version 3.10.0.60
+LIST             11 ..\..\output\output.StreamTest2\StreamTest2.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.StreamTest2\StreamTest2.cbc REPLACE
+DIS              12 ..\..\model\model.StreamTest2\StreamTest2.dis OLD
+BAS6             13 ..\..\model\model.StreamTest2\StreamTest2.bas OLD
+OC               39 ..\..\model\model.StreamTest2\StreamTest2.oc OLD
+DATA             37 ..\..\output\output.StreamTest2\StreamTest2.fhd REPLACE
+DATA             38 ..\..\output\output.StreamTest2\StreamTest2.fdn REPLACE
+PCG              18 ..\..\model\model.StreamTest2\StreamTest2.pcg OLD
+LPF              14 ..\..\model\model.StreamTest2\StreamTest2.lpf OLD
+LMT6            135 ..\..\model\model.StreamTest2\StreamTest2.lmt OLD
+STR             142 ..\..\model\model.StreamTest2\StreamTest2.str OLD
+DATA(BINARY)    143 ..\..\output\output.StreamTest2\StreamTest2.str_flow REPLACE

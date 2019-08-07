@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Post Processors</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Post Processors</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse supports two post processors: MODPATH and ZONEBUDGET. They can be selected on the can be selected in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH" styleclass="Normal" translate="true">MODPATH</link><text styleclass="Normal" translate="true"> is used for particle tracking. The user assigns starting locations for particles and MODPATH will track the advective transport of those particles either forward or backwards.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ZONEBUDGET" styleclass="Normal" translate="true">ZONEBUDGET</link><text styleclass="Normal" translate="true"> is used for constructing subregional water budgets. The user assigns cells to zones and ZONEBUDGET constructs a water budget for all the cells in each zone.</text></para>
+  </body>
+</topic>

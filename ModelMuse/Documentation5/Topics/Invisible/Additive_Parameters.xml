@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Additive Parameters</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If more than one parameter of the same type applies to the same cell, the input value for MODFLOW will be the sum of the input values determined for that cell for all the parameters that apply to the cell. For example, suppose that there are two HK parameters defined: HK1 and HK2. They have </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Values</text><text styleclass="Normal" translate="true"> of 10 and 20 respectively. If they both apply to the cell in column 1, row 1, layer 1 and neither has multiplier data sets, the hydraulic conductivity for that cell would be 10 + 20 = 30. Now suppose that the multiplier for HK1 was 5 at that cell. The hydraulic conductivity for that cell would be 10*5 + 20 = 70.</text></para>
+  </body>
+</topic>

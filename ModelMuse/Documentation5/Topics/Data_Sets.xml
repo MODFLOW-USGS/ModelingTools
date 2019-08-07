@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Data sets</text><text styleclass="Normal" translate="true"> are used in ModelMuse to represent spatially distributed data for each cell in MODFLOW or WellFootprint or for each node or element in PHAST or SUTRA. Each data set represents a two-dimensional (2-D) or three-dimensional (3-D) array of values. 3-D data sets are defined for the entire extent of the model domain. 2-D data sets are defined for a top, front, or side projection of the model domain. If the number of rows, columns, or layers in the grid or mesh changes, the sizes of the data sets are also changed. (In SUTRA, all data sets are treated as having a single row and the number of columns is the number of nodes or elements in the top view of the model.)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In addition to the data sets required by MODFLOW, SUTRA, or PHAST, the user can create additional data sets. The user-defined data sets can be used in “</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formulas2" styleclass="Normal" translate="true">Formulas</link><text styleclass="Normal" translate="true">” to define the distribution of values in the data sets that are required by MODFLOW or PHAST. See &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets Dialog Box</link><text styleclass="Normal" translate="true">&quot;</text><conditional-text type="IF" value="PRINT,PDF,EBOOK"/><text styleclass="Normal" translate="true"> in the help system</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> for more information on data sets.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SWI4_2d_sww" FileType="bin">
+    <FileName Model_Name="SWI4_2d_sww" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SWI4_2d_sww" FileType="ancillary">
+    <FileName Model_Name="SWI4_2d_sww" FileType="ancillary">SWI4_2d_sww.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SWI4_2d_sww" FileType="Model Input">
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.bas</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.dis</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.ghb</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.gsf</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.lpf</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.nam.archive</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.oc</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.pcg</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.swi</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">SWI4_2d_sww.wel</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Input">usgs.SWI4_2d_sww.reference</FileName>
+  </model>
+  <output Model_Name="SWI4_2d_sww" FileType="Model Output">
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Output">SWI4_2d_sww.cbc</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Output">SWI4_2d_sww.fdn</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Output">SWI4_2d_sww.fhd</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Output">SWI4_2d_sww.lst</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Output">SWI4_2d_sww.swi_obs</FileName>
+    <FileName Model_Name="SWI4_2d_sww" FileType="Model Output">SWI4_2d_sww.zta</FileName>
+  </output>
+</Model_Archive_List>

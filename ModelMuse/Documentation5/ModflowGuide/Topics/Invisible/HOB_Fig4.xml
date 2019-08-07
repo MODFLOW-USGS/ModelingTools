@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">HOB_Fig4</title>
+  <body>
+    <para styleclass="Normal"><image src="MultilayerHeadObs.PNG" scale="100.00%" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Figure 4: Situations for which the Observation Process (A) can and (B) cannot produce correct spatial interpolation for the multilayer hydraulic-head observation shown in figure 3.</text></para>
+  </body>
+</topic>

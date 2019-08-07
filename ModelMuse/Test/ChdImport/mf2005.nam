@@ -1,0 +1,12 @@
+LIST 7 gv1_mf.lst
+BAS6  1 gv1.bas
+DIS  29 gv1.dis
+LPF 11 gv1_mf2005.lpf
+ZONE 13 gv1.zone
+WEL 12 gv1.wel
+CHD 40 gv1_mod.chd
+OC  22 gv1.oc
+PCG 19 gv1_mod.pcg
+DATA(BINARY) 50 gv1.cbb
+DATA(BINARY) 54 gv1.cbw
+DATA(BINARY) 30 gv1.hds

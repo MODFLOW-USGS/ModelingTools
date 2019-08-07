@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Main Data File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Main Data File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The main data file is used by MODPATH and MODPATH-PLOT to define most of the basic elements of the MODPATH simulation. Although most of the data in this file is used by both MODPATH and MODPATH-PLOT, some data is specific to one program or the other. MODPATH and MODPATH-PLOT are designed to read data from a single main data file. Each of the programs ignores those data items that are specific to the other program. The MODPATH main data file is opened in the Name file as type MAIN.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The main data file consists of 6 data items:</text></para>
+    <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Item 1 -- Specifications</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Item 2 -- Options</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Item 3 -- Confining Bed Codes</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Item 4 -- Boundary Array</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Item 5 -- Porosity</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Item 6 -- Stress Period and Time Step Data</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Data item 6 is omitted for steady-state simulations. Detailed instructions for these data items follow.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><table rowcount="9" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="TableTitle"><text styleclass="TableTitle" translate="true">Data Set</text></para>
+        </td>
+        <td>
+          <para styleclass="TableTitle"><text styleclass="TableTitle" translate="true">Description</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MAXSIZ HNOFLO &#160;HDRY &#160;NPART &#160;IRCHTP &#160;IEVTTP</text></para>
+          <para styleclass="Normal" style="text-indent:-17px; margin-right:0px; margin-left:17px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVALUES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXSIZ]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MAXSIZ-- is the maximum allowed size (in bytes) of the Composite Budget File.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">If MAXSIZ = 0, the program uses a default value that is set in the MODPATH main program. The default value can be changed by resetting the MAXSIZ value in the MODPATH main program and then recompiling the source code. If a transient MODPATH run will generate a composite budget file larger than MAXSIZ, a warning message is issued and an option is provided to either quit or proceed.</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">The default value of MAXSIZ is 15,000,000.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">&#32;</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HNOFLO]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HNOFLO-- is the value specified in MODFLOW to represent head in inactive cells.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HDRY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HDRY-- is the head assigned by MODFLOW to cells that have gone dry. If the original version of MODFLOW was used with the BCF1 package, HDRY should be set to &quot;1.0E+30&quot;. If the BCF2 package was used in the MODFLOW simulation, HDRY must equal the value specified in the MODFLOW simulation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPART]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NPART-- is the maximum number of particles allowed for a MODPATH run. The value of NPART has no effect in MODPATH-PLOT. If NPART is omitted or set equal to 0, MODPATH &#160;automatically resets NPART to a default value that is defined in the MODPATH main program. For the standard version of the MODPATH source code, there is no advantage to setting NPART to a value other than 0 because array memory is not allocated dynamically. However, providing the variable NPART makes it relatively easy to take advantage of FORTRAN compilers that allow arrays to be dimensioned dynamically at runtime. The use of dynamic memory allocation requires that MODPATH’s main source program be modified as appropriate for each specific FORTRAN compiler.</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">The default value is 500,000.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IRCHTP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IRCHTP indicates where recharge (if used in the model) is applied</text></para>
+                      <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0 - recharge is treated as an internal source.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0 - recharge is assigned as a vertical component of flow to the top face.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true"> &#160;</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IEVTTP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IEVTTP indicates where evapotranspiration (if used in the model) is applied</text></para>
+                      <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0 - ET is treated as an internal sink.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0 - ET is assigned as a vertical component of flow to the top face.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Options]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Options-- is a 1-line character record that may contain one or more keyword codes that control options in MODPATH and MODPATH-PLOT. A blank line must be included for this data item even if none of the keyword options is used. Keywords that only affect MODPATHPLOT are ignored by MODPATH.</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">XSECTION</text><text styleclass="Normal" translate="true"> indicates that the model is a 1-row cross section for which IBOUND and the Grid Unit Array (GUA) should each be read as a single, 2-dimensional array with dimensions of NCOL and NLAY.</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">COMPACT</text><text styleclass="Normal" translate="true"> indicates that MODPATH should generate endpoint, pathline, and time series files as text files using the global node number to indicate cell location. If COMPACT is omitted, the cell location is designated using the row-column-layer grid indices (as in previous versions of MODPATH).</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">BINARY</text><text styleclass="Normal" translate="true"> indicates that the endpoint, pathline, and time series files will be generated by MODPATH in binary form. This keyword also is required by MODPATH-PLOT in order to correctly read binary versions of these files.</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">METERS</text><text styleclass="Normal" translate="true"> indicates to MODPATH-PLOT that distances are in meters. The METERS parameter only affects the label on the distance scale produced by MODPATH-PLOT. It has no affect on computations produced by MODPATH. If the option METERS is not specified, MODPATH assumes that length units are in feet. If a length unit other than feet or meters is used in MODFLOW, the scaling performed by MODPATH-PLOT will not be correct.</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">WT(OFF)</text><text styleclass="Normal" translate="true"> indicates that the water table profile will not be drawn on true cross section plots. If none of the three &quot;WT&quot; options is specified, MODPATH-PLOT draws the water-table profile as a solid line with the same color used for drawing contour lines.</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">WT(DOTTED)</text><text styleclass="Normal" translate="true"> indicates that the water-table profile will be drawn as a dotted line on true cross section plots.</text></para>
+                <para styleclass="Normal"><text styleclass="Keyword" translate="true">WT(DASHED)</text><text styleclass="Normal" translate="true"> indicates that the water-table profile will be drawn as a dashed line on true cross section plots.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYCON(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0 indicates confined</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0 indicates convertible or water table</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBOUND(NCOL,NROW)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Read one array for each layer</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In the current version of MODFLOW, the IBOUND array is read one layer at a time by specifying a 2-D array of data for each layer in the grid. In this version of MODPATH, if the model is a 1-row cross section and the keyword </text><text styleclass="Keyword" translate="true">XSECTION</text><text styleclass="Normal" translate="true"> is specified in the options data record (Main data file item 2), the IBOUND array will be read as a single 2-D array for the entire cross section. Future versions of MODFLOW may support the </text><text styleclass="Keyword" translate="true">XSECTION</text><text styleclass="Normal" translate="true"> option for IBOUND data in cross sectional models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">If this IS NOT a 1-row cross section</text><text styleclass="Normal" translate="true">, read a 2-D array of data for each layer by repeating the following data sequence for each layer:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3. IBOUND(NCOL,NROW)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FORMAT: 2-D integer array reader (U2DINT)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Or, if this IS a 1-row cross section with XSECTION specified</text><text styleclass="Normal" translate="true">, read a single 2-D array for the cross section:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">3. IBOUND(NCOL,NLAY)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FORMAT: 2-D integer array reader (U2DINT)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IBOUND-- is the boundary array containing cell type codes.</text></para>
+                <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">IBOUND &lt; 0 : specified head cell</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">IBOUND = 0 : inactive cell</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">IBOUND &gt; 0 : active cell</text></li>
+                </list>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The absolute value of IBOUND is the zone code, which is used by MODPATH-PLOT to determine the color of pathlines and particle points. MODPATH requires that the absolute value of IBOUND be less than 1000.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[POR(NCOL,NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Read one array for each layer</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">REPEAT THE FOLLOWING DATA IN SEQUENCE FOR EACH LAYER:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">5A. POR(NCOL,NROW)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FORMAT: 2-D real array reader (U2DREL)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the model layer has a quasi-3d confining layer, then</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">5B. PorCB(NCOL,NROW)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FORMAT: 2-D real array reader (U2DREL)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">POR-- is the array containing porosity values for a model layer.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">PorCB-- is the array containing porosity values for a quasi-3D confining layer associated with the model layer. If a model layer includes a quasi-3d confining layer, the PorCB array immediately follows the POR array for that model layer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Items 6A and 6B are required only for transient simulations:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">6a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TBEGIN]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">TBEGIN-- is the time value assigned to the beginning of the MODFLOW simulation. Any convenient value may be specified, including values less than zero.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">6b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BeginPeriod &#160;BeginStep &#160;EndPeriod &#160;EndStep</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data item 6b marks the range of time steps that will be processed from the MODFLOW cell-bycell budget file and used to generate the MODPATH composite budget file. The MODFLOW cell-by-cell budget file must contain data for all of the time steps within the range specified in data item 6b. The MODFLOW cell-by-cell budget file also may contain data for time steps that are outside of the specified range.</text></para>
+          <para styleclass="Normal" style="text-indent:-17px; margin-right:0px; margin-left:17px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVALUES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-17px; margin-right:0px; margin-left:17px; tabstops:none;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BeginPeriod  BeginStep]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">BeginPeriod, BeginStep-- the stress period and time step of the first time step in the block of time steps that will be processed. </text><text styleclass="New Materials" translate="true">If any stress period in the model is a steady-state stress period, BeginPeriod and BeginStep must both be 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[End Period  EndStep]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">EndPeriod, EndStep-- the stress period and time step of the last time step in the block of time steps that will be processed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 6b is not read if the MODPATH analysis uses an existing composite budget file.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

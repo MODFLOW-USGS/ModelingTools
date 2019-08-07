@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BlockAreaSide</title>
+  <keywords>
+    <keyword translate="true">BlockAreaSide</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">BlockAreaSide</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">BlockAreaSide</text><text styleclass="Normal" translate="true">({{Col,}Row, Layer}) is like </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BlockAreaFront" styleclass="Normal" translate="true">BlockAreaFront</link><text styleclass="Normal" translate="true"> except that the value returned is the cross-sectional area of an element or cell as seen from the side of the grid (fig. 22). The function has three optional arguments: Column, Row, and Layer. If these arguments are provided, they specify the element or cell for which the area should be calculated. If only two of the arguments are provided, they will be treated as the row and layer. If they are not provided, the function uses the column, row, and layer of the element or cell for which the formula is being calculated. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">BlockAreaSide</text><text styleclass="Normal" translate="true"> always returns 0. If any of the arguments has an invalid value, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">BlockAreaSide</text><text styleclass="Normal" translate="true"> returns zero.</text></para>
+    <para style="text-align:center; page-break-after:avoid;"><image src="BlockAreaSide.png" scale="50.00%" width="364" height="179" styleclass="Image Caption"><title translate="true">Illustration of BlockAreaSide</title></image></para>
+    <para style="text-align:center; margin-top:16px; margin-bottom:16px;"><text style="font-family:&apos;Univers 57 Condensed&apos;; font-size:12pt; font-weight:bold; color:#000000;" translate="true">Figure 22.</text><text style="font-family:&apos;Univers 57 Condensed&apos;; font-size:12pt; color:#000000;" translate="true"> For rectangular shapes, BlockAreaSide returns the product of a times b.</text></para>
+  </body>
+</topic>

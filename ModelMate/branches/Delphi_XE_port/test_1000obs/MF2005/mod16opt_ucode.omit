@@ -1,0 +1,4 @@
+# OmitDefault values -- HOBDRY from MODFLOW HOB file
+BEGIN OMIT_DATA
+  1.00000E+30
+END OMIT_DATA

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Archive Lists</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Archive Lists</text></para>
+    </header>
+    <para styleclass="Normal"><snippet src="File_Lists"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Archive list files can also be added by dragging them from Windows Explorer and dropping them on to the list of archive lists.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The order of the archive lists in the list of archive lists can be rearranged by selecting one of the file names and dragging to a new position in the list of archive lists. The order of the files names affects the order in which models appear in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" style="font-weight:bold;" translate="true">Archive Structure</link><text styleclass="Normal" translate="true"> pane. You can also select a file name from the list of archive lists, right click, and then select Delete from the pop-up menu to delete an archive list from the list of archive lists.</text></para>
+    <para styleclass="Normal"><snippet src="Update_Paths"/></para>
+  </body>
+</topic>

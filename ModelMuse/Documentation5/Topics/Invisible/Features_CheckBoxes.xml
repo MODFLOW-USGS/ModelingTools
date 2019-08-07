@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Features CheckBoxes</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Features CheckBoxes</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There is a checkbox next to each feature in the list. The checkbox can be in three states: checked, unchecked and indeterminate. If the checkbox is checked, all of the objects that are being edited define input for the feature. If the checkbox is unchecked, none of the objects that are being edited define input for the feature. If the checkbox is indeterminate, some of the objects that are being edited define input for the feature and some do not.</text></para>
+  </body>
+</topic>

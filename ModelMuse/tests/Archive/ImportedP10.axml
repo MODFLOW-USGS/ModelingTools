@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportedP10" FileType="bin">
+    <FileName Model_Name="ImportedP10" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportedP10" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportedP10" FileType="ancillary">
+    <FileName Model_Name="ImportedP10" FileType="ancillary">ImportedP10.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportedP10" FileType="Model Input">
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.bas</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.bcf</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.chd</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.dis</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.gsf</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.lmt</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.nam.archive</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.oc</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.pcg</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.rch</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">ImportedP10.wel</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Input">usgs.ImportedP10.reference</FileName>
+  </model>
+  <output Model_Name="ImportedP10" FileType="Model Output">
+    <FileName Model_Name="ImportedP10" FileType="Model Output">ImportedP10.cbc</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Output">ImportedP10.fdn</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Output">ImportedP10.fhd</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Output">ImportedP10.ftl</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Model Output">ImportedP10.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="ImportedP10" FileType="Mt3dms Input">
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">ImportedP10.adv</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">ImportedP10.btn</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">ImportedP10.dsp</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">ImportedP10.gcg</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">ImportedP10.mt_nam.archive</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">ImportedP10.ssm</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Input">usgs.ImportedP10_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="ImportedP10" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Output">ImportedP10.cnf</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Output">ImportedP10.mls</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Output">ImportedP10_Comp1._mas</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Output">ImportedP10_Comp1.mto</FileName>
+    <FileName Model_Name="ImportedP10" FileType="Mt3dms Output">ImportedP10_Comp1.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

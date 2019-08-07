@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Create Archive</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Create Archive</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Create Archive</text><text styleclass="Normal" translate="true"> pane is used to select an empty folder in which to create the archive. In addition to selecting the archive directory, there are three buttons on the pane.</text></para>
+    <para styleclass="Normal"><snippet src="CreateArchiveHidden"/></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Update Archive</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command will display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Update_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Archive Update</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Update_Dialog_Box" styleclass="Normal" translate="true"> Dialog Box</link><text styleclass="Normal" translate="true"> which displays differences between the files that are to be placed in the archive on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" translate="true">Archive Structure</link><text styleclass="Normal" translate="true"> pane and the files contained in the actual archive. The dialog box can also be used to update the files in the archive by adding files to, removing files from and updating files in the archive.</text></para>
+    <para styleclass="Normal"><snippet src="Move_Files_to_Archive_Director"/></para>
+    <para styleclass="Heading2_atoc_"><snippet src="Update_Metadata"/></para>
+    <para styleclass="Normal"><snippet src="Update_Readme.txt"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Other related commands can be found under the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive" styleclass="Normal" style="font-weight:bold;" translate="true">Archive</link><text styleclass="Normal" translate="true"> menu.</text></para>
+  </body>
+</topic>

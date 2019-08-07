@@ -1,0 +1,20 @@
+# RIV: River package file created on 5/14/2018 by ModelMuse version 3.10.0.13.
+PARAMETER     2     4 # DataSet 1: PARAMETER NPRIV MXL
+     3     9 AUXILIARY IFACE # DataSet 2: MXACTC IRIVCB Option
+RIV_Par1 RIV  1.000000000000E+000      1 INSTANCES     2 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+RIV_Par1_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+     1     4    10 -1.000000000000E+000   1.000000000000E+000  -2.000000000000E+000      0 # Data Set 4b: Layer Row Column Stage Condfact Rbot IFACE
+RIV_Par1_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+     1     4    10 -1.000000000000E+000   0.000000000000E+000  -2.000000000000E+000      0 # Data Set 4b: Layer Row Column Stage Condfact Rbot IFACE
+RIV_Par2 RIV  1.000000000000E+000      1 INSTANCES     2 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+RIV_Par2_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+     1     1     7 -1.000000000000E+000   1.000000000000E+000  -2.000000000000E+000      0 # Data Set 4b: Layer Row Column Stage Condfact Rbot IFACE
+RIV_Par2_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+     1     1     7 -1.000000000000E+000   0.000000000000E+000  -2.000000000000E+000      0 # Data Set 4b: Layer Row Column Stage Condfact Rbot IFACE
+     1     2 # Data Set 5: ITMP NP Stress period 1
+     1     1    10 -1.000000000000E+000   1.000000000000E+000  -2.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+RIV_Par1 RIV_Par1_1 # Data Set 7: PARNAM Iname
+RIV_Par2 RIV_Par2_1 # Data Set 7: PARNAM Iname
+    -1     2 # Data Set 5: ITMP NP Stress period 2
+RIV_Par1 RIV_Par1_2 # Data Set 7: PARNAM Iname
+RIV_Par2 RIV_Par2_2 # Data Set 7: PARNAM Iname

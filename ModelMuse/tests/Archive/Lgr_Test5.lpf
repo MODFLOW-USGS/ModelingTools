@@ -1,0 +1,13 @@
+# LPF: Layer Property Flow package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# LPF file for etsdrt test case
+     9 -1.000000000000E+020      1 # ILPFCB, HDRY, NPLPF
+     1 # LAYTYP
+     0 # LAYAVG
+    -1 # CHANI
+     0 # LAYVKA
+     0 # LAYWET
+HydCond HK  5.000000100000E-002      1 # PARNAM, PARTYP, PARVAL, NCLU
+     1 NONE  ALL  # Layer, MLTARR, ZONARR
+    12 # HK Layer 1 Layer 1
+CONSTANT     1.000000000000E+000  # HANI Layer 1 Layer 1
+CONSTANT     9.999999800000E-003  # VKA Layer 1 Layer 1

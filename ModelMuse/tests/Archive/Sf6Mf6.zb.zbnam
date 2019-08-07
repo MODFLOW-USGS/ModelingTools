@@ -1,0 +1,5 @@
+BEGIN ZONEBUDGET
+  BUD Sf6Mf6.cbc
+  ZON Sf6Mf6.zb_zones
+  GRB Sf6Mf6.dis.grb
+END ZONEBUDGET

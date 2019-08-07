@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Water Supply: Aquifer Properties</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Water Supply: Aquifer Properties</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For this example, specify a hydraulic conductivity of 0.008 ft/s and a specific storage of </text><text styleclass="Normal" translate="true">0.0015. Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data|Edit Data Sets...</text><text styleclass="Normal" translate="true"> Then select the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Kx</text><text styleclass="Normal" translate="true"> data set (under &quot;Required|Hydrology&quot;) and set its default formula. Then select the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Specific_Storage</text><text styleclass="Normal" translate="true"> data set and set its default formula. </text></para>
+  </body>
+</topic>

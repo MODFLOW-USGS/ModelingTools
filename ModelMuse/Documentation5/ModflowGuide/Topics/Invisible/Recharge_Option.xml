@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Recharge Option</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Recharge Option</text></para>
+    </header>
+    <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="New Materials" translate="true">When Local Grid Refinement is used, NRCHOP should not be set to 3 in the parent model unless </text></li>
+    </list>
+    <list id="7" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:14px; tabstops:none; font-family:&apos;Courier New&apos;; font-size:12pt; font-weight:bold; color:#000000;">
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:14px; tabstops:none;"><text styleclass="New Materials" translate="true">the child model extends to the base &#160;of the parent model, or</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:14px; tabstops:none;"><text styleclass="New Materials" translate="true">there is no recharge in the area of the child model</text></li>
+    </list>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:14px; tabstops:none;"><text styleclass="New Materials" translate="true">because the recharge in the area of the child model will be applied to the first layer below the child model in addition to any recharge that is applied in the child model itself (Personal communication, Steffen Mehl and Mary Hill, 2011).</text></para>
+  </body>
+</topic>

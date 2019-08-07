@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RCT: Chemical Reactions Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RCT: Chemical Reactions Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The RCT: Chemical Reaction Package pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS</link><text styleclass="Normal" translate="true">. It is used to specify data for the RCT package in MT3DMS. </text></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[ISOTHM]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="ISOTHM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ISOTHM indicates which type of sorption (or dual-domain mass transfer) is simulated:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ISOTHM = 0, no sorption is simulated;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=1, Linear isotherm (equilibrium-controlled);</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=2, Freundlich isotherm (equilibrium-controlled);</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=3, Langmuir isotherm (equilibrium-controlled);</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=4, First-order kinetic sorption (nonequilibrium);</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=5, Dual-domain mass transfer (without sorption);</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=6, Dual-domain mass transfer (with sorption).</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[IREACT]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT indicates which type of kinetic rate reaction is simulated:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT = 0, no kinetic rate reaction is simulated;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT = 1, first-order irreversible reaction. Note that this reaction package is not intended for modeling chemical reactions between species. An add-on reaction package developed specifically for that purpose may be used.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT =100, zeroth-order reaction (decay or production).</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[IGETSC]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IGETSC indicates whether the initial concentration for the nonequilibrium sorbed or immobile phase of all species should be read when nonequilibrium sorption (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 4) or dual-domain mass transfer (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 5 or 6) is simulated:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If the checkbox is not checked, the initial concentration for the sorbed or immobile phase is not read. By default, the sorbed phase is assumed to be in equilibrium with the dissolved phase (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 4), and the immobile domain is assumed to have zero concentration (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 5 or 6).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If the checkbox is checked, the initial concentration for the sorbed phase or immobile liquid phase of all species will be read.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Normal"></para>
+ </body>
+</topic>

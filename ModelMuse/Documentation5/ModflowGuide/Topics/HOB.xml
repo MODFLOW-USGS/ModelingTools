@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HOB - Head-Observation Package</title>
+  <keywords>
+    <keyword translate="true">COFF</keyword>
+    <keyword translate="true">COLUMN</keyword>
+    <keyword translate="true">EVH</keyword>
+    <keyword translate="true">HOB</keyword>
+    <keyword translate="true">HOBDRY</keyword>
+    <keyword translate="true">HOBS</keyword>
+    <keyword translate="true">IREFSP</keyword>
+    <keyword translate="true">ITT</keyword>
+    <keyword translate="true">IUHOBSV</keyword>
+    <keyword translate="true">LAYER</keyword>
+    <keyword translate="true">MAXM</keyword>
+    <keyword translate="true">MLAY</keyword>
+    <keyword translate="true">MOBS</keyword>
+    <keyword translate="true">NH</keyword>
+    <keyword translate="true">OBSNAM</keyword>
+    <keyword translate="true">PLOT-SYMBOL</keyword>
+    <keyword translate="true">PR</keyword>
+    <keyword translate="true">ROFF</keyword>
+    <keyword translate="true">ROW</keyword>
+    <keyword translate="true">STATdd</keyword>
+    <keyword translate="true">STAT-FLAG</keyword>
+    <keyword translate="true">STATh</keyword>
+    <keyword translate="true">STATISTIC</keyword>
+    <keyword translate="true">Text</keyword>
+    <keyword translate="true">TOFFSET</keyword>
+    <keyword translate="true">TOMULTH</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">HOB - Head-Observation Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HOB</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Head-Observation input file is used to specify observations of head for use in the Observation process.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr00184" target="_blank" styleclass="Citation" translate="true">Hill, M.C., Banta, E.R., Harbaugh, A.W., and Anderman, E.R., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to the Observation, Sensitivity, and Parameter-Estimation Processes and three post-processing programs: U.S. Geological Survey Open-File Report 00-184, 210 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="ofr-00-184-errata.pdf" styleclass="Normal" translate="true">ofr-00-184-errata.pdf</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="OBS.pdf" styleclass="Normal" translate="true">OBS.pdf</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation Process</link><text styleclass="Normal" translate="true"> input files</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for the Head-Observation input file is read from a file that is specified with &quot;HOB&quot; as the file type in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name file</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><table rowcount="8" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional and can include as many lines as desired. Each line needs to begin with the “#” character in the first column.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character string (maximum of 79 characters) that starts in column 2. Any characters can be included in Text. The “#” character needs to be in column 1. Text is printed when the file is read and provides an opportunity for the user to include information about the model both in the input file and the associated output file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><table rowcount="3" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:275px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:670px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">NH MOBS MAXM (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:275px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:670px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005"/><text styleclass="Normal" translate="true">NH MOBS MAXM IUHOBSV HOBDRY </text><text styleclass="Keywords" translate="true">[NOPRINT]</text><text styleclass="Normal" translate="true"> (free format) </text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:275px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:670px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">NH MOBS MAXM IUHOBSV HOBDRY (free format) </text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NH" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NH—is the number of head (or change in head) observations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MOBS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MOBS—is the number of the NH observations that are multilayer.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MAXM—is the maximum number of layers used for any of the MOBS observations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IUHOBSV]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IUHOBSV—File unit for saving observation data in a file. Specify 0 for no observation output file. The file for this unit must be included as type “DATA” in the Name File. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HOBDRY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HOBDRY—is the value of the simulated equivalent that is written into the observation output file (file unit IUHOBSV) when the observation is omitted because a cell is dry. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[NOPRINT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">NOPRINT</text><text styleclass="Normal" translate="true">—is an option keyword that turns off printing of input and output data in the Listing File.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><table rowcount="2" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:273px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:672px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">TOMULTH EVH (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:273px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:672px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">TOMULTH</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TOMULTH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TOMULTH" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TOMULTH—is the time-offset multiplier for head observations [-- or T/T]. The product of TOMULTH and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="TOFFSET" styleclass="Normal" translate="true">TOFFSET</link><text styleclass="Normal" translate="true"> must produce a time value in units consistent with other model input. TOMULTH can be dimensionless or can be used to convert the units of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="TOFFSET" styleclass="Normal" translate="true">TOFFSET</link><text styleclass="Normal" translate="true"> to the time unit used in the simulation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[EVH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="EVH" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">EVH—is the input error variance multiplier for hydraulic-head observations and is used to calculate the weights as described below in the calculation of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="STATISTIC" styleclass="Normal" translate="true">STATISTIC</link><text styleclass="Normal" translate="true">. EVH makes it easy to change the weights uniformly for all hydraulic-head observations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Read sufficient repetitions of item 3 and, optionally, items 4 through 6 to obtain </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="NH" styleclass="Normal" translate="true">NH</link><text styleclass="Normal" translate="true"> head or change-in-head observations.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><table rowcount="2" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:276px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:669px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">OBSNAM LAYER ROW COLUMN &#160;IREFSP TOFFSET ROFF COFF HOBS &#160;STATISTIC STAT-FLAG &#160;PLOT-SYMBOL (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:276px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:669px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">OBSNAM LAYER ROW COLUMN IREFSP TOFFSET ROFF COFF HOBS (free format) </text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If LAYER is less than zero, hydraulic heads from multiple layers are combined to calculate a simulated value. The number of layers equals the absolute value of LAYER, or |LAYER|. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="HOB_OBSNAM"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LAYER—is the layer index of the cell in which the head observation is located. If LAYER is less than zero, hydraulic heads from multiple layers are combined to calculate a simulated value. The number of layers equals the absolute value of LAYER, or |LAYER|.</text></para>
+                      <para styleclass="Normal"><snippet src="HOB_Fig4"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ROW—is the row index of the cell in which the head observation is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[COLUMN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">COLUMN—is the column index of the cell in which the head observation is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><anchor id="IREFSP" styleclass="Normal"></anchor><anchor id="TOFFSET" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal"><snippet src="HOB_IREFSP_TOFFSET"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROFF]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ROFF" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ROFF—is the row offset used to locate the observation within a finite-difference cell (fig. 2).</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">If the absolute value of ROFF is less than 0.001, ROFF is changed to 0.</text></para>
+                      <para styleclass="Normal"><snippet src="HOB_Fig2"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[COFF]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">COFF—is the column offset used to locate the observation within a finite-difference cell (fig. 2).</text></para>
+                      <para styleclass="Normal"><text styleclass="New Materials" translate="true">If the absolute value of COFF is less than 0.001, COFF is changed to 0.</text></para>
+                      <para styleclass="Normal"><snippet src="HOB_Fig2"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="HOB_HOBS"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STATISTIC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="STATISTIC" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">STATISTIC—is the value from which the observation weight is calculated as determined using STAT-FLAG.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><anchor id="StatFlag" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal"><snippet src="HOB_STAT-FLAG_PLOT-SYMBOL"/></para>
+                <para styleclass="Normal"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MLAY(1), PR(1), MLAY(2), PR(2), ..., MLAY(|LAYER|), PR(|LAYER|) (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Sufficient repetitions of item 4 are read to define the contributions from each layer. The order of the layers needs to be specified according to the method presented in figure 4.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MLAY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MLAY(I)—is the I&apos;th layer number for a multilayer head observation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PR(I)—is the proportion of the simulated hydraulic head in layer MLAY(I) that is used to calculate simulated multilayer head. The sum of all PR values for a given observation needs to equal 1.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Figure 4]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="HOB_Fig4"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ITT (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="IREFSP" styleclass="Normal" translate="true">IREFSP</link><text styleclass="Normal" translate="true"> in item 3 is less than zero, read item 5.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="ITT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ITT—is a flag that identifies whether head or changes in head are to be used as observations.</text></para>
+                <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">ITT = 1: The observed hydraulic heads are used as observations.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">ITT = 2: The initial observed hydraulic head and subsequent changes in head (for example, drawdown) are used as observations. Changes in head are calculated internally from the hydraulic-head values listed in item 6, so the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="HOBS" styleclass="Normal" translate="true">HOBS</link><text styleclass="Normal" translate="true"> values specified in item 6 need to be hydraulic heads.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:49px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td style="width:945px;">
+          <para styleclass="Normal"><table rowcount="2" colcount="2" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:271px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2000: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:674px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">OBSNAM IREFSP TOFFSET HOBS STATh STATdd &#160;STAT-FLAG PLOT-SYMBOL (free format)</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+            <tr style="vertical-align:top">
+              <td style="vertical-align:middle; width:271px;">
+                <para styleclass="Table Header"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Table Header" translate="true">MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR: </text><conditional-text type="END"/></para>
+              </td>
+              <td style="width:674px;">
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">OBSNAM IREFSP TOFFSET HOBS (free format) </text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="IREFSP" styleclass="Normal" translate="true">IREFSP</link><text styleclass="Normal" translate="true"> in item 3 is less than zero, read item 6 for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="IREFSP" styleclass="Normal" translate="true">IREFSP</link><text styleclass="Normal" translate="true"> observation times</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="HOB_OBSNAM"/></para>
+                <para styleclass="Normal"><snippet src="HOB_IREFSP_TOFFSET"/></para>
+                <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><anchor id="HOBS" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="HOB_HOBS"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STATh]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STATh—is the value from which the weight is calculated if the observation is hydraulic head. &#160;STAT-FLAG is used to identify what STATh is and how the weight is calculated, as for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="STATISTIC" styleclass="Normal" translate="true">STATISTIC</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STATdd]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STATdd—is the value from which the weight is calculated if the observation is the temporal change in hydraulic head. STAT-FLAG is used to identify what STATdd is and how the weight is calculated, as for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB" anchor="STATISTIC" styleclass="Normal" translate="true">STATISTIC</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="HOB_STAT-FLAG_PLOT-SYMBOL"/><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

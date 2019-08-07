@@ -1,0 +1,60 @@
+# FMP: Farm Process file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+PARAMETER     1    30 # DataSet 1: PARAMETER NPFWL MXL
+FLAG_BLOCKS # DataSet 2a
+    15     8     6     3 # Data Set 2c Parameter Dimensions: MXACTW NFARMS NCROPS NSOILS
+     2     2    -1     2     2     2     2 # Data Set 2c When-to-Read-Flags: IFRMFL, IRTFL ICUFL IPFL IFTEFL IIESWFL IEFFL
+     1    -1     0     0 # Data set 2c Water Policy Flags: IEBFL IROTFL IDEFFL IALLOTGW
+     3 # Data Set 2c Crop Consumptive-Use Flag: ICCFL
+     1     1     2     0     2    -1     1 # Data Set 2c Surface-Water Flags: INRDFL MXNRDT ISRDFL IRDFL ISRRFL IRRFL IALLOTSW 
+     9     9   148     0     0    -1 # Data Set 2c Mandatory and Optional Print Flags: IFWLCB IFNRCB ISDPFL IFBPFL IETPFL IRTPFL
+AUX QMAXRESET 
+NOOPT
+WELLS1 QMAX  1.000000000000E+003     15 # Data Set 3: PARNAM PARTYP Parval NLST
+     0     6     2    -1     5  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     0     8     2    -2     5  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     0    10     2    -3     5  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     0     3    19    -4     6  2.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     0     6    17    -5     6  1.400000000000E+001  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1     5     6     6     1  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1     8     6     7     1  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1     8     9     8     1  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1     5     9     9     2  3.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1     6    10    10     2  2.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1     7    11    11     2  1.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1    18     3    12     3  2.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1    21     3    13     3  4.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1    18    19    14     4  3.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+     1    21    19    15     4  5.000000000000E+000  # Data Set 4b: Layer, Row, Column, Farm-Well-ID, Farm ID, QMAXfact
+OPEN/CLOSE FarmLgrTest1.GSURF 1.0 (FREE)       12 # Data set 5: GSURF
+OPEN/CLOSE FarmLgrTest1.SID 1 (FREE)        5 # Data set 8: SID
+OPEN/CLOSE FarmLgrTest1.SoilProp # Data Set 9 Soil Properties
+OPEN/CLOSE FarmLgrTest1.PSI # Data set 14: Crop-ID PSI(1) PSI(2) PSI(3) PSI(4)
+     0     0 # Data Set 22: ITMP NP Stress period 1
+EXTERNAL    186 1 (FREE)        5 # Data Set 26: FID
+EXTERNAL    151 # Data Set 27 Farm-ID OFE(FID,CID)
+EXTERNAL    152 1 (FREE)        5 # Data Set 28: CID
+EXTERNAL    153 # Data set 29: Crop-ID ROOT
+EXTERNAL    154 # Data set 30a: Crop-ID CU {NONIRR}
+CONSTANT     9.100000000000E-004  # Data Set 30b: ETR
+EXTERNAL    156 # Data set 31: Crop-ID FTR FEP FEI
+EXTERNAL    157 # Data set 32: Crop-ID FIESWP FIESWI
+CONSTANT     2.070000000000E-003  # Data Set 33: PFLX
+EXTERNAL    161 # Data Set 36: Farm-ID (NRDV NRDR NRDU)...
+EXTERNAL    162 # Data set 37a Farm-ID Row Column Segment Reach
+EXTERNAL    163 # Data set 37b Farm-ID Row Column Segment Reach
+  0.000000000000E+000  # Data Set 38: ALLOT
+     0     1 # Data Set 22: ITMP NP Stress period 2
+WELLS1 # Data Set 24: PARNAM
+EXTERNAL    186 1 (FREE)        5 # Data Set 26: FID
+EXTERNAL    151 # Data Set 27 Farm-ID OFE(FID,CID)
+EXTERNAL    152 1 (FREE)        5 # Data Set 28: CID
+EXTERNAL    153 # Data set 29: Crop-ID ROOT
+EXTERNAL    154 # Data set 30a: Crop-ID CU {NONIRR}
+CONSTANT     9.100000000000E-004  # Data Set 30b: ETR
+EXTERNAL    156 # Data set 31: Crop-ID FTR FEP FEI
+EXTERNAL    157 # Data set 32: Crop-ID FIESWP FIESWI
+CONSTANT     2.070000000000E-003  # Data Set 33: PFLX
+EXTERNAL    161 # Data Set 36: Farm-ID (NRDV NRDR NRDU)...
+EXTERNAL    162 # Data set 37a Farm-ID Row Column Segment Reach
+EXTERNAL    163 # Data set 37b Farm-ID Row Column Segment Reach
+  0.000000000000E+000  # Data Set 38: ALLOT

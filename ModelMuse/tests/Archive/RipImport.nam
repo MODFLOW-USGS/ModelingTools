@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 5/10/2016 by ModelMuse
+LIST             11 RipImport.lst REPLACE
+DATA(BINARY)      9 RipImport.cbc REPLACE
+DIS              12 RipImport.dis OLD
+BAS6             13 RipImport.bas OLD
+OC               39 RipImport.oc OLD
+DATA             37 RipImport.fhd REPLACE
+DATA             38 RipImport.fdn REPLACE
+DATA            189 RipImport.wbgt REPLACE
+SIP              35 RipImport.sip OLD
+BCF6             64 RipImport.bcf OLD
+CHD              17 RipImport.chd OLD
+WEL              20 RipImport.wel OLD
+STR             142 RipImport.str OLD
+DATA(BINARY)    143 RipImport.str_flow REPLACE
+RIP             187 RipImport.rip OLD
+DATA            188 RipImport.rip_et REPLACE

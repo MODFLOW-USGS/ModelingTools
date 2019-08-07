@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 7/22/2019 by ModelMuse Version 4.0.0.6
+BEGIN OPTIONS
+  LIST ..\..\output\output.Sf6Mf6\Sf6Mf6.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Sf6Mf6\Sf6Mf6.dis
+  IC6          ..\..\model\model.Sf6Mf6\Sf6Mf6.ic
+  NPF6         ..\..\model\model.Sf6Mf6\Sf6Mf6.npf
+  STO6         ..\..\model\model.Sf6Mf6\Sf6Mf6.sto
+  OC6          ..\..\model\model.Sf6Mf6\Sf6Mf6.oc
+  CHD6         ..\..\model\model.Sf6Mf6\Sf6Mf6.chd
+  SFR6         ..\..\model\model.Sf6Mf6\Sf6Mf6.sfr
+END PACKAGES

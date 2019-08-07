@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Conditions Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Conditions Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial Conditions</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Starting type (CREAD):</text><text styleclass="Normal" translate="true"> SUTRA allows a simulation to read the initial conditions from the initial conditions file (cold start) or a previously saved restart file (warm start). A warm start is used to continue a previous simulation without any changes other than changing the time step size and increasing the simulation time.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Restart for warm start:</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> This is the name of the restart file previously saved by SUTRA.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Frequency for saving restart file (ISTORE):</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> ISTORE controls how frequently the restart file is saved. The file will be saved when the time step is an even multiple of ISTORE or on the last time step of the simulation. ISTORE can be set to 0 to never stave a restart file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:normal;" translate="true">For a cold start, you can </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Read initial conditions from a restart file</text><text styleclass="Normal" style="font-weight:normal;" translate="true">. You can read either pressure/head, concentration/temperature, or both from the restart file. This option can be useful for using a steady state model to generate initial conditions for a transient model. For this to work, you must specify the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Restart file for initial conditions</text><text styleclass="Normal" translate="true"> and the mesh must not have changed.</text></para>
+  </body>
+</topic>

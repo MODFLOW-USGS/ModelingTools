@@ -1,0 +1,13 @@
+# Name File for MODFLOW created on 5/18/2019 by ModelMuse Version 3.10.0.60
+LIST             11 ImportMt3dP07.lst REPLACE
+DATA(BINARY)      9 ImportMt3dP07.cbc REPLACE
+DIS              12 ImportMt3dP07.dis OLD
+BAS6             13 ImportMt3dP07.bas OLD
+OC               39 ImportMt3dP07.oc OLD
+DATA             37 ImportMt3dP07.fhd REPLACE
+DATA             38 ImportMt3dP07.fdn REPLACE
+SIP              35 ImportMt3dP07.sip OLD
+BCF6             64 ImportMt3dP07.bcf OLD
+LMT6            135 ImportMt3dP07.lmt OLD
+CHD              17 ImportMt3dP07.chd OLD
+WEL              20 ImportMt3dP07.wel OLD

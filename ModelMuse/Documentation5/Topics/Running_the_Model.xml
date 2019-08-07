@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Executing the Model</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Executing the Model</text></para>
+    </header>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="31" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Export|PHAST Input File</text><text styleclass="Normal" translate="true">. Accept the default name, make sure the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Run model</text><text styleclass="Normal" translate="true"> check box is checked, and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Save</text><text styleclass="Normal" translate="true"> button. </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://water.usgs.gov/nrp/gwsoftware/modelviewer/ModelViewer.html" target="_blank" styleclass="Normal" translate="true">Model Viewer</link><text styleclass="Normal" translate="true"> can be used to display the results.</text></li>
+    </list>
+  </body>
+</topic>

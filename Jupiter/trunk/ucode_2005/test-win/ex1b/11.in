@@ -1,0 +1,93 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options	KEYWORDS
+Verbose=0
+END Options
+
+# ------------------------------
+# UCODE-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+ModelName=ex1
+#Performance
+  LinearityAdv=no
+  sensitivities=yes          # calculate sensitivities: yes/no
+  optimize=no                # estimate parameters: yes/no
+#Printing and output files
+  StartRes=no                # print residuals: yes/no 
+  IntermedRes=no             # # same
+  FinalRes=no                # # same
+  StartSens=css              # print sensitivities:  
+  IntermedSens=css           # #   css, dss, unscaled, onepercentss,  
+  FinalSens=css              # #   allss,all, or none
+  DataExchange=yes           # graphing & postprocessing: yes/no 
+END UCODE_CONTROL_DATA 
+
+
+# --------------------------------
+# COMMAND FOR APPLICATION MODEL(S)
+# --------------------------------
+
+BEGIN MODEL_COMMAND_LINES FILES
+..\ex1b-files\fwd.command
+END MODEL_COMMAND_LINES
+
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+   GroupName = MyPars  adjustable=yes TOLPAR=.01  maxchange=2.0	  
+   SENMETHOD=1
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA FILES
+..\ex1b-files\tr.params
+END PARAMETER_DATA 
+  
+BEGIN PARAMETER_VALUES TABLE          
+#     1           2                 
+  nrow=9  ncol=2 columnlabels      
+  paramname  STARTVALUE             
+  Q1&2    -1.0742485997846200E+00   
+  RCH_1    3.4128209748174060E+01 
+  RCH_2    5.0484535036205100E+01 
+  K_RB     1.2469352683639000E-03 
+  SS_1     1.1405365959350000E-03 
+  HK_1     4.2576827533969990E-04 
+  VK_CB    2.1746130251730020E-07 
+  SS_2     6.0261625462799920E-05 
+  HK_2     4.8197537179700030E-05 
+END PARAMETER_VALUES    
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN OBSERVATION_GROUPS FILES
+..\ex1b-files\groups.obs
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA FILES
+..\ex1b-files\hed.obs
+..\ex1b-files\flo.obs
+END OBSERVATION_DATA 
+
+# -----------------------------
+# APPLICATION MODEL INFORMATION
+# -----------------------------
+
+BEGIN MODEL_INPUT_FILES	KEYWORDS
+  modinfile=..\..\test-data-win\data-transient\tc1-fwd.sen  
+  templatefile=..\ex1b-files\tc1sen-forward.tpl
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES  KEYWORDS
+  modoutfile=..\..\test-data-win\data-transient\tc1._os  
+  instructionfile=..\ex1b-files\obs.instructions   
+  category=obs
+END MODEL_OUTPUT_FILES

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="LgrStreamLinkTest2" FileType="bin">
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="LgrStreamLinkTest2" FileType="ancillary">
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="ancillary">LgrStreamLinkTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="LgrStreamLinkTest2" FileType="Model Input">
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.bas</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.dis</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.gsf</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.jtf</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.lgr.archive</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.lpf</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.nam.archive</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.oc</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.pcg</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.pval</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">LgrStreamLinkTest2.sfr</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Input">usgs.LgrStreamLinkTest2.reference</FileName>
+  </model>
+  <model Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.bas</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.dis</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.gsf</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.jtf</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.lpf</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.nam.archive</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.oc</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.pcg</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.pval</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Input">LgrStreamLinkTest2_Child_1.sfr</FileName>
+  </model>
+  <output Model_Name="LgrStreamLinkTest2" FileType="Model Output">
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Output">LgrStreamLinkTest2.bfh_flux</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Output">LgrStreamLinkTest2.bfh_head</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Output">LgrStreamLinkTest2.cbc</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Output">LgrStreamLinkTest2.fdn</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Output">LgrStreamLinkTest2.fhd</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2" FileType="Model Output">LgrStreamLinkTest2.lst</FileName>
+  </output>
+  <output Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Output">
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Output">LgrStreamLinkTest2_Child_1.cbc</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Output">LgrStreamLinkTest2_Child_1.fdn</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Output">LgrStreamLinkTest2_Child_1.fhd</FileName>
+    <FileName Model_Name="LgrStreamLinkTest2_Child_1" FileType="Model Output">LgrStreamLinkTest2_Child_1.lst</FileName>
+  </output>
+</Model_Archive_List>

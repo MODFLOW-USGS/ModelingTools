@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Properties Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Properties Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Properties</text><text styleclass="Normal" translate="true"> tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Hydrogeologic_Units" styleclass="Strong" translate="true">MODFLOW Hydrogeologic Units</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">HGUNAM</text><text styleclass="Normal" translate="true"> is the name of the hydrogeologic unit. This name can consist of up to 10 characters and is not case sensitive. Only ASCII characters are allowed in HGUNAM.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">HGUHANI</text><text styleclass="Normal" translate="true">, the horizontal anisotropy, is the ratio of hydraulic conductivity along columns to hydraulic conductivity along rows for the entire hydrogeologic unit. If any HANI parameters are used with the selected hydrogeologic unit, HGUHANI can not be set.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Method of specifying vertical hydraulic conductivity (HGUVANI).</text><text styleclass="Normal" translate="true"> The user can specify the vertical hydraulic conductivity of a hydrogeologic unit in either of two ways:</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Vertical hydraulic conductivity (VK parameters must be used)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Ratio of horizontal to vertical hydraulic conductivity. (If present, VK parameters represent vertical anisotropy. VK parameters are ignored if a VANI parameter is defined for the hydrogeologic unit.)</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Ratio of horizontal to vertical hydraulic conductivity (HGUVANI).</text><text styleclass="Normal" translate="true"> If vertical anisotropy is used to define the vertical hydraulic conductivity and now VK or VANI parameters are used in a particular row and column for the hydrogeologic unit, the value of HGUVANI will be used as the vertical anisotropy for that location.</text></para>
+  </body>
+</topic>

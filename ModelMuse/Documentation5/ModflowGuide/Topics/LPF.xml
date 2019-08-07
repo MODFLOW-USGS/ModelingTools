@@ -1,0 +1,615 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LPF - Layer-Property Flow Package</title>
+  <keywords>
+    <keyword translate="true">anisotropy</keyword>
+    <keyword translate="true">CHANI</keyword>
+    <keyword translate="true">CONSTANTCV</keyword>
+    <keyword translate="true">HANI</keyword>
+    <keyword translate="true">HDRY</keyword>
+    <keyword translate="true">HK</keyword>
+    <keyword translate="true">IHDWET</keyword>
+    <keyword translate="true">ILPFCB</keyword>
+    <keyword translate="true">IWETIT</keyword>
+    <keyword translate="true">IZ</keyword>
+    <keyword translate="true">LAYAVG</keyword>
+    <keyword translate="true">Layer</keyword>
+    <keyword translate="true">LAYTYP</keyword>
+    <keyword translate="true">LAYVKA</keyword>
+    <keyword translate="true">LAYWET</keyword>
+    <keyword translate="true">LPF</keyword>
+    <keyword translate="true">Mltarr</keyword>
+    <keyword translate="true">NCLU</keyword>
+    <keyword translate="true">NCLU</keyword>
+    <keyword translate="true">NOCVCORRECTION</keyword>
+    <keyword translate="true">NPLPF</keyword>
+    <keyword translate="true">PARNAM</keyword>
+    <keyword translate="true">PARTYP</keyword>
+    <keyword translate="true">Parval</keyword>
+    <keyword translate="true">Parval</keyword>
+    <keyword translate="true">SS</keyword>
+    <keyword translate="true">STORAGECOEFFICIENT</keyword>
+    <keyword translate="true">SY</keyword>
+    <keyword translate="true">THICKSTRT</keyword>
+    <keyword translate="true">VANI</keyword>
+    <keyword translate="true">VK</keyword>
+    <keyword translate="true">VKA</keyword>
+    <keyword translate="true">VKCB</keyword>
+    <keyword translate="true">WETDRY</keyword>
+    <keyword translate="true">WETFCT</keyword>
+    <keyword translate="true">Zonarr</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LPF - Layer-Property Flow Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LPF</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Layer-Property Flow package is used to specify properties controlling flow between cells.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="ofr-00-92-errata.pdf" styleclass="Normal" translate="true">ofr-00-92-errata.pdf</link></li>
+          </list>
+          <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16, variously p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="MF2005_release.txt" styleclass="Normal" translate="true">release.txt for MODFLOW-2005</link></li>
+          </list>
+          <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="RevisedMF2005Input.pdf" styleclass="Normal" translate="true">RevisedMF2005Input.pdf</link></li>
+          </list>
+          <list id="24" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BCF" styleclass="Normal" translate="true">Block-Centered Flow package (BCF)</link><text styleclass="Normal" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2" styleclass="Normal" translate="true">Hydrogeologic-Unit Flow package (HUF2)</link><text styleclass="Normal" translate="true"> are two other packages that can be used to specify properties controlling flow between cells.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HFB6" styleclass="Normal" translate="true">Horizontal Flow Barrier (HFB)</link><text styleclass="Normal" translate="true"> package modifies the horizontal conductances between certain, specified pairs of cells.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="25" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="26" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="27" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="28" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Flow_Package_Requirement"/></para>
+          <list id="29" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><snippet src="RefToReadBinary"/></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:8pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><link displaytype="text" defaultstyle="true" type="topiclink" href="SOR" styleclass="Normal" translate="true">SOR</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">SOR</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> solver </text><conditional-text type="IFNOT" value="MODFLOW-2000"/><text styleclass="Normal" translate="true">(not included in MODFLOW-2005) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">doesn&apos;t work well with the wetting capability. </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/></li>
+          </list>
+          <list id="30" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">An option to print property arrays in the LPF and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" styleclass="Normal" translate="true">UPW</link><text styleclass="Normal" translate="true"> packages to separate files can be activated in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Parameter_Value_File" styleclass="Normal" translate="true">PVAL</link><text styleclass="Normal" translate="true"> file in MODFLOW-OWHM.</text><conditional-text type="END"/></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Table Header" style="text-align:left;"><text styleclass="Normal" translate="true">Input for the Layer-Property Flow (LPF) Package is read from the file that is type &quot;LPF&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. &#160;Free format is used for reading all values. The LPF Package is an alternative to the BCF Package and HUF2 Package. No more than one of these packages should be used simultaneously.</text></para>
+    <para styleclass="Table Header" style="text-align:left;"><table rowcount="20" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ILPFCB HDRY NPLPF</text><conditional-text type="IFNOT" value="MODFLOW-2000"/><text styleclass="Normal" translate="true"> [Options]</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ILPFCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ILPFCB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ILPFCB—is a flag and a unit number.</text></para>
+                      <list id="31" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ILPFCB &gt; 0, it is the unit number to which cell-by-cell flow terms will be written when &quot;SAVE BUDGET&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">. The terms that are saved are storage, constant-head flow, and flow between adjacent cells.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ILPFCB = 0, cell-by-cell flow terms will not be written.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ILPFCB &lt; 0, cell-by-cell flow for constant-head cells will be written in the listing file when &quot;SAVE BUDGET&quot; or a non-zero value for ICBCFL is specified in Output Control. Cell-by-cell flow to storage and between adjacent cells will not be written to any file.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The flow terms that will be saved are the flows through the right, front, and lower cell face. Positive values represent flows toward higher column, row, or layer numbers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HDRY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HDRY—is the head that is assigned to cells that are converted to dry during a simulation. Although this value plays no role in the model calculations, it is useful as an indicator when looking at the resulting heads that are output from the model. HDRY is thus similar to HNOFLO in the Basic Package, which is the value assigned to cells that are no-flow cells at the start of a model simulation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPLPF]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NPLPF" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NPLPF—is the number of LPF parameters. </text></para>
+                      <para styleclass="Normal"><snippet src="MaxParameters"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IFNOT" value="MODFLOW-2000"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Options]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Options" styleclass="Normal"></anchor><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005 and models derived from it only)</text></para>
+                      <para styleclass="Normal"><conditional-text type="END"/><text styleclass="Normal" translate="true">Options—are optional key words that activate options:</text></para>
+                      <list id="32" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">STORAGECOEFFICIENT</text><text styleclass="Normal" translate="true"> indicates that variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Ss" styleclass="Normal" translate="true">Ss</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" styleclass="Normal" translate="true">SS</link><text styleclass="Normal" translate="true"> parameters are read as storage coefficient rather than specific storage.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">CONSTANTCV</text><text styleclass="Normal" translate="true"> indicates that vertical conductance for an unconfined cell is computed from the cell thickness rather than the saturated thickness. &#160;The CONSTANTCV option automatically invokes the NOCVCORRECTION option.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">THICKSTRT</text><text styleclass="Normal" translate="true"> indicates that layers having a negative </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> are confined, and their cell thickness for conductance calculations will be computed as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="STRT" styleclass="Normal" translate="true">STRT</link><text styleclass="Normal" translate="true">-</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="BOTM" styleclass="Normal" translate="true">BOT</link><text styleclass="Normal" translate="true"> rather than TOP-</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="BOTM" styleclass="Normal" translate="true">BOT</link><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">NOCVCORRECTION</text><text styleclass="Normal" translate="true"> indicates that vertical conductance is not corrected when the vertical flow correction is applied.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">NOVFC</text><text styleclass="Normal" translate="true"> turns off the vertical flow correction under dewatered conditions. &#160;This option turns off the vertical flow calculation described on p. 5-8 of USGS Techniques and Methods Report 6-A16 and the vertical conductance correction described on p. 5-18 of that report.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">NOPARCHECK</text><text styleclass="Normal" translate="true"> turns off the checking that a value is defined for all cells when parameters are used to define layer data.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Consult pages 5-18 to 5-19 of the MODFLOW-2005 report for information on when it is appropriate to use these options.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYTYP(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="LAYTYP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LAYTYP—contains a flag for each layer that specifies the layer type. Use as many records as needed to enter a value for each layer.</text></para>
+                <list id="33" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—confined</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0—convertible.</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000)</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt;0 – convertible &#160;</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005 and models derived from it)</text><conditional-text type="END"/></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">&lt;0 – convertible unless the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Options" styleclass="Normal" translate="true">THICKSTRT</link><text styleclass="Normal" translate="true"> option is in effect. When </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Options" styleclass="Normal" translate="true">THICKSTRT</link><text styleclass="Normal" translate="true"> is in effect, a negative value of LAYTYP indicates that the layer is confined, and its saturated thickness will be computed as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="STRT" styleclass="Normal" translate="true">STRT</link><text styleclass="Normal" translate="true">-</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="BOTM" styleclass="Normal" translate="true">BOT</link><text styleclass="Normal" translate="true">. &#160;</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005 and models derived from it only)</text><conditional-text type="END"/><conditional-text type="END"/></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYAVG(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LAYAVG—contains a flag for each layer that defines the method of calculating interblock transmissivity. Use as many records as needed to enter a value for each layer.</text></para>
+                <list id="34" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—harmonic mean (This is most appropriate for confined and unconfined aquifers with abrupt boundaries in transmissivity at the cell boundaries or for confined aquifers with uniform hydraulic conductivity.)</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">1—logarithmic mean (This is most appropriate for confined aquifers with gradually varying transmissivities.)</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">2—arithmetic mean of saturated thickness and logarithmic-mean hydraulic conductivity. &#160;(This is most appropriate for unconfined aquifers with gradually varying transmissivities.)</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CHANI(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="CHANI" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">CHANI—contains a value for each layer that is a flag or the horizontal anisotropy. If CHANI is less than or equal to 0, then variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true"> defines horizontal anisotropy. If CHANI is greater than 0, then CHANI is the horizontal anisotropy for the entire layer, and HANI is not read. If any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true"> parameters are used, CHANI for all layers must be less than or equal to 0. Use as many records as needed to enter a value of CHANI for each layer. The horizontal anisotropy is the ratio of the hydraulic conductivity along columns (the Y direction) to the hydraulic conductivity along rows (the X direction).</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYVKA(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="LAYVKA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LAYVKA—contains a flag for each layer that indicates whether variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> is vertical hydraulic conductivity or the ratio of horizontal to vertical hydraulic conductivity. Use as many records as needed to enter a value for each layer.</text></para>
+                <list id="35" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—indicates </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> is vertical hydraulic conductivity</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0—indicates </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> is the ratio of horizontal to vertical hydraulic conductivity, where the horizontal hydraulic conductivity is specified as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> in item 10.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYWET(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="LAYWET" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LAYWET—contains a flag for each layer that indicates if wetting is active. Use as many records as needed to enter a value for each layer.</text></para>
+                <list id="36" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—indicates wetting is inactive</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0—indicates wetting is active</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[WETFCT IWETIT IHDWET]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(Include item 7 only if LAYWET indicates at least one wettable layer.)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WETFCT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="WETFCT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">WETFCT—is a factor that is included in the calculation of the head that is initially established at a cell when it is converted from dry to wet. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="IHDWET" styleclass="Normal" translate="true">IHDWET</link><text styleclass="Normal" translate="true">.)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWETIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IWETIT—is the iteration interval for attempting to wet cells. Wetting is attempted every IWETIT iteration. If using the PCG solver (Hill, 1990), this applies to outer iterations, not inner iterations. If IWETIT &#160;less than or equal to 0, it is changed to 1.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHDWET]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IHDWET" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IHDWET—is a flag that determines which equation is used to define the initial head at cells that become wet:</text></para>
+                      <list id="37" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IHDWET = 0, equation 33A is used:</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">h = BOT + WETFCT (hn - BOT) .</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">(hn is the head in the neighboring cell that is causing the dry cell to convert to an active cell.)</text></para>
+                      <list id="38" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IHDWET is not 0, equation 33B is used:</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">h = BOT + WETFCT(THRESH) .</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat Items 8-9 for each parameter to be defined (that is, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="NPLPF" styleclass="Normal" translate="true">NPLPF</link><text styleclass="Normal" translate="true"> times).</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[PARNAM PARTYP Parval NCLU]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PARNAM—is the name of a parameter to be defined. This name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent. </text></para>
+                      <para styleclass="Normal"><snippet src="Unique_Param_Name"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARTYP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="PARTYP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">PARTYP—is the type of parameter to be defined. For the LPF Package, the allowed parameter types are:</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HK—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true">, horizontal hydraulic conductivity</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HANI—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true">, horizontal anisotropy</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VK—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> for layers for which VKA represents vertical hydraulic conductivity (LAYVKA=0)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VANI—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> for layers for which </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> represents vertical anisotropy (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true">0)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SS—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Ss" styleclass="Normal" translate="true">Ss</link><text styleclass="Normal" translate="true">, the specific storage. </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">However, when the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Options" styleclass="New Materials" translate="true">STORAGECOEFFICIENT</link><text styleclass="New Materials" translate="true"> option is used, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Ss" styleclass="New Materials" translate="true">Ss</link><text styleclass="New Materials" translate="true"> is confined storage coefficient.</text><conditional-text type="END"/></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SY—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Sy" styleclass="Normal" translate="true">Sy</link><text styleclass="Normal" translate="true">, the specific yield</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VKCB—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="VKCB" styleclass="Normal" translate="true">VKCB</link><text styleclass="Normal" translate="true">, the vertical hydraulic conductivity of a Quasi-three-dimensional confining layer.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parval]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Parval" styleclass="Normal"></anchor></para>
+                      <para styleclass="Normal"><snippet src="Parval"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NCLU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NCLU" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NCLU—is the number of clusters required to define the parameter. Each repetition of Item 9 is a cluster (variables </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Layer" styleclass="Normal" translate="true">Layer</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Mltarr" styleclass="Normal" translate="true">Mltarr</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Zonarr" styleclass="Normal" translate="true">Zonarr</link><text styleclass="Normal" translate="true">, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="IZ" styleclass="Normal" translate="true">IZ</link><text styleclass="Normal" translate="true">). There is usually only one cluster for each layer that is associated with a parameter. For example, if the parameter applies to cells in a single layer, there will generally be just one cluster. However, it is acceptable to have more than one cluster for the same layer.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Layer Mltarr Zonarr IZ]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Each repetition of Item 9 is called a parameter cluster. Repeat Item 9 </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="NCLU" styleclass="Normal" translate="true">NCLU</link><text styleclass="Normal" translate="true"> times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Layer]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Layer" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Layer—is the layer number to which a cluster definition applies.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Mltarr]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Mltarr" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Mltarr—is the name of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MULT" styleclass="Normal" translate="true">multiplier array</link><text styleclass="Normal" translate="true"> to be used to define variable values that are associated with a parameter. The name “NONE” means that there is no multiplier array, and the variable values will be set equal to Parval.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Zonarr]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Zonarr" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Zonarr—is the name of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ZONE" styleclass="Normal" translate="true">zone array</link><text styleclass="Normal" translate="true"> to be used to define the cells that are associated with a parameter. The name “ALL” means that there is no zone array, and all cells in the specified layer are part of the parameter.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IZ]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IZ" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IZ—is up to 10 zone numbers (separated by spaces) that define the cells that are associated with a parameter. These values are not used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Zonarr" styleclass="Normal" translate="true">ZONARR</link><text styleclass="Normal" translate="true"> is specified as “ALL”. Values can be positive or negative, but 0 is not allowed. The end of the line, a zero value, or a non-numeric entry terminates the list of values.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A subset of the following two-dimensional variables is used to describe each layer. All the variables that apply to layer 1 are read first, followed by layer 2, followed by layer 3, and so forth. If a variable is not required due to simulation options (for example, Ss and Sy for a completely steady-state simulation), then it must be omitted from the input file.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">These variables are either read by the array-reading utility module, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true">, or they are defined through parameters. If a variable is defined through parameters, then the variable itself is not read; however, a single record containing a print code is read in place of the array control record. The print code determines the format for printing the values of the variable as defined by parameters. The print codes are the same as those used in an array control record. If any parameters of a given type are used, parameters must be used to define the corresponding variable for all layers in the model.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HK(NCOL,NROW)- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If there are any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" styleclass="Normal" translate="true">HK parameters</link><text styleclass="Normal" translate="true">, read only a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">print code</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HK]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HK" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HK—is the hydraulic conductivity along rows. HK is multiplied by horizontal anisotropy (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="CHANI" styleclass="Normal" translate="true">CHANI</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true">) to obtain hydraulic conductivity along columns.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 11</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[HANI(NCOL,NROW)]- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 11 only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="CHANI" styleclass="Normal" translate="true">CHANI</link><text styleclass="Normal" translate="true"> is less than or equal to 0. If there are any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" styleclass="Normal" translate="true">HANI parameters</link><text styleclass="Normal" translate="true">, read only a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">print code</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HANI]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HANI" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HANI—is the ratio of hydraulic conductivity along columns to hydraulic conductivity along rows, where </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> of item 10 specifies the hydraulic conductivity along rows. Thus, the hydraulic conductivity along columns is the product of the values in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> and HANI. Read only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="CHANI" styleclass="Normal" translate="true">CHANI</link><text styleclass="Normal" translate="true"> &#160;</text><text styleclass="Normal" style="text-decoration:underline;" translate="true">&lt;</text><text styleclass="Normal" translate="true"> 0.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 12</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">VKA(NCOL,NROW)- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If there are any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" styleclass="Normal" translate="true">VK or VANI parameters</link><text styleclass="Normal" translate="true">, read only a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">print code</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VKA]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="VKA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VKA—is either vertical hydraulic conductivity or the ratio of horizontal to vertical hydraulic conductivity depending on the value of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true">.</text></para>
+                <list id="39" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true"> is 0, VKA is vertical hydraulic conductivity.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true"> is not 0, VKA is the ratio of horizontal to vertical hydraulic conductivity. In this case, &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> is divided by VKA to obtain vertical hydraulic conductivity, and values of VKA typically are greater than or equal to 1.0.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 13</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Ss(NCOL,NROW)]- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 13 only if at least one stress period is transient. If there are any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Parval" styleclass="Normal" translate="true">SS parameters</link><text styleclass="Normal" translate="true">, read only a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">print code</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ss]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Ss" styleclass="Normal"></anchor><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="MODFLOW-2000"/><text styleclass="Normal" translate="true">(MODFLOW-2000)</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> Ss—is specific storage. Read only for a transient simulation (at least one transient stress period).</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></para>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005 and models derived from it) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Ss—is specific storage unless the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Options" styleclass="Normal" translate="true">STORAGECOEFFICIENT</link><text styleclass="Normal" translate="true"> option is used. When </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="Options" styleclass="Normal" translate="true">STORAGECOEFFICIENT</link><text styleclass="Normal" translate="true"> is used, Ss is confined storage coefficient. Read only for a transient simulation (at least one transient stress period).</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 14</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Sy(NCOL,NROW)]- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 14 only if at least one stress period is transient and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> is not 0. If there are any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" styleclass="Normal" translate="true">SY parameters</link><text styleclass="Normal" translate="true">, read only a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">print code</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Sy]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Sy" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Sy—is specific yield. Read only for a transient simulation (at least one transient stress period) and if the layer is convertible (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> is not 0).</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 15</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[VKCB(NCOL,NROW)]- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 15 only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="LAYCBD" styleclass="Normal" translate="true">LAYCBD</link><text styleclass="Normal" translate="true"> (in the Discretization File) is not 0. If there are any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" styleclass="Normal" translate="true">VKCB parameters</link><text styleclass="Normal" translate="true">, read only a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">print code</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VKCB]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="VKCB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VKCB—is the vertical hydraulic conductivity of a Quasi-three-dimensional confining bed below a layer. Read only if there is a confining bed. Because there cannot be a confining bed beneath the bottom layer, VKCB cannot be specified for the bottom layer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 16</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[WETDRY(NCOL,NROW)]- </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 16 only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYWET" styleclass="Normal" translate="true">LAYWET</link><text styleclass="Normal" translate="true"> is not 0 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> is not 0.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WETDRY]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="WETDRY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">WETDRY—is a combination of the wetting threshold and a flag to indicate which neighboring cells can cause a cell to become wet.</text></para>
+                <list id="40" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If WETDRY &lt; 0, only the cell below a dry cell can cause the cell to become wet.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If WETDRY &gt; 0, the cell below a dry cell and the four horizontally adjacent cells can cause a cell to become wet.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If WETDRY is 0, the cell cannot be wetted.</text></li>
+                </list>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The absolute value of WETDRY is the wetting threshold. When the sum of BOT and the absolute value of WETDRY at a dry cell is equaled or exceeded by the head at an adjacent cell, the cell is wetted. Read only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> is not 0 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="LAYWET" styleclass="Normal" translate="true">LAYWET</link><text styleclass="Normal" translate="true"> is not 0. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake</link><text styleclass="Normal" translate="true"> package requires that WETDRY be set to 0 in Lakes.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

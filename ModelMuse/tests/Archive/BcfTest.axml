@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="BcfTest" FileType="bin">
+    <FileName Model_Name="BcfTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="BcfTest" FileType="ancillary">
+    <FileName Model_Name="BcfTest" FileType="ancillary">BcfTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="BcfTest" FileType="Model Input">
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.bas</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.bcf</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.chd</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.dis</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.gsf</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.nam.archive</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.oc</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">BcfTest.pcg</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Input">usgs.BcfTest.reference</FileName>
+  </model>
+  <output Model_Name="BcfTest" FileType="Model Output">
+    <FileName Model_Name="BcfTest" FileType="Model Output">BcfTest.cbc</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Output">BcfTest.fdn</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Output">BcfTest.fhd</FileName>
+    <FileName Model_Name="BcfTest" FileType="Model Output">BcfTest.lst</FileName>
+  </output>
+</Model_Archive_List>

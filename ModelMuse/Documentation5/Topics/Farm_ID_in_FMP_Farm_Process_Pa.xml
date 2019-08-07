@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Farm ID in FMP: Farm Process Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm ID in FMP: Farm Process Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farm ID in FMP: Farm Process</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farm ID in FMP: Farm Process</text><text styleclass="Normal" translate="true"> pane is used to define where farms are located. Farms are identified by a unique Farm ID (an integer) assigned to each farm.The locations of farms can vary with time. The properties of farms are defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Farms Dialog Box</link><text styleclass="Normal" translate="true">. In addition to identifying farms, the Farm ID also sets the water rights priority of the farm with farms with lower farm IDs having higher priorities over farms with higher farm IDs.</text></para>
+  </body>
+</topic>

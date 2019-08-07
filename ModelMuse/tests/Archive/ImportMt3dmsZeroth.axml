@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportMt3dmsZeroth" FileType="bin">
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportMt3dmsZeroth" FileType="ancillary">
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="ancillary">ImportMt3dmsZeroth.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportMt3dmsZeroth" FileType="Model Input">
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.bas</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.bcf</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.chd</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.dis</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.gsf</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.lmt</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.nam.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.oc</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">ImportMt3dmsZeroth.sip</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Input">usgs.ImportMt3dmsZeroth.reference</FileName>
+  </model>
+  <output Model_Name="ImportMt3dmsZeroth" FileType="Model Output">
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Output">ImportMt3dmsZeroth.cbc</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Output">ImportMt3dmsZeroth.fdn</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Output">ImportMt3dmsZeroth.fhd</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Output">ImportMt3dmsZeroth.ftl</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Model Output">ImportMt3dmsZeroth.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.adv</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.btn</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.dsp</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.gcg</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.mt_nam.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.rct</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">ImportMt3dmsZeroth.ssm</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Input">usgs.ImportMt3dmsZeroth_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Output">ImportMt3dmsZeroth.cnf</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Output">ImportMt3dmsZeroth.mls</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Output">ImportMt3dmsZeroth_Chem1._mas</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Output">ImportMt3dmsZeroth_Chem1.mto</FileName>
+    <FileName Model_Name="ImportMt3dmsZeroth" FileType="Mt3dms Output">ImportMt3dmsZeroth_Chem1.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

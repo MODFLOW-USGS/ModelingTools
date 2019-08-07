@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">GageNote3</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 3</text><text styleclass="Normal" translate="true">: Data Set 2 must include exactly </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GAGE" anchor="NUMGAGE" styleclass="Normal" translate="true">NUMGAGE</link><text styleclass="Normal" translate="true"> lines (records) of data. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GAGE" anchor="NUMGAGE" styleclass="Normal" translate="true">NUMGAGE</link><text styleclass="Normal" translate="true"> &gt; 1, it is permissible to interleaf the Item 2 lines for stream gaging stations with lines for lake gages. Data lines (records) within Item 2 can be listed in any arbitrary order.</text></para>
+  </body>
+</topic>

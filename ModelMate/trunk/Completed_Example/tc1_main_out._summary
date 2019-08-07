@@ -1,0 +1,56 @@
+
+ SELECTED STATISTICS FROM MODIFIED GAUSS-NEWTON ITERATIONS
+
+        # PARAMs                  MAX.             MAX. CHANGE   DAMPING
+ ITER.  ESTIMATED  PARNAM         CALC. CHANGE     ALLOWED       PARAMETER
+ -----  --------- ------------  ---------------- -------------  ------------
+    1        9     VERT_K_CB      1.14825         2.00000        1.0000    
+    2        9     RIVERS         1.04155         2.00000        1.0000    
+    3        9     RIVERS        0.889779         2.00000        1.0000    
+    4        9     RIVERS        0.326211         2.00000        1.0000    
+    5        9     RIVERS        0.659213E-01     2.00000        1.0000    
+    6        9     RIVERS       -0.281839E-01     2.00000       0.73805    
+    7        9     SS_2         -0.104079E-01     2.00000        1.0000    
+    8        9     RIVERS       -0.795564E-02     2.00000        1.0000    
+
+
+ PARAMETER VALUES FOR EACH ITERATION
+ - INDICATES DAMPING RESULTED FROM PARAMETER CONSTRAINTS FOR THAT ITERATION.
+ * INDICATES SOME PARAMETERS WERE OMITTED DURING THAT ITERATION.  THE VALUES
+   OF THOSE PARAMETERS ARE REPORTED EVEN THOUGH THEY WERE NOT UPDATED
+
+   ITER   SS_1         HK_1         VERT_K_CB    SS_2         HK_2        
+      0    0.1300E-02   0.3000E-03   0.1000E-06   0.2000E-03   0.4000E-04
+      1    0.1403E-02   0.4529E-03   0.2148E-06   0.6203E-04   0.4926E-04
+      2    0.1085E-02   0.4105E-03   0.2099E-06   0.4244E-04   0.4607E-04
+      3    0.1112E-02   0.4157E-03   0.2115E-06   0.5955E-04   0.4709E-04
+      4    0.1112E-02   0.4157E-03   0.2114E-06   0.5990E-04   0.4708E-04
+      5    0.1112E-02   0.4156E-03   0.2111E-06   0.6041E-04   0.4709E-04
+      6    0.1112E-02   0.4156E-03   0.2115E-06   0.5977E-04   0.4707E-04
+      7    0.1113E-02   0.4156E-03   0.2118E-06   0.5915E-04   0.4707E-04
+      8    0.1113E-02   0.4156E-03   0.2117E-06   0.5922E-04   0.4706E-04
+
+   ITER   WELLS_TR     RIVERS       RCH_ZONE_1   RCH_ZONE_2  
+      0    -1.100       0.1200E-02    63.10        31.50    
+      1    -1.156       0.2479E-03    48.20        48.13    
+      2    -1.024       0.5060E-03    32.22        48.57    
+      3    -1.048       0.9563E-03    33.53        49.20    
+      4    -1.049       0.1268E-02    33.49        49.22    
+      5    -1.049       0.1352E-02    33.49        49.22    
+      6    -1.048       0.1324E-02    33.48        49.22    
+      7    -1.048       0.1327E-02    33.45        49.23    
+      8    -1.048       0.1316E-02    33.48        49.21    
+
+ SUMS OF SQUARED WEIGHTED RESIDUALS FOR EACH ITERATION
+
+         SUMS OF SQUARED WEIGHTED RESIDUALS
+         ITER.  OBSERVATIONS  PRIOR INFO.      TOTAL       # INCLUDED OBS
+              0   0.26831E+06    1.3651       0.26831E+06     32 OF      32
+              1    1560.6       0.25453        1560.9         32 OF      32
+              2    93.843       0.11096E-01    93.854         32 OF      32
+              3    40.968       0.24566E-01    40.992         32 OF      32
+              4    37.568       0.24313E-01    37.592         32 OF      32
+              5    37.493       0.24175E-01    37.517         32 OF      32
+              6    37.493       0.24280E-01    37.517         32 OF      32
+              7    37.491       0.24189E-01    37.515         32 OF      32
+              8    37.493       0.24166E-01    37.517         32 OF      32

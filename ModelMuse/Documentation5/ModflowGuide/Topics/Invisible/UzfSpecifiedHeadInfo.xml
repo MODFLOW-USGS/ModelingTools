@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">UzfSpecifiedHeadInfo</title>
+  <body>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="New Materials" translate="true">UZF</link><text styleclass="New Materials" translate="true"> package is used, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" anchor="IUZFBND" styleclass="New Materials" translate="true">IUZFBND</link><text styleclass="New Materials" translate="true"> should be set to zero for all specified head cells.</text><conditional-text type="END"/></para>
+  </body>
+</topic>

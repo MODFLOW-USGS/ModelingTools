@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="PcgnTest" FileType="bin">
+    <FileName Model_Name="PcgnTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="PcgnTest" FileType="ancillary">
+    <FileName Model_Name="PcgnTest" FileType="ancillary">PcgnTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="PcgnTest" FileType="Model Input">
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.bas</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.chd</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.dis</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.gsf</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.jtf</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.lpf</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.nam.archive</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.oc</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.pcgn</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">PcgnTest.pval</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Input">usgs.PcgnTest.reference</FileName>
+  </model>
+  <output Model_Name="PcgnTest" FileType="Model Output">
+    <FileName Model_Name="PcgnTest" FileType="Model Output">PcgnTest.cbc</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Output">PcgnTest.fdn</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Output">PcgnTest.fhd</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Output">PcgnTest.lst</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Output">PcgnTest.pcgn_pc</FileName>
+    <FileName Model_Name="PcgnTest" FileType="Model Output">PcgnTest.pcgn_ts</FileName>
+  </output>
+</Model_Archive_List>

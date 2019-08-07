@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Well Screens</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Well Screens</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Well Screens</text><text styleclass="Normal" translate="true"> tab on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MNW2_Object_Pane" styleclass="Strong" translate="true">MNW2 pane</link><text styleclass="Normal" translate="true"> contains a table within which multiple wells screens can be defined for vertical wells. The </text><text styleclass="Strong" translate="true">Well Screens</text><text styleclass="Normal" translate="true"> tab is only visible if the well is vertical. The user can specify a formula for each required parameter. The formula will be evaluated once for each well screen.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Well screen top (ZTop) The top of the open interval (well screen). It does not need to be at the top or bottom of a cell but it should be in an active cell.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Well screen bottom (ZBottom) The bottom of the open interval (well screen). It does not need to be at the top or bottom of a cell but it should be in an active cell.</text></para>
+    <para styleclass="Normal"><snippet src="MNW_Loss_Terms"/></para>
+  </body>
+</topic>

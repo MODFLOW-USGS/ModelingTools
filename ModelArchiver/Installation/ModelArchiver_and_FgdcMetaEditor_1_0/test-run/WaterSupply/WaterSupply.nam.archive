@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 9/21/2017 by ModelMuse Version 3.9.0.15
+LIST             11 ..\..\output\output.WaterSupply\WaterSupply.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.WaterSupply\WaterSupply.cbc REPLACE
+DIS              12 ..\..\model\model.WaterSupply\WaterSupply.dis OLD
+BAS6             13 ..\..\model\model.WaterSupply\WaterSupply.bas OLD
+OC               39 ..\..\model\model.WaterSupply\WaterSupply.oc OLD
+DATA             37 ..\..\output\output.WaterSupply\WaterSupply.fhd REPLACE
+DATA             38 ..\..\output\output.WaterSupply\WaterSupply.fdn REPLACE
+PCG              18 ..\..\model\model.WaterSupply\WaterSupply.pcg OLD
+LPF              14 ..\..\model\model.WaterSupply\WaterSupply.lpf OLD
+WEL              20 ..\..\model\model.WaterSupply\WaterSupply.wel OLD
+RIV              21 ..\..\model\model.WaterSupply\WaterSupply.riv OLD
+HOB              41 ..\..\model\model.WaterSupply\WaterSupply.ob_hob OLD
+DATA             42 ..\..\output\output.WaterSupply\WaterSupply.hob_out REPLACE

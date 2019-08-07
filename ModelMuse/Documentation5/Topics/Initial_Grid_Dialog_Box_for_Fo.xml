@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Grid Dialog Box for Footprint Projects</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Grid Dialog Box for Footprint Projects</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">With a Footprint project, the user specifies the dimensions of the grid (the number of columns and rows) and the cell size. The user must also specify the X and Y coordinates of the grid origin. The grid origin is the location of the node in the first column and row. Columns are numbered from left to right. Rows are numbered from back to front. Thus the grid origin is the node at the left-, back- corner of the grid. The grid angle must also be specified. The angle is measured in degrees counterclockwise from the X-axis. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user may choose not to define the grid by clicking the </text><text styleclass="Strong" translate="true">No Grid</text><text styleclass="Normal" translate="true"> button. The user will then need to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Generating_Grids" styleclass="Normal" translate="true">specify the rest of the grid</link><text styleclass="Normal" translate="true"> later.</text></para>
+  </body>
+</topic>

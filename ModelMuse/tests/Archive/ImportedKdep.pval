@@ -1,0 +1,13 @@
+# PVAL file created on 7/6/2009 by ModelMuse version 2.0.0.7.
+11
+HK1        1
+HK2        0.0099999998
+HK3        9.9999997E-5
+HK4        1E-6
+VANI12     4
+VANI3      1
+KDEP       0.001
+GHB 1
+DRAIN 1
+RCH 0.00031
+ETM 0.00039999999

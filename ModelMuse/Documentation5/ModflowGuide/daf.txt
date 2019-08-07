@@ -1,0 +1,29 @@
+February 28, 2003
+
+Addition of the Diffusion Analogy Surface-Water Flow Model (DAFLOW)
+                            to MODFLOW-2000
+
+The addition of DAFLOW to MODFLOW-96 is documented in "Modifications to
+the Diffusion Analogy Surface-Water Flow Model (DAFLOW) for Coupling to
+the Modular Finite-Difference Ground-Water Flow Model (MODFLOW)" by
+Harvey Jobson and Arlen Harbaugh, USGS Open-File Report (OFR) 99-217. 
+DAFLOW has subsequently been added to MODFLOW-2000.
+
+Few changes were required to add DAFLOW to MODFLOW-2000.  The user
+input files are identical to those documented in OFR 99-217.  As before
+three files must be specified in the MODFLOW Name File, but there is a
+change in the file type for one of the files.  As in MODFLOW-96, file
+type DAF indicates the generic DAFLOW input file, and file type DAFG
+indicates the input file for MODFLOW-specific data.  The third file is
+an output file, which is normally called bltm.flw.  This file is
+specified using DATA for the file type (rather than DAFF), and the file
+unit must be one greater than the file unit used for the DAFG file.
+
+MODFLOW/DAFLOW Release information
+
+Version 1.0, April 14, 2000 -- Initial release
+
+Version 1.1, Dec. 26, 2002 -- Updated to fix error that occurred when branches
+                              were numbered in upstream direction.
+
+Version 1.2, Feb. 28, 2003 -- Added to MODFLOW-2000

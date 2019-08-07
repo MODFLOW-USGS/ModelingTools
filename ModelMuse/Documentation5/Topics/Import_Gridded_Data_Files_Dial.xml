@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Import Gridded Data Files Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import Gridded Data Files Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Import Gridded Data Files</text><text styleclass="Normal" translate="true"> dialog box, is used to import data from multiple files containing gridded real number data. For each file, a new 2D top data set will be created whose name is based on the file name. ModelMuse will read data from the file beginning at column 1, row 1 in row major order. For MODFLOW models, this means the data is laid out in the same way as the grid. For PHAST models, this means that the rows are laid out in the opposite order of the way the grid appears because in PHAST the row numbering is from the bottom to top instead of top to bottom. Data are always at block centers. (Cells in MODFLOW; Elements in PHAST.) To open the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Import Gridded Data Files</text><text styleclass="Normal" translate="true"> dialog box, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Import|Gridded Data Files...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW-LGR models, the user can select which grid to use when importing the data.</text></para>
+  </body>
+</topic>

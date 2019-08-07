@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Importing Data</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">RMA: Importing Data</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to import the image of the Rocky Mountain Arsenal area. Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Import|Image...</text><text styleclass="Normal" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ImportEdit_Bitmap_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Import Image</link><text styleclass="Normal" translate="true"> dialog box will appear. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Select Image</text><text styleclass="Normal" translate="true"> button and select the file &quot;rmamap.emf&quot; (in the &quot;</text><text styleclass="Figure Referrer" translate="true">My Documents\ModelMuse Examples\</text><text styleclass="Normal" translate="true">data\RMA&quot; folder). The user will be prompted to click on the image and enter the real-world coordinates of the points that was clicked. Entering the coordinates allows the image to be georeferenced so it can be displayed at the correct location. The coordinates to be entered are in the table below. Instead of clicking on the image, however, there is an easier way to transfer the coordinates. </text><conditional-text type="IF" value="USER1"/><text styleclass="Normal" translate="true">Open the help and find this topic in the help (Examples|MODFLOW Examples: Rocky Mountain Arsenal (RMA)|RMA: Importing Data). </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Use the mouse to select the data in the table below and copy it to the clipboard (Ctrl-C). Then paste (Ctrl-V) it into Microsoft Excel. Then select the data in Excel and copy the data to the clipboard again and paste (Ctrl-V) it into the top left hand cell (column = Pixel X; row = 1) of the table in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ImportEdit_Bitmap_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Import Image</link><text styleclass="Normal" translate="true"> dialog box. Then click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="3" colcount="4" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Pixel X</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Pixel Y</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">X</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Y</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1690</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">9000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">418</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">575</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">6300</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">2640</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The image will appear in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Main_Window" styleclass="Normal" translate="true">top view</link><text styleclass="Normal" translate="true"> of the model. Click on the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Zoom</text><text styleclass="Normal" translate="true"> button </text><image src="Zoom.png" scale="100.00%" styleclass="Normal"><title translate="true">Zoom button</title></image><text styleclass="Normal" translate="true"> and click and drag a rectangle around the image. When the mouse button is released, ModelMuse will zoom in on the selected area. Try experimenting with the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Pan</text><text styleclass="Normal" translate="true"> button </text><image src="Pan.PNG" scale="100.00%" styleclass="Image Caption"><title translate="true">Pan button</title></image><text styleclass="Normal" translate="true">. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Pan</text><text styleclass="Normal" translate="true"> button and then move the mouse over the top view of the model. Push down the mouse button and hold it down. Move the mouse and then release the mouse button. The view of the model should be dragged to a new location when this is done. Try experimenting with the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Zoom In</text><text styleclass="Normal" translate="true"> </text><image src="ZoomIn.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Zoom In button</title></image><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Zoom Out</text><text styleclass="Normal" translate="true"> </text><image src="ZoomOut.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Zoom Out button</title></image><text styleclass="Normal" translate="true"> buttons too. When one of those buttons is clicked, clicking on the model will zoom in or out by a factor of two at the location that was clicked. See the </text><conditional-text type="IF" value="USER1"/><text styleclass="Normal" translate="true">help for the </text><conditional-text type="END"/><link displaytype="text" defaultstyle="true" type="topiclink" href="View" styleclass="Normal" style="font-weight:bold;" translate="true">View</link><text styleclass="Normal" translate="true"> menu for more details.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It is possible to draw objects to define the rest of the model. However, it is easier to import them if they have already been defined elsewhere. In this case, there is a Shapefile that contains the objects needed to define much of the model. The next step is to import the Shapefile.</text></para>
+    <para styleclass="Figure Referrer"><text styleclass="Figure Referrer" translate="true">Select </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">File|Import|Shapefile...</text><text styleclass="Figure Referrer" translate="true"> Select rma.SHP. (in the &quot;My Documents\ModelMuse Examples\data\RMA&quot; folder.) Check the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Set values of intersected cells</text><text styleclass="Figure Referrer" translate="true"> check box (fig. 98). The attributes associated with the shapes aren&apos;t useful so there is no need to check the check box under &quot;Import&quot; in the table. Instead, just the geometry of the shapes will be imported. Click the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">OK</text><text styleclass="Figure Referrer" translate="true"> button.</text></para>
+    <para styleclass="Image"><image src="RmaImportShapefile.ipp" scale="75.00%" width="598" height="435" styleclass="Image"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 98. </text><text styleclass="Image Caption" translate="true">Import Shapefile dialog box showing settings.</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The shapes may not be visible at first because they are at the hidden by the image. To hide the image, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit|Show or Hide Image</text></para>
+    <para styleclass="Figure Referrer"><text styleclass="Figure Referrer" translate="true">The model will now appear similar to figure 99. Show the image again by selecting </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Edit|Show or Hide Image</text><text styleclass="Figure Referrer" translate="true"> again.</text></para>
+    <para styleclass="Image"><image src="RmaModelAfterShapefileImported.bmp" scale="75.00%" width="415" height="529" styleclass="Image"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 99. </text><text styleclass="Image Caption" translate="true">Model after importing Shapefile with data.</text></para>
+  </body>
+</topic>

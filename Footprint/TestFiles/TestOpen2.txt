@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Well_Footprint_File>
+ < FileFormatVersion >
+  1
+ </ FileFormatVersion >
+<Number_Of_Rows>
+  5
+</Number_Of_Rows>
+<Number_Of_Columns>
+ 6
+</Number_Of_Columns>
+
+<Closure_Criterion>
+1d-3
+</Closure_Criterion>
+
+<Listing_File>
+Footprint.txt
+</Listing_File>
+
+<Text_Results_File>
+Output.Txt
+</Text_Results_File>
+
+<Binary_Results_File>
+PriorWithdrawals.fpb
+</Binary_Results_File>
+
+<Max_Iterations>
+100000
+</Max_Iterations>
+
+<Initial_Distribution>
+False
+</Initial_Distribution>
+
+<Redistribution_Criterion>
+5
+</Redistribution_Criterion>
+
+  <Outline>4<Point>0<X>0</X>
+      <Y>0</Y>
+    </Point>
+    <Point>1<X>0</X>
+      <Y>1</Y>
+    </Point>
+    <Point>2<X>1</X>
+      <Y>1</Y>
+    </Point>
+    <Point>3<X>1</X>
+      <Y>0</Y>
+    </Point>
+  </Outline>
+
+<Grid_Angle>
+  45.0
+</Grid_Angle>
+
+<Cell_Size>
+45.1
+</Cell_Size>
+
+<Depth_Rate_Index>
+  <Text_File>DepthRateIndex.txt
+  </Text_File>
+</Depth_Rate_Index>
+<Withdrawals>
+  <Text_File>
+    TestWithdrawals.txt
+  </Text_File>
+</Withdrawals>
+<Active>
+  <Text_File>
+    Active.txt
+  </Text_File>
+</Active>
+  <FileFormatVersion>1</FileFormatVersion>
+</Well_Footprint_File>

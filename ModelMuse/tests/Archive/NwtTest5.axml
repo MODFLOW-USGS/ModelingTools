@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="NwtTest5" FileType="bin">
+    <FileName Model_Name="NwtTest5" FileType="bin">C:\WRDAPP\MODFLOW-NWT_1.1.3\bin\MODFLOW-NWT_64.exe</FileName>
+  </bin>
+  <ancillary Model_Name="NwtTest5" FileType="ancillary">
+    <FileName Model_Name="NwtTest5" FileType="ancillary">NwtTest5.gpt</FileName>
+  </ancillary>
+  <model Model_Name="NwtTest5" FileType="Model Input">
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.bas</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.dis</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.evt</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.gag</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.ghb</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.gsf</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.nam.archive</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.nwt</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.oc</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.rch</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.sfr</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.upw</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">NwtTest5.wel</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Input">usgs.NwtTest5.reference</FileName>
+  </model>
+  <output Model_Name="NwtTest5" FileType="Model Output">
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.cbc</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.fdn</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.fhd</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.lst</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg1</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg10</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg11</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg12</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg2</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg3</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg4</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg5</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg6</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg7</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg8</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.sfrg9</FileName>
+    <FileName Model_Name="NwtTest5" FileType="Model Output">NwtTest5.wel_dewater.txt</FileName>
+  </output>
+</Model_Archive_List>

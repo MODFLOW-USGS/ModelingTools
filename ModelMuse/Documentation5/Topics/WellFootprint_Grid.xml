@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">WellFootprint Grid</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">WellFootprint Grid</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">WellFootprint uses a two-dimensional map view grid in which all the cells are square and have the same size. Row 1, column 1 is in the upper left corner of the grid. </text></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 McBug.lst REPLACE
+DATA(BINARY)      9 McBug.cbc REPLACE
+DIS              12 McBug.dis OLD
+BAS6             13 McBug.bas OLD
+OC               39 McBug.oc OLD
+DATA             37 McBug.fhd REPLACE
+DATA             38 McBug.fdn REPLACE
+PCG              18 McBug.pcg OLD
+LPF              14 McBug.lpf OLD
+CHD              17 McBug.chd OLD
+WEL              20 McBug.wel OLD
+ZONE             15 McBug.zon OLD
+PVAL             52 McBug.pval OLD

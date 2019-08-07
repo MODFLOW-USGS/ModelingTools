@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GAGE - Gage Package</title>
+  <keywords>
+    <keyword translate="true">GAGE</keyword>
+    <keyword translate="true">GAGERCH</keyword>
+    <keyword translate="true">GAGESEG</keyword>
+    <keyword translate="true">LAKE</keyword>
+    <keyword translate="true">NUMGAGE</keyword>
+    <keyword translate="true">OUTTYPE</keyword>
+    <keyword translate="true">UNIT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GAGE - Gage Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GAGE</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Lakes and streams can be designated as having gaging stations located on them. For each such designated lake or stream, the time and a variety of other information will be written to a separate output file after each time step (and each transport time increment) &#160;to facilitate graphical postprocessing of the calculated data.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/wri/wri004167" target="_blank" styleclass="Citation" translate="true">Merritt, M.L., and Konikow, L.F., 2000, Documentation of a Computer Program to Simulate Lake-Aquifer Interaction Using the MODFLOW Ground-Water Flow Model and the MOC3D Solute-Transport Model: U.S. Geological Survey Water-Resources Investigations Report 00-4167, 146 p.</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr20041042" target="_blank" styleclass="Citation" translate="true">Prudic, D.E., Konikow, L.F., and Banta, E.R., 2004, A new stream-flow routing (SFR1) package to simulate stream-aquifer interaction with MODFLOW-2000: U.S. Geological Survey Open-File Report 2004-1042, 95 p.</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2006/tm6A13/" target="_blank" styleclass="Citation" translate="true">Niswonger, R.G. and Prudic, D.E., 2005, Documentation of the Streamflow-Routing (SFR2) Package to include unsaturated flow beneath streams--A modification to SFR1: U.S. Geological Survey Techniques and Methods, Book 6, Chap. A13, 47 p.</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="filelink" href="Combined_gage_input_instructions.pdf" styleclass="Normal" translate="true">Combined_gage_input_instructions.pdf</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="filelink" href="Gage7_input_instructions.pdf" styleclass="Normal" translate="true">Gage7_input_instructions.pdf</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="filelink" href="Gage_input_instructions.pdf" styleclass="Normal" translate="true">Gage_input_instructions.pdf</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" styleclass="Normal" translate="true">Lake (LAK)</link><text styleclass="Normal" translate="true"> package</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">Streamflow-Routing (SFR)</link><text styleclass="Normal" translate="true"> package</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Stream Gaging (Monitoring) Station File (GAGE)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Cells of the model grid can be designated as “stream gaging station” locations. At each designated cell (or stream reach), the time, stage, streamflow out of that reach, the streambed seepage, unsaturated storage, change in unsaturated storage, and groundwater recharge will be written to a separate output file to facilitate model output evaluation and graphical post processing of the calculated data. Several options are available to print additional information. The input file for specifying gaging station locations is read if the file type (Ftype) “GAGE” is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. The output file will contain two header lines that provide relevant information (the text will be contained within quotes).</text></para>
+    <para styleclass="Normal"><table rowcount="7" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For each simulation, if GAGE Package is used:</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NUMGAGE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="NUMGAGE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NUMGAGE Number of gaging stations</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For each gaging station:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 2 must include exactly </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GAGE" anchor="NUMGAGE" styleclass="Normal" translate="true">NUMGAGE</link><text styleclass="Normal" translate="true"> lines (or records) of data. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GAGE" anchor="NUMGAGE" styleclass="Normal" translate="true">NUMGAGE</link><text styleclass="Normal" translate="true"> &gt; 1, it is permissible to interleaf in Data Set 2 records for stream gaging stations (according to the format specified in the documentation for the Stream Package) with records for gages on lakes. Data lines (records) within Data Set 2 can be listed in any arbitrary order.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If the gage is on a lake</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LAKE UNIT [OUTTYPE]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAKE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LAKE Negative value of the lake number of the lake where the gage is located.</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">The Gage Package can also be used in conjunction with the Stream Flow Routing (SFR) Package to specify the location of a gaging station on a stream. Therefore, to guarantee that the code can distinguish between input for lakes and that for stream locations, lake numbers are specified as their negative value.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[UNIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">UNIT Unit number for output file. Specify negative value of unit number to invoke reading of optional parameter OUTTYPE for listing additional information for lakes.</text></para>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">The user should specify a unique unit number for each gaging station and match those unit numbers to DATA file types and file names in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name file</link><text styleclass="Normal" translate="true"> (Harbaugh and McDonald, 1996b).</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OUTTYPE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="OUTTYPE" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">OUTTYPE Code for type of expanded listing desired in output file:</text></para>
+                      <list id="18" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="0" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">Use standard default listing of time, stage, volume, and concentration.</text></li>
+                        <li styleclass="Normal"></li>
+                      </list>
+                      <para styleclass="Normal"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:18px; tabstops:none; font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:18px; tabstops:none;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) &#160;</text><conditional-text type="END"/><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">Default values plus all inflows to and outflows from lake (as volumes during time increment), and total lake conductance.</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></li>
+                              <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:18px; tabstops:none;"><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">(MODFLOW-2005, MODFLOW-LGR, MODFLOW-CFP, MODFLOW-NWT, </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">and MODFLOW-OWHM</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">) </text><conditional-text type="END"/><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">Default values plus all inflows to and outflows from lake (as volumes during time increment), total lake conductance, and time-step budget error (percent). Computed runoff from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">UZF</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true"> and lake infiltration to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">UZF</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true"> is added whenever the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">UZF</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true"> Package is active in MODFLOW-2005 and MODFLOW-LGR. (The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">UZF</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true"> Package is not available in MODFLOW-2000.)</text><conditional-text type="END"/></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <list id="18" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="0" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"></li>
+                      </list>
+                      <para styleclass="Normal"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:18px; tabstops:none; font-family:Symbol; font-size:12pt; color:#000000;">
+                              <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:18px; tabstops:none;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Default values plus changes in lake stage, lake volume, and solute concentrations.</text><conditional-text type="END"/></li>
+                              <li styleclass="Normal" style="text-indent:-1px; margin-right:0px; margin-left:18px; tabstops:none;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM and MODFLOW-LGR) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Default values plus changes in lake stage, lake volume, and solute concentrations, and cumulative lake budget error (percent).</text><conditional-text type="END"/></li>
+                            </list>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <list id="18" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="0" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">All of the above except time-step budget error.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></li>
+                        <li styleclass="Normal"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Time, lake stage, lake volume, solute concentration, and rate of change of lake volume, as well as volumetric rates for all inflows to and outflows from lakes (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/T), total lake conductance (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">/T), and time-step budget error. Volumetric rates of computed runoff from UZF and lake infiltration to UZF is added whenever the UZF Package is active in MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, and MODFLOW-LGR.</text><conditional-text type="END"/></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Total lake conductance (OUTTYPE options 1 and 3 for a lake gaging station) is the sum of the conductances of each seepage interface for each lake. Changes in lake stage, volume, and solute concentrations (OUTTYPE options 2 or 3) are listed as incremental changes from previous time increment and as cumulative change since start of simulation.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-OWHM, and MODFLOW-LGR) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Volumetric rates for option 4 are expressed in units of volume per time during a time step increment. Versions of the GAGE Package since 2006 for MODFLOW-2000 and MODFLOW-2005 had listed groundwater inflows and outflows as volumetric flow rates and listed the other values as volumes per time step for options 1 and 3.</text><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%NOTES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="GageNote1"/></para>
+                <para styleclass="Normal"><snippet src="GageNote2"/></para>
+                <para styleclass="Normal"><snippet src="GageNote3"/></para>
+                <para styleclass="Normal"><snippet src="GageNote5"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If the gage is on a stream</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GAGESEG GAGERCH UNIT OUTTYPE</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GAGESEG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">GAGESEG An integer value that is the stream segment number where gage is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GAGERCH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">GAGERCH An integer value that is the stream reach number where gage is located.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[UNIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">UNIT An integer value that is the unit number of output file for this gage.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[OUTTYPE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="OUTTYPE2" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">OUTTYPE An integer value that is a flag for type of expanded listing desired in output file:</text></para>
+                      <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">0 Use standard default listing of time, stage, outflow, and solute concentration.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">1 Default values plus depth, width, and flow at midpoint.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">2 Default values plus streambed conductance for the reach, head difference across streambed, and hydraulic gradient across streambed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">3 Default values plus solute load in stream (if GWT is active).</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">4 All of the above.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">5 Use for diversions to provide a listing of time, stage, flow diverted, maximum assigned diversion rate, flow at end of upstream segment prior to diversion, solute concentration, and solute load.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">6 Used for unsaturated flow routing to provide a listing of time, stage, groundwater head, streambed seepage, change in unsaturated storage, and recharge.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">7 Used for unsaturated flow routing to provide a listing of time and the unsaturated water content profile beneath the stream. Two profiles are printed. The first is the volume average water content of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ISUZN" styleclass="Normal" translate="true">ISUZN</link><text styleclass="Normal" translate="true"> unsaturated cells beneath a stream reach. The second profile is the volume averaged water content beneath the low flow channel only. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" anchor="ISUZN" styleclass="Normal" translate="true">ISUZN</link><text styleclass="Normal" translate="true"> =1 then both water content profiles will be the same.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">8 Use for unsaturated flow to provide a listing of time and the following budget components summed over all stream reaches: stream loss; stream gain; infiltration into the unsaturated zone; change of storage in the unsaturated zone; recharge; and storage in the unsaturated zone. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-OWHM, and MODFLOW-LGR)</text><conditional-text type="END"/><conditional-text type="END"/></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%NOTES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="GageNote1"/></para>
+                <para styleclass="Normal"><snippet src="GageNote3"/></para>
+                <para styleclass="Normal"><snippet src="GageNote4"/></para>
+                <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" style="font-weight:bold;" translate="true">Note</text><text styleclass="Normal" translate="true">: Although a stream segment and reach number are required inputs for a stream gaging station, any active segment and reach number can be specified when OUTTYPE is 8 (recommend using segment 1, reach 1). No information specific to the specified reach is printed when this OUTTYPE option is selected.</text><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

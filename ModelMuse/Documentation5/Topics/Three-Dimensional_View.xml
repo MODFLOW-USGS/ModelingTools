@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Three-Dimensional View</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Three-Dimensional View</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The 3-D view of the model (fig. 9) allows the user to view (but not edit) the model. A number of items in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="View" styleclass="Normal" style="font-weight:bold;" translate="true">View</link><text styleclass="Normal" translate="true"> menu change the appearance of the 3-D view. The following mouse actions can be used to navigate in the 3-D view.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">To rotate the 3-D view, click in the 3-D view and drag with the mouse.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">To pan the 3-D view, hold down the shift key while dragging with the mouse.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">To change the magnification of the 3-D view, hold down the right mouse key and click in the 3-D view. Then, while holding the right mouse key down, move the mouse up or down.</text></li>
+    </list>
+    <para style="text-align:center; page-break-after:avoid;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="3DView.png" scale="100.00%" styleclass="Image Caption"><title translate="true">A 3D view of a model in ModelMuse.</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 9.</text><text styleclass="Image Caption" translate="true"> A 3-D view of a model in ModelMuse.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

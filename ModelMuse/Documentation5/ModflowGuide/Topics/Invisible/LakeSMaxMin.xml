@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">LakeSMaxMin</title>
+  <body>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">SSMN and SSMX are not needed for a transient run and must be omitted when the solution is transient.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">When the first stress period is a steady-state stress period, SSMN is defined in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" anchor="DataSet3" styleclass="Normal" translate="true">record 3</link><text styleclass="Normal" translate="true">. &#160;For subsequent steady-state stress periods, SSMN is defined in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LAK" anchor="DataSet9a" styleclass="Normal" translate="true">record 9a</link><text styleclass="Normal" translate="true">.</text></li>
+    </list>
+  </body>
+</topic>

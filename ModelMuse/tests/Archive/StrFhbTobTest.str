@@ -1,0 +1,13 @@
+# STR: Stream package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+    10     1     0     0     0  1.000000000000E+000      9   143 AUXILIARY IFACE # Data Set 2: MXACTS NSS NTRIB NDIV  ICALC CONST ISTCB1 ISTCB2 Option
+    10     0     0 # Data Set 5: ITMP IRDFLG IPTFLG
+     1     2     3     1     1  1.000000000000E+000   1.000000000000E+000   8.575765644969E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     3     3     1     2  0.000000000000E+000   1.000000000000E+000   4.568432279389E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     3     4     1     3  0.000000000000E+000   1.000000000000E+000   9.266379052495E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     4     4     1     4  0.000000000000E+000   1.000000000000E+000   5.204515559016E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     4     5     1     5  0.000000000000E+000   1.000000000000E+000   8.630295772868E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     5     5     1     6  0.000000000000E+000   1.000000000000E+000   5.840598838643E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     5     6     1     7  0.000000000000E+000   1.000000000000E+000   7.994212493241E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     6     6     1     8  0.000000000000E+000   1.000000000000E+000   6.476682118269E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     6     7     1     9  0.000000000000E+000   1.000000000000E+000   7.358129213614E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE
+     1     7     7     1    10  0.000000000000E+000   1.000000000000E+000   4.994010987070E+001  -3.000000000000E+000  -1.000000000000E+000      0 # Data set 6: Layer Row Col Seg Reach Flow Stage Condfact Sbot Stop, IFACE

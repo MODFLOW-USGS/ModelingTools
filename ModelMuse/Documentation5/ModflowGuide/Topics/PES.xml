@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PES - Parameter-Estimation Process Input File</title>
+  <keywords>
+    <keyword translate="true">BPRI</keyword>
+    <keyword translate="true">COEF</keyword>
+    <keyword translate="true">CSA</keyword>
+    <keyword translate="true">EQNAM</keyword>
+    <keyword translate="true">FCONV</keyword>
+    <keyword translate="true">IAP</keyword>
+    <keyword translate="true">IBEFLG</keyword>
+    <keyword translate="true">IOSTAR</keyword>
+    <keyword translate="true">IPR</keyword>
+    <keyword translate="true">IPRCOV</keyword>
+    <keyword translate="true">IPRINT</keyword>
+    <keyword translate="true">IWTP</keyword>
+    <keyword translate="true">IYCFLG</keyword>
+    <keyword translate="true">LASTX</keyword>
+    <keyword translate="true">LPRINT</keyword>
+    <keyword translate="true">MAX-CHANGE</keyword>
+    <keyword translate="true">MAX-ITER</keyword>
+    <keyword translate="true">MPR</keyword>
+    <keyword translate="true">NFIT</keyword>
+    <keyword translate="true">NIPRNAM</keyword>
+    <keyword translate="true">NOPT</keyword>
+    <keyword translate="true">NPNG</keyword>
+    <keyword translate="true">PARNEG</keyword>
+    <keyword translate="true">PES</keyword>
+    <keyword translate="true">PLOT-SYMBOL</keyword>
+    <keyword translate="true">PNAM</keyword>
+    <keyword translate="true">prior-information equation</keyword>
+    <keyword translate="true">PRM</keyword>
+    <keyword translate="true">RMAR</keyword>
+    <keyword translate="true">RMARM</keyword>
+    <keyword translate="true">SIGN</keyword>
+    <keyword translate="true">SOSC</keyword>
+    <keyword translate="true">SOSR</keyword>
+    <keyword translate="true">STAT</keyword>
+    <keyword translate="true">STAT-FLAG</keyword>
+    <keyword translate="true">STATP</keyword>
+    <keyword translate="true">Text</keyword>
+    <keyword translate="true">TOL</keyword>
+    <keyword translate="true">WTP</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PES - Parameter-Estimation Process Input File</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PES</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Parameter-Estimation Process is used to calibrate a model by modifying parameter values until the fit between the simulated values and observations is optimal.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr00184" target="_blank" styleclass="Citation" translate="true">Hill, M.C., Banta, E.R., Harbaugh, A.W., and Anderman, E.R., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to the Observation, Sensitivity, and Parameter-Estimation Processes and three post-processing programs: U.S. Geological Survey Open-File Report 00-184, 210 p.</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The Parameter-Estimation Process requires that the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Ground-Water_Flow_Process" styleclass="Normal" translate="true">flow</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">observation</link><text styleclass="Normal" translate="true">, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Sensitivity_Process" styleclass="Normal" translate="true">sensitivity</link><text styleclass="Normal" translate="true"> processes all be used.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Package_Incompatibilities" styleclass="Normal" translate="true">Package Incompatibilities</link></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The Parameter Estimation Process is not included in MODFLOW-2005 or MODFLOW-LGR. &#160;External programs such as </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://typhoon.mines.edu/freeware/ucode/" target="_blank" styleclass="Normal" translate="true">UCODE</link><text styleclass="Normal" translate="true"> must be used instead.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for the Parameter-Estimation Process is read from a file that is specified with file type &quot;PES&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name file</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><table rowcount="12" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional and can include as many lines as desired. Each line needs to begin with</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">the “#” character in the first column.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character string (maximum of 79 characters) that starts in column 2. Any characters can be included in Text. The “#” character needs to be in column 1. Text is printed when the file is read and provides an opportunity for the user to include information about the model both in the input file and the associated output file.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MAX-ITER MAX-CHANGE TOL SOSC (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 1 includes variables that are most often changed by the user.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAX-ITER]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MAX-ITER—is the maximum number of parameter-estimation iterations. If MAX-ITER = 0, the program calculates the variance-covariance matrix on parameters and related statistics (the parameter correlation coefficients generally are of most interest) using the starting parameter values from the Sensitivity Process input file, and parameter estimation stops after one iteration.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAX-CHANGE]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MAX-CHANGE—is the maximum fractional change for parameter values in one iteration (Hill, 1998, eq. 5, p. 9). MAX-CHANGE commonly equals 2.0, or less if parameter values are unstable during parameter-estimation iterations.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TOL—is the parameter-estimation closure criteria, as a fractional change in parameter values (Hill, 1998, eq. 7, p.12). TOL commonly equals 0.01. Larger values often are used during preliminary calibration efforts; values as small as 0.001 may be used for theoretical work.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SOSC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SOSC—is the second convergence criterion discussed in Hill (1998, p. 12). If SOSC </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0.0, parameter estimation will converge if the least-squares objective function does not decrease by more than SOSC*100 percent over two parameter-estimation iterations. SOSC usually equals 0.0. Typical nonzero values of SOSC are 0.01 and 0.05.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IBEFLG IYCFLG IOSTAR NOPT NFIT SOSR &#160;RMAR RMARM IAP (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 2 includes variables that control the modified Gauss-Newton calculations and are sometimes changed by the user.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBEFLG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IBEFLG—is a flag that controls the generation of files to be used as input to the post-processing program BEALE-2000, which tests model linearity.</text></para>
+                      <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBEFLG = 0, no file for BEALE-2000 is produced.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBEFLG = 1, the _b1 file of tables 5 and 12 is produced.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBEFLG = 2, the _b2 file of tables 5 and 13 is produced. Production of this file may require MODFLOW-2000 input files that differ from the files used for model calibration, as discussed in chapter 7.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IYCFLG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IYCFLG—is a flag that controls the generation of files to be used as input to the post-processing program YCINT-2000, which calculates confidence and prediction intervals on simulated equivalents to observations.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IYCFLG = 0, The _y0 file of tables 5 and 9 is produced. Production of this file may require MODFLOW-2000 input files that differ from the files used for model calibration.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IYCFLG = 1, The _y1 file of tables 5 and 10 is produced. Production of this file may require MODFLOW-2000 input files that differ from the files used for model calibration, as discussed in chapter 7. Sensitivities for the predicted quantities are calculated, but the calculations related to nonlinear regression and the variance-covariance matrix on parameters are not made.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IYCFLG = 2, The _y2 file of tables 5 and 11 is produced. This file is needed if confidence and prediction intervals on differences (eq. 7) are to be calculated. Production of this file may require MODFLOW-2000 input files that differ from the files used for model calibration, as discussed in chapter 7. Sensitivities for the predicted quantities are calculated, but the calculations related to nonlinear regression and the variance-covariance matrix on parameters are not made.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IOSTAR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IOSTAR—is a flag that controls printing to the screen. If IOSTAR equals one, printing to the screen is suppressed. Usually IOSTAR=0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NOPT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NOPT—is a flag identifying whether or not to include matrix R of equation (B1) in equation (4a), as described in Hill (1998, p. 8, 78). Regression may converge in fewer iterations with NOPT = 1 for problems with large residuals and a large degree of nonlinearity.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NFIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NFIT—is the number of Gauss-Newton iterations (when NOPT equals 1) after which matrix R of equation (B1) is included in equation (4a) of Hill (1998, p. 8, 79).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SOSR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SOSR—is a criterion for using R of equation (B1) in equation (4a) of Hill (1998, p. 8,78). Matrix R is used if the percentage change in the sum of squared, weighted residuals does not exceed SOSR*100 in two parameter-estimation iterations. Usually SOSR equals 0.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RMAR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">RMAR—is used along with RMARM to calculate the Marquardt parameter, if its use is indicated based on CSA of item 4. The calculation of the Marquardt parameter described by Hill (1998, p. 9) is expressed as mrnew= RMARM*mrold+ RMAR. Typically, RMAR = 0.001. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RMARM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">RMARM—is used along with RMAR to calculate the Marquardt parameter, if its use is indicated based on CSA of item 4. The calculation of the Marquardt parameter described by Hill (1998, p. 9) is expressed as mrnew= RMARM*mrold+ RMAR. Typically, RMARM = 1.5.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IAP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IAP—is a flag identifying whether, for log-transformed parameters, MAX-CHANGE applies to the native parameter value or to the log transform of the parameter value. Generally, IAP = 0.</text></para>
+                      <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IAP = 0, MAX-CHANGE applies to the native parameter value.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IAP = 1, MAX-CHANGE applies to the log transform of the parameter value.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRCOV IPRINT LPRINT (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 3 includes variables that control printing.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRCOV]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRCOV—is a format code for printing of variance-covariance and correlation matrices. Permissible values of IPRCOV and corresponding formats are:</text></para>
+                      <para style="margin-top:14px; margin-left:1px;"><table rowcount="11" colcount="2" style="width:300px; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:bold; color:#000000;" translate="true">IPRCOV</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:bold; color:#000000;" translate="true">FORMAT</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">1</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">11G10.3</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">2</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">10G11.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">3</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">9G12.5</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">4</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">8G13.6</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">5</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">8G14.7</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">6</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">6G10.3</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">7</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">5G11.4</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">8</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">5G12.5</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">9</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">4G13.6</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">10</text></para>
+                          </td>
+                          <td style="vertical-align:middle;">
+                            <para><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">4G14.7</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPRINT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRINT—is a flag that controls printing of various statistics computed for each parameter-estimation iteration, including simulated equivalents, unweighted and weighted residuals, observation sensitivities, summary statistics for residuals by observation type, scaled least-squares matrix of the Gauss-Newton method, and scaled gradient vector of the objective function.</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPRINT = 0, the statistics are printed at the first and last parameter-estimation iterations.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPRINT &gt; 0, the statistics are printed at each iteration. Also, a summary of parameter values and statistics for all parameter-estimation iterations is printed in theGLOBAL output file.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LPRINT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LPRINT—is a flag that controls printing of eigenvalues and eigenvectors.</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LPRINT = 0, eigenvalues and eigenvectors are not printed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LPRINT &gt; 0, if parameter estimation converges, eigenvalues and eigenvectors are printed.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CSA FCONV LASTX (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 4 includes variables that control the modified Gauss-Newton calculations and are rarely changed by the user.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CSA]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">CSA—is the search-direction adjustment parameter used in the Marquardt procedure. Usually equals 0.08.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FCONV]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">FCONV—is a flag and a value used to allow coarser solver convergence criteria for early parameter-estimation iterations. If FCONV equals zero, coarser convergence criteria are not used. Commonly, FCONV = 0.0; typical nonzero values would be 5.0 or 10.0, and these can produce much smaller execution times in some circumstances.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LASTX]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">LASTX—is a flag that controls calculation of the sensitivities used to calculate the parameter variance-covariance matrix when parameter estimation converges.</text></para>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LASTX = 0, sensitivities from the last parameter-estimation iteration are used to calculate the variance-covariance matrix. The program proceeds as in figure 1.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LASTX &gt; 0, sensitivities are recalculated using the final parameter estimates and are used to calculate the variance-covariance matrix.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NPNG IPR MPR (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 5 includes variables that indicate whether additional items need to be read. The additional possible items are as follows.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPNG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NPNG" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NPNG—is the number of parameters of type HK, VK, VANI, VKCB, SS, SY, EVT, or ETS that can have negative values. This is useful for some interpolation methods in which, for example, deviations from a base value are calculated, where the deviations can be positive or negative. An example of such a method is described by Keidser and Rosbjerg (1991). If NPNG is greater than zero, item 6 is read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IPR" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IPR—is the number of parameters included in the full variance-covariance matrix used to weight the prior information.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MPR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MPR" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">MPR—is the number of prior-information equations to be used in the regression.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="NPNG" styleclass="Normal" translate="true">NPNG</link><text styleclass="Normal" translate="true"> is greater than zero, read item 6 once.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PARNEG(1), PARNEG(2), . . . , PARNEG(NPNG) (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNEG]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">PARNEG—is an array of NPNG names of parameters of type HK, VK, VANI, VKCB, SS, SY, EVT, </text><text styleclass="New Materials" translate="true">or ETS </text><text styleclass="Normal" translate="true">that can have negative values. This may be the case when the second kriging method discussed in Hill (1992, p. 125) is used.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true"> is greater than zero, read item </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true"> repetitions of item 7. Parameters that appear in item 7 may not appear in item 10.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NIPRNAM BPRI PLOT-SYMBOL (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NIPRNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NIPRNAM—is the name of one of the IPR parameters for which a variance-covariance matrix for prior parameter estimates is to be read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BPRI]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">BPRI—is the prior estimate for parameter NIPRNAM.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="PES_PlotSymbol"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true"> is greater than zero, read items 8 and 9 once. The size of item 9 depends on </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IWTP (free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWTP]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="IWTP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IWTP—is a flag identifying how the weight matrix for correlated prior information is to be calculated using the values in array WTP specified in item 9.</text></para>
+                <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">IWTP = 0, WTP is a variance-covariance matrix. The diagonal terms of this matrix are the variances of the prior information, the off-diagonals are the covariances. Diagonal term WTP(I,I) is the variance for the parameter designated by NIPRNAM(I); off-diagonal term WTP(I,J) is the covariance for the parameters designated by NIPRNAM(I) and NIPRNAM(J). For parameters specified as being log-transformed in the Sensitivity Process input file, the corresponding WTP elements are interpreted as being relative to the log-transformed value (using log base 10). The weight matrix is calculated by taking the inverse of the array specified in item 9.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">IWTP = 1, WTP is a matrix of coefficients of variation (the standard deviation divided by the prior information value) and correlation coefficients. The diagonal terms are the coefficients of variation of the prior information; off-diagonals are the correlation coefficients and vary in value from –1.0 to +1.0. Diagonal term WTP(I,I) is the coefficients of variation for the parameter designated by NIPRNAM(I); off-diagonal term WTP(I,J) is the correlation coefficients for the parameters designated by NIPRNAM(I) and NIPRNAM(J). For parameters specified as being log-transformed in the Sensitivity Process input file, the corresponding WTP elements are interpreted as being relative to the log-transformed value (using log base 10). The weight matrix is calculated by in two steps. First, the coefficients of variation and correlation coefficients are used to calculate variances and covariances, and then the inverse of the variance-covariance matrix is calculated. In calculating variances, the coefficients of variation are multiplied by the prior information values specified in item 7, or the log10 of that value for log-transformed parameters; if the value equals zero, 1.0 is used instead.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WTP(1,1), WTP(1,2), ..., WTP(1,</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true">) (free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WTP(2,1), WTP(2,2), ..., WTP(2,</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true">) (new line; free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">...</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WTP(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true">,1), WTP(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true">,2), ..., WTP(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true">,</text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true">) (new line; free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[WTP]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">WTP—is an </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true"> by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IPR" styleclass="Normal" translate="true">IPR</link><text styleclass="Normal" translate="true"> array containing statistics used to calculate the weight matrix for correlated prior information. The statistics specified depends on the value of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="IWTP" styleclass="Normal" translate="true">IWTP</link><text styleclass="Normal" translate="true">. Note that the matrix is symmetric, but the entire matrix (upper and lower parts) must be entered.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="MPR" styleclass="Normal" translate="true">MPR</link><text styleclass="Normal" translate="true"> is greater than zero, read </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" anchor="MPR" styleclass="Normal" translate="true">MPR</link><text styleclass="Normal" translate="true"> repetitions of item 10. Examples are shown after the next section. Parameters that appear in item 7 may not appear in item 10.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">EQNAM PRM &quot;=&quot; [SIGN] [COEF &quot;*&quot;] PNAM [SIGN [COEF &quot;*&quot;] PNAM [SIGN…]] &quot;</text><text styleclass="Keywords" translate="true">STAT</text><text styleclass="Normal" translate="true">&quot; STATP STAT-FLAG PLOT-SYMBOL (free format: maximum of 200 characters; one or more spaces must separate all words, numbers, and symbols)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[EQNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">EQNAM—is a user-supplied name (up to 10 nonblank characters) for a prior-information equation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PRM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PRM—is the prior estimate for prior-information equation EQNAM. PRM always needs to be specified as a native, untransformed value. That is, even if the parameter is specified as being log-transformed in the Sensitivity Process input file, here PRM needs to be the untransformed value. The program will calculate the log-transformed value. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA["="]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">&quot;=&quot; indicates that an equal sign (without quotes) must be entered literally.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SIGN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SIGN—is either &quot;+&quot; or &quot;-&quot; (entered without quotes). The SIGN before the first PARNAM is assumed to be “+” unless otherwise indicated.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[COEF]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">COEF—is the coefficient for the parameter following the &quot;*&quot; in prior-information equation EQNAM. COEF can be specified with or without a decimal point and can be specified in scientific notation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA["*"]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">&quot;*&quot;—indicates that an asterisk (without quotes) must be entered literally if a value for COEF is entered.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PNAM—is a parameter name (up to 10 nonblank characters) as specified in the SEN file. If the parameter is designated in the Sensitivity Process input file as being log-transformed (LN greater than 0), the prior-information equation may contain only one parameter name. If a prior-information equation contains no log-transformed parameters, the equation may contain any number of terms, where each term is defined by the sequence: SIGN [COEF &quot;*&quot;] PNAM.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA["STAT"]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">&quot;STAT&quot;—indicates that the word “STAT” (without quotes) must be entered literally, although it may be in any combination of upper- and lowercase letters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STATP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STATP—is the value from which the weight for prior-information equation EQNAM is calculated, as determined using STAT-FLAG. If a parameter is specified as being log-transformed in the Sensitivity Process input file, STATP may be specified relative either to the native value or to the log-transformed value (using log base 10), depending on the value of STAT-FLAG.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STAT-FLAG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG—is a flag identifying how the weight for prior-information equation EQNAM is to be calculated. This depends both on whether the user chooses to specify the variance, standard deviation, or coefficient of variation, and whether, for log-transformed parameters, the user chooses to specify the statistic related to the native, untransformed parameter, or to the transformed parameter.</text></para>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 0, STATP is the variance associated with PRM, and is related to the native prior value. Weight = 1/STATP unless the parameter is defined as log-transformed in the Sensitivity Process input file, in which case equation 27 is used to convert STATP (which equals </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">b</text><text styleclass="Normal" translate="true"> of equation 27) to </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ln b</text><text styleclass="Normal" translate="true">, and weight = 1/</text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ln b</text><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 1, STATP is the standard deviation associated with PRM, and is related to the native prior value. Weight = 1/STATP</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true"> unless the parameter value is defined as log-transformed in the Sensitivity Process input file, in which case equation 27 is used to convert STATP (which equals </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">b</text><text styleclass="Normal" translate="true"> of equation 27) to </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ln b</text><text styleclass="Normal" translate="true">, and weight = 1/</text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ln b</text><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 2, STATP is the coefficient of variation associated with PRM, and is related to the native prior value. Weight = 1/(STATP * PRM)</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true"> unless the parameter is defined as log-transformed in the Sensitivity Process input file, in which case equation 27 is used to convert STATP (which equals </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">b</text><text styleclass="Normal" translate="true">/b of equation 27), to </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ln b</text><text styleclass="Normal" translate="true">, and weight = 1/</text><text styleclass="Normal" style="font-family:Symbol;" translate="true">s</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:sub; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">ln b</text><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 10, STATP is the variance associated with the log (base 10) transform of PRM; weight = 1/[STATP * 2.30262].</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 11, STATP is the standard deviation associated with the log (base 10) transform of PRM; weight = 1/[STATP</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">* 2.30262].</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STAT-FLAG = 12, STATP is the coefficient of variation associated with the log (base 10) transform of PRM; weight = 1/[(STATP * log 10 (PRM))</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">* 2.30262].</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="PES_PlotSymbol"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Example Input File</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true"># Example PES file</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">#</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">15 2.0 1E-5 1E-4 ITEM 1: MAX-ITER MAX-CHANGE TOL SOSC</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">0 0 0 0 0 0. .001 1.5 0 ITEM 2: IBEFLG IYCFLG IOSTAR NOPT NFIT SOSR RMAR RMARM IAP</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">2 0 0 ITEM 3: IPRCOV IPRINT LPRINT</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">0.08 0.0 0 ITEM 4: CSA FCONV LASTX</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">0 0 6 ITEM 5: NPNG IPR MPR</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">EQ-Q_3 -97000. = WQ_3 STAT 1940 1 9 ITEMS 10: 6 (MPR) PRIOR-INFO EQUATIONS</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">EQ-Q_4 -51000. = WQ_4 STAT 1020 1 9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">EQ-HK_2 420. = HK_2 STAT 84. 1 9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">EQ-RCH_1 0.0004 = RCH_ZONE_1 stat 1.2E-4 1 9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">EQ-RCH_3 1.7E-4 = RCH_ZONE_3 stat 5.1E-5 1 9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">EQ-KRB_1 0.08 = RIVERS stat 0.008 1 9</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this example, WQ_3, WQ_4, HK_2, RCH_ZONE_1, RCH_ZONE_3, and RIVERS are</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">parameter names, which need to be defined in input files for Groundwater Flow Process</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">packages and need to be listed with ISENS &gt; 0 in the Sensitivity Process input file. The program</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">matches parameter names among the various input files in a case-insensitive manner. EQ-Q_3,</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">EQ-Q_4, EQ-HK_2, EQ-RCH_1, EQ-RCH_3, and EQ-KRB_1 are names assigned to the 6 (MPR)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">prior-information equations.</text></para>
+  </body>
+</topic>

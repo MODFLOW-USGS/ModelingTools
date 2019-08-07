@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 ResTest.lst REPLACE
+DATA(BINARY)      9 ResTest.cbc REPLACE
+DIS              12 ResTest.dis OLD
+BAS6             13 ResTest.bas OLD
+OC               39 ResTest.oc OLD
+DATA             37 ResTest.fhd REPLACE
+DATA             38 ResTest.fdn REPLACE
+PCG              18 ResTest.pcg OLD
+LPF              14 ResTest.lpf OLD
+CHD              17 ResTest.chd OLD
+RES              27 ResTest.res OLD

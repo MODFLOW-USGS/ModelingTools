@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE Nodes [
+
+<!ENTITY % NameValue "CDATA">
+<!ENTITY % PropType "(I|S|D|L|H|B)">
+<!ENTITY % VersionValue "CDATA">
+
+<!ELEMENT Prp (#PCDATA)>
+<!ELEMENT Node (Node|Prp)*>
+<!ELEMENT Nodes (Node)+>
+
+<!ATTLIST Nodes version CDATA "1">
+
+<!ATTLIST Node name CDATA #REQUIRED>
+
+<!ATTLIST Prp name CDATA #REQUIRED>
+<!ATTLIST Prp type CDATA #REQUIRED>
+<!ATTLIST Prp value CDATA #REQUIRED>
+]>
+<Nodes version="1">
+	<Node name="root">
+		<Node name="child list">
+			<Node name="item0000000000">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ChdScript.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="0"/>
+				<Prp name="key" type="S" value="{0ED46585-86EA-455B-A9C4-B27405C158B8}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000001">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="RenameDataSetAndVariable.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="1"/>
+				<Prp name="key" type="S" value="{02346AC0-0F47-4D9F-B151-A34397223EBB}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000002">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="HufExample2.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="2"/>
+				<Prp name="key" type="S" value="{4C2CD083-EBD8-4907-BCAD-C25EE76D0BEC}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000003">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ImportLayWet.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="3"/>
+				<Prp name="key" type="S" value="{A39875CC-29B2-47A6-972C-9ECBC827E876}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000004">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ImportEvt.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="4"/>
+				<Prp name="key" type="S" value="{D584AB21-36FB-45C8-A5CE-C90A53403192}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000005">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="SfrImport.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="5"/>
+				<Prp name="key" type="S" value="{4B4D762D-C1C9-4D39-A9D9-2F3816ACEFC3}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000006">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ElevationImport.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="6"/>
+				<Prp name="key" type="S" value="{75E8F688-461D-4366-B68B-1AFCDDF6F5A0}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000007">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ImportWithoutZones.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="7"/>
+				<Prp name="key" type="S" value="{53143491-7F56-47EC-A4F6-2F588A20EAC4}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000008">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="CheckCommentEdit.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="8"/>
+				<Prp name="key" type="S" value="{AB15C45C-2326-4549-8896-6967EC163A89}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000009">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="UndoImport.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="9"/>
+				<Prp name="key" type="S" value="{D7E66D8D-D9F0-4776-BC33-338EE04BA06A}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000010">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="UndoTest.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="10"/>
+				<Prp name="key" type="S" value="{B6672FC5-8546-4E54-9A19-9246E7009AB7}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000011">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="DeleteDataSet.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="11"/>
+				<Prp name="key" type="S" value="{FF4938E2-242C-4421-B711-2E3C472F0636}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000012">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="UzfImport.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="12"/>
+				<Prp name="key" type="S" value="{6FBC6594-C3DB-4651-9242-2C22875891EA}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000013">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="EditMultipleObjects.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="13"/>
+				<Prp name="key" type="S" value="{2CD06DA4-EAD0-4371-8428-E3BD01FC6A7D}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000014">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="CancelDisablePackage.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="14"/>
+				<Prp name="key" type="S" value="{0E16AFA3-0EE0-4163-B08E-0FB7C91B83A8}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000015">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="UpdateSegmentsTest.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="15"/>
+				<Prp name="key" type="S" value="{3607607F-A03B-4BB9-BFC0-546B8B637317}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000016">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="NewModelTest.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="16"/>
+				<Prp name="key" type="S" value="{8678A5A1-0BBA-4D79-BE44-45B66DDD7E1B}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000017">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ActiveOnLayer.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="17"/>
+				<Prp name="key" type="S" value="{EBE6F7A0-5390-4742-B54E-235544F931CE}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000018">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="StackOverflow.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="18"/>
+				<Prp name="key" type="S" value="{D268E976-493F-4D58-A192-CE4F11CD206B}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000019">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ZRefinement.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="19"/>
+				<Prp name="key" type="S" value="{293EEED4-A763-402A-9FAA-4EBD973FB3EE}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000020">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ChdImport.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="20"/>
+				<Prp name="key" type="S" value="{5AD520CF-9C63-485C-996B-19EFC205339B}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000021">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="RMA.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="21"/>
+				<Prp name="key" type="S" value="{67F9483C-F471-4C54-B1DF-64377D8EBF9D}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000022">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ImportTest.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="22"/>
+				<Prp name="key" type="S" value="{8841F84C-6E30-436B-8F1D-A98BA68F5BCC}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000023">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="DeleteLayerGroup.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="23"/>
+				<Prp name="key" type="S" value="{E6978928-9849-4A96-8AC9-9D0ABB9588F9}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000024">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ContourExport.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="24"/>
+				<Prp name="key" type="S" value="{F230C066-C5FE-40BE-9DBF-4E731358BE45}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000025">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ContourTwice.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="25"/>
+				<Prp name="key" type="S" value="{60660A4E-F5A4-4353-A7C7-B00D1D5213FB}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000026">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="CreateNewDataSets.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="26"/>
+				<Prp name="key" type="S" value="{CDB39D9B-475E-42A1-85AC-868D78A1E0CB}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000027">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="DeleteLastSection.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="27"/>
+				<Prp name="key" type="S" value="{59E4C913-136A-461A-A12A-ABD0BD9AE6EF}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000028">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="AnimateTest.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="28"/>
+				<Prp name="key" type="S" value="{A488730E-D864-4885-A948-243DF77689FF}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000029">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="AddRechParamBug.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="29"/>
+				<Prp name="key" type="S" value="{AE9F6FC2-842E-427B-A13A-66DB7575DB1D}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000030">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="Constants.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="30"/>
+				<Prp name="key" type="S" value="{31BC1FF6-AA22-4484-8FC5-2C603B1821AD}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000031">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="ChildModelRemove.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="31"/>
+				<Prp name="key" type="S" value="{1EF0DF46-C25A-40B0-AA2F-0E4827398940}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000032">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="UndoSplitCells.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="32"/>
+				<Prp name="key" type="S" value="{1CD44025-81D9-44B5-8367-F0242376260B}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000033">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="TestColoringPhastDataSet.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="33"/>
+				<Prp name="key" type="S" value="{9BB30E1B-C23C-4426-9D18-75187CA6A276}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000034">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="OpenSutra.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="34"/>
+				<Prp name="key" type="S" value="{91AC25B9-02B0-4AE8-95F4-A06E51B900DC}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000035">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="FarmDialogs.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="35"/>
+				<Prp name="key" type="S" value="{DA77DFD7-4F93-4532-85CD-6AF78628495C}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000036">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="TestRIP.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="36"/>
+				<Prp name="key" type="S" value="{CA06AC56-C7C9-4DF0-A77F-A7FE69F0E7DD}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+			<Node name="item0000000037">
+				<Node name="item data">
+					<Prp name="relpath" type="S" value="FootprintWithdrawal.sd"/>
+				</Node>
+				<Prp name="index" type="I" value="37"/>
+				<Prp name="key" type="S" value="{45B1205A-A1A7-4823-875C-86E3BD592F12}"/>
+				<Prp name="type" type="S" value="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}"/>
+				<Prp name="typename" type="S" value="Script Unit"/>
+			</Node>
+		</Node>
+		<Node name="folders">
+			<Node name="folders"/>
+		</Node>
+		<Prp name="settingsversion" type="S" value="7.52"/>
+		<Prp name="signature" type="S" value="{9252F941-DB23-4FCA-AA50-858B33BB4A19}"/>
+		<Prp name="version" type="S" value="7.0"/>
+	</Node>
+</Nodes>

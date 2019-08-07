@@ -1,0 +1,6 @@
+     2     1    81     0 # NLKINIT, MXLKBC, ICBCLK, IETLAK
+       103        1.                            12 # CINITLAK
+  0.000000000000E+000 
+  0.000000000000E+000 
+         1 # NTMP for stress period      1
+     1     1  1.000000000000E+000  # ILKBC, ILKBCTYP, (CBCLK(n), n=1, NCOMP)

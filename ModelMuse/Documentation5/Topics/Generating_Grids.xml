@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Generating Grids</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Generating Grids</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Grids are used in MODFLOW, PHAST, and Footprint models. A grid can be generated in four ways.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">When a new model is first created, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Specifying_a_Uniform_Initial_G" styleclass="Normal" translate="true">a uniform grid can be specified</link><text styleclass="Normal" translate="true">.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">The commands </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Specify Grid Angle…</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Specify Grid Lines…</text><text styleclass="Normal" translate="true"> can be used to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Specifying_a_Grid_with_Numbers" styleclass="Normal" translate="true">specify the grid numerically</link><text styleclass="Normal" translate="true">.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">A grid can be </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Drawing_the_Grid" styleclass="Normal" translate="true">drawn and rotated with the mouse</link><text styleclass="Normal" translate="true">.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">The user can </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Objects_to_Specify_the_G" styleclass="Normal" translate="true">use objects to define where the grid should be</link><text styleclass="Normal" translate="true"> and then use the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Generate Grid...</text><text styleclass="Normal" translate="true"> command to create it.</text></li>
+    </list>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">These four options are explained in greater detail in the following sections.</text></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">With MODFLOW 6 models, structured grids can be converted to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by Vertices</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+jtf @
+# MODFLOW-2005 PVAL file for project tc1
+11
+SS_1 @SS_1                  @
+HK_1 @HK_1                  @
+VERT_ANI_1 @VERT_ANI_1            @
+VERT_K_CB @VERT_K_CB             @
+SS_2 @SS_2                  @
+HK_2 @HK_2                  @
+VERT_ANI_2 @VERT_ANI_2            @
+WELLS_TR @WELLS_TR              @
+RIVERS @RIVERS                @
+RCH_ZONE_1 @RCH_ZONE_1            @
+RCH_ZONE_2 @RCH_ZONE_2            @

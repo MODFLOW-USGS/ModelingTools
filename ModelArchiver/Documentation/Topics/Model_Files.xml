@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Model Files</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Model Files</text></para>
+    </header>
+    <para styleclass="Normal"><snippet src="FileExtensionsHidden"/></para>
+    <para styleclass="Heading2_atoc_"><snippet src="SelectModelFilesHidden"/></para>
+    <para styleclass="Heading2_atoc_"></para>
+  </body>
+</topic>

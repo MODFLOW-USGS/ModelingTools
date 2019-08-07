@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="EncloseBug3" FileType="bin">
+    <FileName Model_Name="EncloseBug3" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="EncloseBug3" FileType="ancillary">
+    <FileName Model_Name="EncloseBug3" FileType="ancillary">EncloseBug3.gpt</FileName>
+  </ancillary>
+  <model Model_Name="EncloseBug3" FileType="Model Input">
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.bas</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.dis</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.gsf</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.lpf</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.nam.archive</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.oc</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">EncloseBug3.pcg</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Input">usgs.EncloseBug3.reference</FileName>
+  </model>
+  <output Model_Name="EncloseBug3" FileType="Model Output">
+    <FileName Model_Name="EncloseBug3" FileType="Model Output">EncloseBug3.cbc</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Output">EncloseBug3.fdn</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Output">EncloseBug3.fhd</FileName>
+    <FileName Model_Name="EncloseBug3" FileType="Model Output">EncloseBug3.lst</FileName>
+  </output>
+</Model_Archive_List>

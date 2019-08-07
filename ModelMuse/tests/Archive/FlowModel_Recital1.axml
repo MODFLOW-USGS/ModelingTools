@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="FlowModel Recital1" FileType="bin">
+    <FileName Model_Name="FlowModel Recital1" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="bin">C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe</FileName>
+  </bin>
+  <ancillary Model_Name="FlowModel Recital1" FileType="ancillary">
+    <FileName Model_Name="FlowModel Recital1" FileType="ancillary">FlowModel Recital1.gpt</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="ancillary">V:\Ldd General\?????\???? ?????????\GoogleEarth_Image.jpg</FileName>
+  </ancillary>
+  <model Model_Name="FlowModel Recital1" FileType="Model Input">
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.bas</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.chd</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.dis</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.drn</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.gsf</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.lpf</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.nam.archive</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.oc</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.pcg</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">FlowModel_Recital1.rch</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Input">usgs.FlowModel_Recital1.reference</FileName>
+  </model>
+  <output Model_Name="FlowModel Recital1" FileType="Model Output">
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Output">FlowModel_Recital1.cbc</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Output">FlowModel_Recital1.fdn</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Output">FlowModel_Recital1.fhd</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Model Output">FlowModel_Recital1.lst</FileName>
+  </output>
+  <Modpath_Input_Files Model_Name="FlowModel Recital1" FileType="Modpath Input">
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">FlowModel_Recital1.mpm</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">FlowModel_Recital1.mpn.archive</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">FlowModel_Recital1.mprsp.archive</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">FlowModel_Recital1.strt</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">Mp.bat.archive</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">MpIn.txt</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">RunModpath.Bat.archive</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Input">usgs.FlowModel_Recital1_Modpath.reference</FileName>
+  </Modpath_Input_Files>
+  <Modpath_Output_Files Model_Name="FlowModel Recital1" FileType="Modpath Output">
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Output">FlowModel_Recital1.cbf</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Output">FlowModel_Recital1.end</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Output">FlowModel_Recital1.mplst</FileName>
+    <FileName Model_Name="FlowModel Recital1" FileType="Modpath Output">FlowModel_Recital1.path</FileName>
+  </Modpath_Output_Files>
+</Model_Archive_List>

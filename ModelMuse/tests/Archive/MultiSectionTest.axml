@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="MultiSectionTest" FileType="bin">
+    <FileName Model_Name="MultiSectionTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="MultiSectionTest" FileType="ancillary">
+    <FileName Model_Name="MultiSectionTest" FileType="ancillary">MultiSectionTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="MultiSectionTest" FileType="Model Input">
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.bas</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.dis</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.gsf</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.lpf</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.nam.archive</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.oc</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">MultiSectionTest.pcg</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Input">usgs.MultiSectionTest.reference</FileName>
+  </model>
+  <output Model_Name="MultiSectionTest" FileType="Model Output">
+    <FileName Model_Name="MultiSectionTest" FileType="Model Output">MultiSectionTest.cbc</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Output">MultiSectionTest.fdn</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Output">MultiSectionTest.fhd</FileName>
+    <FileName Model_Name="MultiSectionTest" FileType="Model Output">MultiSectionTest.lst</FileName>
+  </output>
+</Model_Archive_List>

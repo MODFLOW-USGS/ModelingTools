@@ -1,0 +1,12 @@
+# Name File for MT3DMS created on 10/11/2018 by ModelMuse
+LIST 16 ..\..\output\output.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.mls
+FTL 10 ..\..\output\output.ImportMt3dSteadyState\ImportMt3dSteadyState.ftl
+DATA 17 ..\..\output\output.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.cnf
+BTN 1 ..\..\model\model.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.btn
+DATA(BINARY) 201 ..\..\output\output.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState_Comp1.ucn
+DATA 601 ..\..\output\output.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState_Comp1._mas
+DATA 401 ..\..\output\output.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState_Comp1.mto
+ADV 2 ..\..\model\model.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.adv
+DSP 3 ..\..\model\model.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.dsp
+SSM 4 ..\..\model\model.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.ssm
+GCG 9 ..\..\model\model.ImportMt3dSteadyState_MT3DMS\ImportMt3dSteadyState.gcg

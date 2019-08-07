@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Interactive Input</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Interactive Input</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Interactive input to Zonebudget is the same as for the original version except for the part that prompts for the output file. The user is prompted for an output (listing) file, cell-by-cell budget file, title (maximum 80 characters), and zone file. If no zone file is specified, zones can be defined interactively. The final prompts ask the user to identify the time steps at which the budgets should be computed.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The prompt for the output file is “Enter a LISTING FILE for results or a base name and file types:”. If a single file is specified, as is done for the previous versions of Zonebudget, the result will be output that is the same as for the previous versions. This file will contain budgets for each numbered zone and each composite zone formatted for printing. Instead of entering the single output file, a base name followed by up to three file types can be entered. The three allowed file types are ZBLST, CSV, and CSV2. ZBLST indicates the original file format. CSV and CSV2 are the two comma-delimited file formats. These files are named with “.zblst”, “.csv”, and “.2.csv”, respectively, appended to the base name. The zone information and title are written to the ZBLST file. If no ZBLST file is specified, then the title and zone information is written to a file with “.log” appended to the base name. For example, if the response to the output-file prompt is “TEST ZBLST CSV”, then files TEST.zblst and TEST.csv will be created.</text></para>
+  </body>
+</topic>

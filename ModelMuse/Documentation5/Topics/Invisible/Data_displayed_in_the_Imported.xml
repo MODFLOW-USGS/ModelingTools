@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Data displayed in the Imported Data tab</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The imported data are displayed in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Imported_Data_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Imported Data</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. Imported data can not be edited. The &quot;Key&quot; argument used to access the data is displayed in the captions of the columns. Imported coordinates, however, can not be accessed using a key.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Key argument is a text variable so it is typically enclosed in quotation marks.</text></para>
+  </body>
+</topic>

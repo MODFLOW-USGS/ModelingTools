@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Drntest" FileType="bin">
+    <FileName Model_Name="Drntest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Drntest" FileType="ancillary">
+    <FileName Model_Name="Drntest" FileType="ancillary">Drntest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Drntest" FileType="Model Input">
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.bas</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.chd</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.dis</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.drn</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.gsf</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.lpf</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.nam.archive</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.oc</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">Drntest.pcg</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Input">usgs.Drntest.reference</FileName>
+  </model>
+  <output Model_Name="Drntest" FileType="Model Output">
+    <FileName Model_Name="Drntest" FileType="Model Output">Drntest.bdn</FileName>
+    <FileName Model_Name="Drntest" FileType="Model Output">Drntest.lst</FileName>
+  </output>
+</Model_Archive_List>

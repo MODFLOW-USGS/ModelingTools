@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Update Readme.txt</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Update Readme.txt</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Update Readme.txt</text><text styleclass="Normal" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command copies the readme.txt file specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Readme.txt_File" styleclass="Normal" translate="true">Readme.txt File</link><text styleclass="Normal" translate="true"> pane to the directory specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Create_Archive" styleclass="Normal" translate="true">Create Archive</link><text styleclass="Normal" translate="true"> pane and then appends descriptions of the files and folders from the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" translate="true">Archive Structure</link><text styleclass="Normal" translate="true"> pane to the end of the file. This command is useful when either the file descriptions on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Create_Archive" styleclass="Normal" translate="true">Create Archive</link><text styleclass="Normal" translate="true"> pane or the content of the readme.txt file specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Readme.txt_File" styleclass="Normal" translate="true">Readme.txt File</link><text styleclass="Normal" translate="true"> pane have changed after the archive has been created.</text></para>
+  </body>
+</topic>

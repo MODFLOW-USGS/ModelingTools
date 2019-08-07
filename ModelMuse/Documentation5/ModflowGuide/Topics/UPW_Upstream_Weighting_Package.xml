@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">UPW - Upstream Weighting Package</title>
+  <keywords>
+    <keyword translate="true">CHANI</keyword>
+    <keyword translate="true">HANI</keyword>
+    <keyword translate="true">HDRY</keyword>
+    <keyword translate="true">HK</keyword>
+    <keyword translate="true">IPHDRY</keyword>
+    <keyword translate="true">IUPWCB</keyword>
+    <keyword translate="true">IZ</keyword>
+    <keyword translate="true">LAYAVG</keyword>
+    <keyword translate="true">Layer</keyword>
+    <keyword translate="true">LAYTYP</keyword>
+    <keyword translate="true">LAYVKA</keyword>
+    <keyword translate="true">LAYWET</keyword>
+    <keyword translate="true">Mltarr</keyword>
+    <keyword translate="true">NCLU</keyword>
+    <keyword translate="true">NPUPW</keyword>
+    <keyword translate="true">PARNAM</keyword>
+    <keyword translate="true">PARTYP</keyword>
+    <keyword translate="true">Parval</keyword>
+    <keyword translate="true">Ss</keyword>
+    <keyword translate="true">Sy</keyword>
+    <keyword translate="true">VKA</keyword>
+    <keyword translate="true">VKCB</keyword>
+    <keyword translate="true">Zonarr</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">UPW - Upstream Weighting Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">UPW</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Upstream Weighting package is used to specify properties controlling flow between cells in MODFLOW-NWT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A37" target="_blank" styleclass="Citation" translate="true">Niswonger, R.G., Panday, Sorab, and Ibaraki, Motomu, 2011, MODFLOW-NWT, A Newton formulation for MODFLOW-2005: U.S. Geological Survey Techniques and Methods 6-A37, 44 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="NWT_release.txt" styleclass="Normal" translate="true">Release.txt for MODFLOW-NWT</link></li>
+          </list>
+          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">LPF</link><text styleclass="Normal" translate="true"> package has nearly identical input.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" styleclass="Normal" translate="true">NWT</link><text styleclass="Normal" translate="true"> Solver is required in the UPW package is used.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Flow_Package_Requirement"/></para>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Input data types and formats described below are nearly identical to those for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">LPF</link><text styleclass="Normal" translate="true"> Package and described on pages 8-28 through 8-31 of the MODFLOW-2005 manual (Harbaugh, 2005). However, the input variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYWET" styleclass="Normal" translate="true">LAYWET</link><text styleclass="Normal" translate="true"> should be set to zero for all layers because all layers that are specified as convertible (that is, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true">&gt;0) are assumed to be wettable in the UPW Package. The model will stop and print an error statement to the main Listing file if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYWET" styleclass="Normal" translate="true">LAYWET</link><text styleclass="Normal" translate="true"> is non-zero for any layers. Options are not allowed in the UPW Package, as they are in the LPF Package, and the variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="IPHDRY" styleclass="Normal" translate="true">IPHDRY</link><text styleclass="Normal" translate="true"> is new to the UPW Package. </text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The optional variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="PHIRAMP" styleclass="Normal" translate="true">PHIRAMP</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package can be specified in MODFLOW-NWT.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/></li>
+          </list>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">An option to print property arrays in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" styleclass="Normal" translate="true">LPF</link><text styleclass="Normal" translate="true"> and UPW packages to separate files can be activated in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Parameter_Value_File" styleclass="Normal" translate="true">PVAL</link><text styleclass="Normal" translate="true"> file in MODFLOW-OWHM.</text><conditional-text type="END"/></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Cell property data are read from the file that is type “UPW” in the Name File. Free format is used for reading all values. </text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="19" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For Each Simulation</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Lines beginning with # are restricted to the first lines of the file. Text is written to the Listing File.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IUPWCB HDRY NPUPW IPHDRY Options</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IUPWCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IUPWCB is a flag and a unit number.</text></para>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IUPWCB &gt; 0, cell-by-cell flow terms will be written to this unit number when “SAVE BUDGET” or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in Output Control. The terms that are saved are storage, constant-head flow, and flow between adjacent cells.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IUPWCB = 0, cell-by-cell flow terms will not be written.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IUPWCB &lt; 0, cell-by-cell flow for constant-head cells will be written in the listing file when “SAVE BUDGET” or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in Output Control. Cell-by-cell flow to storage and between adjacent cells will not be written to any file.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The flow terms that will be saved are the flows through the right, front, and lower cell face. Positive values represent flows toward higher column, row, or layer numbers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HDRY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="HDRY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HDRY is the head that is assigned to cells that are converted to dry during a simulation. Although this value plays no role in the model calculations, HDRY values are useful as indicators when looking at the resulting heads that are output from the model. HDRY is thus similar to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="HNOFLO" styleclass="Normal" translate="true">HNOFLO</link><text styleclass="Normal" translate="true"> in the Basic Package, which is the value assigned to cells that are no-flow cells at the start of a model simulation.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPUPW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NPUPW is the number of UPW parameters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IPHDRY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IPHDRY" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IPHDRY is a flag that indicates whether groundwater head will be set to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HDRY" styleclass="Normal" translate="true">HDRY</link><text styleclass="Normal" translate="true"> when the groundwater head is less than 1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-4</text><text styleclass="Normal" translate="true"> above the cell bottom (units defined by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="LENUNI" styleclass="Normal" translate="true">LENUNI</link><text styleclass="Normal" translate="true">). </text></para>
+                      <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IPHDRY=0, then head will not be set to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HDRY" styleclass="Normal" translate="true">HDRY</link><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IPHDRY&gt;0, then head will be set to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HDRY" styleclass="Normal" translate="true">HDRY</link><text styleclass="Normal" translate="true">.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">If the head solution from one simulation will be used as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="STRT" styleclass="Normal" translate="true">starting heads</link><text styleclass="Normal" translate="true"> for a subsequent simulation, or if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation</link><text styleclass="Normal" translate="true"> Process is used (Harbaugh and others, 2000), then </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HDRY" styleclass="Normal" translate="true">HDRY</link><text styleclass="Normal" translate="true"> should not be printed to the output file for dry cells (that is, the UPW Package input variable should be set as IPHDRY=0).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Options]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Options—are optional key words that activate options:</text></para>
+                      <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">NOPARCHECK</text><text styleclass="Normal" translate="true"> turns off the checking that a value is defined for all cells when parameters are used to define layer data.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYTYP(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="LAYTYP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LAYTYP contains a flag for each layer that specifies the layer type.</text></para>
+                <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0 – confined</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt;0 – convertible</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">&lt;0 – confined</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYAVG(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LAYAVG contains a flag for each layer that defines the method of calculating interblock transmissivity.</text></para>
+                <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—harmonic mean</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">1—logarithmic mean</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">2—arithmetic mean of saturated thickness and logarithmic-mean hydraulic conductivity.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CHANI(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="CHANI" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">CHANI contains a value for each layer that is a flag or the horizontal anisotropy. If CHANI is less than or equal to 0, then variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true"> defines horizontal anisotropy. If CHANI is greater than 0, then CHANI is the horizontal anisotropy for the entire layer, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true"> is not read. If any </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HANI_Param" styleclass="Normal" translate="true">HANI parameters</link><text styleclass="Normal" translate="true"> are used, CHANI for all layers must be less than or equal to 0.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYVKA(NLAY)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="LAYVKA" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LAYVKA contains a flag for each layer that indicates whether variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> is vertical hydraulic conductivity or the ratio of horizontal to vertical hydraulic conductivity.</text></para>
+                <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">0—indicates </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> is vertical hydraulic conductivity</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">not 0—indicates </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> is the ratio of horizontal to vertical hydraulic conductivity, where the horizontal hydraulic conductivity is specified as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> in item 9.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LAYWET(NLAY)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(Item 6 should always be set to zero in the UPW Package because all layers with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true">(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="NLAY" styleclass="Normal" translate="true">NLAY</link><text styleclass="Normal" translate="true">)&gt;0 are assumed to be wettable)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LAYWET]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="LAYWET" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">LAYWET contains a flag for each layer that indicates whether wetting is active. LAYWET should always be zero for the UPW Package because all cells initially active are wettable.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat Items 7-8 for each parameter to be defined (that is, NPUPW times).</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[PARNAM PARTYP Parval NCLU]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PARNAM is the name of a parameter to be defined. This name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARTYP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PARTYP is the type of parameter to be defined. For the UPW Package, the allowed parameter types are: </text></para>
+                      <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><anchor id="HK_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HK—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true">, horizontal hydraulic conductivity </text></li>
+                        <li styleclass="Normal"><anchor id="HANI_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HANI—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true">, horizontal anisotropy </text></li>
+                        <li styleclass="Normal"><anchor id="VK_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VK—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> for layers for which &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true">represents vertical hydraulic conductivity (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true">=0) </text></li>
+                        <li styleclass="Normal"><anchor id="VANI_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VANI—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> for layers for which &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKA" styleclass="Normal" translate="true">VKA</link><text styleclass="Normal" translate="true"> represents vertical anisotropy (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true">≠0) </text></li>
+                        <li styleclass="Normal"><anchor id="SS_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SS—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="Ss" styleclass="Normal" translate="true">Ss</link><text styleclass="Normal" translate="true">, the specific storage </text></li>
+                        <li styleclass="Normal"><anchor id="SY_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SY—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="Sy" styleclass="Normal" translate="true">Sy</link><text styleclass="Normal" translate="true">, the specific yield </text></li>
+                        <li styleclass="Normal"><anchor id="VKCB_Param" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VKCB—defines variable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="VKCB" styleclass="Normal" translate="true">VKCB</link><text styleclass="Normal" translate="true">, the vertical hydraulic conductivity of a Quasi-3D confining layer.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parval]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Parval" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Parval is the parameter value. This parameter value may be overridden by a value in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Parameter_Value_File" styleclass="Normal" translate="true">Parameter Value</link><text styleclass="Normal" translate="true"> File.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NCLU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">NCLU is the number of clusters required to define the parameter. Each repetition of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="Item8" styleclass="Normal" translate="true">Item 8</link><text styleclass="Normal" translate="true"> is a cluster (variables Layer, Mltarr, Zonarr, and IZ). Each layer that is associated with a parameter usually has only one cluster. For example, parameters which apply to cells in a single layer generally will be defined by just one cluster. However, having more than one cluster for the same layer is acceptable.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Each repetition of Item 8 is called a parameter cluster. Repeat Item 8 NCLU times.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="Item8" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Data Set 8.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Layer Mltarr Zonarr IZ]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Layer]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer is the layer number to which a cluster definition applies.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Mltarr]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Mltarr is the name of the multiplier array to be used to define variable values that are associated with a parameter. The name “NONE” means that there is no multiplier array, and the variable values will be set equal to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="Parval" styleclass="Normal" translate="true">Parval</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Zonarr]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Zonarr" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Zonarr is the name of the zone array to be used to define the cells that are associated with a parameter. The name “ALL” means that there is no zone array, and all cells in the specified layer are part of the parameter.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IZ]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IZ is up to 10 zone numbers (separated by spaces) that define the cells that are associated with a parameter. These values are not used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="Zonarr" styleclass="Normal" translate="true">ZONARR</link><text styleclass="Normal" translate="true"> is specified as “ALL”. Values can be positive or negative, but 0 is not allowed. The end of the line, a zero value, or a non-numeric entry terminates the list of values.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">A subset of the following two-dimensional variables is used to describe each layer. All variables that apply to layer 1 are read first, followed by layer 2, followed by layer 3, and so forth. A variable not required due to simulation options (for example, Ss and Sy for a completely steady-state simulation) must be omitted from the input file.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">These variables are either read by the array-reading utility subroutine, U2DREL, or they are defined through parameters. If a variable is defined through parameters, then the variable itself is not read; however, a single line containing a print code is read in place of the control line. The print code determines the format for printing the values of the variable as defined by parameters. The print codes are the same as those used in a control line. If any parameters of a given type are used, parameters must be used to define the corresponding variable for all layers in the model.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 9.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HK(NCOL,NROW) - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If any HK parameters are included, read only a print code.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HK]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HK" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HK is the hydraulic conductivity along rows. HK is multiplied by horizontal anisotropy (see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="CHANI" styleclass="Normal" translate="true">CHANI</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HANI" styleclass="Normal" translate="true">HANI</link><text styleclass="Normal" translate="true">) to obtain hydraulic conductivity along columns.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 10.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[HANI(NCOL,NROW)] - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true">&#32;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 10 only if CHANI is less than or equal to 0. If any HANI parameters are included, read only a print code.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HANI]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="HANI" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HANI is the ratio of hydraulic conductivity along columns to hydraulic conductivity along rows, where </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> of item 9 specifies the hydraulic conductivity along rows. Thus, the hydraulic conductivity along columns is the product of the values in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> and HANI. Read only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="CHANI" styleclass="Normal" translate="true">CHANI</link><text styleclass="Normal" translate="true"> ≠ 0.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 11.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">VKA(NCOL,NROW) - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true">&#32;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If any VK or VANI parameters are included, read only a print code.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VKA]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="VKA" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">VKA is either vertical hydraulic conductivity or the ratio of horizontal to vertical hydraulic conductivity depending on the value of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true">. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true"> is 0, VKA is vertical hydraulic conductivity. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYVKA" styleclass="Normal" translate="true">LAYVKA</link><text styleclass="Normal" translate="true"> is not 0, VKA is the ratio of horizontal to vertical hydraulic conductivity. In this case, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="HK" styleclass="Normal" translate="true">HK</link><text styleclass="Normal" translate="true"> is divided by VKA to obtain vertical hydraulic conductivity, and values of VKA typically are greater than or equal to 1.0.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 12.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Ss(NCOL,NROW)] - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link><text styleclass="Normal" translate="true">&#32;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 12 only if at least one stress period is transient. If there are any SS parameters, read only a print code.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Ss]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Ss" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Ss is specific storage. Read only for a transient simulation (at least one </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="Sstr" styleclass="Normal" translate="true">transient stress period</link><text styleclass="Normal" translate="true">).</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 13.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Sy(NCOL,NROW)] - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 13 only if at least one stress period is transient and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> &gt;0. If any SY parameters are included, read only a print code.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Sy]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Sy" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Sy is specific yield. Read only for a transient simulation (at least one </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="Sstr" styleclass="Normal" translate="true">transient stress period</link><text styleclass="Normal" translate="true">) and if the layer is convertible (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="UPW_Upstream_Weighting_Package" anchor="LAYTYP" styleclass="Normal" translate="true">LAYTYP</link><text styleclass="Normal" translate="true"> &gt;0).</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 14.</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[VKCB(NCOL,NROW)] - </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DREL</link></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Include item 14 only if LAYCBD (in the Discretization File) is not 0. If any VKCB parameters are included, read only a print code.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VKCB]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="VKCB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">VKCB is the vertical hydraulic conductivity of a quasi-three-dimensional confining bed below a layer. Read only if there is a confining bed. Because the bottom layer cannot have a confining bed, VKCB cannot be specified for the bottom layer.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

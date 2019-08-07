@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW-2000 input files</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW-2000 input files</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When point stresses are applied to faces, declare IFACE as an Auxilary Variable in each point-stress input file, and use the </text><text styleclass="Keyword" translate="true">COMPACT BUDGET AUXILIARLY</text><text styleclass="Normal" translate="true"> option in Output Control. &#160;The IFACE values are only written into the budget file if this Output Control option is used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IFACE--flag indicating whether well flow is assigned to a face</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFACE=0 or IFACE&gt;6, flow term is treated as an internal source/sink.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFACE=1 through 6, flow term is assigned to the cell face corresponding to the value of IFACE.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFACE&lt;0, flow term is apportioned uniformly among all faces perpendicular to the horizontal direction (faces 1-4) that are boundaries with inactive cells.</text></li>
+    </list>
+    <para styleclass="Normal"><image src="Iface.wmf" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

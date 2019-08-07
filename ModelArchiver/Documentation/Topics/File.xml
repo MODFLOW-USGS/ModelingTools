@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">File</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Open</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Open a ModelArchiver file previously saved with the File|Save command.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Save</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Save a ModelArchiver file so it can be modified later.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Add Model...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Add a folders with a user specified names to the &quot;model&quot;, &quot;output&quot; and &quot;ancillary&quot; parts of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Archive_Structure" styleclass="Normal" translate="true">archive structure</link><text styleclass="Normal" translate="true">. Files can then be added to the archive.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Change Model Order...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Open the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Arrange_Models_Form" styleclass="Normal" style="font-weight:bold;" translate="true">Arrange Models</link><text styleclass="Normal" translate="true"> dialog box to change the order in which models appear in the archive structure.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Exit</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Close ModelArchiver. If the archive has been changed, the user will be prompted to save a ModelArchiver file.</text></para>
+  </body>
+</topic>

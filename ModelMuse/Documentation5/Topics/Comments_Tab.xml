@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Comments/Captions Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Comments/Captions Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Comments/Captions</text><text styleclass="Normal" style="font-weight:bold;" translate="true"> </text><text styleclass="Normal" translate="true">tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true"> dialog box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you want a caption displayed with an object, check the </text><text styleclass="Strong" translate="true">Visible</text><text styleclass="Normal" translate="true"> check box in the caption section. If you do not specify the text of the label, the name of the object will be used as the caption. The </text><text styleclass="Strong" translate="true">X and Y offsets</text><text styleclass="Normal" translate="true"> specify where the label should appear relative to the first visible vertex of the object. The </text><text styleclass="Strong" translate="true">X and Y offsets</text><text styleclass="Normal" translate="true"> are measured in pixels. You can specify a font for the labels. If no font is specified, the default font for the system will be used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Sometimes an object may be unusual in some way or do something that isn&apos;t obvious. Later on, you may not remember why it is set up the way it is. You can use the Comments field </text><text styleclass="Strong" translate="true">Comments/Captions</text><text styleclass="Normal" translate="true"> tab to explain features that need explanation.</text></para>
+  </body>
+</topic>

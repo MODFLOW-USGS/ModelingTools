@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="AssignementTestModflow" FileType="bin">
+    <FileName Model_Name="AssignementTestModflow" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="AssignementTestModflow" FileType="ancillary">
+    <FileName Model_Name="AssignementTestModflow" FileType="ancillary">AssignementTestModflow.gpt</FileName>
+  </ancillary>
+  <model Model_Name="AssignementTestModflow" FileType="Model Input">
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.bas</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.dis</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.gsf</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.lpf</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.nam.archive</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.oc</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">AssignementTestModflow.pcg</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Input">usgs.AssignementTestModflow.reference</FileName>
+  </model>
+  <output Model_Name="AssignementTestModflow" FileType="Model Output">
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Output">AssignementTestModflow.cbc</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Output">AssignementTestModflow.fdn</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Output">AssignementTestModflow.fhd</FileName>
+    <FileName Model_Name="AssignementTestModflow" FileType="Model Output">AssignementTestModflow.lst</FileName>
+  </output>
+</Model_Archive_List>

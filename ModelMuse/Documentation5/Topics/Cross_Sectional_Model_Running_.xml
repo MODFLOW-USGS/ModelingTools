@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Running the Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Running the Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You are now ready to run the model (File|Export|MODFLOW Input Files </text><image src="RunButton.bmp" scale="100.00%" styleclass="Normal"></image><text styleclass="Normal" translate="true">) and import the model results (File|Import|Model Results... </text><image src="ImportModelResults.bmp" scale="100.00%" styleclass="Normal"><title translate="true">Import and display model results button</title></image><text styleclass="Normal" translate="true">). Try importing the heads. The results should look similar to the figure below. It is interesting to note that the highest heads are not located where the ground elevation is highest. Thus, it would be a mistake, in this case, to use the watershed boundary as a no-flow boundary.</text></para>
+    <para styleclass="Normal"><image src="CrossSection16.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

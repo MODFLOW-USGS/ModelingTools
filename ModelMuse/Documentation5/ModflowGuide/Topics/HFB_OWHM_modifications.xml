@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HFB_OWHM_modifications</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">HFB_OWHM_modifications</text></para>
+    </header>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Normal" translate="true">If IROW1=IROW2 and ICOL1=ICOL2 and ABS(Layer2- Layer)=1, then there is no flow routing, but instead the barrier is changed to a vertical barrier between layers and will work with any solver package. </text><conditional-text type="END"/></para>
+  </body>
+</topic>

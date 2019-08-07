@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectVertexDistance</title>
+  <keywords>
+    <keyword translate="true">ObjectVertexDistance</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectVertexDistance</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectVertexDistance</text><text styleclass="Normal" translate="true">(VertexIndex) returns the distance along the length of the object from the beginning of the object to the vertex indicated by VertexIndex. Formulas for the third dimension of an object are not taken into consideration when computing ObjectVertexDistance.</text></para>
+  </body>
+</topic>

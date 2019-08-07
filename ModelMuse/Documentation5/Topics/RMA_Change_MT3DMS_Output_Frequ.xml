@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Change MT3DMS Output Frequency</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Change MT3DMS Output Frequency</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When MODFLOW runs, it will divide each MODFLOW time step into multiple transport time steps. We will want to plot the development of the chloride plume so we need to make sure that the concentrations are saved at multiple times.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|MODFLOW Output Control</text><text styleclass="Normal" translate="true"> and go to the </text><text styleclass="Strong" translate="true">MT3DMS</text><text styleclass="Normal" translate="true"> tab. Change the controls so that the concentrations are saved every 5 transport steps.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma6ExportFrequency.png" scale="60.00%" width="372" height="265" styleclass="Image Caption"><title translate="true">MODFLOW Output Control Showing MT3DMS controls</title></image></para>
+  </body>
+</topic>

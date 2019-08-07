@@ -1,0 +1,84 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options KEYWORDS
+  Verbose=0
+END Options
+
+# ------------------------------
+# UCODE-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+ModelName=ex1
+#Performance
+  linearity=yes
+  sensitivities=yes          # calculate sensitivities: yes, no
+  optimize=no               # estimate parameters: yes, no
+#Printing and output files
+  StartRes=yes               # print residuals: yes/no 
+  IntermedRes=no             # # same
+  FinalRes=no                # # same
+  StartSens=css              # print sensitivities:  
+  IntermedSens=css           # #   css, dss, unscaled, onepercentss,  
+  FinalSens=css              # #   allss,all, or none
+END UCODE_CONTROL_DATA 
+
+# ------------------------------
+# REGRESSION-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN REG_GN_CONTROLS KEYWORDS
+tolpar=0.01                ## GN param conv crit. Also see parameter blocks
+tolsosc=0.0                ## GN fit-change conv criteria. 
+MrqtDirection=85.41        ## angle (degrees) for Mrqt parameter
+MrqtFactor=1.5             ## #
+MrqtIncrement=0.001        ## #
+quasinewton=no             ## option to use QN updating: yes, no
+maxiter=10                 ## maximum # of GaussNewton updates
+maxchange=2.0              ## max frac param change for GN updates
+maxchangerealm=regression   # how changes apply, log-trans params
+END REG_GN_CONTROLS 
+
+BEGIN MODEL_COMMAND_LINES	FILES
+..\ex1a-files\obs-fwd.command
+END MODEL_COMMAND_LINES
+
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+   GroupName = MyPars  adjustable=yes TOLPAR=.01  maxchange=2.0   senmethod=1
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA FILES
+..\ex1a-files\tr.params
+END PARAMETER_DATA 
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN OBSERVATION_GROUPS FILES
+..\ex1a-files\groups.obs
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA FILES
+..\ex1a-files\hed.obs
+..\ex1a-files\flo.obs
+END OBSERVATION_DATA 
+
+BEGIN MODEL_INPUT_FILES	  KEYWORDS
+  modinfile=..\..\test-data-win\data-transient\tc1-fwd.sen  
+  templatefile=..\ex1a-files\tc1sen-forward.tpl
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES   KEYWORDS
+  modoutfile=..\..\test-data-win\data-transient\tc1._os  
+  instructionfile=..\ex1a-files\obs.instructions   
+  category=obs
+END MODEL_OUTPUT_FILES
+

@@ -1,0 +1,5 @@
+# PCG: Preconditioned Conjugate Gradient package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# PCG Package input file for hypothetical test simulation
+# Test of SFR2 Package
+   300    20     1     0 # MXITER, ITER1, NPCOND, IHCOFADD
+  1.000000000000E-006   9.999999700000E-006   9.000000000000E-001      2     0     3  9.600000000000E-001  # HCLOSE, RCLOSE, RELAX, NBPOL, IPRPCG, MUTPCG, DAMPPCG

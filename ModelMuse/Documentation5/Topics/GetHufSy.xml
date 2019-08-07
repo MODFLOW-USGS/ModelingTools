@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GetHufSy</title>
+  <keywords>
+    <keyword translate="true">GetHufSy</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GetHufSy</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetHufSy</text><text styleclass="Normal" translate="true">(Head, {Layer, Row, Column}) returns the specific yield of a cell based on the hydrogeologic units intersected by the cell that contains Head. This is equivalent to the value that HUF will use if Head is the current water table. </text><text styleclass="Strong" translate="true">GetHufSy</text><text styleclass="Normal" translate="true"> is used to help display an approximation of how the HUF geometry and parameters ultimately control the specific yield of the cells. If Head is not inside any hydrogeologic unit GetHufSy will return zero. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetHufSy</text><text styleclass="Normal" translate="true"> can only be used in the formulas for data sets.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetHufSy</text><text styleclass="Normal" translate="true"> is used in the formula for the optional data set </text><text styleclass="Strong" translate="true">HUF_SY</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GetHuf_Average_Sy" styleclass="Strong" translate="true">GetHuf_Average_Sy</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

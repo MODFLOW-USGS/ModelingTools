@@ -1,0 +1,242 @@
+PARAMETER 7                      Item 1: NPRCH
+4 2                              Item 2: NRCHOP IRCHCB
+RCH_Qal    RCH  0.05  1  INSTANCES  9   Fraction of precip, dimensionless
+QbasPreDev             [use for SP's 1-6]
+ppt_AVG    Topunit  1
+Qbas57_61               sp 7
+p_1957_61  Topunit  1
+Qbas62_64               sp 8
+p_1962_64  Topunit  1
+Qbas65_73               sp 9 & 10
+p_1965_73  Topunit  1
+Qbas74_78               sp 11
+p_1974_78  Topunit  1
+Qbas79_86               sp 12 & 13
+p_1979_86  Topunit  1
+Qbas87_94               sp 14
+p_1987_94  Topunit  1
+Qbas95_99               sp 15
+p_1995_99  Topunit  1
+Qbas00_03               sp 16
+p_2000_03  Topunit  1
+RCH_Tdw  RCH  0.04  1  INSTANCES  9   Fraction of precip, dimensionless
+Tdw_PreDev             [use for SP's 1-6]
+ppt_AVG    Topunit  2 3 4
+Tdw_57_61               sp 7
+p_1957_61  Topunit  2 3 4
+Tdw_62_64               sp 8
+p_1962_64  Topunit  2 3 4
+Tdw_65_73               sp 9 & 10
+p_1965_73  Topunit  2 3 4
+Tdw_74_78               sp 11
+p_1974_78  Topunit  2 3 4
+Tdw_79_86               sp 12 & 13
+p_1979_86  Topunit  2 3 4
+Tdw_87_94               sp 14
+p_1987_94  Topunit  2 3 4
+Tdw_95_99               sp 15
+p_1995_99  Topunit  2 3 4
+Tdw_00_03               sp 16
+p_2000_03  Topunit  2 3 4
+RCH_TKd    RCH  0.015  1  INSTANCES  9   Fraction of precip, dimensionless
+TKd_PreDev             [use for SP's 1-6]
+ppt_AVG    Topunit  5 6 7 
+TKd_57_61               sp 7
+p_1957_61  Topunit  5 6 7 
+TKd_62_64               sp 8
+p_1962_64  Topunit  5 6 7 
+TKd_65_73               sp 9 & 10
+p_1965_73  Topunit  5 6 7 
+TKd_74_78               sp 11
+p_1974_78  Topunit  5 6 7 
+TKd_79_86               sp 12 & 13
+p_1979_86  Topunit  5 6 7 
+TKd_87_94               sp 14
+p_1987_94  Topunit  5 6 7 
+TKd_95_99               sp 15
+p_1995_99  Topunit  5 6 7 
+TKd_00_03               sp 16
+p_2000_03  Topunit  5 6 7 
+RCH_Ka     RCH  0.015  1  INSTANCES  9   Fraction of precip, dimensionless
+Ka_PreDev             [use for SP's 1-6]
+ppt_AVG    Topunit  8 9 10
+Ka_57_61               sp 7
+p_1957_61  Topunit  8 9 10
+Ka_62_64               sp 8
+p_1962_64  Topunit  8 9 10
+Ka_65_73               sp 9 & 10
+p_1965_73  Topunit  8 9 10
+Ka_74_78               sp 11
+p_1974_78  Topunit  8 9 10
+Ka_79_86               sp 12 & 13
+p_1979_86  Topunit  8 9 10
+Ka_87_94               sp 14
+p_1987_94  Topunit  8 9 10
+Ka_95_99               sp 15
+p_1995_99  Topunit  8 9 10
+Ka_00_03               sp 16
+p_2000_03  Topunit  8 9 10
+RCH_Klf    RCH  0.015  1  INSTANCES  9   Fraction of precip, dimensionless
+Klf_PreDev             [use for SP's 1-6]
+ppt_AVG    Topunit  11 12
+Klf_57_61               sp 7
+p_1957_61  Topunit  11 12
+Klf_62_64               sp 8
+p_1962_64  Topunit  11 12
+Klf_65_73               sp 9 & 10
+p_1965_73  Topunit  11 12
+Klf_74_78               sp 11
+p_1974_78  Topunit  11 12
+Klf_79_86               sp 12 & 13
+p_1979_86  Topunit  11 12
+Klf_87_94               sp 14
+p_1987_94  Topunit  11 12
+Klf_95_99               sp 15
+p_1995_99  Topunit  11 12
+Klf_00_03               sp 16
+p_2000_03  Topunit  11 12
+RCH_AgIrr  RCH  1.5  1  INSTANCES  5   Units: Inches/Year
+Ag_80_19                sp 1-3 (assume ag irrigation is predevelopment)
+ipy2fpd    IrrParcel2 2
+Ag_20_39                sp 4
+ipy2fpd    Arz1930   1
+Ag_40_53                sp 5
+ipy2fpd    Arz1950   1
+Ag_54_86                sp 6-13
+ipy2fpd    Lsz1970   2
+Ag_87_03                SP 14-16
+ipy2fpd    Lsz2000   2
+RCH_Resid  RCH  1.0  1  INSTANCES  4   Units: Inches/Year
+Res_20_39               sp 4 (assume residential irrigation starts in 1920)
+ipy2fpd    Arz1930   2
+Res_40_53               SP 5
+ipy2fpd    Arz1950   2
+Res_54_86               SP 6-13
+ipy2fpd    Lsz1970   1
+Res_87_03               SP 14-16
+ipy2fpd    Lsz2000   1
+6  0                         Item 5: INRECH INIRCH SP 1 Predev-1879
+RCH_Qal    QbasPreDev   2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_PreDev   2
+RCH_TKd    Tkd_PreDev   2
+RCH_Ka     Ka_PreDev    2
+RCH_Klf    Klf_PreDev   2
+RCH_AgIrr  Ag_80_19     2
+6  0                         Item 5: INRECH INIRCH SP 2 1880-1906
+RCH_Qal    QbasPreDev   2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_PreDev   2
+RCH_TKd    Tkd_PreDev   2
+RCH_Ka     Ka_PreDev    2
+RCH_Klf    Klf_PreDev   2
+RCH_AgIrr  Ag_80_19     2
+6  0                         Item 5: INRECH INIRCH SP 3 1907-19
+RCH_Qal    QbasPreDev   2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_PreDev   2
+RCH_TKd    Tkd_PreDev   2
+RCH_Ka     Ka_PreDev    2
+RCH_Klf    Klf_PreDev   2
+RCH_AgIrr  Ag_80_19     2
+7  0                         Item 5: INRECH INIRCH SP 4 1920-39
+RCH_Qal    QbasPreDev   2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_PreDev   2
+RCH_TKd    Tkd_PreDev   2
+RCH_Ka     Ka_PreDev    2
+RCH_Klf    Klf_PreDev   2
+RCH_Resid  Res_20_39    2
+RCH_AgIrr  Ag_20_39     2
+7  0                         Item 5: INRECH INIRCH SP 5 1940-53
+RCH_Qal    QbasPreDev   2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_PreDev   2
+RCH_TKd    Tkd_PreDev   2
+RCH_Ka     Ka_PreDev    2
+RCH_Klf    Klf_PreDev   2
+RCH_Resid  Res_40_53    2
+RCH_AgIrr  Ag_40_53     2
+7  0                         Item 5: INRECH INIRCH SP 6 1954-56
+RCH_Qal    QbasPreDev   2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_PreDev   2
+RCH_TKd    Tkd_PreDev   2
+RCH_Ka     Ka_PreDev    2
+RCH_Klf    Klf_PreDev   2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 7 1957-61
+RCH_Qal    Qbas57_61    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_57_61    2
+RCH_TKd    TKd_57_61    2
+RCH_Ka     Ka_57_61     2
+RCH_Klf    Klf_57_61    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 8 1962-64
+RCH_Qal    Qbas62_64    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_62_64    2
+RCH_TKd    TKd_62_64    2
+RCH_Ka     Ka_62_64     2
+RCH_Klf    Klf_62_64    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 9 1965-71
+RCH_Qal    Qbas65_73    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_65_73    2
+RCH_TKd    TKd_65_73    2
+RCH_Ka     Ka_65_73     2
+RCH_Klf    Klf_65_73    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 10 1972-73
+RCH_Qal    Qbas65_73    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_65_73    2
+RCH_TKd    TKd_65_73    2
+RCH_Ka     Ka_65_73     2
+RCH_Klf    Klf_65_73    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 11 1974-78
+RCH_Qal    Qbas74_78    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_74_78    2
+RCH_TKd    TKd_74_78    2
+RCH_Ka     Ka_74_78     2
+RCH_Klf    Klf_74_78    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 12 1979-84
+RCH_Qal    Qbas79_86    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_79_86    2
+RCH_TKd    TKd_79_86    2
+RCH_Ka     Ka_79_86     2
+RCH_Klf    Klf_79_86    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 13 1985-86
+RCH_Qal    Qbas79_86    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_79_86    2
+RCH_TKd    TKd_79_86    2
+RCH_Ka     Ka_79_86     2
+RCH_Klf    Klf_79_86    2
+RCH_Resid  Res_54_86    2
+RCH_AgIrr  Ag_54_86     2
+7  0                         Item 5: INRECH INIRCH SP 14 1987-94
+RCH_Qal    Qbas87_94    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_87_94    2
+RCH_TKd    TKd_87_94    2
+RCH_Ka     Ka_87_94     2
+RCH_Klf    Klf_87_94    2
+RCH_Resid  Res_87_03    2
+RCH_AgIrr  Ag_87_03     2
+7  0                         Item 5: INRECH INIRCH SP 15 1995-99
+RCH_Qal    Qbas95_99    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_95_99    2
+RCH_TKd    TKd_95_99    2
+RCH_Ka     Ka_95_99     2
+RCH_Klf    Klf_95_99    2
+RCH_Resid  Res_87_03    2
+RCH_AgIrr  Ag_87_03     2
+7  0                         Item 5: INRECH INIRCH SP 16 2000-03
+RCH_Qal    Qbas00_03    2    Item 7: PNAME INAME IRCHPF
+RCH_Tdw    Tdw_00_03    2
+RCH_TKd    TKd_00_03    2
+RCH_Ka     Ka_00_03     2
+RCH_Klf    Klf_00_03    2
+RCH_Resid  Res_87_03    2
+RCH_AgIrr  Ag_87_03     2

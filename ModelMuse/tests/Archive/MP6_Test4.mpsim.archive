@@ -1,0 +1,16 @@
+# MODPATH Simulation file file created on 2/1/2017 by ModelMuse version 3.8.1.27.
+MP6_Test4.mpn
+..\..\output\output.MP6_Test4_Modpath\MP6_Test4.mplst
+     3     1     1     1     1     2     2     2     2     2     1     1 # Data Set 3: SimulationType, TrackingDirection, WeakSinkOption, WeakSouceOption, ReferenceTimeOption, StopOption, ParticleGenerationOption, TimePointOption, BudgetOutputOption, ZoneArrayOption, RetardationOption, AdvectiveObservationsOption
+..\..\output\output.MP6_Test4_Modpath\MP6_Test4.end
+..\..\output\output.MP6_Test4_Modpath\MP6_Test4.ts
+  2.100000000000E+005  # Data Set 8: ReferenceTime
+MP6_Test4.strt
+   100 # Data Set 23: TimePointCount
+  1.000000000000E+003  # Data Set 24: ReleaseTimeIncrement
+     0 # Data Set 30: StopZone
+CONSTANT        1 # Data Set 31: Zone Layer 1
+CONSTANT        1 # Data Set 31: Zone Layer 2
+CONSTANT        1 # Data Set 31: Zone Layer 3
+CONSTANT        1 # Data Set 31: Zone Layer 4
+CONSTANT        2 # Data Set 31: Zone Layer 5

@@ -1,0 +1,154 @@
+TITLE
+.      1D analytic, pulse input with sorption and decay
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print false
+      -HDF_chemistry true
+      -HDF_heads true
+      -HDF_steady_flow_velocities true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -steady_flow_velocities false
+      -wells true
+      -xyz_chemistry false
+      -xyz_components false
+      -xyz_heads false
+      -xyz_steady_flow_velocities false
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 1E-9
+UNITS
+      -time seconds
+      -horizontal_grid centimeters
+      -vertical_grid centimeters
+      -head centimeters
+      -hydraulic_conductivity centimeters/seconds
+      -specific_storage 1/centimeters
+      -dispersivity centimeters
+      -flux centimeters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -nonuniform   X    0 0.2 0.4 0.6 0.8 1 1.2 1.4 1.6 1.8 2
+             2.2 2.4 2.6 2.8 3 3.2 3.4 3.6 3.8 4
+             4.2 4.4 4.6 4.8 5 5.2 5.4 5.6 5.8 6
+             6.2 6.4 6.6 6.8 7 7.2 7.4 7.6 7.8 8
+             8.2 8.4 8.6 8.8 9 9.2 9.4 9.6 9.8 10
+             10.2 10.4 10.6 10.8 11 11.2 11.4 11.6 11.8 12
+      -uniform   Y   0 1 2
+      -uniform   Z   0 1 2
+      -chemistry_dimensions X
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 12 1 1
+            -Kx 0.12
+            -Ky 0.12
+            -Kz 0.12
+            -porosity 0.1
+            -specific_storage 0
+            -longitudinal_dispersivity 0.1
+            -horizontal_dispersivity 0.1
+            -vertical_dispersivity 0.1
+      -zone 0 0 0 12 1 1
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW true
+      -head_tolerance 1E-5
+      -flow_balance_tolerance 0.001
+      -iterations 100
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0.5
+      -time_differencing 0.5
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 12 1 1
+            -head X 1 0 0 12
+CHEMISTRY_IC
+      -zone 0 0 0 12 1 1
+            -solution 1
+            -surface 1
+            -kinetics 1
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 0 
+      -HDF_chemistry 10 seconds
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -velocities 0 
+      -wells 0 
+      -xyz_chemistry 0 seconds
+      -xyz_components 0 
+      -xyz_heads 0 
+      -xyz_velocities 0 
+      -xyz_wells 0 
+      -end_of_period_default false
+                  60 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 60 seconds
+      -HDF_chemistry 4 
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 60 seconds
+      -wells 0 
+      -xyz_chemistry 60 seconds
+      -xyz_components 0 
+      -xyz_heads 0 
+      -xyz_velocities 0 
+      -xyz_wells 0 
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 12 1 1
+            -print 1
+      -xyz_chemistry
+      -zone 0 0 0 12 1 1
+            -print 1
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 0.1 1 1
+            -head
+                  0 1
+            -associated_solution
+                  0 2
+                  60 1
+      -zone 11.9 0 0 12 1 1
+            -head
+                  0 0
+            -associated_solution
+                  0 1
+                  60 1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 0.4 seconds
+                  60 0.4 seconds
+            -time_end
+                  120 seconds
+END

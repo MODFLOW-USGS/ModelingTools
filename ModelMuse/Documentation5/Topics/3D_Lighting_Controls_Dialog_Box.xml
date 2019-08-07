@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">3D Lighting Controls Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">3-D Lighting Controls Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">3-D Lighting Controls</text><text styleclass="Normal" translate="true"> dialog box helps control the appearance of the 3-D image of the model in the lower right corner of the Working Area. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">3-D Lighting Controls</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">View|3-D Lighting…</text><text styleclass="Normal" translate="true"> There are six controls in the dialog box. The three controls on the left set the position of the light. The other three set different aspects of the light intensity.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Light Position</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The coordinate system for the light has its origin in the center of the screen. X increases to the right. Y increases toward the top of the screen. Z increases out from the screen toward the viewer. The units of the coordinate system are arbitrary. They merely control the direction of the light.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Light Intensity</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The light is considered to have three components: Ambient light, Diffuse light and Specular light. Ambient light is light that does not come from any particular direction. For instance, light from the sky would be considered ambient light. Diffuse light comes from a particular direction but is reflected evenly off a surface. However, surfaces directed at the light will receive more light than those directed away from the light. Specular light, like diffuse light is directional. However, it causes a bright spot on the surface on which it is shining. </text></para>
+  </body>
+</topic>

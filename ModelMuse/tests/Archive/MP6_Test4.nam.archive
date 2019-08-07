@@ -1,0 +1,13 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.MP6_Test4\MP6_Test4.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.MP6_Test4\MP6_Test4.cbc REPLACE
+DIS              12 ..\..\model\model.MP6_Test4\MP6_Test4.dis OLD
+BAS6             13 ..\..\model\model.MP6_Test4\MP6_Test4.bas OLD
+OC               39 ..\..\model\model.MP6_Test4\MP6_Test4.oc OLD
+DATA(BINARY)     37 ..\..\output\output.MP6_Test4\MP6_Test4.bhd REPLACE
+DATA             38 ..\..\output\output.MP6_Test4\MP6_Test4.fdn REPLACE
+PCG              18 ..\..\model\model.MP6_Test4\MP6_Test4.pcg OLD
+LPF              14 ..\..\model\model.MP6_Test4\MP6_Test4.lpf OLD
+WEL              20 ..\..\model\model.MP6_Test4\MP6_Test4.wel OLD
+RIV              21 ..\..\model\model.MP6_Test4\MP6_Test4.riv OLD
+RCH              24 ..\..\model\model.MP6_Test4\MP6_Test4.rch OLD

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Browse Graphic</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Browse Graphic</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each archive must have a small &quot;browse graphic&quot; image file that can be used by catalogs. The user selects the image file on this pane. A suitable graphic might overlay the model boundary on a state or regional map.</text></para>
+  </body>
+</topic>

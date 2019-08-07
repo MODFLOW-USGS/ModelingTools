@@ -1,0 +1,1269 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Farm Process</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm Process</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FMP</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">To dynamically simulate the integrated supply-and-demand components of irrigated agricultural to thoroughly understand the interrelation between surface water and groundwater flow in areas where the water-use by vegetation is an important component of the water budget.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Schmid, Wolfgang, Hanson, R.T., Maddock, Thomas, III, Leake, S.A., 2006, User guide for the farm process (FMP1) for the U.S. Geological Survey’s modular three-dimensional finite-difference ground-water flow model, MODFLOW-2000: U.S. Geological Survey Techniques and Methods 6-A17, 127 p.</text><text styleclass="Normal" translate="true"> (</text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A17" target="_blank" styleclass="Normal" translate="true">https://pubs.er.usgs.gov/publication/tm6A17</link><text styleclass="Normal" translate="true">)</text></li>
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Schmid, Wolfgang, and Hanson R.T., 2009, The Farm Process Version 2 (FMP2) for MODFLOW-2005 - Modifications and Upgrades to FMP1: U.S. Geological Survey Techniques in Water Resources Investigations, Book 6, Chapter A32, 102p.</text><text styleclass="Normal" translate="true"> (</text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A32" target="_blank" styleclass="Normal" translate="true">https://pubs.er.usgs.gov/publication/tm6A32</link><text styleclass="Normal" translate="true">)</text></li>
+          </list>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">The Farm Process uses unit numbers 1001 through 1009 internally.</text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">If the Farm Process is used in a child model, it must also be used in the parent model.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><table rowcount="30" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data for each Simulation (Data items 0-20b)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item No. </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Input instruction for each item </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">0 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text] read if ‘#’ is specified (can be repeated multiple times) </text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="1" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">1 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">PARAMETER</text><text styleclass="Normal" translate="true"> NPFWL MXL {MXLP}] read with READOP[9] if word </text><text styleclass="Keywords" translate="true">‘PARAMETER’</text><text styleclass="Normal" translate="true"> is specified </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPFWL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Number of farm well parameters (changeable parameter is a multiplier of the maximum capacity).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="MXL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum number of parameter farm wells.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXLP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Flag indicating the automatic use of parent parameter farm-well list entries for the child model (if ILGR&gt;0 and for child model grids where IGRID&gt;1) (only character “P” or blank possible).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">If MXLP is set to P after MXL, then the maximum number of parent model parameter farm-well list entries may be used as child model parameter farm wells in well locations, where the child model farm ID coincides with the parent model farm ID. IF MXLP=P, then the maximum number of parent model parameter farm-well list entries as specified for the parent model (MXL of parent model) is added to the maximum number of parameter wells list entries specified in the child model, MXL, to allocate space for parameter farm-wells list entries specified in the child model AND pulled from the parent model. If only the use of parent model parameter wells for a child model is desired, and no child model specific parameter farm wells exist, MXL still needs to be specified as zero. If only the use of child model parameter wells is desired, and no parent model parameter farm wells are to be pulled from the parent mode, then MXLP is omitted.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="2a" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">2a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><anchor id="FLAG_BLOCKS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">FLAG_BLOCKS</text><text styleclass="Normal" translate="true">] specify word </text><text styleclass="Keywords" translate="true">‘FLAG_BLOCKS’</text><text styleclass="Normal" translate="true"> only if flags are to be specified by blocks. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="2b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">2b </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">read flags from a single line if word ‘FLAG_BLOCKS’ is not specified in Item 2a: MXACTW {MXACTFWP} NFARMS NCROPS NSOILS IFRMFL IRTFL ICUFL IPFL IFTEFL IIESWFL IEFFL IEBFL IROTFL IDEFFL {IBEN} {ICOST} IALLOTGW ICCFL INRDFL {MXNRDT} ISRDFL IRDFL ISRRFL IRRFL IALLOTSW {PCLOSE} IFWLCB IFNRCB ISDPFL IFBPFL IETPFL {IRTPFL} {IOPFL} {IPAPFL} {Flags for Auxiliary Variables} {Flags for Options} {QCLOSE HPCT RPCT}</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="ItemGroup"><snippet src="Farm_Parameter_Dimensions"/></para>
+                <para styleclass="ItemGroup"><snippet src="FarmWhenToRead"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Water_Policy_Flags"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Crop_Consumptive_Use_Flag"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Surface_Water_Flags"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Mandatory_Print_Flags"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Optional_Print_Flags"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Flags_for_Auxiliary_Varia"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Flags_for_Options"/></para>
+                <para styleclass="ItemGroup"><snippet src="Farm_Variables_for_MNW"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="2c" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">2c</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">read flags by blocks if word “FLAG_BLOCKS” is specified in Item 2a Each block is read on a separate line</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MXACTW {MXACTFWP} NFARMS NCROPS NSOILS</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Parameter_Dimensions"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IFRMFL IRTFL ICUFL IPFL IFTEFL IIESWFL IEFFL</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="FarmWhenToRead"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IEBFL IROTFL IDEFFL {IBEN} {ICOST} IALLOTGW</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Water_Policy_Flags"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ICCFL </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Crop_Consumptive_Use_Flag"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><anchor id="ISRDFL" styleclass="Normal"></anchor><anchor id="IRDFL" styleclass="Normal"></anchor><anchor id="INRDFL" styleclass="Normal"></anchor><anchor id="IALLOT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">INRDFL {MXNRDT} ISRDFL IRDFL ISRRFL IRRFL IALLOTSW {PCLOSE} </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Surface_Water_Flags"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IFWLCB IFNRCB ISDPFL IFBPFL IETPFL {IRTPFL} {IOPFL} {IPAPFL}</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Mandatory_Print_Flags"/></para>
+                <para styleclass="Normal"><snippet src="Farm_Optional_Print_Flags"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Flags for Auxiliary Variables </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Flags_for_Auxiliary_Varia"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Flags for Options </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Flags_for_Options"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">{QCLOSE HPCT RPCT} </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_Variables_for_MNW"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat Items 3 combined with the indicated repetitions of Item 4 NPFWL times if NPFWL &gt; 1.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Items 3 and 4 are not read if NPFWL is 0.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If PARNAM is to be a time-varying parameter, the keyword “INSTANCES” and a value for NUMINST must be entered.</text></para>
+          <para styleclass="Normal"><snippet src="FarmNwtOption"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="3" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">3 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[PARNAM PARTYP PARVAL NLST] [INSTANCES NUMINST] </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="PARNAM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Parameter name for list of parameter farm-wells (called for each stress period to activate a list of parameter wells). This name can consist of 1 to 10 characters and is not case sensitive.</text></para>
+                      <para styleclass="Normal"><snippet src="Unique_Param_Name"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARTYP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Parameter type (the only allowed parameter type is QMAX, which defines values of the volumetric maximum well capacity).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parval]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Parameter value (multiplier applied to parameter-wells).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NLST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NLST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of parameter farm-wells included in the parameter-well-list related to one parameter.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">When NLST is set to “P,” up to the maximum number of parent model parameter farm-well list entries may be used as child model parameter farm wells in well locations where the child model farm ID coincides with the parent model farm ID. For child model parameter farm wells pulled from parent model parameter farm wells, the list entries printed to the list file are appended to the list entries of parameter farm wells specified for the child model under a separate parameter name.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Parent parameter farm wells are excluded from being used for a child model farm if the same child model parameter wells are specified for that child model farm.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[INSTANCES]]></caption></toggle></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> Optional keyword that designates a parameter as time varying. The keyword is not case sensitive; that is, any combination of the same characters with different case can be used. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is present, it must be followed by a value for NUMINST. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is absent, PARNAM is non-time varying and NUMINST should not be present.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NUMINST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NUMINST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of instances for a time-varying parameter, where each instance is a list of wells and associated maximum capacities. If the keyword </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is present, it must be followed by a value for NUMINST. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is absent, NUMINST should not be present.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">After each Item 3 for which the keyword “INSTANCES” is not entered, read Item 4b and not Item 4a.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">After each Item 3 for which the keyword “INSTANCES” is entered, read Item 4a and Item 4b for each instance.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NLST repetitions of Item 4b are required; they are read byREADOP [3]. (SFAC of the utility subroutine [3] applies to QMAXfact). The NLST repetitions of Item 4b follow each repetition of Item 4a when PARNAM is time varying.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="4a" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">4a </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[INSTNAM]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Name of an instance associated with the parameter named in the corresponding Item 3. The instance name can be 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent. Instance names must be unique for a parameter, but instance names may be reused for different parameters.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet4b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">4b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Layer Row Column Farm-Well-ID Farm-ID QMAXfact] {MNW2NAM} [abc]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If, for ILGR&gt;0 and IGRID&gt;1, if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> (item 3) is equal to “P,” then no parameter or nonparameter farm-well list entries, respectively, as defined below need to be specified.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_4_22"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QMAXfact]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="QMAXfact" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum Well Capacity factor (QMAXfact × PARVAL = QMAX) [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T].</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_4_22_xyz"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet5" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">5 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><anchor id="GSURF" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">GSURF(NCOL,NROW) read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="U2DDP" styleclass="Normal" translate="true">U2DDP</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GSURF]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Ground-surface elevation</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If, for ILGR &gt; 0 and IGRID &gt; 1, GSURF = P, then the child model’s ground surface-elevation array is derived automatically from the parent elevation by bilinear interpolation.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="6" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">6 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><anchor id="FID" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">FID(NCOL,NROW) read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IFRMFL" styleclass="Normal" translate="true">IFRMFL</link><text styleclass="Normal" translate="true"> = 1</text></para>
+          <para styleclass="Normal"><snippet src="Farm_6_26_FID"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet7" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">7 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID OFE] or [Farm-ID OFE(FID,CID), OFE(FID,CID), … , OFE(FID,CID</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">NCROPS</link><text styleclass="Normal" translate="true">)] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IEFFL" styleclass="Normal" translate="true">IEFFL</link><text styleclass="Normal" translate="true"> = 1. [All farm and crops must be specified in an array format.]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_7_24"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet8" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">8 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><anchor id="SID" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ISID(NCOL,NROW) read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISID]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Soil type identity</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If, for ILGR &gt; 0 and IGRID &gt; 1, SID = P, then the child model’s soil-type identity array is derived automatically from the parent soil-type identity. In this case, soil-type related data lists (see below, item 9) are skipped and need not to be specified.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet9" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">9 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Soil-ID CapFringe [A-Coeff B-Coeff C-Coeff D-Coeff E-Coeff], or Soil-ID CapFringe [Soil-Type] (parameters in brackets only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICCFL" styleclass="Normal" translate="true">ICCFL</link><text styleclass="Normal" translate="true"> = 1</text><text styleclass="New Materials" translate="true"> or 3</text><text styleclass="Normal" translate="true">) read* NSOILS times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP6" styleclass="Normal" translate="true">6</link><text styleclass="Normal" translate="true">]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Soil-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Soil type identity to which the parameters below are attributed</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CapFringe]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Capillary Fringe [L]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The following parameters are only needed if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICCFL" styleclass="Normal" translate="true">ICCFL</link><text styleclass="Normal" translate="true"> = 1</text><text styleclass="New Materials" translate="true"> or 3</text><text styleclass="Normal" translate="true">:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Either:</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[A-Coeff, B-Coeff, C-Coeff]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Coefficients a, b, c for function DRZ = f(T</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">c-pot</text><text styleclass="Normal" translate="true">, TRZ)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[D-Coeff, E-Coeff]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Coefficients d, e for function n = f(DRZ)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Or:</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Soil-Type]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Soil type in words: </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">3 options are available: </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SANDYLOAM, SILT, and SILTYCLAY (not case-sensitive). </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(For these three options, the FMP code contains intrinsic soil type specific coefficients a,b,c and d,e for the functionalities DRZ = f(T</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">c-pot</text><text styleclass="Normal" translate="true">, TRZ) and n = f(DRZ). If a soil type is entered as a word, then a,b,c,d,e are not read).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The intrinsic coefficients in the program are as follows (Schmid, 2004):</text></para>
+                      <para styleclass="Normal"><table rowcount="4" colcount="6" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Soil type</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">a</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">b</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">c</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">d</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">e</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SANDYLOAM </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">0.201 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">−0.195 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">3.083 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">3.201 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">−3.903 </text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SILT </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">0.320 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">−0.329 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">2.852 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">1.303 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">−2.042 </text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SILTYCLAY </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">0.348 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">−0.327 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">1.731 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">0.530 </text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">−0.377 </text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The parameters DRZ and n allow the fitting of a vertical pseudo steady state pressure head distribution over the total root zone:</text></para>
+                <list id="9" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">The Depleted Root Zone (DRZ) is a function of the potential Transpiration and the Total Root Zone. It is defined as the lower part of the root zone at which the pressure head increases with depth from the minimum (negative) pressure head (defined as ψ4 in stress response function, see below) to zero at the bottom of the root zone.</text></li>
+                </list>
+                <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" style="font-style:italic;" translate="true">DRZ = [exp(a </text><text styleclass="Normal" style="font-style:normal;" translate="true">x</text><text styleclass="Normal" style="font-style:italic;" translate="true"> ln(TRZ </text><text styleclass="Normal" style="font-style:normal;" translate="true">x</text><text styleclass="Normal" style="font-style:italic;" translate="true"> MLT) b </text><text styleclass="Normal" style="font-style:normal;" translate="true">x</text><text styleclass="Normal" style="font-style:italic;" translate="true"> ln(TPOT </text><text styleclass="Normal" style="font-style:normal;" translate="true">x</text><text styleclass="Normal" style="font-style:italic;" translate="true"> MLT)+ c)]</text></para>
+                <list id="9" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">The Sinuosity Coefficient (n) expresses the curvature of the vertical pressure head configuration over depth, which increases with increasing DRZ.</text></li>
+                </list>
+                <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" style="font-style:italic;" translate="true">NEXP = d </text><text styleclass="Normal" style="font-style:normal;" translate="true">x</text><text styleclass="Normal" style="font-style:italic;" translate="true"> ln(DRZ)+ e </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Although the intrinsic parameters a,b,c,d,e were derived based on CENTIMETER length units, multipliers in the program (MLT) can adjust the equations accordingly to length units of METER or FEET, if so chosen as </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="LENUNI" styleclass="Normal" translate="true">LENUNI</link><text styleclass="Normal" translate="true"> = 2 or = 1 in the Discretization file (Harbaugh and others, 2000).</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet10" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">10 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[CID(NCOL,NROW)] read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IROTFL" styleclass="Normal" translate="true">IROTFL</link><text styleclass="Normal" translate="true"> ≥ 0 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_10_25"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet11" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">11 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID ROOT] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP4" styleclass="Normal" translate="true">4</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRTFL" styleclass="Normal" translate="true">IRTFL</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_11_26"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet12" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">12 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID FTR FEP FEI] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IFTEFL" styleclass="Normal" translate="true">IFTEFL</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_12_28"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet13" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">13 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID FIESWP FIESWI] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IIESWFL" styleclass="Normal" translate="true">IIESWFL</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_13_29"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet14" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">14 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID PSI1 PSI2 PSI3 PSI4] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICCFL" styleclass="Normal" translate="true">ICCFL</link><text styleclass="Normal" translate="true"> = 1 or 3</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Crop-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Crop type identity, to which the parameters below are attributed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PSI1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Negative (partially saturated) or positive (saturated or submerged) value of pressure head, at which root uptake becomes zero due to anoxia or high pressure </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PSI2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Negative or positive values of pressure head, at which root uptake is at maximum and from which uptake decreases with rising pressure head due to anoxia [L]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PSI3]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Negative pressure head, at which root uptake is at maximum and from which uptake decreases with falling pressure head due to wilting [L]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PSI4]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Negative pressure head, at which root uptake becomes zero due to wilting [L]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet15" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">15 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID BaseT MinCutT MaxCutT C</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:sub; color:#000000;" translate="true">0</text><text styleclass="Normal" translate="true"> C</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:sub; color:#000000;" translate="true">1</text><text styleclass="Normal" translate="true"> C</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:sub; color:#000000;" translate="true">2</text><text styleclass="Normal" translate="true"> C</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:sub; color:#000000;" translate="true">3</text><text styleclass="Normal" translate="true"> BegRootD MaxRootD RootGC NONIRR] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRTFL" styleclass="Normal" translate="true">IRTFL</link><text styleclass="Normal" translate="true"> = 3, or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> = 3, or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IPFL" styleclass="Normal" translate="true">IPFL</link><text styleclass="Normal" translate="true"> = 3. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Crop-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Crop type identity, to which the parameters below are attributed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BaseT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Base temperature</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MinCutT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Minimum cutoff temperature</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MaxCutT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Maximum cutoff temperature</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[C0 C1 C2 C3]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Polynomial coefficients for CGDD – K</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">c</text><text styleclass="Normal" translate="true"> functionality (see Chapter “General Data Requirements”)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BegRootD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Beginning root depth [L]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MaxRootD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Maximum root depth [L]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[RootGC]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Root growth coefficient</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_NonIrr"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet16" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">16 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[TimeSeriesStep MaxT MinT Precip ETref] read* LENSIM times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRTFL" styleclass="Normal" translate="true">IRTFL</link><text styleclass="Normal" translate="true"> = 3, or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> = 3, or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IPFL" styleclass="Normal" translate="true">IPFL</link><text styleclass="Normal" translate="true"> = 3 (LENSIM = length of simulation expressed as total number of time-series steps; length of time-series step defined by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="Normal" translate="true">ITMUNI</link><text styleclass="Normal" translate="true"> in the Discretization File)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TimeSeriesStep]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Time-step in climate time series. The length of a time series time step must consistently be equal to the MODFLOW time unit chosen in the Discretization File (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="Normal" translate="true">ITMUNI</link><text styleclass="Normal" translate="true">).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">For </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> = 3 or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRTFL" styleclass="Normal" translate="true">IRTFL</link><text styleclass="Normal" translate="true"> = 3, the MODFLOW time unit must be days (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="Normal" translate="true">ITMUNI</link><text styleclass="Normal" translate="true"> = 4). For </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IPFL" styleclass="Normal" translate="true">IPFL</link><text styleclass="Normal" translate="true"> = 3 (while </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> ≠ 3, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRTFL" styleclass="Normal" translate="true">IRTFL</link><text styleclass="Normal" translate="true"> ≠ 3), all MODFLOW time units are possible (seconds, minutes, hours, days, years; </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="Normal" translate="true">ITMUNI</link><text styleclass="Normal" translate="true"> = 1, 2, 3, 4, 5). However, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="Normal" translate="true">ITMUNI</link><text styleclass="Normal" translate="true"> = 1 or 2 for units of seconds or minutes should be avoided for very long periods of simulation due to the possibility of insufficient computer memory.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MaxT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Maximum temperature</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MinT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Minimum temperature</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Precip]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Precipitation flux [L/T]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ETref]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Reference Evapotranspiration flux [L/T]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet17" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">17 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID IFALLOW] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP7" styleclass="Normal" translate="true">7</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> = -2 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Crop-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Crop type identity, to which the parameters below are attributed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFALLOW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Fallow-Flag:</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">1 = Crop type fallowed</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">0 = Crop type not fallowed (for example, pecan trees)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet18" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">18 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID WPF-Slope WPF-Int Crop-Price] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> &gt; 0 and if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IBEN" styleclass="Normal" translate="true">IBEN</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_18_31"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet19" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">19 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID GWcost1 GWcost2 GWcost3 GWcost4 SWcost1 SWcost2 SWcost3 SWcost4] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> &gt; 0 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICOST" styleclass="Normal" translate="true">ICOST</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_19_32"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet20" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">20</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID, ALLOTGW] read* NFARMS with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IALLOTGW" styleclass="Normal" translate="true">IALLOTGW</link><text styleclass="Normal" translate="true"> = 1</text></para>
+          <para styleclass="Normal"><snippet src="Farm_20_25"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet21a" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">21a </text></para>
+        </td>
+        <td>
+          <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Locations of Diversion for Semi-Routed Surface-Water Deliveries</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID Row Column Segment Reach] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP7" styleclass="Normal" translate="true">7</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ISRDFL" styleclass="Normal" translate="true">ISRDFL</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal"><snippet src="Farm_Stream"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet21b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">21b </text></para>
+        </td>
+        <td>
+          <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Locations of Return Flow for Semi-Routed Surface-Water Runoff</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID Row Column Segment Reach] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP7" styleclass="Normal" translate="true">7</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ISRRFL" styleclass="Normal" translate="true">ISRRFL</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal"><snippet src="Farm_Stream"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><table rowcount="21" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data for each Stress Period</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">22 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ITMP {ITMPP} NP</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITMP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ITMP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Flag and counter</text></para>
+                      <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt; 0 ITMP = number of nonparameter farm-wells read for the current stress period.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">= 0 no nonparameter farm-wells are read for the current stress period.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">&lt; 0 nonparameter farm-well data from the last stress period will be reused.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITMPP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ITMPP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">= P</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">for ILGR &gt; 0 and IGRID &gt; 1, up to the maximum number of parent model nonparameter farm-well list entries may be used as child model nonparameter farm wells in well locations, where the child model farm ID coincides with the parent model farm ID. For child model nonparameter farm wells pulled from parent model nonparameter farm wells, the list entries printed to the list file are appended to the list entries of nonparameter farm wells specified for the child model.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Nonparent parameter farm wells are excluded from being used for a child model farm if the same nonparameter wells are already specified for that child model farm.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">(ITMPP is optional only for for ILGR &gt; 0 and IGRID &gt; 1).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of multiplier parameters in use in the current stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet23" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">23 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Layer Row Column Farm-Well-ID Farm-ID QMAX] {MNW2NAM} [abc] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP3" styleclass="Normal" translate="true">3</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> &gt; 0 </text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If, for ILGR&gt;0 and IGRID&gt;1, if ITMPP (item 22) is equal to “P,” then no parameter or nonparameter farm-well list entries, respectively, as defined below need to be specified.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="Farm_4_22"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QMAX]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="QMAX" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Maximum Well Capacity [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T] (positive value = maximum possible discharge rate).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_4_22_xyz"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="FarmNwtOption"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">24 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Pname] [Iname] ] read </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> times if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> &gt; 0. Item 24 is not read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> is 0. Iname is read if Pname is a time-varying parameter. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Pname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Name of multiplier parameter being used in the current stress period. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> parameter names will be read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Instance name read only if Pname is a time-varying parameter. Multiple instances of the same parameter are not allowed in a stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet25" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">25</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID, ALLOTGW] read* NFARMS with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IALLOTGW" styleclass="Normal" translate="true">IALLOTGW</link><text styleclass="Normal" translate="true"> = 2</text></para>
+          <para styleclass="Normal"><snippet src="Farm_20_25"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet26" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">26</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[IFID(NROW,NCOL)] read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IFRMFL" styleclass="Normal" translate="true">IFRMFL</link><text styleclass="Normal" translate="true"> = 2</text></para>
+          <para styleclass="Normal"><snippet src="Farm_6_26_FID"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet27" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">27 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID OFE(FID,CID), OFE(FID,CID), … , OFE(FID,CID</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">NCROPS</link><text styleclass="Normal" translate="true">)] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IEFFL" styleclass="Normal" translate="true">IEFFL</link><text styleclass="Normal" translate="true"> = 2</text></para>
+          <para styleclass="Normal"><snippet src="Farm_7_24"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet28" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">28 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[CID(NCOL,NROW)] read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" styleclass="Normal" translate="true">U2DINT</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IROTFL" styleclass="Normal" translate="true">IROTFL</link><text styleclass="Normal" translate="true"> = -1 </text></para>
+          <para styleclass="Normal"><snippet src="Farm_10_25"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet29" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">29 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">READOPTION [Crop-ID ROOT] read* NCROPS times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP4" styleclass="Normal" translate="true">4</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRTFL" styleclass="Normal" translate="true">IRTFL</link><text styleclass="Normal" translate="true"> = 2 </text></para>
+          <para styleclass="Normal"><snippet src="Farm_11_26"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet30a" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">30a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID CU NONIRR] read* NCROPS times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP4" styleclass="Normal" translate="true">4</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true">&#32;</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; text-decoration:line-through; color:#000000;" translate="true">= 2</text><text styleclass="New Materials" translate="true"> &lt; 3</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Crop-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Crop type identity, to which the parameters below are attributed.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">CU Crop consumptive use flux [L/T] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> = 1, 2; crop coefficient if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> = –1</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="Farm_NonIrr"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet30b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">30b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ETR(NCOL,NROW) read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="U2DDP" styleclass="Normal" translate="true">U2DDP</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICUFL" styleclass="Normal" translate="true">ICUFL</link><text styleclass="Normal" translate="true"> = 1 or -1</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ETR]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Reference Evapotranspiration (see climate related data) [L/T]</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet31" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">31 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID FTR FEP FEI] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IFTEFL" styleclass="Normal" translate="true">IFTEFL</link><text styleclass="Normal" translate="true"> = 2 </text></para>
+          <para styleclass="Normal"><snippet src="Farm_12_28"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet32" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">32 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID FIESWP FIESWI] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with [</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IIESWFL" styleclass="Normal" translate="true">IIESWFL</link><text styleclass="Normal" translate="true"> = 2 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_13_29"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet33" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">33 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[PFLX(NROW,NCOL)] read with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="U2DDP" styleclass="Normal" translate="true">U2DDP</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IPFL" styleclass="Normal" translate="true">IPFL</link><text styleclass="Normal" translate="true"> = 2 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PFLX]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Precipitation flux (see climate related data) [L/T]</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet34" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">34 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Crop-ID WPF-Slope WPF-Int Crop-Price] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NCROPS" styleclass="Normal" translate="true">NCROPS</link><text styleclass="Normal" translate="true"> times with </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">READOP</text><text styleclass="Normal" translate="true">[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> &gt; 0 and if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IBEN" styleclass="Normal" translate="true">IBEN</link><text styleclass="Normal" translate="true"> = 2. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_18_31"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet35" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">35 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID GWcost1 GWcost2 GWcost3 GWcost4 SWcost1 SWcost2 SWcost3 SWcost4] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">READOP</text><text styleclass="Normal" translate="true">[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> &gt; 0 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ICOST" styleclass="Normal" translate="true">ICOST</link><text styleclass="Normal" translate="true"> = 2. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="Farm_19_32"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet36" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">36 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID (NRDV NRDR NRDU)</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Normal" translate="true">, (NRDV NRDR NRDU)</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">2</text><text styleclass="Normal" translate="true">, … , (NRDV NRDR NRDU)</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="MXNRDT" styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">MXNRDT</link><text styleclass="Normal" translate="true">] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">READOP</text><text styleclass="Normal" translate="true">[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="INRDFL" styleclass="Normal" translate="true">INRDFL</link><text styleclass="Normal" translate="true"> = 1. A maximum number of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="MXNRDT" styleclass="Normal" translate="true">MXNRDT</link><text styleclass="Normal" translate="true"> types of nonrouted deliveries is read for each farm. One set of variables NRDV, NRDR, and NRDU is read for a certain unranked type t of a nonrouted delivery by (NRDV NRDR NRDU)</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">t</text><text styleclass="Normal" translate="true"> . See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="WELLFIELD" styleclass="Keywords" translate="true">WELLFIELD</link><text styleclass="Normal" translate="true"> option.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Farm-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Farm identity to which the parameter below are attributed</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NRDV]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NRDV" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Volume of Non-Routed Delivery Type [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">]. If the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="WELLFIELD" styleclass="Keywords" translate="true">WELLFIELD</link><text styleclass="Normal" translate="true"> option is used, this is a dummy value.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NRDR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NRDR" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Rank of Non-Routed Delivery Type. </text><text styleclass="New Materials" translate="true">(Must be greater than or equal to 1.)</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NRDU]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NRDU" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Binary “NRDuse-Flag” of Non-Routed Delivery Type:</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">if &lt; 0: The negative of the virtual well farm ID. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="WELLFIELD" styleclass="Keywords" translate="true">WELLFIELD</link><text styleclass="Normal" translate="true"> option.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">if 0: only the amount sufficient is used to meet the farm’s demand,</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">if 1: the absolute amount available is used; surplus discharged back into farm’s head gate reach.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">if 2: the absolute amount available is used; surplus injected into farm wells attributed to farm ID.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet37a" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">37a</text></para>
+        </td>
+        <td>
+          <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Locations of Diversion for Semi-Routed Surface-Water Deliveries</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID Row Column Segment Reach] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">READOP</text><text styleclass="Normal" translate="true">[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP7" styleclass="Normal" translate="true">7</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ISRDFL" styleclass="Normal" translate="true">ISRDFL</link><text styleclass="Normal" translate="true"> = 2 </text></para>
+          <para styleclass="Normal"><snippet src="Farm_Stream"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet37b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">37b</text></para>
+        </td>
+        <td>
+          <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Locations of Returnflow for Semi-Routed Surface-Water Runoff</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID Row Column Segment Reach] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">READOP</text><text styleclass="Normal" translate="true">[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP7" styleclass="Normal" translate="true">7</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ISRRFL" styleclass="Normal" translate="true">ISRRFL</link><text styleclass="Normal" translate="true"> = 2</text></para>
+          <para styleclass="Normal"><snippet src="Farm_Stream"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet38" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">38 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[ALLOTSW] read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IALLOTSW" styleclass="Normal" translate="true">IALLOTSW</link><text styleclass="Normal" translate="true"> = 1 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ALLOTSW]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Surface-water allotment height [L] for a stress period.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet39" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">39 </text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Farm-ID CALL] read* </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="NFARMS" styleclass="Normal" translate="true">NFARMS</link><text styleclass="Normal" translate="true"> times with READOP[</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process_List_Reading_Util" anchor="READOP5" styleclass="Normal" translate="true">5</link><text styleclass="Normal" translate="true">] if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IALLOTSW" styleclass="Normal" translate="true">IALLOTSW</link><text styleclass="Normal" translate="true"> = 2 </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Farm-ID]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Farm identity to which the parameter below is attributed</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CALL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Water Rights Call attributed to a farm [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T]</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

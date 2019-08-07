@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Parallel Modflow</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Parallel Modflow</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To enable the parallel-processing capabilities of MODFLOW-2000, an implementation of MPI must first be installed on your computer(s). &#160;MPI software is not distributed by the USGS and must be obtained and installed separately. &#160;The mpif.h file and MPI subroutines referenced in the para-mpi.f file and other locations in the MODFLOW source code will be provided as part of the MPI installation. &#160;After MPI has been installed, use mpif.h and other source-code files provided with the MPI implementation that is installed on your computer(s) when MODFLOW-2000 is compiled with para-mpi.f. &#160;Some implementations of MPI support only certain compilers, so ensure that the MPI implementation you install supports the compiler you will be using to compile MODFLOW-2000. &#160;Please refer to page 203 of </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://pubs.er.usgs.gov/usgspubs/ofr/ofr00184" target="_blank" styleclass="Normal" translate="true">USGS Open-File Report 00-184</link><text styleclass="Normal" translate="true"> for additional information.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,49 @@
+# HFB: Horizontal Flow Barrier package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Test problem from USGS Techniques and Methods 6 A-16.  Cells 1,10,14 and
+# 3,6,12 given a large transmissivity, and HFB is used to cause the
+# transmissivity to be essentially the same as before.
+# For layer 1, K is .001.  The barrier width will represent half a cell
+# (2500 ft), so HYDCHR=.001/2500.
+# For layer 3, K is .0002, so HYDCHR is .0002/2500.
+     0     0    40 # Data set 1: NPHFB MXFB NHFBNP
+     1    18    12    18    11  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     1    19    12    19    11  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     1    18    12    17    12  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     1    18    13    17    13  4.000000000000E-007  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6     9     6     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     6     9     6     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     6     9     6     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     7     9     7     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     7     9     7     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     7     9     7     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     8     9     8     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     8     9     8     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     8     9     8     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6     6     6     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     6     6     6     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     6     6     6     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     7     6     7     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     7     6     7     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     7     6     7     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     8     6     8     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     8     6     8     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     8     6     8     5  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     9     6     8     6  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     9     6     8     6  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     9     6     8     6  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     9     7     8     7  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     9     7     8     7  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     9     7     8     7  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     9     8     8     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     9     8     8     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     9     8     8     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6     6     5     6  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     6     6     5     6  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     6     6     5     6  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6     7     5     7  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     6     7     5     7  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     6     7     5     7  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     3     6     8     5     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     4     6     8     5     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     5     6     8     5     8  8.000000000000E-008  # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
+     0 # Data Set 5: NACTHFB

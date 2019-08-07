@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Composite Budget File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Composite Budget File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Composite Budget File (CBF) is a binary, direct access file constructed by MODPATH for transient flow simulations. The CBF permits MODPATH to retrieve budget and head data quickly and efficiently. Once constructed, transient MODPATH simulations can obtain budget and head data for any time step, in any order, directly from the CBF without the need to reprocess the data from MODFLOW data files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Binary, direct access files require all data records to be the same length. The length of CBF data records is 4*(NCOL + 1) bytes, where NCOL is the number of columns in the grid. If NCOL is less than 4, the record length is set to 20 bytes. All data in the CBF is numerical with a precision of 4 bytes. The CBF contains two types of records: (1) header records and (2) array data records. Three-dimensional arrays are written as a series of records, with each record corresponding to one row of data. Records are written in the order of increasing rows, and the arrays are stacked by layer, beginning with layer 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The structure of the Composite Budget File is described in the MODPATH documentation beginning on p. A-30</text></para>
+  </body>
+</topic>

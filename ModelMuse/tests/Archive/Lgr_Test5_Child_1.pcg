@@ -1,0 +1,4 @@
+# PCG: Preconditioned Conjugate Gradient package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# PCG file for ets1, drt1, and etsdrt test cases
+    60     8     1     0 # MXITER, ITER1, NPCOND, IHCOFADD
+  9.999999700000E-005   8.000000000000E+001   1.000000000000E+000      2     1     0  1.000000000000E+000  # HCLOSE, RCLOSE, RELAX, NBPOL, IPRPCG, MUTPCG, DAMPPCG

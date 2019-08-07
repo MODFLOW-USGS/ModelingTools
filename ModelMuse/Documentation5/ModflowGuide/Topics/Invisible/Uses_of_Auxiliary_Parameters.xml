@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Uses of Auxiliary Parameters</title>
+  <body>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:12px; tabstops:none;"><text styleclass="Normal" translate="true">Auxiliary parameters are used with MODPATH and the Groundwater Transport process. &#160;In MODPATH, the variable IFACE is specified with an auxiliary parameter. &#160;In the Groundwater Transport process, concentration is specified with an auxiliary parameter. &#160;The option </text><text styleclass="Keywords" translate="true">COMPACT BUDGET AUXILIARY</text><text styleclass="Normal" translate="true"> must be used in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true"> when IFACE is used for MODPATH.</text></para>
+  </body>
+</topic>

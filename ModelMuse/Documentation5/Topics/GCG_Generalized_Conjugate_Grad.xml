@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GCG: Generalized Conjugate Gradient Solver Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GCG: Generalized Conjugate Gradient Solver Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The GCG: Generalized Conjugate Gradient Solver pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS</link><text styleclass="Normal" translate="true">. It is used to specify some of the data for the GCG solver in MT3DMS. The GCG solver is required for all MT3DMS models.</text></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[MXITER]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MXITER is the maximum number of outer iterations; it should be set to an integer greater than one only when a nonlinear sorption isotherm is included in simulation.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[ITER1]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ITER1 is the maximum number of inner iterations; a value of 30-50 should be adequate for most problems.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[ISOLVE]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ISOLVE is the type of preconditioners to be used with the Lanczos/ORTHOMIN acceleration scheme:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">= 1, Jacobi</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">= 2, SSOR</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">= 3, Modified Incomplete Cholesky (MIC) (MIC usually converges faster, but it needs significantly more memory)</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NCRS]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NCRS is an integer flag for treatment of dispersion tensor cross terms:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">= 0, lump all dispersion cross terms to the right-hand-side (approximate but highly efficient).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">= 1, include full dispersion</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[ACCL]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ACCL is the relaxation factor for the SSOR option; a value of 1.0 is generally adequate.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CCLOSE]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CCLOSE is the convergence criterion in terms of relative concentration; a real value between 10</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-4</text><text styleclass="Normal" translate="true"> and 10</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-6</text><text styleclass="Normal" translate="true"> is generally adequate.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[IPRGCG]]></caption></toggle></para>
+  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRGCG is the interval for printing the maximum concentration changes of each iteration. Set IPRGCG to zero as default for printing at the end of each stress period.</text></para>
+        </td>
+      </tr>
+    </table></para>
+ </body>
+</topic>

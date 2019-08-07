@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 testRch2.lst REPLACE
+DATA(BINARY)      9 testRch2.cbc REPLACE
+DIS              12 testRch2.dis OLD
+BAS6             13 testRch2.bas OLD
+OC               39 testRch2.oc OLD
+DATA             37 testRch2.fhd REPLACE
+DATA             38 testRch2.fdn REPLACE
+PCG              18 testRch2.pcg OLD
+LPF              14 testRch2.lpf OLD
+CHD              17 testRch2.chd OLD
+RCH              24 testRch2.rch OLD

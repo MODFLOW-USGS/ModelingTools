@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Selected Objects Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Selected Objects Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Selected Objects</text><text styleclass="Normal" translate="true"> dialog box displays a list of the objects that are currently selected. The user can continue to work with the model while this dialog box is visible. To display the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Selected Objects</text><text styleclass="Normal" translate="true"> dialog box, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">View|List Selected Objects.</text></para>
+  </body>
+</topic>

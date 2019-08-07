@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RowCenter</title>
+  <keywords>
+    <keyword translate="true">RowCenter</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RowCenter</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW, PHAST, and WellFootprint models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">RowCenter</text><text styleclass="Normal" translate="true">({Row}) returns the Y coordinate in the grid coordinate system of the center of the cell (MODFLOW, WellFootprint) or element (PHAST) specified by its one optional argument Row. For SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">RowCenter</text><text styleclass="Normal" translate="true"> returns zero. If the optional argument is not included, the function uses the row number of the cell or element for which the formula is being calculated. If an invalid row number is specified, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">RowCenter</text><text styleclass="Normal" translate="true"> returns 0.</text></para>
+  </body>
+</topic>

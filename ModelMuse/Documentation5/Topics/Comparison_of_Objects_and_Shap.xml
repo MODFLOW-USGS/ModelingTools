@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Comparison of Objects and Shapefiles</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Comparison of Objects and Shapefiles</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Users of Geographic Information Systems (GIS) may find some similarities between Objects in ModelMuse and coverages in a GIS. There are, however, significant differences as well. The precise characteristics of a GIS coverage may vary among implementations in different software and formats. Shapefiles (</text><text styleclass="Reference" translate="true">Environmental Systems Research Institute, Inc., 1998)</text><text styleclass="Normal" translate="true">, one example of a GIS coverage, resemble Objects in that they comprise points, polylines, polygons (and some other shapes) associated with attributes. Unlike objects, however, all the shapes in a Shapefile are associated with the same kinds of attributes. In contrast, the data sets associated with one object are not necessarily the same as the data sets associated with another object. The values of the attributes associated with a shape in a Shapefile are simple types and thus do not vary from place to place within a shape. With objects, the formula for a data set is evaluated at different locations and can give a different value at each such location. Both objects and shapes have strict rules regarding what is and is not a valid geometry; however, the rules are not the same for both of them. In shapes with multiple sections, for example, no section can overlap any other section, whereas in Objects, overlapping sections are allowed. Another difference between shapes and Objects is that all the shapes in a Shapefile must be of the same type; combinations of points, polylines, and polygons in the same Shapefile are not allowed. Objects have no such restriction. In summary, shapes in a Shapefile tend to be much more homogeneous than are Objects in ModelMuse.</text></para>
+  </body>
+</topic>

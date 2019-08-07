@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SUTRA Layer Groups Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA Layer Groups Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Layer Groups</text><text styleclass="Normal" translate="true"> dialog box is used to define the layer structure of a SUTRA model. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Layer Groups</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|SUTRA Layer Groups...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To define the layer structure of a SUTRA model, the user adds or removes layer groups using the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Add layer group </text><image src="AddLayer.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Layer Group button</title></image><text styleclass="Normal" translate="true">, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Insert layer group</text><text styleclass="Normal" translate="true"> </text><image src="InsertLayer.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Insert Layer Group button</title></image><text styleclass="Normal" translate="true">, and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Delete layer group </text><image src="DeleteLayer.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Delete Layer Group button</title></image><text styleclass="Normal" translate="true"> buttons on the left hand side of the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Layer Groups</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Layer Group (Aquifer) Name</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This is the name of the layer group. It is for the convenience of the user.</text></para>
+    <para styleclass="Normal"><anchor id="MinimumThickness" styleclass="Normal" style="font-weight:bold;"></anchor><text styleclass="Normal" style="font-weight:bold;" translate="true">Minimum thickness</text><text styleclass="Normal" translate="true"> is the minimum distance between vertically aligned nodes. If </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Minimum thickness</text><text styleclass="Normal" translate="true"> is set to zero, layers are allowed to pinch out.</text></para>
+    <para styleclass="Normal"><snippet src="file::Discretization.xml"/></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="mfGridDrawBug" FileType="bin">
+    <FileName Model_Name="mfGridDrawBug" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="mfGridDrawBug" FileType="ancillary">
+    <FileName Model_Name="mfGridDrawBug" FileType="ancillary">mfGridDrawBug.gpt</FileName>
+  </ancillary>
+  <model Model_Name="mfGridDrawBug" FileType="Model Input">
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.bas</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.dis</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.gsf</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.lpf</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.nam.archive</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.oc</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">mfGridDrawBug.pcg</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Input">usgs.mfGridDrawBug.reference</FileName>
+  </model>
+  <output Model_Name="mfGridDrawBug" FileType="Model Output">
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Output">mfGridDrawBug.cbc</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Output">mfGridDrawBug.fdn</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Output">mfGridDrawBug.fhd</FileName>
+    <FileName Model_Name="mfGridDrawBug" FileType="Model Output">mfGridDrawBug.lst</FileName>
+  </output>
+</Model_Archive_List>

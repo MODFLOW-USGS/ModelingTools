@@ -1,0 +1,80 @@
+object frmAboutMetaEditor: TfrmAboutMetaEditor
+  Left = 0
+  Top = 0
+  Caption = 'About'
+  ClientHeight = 347
+  ClientWidth = 606
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object memoDisclaimer: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    ReadOnly = True
+    StyledSettings = [Family, Style, FontColor]
+    TextSettings.Font.Size = 16.000000000000000000
+    TextSettings.WordWrap = True
+    Align = Top
+    Size.Width = 606.000000000000000000
+    Size.Height = 209.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 602.000000000000000000
+    Viewport.Height = 205.000000000000000000
+  end
+  object pnlBottom: TPanel
+    Align = Bottom
+    Position.Y = 307.000000000000000000
+    Size.Width = 606.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object btnClose: TButton
+      Anchors = [akTop, akRight]
+      StyledSettings = [Family, Style, FontColor]
+      ModalResult = 8
+      Position.X = 517.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 0
+      Text = 'Close'
+      TextSettings.Font.Size = 16.000000000000000000
+    end
+    object lblVersion: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 169.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      Text = 'Version'
+      TabOrder = 1
+    end
+  end
+  object sgAcknowledgements: TStringGrid
+    Align = Client
+    CanFocus = True
+    ClipChildren = True
+    Size.Width = 606.000000000000000000
+    Size.Height = 98.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 16.000000000000000000
+    StyledSettings = [Family, Style, FontColor]
+    TabOrder = 2
+    RowCount = 2
+    Viewport.Width = 602.000000000000000000
+    Viewport.Height = 73.000000000000000000
+    object scItem: TStringColumn
+      Header = 'Item'
+      ReadOnly = True
+      Size.Width = 257.000000000000000000
+    end
+    object scURL: TStringColumn
+      Header = 'URL'
+      ReadOnly = True
+      Size.Width = 343.000000000000000000
+    end
+  end
+end

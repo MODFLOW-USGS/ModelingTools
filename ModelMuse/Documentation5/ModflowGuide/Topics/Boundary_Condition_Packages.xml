@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Boundary Condition Packages</title>
+  <keywords>
+    <keyword translate="true">Boundary conditions</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Boundary Condition Packages</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are three types of boundary conditions in the Groundwater Flow process</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Specified_Head_Boundaries" styleclass="Normal" translate="true">Specified Head</link><text styleclass="Normal" translate="true"> boundaries (which are examples of &#160;Dirichlet or first-type boundary conditions)</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Specified_Flux_Boundaries" styleclass="Normal" translate="true">Specified Flux</link><text styleclass="Normal" translate="true"> boundaries (which are examples of &#160;Neumann or second-type boundary conditions)</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head-Dependent_Flux_Boundary_P" styleclass="Normal" translate="true">Head-Dependent Flux</link><text styleclass="Normal" translate="true"> boundaries (which are examples of Robin or mixed boundary conditions)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Specified heads can also be specified using a combination of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="IBOUND" styleclass="Normal" translate="true">IBOUND</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="STRT" styleclass="Normal" translate="true">STRT</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="Normal" translate="true">Basic</link><text styleclass="Normal" translate="true"> package. &#160;</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Although MODFLOW does not require the use of any specific boundary condition package in order to run properly, it is not possible to simulate most real-world conditions properly without using at least one of them.</text></para>
+  </body>
+</topic>

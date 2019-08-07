@@ -1,0 +1,106 @@
+TITLE
+.      -Well flow Lohman, 1972, p. 19
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT false
+UNITS
+      -time minutes
+      -horizontal_grid feet
+      -vertical_grid feet
+      -head feet
+      -hydraulic_conductivity feet/days
+      -specific_storage 1/feet
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter feet
+      -well_flow_rate feet3/days
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 4000 41
+      -uniform   Y   0 4000 41
+      -uniform   Z   -100 0 2
+      -print_orientation XY
+MEDIA
+      -zone 0 0 -100 4000 4000 0
+            -Kx 137
+            -Ky 137
+            -Kz 137
+            -porosity 0.2
+            -specific_storage 2E-6
+      -zone 0 0 -100 4000 4000 0
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW false
+SOLUTION_METHOD
+      -iterative_solver true
+      -tolerance 1E-10
+      -save_directions 10
+      -maximum_iterations 500
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 -100 4000 4000 0
+            -head 0
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -HDF_heads 600 seconds
+      -HDF_velocities 600 seconds
+      -heads 600 seconds
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 0 
+      -wells 600 seconds
+      -xyz_components 0 
+      -xyz_heads 600 seconds
+      -xyz_velocities 600 seconds
+      -xyz_wells 30 seconds
+      -end_of_period_default false
+WELL 1 WELL 1
+      2000 2000
+            -diameter 1
+            -elevation 0 -100
+            -pumping_rate
+                  0       96000
+WELL 2 WELL 2
+      2200 2000
+            -diameter 1
+            -elevation 0 -10
+            -pumping_rate
+                  0       0
+WELL 3 WELL 3
+      2400 2000
+            -diameter 1
+            -elevation 0 -10
+            -pumping_rate
+                  0       0
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 0.5 minutes
+            -time_end
+                  10 minutes
+END

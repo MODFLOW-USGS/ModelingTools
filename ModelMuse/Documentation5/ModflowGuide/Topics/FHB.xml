@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">FHB - Flow and Head Boundary Package</title>
+  <keywords>
+    <keyword translate="true">AuxVar</keyword>
+    <keyword translate="true">BDTIM</keyword>
+    <keyword translate="true">CNSTM</keyword>
+    <keyword translate="true">Column</keyword>
+    <keyword translate="true">FHB</keyword>
+    <keyword translate="true">FLWRAT</keyword>
+    <keyword translate="true">IAUX</keyword>
+    <keyword translate="true">IFHBCB</keyword>
+    <keyword translate="true">IFHBPT</keyword>
+    <keyword translate="true">IFHBSS</keyword>
+    <keyword translate="true">IFHBUN</keyword>
+    <keyword translate="true">Layer</keyword>
+    <keyword translate="true">NBDTIM</keyword>
+    <keyword translate="true">NFHBX1</keyword>
+    <keyword translate="true">NFHBX2</keyword>
+    <keyword translate="true">NFLW</keyword>
+    <keyword translate="true">NHED</keyword>
+    <keyword translate="true">Row</keyword>
+    <keyword translate="true">SBHED</keyword>
+    <keyword translate="true">VarName</keyword>
+    <keyword translate="true">Weight</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">FHB - Flow and Head Boundary Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FHB</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Flow and Head Boundary package is used for specified head cells and specified flow cells whose properties can vary within a stress period.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr97571" target="_blank" styleclass="Citation" translate="true">Leake, S.A., and Lilly, M.R., 1997, Documentation of a computer program (FHB1) for assignment of transient specified-flow and specified-head boundaries in applications of the modular finite-difference ground-water flow model (MODFLOW): U.S. Geological Survey Open-File Report 97-571, 50 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="Readme_FHB.txt" styleclass="Normal" translate="true">Readme_FHB.txt</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">See: &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="IBOUND" styleclass="Normal" translate="true">IBOUND</link><text styleclass="Normal" translate="true"> in the Basic package</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD" styleclass="Normal" translate="true">Time-Variant Specified-Head</link><text styleclass="Normal" translate="true"> package</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">Well</link><text styleclass="Normal" translate="true"> package</text></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" styleclass="Normal" translate="true">Recharge</link><text styleclass="Normal" translate="true"> package</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">Specified heads specified in the the Flow and Head Boundary package override those specified in the the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="New Materials" translate="true">Basic</link><text styleclass="New Materials" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD" styleclass="New Materials" translate="true">Time-Variant Specified-Head</link><text styleclass="New Materials" translate="true"> packages.</text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">If two different specified heads are specified for the same cell with the Flow and Head Boundary package, the later one overrides the earlier one. </text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">If two specified fluxes are specified for the same cell with the Flow and Head Boundary package, the fluxes are added together.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">Programmers should know that the Flow and Head Boundary package changes the value assigned to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" anchor="IBOUND" styleclass="Normal" translate="true">IBOUND</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="Normal" translate="true">Basic</link><text styleclass="Normal" translate="true"> package.</text></li>
+            <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="UzfSpecifiedHeadInfo"/></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input for FHB1 is read from the file that has file type &quot;FHB&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file.. All input is free format, which requires each of the numbered data groups to start on a new input record. More than one record can be used for any data group and numbers within data groups must be separated by at least one space or a comma. Integer data types cannot include a decimal point. Blank spaces are not treated as zeros. For an example annotated input data set, refer to figure 8 in Leake and Lilly 1997.</text></para>
+    <para styleclass="Normal"><table rowcount="19" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NBDTIM NFLW NHED IFHBSS &#160;IFHBCB NFHBX1 NFHBX2</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NBDTIM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><anchor id="NBDTIM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NBDTIM is the number of times at which flow and head will be specified for all selected cells.</text></para>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NBDTIM = 1, specified flow and head values will remain constant for the entire simulation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If NBDTIM &gt; 1, specified flow and head values will be computed for each time step using linear interpolation.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NFLW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><anchor id="NFLW" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NFLW is the number of cells at which flows will be specified.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NHED]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><anchor id="NHED" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NHED is the number of cells at which head will be specified.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFHBSS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IFHBSS is the FHB steady-state option flag. &#160;If the simulation includes any transient-state stress periods, the flag is read but not used; in this case, specified-flow, specified-head, and auxiliary-variable values will be interpolated for steady-state stress periods in the same way that values are interpolated for transient stress periods. &#160;If the simulation includes only steady-state stress periods, the flag controls how flow, head, and auxiliary-variable values will be computed for each steady-state solution.</text></para>
+                      <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFHBSS = 0, values of flow, head, and auxiliary variables will be those specified for the starting time of the simulation. &#160;This results in use of the first value in arrays FLWRAT, SBHED, and AuxVar for each respective boundary cell.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFHBSS </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">¹</text><text styleclass="Normal" translate="true"> 0, values of flow, head, and auxiliary variables will be interpolated in the same way that values are computed for transient simulations.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFHBCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IFHBCB is a flag and unit number.</text></para>
+                      <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFHBCB &gt; 0, it is the unit number on which cell-by-cell flow terms will be recorded whenever ICBCFL is set (see McDonald and Harbaugh, 1988, chap. 4, p. 14–15).</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFHBCB </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0, cell-by-cell flow terms will not be recorded.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NFHBX1]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><anchor id="NFHBX1" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NFHBX1 is the number of auxiliary variables whose values will be computed for each time step for each specified-flow cell.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NFHBX2]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                      <para styleclass="Normal"><anchor id="NFHBX2" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NFHBX2 is the number of auxiliary variables whose values will be computed for each time step for each specified-head cell.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">VarName Weight</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Omit data item 2 if NFHBX1=0. Input item 2 consists of one record for each of NFHBX1 auxiliary variables.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VarName]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Character</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VarName is the name of an auxiliary variable. Name can include up to 16 characters with no embedded blank characters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Weight]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Real</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Weight is the time-weighting factor for an auxiliary variable specifying the fraction of each time step at which the value of the variable will be interpolated. Value must be in the range from 0.0 to 1.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">VarName Weight</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Omit data item 3 if NFHBX2=0. Input item 3 consists of one record for each of NFHBX2 auxiliary variables.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[VarName]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Character</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">VarName is the name of an auxiliary variable. Name can include up to 16 characters with no embedded blank characters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Weight]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Real</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Weight is the time-weighting factor for an auxiliary variable specifying the fraction of each time step at which the value of the variable will be interpolated. Value must be in the range from 0.0 to 1.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data items 4a and 4b are required for all simulations. Include </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NBDTIM" styleclass="Normal" translate="true">NBDTIM</link><text styleclass="Normal" translate="true"> times in data item 4b.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="height:26px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4a</text></para>
+        </td>
+        <td style="height:26px;">
+          <para styleclass="Normal"><snippet src="FHB_Header"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[BDTIM(NBDTIM)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Real</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="BDTIM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">BDTIM is simulation time at which values of specified flow and (or) values of specified head will be read. NBDTIM values are required.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Omit data items 5a and 5b if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFLW" styleclass="Normal" translate="true">NFLW</link><text styleclass="Normal" translate="true">=0. Input item 5b consists of one set of numbers for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFLW" styleclass="Normal" translate="true">NFLW</link><text styleclass="Normal" translate="true"> cells. Each set of numbers includes layer, row, and column indices, an integer auxiliary variable, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NBDTIM" styleclass="Normal" translate="true">NBDTIM</link><text styleclass="Normal" translate="true"> values of specified flow.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="FHB_Header"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column IAUX &#160;FLWRAT(NBDTIM)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="FHB_Location_Variables"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[FLWRAT(NBDTIM)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Real</text></para>
+                      <para styleclass="Normal"><anchor id="FLWRAT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">FLWRAT is volumetric rate of flow at specified-flow cells. A list of NBDTIM values must be specified for each of NFLW specified-flow cells.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Omit data items 6a and 6b if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFHBX1" styleclass="Normal" translate="true">NFHBX1</link><text styleclass="Normal" translate="true">=0 or if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFLW" styleclass="Normal" translate="true">NFLW</link><text styleclass="Normal" translate="true">=0. Include one set of data items 6a and 6b for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFHBX1" styleclass="Normal" translate="true">NFHBX1</link><text styleclass="Normal" translate="true"> auxiliary variables. Input item 6b consists of one set of numbers for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFLW" styleclass="Normal" translate="true">NFLW</link><text styleclass="Normal" translate="true"> cells. Each set includes </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NBDTIM" styleclass="Normal" translate="true">NBDTIM</link><text styleclass="Normal" translate="true"> values of the variable.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="FHB_Header"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[AuxVar(NBDTIM)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="AuxVar6b" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="FHB_Auxiliary_Variable"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Omit data items 7a and 7b if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NHED" styleclass="Normal" translate="true">NHED</link><text styleclass="Normal" translate="true">=0. Input item 7b consists of one set of numbers for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFLW" styleclass="Normal" translate="true">NFLW</link><text styleclass="Normal" translate="true"> cells. Each set of numbers includes layer, row, and column indices, an integer auxiliary variable, and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NBDTIM" styleclass="Normal" translate="true">NBDTIM</link><text styleclass="Normal" translate="true"> values of specified head.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="FHB_Header"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column IAUX &#160;SBHED(NBDTIM)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer Integer Integer Integer Real</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="FHB_Location_Variables"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SBHED(NBDTIM)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="SBHED" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">SBHED is an array containing NBDTIM values of the head for each specified-head cell.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="UzfSpecifiedHeadInfo"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Omit data items 8a and 8b if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFHBX2" styleclass="Normal" translate="true">NFHBX2</link><text styleclass="Normal" translate="true">=0 or if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NHED" styleclass="Normal" translate="true">NHED</link><text styleclass="Normal" translate="true">=0. Include one set of data items 8a and 8b for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NFHBX2" styleclass="Normal" translate="true">NFHBX2</link><text styleclass="Normal" translate="true"> auxiliary variables. Input item 8b consists of one set of numbers for each of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NHED" styleclass="Normal" translate="true">NHED</link><text styleclass="Normal" translate="true"> cells. Each set includes </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="NBDTIM" styleclass="Normal" translate="true">NBDTIM</link><text styleclass="Normal" translate="true"> values of the variable.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="FHB_Header"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 8b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[AuxVar(NBDTIM)]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><anchor id="AuxVar8b" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="FHB_Auxiliary_Variable"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

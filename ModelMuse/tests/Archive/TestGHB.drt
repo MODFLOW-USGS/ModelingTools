@@ -1,0 +1,22 @@
+# DRT: Drain Return package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     4     9     1     8 AUXILIARY IFACE RETURNFLOW # DataSet 1: MXADRT IDRTCB NPDRT MXL Option
+DRT_Par1 DRT  1.000000000000E+000      2 INSTANCES     3 # Data Set 2: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+DRT_Par1_2 # Data Set 3a: INSTNAM (Parameter instance for stress period 2)
+     1     1     4  4.000000000000E+000   5.000000000000E+000      1     1     1  6.000000000000E-001      0 # Data Set 3b: Layer Row Column Elevation Condfact IFACE LayR RowR ColR Rfprop IFACE
+     1     1     1  0.000000000000E+000   0.000000000000E+000      0     0     0     0  0.000000000000E+000  # Data Set 3b: Layer Row Column Stage Condfact LayR  RowR ColR Rfprop IFACE (Dummy boundary)
+DRT_Par1_3 # Data Set 3a: INSTNAM (Parameter instance for stress period 3)
+     1     1     4  4.000000000000E+000   5.000000000000E+000      1     1     1  6.000000000000E-001      0 # Data Set 3b: Layer Row Column Elevation Condfact IFACE LayR RowR ColR Rfprop IFACE
+     1     2     5  7.000000000000E+000   8.000000000000E+000      1     4     9  9.000000000000E-001      0 # Data Set 3b: Layer Row Column Elevation Condfact IFACE LayR RowR ColR Rfprop IFACE
+DRT_Par1_4 # Data Set 3a: INSTNAM (Parameter instance for stress period 4)
+     1     2     5  7.000000000000E+000   8.000000000000E+000      1     4     9  9.000000000000E-001      0 # Data Set 3b: Layer Row Column Elevation Condfact IFACE LayR RowR ColR Rfprop IFACE
+     1     1     1  0.000000000000E+000   0.000000000000E+000      0     0     0     0  0.000000000000E+000  # Data Set 3b: Layer Row Column Stage Condfact LayR  RowR ColR Rfprop IFACE (Dummy boundary)
+     2     0 # Data Set 4: ITMP NP Stress period 1
+     1     1     4  1.000000000000E+000   2.000000000000E+000      1     1     1  5.000000000000E-001      0 # Data Set 4: Layer Row Column Elevation Cond  LayR RowR ColR Rfprop IFACE
+     1     2     5  1.000000000000E+001   1.100000000000E+001      1     4     9  1.200000000000E-001      0 # Data Set 4: Layer Row Column Elevation Cond  LayR RowR ColR Rfprop IFACE
+     1     1 # Data Set 4: ITMP NP Stress period 2
+     1     2     5  1.000000000000E+001   1.100000000000E+001      1     4     9  1.200000000000E-001      0 # Data Set 4: Layer Row Column Elevation Cond  LayR RowR ColR Rfprop IFACE
+DRT_Par1 DRT_Par1_2 # Data Set 6: PARNAM Iname
+     0     1 # Data Set 4: ITMP NP Stress period 3
+DRT_Par1 DRT_Par1_3 # Data Set 6: PARNAM Iname
+     0     1 # Data Set 4: ITMP NP Stress period 4
+DRT_Par1 DRT_Par1_4 # Data Set 6: PARNAM Iname

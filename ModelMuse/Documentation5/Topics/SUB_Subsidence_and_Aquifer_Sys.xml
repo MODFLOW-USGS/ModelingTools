@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SUB: Subsidence and Aquifer-System Compaction Package Pane</title>
+  <keywords>
+    <keyword translate="true">AC1</keyword>
+    <keyword translate="true">AC2</keyword>
+    <keyword translate="true">IDREST</keyword>
+    <keyword translate="true">IDSAVE</keyword>
+    <keyword translate="true">Ifl1</keyword>
+    <keyword translate="true">Ifl10</keyword>
+    <keyword translate="true">Ifl11</keyword>
+    <keyword translate="true">Ifl12</keyword>
+    <keyword translate="true">Ifl13</keyword>
+    <keyword translate="true">Ifl2</keyword>
+    <keyword translate="true">Ifl3</keyword>
+    <keyword translate="true">Ifl4</keyword>
+    <keyword translate="true">Ifl5</keyword>
+    <keyword translate="true">Ifl6</keyword>
+    <keyword translate="true">Ifl7</keyword>
+    <keyword translate="true">Ifl8</keyword>
+    <keyword translate="true">Ifl9</keyword>
+    <keyword translate="true">Ifm1</keyword>
+    <keyword translate="true">Ifm2</keyword>
+    <keyword translate="true">Ifm3</keyword>
+    <keyword translate="true">Ifm4</keyword>
+    <keyword translate="true">Ifm5</keyword>
+    <keyword translate="true">Ifm6</keyword>
+    <keyword translate="true">ISP1</keyword>
+    <keyword translate="true">ISP2</keyword>
+    <keyword translate="true">ITMIN</keyword>
+    <keyword translate="true">ITS1</keyword>
+    <keyword translate="true">ITS2</keyword>
+    <keyword translate="true">Iun1</keyword>
+    <keyword translate="true">Iun2</keyword>
+    <keyword translate="true">Iun3</keyword>
+    <keyword translate="true">Iun4</keyword>
+    <keyword translate="true">Iun5</keyword>
+    <keyword translate="true">Iun6</keyword>
+    <keyword translate="true">NN</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUB: Subsidence and Aquifer-System Compaction Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Subsidence and Aquifer-System Compaction package is used for simulating the drainage, changes in groundwater storage, and compaction of aquifers, interbeds and confining units that constitute an aquifer system. Delays in the release of groundwater from interbed storage, and thus delays in aquifer-system compaction, can be simulated. Delayed drainage and compaction in confining units can also be simulated.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pane for the SUB package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Subsidence_MM" styleclass="Normal" translate="true">Subsidence</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user defines the layers with which the interbeds are associated in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">NN</text><text styleclass="Normal" translate="true"> is the number of nodes used to discretize the half space to approximate the head distributions in systems of delay interbeds.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">AC1</text><text styleclass="Normal" translate="true"> is an acceleration parameter. This parameter (ω1 in equation 25) is used to predict the aquifer head at the interbed boundaries on the basis of the head change computed for the previous iteration. A value of 0.0 results in the use of the aquifer head at the previous iteration. Limited experience indicates that optimum values may range from 0.0 to 0.6.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">AC2</text><text styleclass="Normal" translate="true"> is an acceleration parameter. This acceleration parameter is a multiplier for the head changes to compute the head at the new iteration (ω2 in equation 27). Values are normally between 1.0 and 2.0, but the optimum is probably closer to 1.0 than to 2.0. However, as discussed following equation 27, this parameter also can be used to help convergence of the iterative solution by using values between 0 and 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ITMIN</text><text styleclass="Normal" translate="true"> is the minimum number of iterations for which one-dimensional equations will be solved for flow in interbeds when the Strongly Implicit Procedure (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SIP_Strongly_Implicit_Procedure_Package" styleclass="Strong" translate="true">SIP</link><text styleclass="Normal" translate="true">) is used to solve the ground-water flow equations. If the current iteration level is greater than </text><text styleclass="Strong" translate="true">ITMIN</text><text styleclass="Normal" translate="true"> and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SIP_Strongly_Implicit_Procedure_Package" styleclass="Strong" translate="true">SIP</link><text styleclass="Strong" translate="true"> </text><text styleclass="Normal" translate="true">convergence criterion for head closure (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SIP_Strongly_Implicit_Procedure_Package" anchor="HCLOSE" styleclass="Strong" translate="true">HCLOSE</link><text styleclass="Normal" translate="true">) is met at a particular cell, the one-dimensional equations for that cell will not be solved. The previous solution will be used. The value of </text><text styleclass="Strong" translate="true">ITMIN</text><text styleclass="Normal" translate="true"> is not used if a solver other than </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SIP_Strongly_Implicit_Procedure_Package" styleclass="Strong" translate="true">SIP</link><text styleclass="Normal" translate="true"> is used to solve the ground-water flow equations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><text styleclass="Strong" translate="true">IDSAVE</text><text styleclass="Normal" translate="true"> checkbox is checked, restart records for delay interbeds will be saved at the end of the simulation. The restart record file will have the extension .rst.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><text styleclass="Strong" translate="true">IDREST</text><text styleclass="Normal" translate="true"> file name is specified, restart records for delay interbeds will be read in. The restart records contain the starting head and starting preconsolidation head for the delay interbeds. If you are saving restart records as well as reading restart records, you should make sure that the file that is read has a different name from the one that is saved.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Binary output choice</text><text styleclass="Normal" translate="true"> determines whether all the binary output selected on the </text><text styleclass="Strong" translate="true">Print/Save</text><text styleclass="Normal" translate="true"> tab is saved to a single file or to multiple files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The table on the </text><text styleclass="Strong" translate="true">Print/Save</text><text styleclass="Normal" translate="true"> tab is used to choose what to print or save during the specified time periods. However those time periods are not used to specify stress periods if the chosen times do not correspond to the boundaries of the stress periods. Instead, a pair of stress periods and times steps are chosen that contain the specified starting and ending times. The first row of the table is used to choose the format with which various types of data are printed. The extensions for the binary output files that can be generated by the SUB package are listed in the table below.</text></para>
+    <para styleclass="Normal"><table rowcount="13" colcount="4" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td rowspan="2">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Data type</text></para>
+        </td>
+        <td rowspan="2">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Variables</text></para>
+        </td>
+        <td colspan="2">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Output file extension</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Single file</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Multiple files</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Subsidence</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun1, Ifl2</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubSubOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Compaction by model layer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun2, Ifl4</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubComMlOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Compaction by interbed system</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun3, Ifl6</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubComIsOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Vertical displacement</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun4, Ifl8</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubVdOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Critical head for no-delay interbeds </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun5, Ifl10</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubNdCritHeadOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Critical head for delay interbeds</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun6, Ifl12</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubDCritHeadOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="4">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Only available in MODFLOW-OWHM</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Elastic compaction by model layer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun7, Ifl14</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubElasCompMlOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Inelastic compaction by model layer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun8, Ifl16</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubInelasCompMlOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Elastic compaction by interbed system</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun9, Ifl18</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubElasCompIbOut</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Inelastic compaction by interbed system</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Iun10, Ifl20</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.Sub_Out</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">.SubInelasCompIbOut</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

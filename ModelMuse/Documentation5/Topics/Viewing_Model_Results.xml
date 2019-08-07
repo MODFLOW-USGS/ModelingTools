@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Viewing Model Results</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Viewing Model Results</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To view the heads, drawdowns, or flows calculated by the model, select &quot;File|Import|Model Results...&quot; and select the ExampleModel.fhd. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_MODFLOW_Model_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Select Model Results to Import</link><text styleclass="Normal" translate="true"> dialog box will appear (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">92</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">47</text><conditional-text type="END"/><text styleclass="Normal" translate="true">).</text></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:49px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><image src="SelectModelResults2.bmp" scale="75.00%" width="390" height="303" styleclass="Image Caption"></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">92</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">47</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" style="font-weight:bold;" translate="true">Select Model Results to Import</text><text styleclass="Image Caption" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this dialog box, the user can select the data to import. In this case, the model only has one time step so there is only one set of data to import. It is also possible to color the grid with one of the data sets that is imported by selecting it in the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Color or contour grid</text><text styleclass="Normal" translate="true"> combo box. The first, and in this case, only data set that is selected will be automatically selected in the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Color or contour grid</text><text styleclass="Normal" translate="true"> combo box. The user can choose a different data set (if there is one) or &quot;none&quot; can be selected. The user can also choose to contour the data instead of coloring it by selecting </text><text styleclass="Strong" translate="true">Contour grid</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button. The grid will then be colored as illustrated in figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">93</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">48</text><conditional-text type="END"/><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal" style="text-align:center; text-indent:48px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="ModelResults.bmp" scale="75.00%" width="484" height="455" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-align:center; text-indent:48px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">93</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">48</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Simulated heads in ExampleModel.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In addition to heads, ModelMuse can also import drawdown and flow terms so that the user can plot them. To import them, the user merely needs to select the appropriate file to import. For time-series plots, a separate program, GW_Chart (Winston, 2000), can be used (http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html).</text></para>
+  </body>
+</topic>

@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">WEL - Well Package</title>
+  <keywords>
+    <keyword translate="true">Column</keyword>
+    <keyword translate="true">Iname</keyword>
+    <keyword translate="true">INSTANCES</keyword>
+    <keyword translate="true">INSTNAM</keyword>
+    <keyword translate="true">ITMP</keyword>
+    <keyword translate="true">IWELCB</keyword>
+    <keyword translate="true">Layer</keyword>
+    <keyword translate="true">MXACTW</keyword>
+    <keyword translate="true">MXL</keyword>
+    <keyword translate="true">NLST</keyword>
+    <keyword translate="true">NP</keyword>
+    <keyword translate="true">NPWEL</keyword>
+    <keyword translate="true">NUMINST</keyword>
+    <keyword translate="true">Option</keyword>
+    <keyword translate="true">PARAMETER</keyword>
+    <keyword translate="true">PARNAM</keyword>
+    <keyword translate="true">PARTYP</keyword>
+    <keyword translate="true">Parval</keyword>
+    <keyword translate="true">PHIRAMP</keyword>
+    <keyword translate="true">Pname</keyword>
+    <keyword translate="true">Q</keyword>
+    <keyword translate="true">Qfact</keyword>
+    <keyword translate="true">Row</keyword>
+    <keyword translate="true">Text</keyword>
+    <keyword translate="true">WEL</keyword>
+    <keyword translate="true">xyz</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">WEL - Well Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">WEL</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Well package is used to simulate a specified flux to individual cells and specified in units of length</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/time.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr200092" target="_blank" styleclass="Citation" translate="true">Harbaugh, A.W., Banta, E.R., Hill, M.C., and McDonald, M.G., 2000, MODFLOW-2000, the U.S. Geological Survey modular ground-water model -- User guide to modularization concepts and the Ground-Water Flow Process: U.S. Geological Survey Open-File Report 00-92, 121 p.</link></li>
+          </list>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Citation" translate="true">Harbaugh, A.W., 2005, MODFLOW-2005, the U.S. Geological Survey modular ground-water model -- the Ground-Water Flow Process: U.S. Geological Survey Techniques and Methods 6-A16. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/tm/2005/tm6A16/" target="_blank" styleclass="Citation" translate="true">https://pubs.usgs.gov/tm/2005/tm6A16/</link></li>
+          </list>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="Time-varying-parameters.pdf" styleclass="Normal" translate="true">Time-varying-parameters.pdf</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+          </list>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="modpath.txt" styleclass="Normal" translate="true">modpath.txt</link></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A37" target="_blank" styleclass="Citation" translate="true">Niswonger, R.G., Panday, Sorab, and Ibaraki, Motomu, 2011, MODFLOW-NWT, A Newton formulation for MODFLOW-2005: U.S. Geological Survey Techniques and Methods 6-A37, 44 p.</link></li>
+          </list>
+          <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="NWT_release.txt" styleclass="Normal" translate="true">release.txt for MODFLOW-NWT</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCH" styleclass="Normal" translate="true">Recharge</link><text styleclass="Normal" translate="true"> package is used to simulate a specified flux distributed over the top of the model and specified in units of length/time. &#160;Within MODFLOW, these rates are multiplied by the horizontal area of the cells to which they are applied to calculate the volumetric flux rates.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" styleclass="Normal" translate="true">Flow and Head Boundary</link><text styleclass="Normal" translate="true"> package can be used to simulate a specified flux to particular cells specified in units of length</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text><text styleclass="Normal" translate="true">/time and varying as a function of time within stress periods.</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="22" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <list id="23" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">In MODFLOW-NWT version 1.1 WEL parameters can not be used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NUMTAB" styleclass="New Materials" translate="true">NUMTAB</link><text styleclass="New Materials" translate="true"> &#160;&gt; 0</text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">MODFLOW-NWT version 1.1 does not read auxiliary variables for wells when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="TABFILES" styleclass="New Materials" translate="true">tabfiles</link><text styleclass="New Materials" translate="true"> are used.</text><conditional-text type="END"/></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input to the Well (WEL) Package is read from the file that has type &quot;WEL&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. Optional variables are shown in brackets. All variables are free format if the option “FREE” is specified in the Basic Package input file; otherwise, the non-optional variables have 10-character fields and the optional variables are free format.</text></para>
+    <para styleclass="Normal"><table rowcount="19" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="height:135px;">
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td style="height:135px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional—“#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable (199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Except for the name file, lines beginning with # are restricted to these first lines of the file. Text is printed when the file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[ </text><text styleclass="Keywords" translate="true">PARAMETER</text><text styleclass="Normal" translate="true"> NPWEL MXL]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This optional item must start with the word “</text><text styleclass="Keywords" translate="true">PARAMETER</text><text styleclass="Normal" translate="true">”.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td style="height:26px;">
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPWEL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NPWEL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NPWEL—is the number of well parameters.</text></para>
+                      <para styleclass="Normal"><snippet src="MaxParameters"/></para>
+                      <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">In MODFLOW-NWT version 1.1 WELL parameters can not be used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NUMTAB" styleclass="New Materials" translate="true">NUMTAB</link><text styleclass="New Materials" translate="true"> &#160;&gt; 0</text><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MXL—is the maximum number of wells that will be defined using parameters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="Heading2_atoc_" translate="true">Options Block (MODFLOW-NWT version 1.1</text><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; text-decoration:line-through; color:#000000;" translate="true">Note that the following changes to the Well Package input no longer supports previous input files that read the key word option SPECIFY in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="DataSet2b" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; text-decoration:line-through; color:#000000;" translate="true">Data Set 2B</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; text-decoration:line-through; color:#000000;" translate="true">.</text><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true"> In MODFLOW-NWT version 1.1.3 backwards compatibility was restored by allowing the options to be read in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="DataSet2b" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">Data Set 2B</link><text style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The input format for specifying the keyword (character) variable </text><text styleclass="Keywords" translate="true">SPECIFY</text><text styleclass="Normal" translate="true"> has changed.This character variable is now specified within the OPTIONS block that is specified between Data Set 0 and Data Set 1. A new character variable option was added that allows users to specify pumping rates using separate tabular input files for each well. Each tabular input file consists of a series of simulation times and pumping rates that should begin with time equal to zero. The applied pumping rate will be interpolated from the tabular input file using the times at the end and beginning of the time step. Options must be proceeded with the &quot;OPTIONS&quot; specification and followed by the &quot;END&quot; specification. Characters can be specified as upper or lower case.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW-NWT version 1.3, backwards compatibility was restored by allowing the </text><text styleclass="Keywords" translate="true">SPECIFY</text><text styleclass="Normal" translate="true"> keyword to again be specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="Option" styleclass="Normal" translate="true">Option</link><text styleclass="Normal" translate="true"> in data set 2A.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Optional character variables for WELL in any order:</text></para>
+          <list id="24" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Keywords" translate="true">OPTIONS</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">SPECIFY</text><text styleclass="Normal" translate="true"> PHIRAMP IUNITRAMP]</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true"> NUMTAB MAXVAL]</text></li>
+            <li styleclass="Normal"><text styleclass="Keywords" translate="true">END</text></li>
+          </list>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="SpecifyOptions"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TABFILES]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="TABFILES" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true"> -- An optional character variable. When TABFILES is specified, all pumping rates for all wells in the model will be input using separage time series tabular input files. &#160;See: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Well_Tab_Files" styleclass="Normal" translate="true">Well Tab Files</link></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NUMTAB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NUMTAB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NUMTAB -- An integer variable that is the number of tabular input files that will be read for interpolating pumping rates for each well in the model. A separate tabular input file is required for each well in the model. Wells can be made inactive by specifying pumping rates of zero for times when a well is inactive. (</text><text styleclass="New Materials" translate="true">In MODFLOW-NWT version 1.1 WELL parameters can not be used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NUMTAB" styleclass="New Materials" translate="true">NUMTAB</link><text styleclass="New Materials" translate="true"> &#160;&gt; 0)</text><text styleclass="Normal" translate="true"> See: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Well_Tab_Files" styleclass="Normal" translate="true">Well Tab Files</link></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MAXVAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MAXVAL -- An integer value equal to the maximum number of time series values specified in the tabular input file, not including header lines. Tabular input files each can have a different number of values and MAXVAL is the number of lines in the tabular input file that has the most lines as compared to all other tabular input files. &#160;See: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Well_Tab_Files" styleclass="Normal" translate="true">Well Tab Files</link></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Heading2_atoc_" translate="true">Data Set 1a-1</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Heading2_atoc_" translate="true"> (MODFLOW-OWHM only)</text><conditional-text type="END"/><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Tabfile1"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Heading2_atoc_" translate="true">Data Set 1a-2</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Heading2_atoc_" translate="true"> (MODFLOW-OWHM only)</text><conditional-text type="END"/><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Tabfile2"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Heading2_atoc_" translate="true">Data Set 1a-3</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Heading2_atoc_" translate="true"> (MODFLOW-OWHM only)</text><conditional-text type="END"/><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Tabfile3"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><text styleclass="Heading2_atoc_" translate="true">Data Set 1a-4</text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Heading2_atoc_" translate="true"> (MODFLOW-OWHM only)</text><conditional-text type="END"/><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="Tabfile6"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MXACTW IWELCB [Option]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXACTW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MXACTW—is the maximum number of wells in use during any stress period. MXACTW includes wells that are defined using parameters as well as wells that are defined without using parameters.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IWELCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="IWELCB" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IWELCB—is a flag and a unit number.</text></para>
+                      <list id="25" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWELCB &gt; 0, it is the unit number to which cell-by-cell flow terms will be written when &quot;SAVE BUDGET&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWELCB = 0, cell-by-cell flow terms will not be written.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IWELCB &lt; 0, well recharge for each well will be written to the listing file when &quot;SAVE BUDGET&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Option]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Option" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Option—is an optional list of character values.</text></para>
+                      <list id="26" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">“</text><text styleclass="Keywords" translate="true">AUXILIARY</text><text styleclass="Normal" translate="true"> abc” or “</text><text styleclass="Keywords" translate="true">AUX</text><text styleclass="Normal" translate="true"> abc”—defines an auxiliary variable, named &quot;abc&quot;, which will be read for each well as part of Items 4 and 6. Up to 20 variables can be specified, each of which must be preceded by &quot;AUXILIARY&quot; or &quot;AUX.&quot; These variables will not be used by the Groundwater Flow Process, but they will be available for use by other processes. The auxiliary variable values will be read after the Q variable.</text></li>
+                      </list>
+                      <para styleclass="Normal"><snippet src="Uses_of_Auxiliary_Parameters"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">MODFLOW-NWT version 1.1 does not read auxiliary variables for wells when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="TABFILES" styleclass="New Materials" translate="true">tabfiles</link><text styleclass="New Materials" translate="true"> are used.</text><conditional-text type="END"/></para>
+                      <list id="26" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">“</text><text styleclass="Keywords" translate="true">CBCALLOCATE</text><text styleclass="Normal" translate="true">” or “</text><text styleclass="Keywords" translate="true">CBC</text><text styleclass="Normal" translate="true">”—indicates that memory should be allocated to store cell-by-cell flow for each well in order to make these flows available for use in other packages. (This option is &#160;only available in MODFLOW-2000.)</text></li>
+                        <li styleclass="Normal"><conditional-text type="END"/><anchor id="NOPRINT" styleclass="Keywords"></anchor><text styleclass="Normal" translate="true">“</text><text styleclass="Keywords" translate="true">NOPRINT</text><text styleclass="Normal" translate="true">”—suppresses the printing of cell lists.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><anchor id="DataSet2b" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Data Set 2b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data set 2b can only be specified in versions of MODFLOW that include the </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" styleclass="Normal" translate="true">NWT</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">NWT</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> solver. PHIRAMP is only used if </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" styleclass="Normal" translate="true">NWT</link><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">NWT</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> is the selected solver. Otherwise, it is ignored.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">SPECIFY</text><text styleclass="Normal" translate="true"> PHIRAMP IUNITRAMP]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="SpecifyOptions"/></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Incompatibilities in MODFLOW-NWT 1.1]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Note that the following changes to the Well Package input no longer supports previous input files that read the key word option SPECIFY in Data Set 2B.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true"> The input format for specifying the keyword (character) variable SPECIFY has changed. This character variable is now specified within the OPTIONS block that is specified between Data Set 0 and Data Set 1.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2" style="height:29px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat Items 3 and 4 for each </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NPWEL" styleclass="Normal" translate="true">NPWEL</link><text styleclass="Normal" translate="true"> parameter.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[PARNAM PARTYP Parval NLST [</text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> NUMINST]]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If PARNAM is to be a time-varying parameter, the keyword “</text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true">” and a value for NUMINST must be entered.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="PARNAM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">PARNAM—is the name of a parameter. This name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent. All parameter names must be unique.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARTYP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PARTYP—is the type of parameter. For the WEL Package, the only allowed parameter type is Q, which defines values of the volumetric recharge rate.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parval]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="Parval"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NLST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NLST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NLST—is the number of wells that are included in a non-time-varying parameter or in each instance of a time-varying parameter.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[INSTANCES]]></caption></toggle></para>
+                <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> – is an optional keyword that designates a parameter as time varying. The keyword is case-insensitive; that is, it may be entered in any combination of upper- and lower-case letters. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is present, it must be followed by a value for NUMINST. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is absent, PARNAM is non-time-varying and NUMINST should not be present.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NUMINST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NUMINST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NUMINST – is the number of instances that are included in the definition of a time-varying parameter, where each instance is a list of wells and associated properties. If the keyword </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is present, NUMINST must be present and must be at least 1. If the keyword </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is absent, NUMINST should not be present.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">INSTNAM</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 4a is read only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="PARNAM" styleclass="Normal" translate="true">PARNAM</link><text styleclass="Normal" translate="true"> is time-varying. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NUMINST" styleclass="Normal" translate="true">NUMINST</link><text styleclass="Normal" translate="true"> repetitions of Item 4 (parts a and b) are read. After each repetition of Item 4a, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> repetitions of Item 4b are read.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[INSTNAM]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">INSTNAM – is the name of an instance associated with the parameter PARNAM specified in the corresponding Item 3. The name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent. Names entered for INSTNAM must be unique for any given parameter, but names may be reused for instances associated with different parameters.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column Qfact [xyz]</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> repetitions of Item 4b are required; they are read by module </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" styleclass="Normal" translate="true">ULSTRD</link><text styleclass="Normal" translate="true">. (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" anchor="SFAC" styleclass="Normal" translate="true">SFAC</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" styleclass="Normal" translate="true">ULSTRD</link><text styleclass="Normal" translate="true"> utility module applies to Qfact). &#160;The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> repetitions of Item 4b follow each repetition of Item 4a when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="PARNAM" styleclass="Normal" translate="true">PARNAM</link><text styleclass="Normal" translate="true"> is time-varying.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="WellLocationVariable"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Qfact]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Qfact—is the factor used to calculate well recharge rate from the parameter value. The recharge rate is the product of Qfact and the parameter value.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="WelllAdditionalVariable"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH STRESS PERIOD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ITMP NP</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITMP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ITMP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ITMP—is a flag and a counter.</text></para>
+                      <list id="27" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP &lt; 0, non-parameter well data from the last stress period will be reused.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">³</text><text styleclass="Normal" translate="true"> 0, ITMP will be the number of non-parameter wells read for the current stress period.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NP—is the number of parameters in use in the current stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Note: MODFLOW-NWT 1.1]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="New Materials" translate="true">If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NUMTAB" styleclass="New Materials" translate="true">NUMTAB</link><text styleclass="New Materials" translate="true"> &gt; 0, Data sets 5, 6, and 7 are only read for stress period 1. WELL Parameters can not be used if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="NUMTAB" styleclass="New Materials" translate="true">NUMTAB</link><text styleclass="New Materials" translate="true"> &gt; 0.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="Heading2_atoc_" translate="true">MODFLOW-NWT version 1.1</text><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/><text styleclass="Normal" translate="true">IF </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="TABFILES" styleclass="Normal" translate="true">TABFILES</link><text styleclass="Normal" translate="true"> is specified then DATA SET 6 is replaced with the following NUMTAB lines for stress period 1 only. DATA SET 6 is not required for stress periods following the first stress period when the TABFILES option is used.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[TABUNIT TABVAL TABLAY TABROW TABCOL] &#160; </text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">#repeat this line NUMTAB times for stress period 1. </text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TABUNIT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TABUNIT -- An integer value equal to the unit number for the tabular input file. This unit number must match the unit number specified in the MODFLOW Name file as type data.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TABVAL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TABVAL -- An integer value equal to the number of lines in this tabular input file not including header lines.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TABLAY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TABLAY -- An integer value equal to the MODFLOW layer for the cell to which the pumping rates will be applied</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">.</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TABROW]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TABROW -- An integer value equal to the MODFLOW row for the cell to which the pumping rates will be applied.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TABCOL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">TABCOL -- An integer value equal to the MODFLOW column for the cell to which the pumping rates will be applied.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column Q [xyz]</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> repetitions of Item 6 are read by module </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" styleclass="Normal" translate="true">ULSTRD</link><text styleclass="Normal" translate="true"> if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> &gt; 0. (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" anchor="SFAC" styleclass="Normal" translate="true">SFAC</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" styleclass="Normal" translate="true">ULSTRD</link><text styleclass="Normal" translate="true"> utility module applies to Q.) Item 6 is not read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> is negative or zero.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="WellLocationVariable"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Q]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Q—is the volumetric recharge rate. A positive value indicates recharge and a negative value indicates discharge (pumping).</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="WelllAdditionalVariable"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[Pname [Iname]]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 7 is repeated </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> times. It is not read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> is negative or 0. &#160;Iname is read if Pname is a time-varying parameter.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Pname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Pname—is the name of a parameter that is being used in the current stress period. NP parameter names will be read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iname – is an instance name that is read only if Pname is a time-varying parameter. Multiple instances of the same time-varying parameter are not allowed in a stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

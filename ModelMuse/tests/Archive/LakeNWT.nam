@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 8/1/2019 by ModelMuse Version 4.0.0.7
+LIST             11 LakeNWT.lst REPLACE
+DATA(BINARY)      9 LakeNWT.cbc REPLACE
+DIS              12 LakeNWT.dis OLD
+BAS6             13 LakeNWT.bas OLD
+OC               39 LakeNWT.oc OLD
+DATA(BINARY)     37 LakeNWT.bhd REPLACE
+DATA             38 LakeNWT.fdn REPLACE
+NWT             133 LakeNWT.nwt OLD
+UPW             134 LakeNWT.upw OLD
+LMT6            135 LakeNWT.lmt OLD
+CHD              17 LakeNWT.chd OLD
+RCH              24 LakeNWT.rch OLD
+LAK              28 LakeNWT.lak OLD

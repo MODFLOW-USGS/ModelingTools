@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentVertexZ</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentVertexZ</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectCurrentVertexZ</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectCurrentVertexZ</text><text styleclass="Normal" translate="true"> is intended for use with points and polyline objects. If the object being evaluated does not intersect the cell or element being evaluated, ObjectCurrentVertexZ returns zero. If one of the vertices of an object is in the element or cell, ObjectCurrentVertexZ returns the Z coordinate of that vertex. Otherwise, ObjectCurrentVertexZ returns the Z coordinate of the first place where the object intersects the cell or element. For objects drawn on the top view of the model, ObjectCurrentVertexZ returns zero.</text></para>
+  </body>
+</topic>

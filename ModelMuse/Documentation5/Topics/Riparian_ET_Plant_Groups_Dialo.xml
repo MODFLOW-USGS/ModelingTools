@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Riparian ET Plant Groups Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Riparian ET Plant Groups Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Riparian ET Plant Groups</text><text styleclass="Normal" translate="true"> dialog box is used to define the transpiration curves of riparian plant groups in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RIP_Riparian_Pkg" styleclass="Normal" translate="true">Riparian Evapotranspiration</link><text styleclass="Normal" translate="true"> package. The Riparian Evapotranspiration package is included in MODFLOW-OWHM. The transpiration curve is used to define the rate of evapotranspiration fram the saturated zone as a function of head. Unlike the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="EVT_Evapotranspiration_Package" styleclass="Normal" translate="true">Evapotranspiration</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ETS_Evapotranspiration_Segments_Package" styleclass="Normal" translate="true">Evapotranspiration Segments</link><text styleclass="Normal" translate="true"> packages, the rate of evapotranspiration may decrease with increasing head in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RIP_Riparian_Pkg" styleclass="Normal" translate="true">Riparian Evapotranspiration</link><text styleclass="Normal" translate="true"> package. This is because too high a water table can cause plant roots to become oxygen deficient.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The locations where each plant group exists is defined using </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RIP_Riparian_ET_Pane" styleclass="Normal" translate="true">Objects</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The left side of the dialog box contains a list of the riparian plant groups. When the user selects a plant group from the list, its properties appear in the two tabs on the right: the </text><text styleclass="Strong" translate="true">Properties</text><text styleclass="Normal" translate="true"> tab, and the </text><text styleclass="Strong" translate="true">Transpiration Rate Curve</text><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Properties</text><text styleclass="Normal" translate="true"> tab is used to define the name and several values that determine overall size of the transpiration curve.</text></para>
+    <list id="2" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Name (RIPNM)</text><text styleclass="Normal" translate="true"> is a name for the riparian plant group. It may be up to 24 characters in length. Spaces are allowed.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Saturated extinction depth (Sxd)</text><text styleclass="Normal" translate="true"> is the distance from the land surface to the elevation at which transpiration is at a minimum due to saturation. Negative values represent a water table that is above the land surface.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Active root depth (Ard)</text><text styleclass="Normal" translate="true"> is the distance between the elevation where transpiration is at a minimum due to saturation and the elevation where transpiration is at a minimum due to too low a water table.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Max ET flux (Rmax)</text><text styleclass="Normal" translate="true"> is the maximum rate of evapotranspiration in units of Length/Time.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Evaporative flux at saturated extinction depth (Rsxd)</text><text styleclass="Normal" translate="true"> is the rate of evaporation (or evapotranspiration) when the evapotranspiration is at a minimum due to saturation. In the illustration, </text><text styleclass="Strong" translate="true">Rsxd</text><text styleclass="Normal" translate="true"> is zero but it could be a positive number.</text></li>
+    </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Illustration of Sxd, Ard, Rmax, and Rsxd]]></caption></toggle></para>
+  <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><image src="RipTranspirationFluxCurve.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Illustration of Sxd, Ard, Rmax, and Rsxd</title></image></para>
+        </td>
+      </tr>
+    </table></para>
+  <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Transpiration Rate Curve</text><text styleclass="Normal" translate="true"> tab is used to define the shape of the transpiration curve. The tab has a table with columns labeled </text><text styleclass="Strong" translate="true">Dimensionless active root depth segment (fdh)</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Strong" translate="true">Dimensionless flux segment (fdR)</text><text styleclass="Normal" translate="true">. Each row in the table defines one segment of the transpiration curve. </text></para>
+  <list id="3" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Dimensionless active root depth segment (fdh)</text><text styleclass="Normal" translate="true"> represents the length of the segment in the vertical elevation (Y) direction. The sum of the dimensionless depth segments should be equal to 1.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Dimensionless flux segment (fdR)</text><text styleclass="Normal" translate="true"> represents the length of the segment in the transpiration rate (X) direction. The highest total rate of dimensionless flux should be equal to 1.</text></li>
+    </list>
+  <para styleclass="Normal"><text styleclass="Normal" translate="true">A graph of the transpiration curve is plotted to the right of the table.</text></para>
+  <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Illustrations of fdh and fdR]]></caption></toggle></para>
+  <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><image src="RipTranspirationFluxCurveDs.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Illustration of fdh</title></image></para>
+          <para styleclass="Normal"><image src="RipTranspirationFluxCurveRates.png" scale="100.00%" styleclass="Image Caption"><caption translate="true"><![CDATA[Illustratoin of fdR]]></caption></image></para>
+    </td>
+      </tr>
+    </table></para>
+  <para styleclass="Normal"></para>
+ </body>
+</topic>

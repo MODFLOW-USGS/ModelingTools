@@ -1,0 +1,8 @@
+# Mass/Energy Source Boundary Condition File file created on 12/9/2015 by ModelMuse version 3.6.3.5.
+# Data set 1
+'UFlux' # BCSSCH
+# Data set 2
+'Mass/Energy sources'     0     1     0     0 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1
+# Data set 4; Time = 1
+    48  1.000000000000E-003  # Data Set 4: IQCU1, QUINC1
+     0

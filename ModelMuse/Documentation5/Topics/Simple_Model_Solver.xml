@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Simple Model: Solver</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Simple Model: Solver</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This model uses the SIP solver. To use it select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|MODFLOW Packages and Programs</text><text styleclass="Normal" translate="true">. Expand the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Solvers</text><text styleclass="Normal" translate="true"> and check the radio button for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SIP</text><text styleclass="Normal" translate="true"> package. Change </text><text styleclass="Normal" style="font-weight:bold;" translate="true">MXITER</text><text styleclass="Normal" translate="true"> to 50, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">IPCALC</text><text styleclass="Normal" translate="true"> to 0, and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">WSEED</text><text styleclass="Normal" translate="true"> to 0.001. Then click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ColumnCenter</title>
+  <keywords>
+    <keyword translate="true">ColumnCenter</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ColumnCenter</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW, PHAST, and WellFootprint models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnCenter</text><text styleclass="Normal" translate="true">({Column}) returns the X coordinate in the grid coordinate system of the center of the cell (MODFLOW) or element (PHAST) specified by its one optional argument Column. If the optional argument is not included, the function uses the column number of the cell or element for which the formula is being calculated. If an invalid column number is specified, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnCenter</text><text styleclass="Normal" translate="true"> returns 0. For SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnCenter</text><text styleclass="Normal" translate="true"> returns zero.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="HufTest10" FileType="bin">
+    <FileName Model_Name="HufTest10" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="HufTest10" FileType="ancillary">
+    <FileName Model_Name="HufTest10" FileType="ancillary">HufTest10.gpt</FileName>
+  </ancillary>
+  <model Model_Name="HufTest10" FileType="Model Input">
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.bas</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.chd</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.dis</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.drn</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.evt</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.ghb</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.gsf</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.huf</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.jtf</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.kdep</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.lvda</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.mlt</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.nam.archive</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.oc</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.pcg</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.pval</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.rch</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.wel</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">HufTest10.zon</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Input">usgs.HufTest10.reference</FileName>
+  </model>
+  <output Model_Name="HufTest10" FileType="Model Output">
+    <FileName Model_Name="HufTest10" FileType="Model Output">HufTest10.cbc</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Output">HufTest10.fdn</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Output">HufTest10.fhd</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Output">HufTest10.huf_fhd</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Output">HufTest10.huf_flow</FileName>
+    <FileName Model_Name="HufTest10" FileType="Model Output">HufTest10.lst</FileName>
+  </output>
+</Model_Archive_List>

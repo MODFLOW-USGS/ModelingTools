@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Flux Observations: TOB: Transport Observation Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Flux Observations: TOB: Transport Observation Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Flux Observations: TOB: Transport Observation Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This tab is used to associate an object with a flux observation in MT3DMS. The flux observations are defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Flux_Observations" styleclass="Normal" style="font-weight:bold;" translate="true">Manage Flow Observations</link><text styleclass="Normal" translate="true"> dialog box. To associate an object with a flux observation, the user checks the check box for the appropriate observation in the table. The user may also specify a </text><text styleclass="Strong" translate="true">Factor</text><text styleclass="Normal" translate="true"> which determines how much of the flux to include in the observation. If no </text><text styleclass="Strong" translate="true">Factor</text><text styleclass="Normal" translate="true"> is specified, it will be set to 1 meaning that all the flux will be included in the flux observation. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Flux_Observations" styleclass="Normal" style="font-weight:bold;" translate="true">Manage Flow Observations</link><text styleclass="Normal" translate="true"> dialog box for a more extensive discussion of </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Factor</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><snippet src="Add_or_remove_flux_observation"/></para>
+  </body>
+</topic>

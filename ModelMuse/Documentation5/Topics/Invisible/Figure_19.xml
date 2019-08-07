@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Figure 19</title>
+  <body>
+    <para style="text-align:center; page-break-after:avoid;"><image src="GlobalAndGridCoordinates.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Global and grid coordinate systems in ModelMuse</title></image></para>
+    <para style="text-align:center; margin-top:16px; margin-bottom:16px;"><text style="font-family:&apos;Univers 57 Condensed&apos;; font-size:12pt; font-weight:bold; color:#000000;" translate="true">Figure 20.</text><text style="font-family:&apos;Univers 57 Condensed&apos;; font-size:12pt; color:#000000;" translate="true"> Global and grid coordinate systems in ModelMuse.</text></para>
+  </body>
+</topic>

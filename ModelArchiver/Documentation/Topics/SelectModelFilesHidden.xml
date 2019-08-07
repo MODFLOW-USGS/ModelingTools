@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SelectModelFilesHidden</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SelectModelFilesHidden</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Select Model Files</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model Files|Select Model Files</text><text styleclass="Normal" translate="true"> or clicking </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Select files for the archive</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Files" styleclass="Normal" style="font-weight:bold;" translate="true">Files</link><text styleclass="Normal" translate="true"> pane</text><text styleclass="Normal" translate="true"> is a convenient way to add model input, output, and ancillary files to the archive structure. The user selects a directory and ModelArchiver searches that directory and its subdirectories for files that have extensions recognized by ModelArchiver. It will then open the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Model_Files_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model Files</link><text styleclass="Normal" translate="true"> dialog box in which the user can fine-tune which files are added to the archive structure.</text></para>
+  </body>
+</topic>

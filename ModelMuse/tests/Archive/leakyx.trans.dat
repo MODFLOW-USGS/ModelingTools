@@ -1,0 +1,97 @@
+TITLE
+.      One dimensional confined flow with leakage boundary condition
+.      Hand calculation and HST
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT false
+UNITS
+      -time seconds
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 400 5
+      -uniform   Y   0 400 5
+      -uniform   Z   0 100 2
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 400 400 100
+            -Kx 0.00011572
+            -Ky 0.00011572
+            -Kz 0.00011572
+            -porosity 0.15
+            -specific_storage 8.7034E-10
+      -zone 0 0 0 400 400 100
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW false
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 400 400 100
+            -head 100
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 1 step
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 1 step
+      -progress_statistics 1 step
+      -restart 0 
+      -save_final_heads false
+      -velocities 2 step
+      -wells 0 
+      -xyz_components 0 
+      -xyz_heads 2 step
+      -xyz_velocities 2 step
+      -xyz_wells 0 
+      -end_of_period_default false
+LEAKY_BC
+      -zone 0 0 0 0 400 100
+            -face X
+            -head
+                  0 200
+            -hydraulic_conductivity 0.00011572
+            -thickness 100
+SPECIFIED_HEAD_BC
+      -zone 350 0 0 400 400 100
+            -head
+                  0 100
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 43200 seconds
+            -time_end
+                  86400 seconds
+END

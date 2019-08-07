@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Example: Define Quadtree Refinement</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example: Define Quadtree Refinement</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The final step in our model will be to convert it to a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by vertices</link><text styleclass="Normal" translate="true"> grid and run the model again. We could have converted it earlier if we had wanted to. We will refine the grid around the multi-aquifer well and the stream.</text></para>
+    <list id="2" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Select both the stream and multi-aquifer well and open them in the Object Properties dialog box. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Set the quadtree refinement to 2 click OK to close the dialog box.</text><br/><image src="Modflow6ExampleQuadtreeRefinement.bmp" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Quadtree Refinement</title><caption translate="true"><![CDATA[Quadtree Refinement]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Grid|Switch to DISV and the DISV grid will be created.</text><br/><image src="Modflow6ExampleDisvGrid.bmp" scale="60.00%" width="484" height="367" styleclass="Image Caption"><title translate="true">DISV grid</title><caption translate="true"><![CDATA[DISV grid]]></caption></image></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

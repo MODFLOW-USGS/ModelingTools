@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ObservationTest" FileType="bin">
+    <FileName Model_Name="ObservationTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ObservationTest" FileType="ancillary">
+    <FileName Model_Name="ObservationTest" FileType="ancillary">ObservationTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ObservationTest" FileType="Model Input">
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.bas</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.chd</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.dis</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.drn</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.ghb</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.gsf</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.jtf</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.lpf</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.nam.archive</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.ob_chob</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.ob_drob</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.ob_gbob</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.ob_rvob</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.oc</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.pcg</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.pval</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">ObservationTest.riv</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Input">usgs.ObservationTest.reference</FileName>
+  </model>
+  <output Model_Name="ObservationTest" FileType="Model Output">
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.cbc</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.chob_out</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.drob_out</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.fdn</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.fhd</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.gbob_out</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.lst</FileName>
+    <FileName Model_Name="ObservationTest" FileType="Model Output">ObservationTest.rvob_out</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,16 @@
+# Discretization File created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Upper left corner: (0, 0)
+# Lower left corner: (0, -5000)
+# Upper right corner: (7500, 0)
+# Lower right corner: (7500, -5000)
+# Grid angle (in degrees counterclockwise): 0
+     2    10    15     2     4     0 # NLAY, NROW, NCOL, NPER, ITMUNI, LENUNI
+     1     0 # LAYCB
+CONSTANT     5.000000000000E+002  # DELR
+CONSTANT     5.000000000000E+002  # DELC
+CONSTANT     1.500000000000E+002  # TOP
+CONSTANT     5.000000000000E+001  # BOTM, Layer 1
+CONSTANT     0.000000000000E+000  # BOTM, Confining Bed 1
+CONSTANT    -5.000000000000E+001  # BOTM, Layer 2
+  1.000000000000E+000      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1)
+  1.000000000000E+000      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 2)

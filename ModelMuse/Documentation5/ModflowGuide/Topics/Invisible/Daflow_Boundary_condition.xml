@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Daflow Boundary condition</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">N, I, and TRB - The second type of record specifies the branch number, node number, and flow for the changed boundary condition. Data group 3 must be input for each time step of the simulation. The first record is always required, whereas the second record is only required if one or more boundary conditions are changed.</text></para>
+  </body>
+</topic>

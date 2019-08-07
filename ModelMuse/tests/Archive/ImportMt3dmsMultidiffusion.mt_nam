@@ -1,0 +1,18 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportMt3dmsMultidiffusion.mls
+FTL 10 ImportMt3dmsMultidiffusion.ftl
+DATA 17 ImportMt3dmsMultidiffusion.cnf
+BTN 1 ImportMt3dmsMultidiffusion.btn
+DATA(BINARY) 201 ImportMt3dmsMultidiffusion_Comp1.ucn
+DATA(BINARY) 202 ImportMt3dmsMultidiffusion_Comp2.ucn
+DATA(BINARY) 203 ImportMt3dmsMultidiffusion_Comp3.ucn
+DATA 601 ImportMt3dmsMultidiffusion_Comp1._mas
+DATA 602 ImportMt3dmsMultidiffusion_Comp2._mas
+DATA 603 ImportMt3dmsMultidiffusion_Comp3._mas
+DATA 401 ImportMt3dmsMultidiffusion_Comp1.mto
+DATA 402 ImportMt3dmsMultidiffusion_Comp2.mto
+DATA 403 ImportMt3dmsMultidiffusion_Comp3.mto
+ADV 2 ImportMt3dmsMultidiffusion.adv
+DSP 3 ImportMt3dmsMultidiffusion.dsp
+SSM 4 ImportMt3dmsMultidiffusion.ssm
+GCG 9 ImportMt3dmsMultidiffusion.gcg

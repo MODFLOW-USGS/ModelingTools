@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Simple Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Simple Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example reproduces the model in the MODFLOW-2005 documentation (</text><link displaytype="text" defaultstyle="true" type="weblink" href="http://pubs.er.usgs.gov/publication/tm6A16" target="_blank" styleclass="Reference" translate="true">Harbaugh, 2005</link><text styleclass="Reference" translate="true">) except that parameters are not used</text><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><image src="Modflow2000Example.tif" scale="40.00%" width="657" height="626" styleclass="Image Caption"><caption translate="true"><![CDATA[Model Configuration (Harbaugh, 2005)]]></caption></image></para>
+ </body>
+</topic>

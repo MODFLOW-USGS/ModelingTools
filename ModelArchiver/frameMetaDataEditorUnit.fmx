@@ -1,0 +1,204 @@
+object frameMetaDataEditor: TframeMetaDataEditor
+  DragMode = dmAutomatic
+  Size.Width = 625.000000000000000000
+  Size.Height = 588.000000000000000000
+  Size.PlatformDefault = False
+  OnDragOver = FrameDragOver
+  OnDragDrop = FrameDragDrop
+  object tmr1: TTimer
+    Enabled = False
+    Interval = 80
+    OnTimer = tmr1Timer
+    Left = 384
+    Top = 80
+  end
+  object tvMetaData: TTreeView
+    Align = MostLeft
+    Size.Width = 289.000000000000000000
+    Size.Height = 507.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    OnDragOver = FrameDragOver
+    OnDragDrop = FrameDragDrop
+    Images = ilAddButton
+    OnChange = tvMetaDataChange
+    OnChangeCheck = tvMetaDataChangeCheck
+    Viewport.Width = 289.000000000000000000
+    Viewport.Height = 507.000000000000000000
+  end
+  object spl1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 289.000000000000000000
+    Size.Width = 8.000000000000000000
+    Size.Height = 507.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object pnl1: TPanel
+    Align = MostBottom
+    Position.Y = 507.000000000000000000
+    Size.Width = 625.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object btnDuplicate: TButton
+      Enabled = False
+      Images = ilAddButton
+      ImageIndex = 1
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 1
+      Text = 'Duplicate'
+      OnClick = btnDuplicateClick
+    end
+    object btnExpandAll: TButton
+      Position.X = 96.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 2
+      Text = 'Expand All'
+      OnClick = btnExpandAllClick
+    end
+    object btnExpandUsed: TButton
+      Position.X = 184.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 3
+      Text = 'Expand Used'
+      OnClick = btnExpandUsedClick
+    end
+    object btnCollapseAll: TButton
+      Position.X = 272.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 5
+      Text = 'Collapse All'
+      OnClick = btnCollapseAllClick
+    end
+    object imgManditory: TImage
+      MultiResBitmap = <
+        item
+        end>
+      Position.X = 8.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 81.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object imgMandIfAppl: TImage
+      MultiResBitmap = <
+        item
+        end>
+      Position.X = 96.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object imgOptional: TImage
+      MultiResBitmap = <
+        item
+        end>
+      Position.X = 248.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 81.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object ilAddButton: TImageList
+    Source = <
+      item
+        MultiResBitmap.Width = 32
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D494844520000002000000010080600000077007D
+              59000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              00BA49444154484BC594510EC4200844ED5E5C3DF96E314CE35218B589E9FB31
+              166146B4A6B7397414BE3ACED0E73572CED3F9B5D62BDF1642919B8042E33051
+              4A69730BBECB789CB489831461BB61B16682754362824ED347C71E38A3421168
+              EFCA91444881C7455827FA0E8CD8666285AD26C29BA82071B4CE05C2B8FDDECD
+              6785B78B0BDE5F203071C44298B83D0ECF00131F32B373F60E8CC4FFDC5B46E2
+              76F742BF801637DC0C7AC523C420CC453B7DC4CA0363BBF31229FD00C474674C
+              14F384B30000000049454E44AE426082}
+            FileName = 
+              'C:\Program Files (x86)\Common Files\Borland Shared\Images\Button' +
+              's\SUM.BMP'
+          end>
+        Name = 'SUM'
+      end
+      item
+        MultiResBitmap.Width = 32
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D494844520000002000000010080600000077007D
+              59000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              00AF49444154484BED94E10A80200C84AD17579FDC3AF3A2C6B64AB0FEF4814C
+              A7E24E4EA760535A04DE3A9518E3BE3FE76CEE9F5B543956D0434AA9C6B2523B
+              0A6E016FF017F07901D29D27B360A0D8D774F4D1F90026A41189F72200EC6A36
+              CC6FCB74508004F9D62D9CAF8B1D4E87B221BF4DFBC85B20CCCB028678C05289
+              FCB4D2862E5DEA89BC054B3D18F60AE46118DF554FBAD413AAF6D483A1FF000F
+              457CAA9E74A92757EAC1F09FD0571FC20207E49B8B6138AFA80000000049454E
+              44AE426082}
+            FileName = 
+              'C:\Program Files (x86)\Common Files\Borland Shared\Images\Button' +
+              's\ARROW1D.BMP'
+          end>
+        Name = 'ARROW1D'
+      end
+      item
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              005349444154384F63A0143042692CE0FF7F28030A18B1AA6582D26483616000
+              24601A18D0020C0A1A90841BB084610303237E17C03461D30C05040C00BA008F
+              6610C06D00CCF9C8DEC002F0183F9A90E80418180022E40E1A7D110667000000
+              0049454E44AE426082}
+            FileName = 'D:\Colab\GWModelTools\ModelMuse\SelectRow.bmp'
+          end>
+        Name = 'SelectRow'
+      end
+      item
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              003849444154384F63A0143042690C70E0C081FF5026183838386055CB04A5C9
+              06C3C00070C0A00718B10014B0C3250CB081D1844437C0C0000086090C1AD0D4
+              38DA0000000049454E44AE426082}
+            FileName = 'D:\Colab\GWModelTools\ModelArchiver\DisabledAdd.bmp'
+          end>
+        Name = 'DisabledAdd'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'SelectRow'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'DisabledAdd'
+          end>
+      end>
+    Left = 416
+    Top = 160
+  end
+end

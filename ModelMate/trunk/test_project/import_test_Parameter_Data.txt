@@ -1,0 +1,15 @@
+BEGIN Parameter_Data Table
+  NROW=11 NCOL=3 COLUMNLABELS
+  ParamName GroupName StartValue
+  SS_1 ParamType1 0.0013
+  HK_1 ParamType1 0.0003
+  VERT_ANI_1 ParamType1 1
+  VERT_K_CB ParamType1 1E-7
+  SS_2 ParamType1 0.0002
+  HK_2 ParamType1 4E-5
+  VERT_ANI_2 ParamType1 1
+  WELLS_TR ParamType1 -1.1
+  RIVERS ParamType1 0.0012
+  RCH_ZONE_1 ParamType1 63.1
+  RCH_ZONE_2 ParamType1 31.5
+END Parameter_Data

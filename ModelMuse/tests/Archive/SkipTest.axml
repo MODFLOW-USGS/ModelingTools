@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SkipTest" FileType="bin">
+    <FileName Model_Name="SkipTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SkipTest" FileType="ancillary">
+    <FileName Model_Name="SkipTest" FileType="ancillary">SkipTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SkipTest" FileType="Model Input">
+    <FileName Model_Name="SkipTest" FileType="Model Input">bcf2ss.bc6</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.bas</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.dis</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.gsf</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.nam.archive</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.oc</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.pcg</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.rch</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.riv</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">SkipTest.wel</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Input">usgs.SkipTest.reference</FileName>
+  </model>
+  <output Model_Name="SkipTest" FileType="Model Output">
+    <FileName Model_Name="SkipTest" FileType="Model Output">SkipTest.cbc</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Output">SkipTest.fdn</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Output">SkipTest.fhd</FileName>
+    <FileName Model_Name="SkipTest" FileType="Model Output">SkipTest.lst</FileName>
+  </output>
+</Model_Archive_List>

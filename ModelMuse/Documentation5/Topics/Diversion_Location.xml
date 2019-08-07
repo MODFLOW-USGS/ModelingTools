@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Diversion Location</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Diversion Location</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Font Style" style="font-family:'Times New Roman'; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">This tab is</text><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Strong" translate="true">Farms</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Diversion Location</text><text styleclass="Normal" translate="true"> tab is where the modeler specifies the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Object_Pane" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> segment and reach from which water can be diverted to supply water to the farm. </text></para>
+    <para styleclass="Normal"><snippet src="Location_Method"/></para>
+  </body>
+</topic>

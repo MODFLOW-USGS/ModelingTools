@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Contour Level File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Contour Level File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The contour level file can be used to specify contours to plot in MODPATH-PLOT. The structure of the file is free-format and consists of one contour level per line:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">1. Clevel</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Clevel-- value of a contour level.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Any number of contours can be specified in the file, however MODPATH-PLOT has a pre-set limit of 1000 contours. The preset value can be changed by resetting the value of the variable NLVMAX in the MODPATH-PLOT main program. MODPATH-PLOT reads contour levels until it reaches the end of the file.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specification Method</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Specification Method</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Specification Method pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Surface_Water_Routing_Proc" styleclass="Normal" translate="true">SWR: Surface-Water Routing Process Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Surface-Water Routing process allows rain, evaporation, lateral inflow, and stage for reaches to be specified in either of two ways. Either values can be specified for individual reaches or an array of values covering the top surface of the grid can be specified. If values are specified by reach, only objects that define reaches can be used to specify a value. If values are specified by cell, the value for any individual cell will be applied to all the reaches in the cell. In the case of lateral inflow, the values are scaled by the length of the reach as a fraction of the lengths of all of the reaches in the cell. If multiple objects specify a value for the same cell, normally the value specified by the object that is in front of the others will be the final value for the cell. However, you can have the values from multiple objects added together instead.</text></para>
+  </body>
+</topic>

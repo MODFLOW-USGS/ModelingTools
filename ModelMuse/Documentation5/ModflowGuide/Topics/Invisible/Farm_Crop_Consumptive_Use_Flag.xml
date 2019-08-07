@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Farm Crop Consumptive-Use Flag</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm Crop Consumptive-Use Flag</text></para>
+    </header>
+    <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Crop Consumptive-Use Flag</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ICCFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="ICCFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Concept used for the approximation of ET-fluxes with changing head:</text></para>
+          <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">1 for consumptive use Concept 1 = plant-and soil-specific pseudo steady state transpiration approximated by analytical solution: A restriction of active root zone corresponding to anoxia- or wilting-related pressure heads is determined by FMP by using analytical solutions of a vertical pseudo steady state pressure head distribution over the depth of the total root zone. (FMP3 not linked to UZF1). (See data sets </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet9" styleclass="Normal" translate="true">9</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet14" styleclass="Normal" translate="true">14</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">2 for consumptive use Concept 2 = nonplant- and nonsoil-specific simplification of Concept 1. (FMP3 not linked to UZF1). </text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">3 for consumptive use Concept 1 = plant-and soil-specific pseudo steady state transpiration approximated by analytical solution: A restriction of active root zone corresponding to anoxia- or wilting-related pressure heads is determined by FMP by using analytical solutions of a vertical pseudo steady state pressure head distribution over the depth of the total root zone. (FMP3 linked to UZF1: FMP3 farm identification arrays linked to coinciding UZF1 infiltration arrays). (See data sets </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet9" styleclass="Normal" translate="true">9</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet14" styleclass="Normal" translate="true">14</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">4 for consumptive use Concept 2 = nonplant- and nonsoil-specific simplification of Concept 1. (FMP3 linked to UZF1: FMP3 farm identification arrays linked to coinciding UZF1 infiltration arrays).</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">P = Consumptive use Concept specified in parent model is used for child model. For child ICCFL=P and parent ICCFL=1, no additional data are required for crop-specific PSI list entries for the child model.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

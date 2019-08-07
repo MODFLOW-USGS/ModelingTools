@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Add or remove flux observations button</title>
+  <body>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Clicking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Add or remove flux observations</text><text styleclass="Normal" translate="true"> button will display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Flux_Observations" styleclass="Strong" translate="true">Manage Flow Observations</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

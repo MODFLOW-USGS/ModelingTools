@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Example 4 (Biscayne Bay Aquifer)</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Example 4 (Biscayne Bay Aquifer)</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example is a simplified model of the Biscayne Bay aquifer in southeast Florida. An upper aquifer and a lower aquifer are included in the model:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Data for this problem are in several shape files provided with ModelMuse in the &quot;data\Biscayne&quot; directory (C:\Users\Public\Documents\ModelMuse Examples\data\Biscayne): InitialWaterTable.shp, LowerAquiferBottom.shp, UpperAquiferBottom.shp, and UpperAquiferTransmissivity.shp. Each of these files also has associated with it two other files with the extension .shx and .dbf.  The names of the shape files reflect the data contained within them. These shape files will be imported into ModelMuse and used to set the hydraulic conductivity, active area, and initial water table of the model. A specified head boundary will be specified on the coastline, and a specified flux boundary (recharge) will be specified for the entire upper surface.</text></para>
+    <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">The goals of this example are the following: </text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Illustrate importing data from external files.</text></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Illustrate use of formulas for specifying the geometry of geologic units.</text></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Illustrate use of formulas for specifying aquifer properties tied to geologic units.</text></li>
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Illustrate the effects of different interpolation methods.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

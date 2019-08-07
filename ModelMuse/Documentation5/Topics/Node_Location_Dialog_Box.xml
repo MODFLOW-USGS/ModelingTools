@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Node Location Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Node Location Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Node Location</text><text styleclass="Normal" translate="true"> dialog box is used to specify the X and Y coordinates of one or more nodes numerically. It is displayed by first selecting one or more nodes or elements in the top view of the model while the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Move or delete nodes or elements</text><text styleclass="Normal" translate="true"> button </text><image src="MoveNodesOrElementsButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Move or Delete Nodes or Elements button</title></image><text styleclass="Normal" translate="true"> is depressed and then double-clicking on a node or element. The coordinates of the selected nodes and all the nodes of the selected elements will be displayed in the dialog box. The user can enter new coordinates. The coordinates will be changed when the user clicks the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></para>
+  </body>
+</topic>

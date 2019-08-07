@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CreateArchiveHidden</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CreateArchiveHidden</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Create Archive</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command moves all the files in the archive structure to the archive directory specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Create_Archive" styleclass="Normal" style="font-weight:bold;" translate="true">Create Archive</link><text styleclass="Normal" translate="true"> pane. Each folder and file in the archive structure will have a description associated with it. Those descriptions will be appended to the copy of the readme file copied to the archive thereby providing a human-readable description of the archive structure. Files in some of the directories will be compressed into .zip files. The metadata file will be updated with information about the files in the archive.</text></para>
+  </body>
+</topic>

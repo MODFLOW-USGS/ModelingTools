@@ -1,0 +1,10 @@
+         0         0                                                    ISS IBCFCB HDRY IWDFLG WETFCT IWETIT IGHWET
+ 0 0                     LAYCON
+         0        1.     TRPY
+         0     1000.     DELR
+         0     1000.     DELC
+         0    .00100     S, layer 1
+         0    .02000     T, layer 1
+         0  2.00E-08     VCONT
+         0   .000100     S, layer 2
+         0   .002200     T, layer 2

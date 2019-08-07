@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Visualization Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Visualization Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Data Visualization</text><text styleclass="Normal" translate="true"> dialog box is used for </text><text styleclass="Table Cell" translate="true">coloring the grid with the values of a data set, boundary condition or observations; contouring the values of a data set or visualizing the model data in other ways. The </text><text styleclass="Strong" translate="true">Data Visualization</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">Data|Data Visualization...</text><text styleclass="Normal" translate="true"> or clicking the </text><text styleclass="Strong" translate="true">Data Visualization</text><text styleclass="Normal" translate="true"> button </text><image src="DataVisualizationButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Data Visualization dialog box has a list of panes on the left. Selecting one of these will cause the corresponding pane to be displayed. some of the panes have multiple tabs. The panes are:</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Bullet List" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Bullet List" translate="true">Color Grid</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Contour_Data_Dialog_Box" styleclass="Bullet List" translate="true">Contour Data</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH_Display_Dialog_Box" styleclass="Bullet List" translate="true">MODPATH Pathlines</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH_Endpoint_Display" styleclass="Bullet List" translate="true">MODPATH End Points</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH_Time_Series_Display" styleclass="Bullet List" translate="true">MODPATH Time Series</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Observation_Results" styleclass="Bullet List" translate="true">Head Observation Results</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Stream_Links_Pane" styleclass="Bullet List" translate="true">SFR Stream Links</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Stream_Links_Pane" styleclass="Bullet List" translate="true">STR Stream Links</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Reach_Connections" styleclass="Bullet List" translate="true">SWR Reach Connections</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Observations" styleclass="Bullet List" translate="true">SWR Observations</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Vectors_Pane" styleclass="Bullet List" translate="true">Vectors (SUTRA models)</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Cross_Sections_Pane" styleclass="Bullet List" translate="true">Cross Sections</link></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

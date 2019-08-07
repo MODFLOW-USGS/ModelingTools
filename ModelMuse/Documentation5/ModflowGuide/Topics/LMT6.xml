@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LMT6 - Link-MT3DMS Package</title>
+  <keywords>
+    <keyword translate="true">Fformat</keyword>
+    <keyword translate="true">Fheader</keyword>
+    <keyword translate="true">Fname</keyword>
+    <keyword translate="true">INFTL</keyword>
+    <keyword translate="true">LMT6</keyword>
+    <keyword translate="true">Text</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LMT6 - Link-MT3DMS Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LMT6 </text><conditional-text type="IF" value="ALLMODELS,MODFLOW-LGR"/><text styleclass="Normal" translate="true">(LMT7 in MODFLOW-LGR version 2)</text><conditional-text type="END"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Link-MT3DMS package is used to record flow information for use by MT3DMS</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr0182" target="_blank" styleclass="Citation" translate="true">Zheng, Chunmiao, Hill, M.C. and Hsieh P.A., 2001, MODFLOW-2000, The U.S. Geological Survey Modular Ground-Water Model-User Guide to the LMT6 Package, The Linkage with MT3DMS for Multi-Species Mass Transport: U.S. Geological Survey Open-File Report 01-82, 44 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="lmt6.txt" styleclass="Normal" translate="true">lmt6.txt</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="lmt7.txt" styleclass="Normal" translate="true">lmt7.txt</link><conditional-text type="IF" value="ALLMODELS,MODFLOW-NWT"/></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="LMT8.pdf" styleclass="Normal" translate="true">LMT8.pdf</link><conditional-text type="END"/></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Only the &quot;extended&quot; format, not the &quot;standard&quot; format is supported in MODFLOW-2005. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LMT6" anchor="Fheader" styleclass="Normal" translate="true">Fheader</link><text styleclass="Normal" translate="true">.</text></para>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">Although the readme file for LMT8 says &quot;The file type in the Name file must be LMT8&quot;, the source code for MODFLOW-2005 1.12 and MODFLOW-NWT version 1.1.2 use &quot;LMT6&quot; not &quot;LMT8&quot;.</text><conditional-text type="END"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input to the Link-MT3DMS Package is read from the file that has the file type “LMT6” in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. All input records are preceded by keywords shown in bold italics. The keywords must be entered exactly as shown except that they may be entered in uppercase, lowercase, or a combination. The underscore character must not be skipped. Optional parts of input records are shown in brackets. The total length of each input record must not exceed 199 characters.</text></para>
+    <para styleclass="Normal"><table rowcount="3" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional — “#” must be in column 1. Item 0 can be repeated multiple times.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text — is a character variable (up to 199 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Any combination of the following records:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">OUTPUT_FILE_NAME</text><text styleclass="Normal" translate="true"> [Fname]]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">OUTPUT_FILE_UNIT</text><text styleclass="Normal" translate="true"> [INFTL]]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">OUTPUT_FIlE_HEADER</text><text styleclass="Normal" translate="true"> [Fheader]]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">OUTPUT_FILE_FORMAT</text><text styleclass="Normal" translate="true"> [Fformat]]</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-NWT"/></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">PACKAGE_FLOWS</text><text styleclass="Normal" translate="true"> &#160; &#160; &#160; [</text><text styleclass="Keywords" translate="true">ALL</text><text styleclass="Normal" translate="true"> or some combination of</text><text styleclass="Keywords" translate="true"> UZF, SFR, or LAK</text><text styleclass="Normal" translate="true">]]</text><conditional-text type="END"/></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Fname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Fname — is the name of the flow-transport link file produced by MODFLOW-2000 through the LMT6 Package for use by the MT3DMS transport model. Directory path names may be specified as part of Fname as in D:\MF2K\DATA\TWRI\TWRI.FTL. The convention for the file extension of the LMT6 Package produced output file is designated as ‘FTL’ for ‘Flow-Transport Link’. If Fname is not specified (left blank) after the keyword ‘OUTPUT_FILE_NAME’, or if the entire record including the keyword is missing, the output file is assigned the default name RootName.FTL where RootName is whatever file name is assigned to the LMT6 Package input file. For example, if the input file to the LMT6 Package is named TEST1.LMT , then the name for the LMT6 Package produced output file is TEST1.FTL by default.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[INFTL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">INFTL — is the unit number on which the LMT6 Package produced output file will be saved. A positive, unique integer must be used that has not been associated with any other file. If an invalid input is entered, an error message is written to the MODFLOW-2000 LIST output file and the program execution is terminated. If INFTL is not specified by the user, or if the entire record including the keyword is missing, the output file will be saved on the default unit number of 333. </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Fheader]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="Fheader" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Fheader — a character value that specifies the header structure of the LMT6 Package produced flow-transport link file. Only two input values are allowed (in either uppercase or lowercase):</text></para>
+                      <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">Standard</text><text styleclass="Normal" translate="true"> – the standard header is saved, compatible with all versions of MT3D and MT3DMS since 1996. The flow-transport link file with the standard header supports those sink/source packages that have been part of MODFLOW since 1988 (MODFLOW-88), namely, Well, Drain, River, General Head Boundary, Recharge, Evapotranspiration. Note that the Time-Variant Specified Head (CHD) Package (Leake and Prudic, 1991) is automatically supported since its functionality is implemented through an internal flow package such as the Block-Centered Flow (BCF) Package. In addition, the Stream-Routing (STR) Package (Prudic, 1989) is supported if it is not used concurrently with the River Package in the same simulation. </text><text styleclass="New Materials" translate="true">The standard format is not supported in MODFLOW-2005. If &quot;Standard&quot; is specified, MODFLOW-2005 will print a warning message and then use the Extended format.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">Extended</text><text styleclass="Normal" translate="true"> – an extended header is saved, only recognized by MT3DMS Version 4.0 or later. The flow-transport link file with the extended header is capable of supporting most sink/source packages that have been added to MODFLOW-96 and MODFLOW-2000, such as the Specified Flow and Head Boundary (FHB) Package (Leake and Lilly, 1997) and the Reservoir (RES) Package (Fenske and others, 1996). In addition, the Stream-Routing (STR) Package can be supported along with the River Package in the same simulation.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">If Fheader is not specified by the user, or if the entire record including the keyword is missing, Fheader will be assigned to </text><text styleclass="Keywords" translate="true">Standard</text><text styleclass="Normal" translate="true"> by default. Note that if the standard header is specified and a sink/source package that is not supported by the standard header is used in the flow simulation, an error message is written to the MODFLOW-2000 LIST output file and the program execution is terminated.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Fformat]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Fformat — is a character value that specifies the form of the LMT6 Package produced flow-transport link file. Only two input values are allowed (in either uppercase or lowercase):</text></para>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">Unformatted</text><text styleclass="Normal" translate="true"> – the flow-transport link file is saved as an unformatted (binary) file, compatible with all versions of MT3D and MT3DMS.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">Formatted</text><text styleclass="Normal" translate="true"> – the flow-transport link file is saved as an ASCII (text) file with list-directed (free) format, which can only be read by MT3DMS Version 4.0 or later.</text></li>
+                      </list>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">The default value is </text><text styleclass="Keywords" translate="true">Unformatted</text><text styleclass="Normal" translate="true"> if Fformat is not specified by the user or if the entire record including the keyword is missing. The unformatted file is preferable because it is much smaller in size than an equivalent ASCII text file. The ASCII text file should be used only when the user needs to check the contents of the file. An ASCII text file also may be necessary when the unformatted file produced by the MODFLOW-2000 executable code is not compatible with that of the MT3DMS executable code. This can happen in two cases: (a) when the MODFLOW-2000 and MT3DMS codes are compiled by two FORTRAN compilers that use incompatible styles for their unformatted files, or (b) when the two codes are run on different computer platforms such as UNIX based workstations and Microsoft Windows based personal computers. Whereas a file designated as ‘unformatted’ consists of binary characters, it differs from the so-called ‘true’ binary file available as a nonstandard extension in certain FORTRAN compilers such as Compaq Visual FORTRAN. The ‘true’ binary file format is somewhat more transportable between different compilers. The nonstandard binary file format is supported by MODFLOW-2000 since version 1.2 and MT3DMS since version 4.0.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-NWT"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[PACKAGE_FLOWS]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(The </text><text styleclass="Keywords" translate="true">PACKAGE_FLOWS</text><text styleclass="Normal" translate="true"> keyword is only supported in LMT8 in &#160;MODFLOW-2005 version 1.12 or later and MODFLOW-NWT version 1.1 or later.) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">For the new optional item </text><text styleclass="Keywords" translate="true">PACKAGE_FLOWS</text><text styleclass="Normal" translate="true">, acceptable arguments to follow are either </text><text styleclass="Keywords" translate="true">ALL</text><text styleclass="Normal" translate="true"> or some combination of </text><text styleclass="Keywords" translate="true">UZF</text><text styleclass="Normal" translate="true">, </text><text styleclass="Keywords" translate="true">SFR</text><text styleclass="Normal" translate="true">, or </text><text styleclass="Keywords" translate="true">LAK</text><text styleclass="Normal" translate="true">. &#160;The order of </text><text styleclass="Keywords" translate="true">UZF</text><text styleclass="Normal" translate="true">, </text><text styleclass="Keywords" translate="true">SFR</text><text styleclass="Normal" translate="true">, or </text><text styleclass="Keywords" translate="true">LAK</text><text styleclass="Normal" translate="true"> does not matter. &#160;When specified, flows associated with the respective package (e.g., </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="Normal" translate="true">UZF</link><text styleclass="Normal" translate="true">, etc.) will be written to the Flow-Transport Link file. &#160;Otherwise, only those fluxes interacting with the groundwater (saturated) system are written, which in the case of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_Unsaturated-Zone_Flow_Pack" styleclass="Normal" translate="true">UZF</link><text styleclass="Normal" translate="true"> include recharge, groundwater ET, and spring discharge. &#160;</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

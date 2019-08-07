@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Print Initial Conditions Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">PHAST Print Initial Conditions Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true"> PHAST Print Initial Conditions</text><text styleclass="Normal" translate="true"> dialog box is used to control printing of initial condition data to various output files. It is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Print Initial…</text><text styleclass="Normal" translate="true"> The data corresponding to each checkbox will be printed if the checkbox is checked. The files to which the data will be saved are the same ones in which the corresponding data in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Print_Frequency_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">PHAST Print Frequency</link><text styleclass="Normal" translate="true"> dialog box are saved except for the following items that have no corresponding items in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Print_Frequency_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">PHAST Print Frequency</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Echo input</text><text styleclass="Normal" translate="true"> data are saved in the *.log file. (This option writes data from the flow and transport input file to the *.log file as each line is processed.)</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Fluid properties</text><text styleclass="Normal" translate="true"> data are saved in the *.O.probdef file.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Media properties</text><text styleclass="Normal" translate="true"> data are saved in the *.O.probdef file.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Solution method</text><text styleclass="Normal" translate="true"> data are saved in the *.O.probdef file.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

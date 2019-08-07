@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HOB: Head Observation Package Pane</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">HOB: Head Observation Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Head Observation package is used to compare observed heads with simulated heads computed by MODFLOW. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observations" styleclass="Normal" style="font-weight:bold;" translate="true">Observations</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB_Head_Observation_Package_P" styleclass="Normal" translate="true">location of head observations</link><text styleclass="Normal" translate="true"> is specified with point </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Objects" styleclass="Normal" translate="true">objects</link><text styleclass="Normal" translate="true"> on the top view of the model.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The simulated heads are computed by interpolating from the nearest cell centers to the position of the observation. Head observations can extend over several model layers in which case cells from all the layers that are part of the observation will be used in calculating the simulated head.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If one or more of the cells used to calculate the simulated head goes dry, the simulated head can not be calculated. </text><text styleclass="Strong" translate="true">HOBDRY</text><text styleclass="Normal" translate="true"> is the value that will be printed if a simulated head can not be calculated. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW Listing file will contain a list of the observed values and the simulated equivalents.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Head_Observations" styleclass="Strong" translate="true">Manage Head Observations</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

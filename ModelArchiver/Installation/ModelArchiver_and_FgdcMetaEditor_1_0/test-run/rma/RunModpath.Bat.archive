@@ -1,0 +1,4 @@
+if not exist "..\..\output\NUL" mkdir "..\..\output"
+if not exist "..\..\output\output.rma_Modpath\NUL" mkdir "..\..\output\output.rma_Modpath"
+call mp.bat /wait
+pause

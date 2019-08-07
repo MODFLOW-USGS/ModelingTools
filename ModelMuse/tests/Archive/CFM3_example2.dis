@@ -1,0 +1,21 @@
+# Discretization File created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# 3 layer, 4 rows, 5 columns; transient
+# const heads col 1  CFPM3 example
+# Upper left corner: (0, 0)
+# Lower left corner: (0, -40)
+# Upper right corner: (40, 0)
+# Lower right corner: (40, -40)
+# Grid angle (in degrees counterclockwise): 0
+     3     4     4     5     4     2 # NLAY, NROW, NCOL, NPER, ITMUNI, LENUNI
+     0     0     0 # LAYCB
+CONSTANT     1.000000000000E+001  # DELR
+CONSTANT     1.000000000000E+001  # DELC
+CONSTANT     5.000000000000E+000  # TOP
+CONSTANT     4.000000000000E+000  # BOTM, Layer 1
+CONSTANT     3.000000000000E+000  # BOTM, Layer 2
+CONSTANT     2.000000000000E+000  # BOTM, Layer 3
+  1.000000000000E+002      1  1.000000000000E+000  SS # PERLEN NSTP TSMULT Ss/tr (Stress period 1)
+  1.000000000000E+002     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 2)
+  1.000000000000E+002     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 3)
+  1.000000000000E+002     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 4)
+  1.000000000000E+002     10  1.000000000000E+000  TR # PERLEN NSTP TSMULT Ss/tr (Stress period 5)

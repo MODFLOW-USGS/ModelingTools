@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Specified Heads</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Specified Heads</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Create a point object </text><image src="CreatePoint.png" scale="100.00%" styleclass="Normal"><title translate="true">Create Point Object button</title></image><text styleclass="Normal" translate="true"> in the bottom most layer of the first column (circled in red in the figure below).</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection10.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, go to the MODFLOW Features tab and check the checkbox for the CHD package. Set the starting and ending times to -1 and 0 respectively. Set both the starting and ending heads to 55. Repeat the process for the uppermost cell in the last column on the right except set the heads to 50.</text></para>
+  </body>
+</topic>

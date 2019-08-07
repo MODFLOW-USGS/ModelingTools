@@ -1,0 +1,11 @@
+# Name File for MT3DMS created on 10/11/2018 by ModelMuse
+LIST 16 ..\..\output\output.ImportedP8_MT3DMS\ImportedP8.mls
+FTL 10 ..\..\output\output.ImportedP8\ImportedP8.ftl
+DATA 17 ..\..\output\output.ImportedP8_MT3DMS\ImportedP8.cnf
+BTN 1 ..\..\model\model.ImportedP8_MT3DMS\ImportedP8.btn
+DATA(BINARY) 201 ..\..\output\output.ImportedP8_MT3DMS\ImportedP8_Comp1.ucn
+DATA 601 ..\..\output\output.ImportedP8_MT3DMS\ImportedP8_Comp1._mas
+ADV 2 ..\..\model\model.ImportedP8_MT3DMS\ImportedP8.adv
+DSP 3 ..\..\model\model.ImportedP8_MT3DMS\ImportedP8.dsp
+SSM 4 ..\..\model\model.ImportedP8_MT3DMS\ImportedP8.ssm
+GCG 9 ..\..\model\model.ImportedP8_MT3DMS\ImportedP8.gcg

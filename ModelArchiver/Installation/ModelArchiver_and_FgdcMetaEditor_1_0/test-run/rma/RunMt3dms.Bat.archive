@@ -1,0 +1,4 @@
+if not exist "..\..\output\NUL" mkdir "..\..\output"
+if not exist "..\..\output\output.rma_MT3DMS\NUL" mkdir "..\..\output\output.rma_MT3DMS"
+..\..\bin\mt3dms5b.exe rma.mt_nam
+pause

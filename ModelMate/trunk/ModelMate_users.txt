@@ -1,0 +1,56 @@
+USGS users
+
+James Callegary
+Gerard Gonthier
+Dan Goode
+Alison Gordon
+Mary Hill
+Dave Lampe
+Tom Marston
+Martha Nielson
+Daryll Pope
+Jeff Raffensperger
+Dennis Risser
+Jeff Starn
+Claire Tiedeman
+Fred Tillman
+Lynn Torak
+Dick Yager
+
+
+
+non-USGS users
+
+Bosman Batubara
+William Daniels
+Ahmed Elwan
+Bill Greer
+Sophie Hancock
+Francesco LaVigna
+Miguel Leyes
+Larry Murdoch
+Emre Onay
+Eileen Poeter
+Philipp Reiner
+Judy Schenk
+An Ho Antonio Taylor
+
+
+Need to add to "ModelMate Users" group(?):
+
+James Callegary - yes: jcallega@usgs.gov - done
+Gerard Gonthier - no
+Mary Hill       - yes - done
+Dave Lampe      - yes: dclampe@usgs.gov - done
+Claire Tiedeman - no
+Fred Tillman    - no
+Lynn Torak      - no
+
+Bosman Batubara - no
+William Daniels - no
+Sophie Hancock  - no
+Miguel Leyes    - yes: Miguel Leyes <m.leyes.p@gmail.com> - done
+Emre Onay       - no
+Philipp Reiner  - yes: Philipp Reiner <reiner@hydro.tuwien.ac.at> - done
+Judy Schenk     - yes: Judith Schenk <schenkja@comcast.net> - done
+An Ho Antonio Taylor - no

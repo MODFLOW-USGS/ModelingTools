@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Output Options</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Output Options</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The output file in the original program is a text file that has one page of output for each zone. This original output file still can be obtained in the new program, and two additional forms of a comma-delimited text file also can be obtained. Comma-delimited text files can be easily imported into typical spreadsheet programs, which allow users to make additional calculations beyond those made by Zonebudget. The user can specify any combination of the 3 output forms.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The CSV file is similar in structure to the original output file. For each time for which a budget is requested there is one line for each input term and each output term along with totals. The zones are displayed in columns, so one table displays all zones. This makes it easy to compare any budget term for all the different zones.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The CSV2 file displays the complete budget for one zone and one time in a single line. Each column has a separate inflow or outflow budget term. The rows can be sorted by time within the spreadsheet program, which makes it possible to easily see how each term changes with time.</text></para>
+  </body>
+</topic>

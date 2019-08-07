@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Options</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">PHAST Options</text></para>
+    </header>
+    <list id="3" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="3" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Next, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Title and Units…</text><text styleclass="Normal" translate="true"> With ex1.trans.dat in a text editor, copy the title section to the clipboard and paste it into the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Title</text><text styleclass="Normal" translate="true"> section of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Title_and_Units_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">PHAST Title and Units</link><text styleclass="Normal" translate="true"> dialog box (fig. 38). The title can be edited to remove the blank spaces, “#”and quote characters at the beginnings of the lines. If desired, a different title of the user’s choice can be specified. The dialog box can be resized so that more of the title is visible. Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Ex1Title.bmp" scale="80.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 38. </text><text styleclass="Image Caption" translate="true">Top section of the </text><text styleclass="Image Caption" translate="true">PHAST </text><text styleclass="Image Caption" translate="true">Title and Units dialog box showing the title for example 1.</text></para>
+    <para styleclass="Normal"></para>
+    <list id="4" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="4" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">The next steps are to activate steady flow and solute transport. To do so, select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Steady_Flow_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Steady Flow...</link><text styleclass="Normal" translate="true"> and check the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Steady flow</text><text styleclass="Normal" translate="true"> checkbox. Then click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> and select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Chemistry_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Chemistry Options…</link><text styleclass="Normal" translate="true"> and check the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use solute transport</text><text styleclass="Normal" translate="true"> checkbox. Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Next change some of the default units. Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Title_and_Units_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Title and Units…</link><text styleclass="Normal" translate="true"> again and this time specify the units as follows. (Those that are not listed can be ignored.) Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></li>
+    </list>
+    <para styleclass="Normal" style="text-align:center; margin-left:24px;"><table rowcount="8" colcount="2" style="cell-padding:2px; cell-spacing:0px; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid;">
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Item</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Units</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Time units</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">seconds</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Horizontal grid units</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">centimeters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Vertical grid units</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">centimeters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Head units</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">centimeters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Hydraulic conductivity units</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">centimeters per second</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Specific storage units</text></para>
+        </td>
+        <td style="width:91px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1/centimeters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:160px; height:18px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Dispersivity units</text></para>
+        </td>
+        <td style="width:91px; height:18px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">centimeters</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+    <list id="5" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="6" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">The grid is one-dimensional so the model will be more efficient if the chemistry dimension is specified as X. Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Grid Options…</link><text styleclass="Normal" translate="true">and change the chemistry dimensions to just X (fig. 39). Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="Ex1GridOptions.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 39. </text><text styleclass="Image Caption" translate="true">PHAST </text><text styleclass="Image Caption" translate="true">Grid Options dialog box showing selection of just the X Chemistry dimensions.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

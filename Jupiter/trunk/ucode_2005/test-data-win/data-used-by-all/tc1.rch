@@ -1,0 +1,13 @@
+PARAMETER  2                 Item 1: NPRCH
+         1         0         Item 2: NRCHOP IRCHBD
+RCH_1       RCH  63.072   1  Item 3: PARNAM PARTYP B NCLU
+mlt_rch  zones_1          1  Item 4: Mult_arr_name, Zone_arr_name, Zone numbers
+RCH_2       RCH  31.536   1  Item 3: PARNAM PARTYP B NCLU
+mlt_rch  zones_1          2  Item 4: Mult_arr_name, Zone_arr_name, Zone numbers
+         2         0         Item 5: INRECH INIRICH for stress period 1
+RCH_1                        Item 7: Pname
+RCH_2       20                       Pname, print-code
+        -1         0         Item 6: INRECH INIRICH for stress period 2
+        -1         0                 INRECH INIRICH for stress period 3
+        -1         0                 INRECH INIRICH for stress period 4
+        -1         0                 INRECH INIRICH for stress period 5

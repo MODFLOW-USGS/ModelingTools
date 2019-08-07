@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="AquiferiaInterpolate" FileType="bin">
+    <FileName Model_Name="AquiferiaInterpolate" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="AquiferiaInterpolate" FileType="ancillary">
+    <FileName Model_Name="AquiferiaInterpolate" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Aquiferia\topo_data.exp</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Aquiferia\Topography.dbf</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Aquiferia\Topography.SHP</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Aquiferia\Topography.shx</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="ancillary">AquiferiaInterpolate.gpt</FileName>
+  </ancillary>
+  <model Model_Name="AquiferiaInterpolate" FileType="Model Input">
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.bas</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.dis</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.gsf</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.lpf</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.nam.archive</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.oc</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">AquiferiaInterpolate.pcg</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Input">usgs.AquiferiaInterpolate.reference</FileName>
+  </model>
+  <output Model_Name="AquiferiaInterpolate" FileType="Model Output">
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Output">AquiferiaInterpolate.cbc</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Output">AquiferiaInterpolate.fdn</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Output">AquiferiaInterpolate.fhd</FileName>
+    <FileName Model_Name="AquiferiaInterpolate" FileType="Model Output">AquiferiaInterpolate.lst</FileName>
+  </output>
+</Model_Archive_List>

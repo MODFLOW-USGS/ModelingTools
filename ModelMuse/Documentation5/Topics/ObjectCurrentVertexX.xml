@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentVertexX</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentVertexX</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectCurrentVertexX</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectCurrentVertexX</text><text styleclass="Normal" translate="true"> is intended for use with points and polyline objects. If the object being evaluated does not intersect the cell or element being evaluated, ObjectCurrentVertexX returns zero. If one of the vertices of an object is in the element or cell, ObjectCurrentVertexX returns the X coordinate of that vertex. Otherwise, ObjectCurrentVertexX returns the X coordinate of the first place where the object intersects the cell or element. For objects drawn on the side view of the model, ObjectCurrentVertexX returns zero.</text></para>
+  </body>
+</topic>

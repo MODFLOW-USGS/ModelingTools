@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Farms Wells in FMP: Farm Process Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farms Wells in FMP: Farm Process Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farm Wells in FMP: Farm Process</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Farm Wells in FMP: Farm Process</text><text styleclass="Normal" translate="true"> pane is used to define wells associated with particular farms that can be used by the farm to provide supplemental water when needed. For each well, the user must specify the </text><text styleclass="Strong" translate="true">maximum pumping rate</text><text styleclass="Normal" translate="true"> that the well can provide, the </text><text styleclass="Strong" translate="true">Farm ID</text><text styleclass="Normal" translate="true"> of the farm with which the well is associated, and </text><text styleclass="Strong" translate="true">whether or not it should be pumped only if there is an irrigation requirement in the cell containing the well</text><text styleclass="Normal" translate="true">. The latter must evaluate to either True or False. Farm wells are not be required to be in the farm with which they are associated.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

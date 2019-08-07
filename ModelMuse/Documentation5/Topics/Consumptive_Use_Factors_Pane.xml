@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Consumptive Use Factors Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Consumptive Use Factors Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Crop Properties</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Consumptive Use Factors</text><text styleclass="Normal" translate="true"> pane is always present. It is used for specifying how the following three things vary with time for a crop.</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">FTR</text><text styleclass="Normal" translate="true"> Transpiratory fraction of consumptive use (0 &lt; FTR ≤ 1)</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">FEP</text><text styleclass="Normal" translate="true"> Evaporative fraction of consumptive use related to precipitation (0 ≤ FEP ≤ 1)</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">FEI</text><text styleclass="Normal" translate="true"> Evaporative fraction of consumptive use related to irrigation (0 ≤ FEI &lt; 1)</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">All three are fractions between 0 and 1.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SfrParam" FileType="bin">
+    <FileName Model_Name="SfrParam" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SfrParam" FileType="ancillary">
+    <FileName Model_Name="SfrParam" FileType="ancillary">SfrParam.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SfrParam" FileType="Model Input">
+    <FileName Model_Name="SfrParam" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.bas</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.dis</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.gag</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.ghb</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.gsf</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.jtf</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.lpf</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.nam.archive</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.oc</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.pcg</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.pval</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.sfr</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.tab1</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">SfrParam.tab2</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Input">usgs.SfrParam.reference</FileName>
+  </model>
+  <output Model_Name="SfrParam" FileType="Model Output">
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.cbc</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.fdn</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.fhd</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.lst</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg1</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg2</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg3</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg4</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg5</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg6</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg7</FileName>
+    <FileName Model_Name="SfrParam" FileType="Model Output">SfrParam.sfrg8</FileName>
+  </output>
+</Model_Archive_List>

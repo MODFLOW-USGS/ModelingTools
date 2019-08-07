@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Time Step Length Calculator</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Time Step Length Calculator</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Time Step Length Calculator is used to calculate the maximum length of the initial time step in a MODFLOW stress period based on the length of the stress period, number of time steps, and the multiplier. It is displayed by selecting a cell for the initial time step length in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Time</link><text styleclass="Normal" translate="true"> dialog box clicking the button labeled F(). The Time Step Length Calculator uses the formula that MODFLOW uses:</text></para>
+    <para styleclass="Normal"><image src="TimeStepFormula.PNG" scale="100.00%" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PERLEN = the length of the stress period</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">TSMULT = the time step multiplier</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">NSTP = the number of steps in the stress period.</text></para>
+  </body>
+</topic>

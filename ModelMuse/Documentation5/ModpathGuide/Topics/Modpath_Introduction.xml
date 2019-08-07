@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Online Guide to MODPATH</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Online Guide to MODPATH</text></para>
+    </header>
+    <para styleclass="Normal"><link displaytype="image" src="water_banner1.png" type="weblink" href="http://www.usgs.gov/" target="_blank"><title translate="true">USGS Home Page</title></link></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Compiled by </text><link displaytype="text" defaultstyle="true" type="weblink" href="mailto:rbwinst@usgs.gov" styleclass="Normal" translate="true">Richard B. Winston</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Revised: </text><var styleclass="Normal">&lt;%DATE%&gt;</var></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This document reflects the input instructions for MODPATH version 4.3.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The purpose of this document is to provide a description of the input files for MODPATH. &#160;The material in this guide is largely copied verbatim from the MODPATH report (Pollock, D.W., 1994, User&apos;s Guide for MODPATH/MODPATH-PLOT, Version 3: A particle tracking post-processing package for MODFLOW, the U.S. Geological Survey finite-difference ground-water flow model: U.S. Geological Survey Open-File Report 94-464, 6 ch.) or the modpath.txt file included with MODPATH.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,16 @@
+BEGIN PREDICTION_DATA TABLE
+nrow=12 ncol=5  columnlabels  
+predname       refvalue   measstatistic     measstatflag  groupname
+AD10_X		   9500.000       200.               SD       	pred-x
+AD10_Y		   8500.000       200.               SD       	pred-y
+AD10_Z		   125.0000        10.               SD       	pred-z
+AD50_X		   9500.000       600.               SD       	pred-x
+AD50_Y		   8500.000       600.               SD       	pred-y
+AD50_Z		   125.0000        15.               SD       	pred-z
+A100_X		   9500.000      1000.               SD       	pred-x
+A100_Y		   8500.000      1000.               SD       	pred-y
+A100_Z		   125.0000        25.               SD       	pred-z
+A200_X		   9500.000      1300.               SD       	pred-x
+A200_Y		   8500.000      1300.               SD       	pred-y
+A200_Z		   125.0000        50.               SD       	pred-z
+END PREDICTION_DATA

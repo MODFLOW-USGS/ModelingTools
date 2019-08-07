@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Quick Start Guide</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Quick Start Guide</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When the user starts ModelMuse, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Start_Up_Dialog_Box" styleclass="Strong" translate="true">Start-Up</link><text styleclass="Normal" translate="true"> dialog box will appear in which the user can choose to (1) create a new model, (2) import a MODFLOW-2005 or MODFLOW-NWT model, or (3) open an existing model. If the user chooses to create a new model, the user can create a grid for the model in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Grid_Dialog_Box" styleclass="Strong" translate="true">Initial Grid</link><text styleclass="Normal" style="font-weight:bold;" translate="true"> </text><text styleclass="Normal" translate="true">dialog box. The user can also choose to skip creating the grid and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Generating_Grids" styleclass="Normal" translate="true">create it later</link><text styleclass="Normal" translate="true"> in a variety of different ways. The first time ModelMuse is started on a computer, a video will play. The video can be played again later by selecting </text><text styleclass="Strong" translate="true">Help|Introductory Video</text><text styleclass="Normal" translate="true">.</text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/></para>
+    <list id="2" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Modflow_Models" styleclass="Normal" translate="true">MODFLOW Models</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PHAST_Models" styleclass="Normal" translate="true">PHAST Models</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Models" styleclass="Normal" translate="true">SUTRA Models</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Footprint_Models" styleclass="Normal" translate="true">Footprint Models</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_and_PHAST_Models" styleclass="Normal" translate="true">All Models</link><conditional-text type="END"/></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The following are excellent guides especially for beginning modelers.</text></para>
+    <list id="3" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Reilly, T.E., 2001, System and boundary conceptualization in ground-water flow simulation: U.S. Geological Survey Techniques of Water-Resources Investigations, book 3, chap. B8, 30 p. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://water.usgs.gov/pubs/twri/twri-3_B8/" target="_blank" styleclass="Normal" translate="true">https://water.usgs.gov/pubs/twri/twri-3_B8/</link></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Reilly, T.E., and Harbaugh, A.W., 2004 , Guidelines for evaluating ground-water flow models: U.S. Geological Survey Scientific Investigations Report 2004-5038, 30 p. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.usgs.gov/sir/2004/5038/" target="_blank" styleclass="Normal" translate="true">https://pubs.usgs.gov/sir/2004/5038/</link></li>
+    </list>
+  </body>
+</topic>

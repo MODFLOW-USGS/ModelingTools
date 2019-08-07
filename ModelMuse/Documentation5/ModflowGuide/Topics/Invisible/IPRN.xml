@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">IPRN</title>
+  <body>
+    <para styleclass="Normal"><anchor id="IPRN" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">IPRN—is a flag that indicates if the array being read should be printed (written to the listing file) after it has been read and a code for indicating the format that should be used when it is printed. The format codes are different for each of the three array-reading modules as shown below. IPRN is set to zero when the specified value exceeds those defined. If IPRN is less than zero, the array will not be printed. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Array_Reading_Utility_Modules" anchor="IPRN_Table" styleclass="Normal" translate="true">Table of IPRN Values</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

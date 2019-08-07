@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ModelMuse Frequently Asked Questions (FAQ)</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ModelMuse Frequently Asked Questions (FAQ)</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Frequently_Asked_Questions" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Bullet List" translate="true">MODFLOW Frequently Asked Questions</link></para>
+    <list id="5" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="How_do_I_specify_MT3D_Observat" styleclass="Normal" translate="true">How do I specify MT3D Observations?</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="How_do_I_plot_head__drawdown_o" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">How do I plot head, drawdown or concentration vs. time?</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Why_arent_my_MODPATH_pathlines" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">Why aren&apos;t my MODPATH pathlines visible?</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="What_is_a_floating_point_overf" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">What is a floating point overflow?</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="How_can_I_estimate_the_step_si" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;" translate="true">How can I estimate the step size for my model?</link></li>
+    </list>
+  </body>
+</topic>

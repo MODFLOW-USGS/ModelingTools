@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">GetHufKx</title>
+  <keywords>
+    <keyword translate="true">GetHufKx</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GetHufKx</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetHufKx</text><text styleclass="Normal" translate="true">(Head, {Layer, Row, Column}) returns the horizontal hydraulic conductivity of a cell in the X&apos; direction as determined in the HUF package. (If the Layer Variable Directional Anisotropy (LVDA) option is used, it returns the horizontal hydraulic conductivity along the primary direction of anisotropy.) It is used to help display how the HUF geometry and parameters ultimately control the horizontal hydraulic conductivity of the cells in the X&apos; direction.</text></para>
+    <para styleclass="Normal"><snippet src="Huf_Head_In_Formula"/></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetHufKx</text><text styleclass="Normal" translate="true"> can only be used in the formulas for data sets.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">GetHufKx</text><text styleclass="Normal" translate="true"> is used in the formula for the optional data set </text><text styleclass="Strong" translate="true">HUF_Kx</text><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

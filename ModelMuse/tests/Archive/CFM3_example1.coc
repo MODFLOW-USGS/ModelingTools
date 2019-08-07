@@ -1,0 +1,20 @@
+# COC file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Number of nodes for output (NNODES)
+     5
+# Node numbers, one per line (NODE_NUMBERS)
+     1
+     2
+     3
+     4
+     5
+# Node output each n time steps (N_NTS)
+     1
+# Number of conduits for output (NPIPES)
+     4
+# Conduit numbers, one per line (PIPE_NUMBERS)
+     1
+     2
+     3
+     4
+# Conduit output each n time steps (T_NTS)
+     1

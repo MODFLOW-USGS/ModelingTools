@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="sfrtest5" FileType="bin">
+    <FileName Model_Name="sfrtest5" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="sfrtest5" FileType="ancillary">
+    <FileName Model_Name="sfrtest5" FileType="ancillary">sfrtest5.gpt</FileName>
+  </ancillary>
+  <model Model_Name="sfrtest5" FileType="Model Input">
+    <FileName Model_Name="sfrtest5" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.bas</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.chd</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.dis</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.gsf</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.jtf</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.lpf</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.nam.archive</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.oc</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.pcg</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.pval</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">sfrtest5.sfr</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Input">usgs.sfrtest5.reference</FileName>
+  </model>
+  <output Model_Name="sfrtest5" FileType="Model Output">
+    <FileName Model_Name="sfrtest5" FileType="Model Output">sfrtest5.cbc</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Output">sfrtest5.fdn</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Output">sfrtest5.fhd</FileName>
+    <FileName Model_Name="sfrtest5" FileType="Model Output">sfrtest5.lst</FileName>
+  </output>
+</Model_Archive_List>

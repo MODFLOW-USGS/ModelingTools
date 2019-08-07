@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Executing the Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Executing the Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To execute the model, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Export|MODFLOW Input Files</text><text styleclass="Normal" translate="true"> and make sure the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Execute model</text><text styleclass="Normal" translate="true"> checkbox is checked.</text><text styleclass="Normal" translate="true"> Select the location to save the name file and all the input files for the model; the model input files will be created in that location and the model will be executed. When the model input files have finished being exported, a dialog box showing any error or warning messages about the model will be displayed. ModelMonitor will open and run MODFLOW. When ModelMonitor is closed, the listing file from MODFLOW will open in Notepad.</text></para>
+  </body>
+</topic>

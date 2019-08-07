@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Example 1</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Example 1</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Example 1 is described beginning on p. 85 of the PHAST documentation (</text><link displaytype="text" defaultstyle="true" type="weblink" href="http://pubs.er.usgs.gov/publication/tm6A8" target="_blank" styleclass="Normal" translate="true">Parkhurst and others, 2004</link><text styleclass="Normal" translate="true">). The flow and transport data file itself begins on p. 88. If PHAST is installed on a Windows computer at the default location, this file can be found at C:\Program Files\USGS\phast-1.5.1\examples\ex1\ex1.trans.dat. To follow this example, the user should open this file in a text editor. For the most part, the various data sets will be specified in the same order in which they appear in the original input file. The one exception will be the grid. It will be specified before anything else.</text></para>
+    <para styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">The goals of this example are to:</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Create a simple model using ModelMuse.</text></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Introduce setting default formulas for Data Sets in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box.</text></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Introduce creating objects.</text></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Introduce using objects to specifying boundary conditions.</text></li>
+      <li styleclass="Normal" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:auto; tabstops:none;"><text styleclass="Normal" translate="true">Introduce zooming in and out.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Introduce visualizing data.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

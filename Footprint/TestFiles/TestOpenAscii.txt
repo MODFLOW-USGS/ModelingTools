@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Well_Footprint_File>
+ < FileFormatVersion >
+  1
+ </ FileFormatVersion >
+<Number_Of_Rows>
+  5
+</Number_Of_Rows>
+<Number_Of_Columns>
+ 6
+</Number_Of_Columns>
+
+<Closure_Criterion>
+0.001
+</Closure_Criterion>
+
+<Max_Iterations>
+100000
+</Max_Iterations>
+
+<Initial_Distribution>
+False
+</Initial_Distribution>
+
+<Redistribution_Criterion>
+5
+</Redistribution_Criterion>
+
+<Depth_Rate_Index>
+  <Text_File>DepthRateIndex.txt
+  </Text_File>
+</Depth_Rate_Index>
+<Withdrawals>
+  <Text_File>
+    AsciiOutput.txt
+  </Text_File>
+</Withdrawals>
+  <FileFormatVersion>1</FileFormatVersion>
+</Well_Footprint_File>

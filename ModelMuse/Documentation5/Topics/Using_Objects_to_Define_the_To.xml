@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Using Objects to Define the Top of the Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Using Objects to Define the Top of the Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object|Show or Hide Objects...</link><text styleclass="Normal" translate="true"> The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Show or Hide Objects</link><text styleclass="Normal" translate="true"> dialog box (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">69</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">24</text><conditional-text type="END"/><text styleclass="Normal" translate="true">) will be displayed. Uncheck the check box next to </text><text styleclass="Normal" style="font-weight:bold;" translate="true">All Objects</text><text styleclass="Normal" translate="true"> to hide all the objects. Then click on the + symbol next to </text><text styleclass="Strong" translate="true">Data Sets</text><text styleclass="Normal" translate="true"> display groups of data sets that have objects that are used to set the values of those data sets. Similarly click on the + symbol next to </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Required</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Layer Definition</text><text styleclass="Normal" translate="true">. Then check the check box next to &quot;Model_Top&quot; to display all the objects that are used to set the values of the &quot;Model_Top&quot; data set (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">70</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">25</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). On the top view of the model, there are now several objects that determine the elevation of the top of the model. The elevation is determined by interpolation among these objects. To get a better view of the top of the grid in the 3-D view (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">71A</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">26A</text><conditional-text type="END"/><text styleclass="Normal" translate="true">), select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">View|Show Top Grid</text><text styleclass="Normal" translate="true">. Then on the 3-Dview of the model, click and drag to rotate the view of the model to get a better view of the grid. To see the bottom of the upper aquifer, locate the cube with the red square above and to the left of the top view of the model. Click on the cube below the red square to move the selected layer down by one (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">71B</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">26B</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). The 3-D view will be updated to show the bottom of the upper aquifer.</text></para>
+    <para styleclass="Image Caption"><table rowcount="2" colcount="2" style="cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="ShowOrHideObjects.bmp" scale="75.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+        <td>
+          <para styleclass="Image Caption"><image src="Model_Top_Objects.bmp" scale="50.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-align:left;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">69</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">24</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Show or Hide Objects dialog box in ExampleModel.gpt.</text></para>
+        </td>
+        <td>
+          <para styleclass="Image Caption" style="text-align:left;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">70</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">25</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Objects used to define the top elevation in ExampleModel.gpt.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Image Caption"><table rowcount="2" colcount="2" style="width:280px; cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><image src="3D_View.bmp" scale="50.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+        <td>
+          <para styleclass="Image Caption" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><image src="3D_View2.bmp" scale="50.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><text styleclass="Image Caption" translate="true">A</text></para>
+        </td>
+        <td>
+          <para styleclass="Image Caption" style="text-align:left; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><text styleclass="Image Caption" translate="true">B</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Image Caption" style="text-align:left;"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">71</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">26</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Thee dimensional view of the grid (A) at the top of ExampleModel.gpt and (B) at the bottom of the first layer.</text></para>
+  </body>
+</topic>

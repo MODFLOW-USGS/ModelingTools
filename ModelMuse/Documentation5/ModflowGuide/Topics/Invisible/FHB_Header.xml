@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">FHB Header</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IFHBUN CNSTM IFHBPT</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> &#160;</text><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFHBUN]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IFHBUN is the unit number on which data lists will be read. The same or different unit numbers can be used to read lists in data items 4b, 5b, 6b, 7b, and 8b. A separate value is read for each of these data sets in data sets 4a, 5a, 6a, 7a and 8a respectively.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CNSTM]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Real</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CNSTM is a constant multiplier for data list </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="BDTIM" styleclass="Normal" translate="true">BDTIM</link><text styleclass="Normal" translate="true"> (data item 4b), </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="FLWRAT" styleclass="Normal" translate="true">FLWRAT</link><text styleclass="Normal" translate="true"> (part of data item 5b), &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="SBHED" styleclass="Normal" translate="true">SBHED</link><text styleclass="Normal" translate="true">(part of data item 7b), and auxiliary variables in data items </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="AuxVar6b" styleclass="Normal" translate="true">6b</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FHB" anchor="AuxVar8b" styleclass="Normal" translate="true">8b</link><text styleclass="Normal" translate="true">. A separate value is read for each of these data sets in data sets 4a, 5a, 6a, 7a and 8a respectively.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFHBPT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Integer</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IFHBPT is a flag for printing values of data lists in items 4b, 5b, 6b, 7b, and 8b. A separate value is read for each of these data sets in data sets 4a, 5a, 6a, 7a and 8a respectively.</text></para>
+                <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFHBPT &gt; 0 data list read at the beginning of the simulation will be printed.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">If IFHBCB </text><text styleclass="Normal" style="font-family:Symbol;" translate="true">£</text><text styleclass="Normal" translate="true"> 0 data list read at the beginning of the simulation will not be printed.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

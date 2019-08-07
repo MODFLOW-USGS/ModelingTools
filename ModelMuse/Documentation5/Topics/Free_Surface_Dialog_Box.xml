@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Free Surface Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">PHAST Free Surface Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true"> PHAST Free Surface</text><text styleclass="Normal" translate="true"> dialog box is used to specify whether or not a free surface (water table) is used in the model. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true"> PHAST Free Surface</text><text styleclass="Normal" translate="true"> dialog box is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Free Surface…</text><text styleclass="Normal" translate="true"> If a free surface will be used, the user can check the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use water table for initial condition</text><text styleclass="Normal" translate="true"> checkbox to use the water table to define the initial head. If the free surface is used and the water table is used to define the initial head, the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Water_Table</text><text styleclass="Normal" translate="true"> data set is used to define the initial head. If a free surface is not used or if the water table is not used to define the initial head, the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Head</text><text styleclass="Normal" translate="true"> data set is used to define the head at each node.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note: The most recent version of PHAST no longer supports specifying an initial water table. However, you can still use the initial water table option in ModelMuse. ModelMuse will use the data in the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Initial_Water_Table</text><text styleclass="Normal" translate="true"> data set to specify the initial head in a vertical column of nodes.</text></para>
+  </body>
+</topic>

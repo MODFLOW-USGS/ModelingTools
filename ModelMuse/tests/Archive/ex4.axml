@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ex4" FileType="bin">
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="ex4" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="ex4" FileType="ancillary">
+    <FileName Model_Name="ex4" FileType="ancillary">ex4.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ex4" FileType="Model Input">
+    <FileName Model_Name="ex4" FileType="Model Input">ex4.chem.dat</FileName>
+    <FileName Model_Name="ex4" FileType="Model Input">ex4.trans.dat</FileName>
+    <FileName Model_Name="ex4" FileType="Model Input">phast.dat</FileName>
+    <FileName Model_Name="ex4" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="ex4" FileType="Model Input">usgs.ex4.reference</FileName>
+  </model>
+  <output Model_Name="ex4" FileType="Model Output">
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.h5</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.head.dat</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.log</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.O.head</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.O.probdef</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.O.vel</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.O.wel</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.xyz.chem</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.xyz.head</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.xyz.vel</FileName>
+    <FileName Model_Name="ex4" FileType="Model Output">ex4.xyz.wel</FileName>
+  </output>
+</Model_Archive_List>

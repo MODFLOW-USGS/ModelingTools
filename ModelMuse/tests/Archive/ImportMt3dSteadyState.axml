@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportMt3dSteadyState" FileType="bin">
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="bin">..\..\..\..\mt3dms530\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="bin">..\..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportMt3dSteadyState" FileType="ancillary">
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="ancillary">ImportMt3dSteadyState.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportMt3dSteadyState" FileType="Model Input">
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.bas</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.bcf</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.chd</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.dis</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.gsf</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.lmt</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.nam.archive</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.oc</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.sip</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">ImportMt3dSteadyState.wel</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Input">usgs.ImportMt3dSteadyState.reference</FileName>
+  </model>
+  <output Model_Name="ImportMt3dSteadyState" FileType="Model Output">
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Output">ImportMt3dSteadyState.cbc</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Output">ImportMt3dSteadyState.fdn</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Output">ImportMt3dSteadyState.fhd</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Output">ImportMt3dSteadyState.ftl</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Model Output">ImportMt3dSteadyState.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">ImportMt3dSteadyState.adv</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">ImportMt3dSteadyState.btn</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">ImportMt3dSteadyState.dsp</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">ImportMt3dSteadyState.gcg</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">ImportMt3dSteadyState.mt_nam.archive</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">ImportMt3dSteadyState.ssm</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Input">usgs.ImportMt3dSteadyState_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Output">ImportMt3dSteadyState.cnf</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Output">ImportMt3dSteadyState.mls</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Output">ImportMt3dSteadyState_Comp1._mas</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Output">ImportMt3dSteadyState_Comp1.mto</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="Mt3dms Output">ImportMt3dSteadyState_Comp1.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

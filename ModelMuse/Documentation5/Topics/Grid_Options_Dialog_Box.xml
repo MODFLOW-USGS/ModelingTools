@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Grid Options Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">PHAST Grid Options Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true"> PHAST Grid Options</text><text styleclass="Normal" translate="true"> dialog box is used to change certain options related to the grid in PHAST. To display the dialog box, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Grid Options...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the model is logically a one- or two-dimensional model, the user can use the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Chemistry dimensions</text><text styleclass="Normal" translate="true"> checkboxes to choose which dimensions should be used for the chemistry calculations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the model is a vertical cross sectional model, the user may wish to have the output from the model printed in the “*.o” output file in XZ orientation rather than the default XY orientation. The user can make that selection in the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">PHAST Grid Options</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

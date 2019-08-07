@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Model Features in SUTRA</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Model Features in SUTRA</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA models, Model Features are used to specify the specified-head or pressure, specified temperature or concentration, specified fluid flux, and specified heat or mass fluxes. The user must specify starting times for each boundary condition. The values specified for each time apply until the model run is terminated or the values are overridden by values for a later time or the feature is turned off. Model Features are also used to specify observation locations in SUTRA.</text></para>
+  </body>
+</topic>

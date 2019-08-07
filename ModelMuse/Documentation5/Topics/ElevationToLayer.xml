@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ElevationToLayer</title>
+  <keywords>
+    <keyword translate="true">ElevationToLayer</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ElevationToLayer</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW and PHAST models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</text><text styleclass="Normal" translate="true">(Elevation) returns the grid layer for the current row and column that contains Elevation. For SUTRA and &#160;MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</text><text styleclass="Normal" translate="true">(Elevation) returns the grid layer for the current cell or element that contains Elevation. </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</text><text styleclass="Normal" translate="true"> is used in the formula for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">UZF_Layer</text><text styleclass="Normal" translate="true"> data set. </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer</text><text styleclass="Normal" translate="true"> differs from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ElevationToModelLayer" styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToModelLayer</link><text styleclass="Normal" style="font-weight:normal;" translate="true"> in that nonsimulated layers are counted in </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToLayer </text><text styleclass="Normal" style="font-weight:normal;" translate="true">but not </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ElevationToModelLayer" styleclass="Normal" style="font-weight:bold;" translate="true">ElevationToModelLayer</link><text styleclass="Normal" style="font-weight:bold;" translate="true">.</text></para>
+  </body>
+</topic>

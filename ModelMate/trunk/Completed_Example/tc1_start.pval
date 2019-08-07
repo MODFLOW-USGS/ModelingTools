@@ -1,0 +1,13 @@
+# MODFLOW-2005 PVAL file for project tc1_test
+11
+SS_1         1.3E-3
+HK_1         3.0E-4
+VERT_ANI_1   1.0
+VERT_K_CB    1.0E-7
+SS_2         2.0E-4
+HK_2         4.0E-5
+VERT_ANI_2   1.0
+WELLS_TR     -1.1
+RIVERS       1.2E-3
+RCH_ZONE_1   63.1
+RCH_ZONE_2   31.5

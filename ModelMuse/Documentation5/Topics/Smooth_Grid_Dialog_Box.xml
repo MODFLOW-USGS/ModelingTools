@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Smooth Grid Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Smooth Grid Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Some groundwater-modeling programs, benefit from keeping the contrast in the width of adjacent cells less than a value of 1.5 (Anderson and Woessner, 1991). The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Smooth Grid…</text><text styleclass="Normal" translate="true"> menu item is designed to facilitate creating grids that meet this criterion. In PHAST, contrasts in element size are not an issue, but it still can be useful to have an area with a refined grid where results need to be more accurate. When the user selects this menu item, the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Smooth Grid</text><text styleclass="Normal" translate="true"> dialog box will appear in which the user can specify whether to adjust the row, column, or layer spacing to meet the criterion. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid smoothing criterion</text><text styleclass="Normal" translate="true"> is the maximum ratio between adjacent rows, columns, or layers that will be accepted. The default value is 1.2, which is well below the usual limit. After making the desired selections, the user can click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button to adjust the grid spacing. Column, row, or layer boundaries will be moved to meet the grid smoothing criterion but no new columns, rows, or layers will be created.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This method can not be used with Footprint grids because the cell spacing is required to be uniform.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,131 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options	KEYWORDS
+  Verbose=0
+END Options
+
+# ------------------------------
+# REGRESSION-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+ModelName=ex1
+#Performance
+  LinearityAdv=conf
+  Sensitivities=no           # calculate sensitivities: yes/no
+  Optimize=no                # estimate parameters: yes/no
+#Printing and output files
+  DataExchange=yes           # graphing & postprocessing: yes/no 
+END UCODE_CONTROL_DATA
+
+# --------------------------------
+# COMMAND FOR APPLICATION MODEL(S)
+# --------------------------------
+
+BEGIN MODEL_COMMAND_LINES TABLE
+# Single quotes around 'Command=value' are required if the
+# command includes one or more spaces, but are optional 
+# otherwise
+nrow=1 ncol=3  columnlabels
+COMMAND                                 PURPOSE         COMMANDID
+..\ex1b-files\obs-pred-fwd.bat      Forward         modflow
+END MODEL_COMMAND_LINES
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+   GroupName = MyPars  adjustable=yes TOLPAR=.01 SenMethod=2
+   MaxChange=2.0
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_GROUPS_FOR_PREDICTION KEYWORDS
+   GroupName=porgroup  adjustable=yes TOLPAR=.01 SenMethod=2
+   MaxChange=2.0 
+END PARAMETER_GROUPS_FOR_PREDICTION
+
+BEGIN PARAMETER_DATA FILES
+..\ex1b-files\tr.params
+END PARAMETER_DATA 
+
+BEGIN PARAMETER_DATA_FOR_PREDICTION TABLE
+#     1           2             3          4          5         6          7        8		     9
+  nrow=1  ncol=9 columnlabels
+  paramname  STARTVALUE  lowervalue uppervalue   scalepval  perturbamt transform  TOLPAR  	  groupname
+  POR_1&2     0.33           0.27       0.39       0.33       0.01D0        no     0.01 	    porgroup 	
+END PARAMETER_DATA_FOR_PREDICTION 
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN OBSERVATION_GROUPS FILES
+..\ex1b-files\groups.obs
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA FILES
+..\ex1b-files\hed.obs
+..\ex1b-files\flo.obs
+END OBSERVATION_DATA 
+
+# -----------------------
+# PREDICTION INFORMATION
+# -----------------------
+
+BEGIN PREDICTION_GROUPS FILES
+..\ex1b-files\groups.pred
+END PREDICTION_GROUPS
+
+BEGIN PREDICTION_DATA FILES
+..\ex1b-files\adv.pred
+END PREDICTION_DATA
+
+# -----------------------------
+# PRIOR INFORMATION
+# -----------------------------
+
+BEGIN PRIOR_INFORMATION_GROUPS_FOR_PREDICTION KEYWORDS
+GroupName=prior
+PlotSymbol=4
+UseFlag=yes
+END PRIOR_INFORMATION_GROUPS_FOR_PREDICTION
+
+BEGIN LINEAR_PRIOR_INFORMATION_FOR_PREDICTION KEYWORDS
+PriorName=PrPorosity
+Equation=POR_1&2
+PriorInfoValue=0.33
+Statistic=0.03
+StatFlag=SD
+GroupName=prior
+END LINEAR_PRIOR_INFORMATION_FOR_PREDICTION
+
+# -----------------------------
+# PROCESS MODEL INFORMATION
+# -----------------------------
+
+BEGIN MODEL_INPUT_FILES	KEYWORDS
+# OBS:
+  modinfile=..\..\test-data-win\data-transient\tc1-fwd.sen  
+  templatefile=..\ex1b-files\tc1sen-forward.tpl
+#
+# PREDS:
+  modinfile=..\..\test-data-win\data-adv-preds-ex1b\tc1-fwd.sen  
+  templatefile=..\ex1b-files\tc1sen-forward-pred.tpl  
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES  KEYWORDS
+# OBS:
+  modoutfile=..\..\test-data-win\data-transient\tc1._os  
+  instructionfile=..\ex1b-files\obs.instructions   
+  category=obs
+#
+# PREDS:
+  modoutfile=..\..\test-data-win\data-adv-preds-ex1b\tc1._os  
+  instructionfile=..\ex1b-files\preds.instructions   
+  category=pred
+END MODEL_OUTPUT_FILES
+
+

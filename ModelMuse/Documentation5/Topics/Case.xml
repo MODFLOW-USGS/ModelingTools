@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Case</title>
+  <keywords>
+    <keyword translate="true">Case</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Case</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Case</text><text styleclass="Normal" translate="true">(Index, Result1, Result2, ...). Case uses Index to determine which of the Result1, Result2... arguments will be returned as a result. If Index equals 1, Result1 is returned; if Index equals 2, Result2 is returned; if Index equals 3, Result3 is returned; and so forth. Only “Index”, constant expressions, and the result that is returned will be evaluated. The types of Result1, Result2... must all be the same but they can be of any type. The type that is returned will be the same as the type of Result1, Result2, ...</text></para>
+  </body>
+</topic>

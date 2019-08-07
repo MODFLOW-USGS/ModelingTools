@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ObservationTest2" FileType="bin">
+    <FileName Model_Name="ObservationTest2" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ObservationTest2" FileType="ancillary">
+    <FileName Model_Name="ObservationTest2" FileType="ancillary">ObservationTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ObservationTest2" FileType="Model Input">
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.bas</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.chd</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.dis</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.drn</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.ghb</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.gsf</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.jtf</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.lpf</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.nam.archive</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.ob_chob</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.ob_drob</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.ob_gbob</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.ob_hob</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.ob_rvob</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.oc</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.pcg</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.pval</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">ObservationTest2.riv</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Input">usgs.ObservationTest2.reference</FileName>
+  </model>
+  <output Model_Name="ObservationTest2" FileType="Model Output">
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.cbc</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.chob_out</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.drob_out</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.fdn</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.fhd</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.gbob_out</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.hob_out</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.lst</FileName>
+    <FileName Model_Name="ObservationTest2" FileType="Model Output">ObservationTest2.rvob_out</FileName>
+  </output>
+</Model_Archive_List>

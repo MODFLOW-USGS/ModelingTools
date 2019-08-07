@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="leaky" FileType="bin">
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="leaky" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="leaky" FileType="ancillary">
+    <FileName Model_Name="leaky" FileType="ancillary">leaky.gpt</FileName>
+  </ancillary>
+  <model Model_Name="leaky" FileType="Model Input">
+    <FileName Model_Name="leaky" FileType="Model Input">leaky.trans.dat</FileName>
+    <FileName Model_Name="leaky" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="leaky" FileType="Model Input">usgs.leaky.reference</FileName>
+  </model>
+  <output Model_Name="leaky" FileType="Model Output">
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.h5</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.log</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.O.bcf</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.O.head</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.O.probdef</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.O.wel</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.xyz.head</FileName>
+    <FileName Model_Name="leaky" FileType="Model Output">leaky.xyz.vel</FileName>
+  </output>
+</Model_Archive_List>

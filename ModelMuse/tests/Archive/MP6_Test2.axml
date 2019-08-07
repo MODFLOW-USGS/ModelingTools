@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="MP6 Test2" FileType="bin">
+    <FileName Model_Name="MP6 Test2" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="bin">C:\WRDAPP\modpath.6_0\bin\mp6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="MP6 Test2" FileType="ancillary">
+    <FileName Model_Name="MP6 Test2" FileType="ancillary">MP6 Test2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="MP6 Test2" FileType="Model Input">
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.bas</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.dis</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.gsf</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.lpf</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.nam.archive</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.oc</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.pcg</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.rch</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.riv</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">MP6_Test2.wel</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Input">usgs.MP6_Test2.reference</FileName>
+  </model>
+  <output Model_Name="MP6 Test2" FileType="Model Output">
+    <FileName Model_Name="MP6 Test2" FileType="Model Output">MP6_Test2.bhd</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Output">MP6_Test2.cbc</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Output">MP6_Test2.fdn</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Model Output">MP6_Test2.lst</FileName>
+  </output>
+  <Modpath_Input_Files Model_Name="MP6 Test2" FileType="Modpath Input">
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">Mp.bat.archive</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">MP6_Test2.mpbas</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">MP6_Test2.mpn.archive</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">MP6_Test2.mpsim.archive</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">MP6_Test2.strt</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">RunModpath.Bat.archive</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Input">usgs.MP6_Test2_Modpath.reference</FileName>
+  </Modpath_Input_Files>
+  <Modpath_Output_Files Model_Name="MP6 Test2" FileType="Modpath Output">
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Output">MP6_Test2.end</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Output">MP6_Test2.mplst</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Output">MPATH6.LOG</FileName>
+  </Modpath_Output_Files>
+</Model_Archive_List>

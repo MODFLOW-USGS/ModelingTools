@@ -1,0 +1,15 @@
+# Variance-covariance matrix for group "Flows"
+COMPLETEMATRIX CovFlows
+3 3 controlrecord
+internal  1.0  (free)  21
+      0.16     0.04e-4    0.02e-4
+      0.04e-4  0.1444     0.015e-4
+      0.02e-4  0.015e-4   0.0441
+
+# Variance-covariance matrix for group "Heads2"
+COMPLETEMATRIX CovHeads2
+3 3 controlrecord
+internal  1.0  (free)  19
+      1.0025   0.03e-4    0.02e-4
+      0.03e-4  0.0025     0.015e-4
+      0.02e-4  0.015e-4   0.0025

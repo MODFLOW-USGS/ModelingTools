@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Closest</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Closest</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Closest</text><text styleclass="Normal" translate="true">(TestValue, Value1, Value2, ...) returns the index of whichever of the Value1, Value2, ... values is closest to TestValue. For example, Closest(2.7, 1, 3, 5) would return 2 because 2.7 is closer to 3 than to any of the other values and 3 is the second value in the list of values to which TestValue will be compared. If two or more values are equally far away from TestValue, the index of whichever is first in the list will be returned.</text></para>
+  </body>
+</topic>

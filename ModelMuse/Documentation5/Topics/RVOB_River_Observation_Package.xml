@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RVOB: River Observation Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RVOB: River Observation Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The RVOB package is used to compare observed flows at rivers with simulated flows computed by MODFLOW. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observations" styleclass="Normal" style="font-weight:bold;" translate="true">Observations</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Checking the checkbox associated with the RVOB package is only possible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RIV_River_Package" styleclass="Normal" translate="true">RIV</link><text styleclass="Normal" translate="true"> package is activated. Once activated, the user can enter comments regarding the RVOB package. The observations of flow at river cells are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Flux_Observations" styleclass="Normal" style="font-weight:bold;" translate="true">Manage Flow Observations</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW Listing file will contain a list of the observed values and the simulated equivalents.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,2 @@
+inherited frameScreenObjectFarmID: TframeScreenObjectFarmID
+end

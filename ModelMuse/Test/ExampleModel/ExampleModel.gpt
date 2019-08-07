@@ -1,0 +1,2817 @@
+object PhastModel: TPhastModel
+  Bitmaps = <>
+  ChemistryOptions.UseEquilibriumPhases = True
+  ChemistryOptions.UseExchange = True
+  ChemistryOptions.UseGasPhases = True
+  ChemistryOptions.UseKineticReactants = True
+  ChemistryOptions.UseSolidSolution = True
+  ChemistryOptions.UseSurfaceAssemblages = True
+  DataSetList = <
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'True'
+      DataSet.Name = 'Active'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtBoolean
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Max = 1.000000000000000000
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '100.'
+      DataSet.Name = 'Kx'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.CompressedData = {
+        090000000A0000000A000000E809000000000000789CEDDC5F8C5D5515C7F17B
+        F6DA7BAF3D9226A435B43C48C707D04A6DA6450D160C87906095D0BF4C694BDB
+        E958A658FBD769ABA281AA697DB0F5418D6863535363A38DA00DA2A891A60642
+        3052886824919A14FF046A02D4361112127432B817DFED38631DFB30C8DEC9C9
+        E967EE9E737E33E7AC35E79E7B6F9B4EA73338B46C1BD8DEBD63DBFACDB7756F
+        ED1FECDF34B07D60705BF7C7D6F7776FFFF040F7BA2D839B766CEC9FDBFD8175
+        6F9F7743DFC2FEC1D97D2BB66C1E98D93DFBDD3D33BB7B66745FFEDA4373FEF9
+        90F1C61D1BB7AFDFBA71FDC060F73BBAE7F4F4CC9A31F42DB366EC924E1D136C
+        347599508BABCB845AA42E136AF17599504BA8CB845A625D26D4A27599504BAA
+        CB845ACE759CEFEBE7F37DBD71BEFBF3F93E9FBBCE7139D7518F473D1EF5788C
+        3EEAF1A8C7A31E8FD1473D1EF578D4E331FAA8C7A31E8F37EAF1C8BFC7FCF3E7
+        DC8A6DD579755E9D57E7D579755E9D57E7D579755E9D57E7D579FF7FF3EAA8A3
+        8E3AEAA8A38E3AEAA8A38E3AEA78A38EE5ED68EBC3EECEA77F7B60797BD99179
+        17FDEC9A95EDA155536E38787275FBA5F0C2350F1E5BF3EABC4FF797EB31B637
+        E9FEBF3DFC97052BDABDB7FEFCE5C74FAF6CDF34796FCF0FBFD8D73ED4F7DD39
+        375EDCFF5F6F6F70C396BB5FE9DCD2FE75DADCA7FF7870557BE55AB7E7D6B7AE
+        695FFAC96D973EF9D1D1B7B7F299750B2E7F7859BBF3BEDBBFF187C9CBDA839F
+        D9FBC2BEBE9BDB3D5FBEFEA93D9356B4D3F5BADFBDE5F955ED471E387AC7F3B7
+        8FF2730EAD27B96F4DD9B97369DBF3F88FD6BEE7D1DE76F1FE5FFCE0B969BDED
+        8EF527E4D0C04DED8107BE7EF6A9BFF7B6B3677FEDCCA693CBDB2BF7DE35F5E8
+        63ABDA795FFDDC256F9E32727B274F9D7DDBE7772F69E5FEF8896B9F58DC5EB6
+        EBE2475EBA64F1AB8F1FFBD0A8EBA9533EB53BDEB37AC4F6EEFBD575577F65CF
+        C2F67BEFBB67DABE230BDA334F3EF163FDE0FCFFB8BD032F3E7BFC4F57DCD2BE
+        B8AFEFECFC3D7DFFF2FB9BFFEFD7636CEFD2134B2F7AF0A737B777DC79FCAA77
+        4E5ED96EB8F09B477EF9AE35E3DEDEDDC71E5A7DF0DA9B5ABFF6AA5D17EC5BD6
+        AE0AF71EDE31743E8D777B571C9AF3ED9D8F2C6CF7BEFFF0A3A7A6F7B67F3E35
+        FDCC928F8F7EDEE575AD8F5A1FB53E6A7DD4FAE8D4FAA8F561DF57EB63ECEDD5
+        FAA8F5F17AAC8FEF3F73FA829967168D38BEE3AA8F31CE9B5A1FB53E5E4FF531
+        6FD1CC6947362CB2FA58F7D817E6CE79A5B73DBAD5AFD9DFBBE27FAB8FA1F573
+        F7BEFCD90B772F6EAFEF1DFCCE274F2C1D5F7D60FDECAC5FDFF5FBA9AF9D97E3
+        AA8F31CEEF5A1FE7B6BD5A1F13BB3E8EBFF7E4E9656B979C9FFA185A1FBE7AFF
+        E0E6DF2C185F7D8CB1AEF5D1A9F551EB63D475AD8F4EAD8F5A1FA3AE47AB8F51
+        FF8FD1867044F11D9E084424944884BD69B5D861C32FE4F7BD1A84F0442022A1
+        44222C41F1533A26707C34BF05D7E08940444289445882E2572B4C204C209C2A
+        4C204C204C204C204C204C501C4FCF049E093C13787E5F7E63B221124A24C212
+        1427516082C00481090213E48FEE1A22A144222C4171E64626884C1099203241
+        6482FC0961831289B00445B9281328132813281328132813E40F221B1261098A
+        1A4D4C90982031416282C40489091213E4CF3B1B2C41F16EF62E26E862822E26
+        E862822E26E862822E26E86202FB58F5886E64EB0C4708E18940444289445882
+        A205DA17F8D97983109E0844249448842528FAAEF5C40C4708E1894044428944
+        5882A2D95B4FCC7084109E0844249448842528FEC2584FCC7084109E08442494
+        48842528FEAC594FCC7084109E0844249448842528FE965A4FCC7084109E0844
+        249448842528FE805B4FCC7084109E0844249448842528AE1AAC27663842084F
+        0422124A24C21214174BD613331C218427021109251231BCE311D7477986C111
+        427822109150221196C07A6246433842084F0422124A24C21214578216C9F1D1
+        FC0F213C1188482891084B505C7E5A4FCC7084109E0844249448842528AE79AD
+        27663842084F0422124A24C2121417DAD613331C218427021109251261098AAB
+        7BEB89198E10C2138188841289B004C5530AEB89198E10C2138188841289B004
+        C5F318EB89198E10C2138188841289B004C5D337EB89198E10C2138188841289
+        18DEF188676C9D9C20C311427822109150221196C07A6246433842084F042212
+        4A24C212584FCC68084708E18940444289445882E209B1FD5204530D42782210
+        9150221196A078166E3D31C311427822109150221196A078EA6F3D31C3114278
+        22109150221196A0B8DF603D31C311427822109150221196A0B8C9613D31C311
+        427822109150221196A0B8B3623D31C311427822109150221196A0B8A1643D31
+        C3114278221091502211C33B1E710FA99313643842084F0422124A24C212584F
+        CC68084708E18940444289445802EB89190DE108213C1188482891084B603D31
+        A3211C218427021109251261098AFB827658321C218427021109251261098A9B
+        91D613331C218427021109251261098A3BA0D613331C21842702110925126109
+        8ADBAED613331C218427021109251261098A7BBDD613331C2184270211092512
+        61098A5BDCD613331C218427021109251231BCE31177B53B3941862384F04420
+        22A144222C81F5C48C867084109E08442494488425B09E98D1108E10C2138188
+        841289B004D613331AC211427822109150221196C07A6246433842084F042212
+        4A24C212D8D998D1108E10C2138188841289B004C56B32D613331C2184270211
+        09251261098A1782AC27663842084F0422124A24C21214AF3E594FCC7084109E
+        08442494488425285E74B39E98E108213C118848289188E11D8F789DAD931364
+        3842084F0422124A24C212584FCC68084708E18940444289445802EB89190DE1
+        08213C1188482891084B603D31A3211C21842702110925126109AC2766348423
+        84F0442022A144222C81F5C48C867084109E08442494488425B07AC868084708
+        E18940444289445882E2A569EB89198E10C2138188841289B004C5EBE1D61333
+        1C218427021109251261098AB701584FCC7084109E0844249448C4F08EED0810
+        0DE108213C1188482891084B603D31A3211C21842702110925126109AC276634
+        842384F0442022A144222C81F5C48C867084109E08442494488425B09E98D110
+        8E10C2138188841289B004D613331AC211427822109150221196C07A62464338
+        42084F0422124A24C21258456634842384F0442022A144222C81F5C48C867084
+        109E08442494488425B09E98D1108E10C213818884128918DEB1FDFC44433842
+        084F0422124A24C212584FCC68084708E18940444289445802EB89190DE10821
+        3C1188482891084B603D31A3211C21842702110925126109AC276634842384F0
+        442022A144222C81F5C48C867084109E08442494488425B09E98D1108E10C213
+        8188841289B004D613331AC211427822109150221196C07A4246433842084F04
+        22124A24C212584FCC68084708E1894044428944D88EFF016FEE4A94}
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '100.'
+      DataSet.Name = 'Ky'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'False'
+      DataSet.Name = 'Modflow_Specified_Head'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtBoolean
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
+      DataSet.Max = 1.000000000000000000
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '30'
+      DataSet.Name = 'Modflow_Initial_Head'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Max = 1.000000000000000000
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'If((Kx = 0.), 0., (Ky / Kx))'
+      DataSet.Name = 'Horizontal_Anisotropy'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Max = 1.000000000000000000
+      DataSet.Orientation = dso3D
+      DataSet.CompressedData = {
+        090000000A0000000A0000001803000000000000789CED966B48537118C6A7CB
+        6B6025627D303A68C1466A661754D0570D8D9448233351C4A55B6A2EC15BDE15
+        11832445AC4CB26824E52D053183242B1033B38849461851E4652EDDE6BC2B62
+        164CA231A6B60F277D1E78CEFBE5E1E59CF3FC7F8763C4E1708E2C3B5998C2A4
+        C5099818A148909A90C2881293C4A909020FE68488C70B4C673C191767BEE3F2
+        C591E10566300798C0743EBF90CB815826239855368659652ECC2A6F81596513
+        985536855965339855368759E5D5CAD0FFCF86FEDF30F4F7D9D0E7D962955EAD
+        D007FA401FBA853ED007FAD02DF4813ED0876EA10FF4B159FBD0BC47CDF36BEE
+        DBEC8F5DC821871C72C821871C72C821871C72C86DBC1C044110044110044110
+        B459A5225DF3787719A7CA5D49BCE89077D2E051E2D91526D6CB4668AF7171F6
+        B9AFC3F444DCDF2AEE1F5A99FAF6CD86372E5EBEA0A0BB19CA96E2EA1F14D53B
+        97191A3A42C191D191AD316BDF97959F38BBF3DE18DDCC0D2A0D5F9253DF551F
+        B9578F8C1A1E96782C8C0DE9DCD7DCB34714B64F45516DF2F28A3B2A9ACA6A16
+        58EE1E27FEE917F5A32D0ABAE2BD4352F9544EC73C3EFB2DFACBB4F668664B79
+        7970C1AB713A7B7D9B697B989A6EDBBADA364DA969F891A420A46A82DE3EF822
+        AE755693AFFB52529A5C4117BBA67BDBFAE424CD7134F6146B3F6F0737626B5A
+        CE24393626DB557B4F51E933EB0099F53485FCD6A0CE59D3D4E9EB6323D7BEBF
+        10F337B64EB324BD5621BDEF35474533F9453971F37AF73974669EAF8D1DA3A0
+        C6ECB2AC8891957DF575BF34AF35F5EDE30D9C1A0BEC57D1FB86F2C9AEBC51B2
+        1276679434CAD6BD2F6E20D1EFD0F3098A155C52CDF8AA68B0C666E1DBF2795A
+        EFBEBAF18FBB423FCC1077BBB557BC524DFBBF0BCF58C52BF59E3FF0013EC007
+        F8001FE0037C800FF0013E36321F664B2F4DB801DABCAC950F7DE7067C808FFF
+        898FA30BD91136D3D32B7CF44AFCA22D5CD4E470D0DF7E304AB16E3E34D3F2F1
+        27855BE51405F4E632AE79E36BE6E3EF795854D15E78637EDD7CE83BDFE0037C
+        6C043EF23D335EDF924CFE331F9AE9D4D171D2CD7E6ECD7CE89BE0037C800FF0
+        013EC08721F9F809300B27A8}
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '1.'
+      DataSet.Name = 'Kz'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '0.25'
+      DataSet.Name = 'Porosity'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '1E-5'
+      DataSet.Name = 'Specific_Storage'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '10.'
+      DataSet.Name = 'Longitudinal_Dispersivity'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '1.'
+      DataSet.Name = 'Horizontal_Transverse_Dispersivity'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '1.'
+      DataSet.Name = 'Vertical_Transverse_Dispersivity'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '0.'
+      DataSet.Name = 'Initial_Head'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFormula = '0.'
+      DataSet.Name = 'Initial_Water_Table'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dsoTop
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '1'
+      DataSet.Name = 'Chemistry_Initial_Solution'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '-1'
+      DataSet.Name = 'Chemistry_Initial_Equilibrium_Phases'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '-1'
+      DataSet.Name = 'Chemistry_Initial_Surface'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '-1'
+      DataSet.Name = 'Chemistry_Initial_Exchange'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '-1'
+      DataSet.Name = 'Chemistry_Initial_Gas_Phase'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '-1'
+      DataSet.Name = 'Chemistry_Initial_Solid_Solutions'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFormula = '-1'
+      DataSet.Name = 'Chemistry_Initial_Kinetics'
+      DataSet.Classification = 'Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '1'
+      DataSet.Name = 'Print_Chemistry'
+      DataSet.Classification = 'Output'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '1'
+      DataSet.Name = 'Print_XYZ_Chemistry'
+      DataSet.Classification = 'Output'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0.2'
+      DataSet.Name = 'Specific_Yield'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0.'
+      DataSet.Name = 'Wet_Dry_Threshold'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'Wet_Dry_Flag'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = True
+      DataSet.CheckMin = True
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Max = 1.000000000000000000
+      DataSet.Min = -1.000000000000000000
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'Wet_Dry_Threshold * Wet_Dry_Flag'
+      DataSet.Name = 'WetDry'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'Model_Top'
+      DataSet.Classification = 'Layer Definition'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dsoTop
+      DataSet.TwoDInterpolatorClass = 'TInvDistSq2DInterpolator'
+      DataSet.TwoDInterpolator.Anisotropy = 1.000000000000000000
+      DataSet.CompressedData = {
+        010000000A0000000A0000009D03000000000000789CEDD36F50D3051807F001
+        63FFDC0CB65FFC710BF7A329E972A414B1329E274D6836EEBA90BCC00A8F3FB6
+        62042718B323C0BB112748C0D2917F882165A0C8420F988D46C7050C044B2AC0
+        E0F01C1E1088E337360A05E30D77BDDCABAEEEF8DE7DDE3DF73CF73C778F078D
+        46F35F7138254B7C447550AC483F2213BFA23A9C2513C766CA64C9B4B5FC5FE3
+        E1264F3779B989EE266F3731DCC47413CB4D6C37ADDE7AF546ABBB31FE316FAD
+        EEDFAD5BCB7F277EBCE953A6C56BA0744A04B33E76188ED41E72FCE180BE8BE1
+        FD448F1D5844942DD39F82A5A66D2CE1273404F186F3272FB3B07D7C8B7453CD
+        3ABC3EB23D4352EC857DBBAAB6D16976D8D9C59889CF9A85AF3EBAFDFBE4B30E
+        786FDF95429DC80EA3136D69651D2E48F5D9E361D273F0C916FEA761063EEE86
+        0429279840AFC6B787727C09EC8CB6CAF22D7C6CC89992F51D704246DE13D94F
+        DD70C2D9C13085B4DB0EA7B2E34E37FA2E02C11D3B7EC7C6C5CA0E96F26AA300
+        770A94FD83320255CEBA1D33E501F8D267D3A95E7E24D6523FE0BD200239ED89
+        AD95AFBA20EE5BC5C08F410BF0A259B9EB66881DF2C3E8094A92850FEE11276A
+        5A0458774062B0C5102829088F8ED92F42E374A477C418897449F65BC5BA40E4
+        C79A5D253D7CFC728F4A4EBE6C87F052B6AA53E1046EFEC499E6AD0BF060247A
+        7DC1413E5E708988879B094CD0D45963AA44A8BD6EAC66CC93A8BF79C333802F
+        C4E7FDCEAB731F0930D29A3E1A7ED9132B163845EC5C0ADE1414E92695764836
+        9FABF839838D641497A9F62070EFD1E76AB7740A31A99E97F6CE1289DC441CFE
+        5C2B440F4390594D23B0DE6E2093DEE7E2BEEDA1A663A41D06CBC7267D9FA140
+        4E2BD7E87B2908AD3D471FC9F5C5E385A11213DF0F676A4E262F3F2271E89B2F
+        BA029A85189F57EAF7EB4A9FA9D4B642EDB1F59898E4FCAEAF630E428C49E6D6
+        60075CBC507274776F1734F40E89A5CA3930CF7FFFAEF66B3ADE9D58EA885A16
+        A0764C3FAEB942E0E2ADC095F72730ED4CB1AE77AF0F4EBB5AAD8F775350799F
+        2A5C77CD01B4C11C9E8D9C82BBB16527F6374C59D8B6FEAA16A6037E5A30662A
+        D2E740639557348D3A20D06049799A49C70D3A7FE94089376E7A2CA27963CC3C
+        CCF7FC95218C73404381FC4FF9250A7862F2EAED0F7EB184A47D5C5A587DDFA2
+        367EF8863E6F188A38096DA2FE8750DDABAE38C45C8626C18E94EC6E27048CDF
+        E2F94829C8ACBF2365045330105166DAFADA1CCCBEA0F92D8AD96ED9581D46C5
+        BF3E6BB994B5B9AA3D73D2F237FA847903}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '-5. - Model_Top'
+      DataSet.Name = 'Upper_Aquifer_Bottom'
+      DataSet.Classification = 'Layer Definition'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dsoTop
+      DataSet.CompressedData = {
+        010000000A0000000A0000009B03000000000000789CED946B4C937714C64B6F
+        5CC4D20DA4FFB70879B12F05D7081D0823B82A231B18C11B973904818E1651DE
+        81AB40A66CCC0BA85C64A60BEEE23210A74B18B7CD050716F2084369838B109C
+        3289C86480E362943AC14DD8FB85641FFB69D9129EE4F7E99C3CE79CE7C3B1E3
+        F1787E1CFBF5B974FE1E2DADD36768F3D85C3A23C7F04E1EAB0DA3D704FBD36B
+        E8CD393A3D9B1A9FB34FC75BD2FF557636C2B711818D086D446423621BB1B711
+        071B71B491C5AC17335ABC4DFC8F794B7DFF6EDF92FE3B5A5B9734FA7B961BE2
+        34E6A2754282E6ADC303A6670433B527838A0309F8C5BDEF0D1613140EB8172D
+        DFB012D2135733CFAB68A80F5836958CD3C89826A1C62E4F5C3CB57B991D8F60
+        FCF6A15D653FC9F0C0733624EC3A81FC66DD30634FF0F44080C7481305F9EBDB
+        C3A7CFD3302695747EB64D819AAAFA15A217181CB9E5CF9A1C18DC3FA7932155
+        01554A6B74D00E0A83A9519E96FD14C69EC4F43971FB64ECAA1CCD2A9243D479
+        A96636D41B3D5AA1F2975B0A7CE9A81CCB9231F8FE593CF5C74625341F4D6408
+        DC55889D4BABCE7761C057137FA5914202DB97FBED350A2E011F9FB23A12DC73
+        BEE21EE740633EBF34B2F78E02F1FEC61B8F940C8CE167CE5D50F9A16962BD28
+        744805BEB1B5AECBAC44C9EA948248BD0299DB776ED92825A8488FF8FCDD580A
+        827B7317EA2D140AA715C7A1E67C0A244E85AE0C1A4CFD23CAAD7E28EE69AA16
+        5B558879B0DBCEB9C4172BCB7A9BDB1714A8D25DCAF6D8E1899136FEDB115504
+        3F0B7F65C25C09A89CAF756B93694815C78E36F318F8B4C9FBDCEEFB22BD7639
+        9BF25C05B1BA9AB574F8E2D03697BB215CFDA5F733BB3F957B23A127BA21CD81
+        207FE49583C2720249B8EEEE6FDF1190BE2DFCE9F65578A353664C76F4C1644D
+        A56E7E4105B6BF27DDF98E2FEA374495EDE57C5A131BB567ABBD71FBADE7D933
+        FB089C26494043378146DFEFB1B3DD0D138121DD4E71042907871A23E2BCF078
+        665EABE0EEE87818FDD894C8E083A972EE0D3068BEDE65D6FBACC2654DB641C4
+        CD1FBD6C1A3E32CDE52D6FD4BECAC870F4C9664982458A8E1F2E8E4D5D21B06A
+        D8646312E76BA8F88A7D4A507E6328F0B4C00B27CD65957BAE7AC12CA8988A72
+        A5D066583F187993202B4D5228F9866061AACDFA5ACB8B2830AAFD1F2E93C2FE
+        4F65DEDC272B50D3F166C0F1200F8C1BCE8C0C1CF6C064514CA2A78182B8255F
+        F06329C117B5B3A5874F10044B740D965882D52131E6AE0F5DF15759CB596BB0
+        147B5F5E3779ED91147F0355498F14}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '-20'
+      DataSet.Name = 'Middle_Aquifer_Bottom'
+      DataSet.Classification = 'Layer Definition'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dsoTop
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '-30'
+      DataSet.Name = 'Lower_Aquifer_Bottom'
+      DataSet.Classification = 'Layer Definition'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dsoTop
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'ZoneID = 1'
+      DataSet.Name = 'HK_Par1_Zone'
+      DataSet.Classification = 'HK Parameter'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtBoolean
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = True
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.CompressedData = {
+        090000000A0000000A000000CE00000000000000789CED96410AC230104513AB
+        566F31E009DC0AEEDC780577015310AA056D7B020F6E37296E02115218EA7BF0
+        A08B9F4E9B5F4AAC316637F8F2ADF43727575FB9AE6EA56A9EF7AE7607B9340F
+        7F3EC951F6EFC280322CAA7281AA2C50954B54E50A55B9465596A8CA0DAA3295
+        DCE7E7DCE78DDCFFE7DCDFF336D154E8833EE8230E7DD0077DC4A10FFAA08F38
+        F4411FFFDA47D8C7F0FEE1B9CBAF7B9123478E1C3972E4C89123478E1CB9F9E5
+        0000000000000092B003BF5D3163D219665C3BD98CE8E871F06433E6CE0796FC
+        3AC1}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'MyMultiplier'
+      DataSet.Name = 'HK_Par2_Multiplier'
+      DataSet.Classification = 'HK Parameter'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = True
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.CompressedData = {
+        090000000A0000000A000000E202000000000000789CED965B4853711CC737AF
+        9B504976812E301F6C3D189A0A5688BF5AE0055D171B954B2CA30DB5557A52CB
+        55DA45B31BE843FA12790BC3D0104B8B921993600FDAC539A76E5EE6367D8990
+        92D44C301166911C9AB087537EBFF0E5C7E07B7E9CB3EFFF73387C1E8F1730E7
+        F38A2C514E5A8AE894429992ADCA1229CF3167B25529BB44D25CE9DCEFB40C55
+        9A822970E7411C131FE694DD604ED91DE6943D604ED913E694BD604ED91BE694
+        0530A7ECAC5CFDFDECEAEF0D57BF9F5D7D9E854EDA59A10FF4813ED8853ED007
+        FA6017FA401FE8835DE8037D2CD73E1CFFA3E3F91DF7EDFDDB2EE490430E39E4
+        90430E39E490430E39E4FEBF1C044110044110044110B45C6521B6A91229226B
+        1516327F3B9DBE7F8D95E2DA99B289361BB554E6B63DCC1C21E5BC4617E6DFF6
+        454DC7D5CE182DF4E24382E151A195026A12797161762A559F08FC6A5DFA3E91
+        2164F5C198612A79B233726AC24ABCFCDDE9153576CA90459745C94659F7A984
+        11B3DF9B87C8AFF56D44DEC7417ACD48D56E9F06A899CC17AED75BA863655190
+        566C23D351B1617CDDE2FB72CC7BB21D3A71473F850AB51EF5A36632696225C1
+        7C335D63F4F94D1B4D343E135EAEDBDA4F25EF7437AB8B2D947371C45CEF67A3
+        C86372C10FD3E2BD09324D47DF4C2F4D0BA27C92D7F75295E67DB4757B0FC530
+        470A95F14652AB5FC5DF9932D2267962E3E32DFD642CF62FAC3259A89C296B1C
+        ABB22DDAB74126D1DFDDD64D5A41FB2ADF1803A56A0E49EF9FECA2D079FD9A03
+        B73ADD4B9A7AE8ECBE96A4C0BD03347B5B2FB7A70E934E155D14126C5FD8F7E7
+        756CB3E265ECE15C4917055D096D58DBD94B6F249B05CF8E0F92B8E046B07872
+        98C6945349D9AD76A7F739E697BA3AFE6CB281AE6696CA1F7CEE23DFF0FCE7E1
+        9787E8405E9857FADC795AEA3EC7DC53B9E269C1A56ED22B263DFD7DCCD4589A
+        D1901CCF7EEEC007F8001FE0037C800FF0013EC007F8001FE0037C800FF0013E
+        C007F8001FE0037C800FF0013EFE553E7E02A76EA07C}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'ZoneID <> 1'
+      DataSet.Name = 'HK_Par2_Zone'
+      DataSet.Classification = 'HK Parameter'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtBoolean
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+      DataSet.CompressedData = {
+        090000000A0000000A000000D200000000000000789CED96310AC230184613AB
+        566F91C10BB88A38B97805B7802908D582B63D8107D725D5251024819FF63D78
+        D0E14BFFB45F29D14AA9CDC7A76B4D7FB5E6E22ADBD5ADA99AC7ADABEDCE9C9B
+        BB3B1DCDFE60B6AF428130348A7286A22C50947314E50245B944519628CA158A
+        3296D4E7E7D4E78DD4FFE7D4DFF33AD258E8833EE8230C7DD0077D84A10FFAA0
+        8F30F4411F53EDC3BF47FFFC7EDFE5CFBDC89123478E1C3972E4C89123478EDC
+        F872000000000000303DF43F7C17C65E3123EB0C3DACCD3623387A189C6DC6D8
+        79035C393DB1}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '2'
+      DataSet.Name = 'ZoneID'
+      DataSet.Classification = 'Data Sets|User Defined'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = []
+      DataSet.Orientation = dso3D
+      DataSet.CompressedData = {
+        090000000A0000000A0000000C01000000000000789CED99C10A824014452D2B
+        EB175A0DFD812DDBF7136DC252493085D4A27D1F9E1B490469162EDECC9C0B07
+        175EC4794706D1B9E779DB962AA9D5338B549CA45193D72A2D1FF7268F0E6ABF
+        6BCF1E8B6B5E5649AC2E6F752A8BE41CAA5756DF7EADF0E37B445866208A3988
+        C207512C40144B10C50A44118028D6200ADD4CFDFE3CF5FBC6D4FBF3D4CFF346
+        13DDE0031FF8180F3EF0818FF1E0031FF8180F3EF0E1AA8F6E8EDDFABBFB0E7A
+        D7A2478F1E3D7AF4E8D1A3478F1E3D7AF6F56CCBF09B81A93D5B227DCEF830B3
+        674BA4CFD9451FDDF1DF7AF1617674E6870F42880BD1FDBF6A12C3FDD9D49E2D
+        489F333ECCECD982F439BBE8A3BF6E5D77F8300F9DF9E103005CE00B5C734AC6}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = '0'
+      DataSet.Name = 'MyMultiplier'
+      DataSet.Classification = 'Data Sets|User Defined'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = []
+      DataSet.Orientation = dsoTop
+      DataSet.TwoDInterpolatorClass = 'TLinearSfrpackInterpolator'
+      DataSet.TwoDInterpolator.Anisotropy = 1.000000000000000000
+      DataSet.CompressedData = {
+        010000000A0000000A0000003902000000000000789C636460609004E2E2D412
+        85B2CC448590A2CCC4BCF49C5405CFBC92D4A2023DBD14865130540123919889
+        48CC4C24662112B31289D988C4EC44620E223127911816D6B03082F98D0DC9BE
+        5175F455370A061B78608F8BCE5148B55B91FAC0FEF6D7EC2C7F9147F6DEA78B
+        A67D3BF4D87EF782CA43730B9FDAA781C133384DC83CB75FDE2BFE5C7B60BFED
+        7CD095C5AD8FEC55974632789B3CB19F5A95A0F3E911E9E6295C31120AF47868
+        3F61A5A5DD8F6F8FEC19EA1DB2E62F7D625F10E23ECD2DE4194EF372386DFEFF
+        DC7ADF5E78DF119BBA0BF7EC7715F95631BDBE6BBFD5FE7679D39A07F667F8DA
+        F50FAA3FB6BF15A17EE5B318A6BB60744F88C571F53377EC8D390FB2AC7976DB
+        FED65E4F2703C6DBF68D4597EAB748DFB2FFFCC77CDE718D3BF613CE1E6F5BD4
+        FFC0BEACE2E9ED35C28FEDEDA2A3387EDFC234372864EF999B7F6ED8FFE270E3
+        8A13BF61BF70EF39F74786D7ED3D8AC25BD37CAED95755EDF4E9FA71CD5E262A
+        72E332B53BF6D7FA155B17DE7A603FAF68DAC6F70B1F63982715E274A95BF7AA
+        FD418ED3FC021E57EC33F606FB4E49BA6C6F0C0608FA6EC745E6095BAEDBE7F9
+        ED8ED171BE6BFFBFF352D4938C87F6C773DCDB8D0C9EC0CD43D7878B9EBFDD33
+        ACD2E9B2BD7EADF17AD18B37ECF73BC9726C8ABF67AFDED26CA0FEFDA1FDFBB4
+        1F31A5FB9E106D1E8CFEB87A35E3FFB82BF60D8553A366BFBD692F605EBFD9BC
+        E6BE7D409D095B16303D916A1E8C765CC0BBB6A5FAAAFDA5D4EFAC8A5CB7ED37
+        4E2D581FE7F3C01E00AAB250F1}
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'Kz'
+      DataSet.Name = 'Confining_Bed_Kz'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end
+    item
+      DataSetClass = 'TDataArray'
+      DataSetFormula = 'If((Kz = 0.), 0., (Kx / Kz))'
+      DataSet.Name = 'Vertical_Anisotropy'
+      DataSet.Classification = 'Hydrology'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.Orientation = dso3D
+    end>
+  Diffusivity = 0.000000001000000000
+  Exaggeration = 20.000000000000000000
+  FreeSurface = False
+  GridOptions.ChemicalDimensionX = True
+  GridOptions.ChemicalDimensionY = True
+  GridOptions.ChemicalDimensionZ = True
+  GridOptions.PrintOrientation = pgXY
+  ObjectList = <
+    item
+      ClassTypeName = 'TScreenObject'
+      HigherElevationFormula = 'Model_Top'
+      LowerElevationFormula = 'Upper_Aquifer_Bottom'
+      Points = <
+        item
+          X = 47.378277153557960000
+          Y = -45.817727840199610000
+        end>
+      ScreenObject.Name = 'CHD_Boundary_1'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecTwo
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = 'Model_Top'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = 'Upper_Aquifer_Bottom'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = False
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = True
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.InterpValues = <>
+      ScreenObject.ModflowChdBoundary.Values = <
+        item
+          StartTime = -1.000000000000000000
+          EndHead = '30'
+          StartHead = '30'
+        end>
+      ScreenObject.ModflowChdBoundary.Parameters = <>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      HigherElevationFormula = 'Model_Top'
+      LowerElevationFormula = 'Upper_Aquifer_Bottom'
+      Points = <
+        item
+          X = 964.981273408239600000
+          Y = -950.936329588015100000
+        end>
+      ScreenObject.Name = 'CHD_Boundary_2'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecTwo
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = 'Model_Top'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = 'Upper_Aquifer_Bottom'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = False
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = True
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.InterpValues = <>
+      ScreenObject.ModflowChdBoundary.Values = <
+        item
+          StartTime = -1.000000000000000000
+          EndHead = '29'
+          StartHead = '29'
+        end>
+      ScreenObject.ModflowChdBoundary.Parameters = <>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      HigherElevationFormula = 'Model_Top'
+      LowerElevationFormula = 'Upper_Aquifer_Bottom'
+      Points = <
+        item
+          X = 949.375780274656800000
+          Y = -33.333333333333250000
+        end
+        item
+          X = 943.133583021223600000
+          Y = -457.802746566791500000
+        end>
+      ScreenObject.Name = 'Interpolated_CHD_Boundary'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecTwo
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = 'Model_Top'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = 'Upper_Aquifer_Bottom'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = False
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = True
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.InterpValues = <>
+      ScreenObject.ModflowChdBoundary.Values = <>
+      ScreenObject.ModflowChdBoundary.Parameters = <
+        item
+          Param.ParamName = 'CHD_Par1'
+          Param = <
+            item
+              StartTime = -1.000000000000000000
+              EndHead = 'Interpolate(Y, 1., -1000., 0., 0.)'
+              StartHead = 'Interpolate(Y, 1., -1000., 0., 0.)'
+            end>
+        end
+        item
+          Param.ParamName = 'CHD_Par2'
+          Param = <
+            item
+              StartTime = -1.000000000000000000
+              EndHead = 'Interpolate(Y, 1., 0., 0., -1000.)'
+              StartHead = 'Interpolate(Y, 1., 0., 0., -1000.)'
+            end>
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'Model_Top')
+      DataSetFormulas.Strings = (
+        '9')
+      Points = <
+        item
+          X = 325.156054931335800000
+          Y = -673.158551810237600000
+        end
+        item
+          X = 749.625468164794100000
+          Y = -273.657927590512200000
+        end>
+      ScreenObject.Name = 'Model_Top_1'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'Model_Top')
+      DataSetFormulas.Strings = (
+        '5')
+      Points = <
+        item
+          X = 281.460674157303000000
+          Y = -788.639200998752000000
+        end
+        item
+          X = 471.847690387016000000
+          Y = -744.943820224719100000
+        end
+        item
+          X = 674.719101123596000000
+          Y = -517.103620474407000000
+        end
+        item
+          X = 793.320848938827000000
+          Y = -370.411985018727000000
+        end
+        item
+          X = 840.137328339576200000
+          Y = -214.357053682897000000
+        end
+        item
+          X = 730.898876404495000000
+          Y = -151.935081148564000000
+        end
+        item
+          X = 521.785268414481900000
+          Y = -236.204744069913000000
+        end
+        item
+          X = 368.851435705368000000
+          Y = -395.380774032460000000
+        end
+        item
+          X = 234.644194756554000000
+          Y = -557.677902621723000000
+        end
+        item
+          X = 209.675405742821000000
+          Y = -666.916354556804000000
+        end
+        item
+          X = 281.460674157303000000
+          Y = -788.639200998752000000
+        end>
+      ScreenObject.Name = 'Model_Top_2'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'Model_Top')
+      DataSetFormulas.Strings = (
+        '1')
+      Points = <
+        item
+          X = 97.315855181023620000
+          Y = -479.650436953808000000
+        end
+        item
+          X = 13.046192259675290000
+          Y = -645.068664169788300000
+        end
+        item
+          X = 119.163545568039900000
+          Y = -819.850187265918100000
+        end
+        item
+          X = 371.972534332084900000
+          Y = -910.362047440699600000
+        end
+        item
+          X = 518.664169787765300000
+          Y = -929.088639200999200000
+        end
+        item
+          X = 702.808988764045200000
+          Y = -729.338327091136500000
+        end
+        item
+          X = 830.774032459425900000
+          Y = -595.131086142322400000
+        end
+        item
+          X = 946.254681647940200000
+          Y = -395.380774032459700000
+        end
+        item
+          X = 989.950062421972700000
+          Y = -214.357053682896700000
+        end
+        item
+          X = 977.465667915106200000
+          Y = -114.481897627965300000
+        end
+        item
+          X = 921.285892634207400000
+          Y = 16.604244694132150000
+        end
+        item
+          X = 805.805243445693200000
+          Y = 54.057428214731550000
+        end
+        item
+          X = 687.203495630462100000
+          Y = 57.178526841448040000
+        end
+        item
+          X = 584.207240948814100000
+          Y = 50.936329588014820000
+        end
+        item
+          X = 493.695380774032400000
+          Y = 13.483146067415650000
+        end
+        item
+          X = 387.578027465667900000
+          Y = -52.059925093633180000
+        end
+        item
+          X = 268.976279650436900000
+          Y = -145.692883895131300000
+        end
+        item
+          X = 187.827715355805200000
+          Y = -214.357053682896700000
+        end
+        item
+          X = 97.315855181023620000
+          Y = -479.650436953808000000
+        end>
+      ScreenObject.Name = 'Model_Top_3'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'Model_Top')
+      DataSetFormulas.Strings = (
+        '-1')
+      Points = <
+        item
+          X = 81.710362047440520000
+          Y = 163.295880149812500000
+        end
+        item
+          X = -61.860174781523250000
+          Y = 25.967540574281880000
+        end
+        item
+          X = -242.883895131086400000
+          Y = -223.720349563046500000
+        end
+        item
+          X = -224.157303370786800000
+          Y = -585.767790262172900000
+        end
+        item
+          X = 19.288389513108430000
+          Y = -1122.596754057429000000
+        end
+        item
+          X = 537.390761548064800000
+          Y = -1241.198501872660000000
+        end
+        item
+          X = 874.469413233458200000
+          Y = -960.299625468165400000
+        end
+        item
+          X = 1055.493133583021000000
+          Y = -641.947565543071700000
+        end
+        item
+          X = 1236.516853932584000000
+          Y = -261.173533083645900000
+        end
+        item
+          X = 1217.790262172285000000
+          Y = 50.936329588014590000
+        end
+        item
+          X = 1086.704119850188000000
+          Y = 250.686641697877300000
+        end
+        item
+          X = 830.774032459425800000
+          Y = 313.108614232209700000
+        end
+        item
+          X = 462.484394506866500000
+          Y = 306.866416978776200000
+        end
+        item
+          X = 81.710362047440520000
+          Y = 163.295880149812500000
+        end>
+      ScreenObject.Name = 'Model_Top_4'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'MyMultiplier')
+      DataSetFormulas.Strings = (
+        '0.5')
+      Points = <
+        item
+          X = 362.609238451934500000
+          Y = -292.384519350812700000
+        end>
+      ScreenObject.Name = 'Multiplier_1'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'MyMultiplier')
+      DataSetFormulas.Strings = (
+        '0.7')
+      Points = <
+        item
+          X = 718.414481897627400000
+          Y = -386.017478152311000000
+        end>
+      ScreenObject.Name = 'Multiplier_2'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'MyMultiplier')
+      DataSetFormulas.Strings = (
+        '0.3')
+      Points = <
+        item
+          X = 437.515605493133100000
+          Y = -610.736579275906300000
+        end>
+      ScreenObject.Name = 'Multiplier_3'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecZero
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = True
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      DataSetNames.Strings = (
+        'ZoneID')
+      DataSetFormulas.Strings = (
+        '1')
+      HigherElevationFormula = '-500'
+      LowerElevationFormula = '-1000'
+      Points = <
+        item
+          X = 337.060454413658300000
+          Y = -0.587205287736455800
+        end
+        item
+          X = 337.060454413658300000
+          Y = -16.199019633728010000
+        end
+        item
+          X = 674.613197029692200000
+          Y = -16.199019633728010000
+        end
+        item
+          X = 674.613197029692200000
+          Y = -0.587205287736455800
+        end
+        item
+          X = 337.060454413658300000
+          Y = -0.587205287736455800
+        end>
+      ScreenObject.Name = 'Zone_1'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecTwo
+      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '-500'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '-1000'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = False
+      ScreenObject.SetValuesOfEnclosedCells = True
+      ScreenObject.SetValuesOfIntersectedCells = False
+      ScreenObject.ViewDirection = vdFront
+      ScreenObject.Visible = False
+      ScreenObject.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Values.UsePHAST_Interpolation = False
+        end>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      SelectedVertices = <>
+      MixtureFormulas.Strings = (
+        '')
+    end>
+  PhastGrid.ColumnCount = -1
+  PhastGrid.ColumnDirection = cdWestToEast
+  PhastGrid.LayerCount = -1
+  PhastGrid.LayerDirection = ldBottomToTop
+  PhastGrid.RowCount = -1
+  PhastGrid.RowDirection = rdSouthToNorth
+  PhastGrid.SelectedColumn = 0
+  PhastGrid.SelectedLayer = 0
+  PhastGrid.SelectedRow = 0
+  PhastGrid.DisplayColumn = -1
+  PhastGrid.DisplayRow = -1
+  PhastGrid.DisplayLayer = -1
+  PhastGrid.ColumnPositions = ()
+  PhastGrid.RowPositions = ()
+  PhastGrid.LayerElevations = ()
+  PrintFrequency.SaveFinalHeads = False
+  PrintFrequency = <
+    item
+      BC_FlowRatesUnits = fuDefault
+      BoundaryConditions = False
+      ComponentsUnits = fuDefault
+      ConductancesUnits = fuDefault
+      FlowBalanceUnits = fuEnd
+      ForceChemistryPrintUnits = fuDefault
+      HDF_ChemistryUnits = fuEnd
+      HDF_HeadsUnits = fuEnd
+      HDF_VelocitiesUnits = fuEnd
+      HeadsUnits = fuEnd
+      ProgressStatisticsUnits = fuEnd
+      RestartFrequency.Value = 0.000000000000000000
+      RestartFrequencyUnits = fuDefault
+      VelocitiesUnits = fuDefault
+      WellsUnits = fuEnd
+      XYZ_ChemistryUnits = fuDefault
+      XYZ_ComponentsUnits = fuDefault
+      XYZ_HeadsUnits = fuDefault
+      XYZ_VelocitiesUnits = fuDefault
+      XYZ_WellsUnits = fuDefault
+      EndOfPeriodDefault = False
+    end>
+  PrintInitial.PrintInitialBoundaryConditions = False
+  PrintInitial.PrintInitialComponents = False
+  PrintInitial.PrintInitialConductance = False
+  PrintInitial.PrintInitialEchoInput = True
+  PrintInitial.PrintInitialFluidProperties = True
+  PrintInitial.PrintInitialForceChemistryPrint = False
+  PrintInitial.PrintInitialHDF_Chemistry = True
+  PrintInitial.PrintInitialHDF_Heads = True
+  PrintInitial.PrintInitialHDF_SteadyFlowVelocites = True
+  PrintInitial.PrintInitialHeads = True
+  PrintInitial.PrintInitialMediaProperties = False
+  PrintInitial.PrintInitialSolutionMethod = True
+  PrintInitial.PrintInitialSteadyFlowVelocities = False
+  PrintInitial.PrintInitialWells = True
+  PrintInitial.PrintInitialXYZ_Chemistry = False
+  PrintInitial.PrintInitialXYZ_Components = False
+  PrintInitial.PrintInitialXYZ_Heads = False
+  PrintInitial.PrintInitialXYZ_SteadyFlowVelocities = False
+  PrintInitial.PrintInitialXYZ_Wells = False
+  SoluteTransport = False
+  SolutionOptions.CrossDispersion = False
+  SolutionOptions.RebalanceFraction.Value = 0.500000000000000000
+  SolutionOptions.RebalanceByCell = False
+  SolutionOptions.TimeDifferencing = 1.000000000000000000
+  SolutionOptions.Tolerance = 0.000000000100000000
+  SteadyFlowOptions.FlowBalanceTolerance = 0.001000000000000000
+  SteadyFlowOptions.HeadChangeLimit = 1.000000000000000000
+  SteadyFlowOptions.HeadTolerance = 0.000010000000000000
+  SteadyFlowOptions.MaximumTimeStep = 1000.000000000000000000
+  SteadyFlowOptions.MinimumTimeStep = 1.000000000000000000
+  SteadyFlowOptions.SteadyFlow = False
+  Times.StartTime.Value = 0.000000000000000000
+  Times = <
+    item
+      TimeStepLength = 1.000000000000000000
+      EndingTime = 1.000000000000000000
+    end>
+  Title.Strings = (
+    'PHAST input generated by GoPhast.')
+  Top = 312
+  TopViewHeight = 253
+  TopViewWidth = 444
+  TopX = -593.890824585007100000
+  TopY = -1053.351776077149000000
+  Units.DefaultDispersivityUnits = luMeters
+  Units.DefaultFluxLengthUnits = luMeters
+  Units.DefaultFluxTimeUnits = tuSeconds
+  Units.DefaultHeadUnits = luMeters
+  Units.DefaultHorizontalGridUnits = luMeters
+  Units.DefaultHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultLeakyHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultLeakyHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultLeakyThicknessUnits = luMeters
+  Units.DefaultRiverBedHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultRiverBedHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultRiverBedThicknessUnits = luMeters
+  Units.DefaultSpecificStorageUnits = iluMeters
+  Units.DefaultTimeUnits = tuSeconds
+  Units.DefaultVerticalGridUnits = luMeters
+  Units.DefaultWellDiameterUnits = luCentimeters
+  Units.DefaultWellFlowTimeUnits = tuSeconds
+  Units.DefaultWellFlowVolumnUnits = vuMeters3
+  UseWaterTable = False
+  Version = '2.4.0.25'
+  ModflowGrid.ColumnCount = 10
+  ModflowGrid.ColumnDirection = cdWestToEast
+  ModflowGrid.LayerCount = 9
+  ModflowGrid.LayerDirection = ldTopToBottom
+  ModflowGrid.RowCount = 10
+  ModflowGrid.RowDirection = rdNorthToSouth
+  ModflowGrid.SelectedColumn = 0
+  ModflowGrid.SelectedLayer = 0
+  ModflowGrid.SelectedRow = 9
+  ModflowGrid.DisplayColumn = 0
+  ModflowGrid.DisplayRow = 10
+  ModflowGrid.DisplayLayer = 0
+  ModflowGrid.ColumnPositions = (
+    0.000000000000000000
+    100.000000000000000000
+    200.000000000000000000
+    300.000000000000000000
+    400.000000000000000000
+    500.000000000000000000
+    600.000000000000000000
+    700.000000000000000000
+    800.000000000000000000
+    900.000000000000000000
+    1000.000000000000000000)
+  ModflowGrid.RowPositions = (
+    0.000000000000000000
+    -100.000000000000000000
+    -200.000000000000000000
+    -300.000000000000000000
+    -400.000000000000000000
+    -500.000000000000000000
+    -600.000000000000000000
+    -700.000000000000000000
+    -800.000000000000000000
+    -900.000000000000000000
+    -1000.000000000000000000)
+  ModelSelection = msModflow
+  LayerStructure = <
+    item
+      AquiferName = 'Model_Top'
+      AquiferType = 0
+      DataArrayName = 'Model_Top'
+      GrowthMethod = gmUniform
+      GrowthRate = 1.200000000000000000
+      LayerCollection = <>
+      Simulated = True
+      InterblockTransmissivityMethod = 0
+      VerticalHydraulicConductivityMethod = 0
+      UseStartingHeadForSaturatedThickness = False
+      HorizontalAnisotropy = 1.000000000000000000
+      SubNoDelayBedLayers = <>
+      SubDelayBedLayers = <>
+    end
+    item
+      AquiferName = 'Upper Aquifer'
+      AquiferType = 0
+      DataArrayName = 'Upper_Aquifer_Bottom'
+      GrowthMethod = gmUniform
+      GrowthRate = 1.200000000000000000
+      LayerCollection = <>
+      Simulated = True
+      InterblockTransmissivityMethod = 0
+      VerticalHydraulicConductivityMethod = 0
+      UseStartingHeadForSaturatedThickness = False
+      HorizontalAnisotropy = 1.000000000000000000
+      SubNoDelayBedLayers = <>
+      SubDelayBedLayers = <>
+    end
+    item
+      AquiferName = 'Middle Aquifer'
+      AquiferType = 0
+      DataArrayName = 'Middle_Aquifer_Bottom'
+      GrowthMethod = gmMiddle
+      GrowthRate = 1.500000000000000000
+      LayerCollection = <
+        item
+          Fraction = 0.922330097087378700
+        end
+        item
+          Fraction = 0.805825242718446600
+        end
+        item
+          Fraction = 0.631067961165048600
+        end
+        item
+          Fraction = 0.368932038834951500
+        end
+        item
+          Fraction = 0.194174757281553400
+        end
+        item
+          Fraction = 0.077669902912621350
+        end>
+      Simulated = True
+      InterblockTransmissivityMethod = 0
+      VerticalHydraulicConductivityMethod = 0
+      UseStartingHeadForSaturatedThickness = False
+      HorizontalAnisotropy = 1.000000000000000000
+      SubNoDelayBedLayers = <>
+      SubDelayBedLayers = <>
+    end
+    item
+      AquiferName = 'Lower Aquifer'
+      AquiferType = 0
+      DataArrayName = 'Lower_Aquifer_Bottom'
+      GrowthMethod = gmUniform
+      GrowthRate = 1.200000000000000000
+      LayerCollection = <>
+      Simulated = True
+      InterblockTransmissivityMethod = 0
+      VerticalHydraulicConductivityMethod = 0
+      UseStartingHeadForSaturatedThickness = False
+      HorizontalAnisotropy = 1.000000000000000000
+      SubNoDelayBedLayers = <>
+      SubDelayBedLayers = <>
+    end>
+  GuiSettings.FrontHeight = 194
+  GuiSettings.Height = 607
+  GuiSettings.FrontX = -593.890824585007100000
+  GuiSettings.FrontY = -33.430722425591900000
+  GuiSettings.Left = 270
+  GuiSettings.MagnificationFront = 0.181418743401683400
+  GuiSettings.MagnificationSide = 0.181418743401683400
+  GuiSettings.MagnificationTop = 0.181418743401683400
+  GuiSettings.SideWidth = 184
+  GuiSettings.SideX = -32.741708723610530000
+  GuiSettings.SideY = -1053.351776077149000000
+  GuiSettings.Top = 312
+  GuiSettings.TopViewHeight = 253
+  GuiSettings.TopViewWidth = 444
+  GuiSettings.TopX = -593.890824585007100000
+  GuiSettings.TopY = -1053.351776077149000000
+  GuiSettings.Width = 646
+  GuiSettings.WindowState = wsNormal
+  GuiSettings.TopHorizontalDigits = 0
+  GuiSettings.TopHorizontalPrecision = 5
+  GuiSettings.TopVerticalDigits = 0
+  GuiSettings.TopVerticalPrecision = 5
+  GuiSettings.FrontHorizontalDigits = 0
+  GuiSettings.FrontHorizontalPrecision = 5
+  GuiSettings.FrontVerticalDigits = 0
+  GuiSettings.FrontVerticalPrecision = 5
+  GuiSettings.SideHorizontalDigits = 0
+  GuiSettings.SideHorizontalPrecision = 5
+  GuiSettings.SideVerticalDigits = 0
+  GuiSettings.SideVerticalPrecision = 5
+  ModflowOptions.HDry = -2E20
+  ModflowOptions.HNoFlow = -1E20
+  ModflowStressPeriods = <
+    item
+      DrawDownReference = False
+      MaxLengthOfFirstTimeStep = 1.000000000000000000
+      PeriodLength = 1.000000000000000000
+      StartTime = -1.000000000000000000
+      StressPeriodType = sptSteadyState
+      TimeStepMultiplier = 1.000000000000000000
+    end>
+  ModflowOutputControl.Compact = True
+  ModflowOutputControl.HeadOC.ExternalFormat.ExtFormatPrefix = efp1P
+  ModflowOutputControl.HeadOC.ExternalFormat.NumberFormat = nfE
+  ModflowOutputControl.HeadOC.ExternalFormat.Width = 13
+  ModflowOutputControl.HeadOC.ExternalFormat.Decimals = 5
+  ModflowOutputControl.HeadOC.Frequency = 1
+  ModflowOutputControl.HeadOC.FrequencyChoice = fcTimeSteps
+  ModflowOutputControl.HeadOC.OutputFileType = oftText
+  ModflowOutputControl.HeadOC.PrintFormat = nf10G_11_4
+  ModflowOutputControl.HeadOC.PrintInListing = False
+  ModflowOutputControl.HeadOC.SaveInExternalFile = True
+  ModflowOutputControl.HeadOC.Wrapping = wStrip
+  ModflowOutputControl.DrawdownOC.ExternalFormat.ExtFormatPrefix = efp1P
+  ModflowOutputControl.DrawdownOC.ExternalFormat.NumberFormat = nfE
+  ModflowOutputControl.DrawdownOC.ExternalFormat.Width = 13
+  ModflowOutputControl.DrawdownOC.ExternalFormat.Decimals = 5
+  ModflowOutputControl.DrawdownOC.Frequency = 1
+  ModflowOutputControl.DrawdownOC.FrequencyChoice = fcTimeSteps
+  ModflowOutputControl.DrawdownOC.OutputFileType = oftText
+  ModflowOutputControl.DrawdownOC.PrintFormat = nf10G_11_4
+  ModflowOutputControl.DrawdownOC.PrintInListing = False
+  ModflowOutputControl.DrawdownOC.SaveInExternalFile = True
+  ModflowOutputControl.DrawdownOC.Wrapping = wStrip
+  ModflowOutputControl.BudgetFrequency = 1
+  ModflowOutputControl.BudgetFrequencyChoice = fcTimeSteps
+  ModflowSteadyParameters = <
+    item
+      ParameterName = 'HK_Par1'
+      ParameterType = ptLPF_HK
+      Value = 150.000000000000000000
+      UseMultiplier = False
+      UseZone = True
+      ZoneName = 'HK_Par1_Zone'
+    end
+    item
+      ParameterName = 'HK_Par2'
+      ParameterType = ptLPF_HK
+      Value = 200.000000000000000000
+      MultiplierName = 'HK_Par2_Multiplier'
+      UseMultiplier = True
+      UseZone = True
+      ZoneName = 'HK_Par2_Zone'
+    end>
+  ModflowWettingOptions.WettingActive = False
+  ModflowWettingOptions.WettingFactor = 1.000000000000000000
+  ModflowWettingOptions.WettingEquation = 0
+  ModflowTransientParameters = <
+    item
+      ParameterName = 'CHD_Par1'
+      ParameterType = ptCHD
+      Value = 20.000000000000000000
+    end
+    item
+      ParameterName = 'CHD_Par2'
+      ParameterType = ptCHD
+      Value = 30.000000000000000000
+    end>
+  ModflowPackages.ChdBoundary.IsSelected = True
+  ModflowPackages.ChdBoundary.Comments.Strings = (
+    
+      'These comments will be printed at the beginning of the CHD input' +
+      ' file.')
+  ModflowPackages.GhbBoundary.IsSelected = False
+  ModflowPackages.LpfPackage.IsSelected = True
+  ModflowPackages.LpfPackage.UseConstantCV = False
+  ModflowPackages.LpfPackage.UseSaturatedThickness = False
+  ModflowPackages.LpfPackage.UseStorageCoefficient = False
+  ModflowPackages.PcgPackage.IsSelected = True
+  ModflowPackages.PcgPackage.NPCOND = pmCholesky
+  ModflowPackages.PcgPackage.HCLOSE.Value = 0.001000000000000000
+  ModflowPackages.PcgPackage.RCLOSE.Value = 1000.000000000000000000
+  ModflowPackages.PcgPackage.RELAX.Value = 1.000000000000000000
+  ModflowPackages.PcgPackage.NBPOL = peeEstimate
+  ModflowPackages.PcgPackage.MUTPCG = ppsAll
+  ModflowPackages.PcgPackage.DAMPPCG.Value = 1.000000000000000000
+  ModflowPackages.PcgPackage.DAMPPCGT.Value = 1.000000000000000000
+  ModflowPackages.WelPackage.IsSelected = False
+  ModflowPackages.RivPackage.IsSelected = False
+  ModflowPackages.DrnPackage.IsSelected = False
+  ModflowPackages.DrtPackage.IsSelected = False
+  ModflowPackages.RchPackage.IsSelected = False
+  ModflowPackages.RchPackage.LayerOption = loTop
+  ModflowPackages.RchPackage.TimeVaryingLayers = False
+  ModflowPackages.EvtPackage.IsSelected = False
+  ModflowPackages.EvtPackage.LayerOption = loTop
+  ModflowPackages.EvtPackage.TimeVaryingLayers = False
+  ModflowPackages.EtsPackage.IsSelected = False
+  ModflowPackages.EtsPackage.LayerOption = loTop
+  ModflowPackages.EtsPackage.TimeVaryingLayers = False
+  ModflowPackages.ResPackage.IsSelected = False
+  ModflowPackages.ResPackage.LayerOption = loTop
+  ModflowPackages.ResPackage.TimeVaryingLayers = False
+  ModflowPackages.LakPackage.IsSelected = False
+  ModflowPackages.LakPackage.ConvergenceCriterion = 0.000010000000000000
+  ModflowPackages.LakPackage.Theta = 0.500000000000000000
+  ModflowPackages.LakPackage.SurfDepth.Value = 0.200000000000000000
+  ModflowPackages.SfrPackage.IsSelected = False
+  ModflowPackages.SfrPackage.Dleak = 0.000100000000000000
+  ModflowPackages.SfrPackage.Isfropt = 0
+  ModflowPackages.SfrPackage.Nstrail = 10
+  ModflowPackages.SfrPackage.Isuzn = 10
+  ModflowPackages.SfrPackage.Nsfrsets = 30
+  ModflowPackages.SfrPackage.KinematicRouting = False
+  ModflowPackages.SfrPackage.KinematicRoutingTolerance = 0.000100000000000000
+  ModflowPackages.SfrPackage.KinematicRoutingWeight = 1.000000000000000000
+  ModflowPackages.SfrPackage.GageOverallBudget = False
+  ModflowPackages.UzfPackage.IsSelected = False
+  ModflowPackages.UzfPackage.LayerOption = loTop
+  ModflowPackages.UzfPackage.VerticalKSource = 1
+  ModflowPackages.UzfPackage.RouteDischargeToStreams = True
+  ModflowPackages.UzfPackage.SimulateET = True
+  ModflowPackages.UzfPackage.NumberOfTrailingWaves = 15
+  ModflowPackages.UzfPackage.NumberOfWaveSets = 20
+  ModflowPackages.UzfPackage.PrintSummary = 0
+  ModflowPackages.UzfPackage.DepthOfUndulations = 1.000000000000000000
+  ModflowPackages.GmgPackage.IsSelected = False
+  ModflowPackages.GmgPackage.RCLOSE.Value = 0.000010000000000000
+  ModflowPackages.GmgPackage.IITER = 100
+  ModflowPackages.GmgPackage.HCLOSE.Value = 0.000010000000000000
+  ModflowPackages.GmgPackage.MXITER = 100
+  ModflowPackages.GmgPackage.DAMP.Value = 1.000000000000000000
+  ModflowPackages.GmgPackage.IADAMP = 0
+  ModflowPackages.GmgPackage.IOUTGMG = 1
+  ModflowPackages.GmgPackage.IUNITMHC = False
+  ModflowPackages.GmgPackage.ISM = 0
+  ModflowPackages.GmgPackage.ISC = 1
+  ModflowPackages.GmgPackage.DUP.Value = 0.700000000000000000
+  ModflowPackages.GmgPackage.DLOW.Value = 0.001000000000000000
+  ModflowPackages.GmgPackage.CHGLIMIT.Value = 0.001000000000000000
+  ModflowPackages.GmgPackage.RELAX.Value = 1.000000000000000000
+  ModflowPackages.SipPackage.IsSelected = False
+  ModflowPackages.SipPackage.MXITER = 100
+  ModflowPackages.SipPackage.NPARM = 5
+  ModflowPackages.SipPackage.ACCL.Value = 1.000000000000000000
+  ModflowPackages.SipPackage.HCLOSE.Value = 0.001000000000000000
+  ModflowPackages.SipPackage.IPCALC = 1
+  ModflowPackages.SipPackage.WSEED.Value = 9999.000000000000000000
+  ModflowPackages.SipPackage.IPRSIP = 999
+  ModflowPackages.De4Package.IsSelected = False
+  ModflowPackages.De4Package.ITMX = 5
+  ModflowPackages.De4Package.MXUP = 0
+  ModflowPackages.De4Package.MXLOW = 0
+  ModflowPackages.De4Package.MXBW = 0
+  ModflowPackages.De4Package.IFREQ = 3
+  ModflowPackages.De4Package.MUTD4 = 0
+  ModflowPackages.De4Package.ACCL.Value = 1.000000000000000000
+  ModflowPackages.De4Package.HCLOSE.Value = 0.001000000000000000
+  ModflowPackages.De4Package.IPRD4 = 1
+  ModflowPackages.HobPackage.IsSelected = False
+  ModflowPackages.HobPackage.DryHead = -1000000.000000000000000000
+  ModflowPackages.HfbPackage.IsSelected = False
+  ModflowPackages.ModPath.IsSelected = False
+  ModflowPackages.ModPath.MaximumSize = 0
+  ModflowPackages.ModPath.Compact = False
+  ModflowPackages.ModPath.Binary = False
+  ModflowPackages.ModPath.OutputMode = mopEndpoints
+  ModflowPackages.ModPath.OutputTimes = <>
+  ModflowPackages.ModPath.StopAfterMaxTime = False
+  ModflowPackages.ModPath.TrackingDirection = tdForward
+  ModflowPackages.ModPath.WeakSink = wsPassThrough
+  ModflowPackages.ModPath.StopInZone = False
+  ModflowPackages.ModPath.StopZoneNumber = 0
+  ModflowPackages.ModPath.EndpointWrite = ewAll
+  ModflowPackages.ModPath.ComputeBudgetInAllCells = False
+  ModflowPackages.ModPath.Summarize = False
+  ModflowPackages.ModPath.TimeSeriesMethod = tsmUniform
+  ModflowPackages.ModPath.TimeSeriesInterval = 1.000000000000000000
+  ModflowPackages.ModPath.TimeSeriesMaxCount = 0
+  ModflowPackages.ChobPackage.IsSelected = False
+  ModflowPackages.DrobPackage.IsSelected = False
+  ModflowPackages.GbobPackage.IsSelected = False
+  ModflowPackages.RvobPackage.IsSelected = False
+  ModflowPackages.HufPackage.IsSelected = False
+  ModflowPackages.HufPackage.ReferenceChoice = hrcModelTop
+  ModflowPackages.Mnw2Package.IsSelected = False
+  ModflowPackages.Mnw2Package.CreateWellFile = False
+  ModflowPackages.Mnw2Package.SummarizeByWell = False
+  ModflowPackages.Mnw2Package.SummarizeByNode = False
+  ModflowPackages.BcfPackage.IsSelected = False
+  ModflowPackages.SubPackage.IsSelected = False
+  ModflowPackages.SubPackage.PrintFormats.SubsidenceFormat = 0
+  ModflowPackages.SubPackage.PrintFormats.CompactionByModelLayerFormat = 0
+  ModflowPackages.SubPackage.PrintFormats.CompactionByInterbedSystemFormat = 0
+  ModflowPackages.SubPackage.PrintFormats.VerticalDisplacementFormat = 0
+  ModflowPackages.SubPackage.PrintFormats.NoDelayPreconsolidationHeadFormat = 0
+  ModflowPackages.SubPackage.PrintFormats.DelayPreconsolidationHeadFormat = 0
+  ModflowPackages.SubPackage.PrintChoices = <>
+  ModflowPackages.SubPackage.NumberOfNodes = 10
+  ModflowPackages.SubPackage.AccelerationParameter2 = 1.000000000000000000
+  ModflowPackages.SubPackage.MinIterations = 5
+  ModflowPackages.SubPackage.SaveDelayRestart = False
+  ModflowPackages.SubPackage.BinaryOutputChoice = sbocSingleFile
+  ModflowPackages.ZoneBudget.IsSelected = False
+  ModflowPackages.ZoneBudget.CompositeZones = <>
+  ModflowPackages.ZoneBudget.ExportZBLST = True
+  ModflowPackages.ZoneBudget.ExportCSV = True
+  ModflowPackages.ZoneBudget.ExportCSV2 = True
+  GlobalVariables = <>
+  ModelInputFiles.Strings = (
+    'C:\WRDAPP\MF2005.1_7\Bin\mf2005.exe'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.lst'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.cbc'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.dis'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.bas'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.oc'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.fhd'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.fdn'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.pcg'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.lpf'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.chd'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.zon'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.mlt'
+    'D:\Colab\GWModelTools\ModelMuse\ExampleModel.pval')
+  ModelFileName = 'D:\Colab\GWModelTools\ModelMuse\ExampleModel.gpt'
+  AlternateSolver = False
+  AlternateFlowPackage = False
+  HeadFluxObservations = <>
+  DrainObservations = <>
+  GhbObservations = <>
+  RiverObservations = <>
+  ObservationPurpose = ofObserved
+  HydrogeologicUnits = <>
+  HufParameters = <>
+  DisplaySettings = <>
+end

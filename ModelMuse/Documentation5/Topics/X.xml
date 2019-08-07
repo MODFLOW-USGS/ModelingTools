@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">X</title>
+  <keywords>
+    <keyword translate="true">X</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">X</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">X</text><text styleclass="Normal" translate="true"> returns the X coordinate of a node or the element center in global coordinates (fig. 19). (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Grid" styleclass="Normal" translate="true">The Grid</link><text styleclass="Normal" translate="true">.)</text></para>
+    <para styleclass="Normal"><snippet src="Figure_19"/></para>
+  </body>
+</topic>

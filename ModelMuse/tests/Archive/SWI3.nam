@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 SWI3.lst REPLACE
+DATA(BINARY)      9 SWI3.cbc REPLACE
+DIS              12 SWI3.dis OLD
+BAS6             13 SWI3.bas OLD
+OC               39 SWI3.oc OLD
+DATA             37 SWI3.fhd REPLACE
+DATA             38 SWI3.fdn REPLACE
+PCG              18 SWI3.pcg OLD
+BCF6             64 SWI3.bcf OLD
+GHB              19 SWI3.ghb OLD
+WEL              20 SWI3.wel OLD
+SWI2            168 SWI3.swi OLD
+DATA(BINARY)    170 SWI3.zta REPLACE

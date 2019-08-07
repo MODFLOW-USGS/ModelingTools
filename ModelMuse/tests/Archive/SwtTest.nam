@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 SwtTest.lst REPLACE
+DATA(BINARY)      9 SwtTest.cbc REPLACE
+DIS              12 SwtTest.dis OLD
+BAS6             13 SwtTest.bas OLD
+OC               39 SwtTest.oc OLD
+DATA             37 SwtTest.fhd REPLACE
+DATA             38 SwtTest.fdn REPLACE
+SIP              35 SwtTest.sip OLD
+LPF              14 SwtTest.lpf OLD
+CHD              17 SwtTest.chd OLD
+WEL              20 SwtTest.wel OLD
+SWT              68 SwtTest.swt OLD
+DATA(BINARY)    116 SwtTest.Swt_Out REPLACE

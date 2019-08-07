@@ -1,0 +1,4 @@
+if not exist "..\..\output\NUL" mkdir "..\..\output"
+if not exist "..\..\output\output.rma\NUL" mkdir "..\..\output\output.rma"
+..\..\bin\mf2005.exe rma.nam /wait
+pause

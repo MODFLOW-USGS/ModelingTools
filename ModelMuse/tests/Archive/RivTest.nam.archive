@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.RivTest\RivTest.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.RivTest\RivTest.cbc REPLACE
+DIS              12 ..\..\model\model.RivTest\RivTest.dis OLD
+BAS6             13 ..\..\model\model.RivTest\RivTest.bas OLD
+OC               39 ..\..\model\model.RivTest\RivTest.oc OLD
+DATA             37 ..\..\output\output.RivTest\RivTest.fhd REPLACE
+DATA             38 ..\..\output\output.RivTest\RivTest.fdn REPLACE
+PCG              18 ..\..\model\model.RivTest\RivTest.pcg OLD
+LPF              14 ..\..\model\model.RivTest\RivTest.lpf OLD
+CHD              17 ..\..\model\model.RivTest\RivTest.chd OLD
+RIV              21 ..\..\model\model.RivTest\RivTest.riv OLD

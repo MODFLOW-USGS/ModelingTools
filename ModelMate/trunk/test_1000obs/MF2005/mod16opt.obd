@@ -1,0 +1,69 @@
+# These flow observations are derived from data in Emmons' monograph.
+# They are for flowing wells in Denver, constructed primarily in the 1880s.
+# The number of observations and observed values need to be determined.
+# This first shot uses the Q values from the well file Suzanne prepared,
+# which will not be used when well-specific values are available(?).
+# The TOFFSET value 4930.5 is for the middle of SP 1.  This should be
+# replaced when the correct observation times are available.
+   20   20   20   30 NQxx,NQCxx,NQTxx,IUxxOBSV
+  1.00000E+00  TOMULTxx
+         1        -1  NQOBxx,NQCLxx
+F01718841101    2  1.766000E+03 -2.081551E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        51        14  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F02318901215    2  1.311000E+03 -5.101600E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        50        14  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F03418831101    2  1.400000E+03 -1.711551E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        51        13  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F04618830701    2  1.277000E+03 -2.005348E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        51        13  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F05118841101    2  1.766000E+03 -6.684490E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        53        14  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F05318840315    2  1.535000E+03 -1.105448E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        50        13  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F05518840615    2  1.627000E+03 -1.443850E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        51        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F05718850615    2  1.992000E+03 -3.342246E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        48        16  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F06218850515    2  1.961000E+03 -3.008020E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        52        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F06918840101    2  1.461000E+03 -8.626738E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        50        14  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F07918830815    2  1.322000E+03 -7.219250E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        50        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F08018830804    2  1.657000E+03 -8.689840E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        50        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F08718841101    2  1.766000E+03 -6.016040E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        49        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F08818830701    2  1.277000E+03 -3.342246E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        48        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F09918831115    2  1.414000E+03 -3.554545E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        50        13  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F12118840701    2  1.643000E+03 -1.203200E+02  OBSNAM,IREFSP,TOFFSET,HOBS
+         6        50        12  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F13018831101    2  1.400000E+03 -3.032090E+03  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        52        12  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F13218840315    2  1.535000E+03 -8.021400E+02  OBSNAM,IREFSP,TOFFSET,HOBS
+        10        52        14  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F34618891115    2  3.606000E+03 -6.317000E+01  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        49        14  1.00000E+00  LAYER,ROW,COLUMN,FACTOR
+         1        -1  NQOBxx,NQCLxx
+F40118851101    2  2.114000E+03 -2.194652E+04  OBSNAM,IREFSP,TOFFSET,HOBS
+         8        48        15  1.00000E+00  LAYER,ROW,COLUMN,FACTOR

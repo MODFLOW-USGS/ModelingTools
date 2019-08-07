@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Dispersion in MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Dispersion in MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next select </text><text styleclass="Strong" translate="true">Model|MODFLOW Layer Groups...</text><text styleclass="Normal" translate="true"> Notice that there is a new tab for dispersion. We will leave the default values unchanged.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma2Dispersion.png" scale="60.00%" width="359" height="277" styleclass="Image Caption"><title translate="true">Dispersion tab in the MODFLOW Layer Groups dialog box</title></image></para>
+  </body>
+</topic>

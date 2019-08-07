@@ -1,0 +1,142 @@
+TITLE
+.      3D analytic, continuous injection, 4 species chain decay
+.      Sun, Peterson, Clement (1999) J. Cont. Hyd., Example 6.3
+.      Documentation compares PHAST with chain decay from 
+.      Sun and others combined with Wexler (TWRI, 1992) solution 
+.      to patch source 
+.      
+.      
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print false
+      -HDF_chemistry true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_chemistry false
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 1E-9
+UNITS
+      -time days
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/days
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/days
+      -leaky_hydraulic_conductivity meters/days
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/days
+      -river_bed_hydraulic_conductivity meters/days
+      -river_bed_thickness  meters
+GRID
+      -nonuniform   X    0 4 8 12 16 20 24 28 32 36 40
+             44 48 52 56 60 64 68 72 76 80
+             84 88 92 96 100
+      -nonuniform   Y    0 0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5
+             10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5
+             20.5
+      -nonuniform   Z    0 0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5
+             10.5 11.5 12.5
+      -chemistry_dimensions XYZ
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 100 20.5 12.5
+            -Kx 2
+            -Ky 2
+            -Kz 2
+            -porosity 0.1
+            -specific_storage 0
+            -longitudinal_dispersivity 1.5
+            -horizontal_dispersivity 0.45
+            -vertical_dispersivity 0.15
+      -zone 0 0 0 100 20.5 12.5
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW false
+SOLUTION_METHOD
+      -iterative_solver true
+      -tolerance 1E-14
+      -save_directions 10
+      -maximum_iterations 500
+      -space_differencing 0.5
+      -time_differencing 0.5
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 100 20.5 12.5
+            -head X 1 0 0 100
+CHEMISTRY_IC
+      -zone 0 0 0 100 20.5 12.5
+            -solution 1
+            -kinetics 1
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions true
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 0 
+      -HDF_chemistry 400 day
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 400 
+      -wells 0 
+      -xyz_chemistry 400 day
+      -xyz_components 0 
+      -xyz_heads 400 day
+      -xyz_velocities 400 day
+      -xyz_wells 0 
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 100 20.5 12.5
+            -print 1
+      -xyz_chemistry
+      -zone 0 0 0 100 20.5 12.5
+            -print 1
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 2 20.5 10
+            -head
+                  0 1
+            -fixed_solution
+                  0 1
+      -zone 0 0 10 2 15 12.5
+            -head
+                  0 1
+            -fixed_solution
+                  0 1
+      -zone 0 15 10 2 20.5 12.5
+            -head
+                  0 1
+            -fixed_solution
+                  0 2
+      -zone 98 0 0 100 20.5 12.5
+            -head
+                  0 0
+            -associated_solution
+                  0 1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 10 days
+            -time_end
+                  400 days
+END

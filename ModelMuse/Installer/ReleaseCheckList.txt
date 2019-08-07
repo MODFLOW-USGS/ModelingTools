@@ -1,0 +1,38 @@
+1a. Check release dates of all supported programs (MODFLOW, MT3DMS, SUTRA, PHAST, GMSH, GeomPack++, etc) and see if dates in ModelMuse match the release dates.
+1b. Pass all tests.
+2. Update version number.
+2a. Turn off check for resource leaks in MadExcept.
+2b. Be sure the release version of disclaimer is used. See DisclaimerTextUnit.pas.
+3. Build 32 and 64-bit versions of ModelMuse, ModelMonitor and ModflowImporter
+4. Build help - chm and html
+4a. Check that help works for new things.
+5. Update revision history, including the release date.
+6. Insert google analytics code for help and revision history.
+6. Create and fill folders for release - ModelMuse, ModelMonitor, ModflowImporter, Help, and Release.chm
+7. Check that correct files are in folder for release
+8. check version numbers for ModelMuse in release folder
+8a. Check executables including .chm on www.virustotal.com. 
+9. Update readme and ModelMuse.txt files
+10. Build installers
+11. Create zip files for installation
+12. Create folder for source code
+13. Update ModelMuse, ModelMonitor, and Component source code in folder for source code.
+14. Update Help source in folder for source code.
+15. Update ModflowImporter source in folder for source code.
+16. Create zip file for source.
+17. Update web page.
+17a. Update Videos web page.
+18. Update ModelMuseInternetUpdate.txt
+19. Transfer html help to web.
+19a. Check that html help works with new pages
+19b. Transfer videos and video web page to web.
+20. Transfer release web page to web. 
+21. Transfer installers and zip files to web.
+22. Transfer readme and ModelMuse.txt files to web.
+23. Transfer main web page to web.
+23a. Check that links to installers and zip files work.
+24. Transfer ModelMuseInternetUpdate.txt to web.
+25. Send out email to OGW.
+26. Turn on check for resource leaks in MadExcept.
+27. Be sure the preliminary software version of disclaimer is used.
+

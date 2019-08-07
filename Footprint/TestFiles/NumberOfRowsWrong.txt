@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Well_Footprint_File>
+ <FileFormatVersion>
+  1
+ </FileFormatVersion>
+<Number_Of_Rows>
+-1
+</Number_Of_Rows>
+<Number_Of_Columns>
+-1
+</Number_Of_Columns>
+</Well_Footprint_File>

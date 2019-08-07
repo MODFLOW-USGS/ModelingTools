@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectLength</title>
+  <keywords>
+    <keyword translate="true">ObjectLength</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectLength</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectLength</text><text styleclass="Normal" translate="true"> returns the length of an object in the 2-D projection in which it is created and edited. Formulas for the third dimension of an object are not taken into consideration when computing ObjectLength.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DRN_Object_Pane" styleclass="Normal" translate="true">DRN: Drain package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT_Object_Pane" styleclass="Normal" translate="true">DRT: Drain Return Package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB_Object_Pane" styleclass="Normal" translate="true">GHB: General-Head Boundary Package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="RIV_Object_Pane" styleclass="Normal" translate="true">RIV: River Package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL_Object_Pane" styleclass="Normal" translate="true">WEL: Well Package pane</link></para>
+  </body>
+</topic>

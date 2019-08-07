@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="AddPointBug" FileType="bin">
+    <FileName Model_Name="AddPointBug" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="AddPointBug" FileType="ancillary">
+    <FileName Model_Name="AddPointBug" FileType="ancillary">AddPointBug.gpt</FileName>
+  </ancillary>
+  <model Model_Name="AddPointBug" FileType="Model Input">
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.bas</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.dis</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.gsf</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.lpf</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.nam.archive</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.oc</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">AddPointBug.pcg</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Input">usgs.AddPointBug.reference</FileName>
+  </model>
+  <output Model_Name="AddPointBug" FileType="Model Output">
+    <FileName Model_Name="AddPointBug" FileType="Model Output">AddPointBug.cbc</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Output">AddPointBug.fdn</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Output">AddPointBug.fhd</FileName>
+    <FileName Model_Name="AddPointBug" FileType="Model Output">AddPointBug.lst</FileName>
+  </output>
+</Model_Archive_List>

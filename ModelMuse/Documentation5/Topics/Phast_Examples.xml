@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Examples</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">PHAST Examples</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The PHAST documentation (Parkhurst and others, 2004) includes four examples. This section describes how to create the transport input files for all but the third of those examples. This section also includes an example not represented among the examples distributed with PHAST. (The third example from the PHAST documentation does not show any features of ModelMuse not illustrated with the other examples.) The complete ModelMuse project files for the examples are included with ModelMuse. In addition other ModelMuse files are included. These example project files can be used to create the transport input files for the other examples included with PHAST.</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Example_1" styleclass="Normal" translate="true">Example 1</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Example_2" styleclass="Normal" translate="true">Example 2</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Example_3_Example_4_in_PHAST" styleclass="Normal" translate="true">Example 3</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Example_4_Biscayne_Bay_Aquifer" styleclass="Normal" translate="true">Example 4</link></li>
+    </list>
+  </body>
+</topic>

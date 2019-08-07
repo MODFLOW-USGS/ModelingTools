@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SWR: Surface-Water Routing Process Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SWR: Surface-Water Routing Process Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pane for the Surface-Water Routing Process is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under Surface-Water Routing. The Surface-Water Routing Process is included in MODFLOW-NWT but not MODFLOW-2005.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Surface-Water Routing Process is used to simulate complex surface-water flow conditions. For example, it can simulate backwater effects due to flooding and can simulate structures, such as dams, that control the flow. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">SWR - Surface-Water Routing Process</link><text styleclass="Normal" translate="true"> in the Online Guide for more information.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse will number the reaches in the Surface-Water Routing Process automatically. However, you can override this behavior for any particular reach by assigning a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">vertex value</link><text styleclass="Normal" translate="true"> using &quot;Reach&quot; as the key. For more information see the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Normal" translate="true">Vertex Values Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The SWR: Surface-Water Routing Process Pane has the following sub-panes.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Comments" styleclass="Normal" translate="true">Comments</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Solution_Options" styleclass="Normal" translate="true">Solution Options</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Time_Step_Options" styleclass="Normal" translate="true">Time Step Options</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Specification_Method" styleclass="Normal" translate="true">Specification Method</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Print_Flags" styleclass="Normal" translate="true">Print Flags</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Solver_Options_1" styleclass="Normal" translate="true">Solver Options 1</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Solver_Options_2" styleclass="Normal" translate="true">Solver Options 2</link></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

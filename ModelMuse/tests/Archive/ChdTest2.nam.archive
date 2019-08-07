@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.ChdTest2\ChdTest2.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.ChdTest2\ChdTest2.cbc REPLACE
+DIS              12 ..\..\model\model.ChdTest2\ChdTest2.dis OLD
+BAS6             13 ..\..\model\model.ChdTest2\ChdTest2.bas OLD
+OC               39 ..\..\model\model.ChdTest2\ChdTest2.oc OLD
+DATA             37 ..\..\output\output.ChdTest2\ChdTest2.fhd REPLACE
+DATA             38 ..\..\output\output.ChdTest2\ChdTest2.fdn REPLACE
+PCG              18 ..\..\model\model.ChdTest2\ChdTest2.pcg OLD
+LPF              14 ..\..\model\model.ChdTest2\ChdTest2.lpf OLD
+CHD              17 ..\..\model\model.ChdTest2\ChdTest2.chd OLD
+PVAL             52 ..\..\model\model.ChdTest2\ChdTest2.pval OLD

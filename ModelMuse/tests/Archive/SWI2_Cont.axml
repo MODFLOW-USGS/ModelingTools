@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SWI2_Cont" FileType="bin">
+    <FileName Model_Name="SWI2_Cont" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SWI2_Cont" FileType="ancillary">
+    <FileName Model_Name="SWI2_Cont" FileType="ancillary">SWI2_Cont.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SWI2_Cont" FileType="Model Input">
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.bas</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.bcf</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.chd</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.dis</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.gsf</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.nam.archive</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.oc</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.pcg</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">SWI2_Cont.swi</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Input">usgs.SWI2_Cont.reference</FileName>
+  </model>
+  <output Model_Name="SWI2_Cont" FileType="Model Output">
+    <FileName Model_Name="SWI2_Cont" FileType="Model Output">SWI2_Cont.cbc</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Output">SWI2_Cont.fdn</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Output">SWI2_Cont.fhd</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Output">SWI2_Cont.lst</FileName>
+    <FileName Model_Name="SWI2_Cont" FileType="Model Output">SWI2_Cont.zta</FileName>
+  </output>
+</Model_Archive_List>

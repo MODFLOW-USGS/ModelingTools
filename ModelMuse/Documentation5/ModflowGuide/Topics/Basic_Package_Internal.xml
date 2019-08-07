@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Basic Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Basic Package</text></para>
+    </header>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Source file]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwf2bas7.f</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Modules]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Global]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parameters]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NIUNIT=100, The length of the IUNIT array and related arrays and thus the maximum number of possible packages.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NCOL - Number of columns in the grid.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NROW - Number of rows in the grid.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NLAY - Number of layers in the grid.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NPER - Number of stress periods.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NBOTM - Number of simulated layers plus number of confining beds.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NCNFBD - Number of confining beds</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ITMUNI - ITMUNI is a code which indicates units of time used in the input data. This code is only used to print a table showing elapsed time in seconds, minutes, hours, days, and years. It is not used in formulating or solving the finite-difference equation. </text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0- undefined </text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">l- seconds </text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">2 - minutes </text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">3- hours </text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">4 - days </text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">5 - years</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LENUNI - LENUNI indicates the length unit of model data, which must be consistent for all data values that involve length. </text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - undefined</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - feet</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">2 - meters</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">3 - centimeters</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IXSEC - IXSEC is a flag that indicates whether or not the model is a cross sectional model. </text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - not a cross sectional model</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - is a &#160;cross sectional model</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ITRSS - a flag indicating whether the model is a steady-state model, transient model, or combined steady-state and transient model.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">-1 - combined steady-state and transient model</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - steady-state model</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - transient model</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">INBAS - input file unit for the basic package.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IFREFM - a flag indicating whether or not free format is used</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - free format is not used</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - free format is used</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NODES - Number of cells (nodes) in the finite-difference grid.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IOUT - Primary unit number for all printed output.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">MXITER - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:11pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">MXITER is the maximum number of times through the iteration loop in one time step in an attempt to solve the system of finite-difference equations.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IUNIT(NIUNIT) - IUNIT is a table that indicates which major options are to be used and the unit numbers from which input is to be read.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HNEW(NCOL,NROW,NLAY) - HNEW is an array containing the latest estimates of heads. It starts each time step with heads calculated for the end of the previous time step. It is changed at each iteration until the last iteration when it contains the heads at the end of the time step.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LBOTM(NLAY) - points to the array for the bottom of a layer. For example if a model has two layers with a non-simulated confining bed between the layers, LBOTM would be (1,3).</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYCBD(NLAY) - LAYCBD is a flag, with one value for each model layer, that indicates whether or not a layer has a Quasi-3D confining bed below it. 0 indicates no confining bed, and not zero indicates a confining bed. LAYCBD for the bottom layer must be 0.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYHDT(NLAY) - LAYHDT is a flag indicating whether or not the transmissivity depends on head.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - transmissivity does not depend on head</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - &#160;transmissivity depends on head</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYHDS(NLAY) - LAYHDS is a flag indicating whether or not the storage coefficient depends on head. (LAYHDS is set by each of the flow packages in MODFLOW-2005 but is never used in MODFLOW-2005.)</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - storage coefficient does not depend on head</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - &#160;storage coefficient depends on head</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PERLEN(NPER) - PERLEN is the length of a stress period.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NSTP(NPER) - NSTP is the number of time steps in a stress period.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">TSMULT(NPER) - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:11pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">TSMULT is the multiplier for the length of successive time steps. The length of a time step is calculated by multiplying the length of the previous time step by TSMULT.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ISSFLG(NPER) - ISSFLG is a flag indicating whether or not a particular stress period is steady-state or transient</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - Steady State</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - Transient </text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">DELR(NCOL) - DELR is the cell width along rows. Read one value for each of the NCOL columns. This is a multi-value one-dimensional variable with one value for each column.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">DELC(NROW) - DELC is the cell width along columns. Read one value for each of the NROW rows. This is a multi-value one-dimensional variable with one value for each row.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">BOTM(NCOL,NROW,0:NBOTM) - BOTM is the bottom elevation of a model layer or a Quasi-3d confining bed.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HOLD(NCOL,NROW,NLAY) - HOLD is an array containing heads at the beginning of the current time step. At the beginning of a time step, HOLD AND HNEW contain identical values. HNEW changes from one iteration to the next; HOLD does not.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBOUND(NCOL,NROW,NLAY) - IBOUND is the boundary variable. </text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">If IBOUND(J,I,K) &lt; 0, cell J,I,K has a constant head.</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">If IBOUND(J,I,K) = 0, cell J,I,K is inactive.</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">If IBOUND(J,I,K) &gt; 0, cell J,I,K is active.</text></para>
+                      <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CR(NCOL,NROW,NLAY) - Branch Conductance in the Row Direction</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CC(NCOL,NROW,NLAY) - Branch Conductance in the Column Direction</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CV(NCOL,NROW,NLAY) - Vertical Branch Conductance between a layer and the next lower layer</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HCOF(NCOL,NROW,NLAY) - Coefficient of head in cell (J,I,K) in the finite-difference equation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">RHS(NCOL,NROW,NLAY) - RHS is an array which contains the right hand side of each finite-difference equation. RHS is an accumulation of terms from several different packages.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">BUFF(NCOL,NROW,NLAY) - BUFFER is an array in which data are temporarily stored while they are being gathered for printing. </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STRT(NCOL,NROW,NLAY) - STRT is initial (starting) head—that is, head at the beginning of the simulation.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">DDREF(NCOL,NROW,NLAY) - DDREF is the reference head used to calculate drawdown.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GLOBALDAT(10) - an array of GLOBALTYPE for multiple grids</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Types]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GLOBALTYPE</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[PARAMMODULE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parameters]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">MXPAR=2000, Maximum number of parameters</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">MXCLST=20000, Maximum number of clusters</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">MXINST=50000, Maximun number of parameter instances</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ICLSUM - ICLSUM is the last unused position in array of parameter clusters</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPSUM - IPSUM is the last unused position in array of parameter names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">INAMLOC - INAMLOC is the last unused position in array of instance names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NMLTAR - NMLTAR is the number of multiplier arrays</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NZONAR - NZONAR is the number of zone arrays</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NPVAL - NPVAL is the number of parameters listed in the parameter value file.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">B(MXPAR) - B is the array of parameter values.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IACTIVE(MXPAR) - IACTIVE is set to a value greater than zero if a parameter is active in a stress period.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPLOC(4,MXPAR) - IPLOC points to the positions of the data that define a parameter</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPLOC(1,*) - first cluster in IPCLST</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPLOC(2,*) - last cluster in IPCLST</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPLOC(3,*) - number of instances</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPLOC(4,*) - location of the first instance name</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPCLST(14,MXCLST) the data that defines a cluster</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(1,*) - layer number for cluster</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(2,*) - multiplier array number, 0 means no multiplier array</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(3,*) - zone array number, 0 means no zone array</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(4,*) - position in IPCLST of the last zone for the cluster</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(5,*) - zone number 1</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(6,*) - zone number 2</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(7,*) - zone number 3</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(8,*) - zone number 4</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(9,*) - zone number 5</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(10,*) - zone number 6</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(11,*) - zone number 7</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(12,*) - zone number 8</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(13,*) - zone number 9</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IPCLST(14,*) - zone number 10</text></para>
+                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IZON(NCOL,NROW,NZONAR) - the zone arrays</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">RMLT(NCOL,NROW,NMLTAR) - the multiplier arrays</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PARNAM(MXPAR) - the parameter names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PARTYP(MXPAR) - the parameter types</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ZONNAM(NZONAR) - the zone array names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">MLTNAM(NMLTAR) - the multiplier array names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">INAME(MXINST) - the instance names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PARAMDAT(10) - an array of PARAMTYPE for multiple grids</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Type]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PARAMTYPE</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[GWFBASMODULE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">MSUM - budget term counter</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHEDFM - Format code for printing head.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHEDUN - Unit number for file where heads will be saved.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IDDNFM - Format code for printing drawdown.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IDDNUN - Unit number for file where drawdown will be saved.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBOUUN - Unit number where IBOUND will be saved.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LBHDSV - A flag that indicates whether or not heads should be labeled in the output file</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not label heads</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - label heads</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LBDDSV - A flag that indicates whether or not drawdown should be labeled in the output file</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not label drawdown</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - label drawdown</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LBBOSV - A flag that indicates whether or not IBOUND should be labeled in the output file</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not label IBOUND</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - label IBOUND</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBUDFL - Total Budget Printout Flag</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not print</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - print</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ICBCFL- Cell-By-Cell Flow Term Flag</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not save</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - save</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHDDFL - Head/Drawdown Printout Flag</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not print</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - print</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IAUXSV - Flag to save Auxiliary Data in Cell-By-Cell Budget Files</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not save</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - save</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBDOPT - Flag for using compact budget format</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - do not use compact format</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">2. - use compact format</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPRTIM - Flag for printing total execution time</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not print</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - print</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IPEROC - Period number at which output is desired.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ITSOC - Time step number at which output is desired</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">ICHFLG - Flag that indicates whether flow between adjacent constant-head cells should be calculated.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not calculate</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - calculate</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IDDREF - flag that indicates whether the current heads are to be used as the reference heads for calculating drawdown.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not use as reference heads</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - use as reference heads</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IDDREFNEW - flag that indicates whether the heads calculated at the associated stress period and time step are to be used as the reference heads for calculating drawdown.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 - do not use as reference heads</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 - use as reference heads</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">DELT - length of the current time step</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PERTIM - length of the current stress period</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">TOTIM - total elapsed simulation time</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HNOFLO - head assigned to cells that are inactive.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HDRY - head assigned to cells that have converted to dry</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CHEDFM - Format used for saving heads</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CDDNFM - Format used for saving drawdown</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">CBOUFM - Format used for saving IBOUND</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IOFLG(:NLAY,5) - Flags for printing or saving data. If the corresponding flag is 0, the item will not be printed or saved. If the corresponding flag is not 0, the item will be printed or saved. </text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IOFLG(:*,1) - Flag for printing head</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IOFLG(:*,2) - Flag for printing drawdown</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IOFLG(:*,3) - Flag for saving head</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IOFLG(:*,4) - Flag for saving drawdown</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IOFLG(:*,5) - Flag for saving IBOUND</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VBVL(4,NIUNIT) - Budget accumulator</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">VBVL(1,*) - Rate in of Package *</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">VBVL(2,*) - Rate out of Package *</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">VBVL(3,*) - Volume in of Package *</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">VBVL(4,*) - Volume out of Package *</text></para>
+                      <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VBNM(NIUNIT) - Budget term labels.</text></li>
+                      </list>
+                      <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">PARAMDAT(10) - an array of GWFBASDAT for multiple grids</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Type]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GWFBASTYPE</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Subroutines]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7AR - Allocate and Read for GWF Basic Package</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7ST - Setup Time Variables for New Time Period</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7AD - Advance to Next Time Step</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7FM - Set HCOF=RHS=0.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7OC - Output Controller for Head, Drawdown, and Budget</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7OT - Output Time, Volumetric Budget, Head, and Drawdown</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7ARDIS - Allocate and Read Dis Data</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7D - Calculate, Print, And Save Drawdowns</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7H - Print And Record Heads</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7IB - Record IBOUND</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7I - Set Up Output Control</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7J - Read Initial Alphabetic Output Control Records</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7T - Print Simulation Time</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7V - Print Volumetric Budget</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7N - Set Output Flags Using Alphabetic Output Control Input Structure</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7L - When Using Alphabetic Output Control, Decode Layer Number for Printing or Saving Head or Drawdown</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7OPEN - Open Files</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7ARMZ - Allocate and Read Multiplier and Zone Arrays</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7ARPVAL - Read Parameter Input File</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7STPVAL - Check that Parameter Definitions are Complete</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2BAS7DA - Deallocate Global Data</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7PNT - Change Global Data to a Different Grid</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2BAS7PSV - Save Global Data for a Grid.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

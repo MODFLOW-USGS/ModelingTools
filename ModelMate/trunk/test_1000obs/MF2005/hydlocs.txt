@@ -1,0 +1,6 @@
+2        Item 1: NUMLOC              (number of cell locations)
+6 63 18  Item 2: Layer, Row, Column  (NUMLOC records)
+4 63 18
+
+   
+   

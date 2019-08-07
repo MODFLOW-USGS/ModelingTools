@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">DRT- Drain Return Package</title>
+  <keywords>
+    <keyword translate="true">ColR</keyword>
+    <keyword translate="true">Column</keyword>
+    <keyword translate="true">Cond</keyword>
+    <keyword translate="true">Condfact</keyword>
+    <keyword translate="true">DRT</keyword>
+    <keyword translate="true">Elevation</keyword>
+    <keyword translate="true">IDRTCB</keyword>
+    <keyword translate="true">Iname</keyword>
+    <keyword translate="true">INSTANCES</keyword>
+    <keyword translate="true">INSTNAM</keyword>
+    <keyword translate="true">ITMP NP</keyword>
+    <keyword translate="true">Layer</keyword>
+    <keyword translate="true">LayR</keyword>
+    <keyword translate="true">MXADRT</keyword>
+    <keyword translate="true">MXL</keyword>
+    <keyword translate="true">NLST</keyword>
+    <keyword translate="true">NPDRT</keyword>
+    <keyword translate="true">NUMINST</keyword>
+    <keyword translate="true">Option</keyword>
+    <keyword translate="true">PARNAM</keyword>
+    <keyword translate="true">PARTYP</keyword>
+    <keyword translate="true">Parval</keyword>
+    <keyword translate="true">Pname</keyword>
+    <keyword translate="true">Rfprop</keyword>
+    <keyword translate="true">Row</keyword>
+    <keyword translate="true">RowR</keyword>
+    <keyword translate="true">Text</keyword>
+    <keyword translate="true">xyz</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DRT- Drain Return Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="6" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DRT</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Drain Return Package allows simulation of drains in which some of the water from the drain is used to recharge the aquifer.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr00466" target="_blank" styleclass="Citation" translate="true">Banta, E.R., 2000, MODFLOW-2000, the U.S. Geological Survey Modular Ground-Water Model - Documentation of Packages for Simulating Evapotranspiration with a Segmented Function (ETS1) and Drains with Return Flow (DRT1): U.S. Geological Survey Open-File Report 00-466, 127 p.</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="Time-varying-parameters.pdf" styleclass="Normal" translate="true">Time-varying-parameters.pdf</link></li>
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="release.txt" styleclass="Normal" translate="true">release.txt</link></li>
+          </list>
+          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="modpath.txt" styleclass="Normal" translate="true">modpath.txt</link></li>
+          </list>
+          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="weblink" href="http://dx.doi.org/10.3133/tm6A51" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., Boyce, S.E., Schmid, Wolfgang, Hughes, J.D., Mehl, S.M., Leake, S.A., Maddock, Thomas, III, and Niswonger, R.G., 2014, One-Water Hydrologic Flow Model (MODFLOW-OWHM): U.S. Geological Survey Techniques and Methods 6–A51, 120 p., http://dx.doi.org/10.3133/tm6A51.</link></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
+        </td>
+        <td>
+          <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head-Dependent_Flux_Boundary_P" styleclass="Normal" translate="true">Head-Dependent Flux Boundary packages</link></li>
+            <li styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><link displaytype="text" defaultstyle="true" type="topiclink" href="DTOB" styleclass="Normal" translate="true">Drain Return Observation</link><text styleclass="Normal" translate="true"> package</text></li>
+            <li styleclass="Normal"><conditional-text type="END"/><link displaytype="text" defaultstyle="true" type="topiclink" href="DRN" styleclass="Normal" translate="true">Drain</link><text styleclass="Normal" translate="true"> package</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">Special care must be taken when constructing the DRT package input file if the observations are used. &#160;See discussion of &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DTOB" anchor="MultipleCells" styleclass="Normal" translate="true">Observations at Cells Having More Than One Head-Dependent Boundary Feature Represented by the Same Package</link><text styleclass="Normal" translate="true">&quot; in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DTOB" styleclass="Normal" translate="true">DTOB</link><text styleclass="Normal" translate="true"> (not included in MODFLOW-2005 or MODFLOW-LGR) input file.</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">The Drain-Return Observation Package (DTOB) is not included in MODFLOW-2005 or MODFLOW-LGR</text><conditional-text type="END"/></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input to the DRT1 Package is read from the file that has type “DRT” in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file. Optional variables are shown in brackets. All variables are free format if the option “FREE” is specified in the Basic Package input file; otherwise, the non-optional variables have 10-character fields and the optional variables are free format.</text></para>
+    <para styleclass="Normal"><table rowcount="11" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[#Text]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 0 is optional -- “#” must be in column 1. Item 0 can be repeated as many times as desired.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Text]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Text—is a character variable (79 characters) that starts in column 2. Any characters can be included in Text. The “#” character must be in column 1. Lines beginning with “#” are restricted to these first lines of the input file. Text is written to the LIST output file when the input file is read.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MXADRT IDRTCB NPDRT MXL [Option]</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXADRT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MXADRT—is the maximum number of drain-return cells in use during any stress period. MXADRT includes cells that are defined using parameters as well as cells that are defined without using parameters. </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Recipient cells are not included in MXADRT.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDRTCB]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IDRTCB—is a flag and a unit number.</text></para>
+                      <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IDRTCB &gt; 0, it is the unit number to which DRT1-Package cell-by-cell flow terms will be written when “SAVE BUDGET” or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in Output Control (Harbaugh and others, 2000). IDRTCB must be a unit number associated with a file listed with type “DATA(BINARY)” or “DATAGLO(BINARY)” in the name file.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IDRTCB = 0, DRT1-Package cell-by-cell flow terms will not be written.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If IDRTCB &lt; 0, drain leakage for each drain-return cell and return flow to each recipient cell will be written to the LIST file when “SAVE BUDGET” or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in Output Control.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NPDRT]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NPDRT" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NPDRT—is the number of drain-return parameters. </text></para>
+                      <para styleclass="Normal"><snippet src="MaxParameters"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[MXL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">MXL—is the maximum number of drain-return cells that will be defined using parameters. Recipient cells are not included in MXL. MXL must equal or exceed the sum of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true">×N for all parameters, where N is the greater of 1 and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NUMINST" styleclass="Normal" translate="true">NUMINST</link><text styleclass="Normal" translate="true">.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Option]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Option—is an optional list of character values.</text></para>
+                      <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">“</text><text styleclass="Keywords" translate="true">AUXILIARY</text><text styleclass="Normal" translate="true"> abc” or “</text><text styleclass="Keywords" translate="true">AUX</text><text styleclass="Normal" translate="true"> abc” – defines an auxiliary variable (Harbaugh and McDonald, 1996a, p. 9, Item 4), named &quot;abc,&quot; which will be read for each drain as part of Items 3 and 5. Up to 20 variables can be specified, each of which must be preceded by &quot;</text><text styleclass="Keywords" translate="true">AUXILIARY</text><text styleclass="Normal" translate="true">&quot; or &quot;</text><text styleclass="Keywords" translate="true">AUX</text><text styleclass="Normal" translate="true">.&quot; These variables will not be used by the Groundwater Flow Process, but they will be available for use by other processes. The auxiliary variable values will be read after the Rfprop variable.</text></li>
+                      </list>
+                      <para styleclass="Normal"><snippet src="Uses_of_Auxiliary_Parameters"/></para>
+                      <list id="20" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">“</text><text styleclass="Keywords" translate="true">CBCALLOCATE</text><text styleclass="Normal" translate="true">” or “</text><text styleclass="Keywords" translate="true">CBC</text><text styleclass="Normal" translate="true">”—indicates that memory should be allocated to store cell-by-cell flow for each drain in order to make these flows available for use in other packages. (This option is only available in MODFLOW-2000.)</text></li>
+                        <li styleclass="Normal"><conditional-text type="END"/><text styleclass="Normal" translate="true">“</text><text styleclass="Keywords" translate="true">RETURNFLOW</text><text styleclass="Normal" translate="true">”—activates the return-flow option of the DRT1 Package. If “</text><text styleclass="Keywords" translate="true">RETURNFLOW</text><text styleclass="Normal" translate="true">” is listed as an option, LayR, and, optionally, RowR, ColR, and Rfprop are read from items 3 and(or) 5.</text></li>
+                        <li styleclass="Normal"><text styleclass="Keywords" translate="true">NOPRINT</text><text styleclass="Normal" translate="true">—suppresses the printing of cell lists.</text></li>
+                        <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[PRINTFILE PRTFIL]]></caption></toggle></li>
+                      </list>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Keywords" translate="true">PRINTFILE</text><text styleclass="Normal" translate="true"> PRTFIL</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The keyword is </text><text styleclass="Keywords" translate="true">PRINTFILE</text><text styleclass="Normal" translate="true"> followed by a unit number, PRTFIL, that is specified in the NAM. The unit number is where the DRT flow data is written.</text></para>
+                            <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">This option is only available in MODFLOW-OWHM.</text><conditional-text type="END"/></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">To facilitate parameter estimation, a new output file was added to the DRT to create observations for drain return flows. This output file prints to either a binary file or text (ASCII) file, a header and then all the drain cells’ locations, where drain water was sent to, and the flow rate. This option is activated by adding the option keyword PRINTFILE on Item 1, followed by a unit number of the file to which data will be written. For binary files, a set of static information is written for each drain location to be consistent. Below is an example written to a binary file where the variables are those previously defined in the DRT documentation or in the next section.</text></para>
+                            <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HEADER: ‘ DRAINS (DRT)’ KPER KSTP NDRTCL</text></para>
+                            <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DRN# Layer Row Column Q ‘ DRT ‘ LayR RowR ColR QIN</text></para>
+                            <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DRN# Layer Row Column Q ‘ DRT ‘ 0 0 0 0D0</text></para>
+                            <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DRN# Layer Row Column Q ‘ FMP ‘ LayR RowR 0 QIN</text></para>
+                            <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DRN# Layer Row Column Q ‘ SWR ‘ LayR RowR 0 QIN</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">The first record is a header that contains a string, the current stress period, time step, and the number of drains that will be printed. The subsequent records contain the current drain count, DRN#, the flow rate out of the drain cell, Q, a four-character string that indicates the package that the drain flow is sent to, and the flow rate into that package, QIN. Note that if Rfprop=1.0, then Q=QIN. The second entry represents when DRT functions like DRN and is specified with a zero layer, row, and column, and the type at the end of the line is set to zero because this drain flow is not returned within the model.</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Repeat Items 2 and 3 for each parameter to be defined (that is, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NPDRT" styleclass="Normal" translate="true">NPDRT</link><text styleclass="Normal" translate="true"> times). Items 2 and 3 are omitted if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NPDRT" styleclass="Normal" translate="true">NPDRT</link><text styleclass="Normal" translate="true"> = 0.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[PARNAM PARTYP Parval NLST [</text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> NUMINST]]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If PARNAM is to be a time-varying parameter, the keyword “</text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true">” and a value for NUMINST must be entered.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARNAM]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="PARNAM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">PARNAM—is the name of a parameter to be defined. This name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent. </text></para>
+                      <para styleclass="Normal"><snippet src="Unique_Param_Name"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PARTYP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">PARTYP—is the type of parameter to be defined. For the DRT1 Package, the only allowed parameter type is “DRT,” which defines values of the drain hydraulic conductance.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Parval]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><snippet src="Parval"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NLST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NLST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NLST—is the number of drain-return cells included in a non-time-varying parameter or in each instance of a time-varying parameter.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[INSTANCES]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> – is an optional keyword that designates a parameter as time varying. The keyword is case-insensitive; that is, it may be entered in any combination of upper- and lower-case letters. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is present, it must be followed by a value for NUMINST. If </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is absent, PARNAM is non-time-varying and NUMINST should not be present.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NUMINST]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NUMINST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NUMINST – is the number of instances that are included in the definition of a time-varying parameter, where each instance is a list of drain-return cells, associated recipient cells, and properties. If the keyword </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is present, NUMINST must be present and must be at least 1. If the keyword </text><text styleclass="Keywords" translate="true">INSTANCES</text><text styleclass="Normal" translate="true"> is absent, NUMINST should not be present.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3a</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">INSTNAM</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 3a is read only if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="PARNAM" styleclass="Normal" translate="true">PARNAM</link><text styleclass="Normal" translate="true"> is time-varying. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NUMINST" styleclass="Normal" translate="true">NUMINST</link><text styleclass="Normal" translate="true"> repetitions of Item 3 (parts a and b) are read. After each repetition of Item 3a, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> repetitions of Item 3b are read.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[INSTNAM]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">INSTNAM – is the name of an instance associated with the parameter </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="PARNAM" styleclass="Normal" translate="true">PARNAM</link><text styleclass="Normal" translate="true"> specified in the corresponding Item 3. The name can consist of 1 to 10 characters and is not case sensitive. That is, any combination of the same characters with different case will be equivalent. Names entered for INSTNAM must be unique for any given parameter, but names may be reused for instances associated with different parameters.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3b</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column Elevation &#160;Condfact [LayR RowR ColR Rfprop] [xyz]</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> repetitions of Item 3b records are required; they are read by module </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" styleclass="Normal" translate="true">ULSTRD</link><text styleclass="Normal" translate="true"> (Harbaugh and others, 2000). (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" anchor="SFAC" styleclass="Normal" translate="true">SFAC</link><text styleclass="Normal" translate="true"> of the ULSTRD utility module applies to Condfact.) The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NLST" styleclass="Normal" translate="true">NLST</link><text styleclass="Normal" translate="true"> repetitions of Item 3b follow each repetition of Item 3a when </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="PARNAM" styleclass="Normal" translate="true">PARNAM</link><text styleclass="Normal" translate="true"> is time-varying.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><snippet src="DrainReturnLocationVariables"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Condfact]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Condfact—is the factor used to calculate drain hydraulic conductance from the parameter value. The conductance (L</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text><text styleclass="Normal" translate="true">/T) is the product of Condfact and the parameter value.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">See also &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Frequently_Asked_Questions" anchor="Conductance" styleclass="Normal" translate="true">What is conductance?</link><text styleclass="Normal" translate="true">&quot;</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><snippet src="DrainReturn_ReturnLocationVari"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH STRESS PERIOD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ITMP NP</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ITMP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="ITMP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">ITMP—is a flag and a counter.</text></para>
+                      <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP &lt; 0, non-parameter drain-return data from the last stress period will be reused.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">If ITMP ≥0, ITMP will be the number of non-parameter drain-return cells read for the current stress period.</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NP—is the number of drain-return parameters in use in the current stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Layer Row Column Elevation Cond [LayR RowR ColR Rfprop] [xyz]</text></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> repetitions of Item 5 records are read by module </text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" styleclass="Normal" translate="true">ULSTRD</link><text styleclass="Normal" translate="true"> (Harbaugh and others, 2000) if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> &gt; 0. (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="List_Utility_Module" anchor="SFAC" styleclass="Normal" translate="true">SFAC</link><text styleclass="Normal" translate="true"> of the ULSTRD utility module applies to Cond). Item 5 is not read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="ITMP" styleclass="Normal" translate="true">ITMP</link><text styleclass="Normal" translate="true"> ≤0.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><anchor id="Elevation" styleclass="Normal"></anchor></para>
+                <para styleclass="Normal"><snippet src="DrainReturnLocationVariables"/></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Cond]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Cond—is the hydraulic conductance of the interface between the aquifer and the drain.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">See also &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Frequently_Asked_Questions" anchor="Conductance" styleclass="Normal" translate="true">What is conductance?</link><text styleclass="Normal" translate="true">&quot;</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><snippet src="DrainReturn_ReturnLocationVari"/></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 6</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Pname [Iname]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Item 6 is repeated </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> times. It is not read if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> ≤0. Iname is read if Pname is a time-varying parameter.</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Pname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Pname—is the name of a parameter being used in the current stress period. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT" anchor="NP" styleclass="Normal" translate="true">NP</link><text styleclass="Normal" translate="true"> parameter names will be read.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Iname]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">Iname – is an instance name that is read only if Pname is a time-varying parameter. Multiple instances of the same time-varying parameter are not allowed in a stress period.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

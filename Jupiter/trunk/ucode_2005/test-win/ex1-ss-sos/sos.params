@@ -1,0 +1,16 @@
+BEGIN PARAMETER_DATA TABLE
+#Six parameters are lumped into two for this run. The original parameters are:
+#    1           2             3          4          5            6          7         8
+#paramname  STARTVALUE  lowervalue uppervalue   scalepval   perturbamt transform    TOLPAR  
+#RCH_1       60.0          30.0       80.0       1.0E-2        0.01D0        no      0.01 	     
+#RCH_2       30.0          20.0       60.0       1.0E-2        0.01D0        no      0.01 	     
+#K_RB        1.2000E-3    1.2E-4      1.2E-2     1.0E-6        0.01D0        yes     0.01 	     
+#HK_1        3.0000E-4    3.0E-5      3.0E-3     1.0E-7        0.01D0        yes     0.01 	     
+#VK_CB       1.0000E-7    1.0E-8      1.0E-6     1.0E-10       0.01D0        yes     0.01 	     
+#HK_2        4.0000E-5    4.0E-6      4.0E-4     1.0E-8        0.01D0        yes     0.01 	     
+#																							     
+nrow=2  ncol=6 columnlabels  GroupName=MyPars												     
+paramname   STARTVALUE  lowerconstraint upperconstraint SOSIncrement    Transform         	     
+K_Mult         1.0          0.1              10.            10            yes
+RCH_Mult       1.0          0.1              10.            10            yes
+END PARAMETER_DATA 

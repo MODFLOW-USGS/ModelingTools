@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Georef</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Georef</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each model archive must contain a &quot;georef&quot; folder containing a shapefile with the active and inactive areas of the model. The user selects the shapefile on this pane. A shapefile actually contains several different files with different extensions. The user selects the one with the extension.shp. ModelArchiver will identify the remainder of the files in the shapefile and include them in the archive. ModelMuse users can create a suitable Shapefile by selecting &quot;File|Export|Shapefile|Model Outline to Shapefile&quot;. Of course, this only works if the model is properly georeferenced in ModelMuse. In addition, ModelMuse does not create a projection (.proj) file for the Shapefile. Users can create the projection file by copying another projection file that has the correct projection information. </text></para>
+  </body>
+</topic>

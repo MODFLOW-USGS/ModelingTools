@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Model Features</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Model Features</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In ModelMuse, &quot;Model Features&quot; are data that are only defined at certain locations. Most of them also vary with time. In most cases, Model Features are used to define the boundary conditions of the model. Model Features are treated similarly to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Assigning_Values_to_Data_Sets" styleclass="Normal" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> except that there are no default formulas for Model Features. Model Features are specified only with objects (points, lines, and polygons). </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For PHAST, SUTRA, and MODFLOW, the user can specify different times for different Model Features and the times need not correspond to the boundaries of any previously defined stress period. ModelMuse will determine what the stress periods ought to be based on the times entered by the user. Thus, the specification of the boundary conditions is independent of the time discretization specified by the user. The Time-Variant Specified Head (CHD) package in MODFLOW is different from other packages in that once a cell has been specified as a CHD cell, it can not be converted back to a cell that does not have a CHD boundary in it. (This is determined by how the CHD package is implemented in MODFLOW.)</text></para>
+    <para styleclass="Normal"><snippet src="WellSections"/></para>
+  </body>
+</topic>

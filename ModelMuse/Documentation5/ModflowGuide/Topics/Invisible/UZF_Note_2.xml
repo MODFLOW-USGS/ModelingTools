@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">UZF Note 2</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note 2: The variables NTRAIL2 and NSETS2 are used for dimensioning arrays.</text></para>
+  </body>
+</topic>

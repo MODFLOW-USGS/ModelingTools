@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Legend Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Legend Tab</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Legend Tab</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The legend tab shows how the displayed colors relate to their values. Note that cell values are also displayed on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Hints_and_the_Status_Bar" styleclass="Strong" translate="true">Status Bar</link><text styleclass="Normal" translate="true"> of the main ModelMuse window and in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Value_Dialog_Box" styleclass="Strong" translate="true">Grid or Mesh Value</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can calculate appropriate values to include in the legend but if different values are desired, the user can change the </text><text styleclass="Strong" translate="true">Method</text><text styleclass="Normal" translate="true"> from automatic to manual, specify the number of rows to include in the legend, and specify the values to include in the legend.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Font button is used to specify the font used in the legend. The font is used both in the Legend tab and in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" styleclass="Strong" translate="true">Export Image</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

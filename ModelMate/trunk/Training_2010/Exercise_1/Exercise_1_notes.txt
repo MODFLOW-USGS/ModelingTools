@@ -1,0 +1,16 @@
+Modifications in Calib.mmZlib relative to Obs.mmZlib
+
+Added pumping well (col 6, row 14).  Q = -10,000,000 cfd.
+
+Changed PCG settings:
+  MXITER = 1000
+  ITER1 = 10
+  RCLOSE = 0.1
+  DAMPPCG = 0.9
+  DAMPPCGT = 0.9
+  (keep HCLOSE = 0.01)
+  
+Changed time-step multiplier for stress periods 2-5 from 1 to 1.1.
+
+Changed default formula for data set confining-bed Kz from Kz to Kz/100000.
+

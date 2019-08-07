@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.RechAddTest\RechAddTest.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.RechAddTest\RechAddTest.cbc REPLACE
+DIS              12 ..\..\model\model.RechAddTest\RechAddTest.dis OLD
+BAS6             13 ..\..\model\model.RechAddTest\RechAddTest.bas OLD
+OC               39 ..\..\model\model.RechAddTest\RechAddTest.oc OLD
+DATA             37 ..\..\output\output.RechAddTest\RechAddTest.fhd REPLACE
+DATA             38 ..\..\output\output.RechAddTest\RechAddTest.fdn REPLACE
+PCG              18 ..\..\model\model.RechAddTest\RechAddTest.pcg OLD
+LPF              14 ..\..\model\model.RechAddTest\RechAddTest.lpf OLD
+RCH              24 ..\..\model\model.RechAddTest\RechAddTest.rch OLD
+ZONE             15 ..\..\model\model.RechAddTest\RechAddTest.zon OLD
+MULT             16 ..\..\model\model.RechAddTest\RechAddTest.mlt OLD
+PVAL             52 ..\..\model\model.RechAddTest\RechAddTest.pval OLD

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">GageNote2</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 2</text><text styleclass="Normal" translate="true">: If the LAK3 Package is also active, a gaging station may be placed on a lake. In this case, only two required variables and one optional variable are read. The first variable should be the negative value of the lake number and the second is the unit number for the output. The original description of the Gage Package (Merritt and Konikow, 2000, p. 57) did not include additional print options listed for OUTTYPE. For a gaging station on a lake, a minus sign on the unit number is a flag indicating that OUTTYPE for a lake will be read.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SfrAuxVariables</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SfrAuxVariables</text></para>
+    </header>
+    <list id="21" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The routing between grids is controlled using two new auxiliary variables in item 1 of the SFR input file: LGRGRID and LGRSEG. In item 4b and(or) 6a, these variables function similarly to input variable IUPSEG in the SFR2 Package, which is used to indicate the upstream segment from which flow is supplied from a diversion. LGRGRID and LGRSEG indicate the grid and segment number, respectively, whose outflow will be used as an inflow for the current segment. Segments of the parent grid that are represented by the child grid are inactive after the first LGR iteration, which is indicated by setting LGRGRID to a negative value in the parent-grid SFR2 input file. In this case, the value specified for LGRSEG in the parent-grid SFR2 input file is not used and can be set to any value. Zeros are used for any active segments that do not receive inflow from another grid.</text></li>
+    </list>
+  </body>
+</topic>

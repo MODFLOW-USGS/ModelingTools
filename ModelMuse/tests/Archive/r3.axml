@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="r3" FileType="bin">
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="r3" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="r3" FileType="ancillary">
+    <FileName Model_Name="r3" FileType="ancillary">r3.gpt</FileName>
+  </ancillary>
+  <model Model_Name="r3" FileType="Model Input">
+    <FileName Model_Name="r3" FileType="Model Input">phast.dat</FileName>
+    <FileName Model_Name="r3" FileType="Model Input">r3.chem.dat</FileName>
+    <FileName Model_Name="r3" FileType="Model Input">r3.trans.dat</FileName>
+    <FileName Model_Name="r3" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="r3" FileType="Model Input">usgs.r3.reference</FileName>
+  </model>
+  <output Model_Name="r3" FileType="Model Output">
+    <FileName Model_Name="r3" FileType="Model Output">r3.h5</FileName>
+    <FileName Model_Name="r3" FileType="Model Output">r3.log</FileName>
+  </output>
+</Model_Archive_List>

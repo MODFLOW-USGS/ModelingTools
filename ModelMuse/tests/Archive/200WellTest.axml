@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="200WellTest" FileType="bin">
+    <FileName Model_Name="200WellTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="200WellTest" FileType="ancillary">
+    <FileName Model_Name="200WellTest" FileType="ancillary">200WellTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="200WellTest" FileType="Model Input">
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.bas</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.dis</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.gsf</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.lpf</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.nam.archive</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.oc</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.pcg</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">200WellTest.wel</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Input">usgs.200WellTest.reference</FileName>
+  </model>
+  <output Model_Name="200WellTest" FileType="Model Output">
+    <FileName Model_Name="200WellTest" FileType="Model Output">200WellTest.cbc</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Output">200WellTest.fdn</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Output">200WellTest.fhd</FileName>
+    <FileName Model_Name="200WellTest" FileType="Model Output">200WellTest.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Lgr_Test7" FileType="bin">
+    <FileName Model_Name="Lgr_Test7" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Lgr_Test7" FileType="ancillary">
+    <FileName Model_Name="Lgr_Test7" FileType="ancillary">Lgr_Test7.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Lgr_Test7" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.bas</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.bcf</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.chd</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.dis</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.evt</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.gag</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.gsf</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.lak</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.lgr.archive</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.oc</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.rch</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">Lgr_Test7.sip</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Input">usgs.Lgr_Test7.reference</FileName>
+  </model>
+  <model Model_Name="Lgr_Test7_Child_1" FileType="Model Input">
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.bas</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.bcf</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.chd</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.dis</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.evt</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.gag</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.gsf</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.lak</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.nam.archive</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.oc</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.rch</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Input">Lgr_Test7_Child_1.sip</FileName>
+  </model>
+  <output Model_Name="Lgr_Test7" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.bfh_flux</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.bfh_head</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.cbc</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.fdn</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.fhd</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.lakg1</FileName>
+    <FileName Model_Name="Lgr_Test7" FileType="Model Output">Lgr_Test7.lst</FileName>
+  </output>
+  <output Model_Name="Lgr_Test7_Child_1" FileType="Model Output">
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Output">Lgr_Test7_Child_1.cbc</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Output">Lgr_Test7_Child_1.fdn</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Output">Lgr_Test7_Child_1.fhd</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Output">Lgr_Test7_Child_1.lakg1</FileName>
+    <FileName Model_Name="Lgr_Test7_Child_1" FileType="Model Output">Lgr_Test7_Child_1.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectImportedValuesR</title>
+  <keywords>
+    <keyword translate="true">ObjectImportedValuesR</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectImportedValuesR</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing data, sometimes the data are imported as an object with multiple sections. Each section has an associated value. For real-number values, these values are accessed through the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectImportedValuesR</text><text styleclass="Normal" translate="true">({Key}) function. If used, Key is a text string used to identify the group of imported values to use. For data sets, key is not required because the name of the data set acts as the key. </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectImportedValuesR</text><text styleclass="Normal" translate="true"> is normally only used for data that has been imported from an external source.</text></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="Data_displayed_in_the_Imported"/></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Example: ObjectImportedValuesR(&quot;MyImportedData&quot;)</text></para>
+  </body>
+</topic>

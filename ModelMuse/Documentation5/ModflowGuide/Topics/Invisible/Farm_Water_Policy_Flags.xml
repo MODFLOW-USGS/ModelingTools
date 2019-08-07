@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Farm Water Policy Flags</title>
+  <body>
+    <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Water Policy Flags</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IEBFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="IEBFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Efficiency Behavior Flag</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For IEBFL = 0,1: Cell-by-cell efficiency does not vary with changing groundwater level, but cell-by-cell delivery may vary with changing groundwater level. However, farm efficiency may vary in response to reduced delivery during deficit irrigation (if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> = –1).</text></para>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">0 = Conservative Behavior – Cell-by-cell efficiency is held constant over time step with respect to changing groundwater level. Farm efficiency reset to specified efficiency at each stress period. </text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">1 = Conservative Behavior – Cell -by-cell efficiency is held constant over time with respect to changing groundwater level. Farm efficiency reset to specified efficiency at each time step.</text></li>
+          </list>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For IEBFL = 2,3: Cell-by-cell efficiency varies with changing groundwater level, but cell-by-cell delivery does not vary with changing groundwater level. However, farm delivery may vary in response to deficit irrigation (if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> = –1).</text></para>
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">2 = Conservative Behavior – Cell-by-cell delivery is held constant over time step with respect to changing groundwater level (evaluation of initial total delivery requirement (TDR) per cell at first iteration of first time step of each stress period). Farm efficiency reset to specified efficiency at each stress period.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">3 = Conservative Behavior – Cell-by-cell delivery is held constant over time step with respect to changing groundwater level (evaluation of initial total delivery requirement (TDR) per cell at first iteration of each time step). Farm efficiency reset to specified efficiency at each time step.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IROTFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="IROTFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Crop rotation flag:</text></para>
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&lt; 0 Crop Type changes temporally and spatially at every stress period (CID 2D array is read for each stress period Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet28" styleclass="Normal" translate="true">28</link><text styleclass="Normal" translate="true">)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 0 No crop rotation (CID 2D array is read for the entire simulation). (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet10" styleclass="Normal" translate="true">10</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt; 0 No crop rotation (CID 2D array is read for the entire simulation), and IROTFL = Stress period that is equal to Non-Irrigation Season. (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet10" styleclass="Normal" translate="true">10</link><text styleclass="Normal" translate="true">.)</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDEFFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="IDEFFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Deficiency Scenario flag:</text></para>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">–2 = Water Stacking (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet17" styleclass="Normal" translate="true">17</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">–1= Deficit Irrigation</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">0 = “Zero Scenario” where no policy is applied and if demand exceeds supply, it is assumed to be supplied by other imported sources</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">1 = Acreage-Optimization (See Data Sets </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet18" styleclass="Normal" translate="true">18</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet19" styleclass="Normal" translate="true">19</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet34" styleclass="Normal" translate="true">34</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet35" styleclass="Normal" translate="true">35</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">2 = Acreage-Optimization with Water Conservation Pool (only if SFR is specified in Name File, if a diversion from a river segment into a diversion-segment is specified in the SFR input file, and if routed or semi-routed deliveries from such a diversion-segment into farms can occur (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IRDFL" styleclass="Normal" translate="true">IRDFL</link><text styleclass="Normal" translate="true"> = 1, -1 or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="ISRDFL" styleclass="Normal" translate="true">ISRDFL</link><text styleclass="Normal" translate="true"> = 1, 2). (See Data Sets </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet18" styleclass="Normal" translate="true">18</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet19" styleclass="Normal" translate="true">19</link><text styleclass="Normal" translate="true">, </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet34" styleclass="Normal" translate="true">34</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet35" styleclass="Normal" translate="true">35</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">3 = Acreage-Optimization (a-priori) (Undocumented and incomplete.)</text></li>
+            <li styleclass="Normal"><text styleclass="New Materials" translate="true">4 = Acreage-Optimization with Water Conservation Pool (a-priori) (Undocumented and incomplete.)</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IBEN]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="IBEN" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Crop-Benefits Flag (only to specify if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> &gt; 0): </text></para>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">1 = crop benefits list read for the entire simulation &#160;(See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet18" styleclass="Normal" translate="true">18</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">2 = crop benefits list read for each stress period (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet34" styleclass="Normal" translate="true">34</link><text styleclass="Normal" translate="true">.)</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ICOST]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="ICOST" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Water-Cost Coefficients Flag (only to specify if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="IDEFFL" styleclass="Normal" translate="true">IDEFFL</link><text styleclass="Normal" translate="true"> &gt; 0):</text></para>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">0 = lumped water cost coefficients for the entire simulation. </text><text styleclass="New Materials" translate="true">This option is never allowed.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">1 = water cost coefficients for each farm for the entire simulation (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet19" styleclass="Normal" translate="true">19</link><text styleclass="Normal" translate="true">.)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">2 = water cost coefficients for each farm for each stress period (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet35" styleclass="Normal" translate="true">35</link><text styleclass="Normal" translate="true">.)</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IALLOTGW]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="IALLOTGW" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Variable Groundwater Allotment flag (0, 1, 2, P possible).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0 = Groundwater Allotments (ALLOTGW(NF)) are not specified, and the maximum capacity of each farm to deliver potential groundwater supply is limited by the total pumping capacity of all farm wells that are related to each water-balance subregion (farm).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">1 = Groundwater Allotments (ALLOTGW(NF)) specified for the entire simulation. (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet20" styleclass="Normal" translate="true">20</link><text styleclass="Normal" translate="true">.)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">2 = Groundwater Allotments (ALLOTGW(NF)) specified for each stress period. (See Data Set </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Process" anchor="DataSet25" styleclass="Normal" translate="true">25</link><text styleclass="Normal" translate="true">.)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">P = use parent-model groundwater allotments and bypass reading ALLOTGW per simulation or stress period. For child IALLOTGW=P and parent IALLOTGW=1, no additional data are required for the child model.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

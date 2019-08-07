@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Farm Mandatory Print Flags</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm Mandatory Print Flags</text></para>
+    </header>
+    <para styleclass="ItemGroup"><text styleclass="ItemGroup" translate="true">Mandatory Print Flags</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">For ILGR&gt;0 and IGRID&gt;1, that is, for more than one model grid, several farm-ID related budget lists required the addition of a “GRID” number after the “TIME[UNIT]” column. As a new standard, the introduction of this column is not backwards compatible to FMP3, so if LGR is not active and there is only one parent grid, the GRID column will simple show “1.”</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">So far, this was implemented for IFWLCB=1, IFWLCB&gt;1 (if “Compact Budget” is specified in Output Control), ISDPFL≥1, and IFBPFL≥1. That is, for any time step, budgets for each model are listed in sequence of the GRID number.</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFWLCB]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Farm well budget print flags</text></para>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&lt; 0 A list (farm-well ID, farm ID, layer, row, column, farm-well flow rate) is printed to list file for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not (using numeric codes)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 0 farm-well flow rates not written</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 1 A list (farm-well ID, farm ID, layer, row, column, farm-well flow rate) is saved on ASCII file “FWELLS.OUT” for all time steps</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt; 1 </text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is not specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A cell-by-cell 2D-array of farm-well flow rates will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes).</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A list (node, farm-well flow rate) will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes).</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFNRCB]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Farm net recharge budget print flags</text></para>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&lt; 0 A cell-by-cell 2D-array of farm net recharge flow rates is printed to list file for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes)</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 0 farm net recharge flow rates not written</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 1 A cell-by-cell 2D-array of farm net recharge flow rates is saved on ASCII file “FNRCH_ARRAY.OUT” for all time steps</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 2 A list (stress period, time step, total time, farm ID, cumulative farm net recharge flow rates) will be saved as ASCII file “FNRCH_LIST.OUT”</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 3 A list (stress period, time step, total time, farm ID, cumulative farm net recharge flow rates) will be saved as binary file “FNRCH_LIST_BIN.OUT” for all time steps</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt; 3</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is not specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A list (farm ID, cumulative farm net recharge flow rates) will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes).</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">if number of model layers = 1:</text></para>
+          <para styleclass="Normal" style="margin-left:72px;"><text styleclass="Normal" translate="true">A cell-by-cell 2D-array of farm net recharge flow rates will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes).</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">if number of model layers &gt; 1:</text></para>
+          <para styleclass="Normal" style="margin-left:72px;"><text styleclass="Normal" translate="true">A 2D integer-array of each cells uppermost active layer, and a 2D real-array of each cell’s farm net recharge flow rate will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes).</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISDPFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="ISDPFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Farm supply and demand print flags</text></para>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= –3 A list (A) of current demand and supply flow rates will be printed to the list file at each iteration, and a list (B) of final demand and supply flow rates will be printed to the list file for each time step:</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List (A): (FID, OFE, TFDR, NR-SWD, R-SWD, QREQ);</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List (B): (FID, OFE, TFDR, NR-SWD, R-SWD, QREQ, Q,[COMMENTS])</text></para>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= –2 A list of final demand and supply flow rates will be printed to the list file for each time step:</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List: (FID, OFE, TFDR, NR-SWD, R-SWD, QREQ, Q, [COMMENTS])</text></para>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= –1 A list of final demand and supply flow rates will be printed to the list file for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes):</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List: (FID, OFE, TFDR, NR-SWD, R-SWD, QREQ, Q, [COMMENTS])</text></para>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 0 farm demand and supply flow rates not written</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 1 A list of initial demand and supply flow rates and of final demand &amp; supply flow rates after the application of a deficiency scenario will be saved on ASCII file “FDS.OUT” for all time steps:</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List: (PER, TSTP, TIME, FID, OFE, TFDR-INI, NR-SWD-INI, R-SWD-INI, QREQ, TFDR-FIN, NR-SWD-FIN, R-SWD-FIN, QREQ, Q, DEF-FLAG)</text></para>
+          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt; 1</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is not specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A list of initial demand &amp; supply flow rates and of final demand and supply flow rates after the application of a deficiency scenario will be saved as binary file on a unit number specified in the Name File for all time steps</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">List: list attributes are equal to ISDPFL = 1</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A list of initial demand &amp; supply flow rates and of final demand &amp; supply flow rates after the application of a deficiency scenario will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes)</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">List: list attributes are equal to ISDPFL = 1</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IFBPFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><anchor id="IFBPFL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Farm budget print flags</text></para>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 0 Farm budget flow rates not written</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 1 A compact list of Farm Budget components (flow rates [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T] and cumulative volumes [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">] into and out of a farm) is saved on ASCII file “FB_COMPACT.OUT” for all time steps:</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List: (PER, TSTP, TIME, FID,</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Q-p-in, Q-sw-in, Q-gw-in, Q-ext-in, Q-tot-in,</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Q-et-out, Q-ineff-out, Q-sw-out, Q-gw-out, Q-tot-out, Q-in-out, Q-discrepancy[%],</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">V-p-in, V-sw-in, V-gw-in, V-ext-in, V-tot-in,</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">V-et-out, V-ineff-out, V-sw-out, V-gw-out, V-tot-out, V-in-out, V-discrepancy[%])</text></para>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">= 2 A compact list of Farm Budget components (flow rates [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/T] and cumulative volumes [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">] into and out of a farm) is saved on ASCII file “FB_DETAILS.OUT” for all time steps:</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">List: (PER, TSTP, TIME, FID, </text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Q-p-in, Q-nrd-in, Q-srd-in, Q-rd-in, Q-wells-in, Q-egw-in, Q-tgw-in, Q-ext-in, Q-tot-in,</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Q-ep-out, Q-ei-out, Q-egw-out, Q-tp-out, Q-ti-out, Q-tgw-out, Q-run-out, Q-dp-out, Q-nrd-out, Q-srd-out, Q-rd-out, Q-wells-out, Q-tot-out, Q-in-out, Q-discrepancy[%],</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">V-p-in, V-nrd-in, V-srd-in, V-rd-in, V-wells-in, V-egw-in, V-tgw-in, V-ext-in, V-tot-in,</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">V-ep-out, V-ei-out, V-egw-out, V-tp-out, V-ti-out, V-tgw-out, V-run-out, V-dp-out, V-nrd-out, V-srd-out, V-rd-out, V-wells-out, V-tot-out, V-in-out, V-discrepancy[%])</text></para>
+          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">&gt; 2</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is not specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A list of farm budget flow rates will be saved as binary file on a unit number specified in the Name File for all time steps</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">List: list attributes are equal to IFBPFL =1 if unit number &gt;2 is odd or equal to IFBPFL = 2 if unit number &gt; 2 is even.</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">if “Compact Budget” is specified in Output Control:</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">A list of farm budget flow rates will be saved as binary file on a unit number specified in the Name File for time steps, for which in Output Control “Save Budget” is specified (using words) or ICBCFL is not zero (using numeric codes)</text></para>
+          <para styleclass="Normal" style="margin-left:48px;"><text styleclass="Normal" translate="true">List: list attributes are equal to IFBPFL = 1 if unit number &gt;2 is odd or equal to IFBPFL = 2 if unit number &gt; 2 is even.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IETPFL]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Farm Total Evapotranspiration print flags</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0 = No ET is written out to list or external files.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">1 = A cell-by-cell 2D-array of Evaporation and Transpiration as one SUMMED array is saved on ASCII file “ET_ARRAY.OUT” for all time steps.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">2 = A cell-by-cell 2D-array of Evaporation and Transpiration as SEPARATE arrays are saved on ASCII file “ET_ARRAY.OUT” for all time steps.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">3 = A list (stress period, time step, total time, farm ID, EVAP, TRAN, and EVAP+TRAN will be saved as ASCII file ‘ET_LIST.OUT.’</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">4 = Does both IETPFL= 2 and 3 and writes to ET_ARRAY.OUT and ET_LIST.OUT, respectively.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">–1= Same as 1, but prints to LST file on the basis of Output Control.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">–2= Same as 2, but prints to LST file on the basis of Output Control.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">–3= Same as 3, but prints to LST file on the basis of Output Control.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

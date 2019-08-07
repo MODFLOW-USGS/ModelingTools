@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Stream Flow Routing Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Stream Flow Routing Package</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Source files]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwfsfrmodule.f</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwf2sfr7.f</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Module]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">GWFSFRMODULE</text></para>
+          <para styleclass="Heading4_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading4_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading4_atocs_"><caption translate="true"><![CDATA[Parameters]]></caption></toggle></para>
+          <para styleclass="Heading4_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NEARZERO=1.0D-30</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CLOSEZERO=1.0E-15</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading4_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading4_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading4_atocs_"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+          <para styleclass="Heading4_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Version_sfr - identifies the version of SFR</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">THETAB</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FLUXB</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FLUXHLD2</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NSS - Number of stream segments</text></para>
+                <para styleclass="Normal"><anchor id="NSTRM" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NSTRM - The absolute value of NSTRM is the number of stream reaches. The sign is a flag used to determine whether or not to read other data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NSFRPAR - Number of stream parameters</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTCB1 - unit number for writing stream-aquifer leakage values</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTCB2 - unit number for writing stream information on inflows and outflows</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IUZT - Flag that is set to 1 if unsaturated flow is active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MAXPTS - variable used to set the dimension of QSTAGE = 3*50</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IRTFLG - If IRTFLG &gt; 0 then streamflow will be routed using the kinematic-wave equation</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NUMTIM - number of sub time steps used to route streamflow</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ISFROPT - An integer value that defines the input structure</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NSTRAIL - Number of trailing wave increments </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ISUZN - The maximum number of vertical cells used to the define the unsaturated zone beneath a stream </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NSFRSETS - The maximum number of different sets of trailing waves </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NUZST - variable used in setting the dimensions of arrays related to unsaturated flow. It is set to the number of stream segments when unsaturated flow is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NSTOTRL - variable used in setting the dimensions of arrays related to unsaturated flow. It is set to ISUZN*NSTRAIL*NSFRSETS when unsaturated flow is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NUMAVE</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ITMP - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">An integer value for reusing or reading stream segment data that can change each stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IRDFLG - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">An integer value for printing input data specified for this stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IPTFLG - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">An integer value for printing streamflow-routing results during this stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NP - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">number of parameters used in the current stress period</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CONST - A real value (or conversion factor) used in calculating stream depth for stream reach. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DLEAK - A real value equal to the closure tolerance for stream depth used to calculate leakage between each stream reach and active model cell. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">WEIGHT - The time weighting factor used to calculate the change in channel storage</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SFRRATIN - This variable is set but not used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SFRRATOUT - This variable is set but not used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FLWTOL - the streamflow tolerance for convergence of the kinematic wave equation used for transient streamflow routing.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">STRMDELSTOR_CUM - This variable is set but not used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">STRMDELSTOR_RATE - This variable is set but not used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">TOTSPFLOW - This variable is set but not used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IOTSG(NSS + nparseg) - An integer value of the downstream stream segment that receives tributary inflow from the last downstream reach of this segment.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NSEGCK(NSS) - NSEGCK &#160;is incremented each time a segment is defined. It is used to check that each segment is defined exactly one time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ITRLSTH(NSTOTRL)</text></para>
+                <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISEG(4,NSS + nparseg)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-16px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISEG(1,*) - ICALC An integer value used to indicate method used to calculate stream depth in this segment.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISEG(2,*) - NSTRPTS An integer value specified only when ICALC = 4. It is used to dimension a table relating streamflow with stream depth and width as specified in Items 4e and 6d. </text></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISEG(3,*)]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">ISEG(3,*) is set to 6 for segments that divert flow and to 5 for segments that neither divert flow nor receive tributary flow. It is set to 7 for segments that do not divert flow but do receive tributary flow.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">ISEG(3,*) is set to as segment number</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISEG(4, jseg) - ireach</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IDIVAR(2,NSS + nparseg)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IDIVAR(1,*) - IUPSEG &#160;An integer value of the upstream segment from which water is diverted (or withdrawn) to supply inflow to this stream segment if this segment originates as a diversion from an upstream segment.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IDIVAR(2,*) - IPRIOR defines the prioritization system for diversion, such as when insufficient water is available to meet all diversion stipulations, and is used in conjunction with the value of FLOW [= SEG(2,*)].</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ISTRM(5,NSTRM) - Reach information]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTRM(1,*) - Layer</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTRM(2,*) - Row</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTRM(3,*) - Column</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTRM(4,*) - Segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ISTRM(5,*) - Reach</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LTRLIT(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">LTRLST(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ITRLIT(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ITRLST(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">NWAVST(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">STRIN(NSS) - Outflow from segment for use in the Lake pacakge.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">STROUT(NSS) - Flow from lake to stream segment.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FXLKOT(NSS) - Flow rate out of lake</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UHC(NSTRM) - the vertical saturated hydraulic conductivity of the unsaturated zone. </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SGOTFLW(NSS) - Outflow from previous segment</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DVRSFLW(NSS) - Amount of flow diverted from a previous segment.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SFRUZBD(10)</text></para>
+                <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SEG(26,NSS + nparseg)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(1,*) - segment length</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(2,*) - FLOW streamflow (in units of volume per time) entering or leaving the upstream end of a stream segment (that is, into the first reach).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(3,*) - volumetric rate of the diffuse overland runoff that enters the stream segment (in units of volume per time).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(4,*) - the volumetric rate per unit area of water removed by evapotranspiration directly from the stream channel (in units of length per time).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(5,*) - the volumetric rate per unit area of water added by precipitation directly on the stream channel (in units of length per time).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(6,*) - Hc1fact A real number that is a factor used to calculate hydraulic conductivity of the streambed at the upstream end of this segment from the parameter value (in units of length per time).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(7,*) - THICKM1 Thickness of streambed material at the upstream end of this segment (in units of length).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(8,*) - ELEVUP Elevation of the top of the streambed at the upstream end of this segment (in units of length).</text></para>
+                      <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SEG(9,*) ]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">CDPTH the coefficient used in the equation that relates stream depth in all reaches in this segment to streamflow</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">WIDTH1 Average width of the stream channel at the upstream end of this segment (in units of length).</text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SEG(10,*)]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">FDPTH &#160;the exponent &#160;used in the equation that relates stream depth in all reaches in this segment to streamflow.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">DEPTH1 Average depth of water in the channel at the upstream end of this segment (units of length). </text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(11,*) - HCOND2 Hydraulic conductivity of the streambed at the downstream end of this segment (units of length per time).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(12,*) - THICKM2 Thickness of streambed material at the downstream end of this segment (in units of length).</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(13,*) - ELEVDN Elevation of the top of the streambed at the downstream end of this segment (in units of length).</text></para>
+                      <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SEG(14,*)]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">AWDTH the coefficient used in the equation that relates stream width in all reaches in this segment to streamflow.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">WIDTH2 Average width of the stream channel at the downstream end of this segment (in units of length). </text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SEG(15,*)]]></caption></toggle></para>
+                      <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">BWDTH the exponent used in the equation that relates stream width in all reaches in this segment to streamflow.</text></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">DEPTH2 Average depth of water in the channel at the downstream end of this segment (units of length). </text></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(16,*) - Manning’s roughness coefficient for the channel in all reaches in this segment. </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(17,*) - Manning’s roughness coefficient for the overbank areas in all reaches in this segment.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(18,*) - Saturated volumetric water content in the unsaturated zone beneath the upstream end of this segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(19,*) - Initial volumetric water content beneath the upstream end of this segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(20,*) - Brooks-Corey exponent used in the relation between water content and hydraulic conductivity within the unsaturated zone beneath the upstream end of this segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(21,*) - Vertical saturated hydraulic conductivity of the unsaturated zone beneath the upstream end of this segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(22,*) - Saturated volumetric water content in the unsaturated zone beneath the downstream end of this segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(23,*) - Initial volumetric water content beneath the downstream end of this segment.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(24,*) - Brooks-Corey exponent used in the relation between water content and hydraulic conductivity within the unsaturated zone beneath the downstream end of this segment. </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(25,*) - Vertical saturated hydraulic conductivity of the unsaturated zone beneath the downstream end of this segment</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">SEG(26,*) - Used by UZF.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STRM(30,NSTRM) - Reach information]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(1,*) - RCHLEN A real number equal to the length of channel of the stream reach within this model cell. </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(2,*) - SLOPE A real number equal to the stream slope across the reach.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(3,*)- STRTOP A real number equal to the top elevation of the streambed</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(4,*) - The elevation of the bottom of the streambed: STRTOP - STRTHICK</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(5,*) - The width of the stream reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(6,*) - STRHC1 A real number equal to the hydraulic conductivity of the streambed. </text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(7,*) - The water depth of the stream reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(8,*) - STRTHICK A real number equal to the thickness of the streambed</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(9,*) - Outflow from the stream reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(10,*) - Inflow to the stream reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(11,*) - Flow through the streambed.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(12,*) - volumetric runoff into the reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(13,*) - volumeteric ET rate for the reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(14,*) - volumeteric precipitation rate for the reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(15,*) - head in the stream reach OR top elevation of the streambed</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(16,*) - leakance? of the stream reach. Units = L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true">/T</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(17,*) - head difference</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(18,*) - head gradient across the stream bed</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(19,*) - head in the stream reach. (This variable is used by the Gage package.)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(20,*) - (This variable is set but never used.)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(21,*) - GW-Rech (This variable is used by the Gage package.)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(22,*) - Chnge-UZ-Stor. (This variable is used by the Gage package.)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(23,*) - Vol.-UZ-Stor.(This variable is used by the Gage package.)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(24,*) - Exfiltrated flow into the stream reach (This variable is set by the UZF package.)</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(25,*) - a variable related to outflow from the stream reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(26,*) - a variable related to inflow into the stream reach.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(27,*) - a variable related to outflow from the stream reach</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(28,*) - a variable related to inflow into the stream reach.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(29,*) - a variable related to storage when routing flow downstream</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">STRM(30,*) - a variable related to storage when routing flow downstream</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SFRQ(5,NSTRM) - Stores data that is written to an output file by the GAG package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">HWDTH(NSTRM,NUMTIM) - width of stream for sub time steps</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">HWTPRM(NSTRM,NUMTIM) - wetted perimeter of stream for sub time steps</text></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[QSTAGE(MAXPTS,NSS + nparseg)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">QSTAGE(1..NSTRPTS, *) - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">FLOWTAB A real number that is the streamflow (units of volume per time) related to a given depth and width.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">QSTAGE(NSTRPTS+11..2*NSTRPTS, *) - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">DPTHTAB A real number that is the average depth (units of length) corresponding to a given flow.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">QSTAGE(2*NSTRPTS+1..3*NSTRPTS, *) - </text><text styleclass="Font Style" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">WDTHTAB A real number that is the stream width (units of length) corresponding to a given flow.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-19px; margin-right:0px; margin-left:19px; tabstops:none;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[XSEC(16,NSS + nparseg)]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-right:0px; margin-left:18px; tabstops:none;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">XSEC(1..8,*) - XCPTi A real number that is the distance relative to the left bank of the stream channel (when looking downstream) for the eight points (XCPT1 through XCPT8) used to describe the geometry of this segment of the stream channel.</text></para>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">XSEC(9..16,*) - ZCPTi A real number that is the height relative to the top of the lowest elevation of the streambed (thalweg). </text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">AVDPT(NUMAVE,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">AVWAT(NUMAVE,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">WAT1(NUMAVE,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CONCQ(NSTRM,Nsol) - the solute concentration associated with &quot;FLOW&quot; </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CONCRUN(NSTRM,Nsol) - the solute concentration in the overland runoff entering the stream segment.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CONCPPT(NSTRM,Nsol) - the solute concentration in precipitation that directly falls onto the stream surface.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">THTS(NSTRM) - the saturated volumetric water content in the unsaturated zone</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">THTR(NSTRM) - residual water content</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">EPS(NSTRM) - the Brooks-Corey exponent used in the relation between water content and hydraulic conductivity within the unsaturated zone </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">FOLDFLBT(NSTRM)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">THTI(NSTRM) - the initial volumetric water content</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SUMLEAK(NSTRM) - leakance through the bottom of the channel</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SUMRCH(NSTRM) - recharge to the water table.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">HLDSFR(NSTRM) - groundwater head at the stream reach.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZFLWT(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZSTOR(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZWDTH(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZSEEP(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DELSTOR(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">WETPER(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZDPIT(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZDPST(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZTHIT(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZTHST(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZSPIT(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZSPST(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZFLIT(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZFLST(NSTOTRL,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">UZOLSFLX(ISUZN,NUZST)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">HSTRM(NSTRM,NUMTIM) - Head in stream for sub time steps.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">QSTRM(NSTRM,NUMTIM)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SLKOTFLW(200,NSS)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DLKOTFLW(200,NSS)</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DLKSTAGE(200,NSS)</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Type]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">GWFSFRTYPE</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Subroutines]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7AR]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ALLOCATE ARRAY STORAGE FOR STREAMS</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">INITIALIZE VARIABLES FOR SFR PACKAGES</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">READ STREAM DATA THAT IS CONSTANT FOR ENTIRE SIMULATION:</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">REACH DATA AND PARAMETER DEFINITIONS</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGWF2SFR7UHC]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">SETS UNSATURATED VERTICAL HYDRAULIC CONDUCTIVITY TO VERTICAL HYDRAULIC CONDUCTIVITY IN THE LAYER-PROPERTY FLOW PACKAGE.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7RP]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">READ STREAM DATA FOR STRESS PERIOD</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7FM]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ADD STREAM TERMS TO RHS AND HCOF IF FLOW OCCURS IN MODEL CELL</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7BD]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CALCULATE VOLUMETRIC GROUND-WATER BUDGET FOR STREAMS AND SUM STREAMFLOWS IN MODELED AREA</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7LAKOUTFLW]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CALCULATE ARRAYS OF LAKE STAGE, FLOW, AND THE DERIVATIVE OF FLOWS FOR STREAM SEGMENTS THAT HAVE INFLOWS DETERMINED BY LAKE STAGE</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7DIVERS]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPUTES DIVERSIONS FROM AN UPSTREAM SEGMENT</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7UZOT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">PRINTS MASS BALANCE FOR ENTIRE UNSATURATED ZONE</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7DPTH]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPUTE STREAM DEPTH GIVEN FLOW USING 8-POINT CROSS SECTION</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7FLW]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPUTE FLOW IN STREAM GIVEN DEPTH USING 8-POINT CROSS SECTION</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7TBD]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPUTE DEPTH AND WIDTH IN STREAM GIVEN FLOW USING RATING TABLES.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7TBF]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPUTE FLOW AND WIDTH IN STREAM GIVEN DEPTH USING RATING TABLES</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGWF2SFR7RDSEG]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">READ STREAM SEGMENT DATA -- parameters or non parameters</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGWF2SFR7PARMOV]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MOVE STREAM PARAMETER DATA INTO ACTIVE SEGMENTS</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGWF2SFR7PRSEG]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">PRINT STREAM SEGMENT DATA -- parameters or non parameters</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CALC_UNSAT_INFIL]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DEFINE UNSATURATED CELLS TO ACCOMMODATE STREAM LOSS.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[UZMASSBAL]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPUTE INFLOW, OUTFLOW, AND CHANGE IN STORAGE IN UNSATURATED ZONE BENEATH STREAMBED.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROUTWAVESIT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ROUTE UNSATURATED ZONE WAVES DURING MODEL ITERATIONS CALLED FROM SUBROUTINE GWF2SFR7FM</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROUTWAVESST]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ROUTE UNSATURATED-ZONE WAVES AFTER FINAL ITERATION CALLED FROM SUBROUTINE GWF2SFR7BD</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[UZFLOW]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">WAVE INTERACTION WITHIN AN UNSATURATED FLOW COMPARTMENT</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LEADWAVE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">CREATE LEAD WAVE WHEN THE SURFACE FLUX INCREASES AND ROUTE WAVES</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[TRAILWAVE]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">INITIALIZE A NEW SET OF TRAIL WAVES WHEN SURFACE FLUX DECREASES</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CHANNELAREA]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">COMPARTMENTALIZE UNSATURATED ZONE BENEATH STREAMBED ON BASIS OF EIGHT POINT CROSS SECTION WHEN ICALC IS 2</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ROUTE_CHAN]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">IMPLICIT FINITE-DIFFERENCE SCHEME TO ROUTE FLOW DOWN CHANNELS</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[GWF2SFR7DA]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Save SFR data for a grid.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGWF2SFR7PNT]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Change SFR data to a different grid.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[SGWF2SFR7PSV]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Save SFR data for a grid.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Functions]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CALCUNSATFLOBOT</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[CALC_UNSAT_INFIL]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">DEFINE UNSATURATED CELLS TO ACCOMMODATE STREAM LOSS.</text></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

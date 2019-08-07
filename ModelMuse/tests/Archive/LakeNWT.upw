@@ -1,0 +1,31 @@
+# UPW: Upstream Weighting package file created on 8/1/2019 by ModelMuse version 4.0.0.7.
+     9 -1.000000000000E+020      0     1 # Data Set 1, IUPWCB HDRY NPUPW IPHDRY
+     0     0     0     0     0     0     0     0 # LAYTYP
+     0     0     0     0     0     0     0     0 # LAYAVG
+    -1    -1    -1    -1    -1    -1    -1    -1 # CHANI
+     0     0     0     0     0     0     0     0 # LAYVKA
+     0     0     0     0     0     0     0     0 # LAYWET
+CONSTANT     2.500000000000E+002  # HK Layer1 Layer 1
+CONSTANT     1.000000000000E+000  # HANI Layer1 Layer 1
+CONSTANT     1.250000000000E+002  # VKA Layer1 Layer 1
+CONSTANT     2.500000000000E+002  # HK Layer2 Layer 2
+CONSTANT     1.000000000000E+000  # HANI Layer2 Layer 2
+CONSTANT     1.250000000000E+002  # VKA Layer2 Layer 2
+CONSTANT     2.500000000000E+002  # HK Layer3 Layer 3
+CONSTANT     1.000000000000E+000  # HANI Layer3 Layer 3
+CONSTANT     1.250000000000E+002  # VKA Layer3 Layer 3
+CONSTANT     2.500000000000E+002  # HK Layer4 Layer 4
+CONSTANT     1.000000000000E+000  # HANI Layer4 Layer 4
+CONSTANT     1.250000000000E+002  # VKA Layer4 Layer 4
+CONSTANT     2.500000000000E+002  # HK Layer5 Layer 5
+CONSTANT     1.000000000000E+000  # HANI Layer5 Layer 5
+CONSTANT     1.250000000000E+002  # VKA Layer5 Layer 5
+CONSTANT     2.500000000000E+002  # HK Layer6 Layer 6
+CONSTANT     1.000000000000E+000  # HANI Layer6 Layer 6
+CONSTANT     1.250000000000E+002  # VKA Layer6 Layer 6
+CONSTANT     2.500000000000E+002  # HK Layer7 Layer 7
+CONSTANT     1.000000000000E+000  # HANI Layer7 Layer 7
+CONSTANT     1.250000000000E+002  # VKA Layer7 Layer 7
+CONSTANT     2.500000000000E+002  # HK Layer8 Layer 8
+CONSTANT     1.000000000000E+000  # HANI Layer8 Layer 8
+CONSTANT     1.250000000000E+002  # VKA Layer8 Layer 8

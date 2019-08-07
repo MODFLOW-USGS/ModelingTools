@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">BcfVCONT</title>
+  <keywords>
+    <keyword translate="true">BcfVCONT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">BcfVCONT</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">BcfVCONT</text><text styleclass="Normal" translate="true">({Layer, Row, Column}) returns the vertical conductance of a layer as required by the BCF package. Either equation 5-39 or 5-40 in the MODFLOW-2005 documentation is used to calculate VCONT depending on whether or not a Quasi3D confining bed is involved. Because VCONT for the bottom layer is not used in MODFLOW, </text><text styleclass="Strong" translate="true">BcfVCONT</text><text styleclass="Normal" translate="true"> will always return a value zero for the bottom layer. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text><text styleclass="Strong" translate="true">BcfVCONT</text><text styleclass="Normal" translate="true"> can only be used in the formulas for data sets.</text></para>
+  </body>
+</topic>

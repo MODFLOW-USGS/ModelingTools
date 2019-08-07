@@ -1,0 +1,12 @@
+    9    0  -40    9                               ITEM 1: NPLIST ISENALL IUHEAD MXSEN
+    0    0    0    0                               ITEM 2: IPRINTS ISENSU ISENPU ISENFM
+WELLS_TR    1  0    -1.1    -1.4    -0.8  1.0E-3   ITEM 3: PARNAM ISENS LN B BL BU BSCAL
+RCH_ZONE_1  1  0    60.0    20.0   100.0  1.0E-2
+RCH_ZONE_2  1  0    30.0    10.0    50.0  1.0E-2
+RIVERS      1  1  1.2E-3  1.2E-4  1.2E-2  1.0E-6
+SS_1        1  1  1.3E-3  1.0E-6  1.0E-4  1.0E-6
+HK_1        1  1  3.0E-4  3.0E-5  3.0E-3  1.0E-7
+VERT_K_CB   1  1  1.0E-7  1.0E-8  1.0E-6  1.0E-10
+SS_2        1  1  2.0E-4  2.0E-5  2.0E-3  1.0E-7
+HK_2        1  1  4.0E-5  4.0E-6  4.0E-4  1.0E-8
+

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Example Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Example Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The goals of this example are to: </text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce the ModelMuse main window.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce objects.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce some of the important ModelMuse dialog boxes.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Illustrate how objects can be used to define non-uniform layer boundaries in MODFLOW models.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce how to work with MODFLOW parameters in ModelMuse.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce how to select MODFLOW packages in ModelMuse.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce methods for importing data and background images.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce methods for viewing model results.</text></li>
+      <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce a method for saving an image of the model.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model in this example has already been created and is used to illustrate a variety of features in ModelMuse. Some of the features that the model illustrates are (1) spatially varying layer elevations, (2) the use of parameters, multiplier arrays, and zone arrays to define aquifer properties, (3) defining boundary conditions, (4) importing data and images, (5) running the model, and (6) viewing model results. The model has ten rows, ten columns, and nine layers. The model has several specified head boundaries and a well. The spatial distribution of the hydraulic conductivity in the Layer Property Flow (LPF) package is defined using a combination of parameters, multiplier arrays, and zone arrays.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To open the example model, start ModelMuse (by double clicking on ModelMuse.exe) and select &quot;Open an existing model&quot;. Go to the ModelMuse Examples directory. It will most likely be in a &quot;C:\Users\Public\Documents\ModelMuse Examples\examples\MODFLOW&quot;. </text></para>
+    <para styleclass="Normal"><image src="ExampleModelLocations.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select ExampleModel.gpt (in the &quot;My Documents\ModelMuse Examples\examples\examples\MODFLOW&quot; folder) and the model will open. It should look similar to figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">66</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">21</text><conditional-text type="END"/><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The ModelMuse main window shows four views of the model. The view on the upper left is a view from the top. The view on the upper right is a view from the right side. The view on the lower left is a view from the front. The view on the lower left is a three-dimensional (3-D) view of the model. The user can edit the model in the top, front, and side views. The model can be viewed but not edited in the 3-D view.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Three point objects (the small squares) are visible on the top view of the model. One of the squares is black, indicating that it is the selected object. If the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Select objects</text><text styleclass="Normal" translate="true"> button </text><image src="Select.png" scale="100.00%" styleclass="Normal"><title translate="true">Select Objects button</title></image><text styleclass="Normal" translate="true"> in the toolbar is depressed, it is possible to double click on an object to display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. The Object Properties dialog box is how the user defines what role each object plays in the model. Another important dialog box is the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box. Data sets define things such as the hydraulic conductivity of the aquifers and the elevations of the layer boundaries. Some data sets are created by ModelMuse, but the user can create additional data sets for other purposes.</text></para>
+    <para styleclass="Image Caption"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="ModelMuse1.bmp" scale="75.00%" width="484" height="455" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">66</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">21</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Initial appearance of ExampleModel.gpt.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

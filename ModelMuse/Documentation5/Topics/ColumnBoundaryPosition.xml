@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ColumnBoundaryPosition</title>
+  <keywords>
+    <keyword translate="true">ColumnBoundaryPosition</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ColumnBoundaryPosition</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW, PHAST, and WellFootprint models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnBoundaryPosition</text><text styleclass="Normal" translate="true">({Column}) returns the X coordinate in the grid coordinate system of the column boundary specified by its one optional argument Column. If the optional argument is not included, the function uses the column number of the node or element for which the formula is being calculated. For SUTRA and MODFLOW 6 DISV models, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ColumnBoundaryPosition</text><text styleclass="Normal" translate="true"> returns zero.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ColumnBoundaryPosition(1) returns the position of the leftmost edge of the grid in MODFLOW, PHAST, and WellFootprint.</text></para>
+  </body>
+</topic>

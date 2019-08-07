@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Grid Angle Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Grid Angle Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid Angle</text><text styleclass="Normal" translate="true"> dialog box is used to change the angle of the grid. It is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Specify Grid Angle…</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Strong" translate="true">Grid|Rotate Grid Around Grid Origin</text><text styleclass="Normal" translate="true"> The user then enters an angle (in degrees) in the edit box and clicks the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button to change the angle of the grid as viewed from the top. The grid will be rotated around either its center or the grid origin depending on which command was used to display the dialog box. The grid angle is measured counterclockwise from the X-axis. The axis of rotation is always vertical. For all models, the grid origin as at the position of the first row and column boundaries. The grid origin is the upper left corner for MODFLOW models and the lower left corner for PHAST models.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Specifying_a_Grid_with_Numbers" styleclass="Normal" translate="true">Specifying a Grid with Numbers</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Editing_the_Grid" styleclass="Normal" translate="true">Editing the Grid</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Heads in FHB: Flow and Head Boundary Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Heads in FHB: Flow and Head Boundary Package</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Heads in FHB: Flow and Head Boundary package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The data that can be specified for the specified heads in the FHB package are the </text><text styleclass="Strong" translate="true">Time</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Strong" translate="true">Head</text><text styleclass="Normal" style="font-weight:normal;" translate="true">. </text></para>
+    <para styleclass="Normal"><snippet src="FHB_Time"/></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Head</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> is the specified head in a cell.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The specified head for a time step will be the interpolated value of specified head at the end of the time step.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DoubleWellTest" FileType="bin">
+    <FileName Model_Name="DoubleWellTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DoubleWellTest" FileType="ancillary">
+    <FileName Model_Name="DoubleWellTest" FileType="ancillary">DoubleWellTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DoubleWellTest" FileType="Model Input">
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.bas</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.dis</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.gsf</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.lpf</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.nam.archive</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.oc</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.pcg</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">DoubleWellTest.wel</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Input">usgs.DoubleWellTest.reference</FileName>
+  </model>
+  <output Model_Name="DoubleWellTest" FileType="Model Output">
+    <FileName Model_Name="DoubleWellTest" FileType="Model Output">DoubleWellTest.cbc</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Output">DoubleWellTest.fdn</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Output">DoubleWellTest.fhd</FileName>
+    <FileName Model_Name="DoubleWellTest" FileType="Model Output">DoubleWellTest.lst</FileName>
+  </output>
+</Model_Archive_List>

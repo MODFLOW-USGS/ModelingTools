@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Parameter Names and Values</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each parameter must have a unique </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Name</text><text styleclass="Normal" translate="true">. Only ASCII characters are allowed in parameter names.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Value</text><text styleclass="Normal" translate="true"> of the parameter is used to determine the input to MODFLOW.</text></para>
+  </body>
+</topic>

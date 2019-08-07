@@ -1,0 +1,21 @@
+# CHD: Time-Variant Specified-Head package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# These comments will be printed at the beginning of the CHD input file.
+PARAMETER     1     4 # PARAMETER NPCHD MXL
+     2 AUXILIARY IFACE # MXACTC Option
+CHD_Par1 CHD  1.000000000000E+000      1 INSTANCES     3 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+CHD_Par1_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+     1     1     1  1.000000000000E+001   1.000000000000E+001      0 # Data Set 4b: Layer Row Column Shdfact Ehdfact IFACE
+CHD_Par1_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+     1    10    10  9.000000000000E+000   9.000000000000E+000      0 # Data Set 4b: Layer Row Column Shdfact Ehdfact IFACE
+CHD_Par1_3 # Data Set 4a: INSTNAM (Parameter instance for stress period 3)
+     1    10    10  9.000000000000E+000   9.000000000000E+000      0 # Data Set 4b: Layer Row Column Shdfact Ehdfact IFACE
+     1     1 # Data Set 5: ITMP NP Stress period 1
+     1    10     6  1.000000000000E+001   1.050000000000E+001      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+CHD_Par1 CHD_Par1_1 # Data Set 7: PARNAM Iname
+     1     1 # Data Set 5: ITMP NP Stress period 2
+     1    10     6  1.050000000000E+001   1.075000000000E+001      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+CHD_Par1 CHD_Par1_2 # Data Set 7: PARNAM Iname
+     1     1 # Data Set 5: ITMP NP Stress period 3
+     1    10     6  1.075000000000E+001   1.100000000000E+001      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+CHD_Par1 CHD_Par1_3 # Data Set 7: PARNAM Iname
+     0     0 # Data Set 5: ITMP NP Stress period 4

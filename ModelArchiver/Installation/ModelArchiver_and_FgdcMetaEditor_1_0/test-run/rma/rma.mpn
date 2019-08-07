@@ -1,0 +1,9 @@
+LIST 11 rma.mplst
+MAIN 12 rma.mpm
+DIS 13 rma.dis
+ENDPOINT 15 rma.end
+PATHLINE 16 rma.path
+LOCATIONS 19 rma.strt
+BUDGET 20 rma.cbc
+HEAD 21 rma.fhd
+DRAWDOWN 23 rma.fdn

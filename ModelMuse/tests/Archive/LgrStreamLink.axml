@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="LgrStreamLink" FileType="bin">
+    <FileName Model_Name="LgrStreamLink" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+  </bin>
+  <ancillary Model_Name="LgrStreamLink" FileType="ancillary">
+    <FileName Model_Name="LgrStreamLink" FileType="ancillary">LgrStreamLink.gpt</FileName>
+  </ancillary>
+  <model Model_Name="LgrStreamLink" FileType="Model Input">
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.bas</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.dis</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.gsf</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.lgr.archive</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.lpf</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.nam.archive</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.oc</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.pcg</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">LgrStreamLink.sfr</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Input">usgs.LgrStreamLink.reference</FileName>
+  </model>
+  <model Model_Name="LgrStreamLink_Child_1" FileType="Model Input">
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.bas</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.dis</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.gsf</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.lpf</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.nam.archive</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.oc</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.pcg</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Input">LgrStreamLink_Child_1.sfr</FileName>
+  </model>
+  <output Model_Name="LgrStreamLink" FileType="Model Output">
+    <FileName Model_Name="LgrStreamLink" FileType="Model Output">LgrStreamLink.bfh_flux</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Output">LgrStreamLink.bfh_head</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Output">LgrStreamLink.cbc</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Output">LgrStreamLink.fdn</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Output">LgrStreamLink.fhd</FileName>
+    <FileName Model_Name="LgrStreamLink" FileType="Model Output">LgrStreamLink.lst</FileName>
+  </output>
+  <output Model_Name="LgrStreamLink_Child_1" FileType="Model Output">
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Output">LgrStreamLink_Child_1.cbc</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Output">LgrStreamLink_Child_1.fdn</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Output">LgrStreamLink_Child_1.fhd</FileName>
+    <FileName Model_Name="LgrStreamLink_Child_1" FileType="Model Output">LgrStreamLink_Child_1.lst</FileName>
+  </output>
+</Model_Archive_List>

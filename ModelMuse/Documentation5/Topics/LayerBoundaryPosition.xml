@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LayerBoundaryPosition</title>
+  <keywords>
+    <keyword translate="true">LayerBoundaryPosition</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">LayerBoundaryPosition</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">LayerBoundaryPosition</text><text styleclass="Normal" translate="true">({{Col, Row,}Layer}) returns the Z coordinate of the position of the layer boundary specified by its arguments (if any). The function has three optional arguments: Column, Row, and Layer. If these arguments are provided, they specify the element or cell for which the area should be calculated. If they are not provided, the function uses the column, row, and layer of the element or cell for which the formula is being calculated. If only one of the arguments is provided, it is treated as the layer. If any of the arguments has an invalid value, the function returns zero. In SUTRA models, Column is the number of the node or element in the two-dimensional mesh on the top view of the model.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">LayerBoundaryPosition(1) returns the elevation of the top of the model grid in MODFLOW.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">LayerBoundaryPosition(1) returns the elevation of the bottom of the model grid in PHAST.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">LayerBoundaryPosition(1) returns the elevation of the top of the model mesh in SUTRA.</text></para>
+  </body>
+</topic>

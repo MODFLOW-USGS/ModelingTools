@@ -1,0 +1,11 @@
+# Name File for MT3DMS created on 11/1/2013 by ModelMuse
+LIST 16 StreamTest2.mls
+FTL 10 StreamTest2.ftl
+DATA 17 StreamTest2.cnf
+BTN 1 StreamTest2.btn
+DATA(BINARY) 201 StreamTest2_abc.ucn
+DATA 601 StreamTest2_abc._mas
+ADV 2 StreamTest2.adv
+DSP 3 StreamTest2.dsp
+SSM 4 StreamTest2.ssm
+GCG 9 StreamTest2.gcg

@@ -1,0 +1,21 @@
+# SSM: Sink and Source Mixing package file created on 8/1/2019 by ModelMuse version 4.0.0.7.
+       753         0 # Data Set 2: MXSS ISSGOUT
+         1 # Data set 3: INCRCH; Stress Period 1
+         0        0.                            12
+        16 # Data set 11: NSS; Stress Period 1
+         1         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         2         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         3         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         4         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         5         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         6         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         7         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         8         1         4         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         1         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         2         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         3         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         4         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         5         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         6         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         7         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]
+         8         1         5         1         1         1 # Data Set 12: KSS, ISS, JSS, CSS, ISSTYPE, [CSSMS(n), n=1, NCOMP]

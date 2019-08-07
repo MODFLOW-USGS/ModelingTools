@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.CFM3_example1\CFM3_example1.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.CFM3_example1\CFM3_example1.cbc REPLACE
+DIS              12 ..\..\model\model.CFM3_example1\CFM3_example1.dis OLD
+BAS6             13 ..\..\model\model.CFM3_example1\CFM3_example1.bas OLD
+OC               39 ..\..\model\model.CFM3_example1\CFM3_example1.oc OLD
+DATA             37 ..\..\output\output.CFM3_example1\CFM3_example1.fhd REPLACE
+DATA             38 ..\..\output\output.CFM3_example1\CFM3_example1.fdn REPLACE
+PCG              18 ..\..\model\model.CFM3_example1\CFM3_example1.pcg OLD
+LPF              14 ..\..\model\model.CFM3_example1\CFM3_example1.lpf OLD
+CHD              17 ..\..\model\model.CFM3_example1\CFM3_example1.chd OLD
+RCH              24 ..\..\model\model.CFM3_example1\CFM3_example1.rch OLD
+CFP             165 ..\..\model\model.CFM3_example1\CFM3_example1.cfp OLD
+CRCH            166 ..\..\model\model.CFM3_example1\CFM3_example1.crch OLD
+COC             167 ..\..\model\model.CFM3_example1\CFM3_example1.coc OLD

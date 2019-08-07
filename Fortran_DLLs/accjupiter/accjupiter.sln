@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "accjupiter", "accjupiter.vfproj", "{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B614E981-5F0E-47FC-AE72-1998A9A5311B} = {B614E981-5F0E-47FC-AE72-1998A9A5311B}
+	EndProjectSection
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "jupiter_api", "..\jupiter_api\jupiter_api.vfproj", "{B614E981-5F0E-47FC-AE72-1998A9A5311B}"
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "testAccJupiter", "..\testAccJupiter\testAccJupiter.vfproj", "{109E9309-D3D1-436D-82A1-B4EE29180063}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C} = {8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}
+		{B614E981-5F0E-47FC-AE72-1998A9A5311B} = {B614E981-5F0E-47FC-AE72-1998A9A5311B}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{812F1494-4883-4798-91B2-F90581969BA1}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe_Important.txt = ReadMe_Important.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}.Debug|Win32.Build.0 = Debug|Win32
+		{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}.Release|Win32.ActiveCfg = Release|Win32
+		{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}.Release|Win32.Build.0 = Release|Win32
+		{B614E981-5F0E-47FC-AE72-1998A9A5311B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B614E981-5F0E-47FC-AE72-1998A9A5311B}.Debug|Win32.Build.0 = Debug|Win32
+		{B614E981-5F0E-47FC-AE72-1998A9A5311B}.Release|Win32.ActiveCfg = Release|Win32
+		{B614E981-5F0E-47FC-AE72-1998A9A5311B}.Release|Win32.Build.0 = Release|Win32
+		{109E9309-D3D1-436D-82A1-B4EE29180063}.Debug|Win32.ActiveCfg = Debug|Win32
+		{109E9309-D3D1-436D-82A1-B4EE29180063}.Debug|Win32.Build.0 = Debug|Win32
+		{109E9309-D3D1-436D-82A1-B4EE29180063}.Release|Win32.ActiveCfg = Release|Win32
+		{109E9309-D3D1-436D-82A1-B4EE29180063}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

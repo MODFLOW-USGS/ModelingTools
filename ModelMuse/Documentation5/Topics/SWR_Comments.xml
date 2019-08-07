@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Comments</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Comments</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Comments pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Surface_Water_Routing_Proc" styleclass="Normal" translate="true">SWR: Surface-Water Routing Process Pane</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The text that you write in this pane will be included as comments at the beginning of the SWR input file.</text></para>
+  </body>
+</topic>

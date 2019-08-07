@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Water Policy Flags</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Water Policy Flags</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is a subpane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP_Farm_Process" styleclass="Strong" translate="true">FMP: Farm Process</link><text styleclass="Normal" translate="true"> pane on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Efficiency behavior (IEBFL)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This flag determines whether the cell-by-cell efficiency or the cell-by-cell delivery of irrigation water is affected by the groundwater level. It also determines whether the farm efficiency is reset to the specified efficiency at every stress period or every time step. Note that Farm efficiency or farm delivery may be reduced if IDEFFL = -1 even if cell-by-cell efficiency or delivery is not affected by groundwater level.</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="IDEFFL" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Deficiency policy (IDEFFL)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are five deficiency scenarios that can be simulated by FMP</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Water stacking (-2):</text><text styleclass="Normal" translate="true"> With water stacking, some crops are given priority over other crops in meeting their irrigation requirements. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="References_Cited" anchor="FMP1" styleclass="Reference" translate="true">Schmid and others (2006)</link><text styleclass="Reference" translate="true"> fig. 12, p. 29.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Deficit irrigation (-1):</text><text styleclass="Normal" translate="true"> With deficit irrigation, all crops are treated equally with respect to irrigation except that if any crop would otherwise get more than it needs, that surplus is redistributed to other crops. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="References_Cited" anchor="FMP1" styleclass="Reference" translate="true">Schmid and others (2006)</link><text styleclass="Reference" translate="true"> fig. 11, p. 29.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">No policy (0):</text><text styleclass="Normal" translate="true"> If demand exceeds supply, it is assumed to be supplied by other imported sources.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Acreage-optimization (1):</text><text styleclass="Normal" translate="true"> With acreage-optimization, the water is distributed so as to maximize profitability.</text></li>
+      <li styleclass="Normal"><text styleclass="Strong" translate="true">Acreage-optimization with water conservation pool (2):</text><text styleclass="Normal" translate="true"> A water conservation pool is a pool of water behind a dam saved for recharge. To use this option, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> package must be active.</text></li>
+    </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Farm well pumping limited by groundwater allotments (IALLOTGW)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If this checkbox is checked, the amount of water that a farm may withdraw will be limited by its allotment (and the well capacities). If not checked, the amount withdrawn is limited only by the well capacities.</text></para>
+    <para style="margin-top:8px; margin-bottom:8px;"></para>
+    <para style="margin-top:8px; margin-bottom:8px;"></para>
+  </body>
+</topic>

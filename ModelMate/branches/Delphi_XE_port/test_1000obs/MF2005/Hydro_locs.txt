@@ -1,0 +1,9 @@
+6               Item 1: NUMLOC
+ 8   63   18    Item 2: Layer Row Column
+10   63   18
+ 8   64   24
+10   64   24
+ 8   73   20
+10   73   20
+
+ 

@@ -1,0 +1,3089 @@
+object Model: TPhastModel
+  Bitmaps = <>
+  Version = '0.3.2.0'
+  Left = 316
+  Top = 163
+  Width = 649
+  Height = 699
+  FrontHeight = 112
+  SideWidth = 118
+  MagnificationTop = 1.061385564265117000
+  MagnificationFront = 1.280000000000000000
+  MagnificationSide = 1.019644651830582000
+  Exaggeration = 1.000000000000000000
+  TopX = -49.371648566773060000
+  TopY = -48.530103946529000000
+  FrontX = -46.367187500000000000
+  FrontY = -25.273437500000000000
+  SideX = -26.364121194199750000
+  SideY = -22.441713925645930000
+  TopViewWidth = 526
+  TopViewHeight = 456
+  PhastGrid.ColumnCount = 30
+  PhastGrid.ColumnDirection = cdWestToEast
+  PhastGrid.LayerCount = 1
+  PhastGrid.LayerDirection = ldBottomToTop
+  PhastGrid.RowCount = 30
+  PhastGrid.RowDirection = rdSouthToNorth
+  PhastGrid.SelectedColumn = 29
+  PhastGrid.SelectedLayer = 0
+  PhastGrid.SelectedRow = 29
+  PhastGrid.ColumnPositions = (
+    0.000000000000000000
+    10.000000000000000000
+    20.000000000000000000
+    30.000000000000000000
+    40.000000000000000000
+    50.000000000000000000
+    60.000000000000000000
+    70.000000000000000000
+    80.000000000000000000
+    90.000000000000000000
+    100.000000000000000000
+    110.000000000000000000
+    120.000000000000000000
+    130.000000000000000000
+    140.000000000000000000
+    150.000000000000000000
+    160.000000000000000000
+    170.000000000000000000
+    180.000000000000000000
+    190.000000000000000000
+    200.000000000000000000
+    210.000000000000000000
+    220.000000000000000000
+    230.000000000000000000
+    240.000000000000000000
+    250.000000000000000000
+    260.000000000000000000
+    270.000000000000000000
+    280.000000000000000000
+    290.000000000000000000
+    300.000000000000000000)
+  PhastGrid.RowPositions = (
+    0.000000000000000000
+    10.000000000000000000
+    20.000000000000000000
+    30.000000000000000000
+    40.000000000000000000
+    50.000000000000000000
+    60.000000000000000000
+    70.000000000000000000
+    80.000000000000000000
+    90.000000000000000000
+    100.000000000000000000
+    110.000000000000000000
+    120.000000000000000000
+    130.000000000000000000
+    140.000000000000000000
+    150.000000000000000000
+    160.000000000000000000
+    170.000000000000000000
+    180.000000000000000000
+    190.000000000000000000
+    200.000000000000000000
+    210.000000000000000000
+    220.000000000000000000
+    230.000000000000000000
+    240.000000000000000000
+    250.000000000000000000
+    260.000000000000000000
+    270.000000000000000000
+    280.000000000000000000
+    290.000000000000000000
+    300.000000000000000000)
+  PhastGrid.LayerElevations = (
+    0.000000000000000000
+    10.000000000000000000)
+  DataSetList = <
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = 'True'
+      DataSet.Name = 'Active'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtBoolean
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.36'
+      DataSet.Name = 'Kx'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.36'
+      DataSet.Name = 'Ky'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.36'
+      DataSet.Name = 'Kz'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.2'
+      DataSet.Name = 'Porosity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '1.37E-5'
+      DataSet.Name = 'Specific_Storage'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '10.'
+      DataSet.Name = 'Long_Dispersivity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '10'
+      DataSet.Name = 'Horizontal_Transv_Dispersivity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '10'
+      DataSet.Name = 'Vertical_Transv_Dispersivity'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.'
+      DataSet.Name = 'Initial_Head'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TRealPhastDataSet'
+      DataSetFunction = '0.'
+      DataSet.Name = 'Initial_Water_Table'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dsoTop
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '0'
+      DataSet.Name = 'Chemistry_Initial_Solution'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Equilibrium_Phases'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Surface'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Exchange'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Gas_Phase'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Solid_Solutions'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TIntegerPhastDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Chemistry_Initial_Kinetics'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+      DataSet.InterpolationDirection = pidX
+      DataSet.UsePHAST_InterpolationForAllCells = False
+      DataSet.Value1 = 0
+      DataSet.Value2 = 0
+    end
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Print_Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+    end
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = '1'
+      DataSet.Name = 'Print_XYZ_Chemistry'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = True
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
+      DataSet.DataType = rdtInteger
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dso3D
+      DataSet.Visible = True
+    end
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = '0'
+      DataSet.Name = 'NorthSpecifiedHeads'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = []
+      DataSet.TwoInterpolatorClass = 'TNearest2DInterpolator'
+      DataSet.TwoDInterpolator.Anisotropy = 1.000000000000000000
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dsoFront
+      DataSet.Visible = True
+    end
+    item
+      DataSetClass = 'TDataSet'
+      DataSetFunction = '0'
+      DataSet.Name = 'EastSpecifiedHeads'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.Lock = []
+      DataSet.TwoInterpolatorClass = 'TNearest2DInterpolator'
+      DataSet.TwoDInterpolator.Anisotropy = 1.000000000000000000
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaNodes
+      DataSet.Orientation = dsoSide
+      DataSet.Visible = True
+    end>
+  Diffusivity = 0.000000001000000000
+  ObjectList = <
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object0'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecZero
+      Contour.EvaluatedAt = eaBlocks
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '0'
+      Contour.LowerElevationFunction = '0'
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 10.000000000000000000
+      Contour.CellSizeUsed = True
+      Contour.Visible = False
+      Contour.InterpValues = <>
+      Points = <
+        item
+        end
+        item
+          X = 300.000000000000000000
+        end
+        item
+          X = 300.000000000000000000
+          Y = 300.000000000000000000
+        end
+        item
+          Y = 300.000000000000000000
+        end
+        item
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object1'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecZero
+      Contour.EvaluatedAt = eaBlocks
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '0'
+      Contour.LowerElevationFunction = '0'
+      Contour.Selected = False
+      Contour.ViewDirection = vdFront
+      Contour.CellSize = 10.000000000000000000
+      Contour.CellSizeUsed = True
+      Contour.Visible = False
+      Contour.InterpValues = <>
+      Points = <
+        item
+          X = -4.296875000000000000
+          Y = 10.000000000000000000
+        end
+        item
+          X = -4.296875000000000000
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object2'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecZero
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = True
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '0'
+      Contour.LowerElevationFunction = '0'
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.Visible = False
+      Contour.WellBoundary.Description = 'Injection well'
+      Contour.WellBoundary.Solution = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '1'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.WellBoundary.InjectionOrPumpingRate = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '-56.25'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.WellBoundary.Diameter = 0.200000000000000000
+      Contour.WellBoundary.AllocateByPressureAndMobility = False
+      Contour.WellBoundary.Intervals = <
+        item
+          SecondElevation = 10.000000000000000000
+        end>
+      Contour.WellBoundary.WellElevationFormat = wefElevation
+      Contour.InterpValues = <>
+      Points = <
+        item
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TMultiValueContour'
+      Contour.Name = 'Object3'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = True
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '10.1'
+      Contour.LowerElevationFunction = '-0.1'
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.Visible = False
+      Contour.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end>
+      Contour.RealValues = <
+        item
+          FirstCol = 0
+          FirstRow = 0
+          FirstLay = 0
+          LastCol = 30
+          LastRow = 30
+          LastLay = 1
+          DataSetName = 'Initial_Head'
+          RealValues = (
+            63.361000000000000000
+            47.740400000000000000
+            40.655000000000000000
+            36.473800000000000000
+            33.554300000000000000
+            31.309900000000000000
+            29.483900000000000000
+            27.943500000000000000
+            26.610700000000000000
+            25.436100000000000000
+            24.385800000000000000
+            23.436100000000000000
+            22.569300000000000000
+            21.772100000000000000
+            21.034100000000000000
+            20.347100000000000000
+            19.704500000000000000
+            19.100900000000000000
+            18.531900000000000000
+            17.993600000000000000
+            17.483000000000000000
+            16.997400000000000000
+            16.534300000000000000
+            16.091800000000000000
+            15.668100000000000000
+            15.261800000000000000
+            14.871400000000000000
+            14.495700000000000000
+            14.133600000000000000
+            13.784200000000000000
+            13.446500000000000000
+            47.740400000000000000
+            43.471600000000000000
+            39.202599999999990000
+            35.842900000000000000
+            33.216700000000000000
+            31.100600000000000000
+            29.341200000000000000
+            27.839600000000000000
+            26.531700000000000000
+            25.373800000000000000
+            24.335600000000000000
+            23.394600000000000000
+            22.534500000000000000
+            21.742400000000000000
+            21.008500000000000000
+            20.324900000000000000
+            19.685000000000000000
+            19.083600000000000000
+            18.516500000000000000
+            17.979800000000000000
+            17.470600000000000000
+            16.986000000000000000
+            16.524000000000000000
+            16.082400000000000000
+            15.659500000000000000
+            15.253800000000000000
+            14.864000000000000000
+            14.488800000000000000
+            14.127200000000000000
+            13.778300000000000000
+            13.441000000000000000
+            40.655000000000000000
+            39.202599999999990000
+            36.840600000000000000
+            34.478500000000000000
+            32.368700000000000000
+            30.534800000000000000
+            28.940400000000000000
+            27.542100000000000000
+            26.302500000000000000
+            25.192100000000000000
+            24.187900000000000000
+            23.272400000000000000
+            22.431600000000000000
+            21.654700000000000000
+            20.932800000000000000
+            20.258800000000000000
+            19.626900000000000000
+            19.032200000000000000
+            18.470600000000000000
+            17.938600000000000000
+            17.433400000000000000
+            16.952300000000000000
+            16.493200000000000000
+            16.054200000000000000
+            15.633600000000000000
+            15.230000000000000000
+            14.842000000000000000
+            14.468400000000000000
+            14.108300000000000000
+            13.760600000000000000
+            13.424500000000000000
+            36.473800000000000000
+            35.842900000000000000
+            34.478500000000000000
+            32.861700000000000000
+            31.244800000000000000
+            29.729300000000000000
+            28.343600000000000000
+            27.085900000000000000
+            25.944200000000000000
+            24.903900000000000000
+            23.951600000000000000
+            23.075300000000000000
+            22.264900000000000000
+            21.511900000000000000
+            20.809100000000000000
+            20.150700000000000000
+            19.531700000000000000
+            18.947600000000000000
+            18.395000000000000000
+            17.870700000000000000
+            17.372000000000000000
+            16.896500000000000000
+            16.442400000000000000
+            16.007700000000000000
+            15.590900000000000000
+            15.190500000000000000
+            14.805500000000000000
+            14.434600000000000000
+            14.076800000000000000
+            13.731200000000000000
+            13.397000000000000000
+            33.554300000000000000
+            33.216700000000000000
+            32.368700000000000000
+            31.244800000000000000
+            30.019500000000000000
+            28.794100000000000000
+            27.618700000000000000
+            26.513800000000000000
+            25.484300000000000000
+            24.527900000000000000
+            23.639300000000000000
+            22.812400000000000000
+            22.040800000000000000
+            21.318800000000000000
+            20.641200000000000000
+            20.003400000000000000
+            19.401300000000000000
+            18.831600000000000000
+            18.291100000000000000
+            17.777100000000000000
+            17.287300000000000000
+            16.819500000000000000
+            16.372100000000000000
+            15.943200000000000000
+            15.531600000000000000
+            15.135800000000000000
+            14.754800000000000000
+            14.387500000000000000
+            14.033000000000000000
+            13.690400000000000000
+            13.358900000000000000
+            31.309900000000000000
+            31.100600000000000000
+            30.534800000000000000
+            29.729300000000000000
+            28.794100000000000000
+            27.808800000000000000
+            26.823400000000000000
+            25.866200000000000000
+            24.951200000000000000
+            24.084000000000000000
+            23.265400000000000000
+            22.494000000000000000
+            21.767000000000000000
+            21.081200000000000000
+            20.433300000000000000
+            19.820200000000000000
+            19.238800000000000000
+            18.686400000000000000
+            18.160700000000000000
+            17.659400000000000000
+            17.180500000000000000
+            16.722300000000000000
+            16.283100000000000000
+            15.861600000000000000
+            15.456400000000000000
+            15.066400000000000000
+            14.690500000000000000
+            14.327800000000000000
+            13.977400000000000000
+            13.638500000000000000
+            13.310300000000000000
+            29.483900000000000000
+            29.341200000000000000
+            28.940400000000000000
+            28.343600000000000000
+            27.618700000000000000
+            26.823400000000000000
+            26.000000000000000000
+            25.176500000000000000
+            24.370400000000000000
+            23.591300000000000000
+            22.844400000000000000
+            22.131300000000000000
+            21.452100000000000000
+            20.805800000000000000
+            20.190800000000000000
+            19.605200000000000000
+            19.047100000000000000
+            18.514600000000000000
+            18.005900000000000000
+            17.519200000000000000
+            17.053100000000000000
+            16.606000000000000000
+            16.176500000000000000
+            15.763600000000000000
+            15.366000000000000000
+            14.982800000000000000
+            14.612900000000000000
+            14.255700000000000000
+            13.910200000000000000
+            13.575700000000000000
+            13.251500000000000000
+            27.943500000000000000
+            27.839600000000000000
+            27.542100000000000000
+            27.085900000000000000
+            26.513800000000000000
+            25.866200000000000000
+            25.176500000000000000
+            24.469400000000000000
+            23.762300000000000000
+            23.066700000000000000
+            22.389400000000000000
+            21.734600000000000000
+            21.104300000000000000
+            20.499100000000000000
+            19.918800000000000000
+            19.362700000000000000
+            18.829800000000000000
+            18.319000000000000000
+            17.829000000000000000
+            17.358600000000000000
+            16.906600000000000000
+            16.471900000000000000
+            16.053500000000000000
+            15.650200000000000000
+            15.261300000000000000
+            14.885800000000000000
+            14.522800000000000000
+            14.171800000000000000
+            13.831900000000000000
+            13.502500000000000000
+            13.182900000000000000
+            26.610700000000000000
+            26.531700000000000000
+            26.302500000000000000
+            25.944200000000000000
+            25.484300000000000000
+            24.951200000000000000
+            24.370400000000000000
+            23.762300000000000000
+            23.142900000000000000
+            22.523500000000000000
+            21.912000000000000000
+            21.313500000000000000
+            20.731400000000000000
+            20.167500000000000000
+            19.622600000000000000
+            19.097000000000000000
+            18.590500000000000000
+            18.102500000000000000
+            17.632400000000000000
+            17.179500000000000000
+            16.742800000000000000
+            16.321700000000000000
+            15.915200000000000000
+            15.522600000000000000
+            15.143200000000000000
+            14.776200000000000000
+            14.420900000000000000
+            14.076700000000000000
+            13.743100000000000000
+            13.419300000000000000
+            13.104900000000000000
+            25.436100000000000000
+            25.373800000000000000
+            25.192100000000000000
+            24.903900000000000000
+            24.527900000000000000
+            24.084000000000000000
+            23.591300000000000000
+            23.066700000000000000
+            22.523500000000000000
+            21.972500000000000000
+            21.421400000000000000
+            20.876100000000000000
+            20.340300000000000000
+            19.816800000000000000
+            19.307200000000000000
+            18.812300000000000000
+            18.332600000000000000
+            17.868200000000000000
+            17.418800000000000000
+            16.984100000000000000
+            16.563600000000000000
+            16.156700000000000000
+            15.763000000000000000
+            15.381800000000000000
+            15.012600000000000000
+            14.654800000000000000
+            14.307800000000000000
+            13.971100000000000000
+            13.644300000000000000
+            13.326700000000000000
+            13.017900000000000000
+            24.385800000000000000
+            24.335600000000000000
+            24.187900000000000000
+            23.951600000000000000
+            23.639300000000000000
+            23.265400000000000000
+            22.844400000000000000
+            22.389400000000000000
+            21.912000000000000000
+            21.421400000000000000
+            20.925200000000000000
+            20.429000000000000000
+            19.937000000000000000
+            19.452200000000000000
+            18.976900000000000000
+            18.512300000000000000
+            18.059500000000000000
+            17.618800000000000000
+            17.190500000000000000
+            16.774500000000000000
+            16.370600000000000000
+            15.978700000000000000
+            15.598300000000000000
+            15.229100000000000000
+            14.870700000000000000
+            14.522600000000000000
+            14.184400000000000000
+            13.855700000000000000
+            13.536200000000000000
+            13.225300000000000000
+            12.922500000000000000
+            23.436100000000000000
+            23.394600000000000000
+            23.272400000000000000
+            23.075300000000000000
+            22.812400000000000000
+            22.494000000000000000
+            22.131300000000000000
+            21.734600000000000000
+            21.313500000000000000
+            20.876100000000000000
+            20.429000000000000000
+            19.977700000000000000
+            19.526400000000000000
+            19.078300000000000000
+            18.635800000000000000
+            18.200700000000000000
+            17.774200000000000000
+            17.357000000000000000
+            16.949800000000000000
+            16.552700000000000000
+            16.165800000000000000
+            15.789100000000000000
+            15.422400000000000000
+            15.065600000000000000
+            14.718400000000000000
+            14.380500000000000000
+            14.051500000000000000
+            13.731300000000000000
+            13.419400000000000000
+            13.115500000000000000
+            12.819300000000000000
+            22.569300000000000000
+            22.534500000000000000
+            22.431600000000000000
+            22.264900000000000000
+            22.040800000000000000
+            21.767000000000000000
+            21.452100000000000000
+            21.104300000000000000
+            20.731400000000000000
+            20.340300000000000000
+            19.937000000000000000
+            19.526400000000000000
+            19.112600000000000000
+            18.698700000000000000
+            18.287400000000000000
+            17.880500000000000000
+            17.479500000000000000
+            17.085400000000000000
+            16.699000000000000000
+            16.320600000000000000
+            15.950700000000000000
+            15.589400000000000000
+            15.236700000000000000
+            14.892500000000000000
+            14.556800000000000000
+            14.229300000000000000
+            13.909900000000000000
+            13.598400000000000000
+            13.294500000000000000
+            12.998000000000000000
+            12.708500000000000000
+            21.772100000000000000
+            21.742400000000000000
+            21.654700000000000000
+            21.511900000000000000
+            21.318800000000000000
+            21.081200000000000000
+            20.805800000000000000
+            20.499100000000000000
+            20.167500000000000000
+            19.816800000000000000
+            19.452200000000000000
+            19.078300000000000000
+            18.698700000000000000
+            18.316600000000000000
+            17.934500000000000000
+            17.554400000000000000
+            17.177900000000000000
+            16.806100000000000000
+            16.440000000000000000
+            16.080200000000000000
+            15.727100000000000000
+            15.381200000000000000
+            15.042400000000000000
+            14.711000000000000000
+            14.386900000000000000
+            14.070100000000000000
+            13.760500000000000000
+            13.457900000000000000
+            13.162300000000000000
+            12.873300000000000000
+            12.590800000000000000
+            21.034100000000000000
+            21.008500000000000000
+            20.932800000000000000
+            20.809100000000000000
+            20.641200000000000000
+            20.433300000000000000
+            20.190800000000000000
+            19.918800000000000000
+            19.622600000000000000
+            19.307200000000000000
+            18.976900000000000000
+            18.635800000000000000
+            18.287400000000000000
+            17.934500000000000000
+            17.579700000000000000
+            17.224800000000000000
+            16.871500000000000000
+            16.521200000000000000
+            16.174700000000000000
+            15.833000000000000000
+            15.496500000000000000
+            15.165600000000000000
+            14.840800000000000000
+            14.522200000000000000
+            14.209800000000000000
+            13.903700000000000000
+            13.604000000000000000
+            13.310600000000000000
+            13.023300000000000000
+            12.742100000000000000
+            12.466700000000000000
+            20.347100000000000000
+            20.324900000000000000
+            20.258800000000000000
+            20.150700000000000000
+            20.003400000000000000
+            19.820200000000000000
+            19.605200000000000000
+            19.362700000000000000
+            19.097000000000000000
+            18.812300000000000000
+            18.512300000000000000
+            18.200700000000000000
+            17.880500000000000000
+            17.554400000000000000
+            17.224800000000000000
+            16.893500000000000000
+            16.562300000000000000
+            16.232300000000000000
+            15.904800000000000000
+            15.580500000000000000
+            15.260100000000000000
+            14.944100000000000000
+            14.633000000000000000
+            14.327000000000000000
+            14.026300000000000000
+            13.731000000000000000
+            13.441300000000000000
+            13.157000000000000000
+            12.878200000000000000
+            12.604900000000000000
+            12.336800000000000000
+            19.704500000000000000
+            19.685000000000000000
+            19.626900000000000000
+            19.531700000000000000
+            19.401300000000000000
+            19.238800000000000000
+            19.047100000000000000
+            18.829800000000000000
+            18.590500000000000000
+            18.332600000000000000
+            18.059500000000000000
+            17.774200000000000000
+            17.479500000000000000
+            17.177900000000000000
+            16.871500000000000000
+            16.562300000000000000
+            16.251700000000000000
+            15.941100000000000000
+            15.631600000000000000
+            15.324000000000000000
+            15.019300000000000000
+            14.717800000000000000
+            14.420100000000000000
+            14.126600000000000000
+            13.837400000000000000
+            13.552800000000000000
+            13.273000000000000000
+            12.997900000000000000
+            12.727700000000000000
+            12.462300000000000000
+            12.201600000000000000
+            19.100900000000000000
+            19.083600000000000000
+            19.032200000000000000
+            18.947600000000000000
+            18.831600000000000000
+            18.686400000000000000
+            18.514600000000000000
+            18.319000000000000000
+            18.102500000000000000
+            17.868200000000000000
+            17.618800000000000000
+            17.357000000000000000
+            17.085400000000000000
+            16.806100000000000000
+            16.521200000000000000
+            16.232300000000000000
+            15.941100000000000000
+            15.648700000000000000
+            15.356300000000000000
+            15.064900000000000000
+            14.775200000000000000
+            14.487700000000000000
+            14.203100000000000000
+            13.921700000000000000
+            13.643900000000000000
+            13.369900000000000000
+            13.099900000000000000
+            12.834000000000000000
+            12.572300000000000000
+            12.314900000000000000
+            12.061600000000000000
+            18.531900000000000000
+            18.516500000000000000
+            18.470600000000000000
+            18.395000000000000000
+            18.291100000000000000
+            18.160700000000000000
+            18.005900000000000000
+            17.829000000000000000
+            17.632400000000000000
+            17.418800000000000000
+            17.190500000000000000
+            16.949800000000000000
+            16.699000000000000000
+            16.440000000000000000
+            16.174700000000000000
+            15.904800000000000000
+            15.631600000000000000
+            15.356300000000000000
+            15.080200000000000000
+            14.804100000000000000
+            14.528700000000000000
+            14.254800000000000000
+            13.982900000000000000
+            13.713300000000000000
+            13.446600000000000000
+            13.183000000000000000
+            12.922700000000000000
+            12.665900000000000000
+            12.412700000000000000
+            12.163200000000000000
+            11.917400000000000000
+            17.993600000000000000
+            17.979800000000000000
+            17.938600000000000000
+            17.870700000000000000
+            17.777100000000000000
+            17.659400000000000000
+            17.519200000000000000
+            17.358600000000000000
+            17.179500000000000000
+            16.984100000000000000
+            16.774500000000000000
+            16.552700000000000000
+            16.320600000000000000
+            16.080200000000000000
+            15.833000000000000000
+            15.580500000000000000
+            15.324000000000000000
+            15.064900000000000000
+            14.804100000000000000
+            14.542500000000000000
+            14.280800000000000000
+            14.019900000000000000
+            13.760200000000000000
+            13.502100000000000000
+            13.246200000000000000
+            12.992800000000000000
+            12.742000000000000000
+            12.494100000000000000
+            12.249300000000000000
+            12.007700000000000000
+            11.769300000000000000
+            17.483000000000000000
+            17.470600000000000000
+            17.433400000000000000
+            17.372000000000000000
+            17.287300000000000000
+            17.180500000000000000
+            17.053100000000000000
+            16.906600000000000000
+            16.742800000000000000
+            16.563600000000000000
+            16.370600000000000000
+            16.165800000000000000
+            15.950700000000000000
+            15.727100000000000000
+            15.496500000000000000
+            15.260100000000000000
+            15.019300000000000000
+            14.775200000000000000
+            14.528700000000000000
+            14.280800000000000000
+            14.032300000000000000
+            13.783700000000000000
+            13.535800000000000000
+            13.288900000000000000
+            13.043400000000000000
+            12.799800000000000000
+            12.558400000000000000
+            12.319300000000000000
+            12.082700000000000000
+            11.848900000000000000
+            11.617800000000000000
+            16.997400000000000000
+            16.986000000000000000
+            16.952300000000000000
+            16.896500000000000000
+            16.819500000000000000
+            16.722300000000000000
+            16.606000000000000000
+            16.471900000000000000
+            16.321700000000000000
+            16.156700000000000000
+            15.978700000000000000
+            15.789100000000000000
+            15.589400000000000000
+            15.381200000000000000
+            15.165600000000000000
+            14.944100000000000000
+            14.717800000000000000
+            14.487700000000000000
+            14.254800000000000000
+            14.019900000000000000
+            13.783700000000000000
+            13.547000000000000000
+            13.310300000000000000
+            13.074100000000000000
+            12.838800000000000000
+            12.604800000000000000
+            12.372400000000000000
+            12.141900000000000000
+            11.913400000000000000
+            11.687300000000000000
+            11.463400000000000000
+            16.534300000000000000
+            16.524000000000000000
+            16.493200000000000000
+            16.442400000000000000
+            16.372100000000000000
+            16.283100000000000000
+            16.176500000000000000
+            16.053500000000000000
+            15.915200000000000000
+            15.763000000000000000
+            15.598300000000000000
+            15.422400000000000000
+            15.236700000000000000
+            15.042400000000000000
+            14.840800000000000000
+            14.633000000000000000
+            14.420100000000000000
+            14.203100000000000000
+            13.982900000000000000
+            13.760200000000000000
+            13.535800000000000000
+            13.310300000000000000
+            13.084300000000000000
+            12.858400000000000000
+            12.632800000000000000
+            12.408100000000000000
+            12.184500000000000000
+            11.962400000000000000
+            11.741900000000000000
+            11.523200000000000000
+            11.306400000000000000
+            16.091800000000000000
+            16.082400000000000000
+            16.054200000000000000
+            16.007700000000000000
+            15.943200000000000000
+            15.861600000000000000
+            15.763600000000000000
+            15.650200000000000000
+            15.522600000000000000
+            15.381800000000000000
+            15.229100000000000000
+            15.065600000000000000
+            14.892500000000000000
+            14.711000000000000000
+            14.522200000000000000
+            14.327000000000000000
+            14.126600000000000000
+            13.921700000000000000
+            13.713300000000000000
+            13.502100000000000000
+            13.288900000000000000
+            13.074100000000000000
+            12.858400000000000000
+            12.642200000000000000
+            12.426100000000000000
+            12.210300000000000000
+            11.995300000000000000
+            11.781200000000000000
+            11.568400000000000000
+            11.357100000000000000
+            11.147300000000000000
+            15.668100000000000000
+            15.659500000000000000
+            15.633600000000000000
+            15.590900000000000000
+            15.531600000000000000
+            15.456400000000000000
+            15.366000000000000000
+            15.261300000000000000
+            15.143200000000000000
+            15.012600000000000000
+            14.870700000000000000
+            14.718400000000000000
+            14.556800000000000000
+            14.386900000000000000
+            14.209800000000000000
+            14.026300000000000000
+            13.837400000000000000
+            13.643900000000000000
+            13.446600000000000000
+            13.246200000000000000
+            13.043400000000000000
+            12.838800000000000000
+            12.632800000000000000
+            12.426100000000000000
+            12.218900000000000000
+            12.011800000000000000
+            11.805000000000000000
+            11.598800000000000000
+            11.393500000000000000
+            11.189300000000000000
+            10.986400000000000000
+            15.261800000000000000
+            15.253800000000000000
+            15.230000000000000000
+            15.190500000000000000
+            15.135800000000000000
+            15.066400000000000000
+            14.982800000000000000
+            14.885800000000000000
+            14.776200000000000000
+            14.654800000000000000
+            14.522600000000000000
+            14.380500000000000000
+            14.229300000000000000
+            14.070100000000000000
+            13.903700000000000000
+            13.731000000000000000
+            13.552800000000000000
+            13.369900000000000000
+            13.183000000000000000
+            12.992800000000000000
+            12.799800000000000000
+            12.604800000000000000
+            12.408100000000000000
+            12.210300000000000000
+            12.011800000000000000
+            11.812900000000000000
+            11.614100000000000000
+            11.415500000000000000
+            11.217500000000000000
+            11.020300000000000000
+            10.824000000000000000
+            14.871400000000000000
+            14.864000000000000000
+            14.842000000000000000
+            14.805500000000000000
+            14.754800000000000000
+            14.690500000000000000
+            14.612900000000000000
+            14.522800000000000000
+            14.420900000000000000
+            14.307800000000000000
+            14.184400000000000000
+            14.051500000000000000
+            13.909900000000000000
+            13.760500000000000000
+            13.604000000000000000
+            13.441300000000000000
+            13.273000000000000000
+            13.099900000000000000
+            12.922700000000000000
+            12.742000000000000000
+            12.558400000000000000
+            12.372400000000000000
+            12.184500000000000000
+            11.995300000000000000
+            11.805000000000000000
+            11.614100000000000000
+            11.422800000000000000
+            11.231600000000000000
+            11.040700000000000000
+            10.850200000000000000
+            10.660400000000000000
+            14.495700000000000000
+            14.488800000000000000
+            14.468400000000000000
+            14.434600000000000000
+            14.387500000000000000
+            14.327800000000000000
+            14.255700000000000000
+            14.171800000000000000
+            14.076700000000000000
+            13.971100000000000000
+            13.855700000000000000
+            13.731300000000000000
+            13.598400000000000000
+            13.457900000000000000
+            13.310600000000000000
+            13.157000000000000000
+            12.997900000000000000
+            12.834000000000000000
+            12.665900000000000000
+            12.494100000000000000
+            12.319300000000000000
+            12.141900000000000000
+            11.962400000000000000
+            11.781200000000000000
+            11.598800000000000000
+            11.415500000000000000
+            11.231600000000000000
+            11.047500000000000000
+            10.863400000000000000
+            10.679400000000000000
+            10.495900000000000000
+            14.133600000000000000
+            14.127200000000000000
+            14.108300000000000000
+            14.076800000000000000
+            14.033000000000000000
+            13.977400000000000000
+            13.910200000000000000
+            13.831900000000000000
+            13.743100000000000000
+            13.644300000000000000
+            13.536200000000000000
+            13.419400000000000000
+            13.294500000000000000
+            13.162300000000000000
+            13.023300000000000000
+            12.878200000000000000
+            12.727700000000000000
+            12.572300000000000000
+            12.412700000000000000
+            12.249300000000000000
+            12.082700000000000000
+            11.913400000000000000
+            11.741900000000000000
+            11.568400000000000000
+            11.393500000000000000
+            11.217500000000000000
+            11.040700000000000000
+            10.863400000000000000
+            10.685800000000000000
+            10.508200000000000000
+            10.330700000000000000
+            13.784200000000000000
+            13.778300000000000000
+            13.760600000000000000
+            13.731200000000000000
+            13.690400000000000000
+            13.638500000000000000
+            13.575700000000000000
+            13.502500000000000000
+            13.419300000000000000
+            13.326700000000000000
+            13.225300000000000000
+            13.115500000000000000
+            12.998000000000000000
+            12.873300000000000000
+            12.742100000000000000
+            12.604900000000000000
+            12.462300000000000000
+            12.314900000000000000
+            12.163200000000000000
+            12.007700000000000000
+            11.848900000000000000
+            11.687300000000000000
+            11.523200000000000000
+            11.357100000000000000
+            11.189300000000000000
+            11.020300000000000000
+            10.850200000000000000
+            10.679400000000000000
+            10.508200000000000000
+            10.336700000000000000
+            10.165200000000000000
+            13.446500000000000000
+            13.441000000000000000
+            13.424500000000000000
+            13.397000000000000000
+            13.358900000000000000
+            13.310300000000000000
+            13.251500000000000000
+            13.182900000000000000
+            13.104900000000000000
+            13.017900000000000000
+            12.922500000000000000
+            12.819300000000000000
+            12.708500000000000000
+            12.590800000000000000
+            12.466700000000000000
+            12.336800000000000000
+            12.201600000000000000
+            12.061600000000000000
+            11.917400000000000000
+            11.769300000000000000
+            11.617800000000000000
+            11.463400000000000000
+            11.306400000000000000
+            11.147300000000000000
+            10.986400000000000000
+            10.824000000000000000
+            10.660400000000000000
+            10.495900000000000000
+            10.330700000000000000
+            10.165200000000000000
+            9.999450000000000000
+            63.364100000000000000
+            47.742400000000010000
+            40.656600000000000000
+            36.475200000000000000
+            33.555600000000000000
+            31.311100000000000000
+            29.485000000000000000
+            27.944500000000000000
+            26.611700000000000000
+            25.437000000000000000
+            24.386700000000000000
+            23.436900000000000000
+            22.570100000000000000
+            21.772800000000000000
+            21.034800000000000000
+            20.347800000000000000
+            19.705100000000000000
+            19.101500000000000000
+            18.532500000000000000
+            17.994200000000000000
+            17.483600000000000000
+            16.997900000000000000
+            16.534800000000000000
+            16.092300000000000000
+            15.668600000000000000
+            15.262200000000000000
+            14.871800000000000000
+            14.496100000000000000
+            14.134000000000000000
+            13.784700000000000000
+            13.447200000000000000
+            47.742400000000010000
+            43.473400000000000000
+            39.204100000000000000
+            35.844300000000000000
+            33.217900000000000000
+            31.101800000000000000
+            29.342300000000000000
+            27.840700000000000000
+            26.532700000000000000
+            25.374800000000000000
+            24.336400000000000000
+            23.395500000000000000
+            22.535300000000000000
+            21.743200000000000000
+            21.009300000000000000
+            20.325500000000000000
+            19.685600000000000000
+            19.084300000000000000
+            18.517100000000000000
+            17.980400000000000000
+            17.471100000000000000
+            16.986600000000000000
+            16.524500000000000000
+            16.082900000000000000
+            15.660000000000000000
+            15.254300000000000000
+            14.864400000000000000
+            14.489300000000000000
+            14.127700000000000000
+            13.778800000000000000
+            13.441700000000000000
+            40.656600000000000000
+            39.204100000000000000
+            36.842000000000000000
+            34.479800000000000000
+            32.369900000000000000
+            30.535900000000000000
+            28.941500000000000000
+            27.543200000000000000
+            26.303500000000000000
+            25.193000000000000000
+            24.188800000000000000
+            23.273200000000000000
+            22.432400000000000000
+            21.655400000000000000
+            20.933500000000000000
+            20.259500000000000000
+            19.627600000000000000
+            19.032800000000000000
+            18.471200000000000000
+            17.939200000000000000
+            17.433900000000000000
+            16.952800000000000000
+            16.493700000000000000
+            16.054700000000000000
+            15.634100000000000000
+            15.230500000000000000
+            14.842400000000000000
+            14.468800000000000000
+            14.108700000000000000
+            13.761100000000000000
+            13.425200000000000000
+            36.475200000000000000
+            35.844300000000000000
+            34.479800000000000000
+            32.862900000000010000
+            31.246000000000000000
+            29.730500000000000000
+            28.344700000000000000
+            27.086900000000000000
+            25.945100000000000000
+            24.904800000000000000
+            23.952500000000000000
+            23.076100000000000000
+            22.265700000000000000
+            21.512600000000000000
+            20.809900000000000000
+            20.151400000000000000
+            19.532300000000000000
+            18.948200000000000000
+            18.395600000000000000
+            17.871200000000000000
+            17.372500000000000000
+            16.897100000000000000
+            16.442900000000000000
+            16.008200000000000000
+            15.591300000000000000
+            15.191000000000000000
+            14.805900000000000000
+            14.435000000000000000
+            14.077200000000000000
+            13.731700000000000000
+            13.397700000000000000
+            33.555600000000000000
+            33.217900000000000000
+            32.369900000000000000
+            31.246000000000000000
+            30.020600000000000000
+            28.795200000000000000
+            27.619800000000000000
+            26.514800000000000000
+            25.485200000000000000
+            24.528800000000000000
+            23.640200000000000000
+            22.813200000000000000
+            22.041500000000000000
+            21.319500000000000000
+            20.641900000000000000
+            20.004000000000000000
+            19.402000000000000000
+            18.832200000000000000
+            18.291700000000000000
+            17.777700000000000000
+            17.287800000000000000
+            16.820100000000000000
+            16.372600000000000000
+            15.943700000000000000
+            15.532000000000000000
+            15.136300000000000000
+            14.755300000000000000
+            14.388000000000000000
+            14.033500000000000000
+            13.690900000000000000
+            13.359600000000000000
+            31.311100000000000000
+            31.101800000000000000
+            30.535900000000000000
+            29.730500000000000000
+            28.795200000000000000
+            27.809800000000000000
+            26.824400000000000000
+            25.867200000000000000
+            24.952100000000000000
+            24.084800000000000000
+            23.266300000000000000
+            22.494800000000000000
+            21.767800000000000000
+            21.082000000000000000
+            20.434000000000000000
+            19.820800000000000000
+            19.239400000000000000
+            18.687000000000000000
+            18.161300000000000000
+            17.660000000000000000
+            17.181100000000000000
+            16.722800000000000000
+            16.283600000000000000
+            15.862100000000000000
+            15.456900000000000000
+            15.066800000000000000
+            14.690900000000000000
+            14.328200000000000000
+            13.977800000000000000
+            13.638900000000000000
+            13.311100000000000000
+            29.485000000000000000
+            29.342300000000000000
+            28.941500000000000000
+            28.344700000000000000
+            27.619800000000000000
+            26.824400000000000000
+            26.000900000000000000
+            25.177400000000000000
+            24.371200000000000000
+            23.592200000000000000
+            22.845200000000000000
+            22.132100000000000000
+            21.452900000000000000
+            20.806500000000000000
+            20.191500000000000000
+            19.605800000000000000
+            19.047700000000000000
+            18.515200000000000000
+            18.006500000000000000
+            17.519800000000000000
+            17.053600000000000000
+            16.606500000000000000
+            16.177000000000000000
+            15.764100000000000000
+            15.366500000000000000
+            14.983200000000000000
+            14.613400000000000000
+            14.256100000000000000
+            13.910600000000000000
+            13.576100000000000000
+            13.252300000000000000
+            27.944500000000000000
+            27.840700000000000000
+            27.543200000000000000
+            27.086900000000000000
+            26.514800000000000000
+            25.867200000000000000
+            25.177400000000000000
+            24.470300000000000000
+            23.763200000000000000
+            23.067500000000000000
+            22.390200000000000000
+            21.735400000000000000
+            21.105100000000000000
+            20.499800000000000000
+            19.919500000000000000
+            19.363400000000000000
+            18.830400000000000000
+            18.319600000000000000
+            17.829500000000000000
+            17.359100000000000000
+            16.907100000000000000
+            16.472400000000000000
+            16.054000000000000000
+            15.650700000000000000
+            15.261800000000000000
+            14.886200000000000000
+            14.523300000000000000
+            14.172200000000000000
+            13.832300000000000000
+            13.502900000000000000
+            13.183700000000000000
+            26.611700000000000000
+            26.532700000000000000
+            26.303500000000000000
+            25.945100000000000000
+            25.485200000000000000
+            24.952100000000000000
+            24.371200000000000000
+            23.763200000000000000
+            23.143700000000000000
+            22.524300000000000000
+            21.912700000000000000
+            21.314300000000000000
+            20.732100000000000000
+            20.168200000000000000
+            19.623300000000000000
+            19.097700000000000000
+            18.591100000000000000
+            18.103100000000000000
+            17.633000000000000000
+            17.180000000000000000
+            16.743400000000000000
+            16.322200000000000000
+            15.915700000000000000
+            15.523100000000000000
+            15.143600000000000000
+            14.776600000000000000
+            14.421300000000000000
+            14.077100000000000000
+            13.743500000000000000
+            13.419800000000000000
+            13.105700000000000000
+            25.437000000000000000
+            25.374800000000000000
+            25.193000000000000000
+            24.904800000000000000
+            24.528800000000000000
+            24.084800000000000000
+            23.592200000000000000
+            23.067500000000000000
+            22.524300000000000000
+            21.973200000000000000
+            21.422200000000000000
+            20.876800000000000000
+            20.341000000000000000
+            19.817500000000000000
+            19.307800000000000000
+            18.812900000000000000
+            18.333200000000000000
+            17.868800000000000000
+            17.419300000000000000
+            16.984600000000000000
+            16.564100000000000000
+            16.157200000000000000
+            15.763500000000000000
+            15.382300000000000000
+            15.013100000000000000
+            14.655200000000000000
+            14.308200000000000000
+            13.971500000000000000
+            13.644700000000000000
+            13.327200000000000000
+            13.018700000000000000
+            24.386700000000000000
+            24.336400000000000000
+            24.188800000000000000
+            23.952500000000000000
+            23.640200000000000000
+            23.266300000000000000
+            22.845200000000000000
+            22.390200000000000000
+            21.912700000000000000
+            21.422200000000000000
+            20.925900000000000000
+            20.429700000000000000
+            19.937700000000000000
+            19.452900000000000000
+            18.977500000000000000
+            18.513000000000000000
+            18.060100000000000000
+            17.619400000000000000
+            17.191000000000000000
+            16.775000000000000000
+            16.371100000000000000
+            15.979200000000000000
+            15.598800000000000000
+            15.229600000000000000
+            14.871100000000000000
+            14.523000000000000000
+            14.184800000000000000
+            13.856200000000000000
+            13.536600000000000000
+            13.225700000000000000
+            12.923300000000000000
+            23.436900000000000000
+            23.395500000000000000
+            23.273200000000000000
+            23.076100000000000000
+            22.813200000000000000
+            22.494800000000000000
+            22.132100000000000000
+            21.735400000000000000
+            21.314300000000000000
+            20.876800000000000000
+            20.429700000000000000
+            19.978400000000000000
+            19.527000000000000000
+            19.078900000000000000
+            18.636400000000000000
+            18.201300000000000000
+            17.774800000000000000
+            17.357600000000000000
+            16.950300000000000000
+            16.553200000000000000
+            16.166300000000000000
+            15.789600000000000000
+            15.422900000000000000
+            15.066100000000000000
+            14.718800000000000000
+            14.380900000000000000
+            14.051900000000000000
+            13.731700000000000000
+            13.419800000000000000
+            13.115900000000000000
+            12.820000000000000000
+            22.570100000000000000
+            22.535300000000000000
+            22.432400000000000000
+            22.265700000000000000
+            22.041500000000000000
+            21.767800000000000000
+            21.452900000000000000
+            21.105100000000000000
+            20.732100000000000000
+            20.341000000000000000
+            19.937700000000000000
+            19.527000000000000000
+            19.113200000000000000
+            18.699300000000000000
+            18.288000000000000000
+            17.881100000000000000
+            17.480100000000000000
+            17.085900000000000000
+            16.699500000000000000
+            16.321100000000000000
+            15.951200000000000000
+            15.589900000000000000
+            15.237200000000000000
+            14.893000000000000000
+            14.557200000000000000
+            14.229700000000000000
+            13.910300000000000000
+            13.598800000000000000
+            13.294900000000000000
+            12.998400000000000000
+            12.709200000000000000
+            21.772800000000000000
+            21.743200000000000000
+            21.655400000000000000
+            21.512600000000000000
+            21.319500000000000000
+            21.082000000000000000
+            20.806500000000000000
+            20.499800000000000000
+            20.168200000000000000
+            19.817500000000000000
+            19.452900000000000000
+            19.078900000000000000
+            18.699300000000000000
+            18.317200000000000000
+            17.935100000000000000
+            17.555000000000000000
+            17.178400000000000000
+            16.806600000000000000
+            16.440500000000000000
+            16.080700000000000000
+            15.727600000000000000
+            15.381600000000000000
+            15.042900000000000000
+            14.711400000000000000
+            14.387400000000000000
+            14.070500000000000000
+            13.760900000000000000
+            13.458300000000000000
+            13.162600000000000000
+            12.873700000000000000
+            12.591500000000000000
+            21.034800000000000000
+            21.009300000000000000
+            20.933500000000000000
+            20.809900000000000000
+            20.641900000000000000
+            20.434000000000000000
+            20.191500000000000000
+            19.919500000000000000
+            19.623300000000000000
+            19.307800000000000000
+            18.977500000000000000
+            18.636400000000000000
+            18.288000000000000000
+            17.935100000000000000
+            17.580200000000000000
+            17.225300000000000000
+            16.872100000000000000
+            16.521700000000000000
+            16.175200000000000000
+            15.833400000000000000
+            15.496900000000000000
+            15.166100000000000000
+            14.841300000000000000
+            14.522600000000000000
+            14.210200000000000000
+            13.904100000000000000
+            13.604400000000000000
+            13.310900000000000000
+            13.023700000000000000
+            12.742500000000000000
+            12.467400000000000000
+            20.347800000000000000
+            20.325500000000000000
+            20.259500000000000000
+            20.151400000000000000
+            20.004000000000000000
+            19.820800000000000000
+            19.605800000000000000
+            19.363400000000000000
+            19.097700000000000000
+            18.812900000000000000
+            18.513000000000000000
+            18.201300000000000000
+            17.881100000000000000
+            17.555000000000000000
+            17.225300000000000000
+            16.894100000000000000
+            16.562800000000000000
+            16.232800000000000000
+            15.905300000000000000
+            15.580900000000000000
+            15.260500000000000000
+            14.944600000000000000
+            14.633500000000000000
+            14.327400000000000000
+            14.026700000000000000
+            13.731400000000000000
+            13.441600000000000000
+            13.157400000000000000
+            12.878600000000000000
+            12.605300000000000000
+            12.337500000000000000
+            19.705100000000000000
+            19.685600000000000000
+            19.627600000000000000
+            19.532300000000000000
+            19.402000000000000000
+            19.239400000000000000
+            19.047700000000000000
+            18.830400000000000000
+            18.591100000000000000
+            18.333200000000000000
+            18.060100000000000000
+            17.774800000000000000
+            17.480100000000000000
+            17.178400000000000000
+            16.872100000000000000
+            16.562800000000000000
+            16.252200000000000000
+            15.941500000000000000
+            15.632000000000000000
+            15.324500000000000000
+            15.019700000000000000
+            14.718300000000000000
+            14.420600000000000000
+            14.127000000000000000
+            13.837800000000000000
+            13.553200000000000000
+            13.273300000000000000
+            12.998300000000000000
+            12.728000000000000000
+            12.462700000000000000
+            12.202300000000000000
+            19.101500000000000000
+            19.084300000000000000
+            19.032800000000000000
+            18.948200000000000000
+            18.832200000000000000
+            18.687000000000000000
+            18.515200000000000000
+            18.319600000000000000
+            18.103100000000000000
+            17.868800000000000000
+            17.619400000000000000
+            17.357600000000000000
+            17.085900000000000000
+            16.806600000000000000
+            16.521700000000000000
+            16.232800000000000000
+            15.941500000000000000
+            15.649200000000000000
+            15.356800000000000000
+            15.065400000000000000
+            14.775600000000000000
+            14.488100000000000000
+            14.203500000000000000
+            13.922100000000000000
+            13.644300000000000000
+            13.370300000000000000
+            13.100300000000000000
+            12.834400000000000000
+            12.572700000000000000
+            12.315300000000000000
+            12.062300000000000000
+            18.532500000000000000
+            18.517100000000000000
+            18.471200000000000000
+            18.395600000000000000
+            18.291700000000000000
+            18.161300000000000000
+            18.006500000000000000
+            17.829500000000000000
+            17.633000000000000000
+            17.419300000000000000
+            17.191000000000000000
+            16.950300000000000000
+            16.699500000000000000
+            16.440500000000000000
+            16.175200000000000000
+            15.905300000000000000
+            15.632000000000000000
+            15.356800000000000000
+            15.080700000000000000
+            14.804500000000000000
+            14.529100000000000000
+            14.255200000000000000
+            13.983300000000000000
+            13.713700000000000000
+            13.447000000000000000
+            13.183400000000000000
+            12.923000000000000000
+            12.666200000000000000
+            12.413000000000000000
+            12.163600000000000000
+            11.918000000000000000
+            17.994200000000000000
+            17.980400000000000000
+            17.939200000000000000
+            17.871200000000000000
+            17.777700000000000000
+            17.660000000000000000
+            17.519800000000000000
+            17.359100000000000000
+            17.180000000000000000
+            16.984600000000000000
+            16.775000000000000000
+            16.553200000000000000
+            16.321100000000000000
+            16.080700000000000000
+            15.833400000000000000
+            15.580900000000000000
+            15.324500000000000000
+            15.065400000000000000
+            14.804500000000000000
+            14.542900000000000000
+            14.281300000000000000
+            14.020300000000000000
+            13.760600000000000000
+            13.502500000000000000
+            13.246600000000000000
+            12.993100000000000000
+            12.742300000000000000
+            12.494400000000000000
+            12.249600000000000000
+            12.008100000000000000
+            11.769900000000000000
+            17.483600000000000000
+            17.471100000000000000
+            17.433900000000000000
+            17.372500000000000000
+            17.287800000000000000
+            17.181100000000000000
+            17.053600000000000000
+            16.907100000000000000
+            16.743400000000000000
+            16.564100000000000000
+            16.371100000000000000
+            16.166300000000000000
+            15.951200000000000000
+            15.727600000000000000
+            15.496900000000000000
+            15.260500000000000000
+            15.019700000000000000
+            14.775600000000000000
+            14.529100000000000000
+            14.281300000000000000
+            14.032700000000000000
+            13.784100000000000000
+            13.536100000000000000
+            13.289200000000000000
+            13.043800000000000000
+            12.800200000000000000
+            12.558700000000000000
+            12.319600000000000000
+            12.083100000000000000
+            11.849300000000000000
+            11.618400000000000000
+            16.997900000000000000
+            16.986600000000000000
+            16.952800000000000000
+            16.897100000000000000
+            16.820100000000000000
+            16.722800000000000000
+            16.606500000000000000
+            16.472400000000000000
+            16.322200000000000000
+            16.157200000000000000
+            15.979200000000000000
+            15.789600000000000000
+            15.589900000000000000
+            15.381600000000000000
+            15.166100000000000000
+            14.944600000000000000
+            14.718300000000000000
+            14.488100000000000000
+            14.255200000000000000
+            14.020300000000000000
+            13.784100000000000000
+            13.547400000000000000
+            13.310700000000000000
+            13.074400000000000000
+            12.839100000000000000
+            12.605100000000000000
+            12.372700000000000000
+            12.142200000000000000
+            11.913700000000000000
+            11.687600000000000000
+            11.464000000000000000
+            16.534800000000000000
+            16.524500000000000000
+            16.493700000000000000
+            16.442900000000000000
+            16.372600000000000000
+            16.283600000000000000
+            16.177000000000000000
+            16.054000000000000000
+            15.915700000000000000
+            15.763500000000000000
+            15.598800000000000000
+            15.422900000000000000
+            15.237200000000000000
+            15.042900000000000000
+            14.841300000000000000
+            14.633500000000000000
+            14.420600000000000000
+            14.203500000000000000
+            13.983300000000000000
+            13.760600000000000000
+            13.536100000000000000
+            13.310700000000000000
+            13.084700000000000000
+            12.858700000000000000
+            12.633200000000000000
+            12.408400000000000000
+            12.184900000000000000
+            11.962700000000000000
+            11.742200000000000000
+            11.523500000000000000
+            11.307000000000000000
+            16.092300000000000000
+            16.082900000000000000
+            16.054700000000000000
+            16.008200000000000000
+            15.943700000000000000
+            15.862100000000000000
+            15.764100000000000000
+            15.650700000000000000
+            15.523100000000000000
+            15.382300000000000000
+            15.229600000000000000
+            15.066100000000000000
+            14.893000000000000000
+            14.711400000000000000
+            14.522600000000000000
+            14.327400000000000000
+            14.127000000000000000
+            13.922100000000000000
+            13.713700000000000000
+            13.502500000000000000
+            13.289200000000000000
+            13.074400000000000000
+            12.858700000000000000
+            12.642600000000000000
+            12.426400000000000000
+            12.210600000000000000
+            11.995600000000000000
+            11.781500000000000000
+            11.568700000000000000
+            11.357400000000000000
+            11.147900000000000000
+            15.668600000000000000
+            15.660000000000000000
+            15.634100000000000000
+            15.591300000000000000
+            15.532000000000000000
+            15.456900000000000000
+            15.366500000000000000
+            15.261800000000000000
+            15.143600000000000000
+            15.013100000000000000
+            14.871100000000000000
+            14.718800000000000000
+            14.557200000000000000
+            14.387400000000000000
+            14.210200000000000000
+            14.026700000000000000
+            13.837800000000000000
+            13.644300000000000000
+            13.447000000000000000
+            13.246600000000000000
+            13.043800000000000000
+            12.839100000000000000
+            12.633200000000000000
+            12.426400000000000000
+            12.219300000000000000
+            12.012100000000000000
+            11.805300000000000000
+            11.599100000000000000
+            11.393800000000000000
+            11.189700000000000000
+            10.986900000000000000
+            15.262200000000000000
+            15.254300000000000000
+            15.230500000000000000
+            15.191000000000000000
+            15.136300000000000000
+            15.066800000000000000
+            14.983200000000000000
+            14.886200000000000000
+            14.776600000000000000
+            14.655200000000000000
+            14.523000000000000000
+            14.380900000000000000
+            14.229700000000000000
+            14.070500000000000000
+            13.904100000000000000
+            13.731400000000000000
+            13.553200000000000000
+            13.370300000000000000
+            13.183400000000000000
+            12.993100000000000000
+            12.800200000000000000
+            12.605100000000000000
+            12.408400000000000000
+            12.210600000000000000
+            12.012100000000000000
+            11.813200000000000000
+            11.614400000000000000
+            11.415800000000000000
+            11.217800000000000000
+            11.020600000000000000
+            10.824500000000000000
+            14.871800000000000000
+            14.864400000000000000
+            14.842400000000000000
+            14.805900000000000000
+            14.755300000000000000
+            14.690900000000000000
+            14.613400000000000000
+            14.523300000000000000
+            14.421300000000000000
+            14.308200000000000000
+            14.184800000000000000
+            14.051900000000000000
+            13.910300000000000000
+            13.760900000000000000
+            13.604400000000000000
+            13.441600000000000000
+            13.273300000000000000
+            13.100300000000000000
+            12.923000000000000000
+            12.742300000000000000
+            12.558700000000000000
+            12.372700000000000000
+            12.184900000000000000
+            11.995600000000000000
+            11.805300000000000000
+            11.614400000000000000
+            11.423100000000000000
+            11.231900000000000000
+            11.041000000000000000
+            10.850500000000000000
+            10.660900000000000000
+            14.496100000000000000
+            14.489300000000000000
+            14.468800000000000000
+            14.435000000000000000
+            14.388000000000000000
+            14.328200000000000000
+            14.256100000000000000
+            14.172200000000000000
+            14.077100000000000000
+            13.971500000000000000
+            13.856200000000000000
+            13.731700000000000000
+            13.598800000000000000
+            13.458300000000000000
+            13.310900000000000000
+            13.157400000000000000
+            12.998300000000000000
+            12.834400000000000000
+            12.666200000000000000
+            12.494400000000000000
+            12.319600000000000000
+            12.142200000000000000
+            11.962700000000000000
+            11.781500000000000000
+            11.599100000000000000
+            11.415800000000000000
+            11.231900000000000000
+            11.047800000000000000
+            10.863600000000000000
+            10.679700000000000000
+            10.496400000000000000
+            14.134000000000000000
+            14.127700000000000000
+            14.108700000000000000
+            14.077200000000000000
+            14.033500000000000000
+            13.977800000000000000
+            13.910600000000000000
+            13.832300000000000000
+            13.743500000000000000
+            13.644700000000000000
+            13.536600000000000000
+            13.419800000000000000
+            13.294900000000000000
+            13.162600000000000000
+            13.023700000000000000
+            12.878600000000000000
+            12.728000000000000000
+            12.572700000000000000
+            12.413000000000000000
+            12.249600000000000000
+            12.083100000000000000
+            11.913700000000000000
+            11.742200000000000000
+            11.568700000000000000
+            11.393800000000000000
+            11.217800000000000000
+            11.041000000000000000
+            10.863600000000000000
+            10.686100000000000000
+            10.508500000000000000
+            10.331200000000000000
+            13.784700000000000000
+            13.778800000000000000
+            13.761100000000000000
+            13.731700000000000000
+            13.690900000000000000
+            13.638900000000000000
+            13.576100000000000000
+            13.502900000000000000
+            13.419800000000000000
+            13.327200000000000000
+            13.225700000000000000
+            13.115900000000000000
+            12.998400000000000000
+            12.873700000000000000
+            12.742500000000000000
+            12.605300000000000000
+            12.462700000000000000
+            12.315300000000000000
+            12.163600000000000000
+            12.008100000000000000
+            11.849300000000000000
+            11.687600000000000000
+            11.523500000000000000
+            11.357400000000000000
+            11.189700000000000000
+            11.020600000000000000
+            10.850500000000000000
+            10.679700000000000000
+            10.508500000000000000
+            10.337100000000000000
+            10.165700000000000000
+            13.447200000000000000
+            13.441700000000000000
+            13.425200000000000000
+            13.397700000000000000
+            13.359600000000000000
+            13.311100000000000000
+            13.252300000000000000
+            13.183700000000000000
+            13.105700000000000000
+            13.018700000000000000
+            12.923300000000000000
+            12.820000000000000000
+            12.709200000000000000
+            12.591500000000000000
+            12.467400000000000000
+            12.337500000000000000
+            12.202300000000000000
+            12.062300000000000000
+            11.918000000000000000
+            11.769900000000000000
+            11.618400000000000000
+            11.464000000000000000
+            11.307000000000000000
+            11.147900000000000000
+            10.986900000000000000
+            10.824500000000000000
+            10.660900000000000000
+            10.496400000000000000
+            10.331200000000000000
+            10.165700000000000000
+            9.999900000000000000)
+        end>
+      Contour.IntegerValues = <>
+      HigherElevationFunction = '10.1'
+      LowerElevationFunction = '-0.1'
+      DataSetNames.Strings = (
+        'Initial_Head')
+      DataSetFormulas.Strings = (
+        'ListRealValue("Initial_Head")')
+      Points = <
+        item
+          X = -0.099999999999999720
+          Y = -0.099999999999999720
+        end
+        item
+          X = -0.099999999999999720
+          Y = 300.100000000000000000
+        end
+        item
+          X = 300.100000000000000000
+          Y = 300.100000000000000000
+        end
+        item
+          X = 300.100000000000000000
+          Y = -0.099999999999999720
+        end
+        item
+          X = -0.099999999999999720
+          Y = -0.099999999999999720
+        end>
+      SelectedNodes = <>
+      MixtureFormulas.Strings = (
+        '0.5')
+    end
+    item
+      ClassTypeName = 'TMultiValueContour'
+      Contour.Name = 'Object4'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = True
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '300.1'
+      Contour.LowerElevationFunction = '299.9'
+      Contour.Selected = False
+      Contour.ViewDirection = vdFront
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.Visible = False
+      Contour.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end>
+      Contour.RealValues = <
+        item
+          FirstCol = 0
+          FirstRow = 0
+          FirstLay = 0
+          LastCol = 30
+          LastRow = 0
+          LastLay = 1
+          DataSetName = 'NorthSpecifiedHeads'
+          RealValues = (
+            13.447300000000000000
+            13.441800000000000000
+            13.425300000000000000
+            13.397800000000000000
+            13.359700000000000000
+            13.311100000000000000
+            13.252300000000000000
+            13.183700000000000000
+            13.105700000000000000
+            13.018700000000000000
+            12.923300000000000000
+            12.820000000000000000
+            12.709200000000000000
+            12.591500000000000000
+            12.467400000000000000
+            12.337500000000000000
+            12.202300000000000000
+            12.062300000000000000
+            11.918000000000000000
+            11.769900000000000000
+            11.618400000000000000
+            11.464000000000000000
+            11.307000000000000000
+            11.147900000000000000
+            10.986900000000000000
+            10.824500000000000000
+            10.660900000000000000
+            10.496400000000000000
+            10.331200000000000000
+            10.165700000000000000
+            9.999900000000000000
+            13.447300000000000000
+            13.441800000000000000
+            13.425300000000000000
+            13.397800000000000000
+            13.359700000000000000
+            13.311100000000000000
+            13.252300000000000000
+            13.183700000000000000
+            13.105700000000000000
+            13.018700000000000000
+            12.923300000000000000
+            12.820000000000000000
+            12.709200000000000000
+            12.591500000000000000
+            12.467400000000000000
+            12.337500000000000000
+            12.202300000000000000
+            12.062300000000000000
+            11.918000000000000000
+            11.769900000000000000
+            11.618400000000000000
+            11.464000000000000000
+            11.307000000000000000
+            11.147900000000000000
+            10.986900000000000000
+            10.824500000000000000
+            10.660900000000000000
+            10.496400000000000000
+            10.331200000000000000
+            10.165700000000000000
+            9.999900000000000000)
+        end>
+      Contour.IntegerValues = <>
+      HigherElevationFunction = '300.1'
+      LowerElevationFunction = '299.9'
+      DataSetNames.Strings = (
+        'NorthSpecifiedHeads')
+      DataSetFormulas.Strings = (
+        'ListRealValue("NorthSpecifiedHeads")')
+      Points = <
+        item
+          X = -0.100000000000000000
+          Y = -0.100000000000000000
+        end
+        item
+          X = -0.100000000000000000
+          Y = 10.100000000000000000
+        end
+        item
+          X = 300.100000000000000000
+          Y = 10.100000000000000000
+        end
+        item
+          X = 300.100000000000000000
+          Y = -0.100000000000000000
+        end
+        item
+          X = -0.100000000000000000
+          Y = -0.100000000000000000
+        end>
+      SelectedNodes = <>
+      MixtureFormulas.Strings = (
+        '0.5')
+    end
+    item
+      ClassTypeName = 'TMultiValueContour'
+      Contour.Name = 'Object5'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = True
+      Contour.SetPropertiesOfIntersectedCells = False
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '300.1'
+      Contour.LowerElevationFunction = '299.9'
+      Contour.Selected = False
+      Contour.ViewDirection = vdSide
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.Visible = False
+      Contour.InterpValues = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+        end>
+      Contour.RealValues = <
+        item
+          FirstCol = 0
+          FirstRow = 0
+          FirstLay = 0
+          LastCol = 0
+          LastRow = 30
+          LastLay = 1
+          DataSetName = 'EastSpecifiedHeads'
+          RealValues = (
+            13.447300000000000000
+            13.441800000000000000
+            13.425300000000000000
+            13.397800000000000000
+            13.359700000000000000
+            13.311100000000000000
+            13.252300000000000000
+            13.183700000000000000
+            13.105700000000000000
+            13.018700000000000000
+            12.923300000000000000
+            12.820000000000000000
+            12.709200000000000000
+            12.591500000000000000
+            12.467400000000000000
+            12.337500000000000000
+            12.202300000000000000
+            12.062300000000000000
+            11.918000000000000000
+            11.769900000000000000
+            11.618400000000000000
+            11.464000000000000000
+            11.307000000000000000
+            11.147900000000000000
+            10.986900000000000000
+            10.824500000000000000
+            10.660900000000000000
+            10.496400000000000000
+            10.331200000000000000
+            10.165700000000000000
+            9.999900000000000000
+            13.447300000000000000
+            13.441800000000000000
+            13.425300000000000000
+            13.397800000000000000
+            13.359700000000000000
+            13.311100000000000000
+            13.252300000000000000
+            13.183700000000000000
+            13.105700000000000000
+            13.018700000000000000
+            12.923300000000000000
+            12.820000000000000000
+            12.709200000000000000
+            12.591500000000000000
+            12.467400000000000000
+            12.337500000000000000
+            12.202300000000000000
+            12.062300000000000000
+            11.918000000000000000
+            11.769900000000000000
+            11.618400000000000000
+            11.464000000000000000
+            11.307000000000000000
+            11.147900000000000000
+            10.986900000000000000
+            10.824500000000000000
+            10.660900000000000000
+            10.496400000000000000
+            10.331200000000000000
+            10.165700000000000000
+            9.999900000000000000)
+        end>
+      Contour.IntegerValues = <>
+      HigherElevationFunction = '300.1'
+      LowerElevationFunction = '299.9'
+      DataSetNames.Strings = (
+        'EastSpecifiedHeads')
+      DataSetFormulas.Strings = (
+        'ListRealValue("EastSpecifiedHeads")')
+      Points = <
+        item
+          X = -0.100000000000000000
+          Y = -0.100000000000000000
+        end
+        item
+          X = 10.100000000000000000
+          Y = -0.100000000000000000
+        end
+        item
+          X = 10.100000000000000000
+          Y = 300.100000000000000000
+        end
+        item
+          X = -0.100000000000000000
+          Y = 300.100000000000000000
+        end
+        item
+          X = -0.100000000000000000
+          Y = -0.100000000000000000
+        end>
+      SelectedNodes = <>
+      MixtureFormulas.Strings = (
+        '0.5')
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object6'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = True
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '11'
+      Contour.LowerElevationFunction = '-1'
+      Contour.Selected = False
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.SpecifiedHeadBoundary.SolutionType = stAssociated
+      Contour.SpecifiedHeadBoundary.Head = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = 'NorthSpecifiedHeads'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.SpecifiedHeadBoundary.AssociatedSolution = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '0'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.InterpValues = <>
+      HigherElevationFunction = '11'
+      LowerElevationFunction = '-1'
+      Points = <
+        item
+          X = -5.663157993043290000
+          Y = 297.764472715220000000
+        end
+        item
+          X = 313.058770932116000000
+          Y = 297.764472715220000000
+        end>
+      SelectedNodes = <>
+    end
+    item
+      ClassTypeName = 'TPhastContour'
+      Contour.Name = 'Object8'
+      Contour.ColorLine = False
+      Contour.ElevationCount = ecTwo
+      Contour.EvaluatedAt = eaNodes
+      Contour.SetPropertiesOfEnclosedCells = False
+      Contour.SetPropertiesOfIntersectedCells = True
+      Contour.SetPropertiesByInterpolation = False
+      Contour.FillColor = clBlack
+      Contour.FillContour = False
+      Contour.LineColor = clBlack
+      Contour.ElevationFunction = '0'
+      Contour.HigherElevationFunction = '11'
+      Contour.LowerElevationFunction = '-1'
+      Contour.Selected = True
+      Contour.ViewDirection = vdTop
+      Contour.CellSize = 1.000000000000000000
+      Contour.CellSizeUsed = False
+      Contour.SpecifiedHeadBoundary.SolutionType = stAssociated
+      Contour.SpecifiedHeadBoundary.Head = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = 'EastSpecifiedHeads'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.SpecifiedHeadBoundary.AssociatedSolution = <
+        item
+          Values.InterpolationDirection = pidX
+          Values.UsePHAST_Interpolation = False
+          Values.IntValue1 = 0
+          Values.IntValue2 = 0
+          Expression = '0'
+          InterpolationDirection = pidX
+          UsePHAST_Interpolation = False
+        end>
+      Contour.InterpValues = <>
+      HigherElevationFunction = '11'
+      LowerElevationFunction = '-1'
+      Points = <
+        item
+          X = 296.603019166958000000
+          Y = 309.023671291380000000
+        end
+        item
+          X = 296.603019166958000000
+          Y = -4.501704444781520000
+        end
+        item
+          X = 298.335203563290900000
+          Y = -4.501704444781520000
+        end>
+      SelectedNodes = <>
+    end>
+  SoluteTransport = True
+  FluidProperties.FluidCompressibility = 0.000000002000000000
+  FluidProperties.FluidDensity = 1000.000000000000000000
+  FluidProperties.FluidDiffusivity = 0.000000001000000000
+  FluidProperties.FluidViscosity = 0.001000000000000000
+  FreeSurface = False
+  PrintFrequency.SaveFinalHeads = False
+  PrintFrequency = <
+    item
+      BC_FlowRatesUnits = fuDefault
+      BoundaryConditions = False
+      ComponentsUnits = fuDefault
+      ConductancesUnits = fuDefault
+      FlowBalanceUnits = fuDefault
+      ForceChemistryPrintUnits = fuDefault
+      HDF_Chemistry = 25.000000000000000000
+      HDF_ChemistryUnits = fuHours
+      HDF_HeadsUnits = fuDefault
+      HDF_VelocitiesUnits = fuDefault
+      HeadsUnits = fuDefault
+      ProgressStatisticsUnits = fuDefault
+      VelocitiesUnits = fuDefault
+      WellsUnits = fuDefault
+      XYZ_Chemistry = 1000.000000000000000000
+      XYZ_ChemistryUnits = fuHours
+      XYZ_ComponentsUnits = fuDefault
+      XYZ_HeadsUnits = fuDefault
+      XYZ_VelocitiesUnits = fuDefault
+      XYZ_WellsUnits = fuDefault
+    end>
+  Title.Strings = (
+    'MOC p. 49')
+  Units.DefaultTimeUnits = tuHours
+  Units.DefaultHorizontalGridUnits = luMeters
+  Units.DefaultVerticalGridUnits = luMeters
+  Units.DefaultHeadUnits = luMeters
+  Units.DefaultHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultHydraulicConductivityTimeUnits = tuHours
+  Units.DefaultSpecificStorageUnits = iluMeters
+  Units.DefaultDispersivityUnits = luMeters
+  Units.DefaultFluxLengthUnits = luMeters
+  Units.DefaultFluxTimeUnits = tuSeconds
+  Units.DefaultLeakyHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultLeakyHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultLeakyThicknessUnits = luMeters
+  Units.DefaultWellDiameterUnits = luMeters
+  Units.DefaultWellFlowVolumnUnits = vuMeters3
+  Units.DefaultWellFlowTimeUnits = tuHours
+  Units.DefaultRiverBedHydraulicConductivityLengthUnits = luMeters
+  Units.DefaultRiverBedHydraulicConductivityTimeUnits = tuSeconds
+  Units.DefaultRiverBedThicknessUnits = luMeters
+  PrintInitial.PrintInitialBoundaryConditions = False
+  PrintInitial.PrintInitialComponents = False
+  PrintInitial.PrintInitialConductance = False
+  PrintInitial.PrintInitialEchoInput = True
+  PrintInitial.PrintInitialFluidProperties = True
+  PrintInitial.PrintInitialForceChemistryPrint = False
+  PrintInitial.PrintInitialHDF_Chemistry = True
+  PrintInitial.PrintInitialHDF_Heads = True
+  PrintInitial.PrintInitialHDF_SteadyFlowVelocites = True
+  PrintInitial.PrintInitialHeads = True
+  PrintInitial.PrintInitialMediaProperties = False
+  PrintInitial.PrintInitialSolutionMethod = True
+  PrintInitial.PrintInitialSteadyFlowVelocities = False
+  PrintInitial.PrintInitialWells = True
+  PrintInitial.PrintInitialXYZ_Chemistry = False
+  PrintInitial.PrintInitialXYZ_Components = False
+  PrintInitial.PrintInitialXYZ_Heads = False
+  PrintInitial.PrintInitialXYZ_SteadyFlowVelocities = False
+  PrintInitial.PrintInitialXYZ_Wells = False
+  Times = <
+    item
+      TimeStepLength = 1.000000000000000000
+      EndingTime = 1000.000000000000000000
+    end>
+  GridOptions.ChemicalDimensionX = True
+  GridOptions.ChemicalDimensionY = True
+  GridOptions.ChemicalDimensionZ = False
+  GridOptions.PrintOrientation = pgXY
+  SolutionOptions.TimeDifferencing = 1.000000000000000000
+  SolutionOptions.CrossDispersion = False
+  SolutionOptions.Tolerance = 0.000000000100000000
+  SolutionOptions.SaveDirections = 10
+  SteadyFlowOptions.SteadyFlow = False
+  SteadyFlowOptions.HeadTolerance = 0.000010000000000000
+  SteadyFlowOptions.FlowBalanceTolerance = 0.001000000000000000
+  SteadyFlowOptions.MinimumTimeStep = 1.000000000000000000
+  SteadyFlowOptions.MaximumTimeStep = 1000.000000000000000000
+  SteadyFlowOptions.HeadChangeLimit = 1.000000000000000000
+  ChemistryOptions.UseKineticReactants = False
+  ChemistryOptions.UseGasPhases = False
+  ChemistryOptions.UseEquilibriumPhases = False
+  ChemistryOptions.UseExchange = False
+  ChemistryOptions.UseSolidSolution = False
+  ChemistryOptions.UseSurfaceAssemblages = False
+  UseWaterTable = False
+  WindowState = wsNormal
+end

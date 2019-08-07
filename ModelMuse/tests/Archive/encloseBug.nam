@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 encloseBug.lst REPLACE
+DATA(BINARY)      9 encloseBug.cbc REPLACE
+DIS              12 encloseBug.dis OLD
+BAS6             13 encloseBug.bas OLD
+OC               39 encloseBug.oc OLD
+DATA             37 encloseBug.fhd REPLACE
+DATA             38 encloseBug.fdn REPLACE
+PCG              18 encloseBug.pcg OLD
+LPF              14 encloseBug.lpf OLD

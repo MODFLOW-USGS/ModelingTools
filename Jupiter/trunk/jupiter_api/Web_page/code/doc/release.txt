@@ -1,0 +1,510 @@
+release.txt
+
+                           JUPITER API Release Notes
+
+     This file describes changes introduced into the JUPITER API with each
+official release.  Every effort will be made to ensure that applications written
+to work with one version of the API will work the same with later versions of
+the API.  However, correction of errors that may be identified in the API may
+result in differences between versions.
+
+NOTE: Any use of trade, product or firm names is for descriptive purposes
+      only and does not imply endorsement by the U.S. Government.
+
+o Version 1.7.3 08/06/2013
+
+This version incorporates changes to accommodate inclusion of singular value 
+decomposition and enhanced weighting in applications.
+
+UTILITIES module:
+
+In subroutine UTL_DX_READ_MCMV, the extensions _mc_presvd and _mv_presvd were 
+added as valid values for the EXT argument.
+
+In subroutine UTL_DX_READ_WT, the extensions '_wt_presvd' and '_wtpri_presvd' 
+were added as valid values for the EXT argument.
+
+DEPENDENTS module:
+
+Variable NDEPGPS was converted to PUBLIC.  NDEPGPS is the number of dependent 
+groups, including observation and prediction groups.  An application should not 
+modify the value of NDEPGPS.
+
+SENSITIVITY module:
+
+In subroutine SEN_UEV_DX_READ_SU, the extensions '_su_presvd' and 
+'_supri_presvd' were added as valid values for the EXT argument.
+
+o Version 1.7.2 10/16/2012
+
+This version incorporates improvements to the parallel-processing capability.
+
+DEVELOPERS PLEASE NOTE: When applications that use the JUPITER API's parallel-
+processing capability are compiled with JUPITER API ver. 1.7.2 (or later), 
+those applications will need to use the new version of JRUNNER (ver. 1.1).  
+Please inform users of your applications that they need to use the new version 
+of JRUNNER.
+
+UTILITIES module:
+
+A new subroutine, UTL_SLEEP, was added.  It can be used to suspend program 
+execution for a specified duration.  The new subroutine is documented in 
+subprograms_addendum.pdf.
+
+PARALLEL_PROCESSING module:
+
+A new function, PLL_CLOSE_AND_DELETE, was added.  It can be used to ensure that 
+a file has been closed and deleted.  The new function is documented in 
+subprograms_addendum.pdf.
+
+Numerous other changes were made to the Parallel Processing module to improve 
+robustness and to decrease the use of CPU cycles when either a dispatcher 
+program or runner program is looking for the presence of signal files.  Also, 
+some messages written to the screen were modified or added to clarify report of 
+events related to parallel processing.
+
+The PLL_WAIT subroutine was modified to invoke new subroutine UTL_SLEEP to 
+suspend program execution without consuming CPU cycles.
+
+A bug in PLL_MAKE_RUNS that may have resulted in loss of data was corrected.
+
+MODEL_INPUT_OUTPUT module:
+
+Subroutine MIO_EXT was slightly modified to improve robustness.
+
+JRUNNER:
+
+The version number for JRUNNER was changed from 1.0 to 1.1.  
+
+JRUNNER was modified to delete the jdispatch.rdy file at the beginning of 
+execution.  When a dispatcher application is compiled with JUPITER API version 
+1.7.2 (or later), JRUNNER ver. 1.0 will not be compatible.  
+
+IMPORTANT: Developers, please ensure that users of your application are advised 
+to use JRUNNER ver. 1.1 with any application that uses parallel processing and 
+is compiled with JUPITER API ver. 1.7.2.
+
+
+o Version 1.7.1 2/22/2012
+
+PRIOR_INFORMATION module:
+
+This version includes a correction to the PRIOR_INFORMATION module for the 
+situation in which prior information items are applied to parameters that were 
+transformed but had not been entered as (log10(paramname)) in the prior 
+information equation.  The programming to convert the prior information to log 
+space was included in version 1.5.0, but that version only converts the prior 
+weight to log space; the square root of the prior weight was not converted.  
+Version 1.7.1 also converts the square root of the prior weight.
+
+
+o Version 1.7.0 11/21/2011
+
+This version includes an enhancement to three modules.
+
+UTILITIES module:
+
+A new subroutine, UTL_COPYLIST, was added.  It makes a copy of all data
+in a "nested linked list." The new subroutine is documented in 
+subprograms_addendum.pdf.
+
+DEPENDENTS module:
+
+Two new public LLIST pointers (LLPTRDEPCOPY and LLPTRPREDCOPY) were added to 
+the Dependents module, and an optional argument, COPYDEPLISTS, was added to the 
+argument list of the DEP_INI_READ subroutine.  When COPYDEPLISTS is included in 
+the calling argument list and is true, copies are made of data in linked lists 
+pointed to by LLPTRDEP and (if the IDEPTYPE argument equals 3) LLPTRPRED before 
+group information is inserted.  The LLPTRDEP data are copied to LLPTRDEPCOPY 
+and (if IDEPTYPE equals 3) the LLPTRPRED data are copied to LLPTRPREDCOPY.  The 
+default when COPYDEPLISTS is omitted is to not make these copies.
+
+PRIOR_INFORMATION module:
+
+Two new public LLIST pointers (LLPTRPRIORCOPY and LLPTRPRIORFPCOPY) were added 
+to the Prior_Information module. 
+
+The NPRIGPS (number of prior-information groups) and NPRIGPSFP (number of 
+prior-information groups for prediction) variables were made public.
+
+An optional argument, COPYPRILIST, was added to the argument list of the 
+PRI_INI_READ subroutine.  When COPYPRILIST is included in the calling argument 
+list and is true, a copy is made of data in the linked list pointed to by 
+LLPTRPRIOR before group information is inserted.  The LLPTRPRIOR data are 
+copied to LLPTRPRIORCOPY.  The default when COPYPRILIST is omitted is to not 
+make the copy.
+
+An optional argument, COPYPRILISTS, was added to the argument list of the 
+PRI_INI_READ_WPRED subroutine.  When COPYPRILISTS is included in the calling 
+argument list and is true, copies are made of data in the linked lists pointed 
+to by LLPTRPRIOR and (if the PRED argument is true) LLPTRPRIORFP before group 
+information is inserted.  The LLPTRPRIOR data are copied to LLPTRPRIORCOPY.  
+When PRED is true, the LLPTRPRIORFP data are copied to LLPTRPRIORFPCOPY.  The 
+default when COPYPRILISTS is omitted is to not make these copies.
+
+
+o Version 1.6.0 9/9/2011
+
+This version includes minor enhancements to four modules.
+
+UTILITIES module:
+
+Output from subroutine UTL_DX_WRITE_EIG was clarified.
+
+Optional LOGICAL argument PRINTIOUTIN was added to subroutine UTL_EIGEN.  
+PRINTIOUTIN controls printing of "VARIANCE-COVARIANCE MATRIX SCALED W/ 
+PARAMETERS", eigenvalues, and eigenvectors.  Revisions to UTL_EIGEN are 
+documented in subprogram_addendum.pdf in the doc directory.
+
+PARALLEL_PROCESSING module:
+
+Modifications enhance robustness of parallel processing.
+
+
+o Version 1.5.0 2/24/2011
+
+This version includes bug fixes for the Prior Information module and minor 
+performance enhancements for parallel processing.
+
+UTILITIES module:
+
+A new PUBLIC function called UTL_SYSTEM_FUNC was added.  UTL_SYSTEM_FUNC can be 
+used to invoke an operating-system command and return a value and error message 
+indicating the success or failure status of the command.  UTL_SYSTEM_FUNC is 
+documented in subprogram_addendum.pdf in the doc directory.
+
+PRIOR_INFORMATION module:
+
+The argument list of subroutine PRI_INI_STORE_WPRED was modified to add an 
+optional argument called CONVERTED, which is a 1-D logical array with dimension 
+MPR.  The revision correctly handles prior information items that applied to 
+parameters that were transformed but had not been entered as (log10(paramname)) 
+in the prior information equation.  PRI_INI_STORE_WPRED is documented in 
+subprogram_addendum.pdf in the doc directory.
+
+The argument list of subroutine PRI_INI_POPX was modified to add an 
+optional argument called CONVERTED, which is a 1-D logical array with dimension 
+MPR.  The revision correctly handles prior information items that apply to 
+parameters that were transformed but had not been entered as (log10(paramname)) 
+in the prior information equation.  PRI_INI_POPX is documented in 
+subprogram_addendum.pdf in the doc directory.
+
+PARALLEL_PROCESSING module:
+
+A new PUBLIC function called PLL_EXE_FUNC was added.  PLL_EXE_FUNC is like 
+PLL_EXE, except that it returns a value indicating the success or failure status 
+of the command in the argument list and an error message.  PLL_EXE_FUNC is 
+documented in subprogram_addendum.pdf in the doc directory.
+
+A new variable named WAITRUNNERS was added, which can be specified in the 
+PARALLEL_CONTROL input block.  WAITRUNNERS has the same definition as WAIT, but 
+it applies only to runners.  If WAITRUNNERS is not specified, its value is the 
+value of WAIT, either as specified in the PARALLEL_CONTROL input block or by 
+default.  Parallel model runs may encounter problems caused by delays in opening 
+and closing files, which are jobs handled by the operating system.  Sometimes it 
+helps to specify a value for WAITRUNNERS that is smaller than the value of WAIT.
+
+PLL_READ_RUNDEP and PLL_MAKE_RUNS were revised to change the handling of the case 
+where jrundep.rdy cannot be deleted after dependent values are successfully read 
+from it.  Now, the dependent values are used and the runner is flagged as 
+nonresponsive.  If this happens, a message is written to the screen.
+
+PLL_WRITE_DISRDY was made more robust in writing the jdispatch.rdy file in runner 
+directories.
+
+PLL_READ_DISPAR was edited to be more robust in opening and reading, and 
+detecting and reporting, problems in reading the jdispar.rdy file.
+
+A write statement in PLL_INI_DISPATCHER was edited to improve clarity.
+
+Jrunner.f90 was edited to invoke PLL_EXE_FUNC instead of PLL_EXE and to call 
+PLL_RUNNER_STOP if PLL_EXE_FUNC returns .FALSE.
+
+      
+o Version 1.4.0 4/6/2010:
+
+DEPENDENTS module:
+
+A new public subroutine called DEP_GET_WTMULTIPLIER was added.  
+DEP_GET_WTMULTIPLIER returns WTMULTIPLIER for a specified observation 
+group.  DEP_GET_WTMULTIPLIER is documented in subprogram_addendum.pdf in
+the doc directory.
+
+An array named STATISTICS was added and made public.  This one-dimensional 
+array holds the value of the variable STATISTIC for each used observation.
+
+A revision was made to the way zero-length default column-name arrays are 
+handled, to accomodate more compilers.
+
+UTILITIES module:
+
+UTL_WRITECDMATRIX was revised to increase the field size for output of 
+integers related to number of elements in a CDMATRIX.  Fields of I9 were 
+increased to I12.  This will accommodate matrices up to 1E6 by 1E6.
+
+PRIOR_INFORMATION module:
+
+A revision was made to the way zero-length default column-name arrays are 
+handled, to accomodate more compilers.
+
+PARALLEL_PROCESSING module:
+
+Code used by PLL_MAKE_RUNS was revised to be more robust with respect to 
+ensuring that the jrundep.rdy file is deleted, after model-simulated values 
+are read, without raising an error condition.
+
+
+o Version 1.3.1 8/17/2009:
+
+UTILITIES module:
+
+Clarified wording of text written by UTL_DX_WRITE_EIG to the _eig file.
+
+DEPENDENTS module:
+
+Fixed bug in DEP_INI_READ that caused data read from Observation_Groups input 
+block to be handled incorrectly when IDEPTYPE equals 3.
+
+Clarified wording of error message written by DEP_INI_STORE when UTL_SVD 
+returns an error flag.
+
+STATISTICS module:
+
+Fixed bug in STA_EVA_COMMENTS to correct condition that generates explanatory 
+text.
+
+PRIOR_INFORMATION module:
+
+Clarified wording of error message written by PRI_INI_PROCESS when UTL_SVD 
+returns an error flag.
+
+Clarified wording and added identification related to weight matrix and 
+square-root of the weight matrix for prior information in PRI_INI_POPX.
+
+      
+o Version 1.3.0 2/19/2009:
+
+UTILITIES module:
+
+New function UTL_ACHAR was added.  It returns the character value for an ASCII 
+code.
+
+The UTL_EIGEN subroutine was modified with additional, optional arguments to add
+a capability to write an _eig file, which is a new data-exchange file.  
+Descriptors for the _eig file, according to the headings of table 17-1 in Banta 
+and others (2006), are:
+  File extension: _eig
+  Content: Eigenvalues and eigenvectors of the covariance matrix on the 
+           parameters
+  Type: Parameter analysis
+  Written by: UTL_EIGEN 
+  Read by: --
+  
+The modifications also correct printing of the eigenvectors in that when the
+vectors are printed one to a column they should have sequential numbers instead 
+of parameter names as the column headings.
+
+MODEL_IO module:
+
+The MIO_EXT subroutine was modified to eliminate writing line of incorrect 
+"Extracted Item Name" and "Extracted Value" (when IVERB>3) for !dum! 
+instructions.
+
+PARALLEL_PROCESSING module:
+
+The PLL_READ_DISPAR subroutine was modified to fix a minor bug.
+
+
+o Version 1.2.3 2/4/2008:
+
+UTILITIES module:
+
+The CHAR2NUM subroutine was modified so that it no longer interprets "D" and "E" 
+as numbers.  Previously, the strings "D" and "E" would have been interpreted as
+zero.
+
+EQUATION module:
+
+The EQN_PARSE_EDIT subroutine was modified to correct a minor bug.
+
+SENSITIVITY module:
+
+In SEN_INI_DI, a bug was corrected in check of validity of dependent names 
+listed in Derivatives Interface file.
+
+The SEN_UEV_DX_WRITE_SEN subroutine was modified to correct a spacing problem 
+in writing an _sc file
+
+
+o Version 1.2.2 7/25/2007:
+ 
+EQUATIONS module:
+
+EQN_LINEAR_COEFFS is revised to optionally edit a prior-information equation 
+in the case where a log-transformed parameter appears as the only term of a 
+prior-information equation but is not included in the parentheses of a log10 
+function. It returns the revised equation and a flag indicating whether the 
+equation is revised so that the programmer can convert the associated 
+statistic to log10 space (perhaps by using the revised UTL_CALCWT). If such 
+a parameter occurs in any form other than log10(param-name) or param-name 
+alone, an error message is written and control is returned with IFAIL=1. The 
+revised subroutine EQN_LINEAR_COEFFS is described in file 
+subprograms_addendum.pdf in the doc directory. 
+  
+  
+PRIOR_INFORMATION module: 
+
+Coding was added to accomodate the case where additional parameters are 
+considered for evaluation of predictive uncertainty. This is appropriate when 
+parameters cannot be included in the regression because the simulated 
+equivalents have little or no sensitivity to them, yet the predictions are 
+sensitive to those parameters. In this case uncertainty associated with those 
+parameters can be included by using the features added in this version of the 
+API.  Specific changes include:
+
+1. Support has been added for two new optional input blocks, to be read by the 
+   Prior-Information Module. Neither is required. The new blocks are as follows:
+   
+   Prior_Information_Groups_For_Prediction   (LLIST pointer: LLPTRGPPRIORFP)
+   Linear_Prior_Information_For_Prediction   (LLIST pointer: LLPTRPRIORFP)
+
+   Support for the new input blocks is provided by new subroutines 
+   PRI_INI_READ_WPRED and PRI_INI_STORE_WPRED, which may be used in place of
+   PRI_INI_READ and PRI_INI_STORE, respectively.  The new subroutines are
+   documented in file subprograms_addendum.pdf in the doc directory.
+     
+   The sequence of blocks read by PRI_INI_READ_WPRED, if all four are present, 
+   is as follows:
+    
+   Prior_Information_Groups
+   Prior_Information_Groups_For_Prediction
+   Linear_Prior_Information
+   Linear_Prior_Information_For_Prediction
+
+2. A new subroutine, PRI_UEV_DX_WRITE_PRP, has been added to write a _prp 
+   data-exchange file, which also is new.  The structure of the _prp file
+   is identical to the _pr file except that it contains prior information added 
+   for evaluation of predictions. The new subroutine is described in file 
+   subprograms_addendum.pdf in the doc directory.
+
+3. A new subroutine, PRI_UEV_DX_READ_PRP, has been added to read a _prp file.
+   The new subroutine is described in file subprograms_addendum.pdf in the doc 
+   directory.
+     
+The modifications to EQN_LINEAR_COEFFS, described above, support editing of a
+prior-information equation if the parameter involved is log-transformed and the 
+parameter is not included in parentheses after a log10 function in the 
+prior-information equation.
+  
+
+SENSITIVITY module:
+
+SEN_UEV_DX_READ_SU has been revised to support reading of files with
+extension _supri or _ suprip, by the addition of an optional argument.
+The expected file structure is the same as that of an _su file, regardless
+of the extension.  The modified SEN_UEV_DX_READ_SU is described in file 
+subprograms_addendum.pdf in the doc directory. 
+
+
+STATISTICS module:
+
+STA_UEV_FIT was modified to write the simulated value even if it is omitted from 
+an analysis, as indicated by the corresponding element of the OMIT array.
+  
+
+UTILITIES module:
+
+UTL_DX_READ_MCMV was modified to allow the EXT argument to be specified as '_mvp'.
+
+UTL_DX_WRITE_MCMV was modified to allow the EXT argument to be specified as '_mvp'.
+
+UTL_DX_READ_WT was modified to allow the EXT argument to be specified as '_wtprip'.
+
+UTL_DX_WRITE_WT was modified to allow the EXT argument to be specified as '_wtprip'.
+  
+UTL_CALCWT was modified to accomodate conversion of variance from native to log10 
+space by the addition of an optional argument. The modified subroutine is described 
+in file subprograms_addendum.pdf in the doc directory.
+
+
+o Version 1.1.0 2/7/2007:
+
+EQUATION module: The ATERM array was converted from PRIVATE to PUBLIC.
+
+Several changes were made to accomodate large problems (e.g. problems with more
+than about 46,000 observations):
+
+1. To avoid stack errors in storing potentially large arrays, several automatic
+arrays in the DEPENDENTS, EQUATION, PRIOR_INFORMATION, SENSITIVITY, STATISTICS,
+and UTILITIES modules were converted to allocatable arrays.
+
+2. To avoid stack errors in functions that return arrays, four subroutines have
+been added that can be used in place of functions:
+
+  function        subroutine
+  --------------  ------------------
+  UTL_DIAGONAL    UTL_DIAGONAL_SUB
+  UTL_MATMUL      UTL_MATMUL_SUB
+  UTL_MATMULVEC   UTL_MATMULVEC_SUB
+  UTL_SUBSTITUTE  UTL_SUBSTITUTE_SUB
+
+  The new subroutines are documented in file subprograms_addendum.pdf in the doc
+  directory.
+
+3. To increase maximum size of arrays that can be stored in a CDMATRIX
+structure, in the DATATYPES module, the definition of type CDMATRIX was modified
+to declare array IPOS as KIND=8.  Numerous references to IPOS and variables used
+in conjunction with IPOS were modified to use KIND=8 integers.  With this
+change, the maximum row and column dimension of a square matrix stored in
+CDMATRIX structure is no longer limited (to 46,340) by the size of an integer
+that can be stored in IPOS. (Note that the value stored in IPOS for the element
+at row NR, column NC equals NR*NC.)  Now, the size of a matrix stored in
+CDMATRIX structure is limited by the size of an integer that can be stored in an
+integer (KIND=4) variable (approximately 2 billion).  Depending on the number of
+non-zero values to be stored, the matrix size may be further limited by the
+availability of memory for allocation.
+
+4. A new specific subroutine for the UTL_RWORD generic interface has been
+implemented.  With this addition, the "N" argument can be a KIND=8 integer if
+the "D" argument is DOUBLE PRECISION.
+
+5. A new subroutine, UTL_INVERT_DIAG, has been added to the UTILITIES module to
+invert a diagonal matrix stored in a CDMATRIX structure.  UTL_INVERT_DIAG can be
+invoked instead of UTL_SVD when the matrix to be inverted has no non-zero off-
+diagonal terms.  For situations where this restriction is met, UTL_INVERT_DIAG
+is substantially faster than UTL_SVD, especially when the matrix dimension is
+large.  The new subroutine is documented in file subprograms_addendum.pdf in
+the doc directory.
+
+
+o Version 1.0.2 12/11/2006:
+
+UTILITIES module:
+
+UTL_SSVD2 was edited to write a more meaningful message and stop execution when
+ITER==30.
+
+UTL_SVD was edited to eliminate redundant check for BUFF3<=0.
+
+BASIC module:
+
+BAS_INI_MODELEXEC was edited to initialize MODCOMLINE and COMMANDID arrays with
+' ' after they are allocated.
+
+EQUATION module:
+
+EQN_INI was edited to change ACHAR arguments (200-207) to values between 0 and
+127 (14-21) to comply with Fortran standard.
+
+
+o Version 1.0.0 07/26/2006:
+
+Initial release of the JUPITER API.
+
+
+Reference
+
+Banta, E.R., Poeter, E.P., Doherty, J.E., and Hill, M.C., 2006, JUPITER: Joint 
+    Universal Parameter IdenTification and Evaluation of Reliability -- An 
+    application programming interface (API) for model analysis: U.S. Geological 
+    Survey Techniques and Methods, bk. 6, chap. E1, 268 p.

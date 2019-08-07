@@ -1,0 +1,7 @@
+BEGIN OBSERVATION_DATA TABLE
+NROW=3  NCOL=4  COLUMNLABELS  GROUPNAME=FLOWS
+obsname  obsvalue  statistic  statflag  
+flow01.ss        -4.4      .160000   var        
+flow01.10        -4.1      .144400   var         
+flow01.283       -2.2      .044100   var         
+END OBSERVATION_DATA

@@ -1,0 +1,68 @@
+release.txt
+
+                          ModelMate Release Notes
+                          
+This file describes changes introduced into ModelMate with each official 
+release.
+
+NOTE: Any use of trade, product or firm names is for descriptive purposes 
+      only and does not imply endorsement by the U.S. Government.
+      
+o Version 1.0.3 2/16/2016
+
+    This version fixes two bugs.
+    
+    Bug fixed: ModelMate would fail to open on certain computers.
+    
+    Bug fixed: Use of the menu item:
+    "Model | Create Instruction Files for Files Defined in ModelMuse"
+    would generate an error message if the names of observation groups
+    included unexpected names. With the current version, instruction files
+    are created for recognized group names, and other observation groups
+    are ignored.
+
+o Version 1.0.2 11/19/2013
+
+    This version fixes a number of bugs and includes several minor 
+    enhancements.
+
+    Bug fixed: Flickering in the Observation Groups table of Observations 
+    window.
+    
+    Bug fixed: Head observations in which multilayer head observations have 
+    the layers and proportions specified on multiple lines were not read 
+    correctly.
+    
+    Bug fixed: Observation names were not read correctly when the names are 
+    surrounded by quotes.
+    
+    Bug fixed: Import of a UCODE input file did not function correctly when 
+    input file uses blockformat FILES.
+    
+    Bug fixed: Observations were not cleared when the  File | New Project menu 
+    item was selected.
+    
+    Support was added for the WAITRUNNERS variable of the Parallel_Control 
+    input block of JUPITER API version 1.5.0 and UCODE_2005 version 1.022.  
+    WAITRUNNERS can be set on the UCODE Parallel-Processing Control window.
+    
+    Wording was clarified for error message related to non-standard group 
+    names found when constructing instruction files for observations defined 
+    in ModelMuse.
+    
+    Error checking was enhanced for the "Model-input and template files" and 
+    "Model-output and instruction files" windows.
+
+    Visual elements were adjusted to be fully visible when ModelMate is run 
+    under Windows 7.
+    
+o Version 1.0.1 6/4/2012
+    
+    Bug fixed: Observation Table did not show new observation added using 
+    "Add Observation" button.
+    
+    Visual elements were adjusted to be fully visible when ModelMate is run 
+    under Windows 7.
+
+o Version 1.0.0 5/2/2011
+    Initial release of ModelMate.

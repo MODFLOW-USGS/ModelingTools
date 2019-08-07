@@ -1,0 +1,16 @@
+# LGR Control File for MODFLOW-LGR created on 1/5/2017 by ModelMuse
+LGR
+     2 # NGRIDS
+SfrLinkTest3.nam # NAME FILE
+PARENTONLY
+   131   132 # Data set 5 IUPBHSV, IUPBFSV
+SfrLinkTest3_Child_1.nam # Data set 6 NAME FILE
+CHILDONLY # Data set 7 GRIDSTATUS
+     0    -2     0     0 # Data set 8 ISHFLG IBFLG IUCBHSV IUCBFSV
+     1     1 # Data set 9 MXLGRITER IOUTLGR
+  5.000000000000E-001   5.000000000000E-001  # Data set 10 RELAXH RELAXF
+  5.000000000000E-003   5.000000000000E-002  # Data set 11 HCLOSELGR FCLOSELGR
+     1     3     4 # Data set 12 NPLBEG NPRBEG NPCBEG
+     3     6     7 # Data set 13 NPLEND NPREND NPCEND
+     3 # Data set 14 NCPP
+     1     1     1 # Data set 15 NCPPL

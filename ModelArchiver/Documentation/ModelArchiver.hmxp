@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false" isrepository="false">
+  <config>
+    <namespaces/>
+    <helpwindows>
+      <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
+        <caption translate="true">&lt;%TITLE%&gt;</caption>
+        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#F0F0F0" textcolor="#FFFFFF"/>
+        <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
+          <user-button name="jump1">
+            <caption translate="true">jump1</caption>
+          </user-button>
+          <user-button name="jump2">
+            <caption translate="true">jump2</caption>
+          </user-button>
+        </window-options-chm>
+      </helpwindow>
+    </helpwindows>
+    <styleclasses>
+      <styleclass name="Code Example" shortcut="0">
+        <style-set media="screen" type="para">background-color:#ccffff; white-space:nowrap; page-break-inside:avoid; border:none;</style-set>
+        <style-set media="screen" type="text">font-family:'Courier New'; font-size:12pt;</style-set>
+      </styleclass>
+      <styleclass name="Courier Fixed" shortcut="116">
+        <style-set media="screen" type="text">font-family:'Courier New'; font-size:9pt; color:#000000;</style-set>
+      </styleclass>
+      <styleclass name="New Materials" parentclass="Courier Fixed" shortcut="0">
+        <style-set media="screen" type="text">font-size:12pt; font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Normal" shortcut="115">
+        <style-set media="screen" type="para">text-align:left; text-indent:0px; margin-right:0px; margin-bottom:6px; margin-left:0px;</style-set>
+        <style-set media="screen" type="text">font-family:'Times New Roman'; font-size:12pt; color:#000000;</style-set>
+      </styleclass>
+      <styleclass name="Citation" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+        <style-set media="screen" type="text">font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="Comment" parentclass="Normal" shortcut="0"/>
+      <styleclass name="Heading1" parentclass="Normal" shortcut="114">
+        <style-set media="screen" type="para">margin-top:12px; margin-bottom:6px;</style-set>
+        <style-set media="screen" type="text">font-size:14pt; font-weight:bold; color:#000000;</style-set>
+      </styleclass>
+      <styleclass name="Heading2_atoc_" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">margin-top:6px; border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Heading3_atocs_" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold; font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="Heading4_atocs_" parentclass="Normal" shortcut="0"/>
+      <styleclass name="Image Caption" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="text">font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Indented bullet" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">margin-left:28px; border:none;</style-set>
+      </styleclass>
+      <styleclass name="ItemGroup" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">text-indent:-18px; margin-left:18px;</style-set>
+        <style-set media="screen" type="text">font-size:14pt; color:#3366ff;</style-set>
+      </styleclass>
+      <styleclass name="Keywords" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold; font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="New Style" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">border:none;</style-set>
+      </styleclass>
+      <styleclass name="Notes" parentclass="Normal" shortcut="0"/>
+      <styleclass name="Table Header" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="para">text-align:center; border:none;</style-set>
+        <style-set media="screen" type="text">font-weight:bold;</style-set>
+      </styleclass>
+      <tablestyleclass name="Default">
+        <style-set media="screen">width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;</style-set>
+      </tablestyleclass>
+    </styleclasses>
+    <config-group name="project">
+      <config-value name="title">ModelArchiver</config-value>
+      <config-value name="author" translate="true">Enter your company name</config-value>
+      <config-value name="copyright" translate="true">© &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
+      <config-value name="versionmajor">1</config-value>
+      <config-value name="versionminor">0</config-value>
+      <config-value name="versionbuild">0</config-value>
+      <config-value name="lcid" translate="true">en-us</config-value>
+      <config-value name="charset" translate="true">ANSI_CHARSET</config-value>
+      <config-value name="deffont">font-family:'MS Sans Serif'; font-size:12pt; color:#000000;</config-value>
+      <config-value name="autohelpstart">340</config-value>
+      <config-value name="autohelpincrement">10</config-value>
+      <config-value name="autohelpanchor">0</config-value>
+      <config-value name="searchpath">.\;.\Images\</config-value>
+      <config-group name="custombuilds">
+        <config-value name="demo">Demo Build</config-value>
+        <config-value name="user1">User defined 1</config-value>
+        <config-value name="user2">User defined 2</config-value>
+        <config-value name="user3">User defined 3</config-value>
+      </config-group>
+      <config-value name="imageshortcuts_includebaggage">1</config-value>
+      <config-value name="bidimode">0</config-value>
+      <config-value name="openchildreadonly">1</config-value>
+      <config-value name="vcsmanuallycheckout">0</config-value>
+      <config-value name="make3include">HTML,OPT_BREADTRAIL,OPT_TOGTOC,OPT_URL</config-value>
+      <config-value name="make3status">*</config-value>
+    </config-group>
+    <config-group name="user">
+      <config-group name="rbwinst-pr">
+        <config-group name="report">
+          <config-value name="type">0</config-value>
+          <config-value name="sort">0</config-value>
+          <config-value name="include">ALL</config-value>
+        </config-group>
+        <config-group name="project">
+          <config-value name="lastexport">3</config-value>
+        </config-group>
+      </config-group>
+      <config-group name="rbwinst">
+        <config-group name="project">
+          <config-value name="lastexport">3</config-value>
+        </config-group>
+      </config-group>
+    </config-group>
+    <config-group name="html">
+      <config-value name="outputfile">.\HTML\index.html</config-value>
+      <config-value name="skin">..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\gold_grey_horiz.hmskin</config-value>
+    </config-group>
+    <variables/>
+    <helpcontext-numbers>
+      <helpcontext-number href="Archive" value="10"/>
+      <helpcontext-number href="Archive_Lists" value="20"/>
+      <helpcontext-number href="Archive_Structure" value="30"/>
+      <helpcontext-number href="Archive_Update_Dialog_Box" value="330"/>
+      <helpcontext-number href="Arrange_Models_Form" value="210"/>
+      <helpcontext-number href="Brows_Graphic" value="40"/>
+      <helpcontext-number href="Create_Archive" value="50"/>
+      <helpcontext-number href="CreateArchiveHidden" value="260"/>
+      <helpcontext-number href="Edit_Metadata_Dialog_Box" value="310"/>
+      <helpcontext-number href="Edit_Readme_File_Dialog_Box" value="320"/>
+      <helpcontext-number href="File" value="60"/>
+      <helpcontext-number href="File_Extensions" value="70"/>
+      <helpcontext-number href="File_Extensions_Form" value="220"/>
+      <helpcontext-number href="File_Lists" value="80"/>
+      <helpcontext-number href="File_Lists_and_ModelMuse_Integ" value="90"/>
+      <helpcontext-number href="FileExtensionsHidden" value="240"/>
+      <helpcontext-number href="Files" value="100"/>
+      <helpcontext-number href="Georef" value="110"/>
+      <helpcontext-number href="Getting_Started" value="120"/>
+      <helpcontext-number href="Help" value="290"/>
+      <helpcontext-number href="Metadata" value="140"/>
+      <helpcontext-number href="Model_Files" value="150"/>
+      <helpcontext-number href="Model_Files_Dialog_Box" value="230"/>
+      <helpcontext-number href="Modelgeoref.txt_File" value="160"/>
+      <helpcontext-number href="Move_Files_to_Archive_Director" value="270"/>
+      <helpcontext-number href="Overview" value="170"/>
+      <helpcontext-number href="Readme.txt_File" value="190"/>
+      <helpcontext-number href="References" value="200"/>
+      <helpcontext-number href="SelectModelFilesHidden" value="250"/>
+      <helpcontext-number href="Update_Metadata" value="280"/>
+      <helpcontext-number href="Update_Paths" value="340"/>
+      <helpcontext-number href="Update_Readme.txt" value="300"/>
+    </helpcontext-numbers>
+  </config>
+  <xi:include parse="xml" href="Maps/table_of_contents.xml"/>
+  <project-files>
+    <file href="Topics/*.xml" build="ALL" filetype="topic">
+      <file-mod href="FileExtensionsHidden.xml"/>
+      <file-mod href="SelectModelFilesHidden.xml"/>
+      <file-mod href="CreateArchiveHidden.xml"/>
+      <file-mod href="Move_Files_to_Archive_Director.xml"/>
+      <file-mod href="Update_Metadata.xml"/>
+      <file-mod href="Update_Readme.txt.xml"/>
+      <file-mod href="Update_Paths.xml"/>
+    </file>
+    <file href="Baggage/*.*" build="ALL" filetype="baggage"/>
+  </project-files>
+</helpproject>

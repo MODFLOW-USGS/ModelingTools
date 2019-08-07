@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Move Files to Archive Directory</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Move Files to Archive Directory</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Move Files to Archive Directory</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command will move all the files in the archive structure to the archive directory specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Create_Archive" styleclass="Normal" style="font-weight:bold;" translate="true">Create Archive</link><text styleclass="Normal" translate="true"> pane. This command can be useful to check that the models still run correctly when transferred to the archive.</text></para>
+  </body>
+</topic>

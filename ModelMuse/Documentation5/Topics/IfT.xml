@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">IfT</title>
+  <keywords>
+    <keyword translate="true">IfT</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">IfT</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">IfT</text><text styleclass="Normal" translate="true">(Boolean_Value, If_True_Text_Result, If_False_Text_Result) is like </text><link displaytype="text" defaultstyle="true" type="topiclink" href="If" styleclass="Normal" translate="true">If</link><text styleclass="Normal" translate="true"> except that the value returned is always text.</text></para>
+  </body>
+</topic>

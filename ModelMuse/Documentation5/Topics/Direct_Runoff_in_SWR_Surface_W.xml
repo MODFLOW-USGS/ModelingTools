@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Direct Runoff in SWR: Surface-Water Routing Process</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Direct Runoff in SWR: Surface-Water Routing Process</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Direct Runoff in SWR: Surface-Water Routing Process</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Starting time</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Ending time</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> are explained in the help for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" anchor="Times" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Reach (DROMAP2D)</text><text styleclass="Normal" translate="true">: DROMAP2D defines the mapping of each cell to a specific SWR1 reach. This array is initialized to have values equal to 0, as a result, direct runoff would not be routed to SWR1 reaches until DROMAP2D values between 1 and the total number of reaches are specified. Direct runoff is not routed for cells having DROMAP2D values less than 1 or greater than the total number of reaches.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Runoff (DROVAL2D)</text><text styleclass="Normal" translate="true">: DROVAL2D defines the base direct runoff rate to apply. This array is initialized to have values equal to 0, as a result, direct runoff would not be routed to SWR1 reaches defined by DROMAP2D values until DROMAP2D values between 1 and the total number of reaches are specified. Direct runoff has units of L/T.</text></para>
+  </body>
+</topic>

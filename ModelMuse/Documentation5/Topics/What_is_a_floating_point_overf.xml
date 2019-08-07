@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">What is a floating point overflow?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">What is a floating point overflow?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Computers can represent real numbers in a number of different ways. The two most common are single-precision and double-precision. A single-precision variable uses 32 bits to represent a real number. The maximum single-precision number is approximately 3.4 x 10</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">38</text><text styleclass="Normal" style="font-size:12pt; vertical-align:baseline;" translate="true">. A double-precision variable </text><text styleclass="Normal" translate="true">uses 64 bits to represent a real number. The maximum </text><text styleclass="Normal" style="font-size:12pt; vertical-align:baseline;" translate="true">double</text><text styleclass="Normal" translate="true">-precision number is approximately 1.8 x 10</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">308</text><text styleclass="Normal" style="font-size:12pt; vertical-align:baseline;" translate="true">. Thus a double-precision variable can hold much larger numbers than a </text><text styleclass="Normal" translate="true">single-precision variable. This can cause problems when assigning the value of a double-precision variable to a single-precision variable if the value of the double-precision variable is larger than the maximum possible single-precision variable. When a program attempts to do that a floating point overflow occurs. In general, a floating point overflow occurs whenever the value being assigned to a variable is larger than the maximum possible value for that variable.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Floating point overflows in MODFLOW can be a symptom of a problem with the model. For example, if a steady-state model has flow entering the groundwater but no place for flow to leave the system, the calculated head might eventually rise high enough to cause a floating point overflow. </text></para>
+  </body>
+</topic>

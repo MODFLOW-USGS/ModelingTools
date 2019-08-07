@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specifying a Grid with Numbers</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Specifying a Grid with Numbers</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If precise control over the position of the grid is desired, the menu items </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Specify Grid Angle…</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Specify Grid Lines…</text><text styleclass="Normal" translate="true"> can be used to locate the grid at an exact position. Normally, it is best to specify the grid angle first. When the grid angle is changed, the grid is rotated relative to its own center. The positions of the grid lines are measured relative to the origin of the coordinate system so that when the grid is rotated, those positions change, as illustrated in the front and side views of the model in figure 11. The objects are not rotated when the grid is rotated (fig. 10). </text></para>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Angle_Dialog_Box" styleclass="Strong" translate="true">Grid Angle Dialog Box</link><text styleclass="Strong" translate="true">&#32;</text><text styleclass="Normal" translate="true">and</text><text styleclass="Strong" translate="true">&#32;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Spacing_Dialog_Box" styleclass="Strong" translate="true">Grid Spacing Dialog Box</link><conditional-text type="IF" value="PRINT,PDF,EBOOK"/><text styleclass="Normal" translate="true"> in the help system</text><conditional-text type="END"/><text styleclass="Normal" translate="true"> for more information.</text><text styleclass="Strong" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Scale_Rotate_and_Move_Objects" styleclass="Strong" translate="true">Scale, Rotate, and Move Objects</link><text styleclass="Normal" translate="true"> dialog box for information on how to edit objects position and geometry. &#160;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Note: </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Grid|Specify Grid Lines…</text><text styleclass="Normal" translate="true"> can not be used with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Footprint_Properties_Dialog_Bo" styleclass="Normal" translate="true">Well Footprints</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption" style="text-align:center; text-indent:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; line-height:1.0; white-space:normal; page-break-inside:auto; page-break-after:avoid; tabstops:none;"><image src="UnRotatedGrid.ipp" scale="45.00%" width="307" height="284" styleclass="Image Caption"><title translate="true">ModelMuse showing an unrotated grid and objects on the top and front views.</title></image><text styleclass="Image Caption" translate="true">&#32;</text><image src="RotatedGrid.ipp" scale="45.00%" width="307" height="284" styleclass="Image Caption"><title translate="true">ModelMuse showing a rotated grid and objects on the top and front views.</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 11.</text><text styleclass="Image Caption" translate="true"> Unrotated (A) and rotated (B) grid with unmoved objects on the top and front views.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

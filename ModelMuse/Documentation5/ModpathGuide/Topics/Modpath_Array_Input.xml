@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Array Input</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Array Input</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The real two-dimensional array reader (U2DREL), the integer two-dimensional array reader (U2DINT), and the real one-dimensional array reader (U1DREL) read one array-control record and, optionally, a data array in a format specified on the array-control record. Five alternate structures for the control record are provided. The original fixed-format control records work as documented (McDonald and Harbaugh, 1988). Four free-format versions of the control record have been added in addition to the original fixed-format control record.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">FIXED FORMAT CONTROL RECORD FOR REAL AND INTEGER ARRAY READERS:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">1. LOCAT CNSTNT FMTIN IPRN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Format: I10 F10.0 A20 I10</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For U2DINT, CNSTNT is an integer that is read with an I10 format.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">FREE-FORMAT CONTROL RECORD FOR REAL ARRAY READERS</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Values in bold italics are key words that can be specified as uppercase or lowercase. Each control record is limited to a length of 79 characters.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">1. </text><text styleclass="Keyword" translate="true">CONSTANT</text><text styleclass="Normal" translate="true"> CNSTNT</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">All values in the array are set equal to CNSTNT.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">2. </text><text styleclass="Keyword" translate="true">INTERNAL</text><text styleclass="Normal" translate="true"> CNSTNT FMTIN IPRN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The individual array elements will be read from the same file that contains the control record.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">3. </text><text styleclass="Keyword" translate="true">EXTERNAL</text><text styleclass="Normal" translate="true"> Nunit CNSTNT FMTIN IPRN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The individual array elements will be read from the file unit number specified by Nunit. The name of the file associated with this file unit is contained in the name file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">4. </text><text styleclass="Keyword" translate="true">OPEN/CLOSE</text><text styleclass="Normal" translate="true"> FNAME CNSTNT FMTIN IPRN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The array will be read from the file whose name is specified by FNAME. This file will be opened on unit 99 just prior to reading the array and closed immediately after the array is read. Thus, a file that is read using this control record can contain only a single array. Files opened using the OPEN/CLOSE option should not be included in the name file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Explanation of Parameters in the Array-Control Records</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Nunit-- is the unit for reading the array when the EXTERNAL free-format control record is used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CNSTNT-- is a real-number constant for U2DREL and U1DREL, and an integer constant for U2DINT. If the array is being defined as a constant, CNSTNT is the constant value. If individual elements of the array are being read, the values are multiplied by CNSTNT after they are read. When CNSTNT is used as a multiplier and if it is specified as 0, it is changed to 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">FMTIN-- is the format for reading array elements. The format must contain 20 characters or less. The format must either be (1) a standard Fortran format that is enclosed in parentheses, (2) &quot;(FREE)&quot;, which indicates free format, or (3) &quot;(BINARY)&quot;, which indicates binary (unformatted) data. When using a free-format control record, the format must be enclosed in apostrophes if it contains one or more blanks or commas. The binary files that can be read by the array readers must have either been created by MODFLOW or by another program capable of generating binary files with the appropriate structure. &quot;(FREE)&quot; and &quot;(BINARY)&quot; can only be specified in free-format control records. Also, &quot;(BINARY)&quot; can only be specified when using U2DREL or U2DINT, and only when the control record is EXTERNAL or OPEN/CLOSE. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">LOCAT-- indicates the location of the array values for a fixed-format array control record. If LOCAT=0, all elements are set equal to CNSTNT. If LOCAT&gt;0, it is the unit number for reading formatted records using FMTIN as the format. If LOCAT&lt;0, it is the unit number for binary(unformatted) records, and FMTIN is ignored. Also, when LOCAT is not 0, the array values are multiplied by CNSTNT after they are read.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRN-- is a flag indicating that the array being read should be printed and a code for indicating the format that should be used. The format codes are different for each of the three array-reader modules as shown below. IPRN is set to zero when the specified value exceeds those defined. If IPRN is less than zero, the array will not be printed.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><table rowcount="20" colcount="4" style="cell-padding:0px; cell-spacing:0px; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IPRN</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">U2DREL</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">U2DINT</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">U1DREL</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10G11.4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10I11</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10G12.5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">11G10.3</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">60I1</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">5G12.5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">9G13.6</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">40I2</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">3</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">15F7.1</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">30I3</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">15F7.2</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">25I4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">5</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">15F7.3</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20I5</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">6</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">15F7.4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10I11</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">7</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20F5.0</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20I2</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">8</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20F5.1</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">15I4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">9</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20F5.2</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10I6</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20F5.3</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">11</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">20F5.4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">12</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10G11.4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">13</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10F6.0</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">14</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10F6.1</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">15</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10F6.2</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">16</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10F6.3</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">17</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10F6.4</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">18</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">10F6.5</text></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+        <td style="vertical-align:top; width:67px; height:16px;">
+          <para styleclass="Normal"></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Several examples of free-format control records used to read a real array consisting of 4 rows with 7 values per row are shown below.</text></para>
+    <para styleclass="Normal"><table rowcount="5" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Code"><text styleclass="Code" translate="true">CONSTANT 5.7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This sets an entire array to the value &quot;5.7&quot;.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Code"><text styleclass="Code" translate="true">INTERNAL 1.0 (7F4.0) 3 </text></para>
+          <para styleclass="Code"><text styleclass="Code" translate="true">1.2 3.7 9.3 4.2 2.2 9.9 1.0</text></para>
+          <para styleclass="Code"><text styleclass="Code" translate="true">3.3 4.9 7.3 7.5 8.2 8.7 6.6</text></para>
+          <para styleclass="Code"><text styleclass="Code" translate="true">4.5 5.7 2.2 1.1 1.7 6.7 6.9</text></para>
+          <para styleclass="Code"><text styleclass="Code" translate="true">7.4 3.5 7.8 8.5 7.4 6.8 8.8</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This reads the array values from the file that contains the control record. Thus, the values immediately follow the control record. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Code"><text styleclass="Code" translate="true">EXTERNAL 52 1.0 (7F4.0) 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This reads the array from the file opened on unit 52.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Code"><text styleclass="Code" translate="true">EXTERNAL 47 1.0 (BINARY) 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This reads the array from the binary file opened on unit 47.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Code"><text styleclass="Code" translate="true">OPEN/CLOSE test.dat 1.0 (7F4.0) 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">This reads the array from the file named &quot;test.dat&quot;.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

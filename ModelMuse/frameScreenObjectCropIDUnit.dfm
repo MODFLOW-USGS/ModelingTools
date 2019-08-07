@@ -1,0 +1,2 @@
+inherited frameScreenObjectCropID: TframeScreenObjectCropID
+end

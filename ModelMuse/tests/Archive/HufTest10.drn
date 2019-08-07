@@ -1,0 +1,12 @@
+# DRN: Drain package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+PARAMETER     1    10 # DataSet 1: PARAMETER NPDRN MXL
+     5     9 AUXILIARY IFACE # DataSet 2: MXACTD IDRNCB Option
+DRAIN DRN  1.000000000000E+000      5 # Data Set 3: PARNAM PARTYP Parval NLST
+     1     7     6  4.000000000000E+002   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1    10    11  5.500000000000E+002   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1    15    14  1.200000000000E+003   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1    16    14  1.200000000000E+003   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     1    14    14  1.200000000000E+003   1.000000000000E+000      0 # Data Set 4b: Layer Row Column Elevation Condfact IFACE
+     0     1 # Data Set 5: ITMP NP Stress period 1
+DRAIN # Data Set 7: PARNAM
+     0     0 # Data Set 5: ITMP NP Stress period 2

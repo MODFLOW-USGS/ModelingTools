@@ -1,0 +1,175 @@
+1. Support any input block: 
+
+Add a field in TUcProject that would be a collection of items, call it InputBlocks.  Each item would contain a TStringList, an identifier (member of an enumeration), and a Use boolean, maybe additional fields.  The stringlist would contain the text for one input block, and the identifier would identify which type of input block is contained in the stringlist.  E.g. the enumeration might be [ibtMergeFiles, ibtRegNonLinInt, ibtDerivParams, ibtDerivObs, ibtDerivPreds, ibtMatrixFiles, ibtPllControl, ibtPllRunners] and others as needed.  An editor specifically designed to edit stringlists would be used to build and store the input blocks, and could be prepopulated with needed text when an input block of a selected type is first created.  In TProject.ExportUcodeFile, at points where input blocks not otherwise supported in the GUI could be inserted into the Ucode input file, there would be code to check the new field for existence of an InputBlocks.Item with the appropriate type and for which Use is True.  If found, the strings in the stringlist would be added to the slExport stringlist.  This way, any input block could be supported without a specific form or set of controls in the GUI.
+
+ibtMergeFiles	   Merge_Files
+ibtRegNonLinInt  Reg_GN_NonLinInt
+ibtDerivParams 	 Derived_Parameters
+ibtDerivObs		   Derived_Observations
+ibtDerivPreds	   Derived_Predictions
+ibtMatrixFiles   Matrix_Files
+ibtPllControl	   Parallel_Control
+ibtPllRunners	   Parallel_Runners
+
+As GUI support for these input blocks is added, the data in the stringlists would need to be read and stored, then the item would be removed from InputBlocks.
+
+************************************************
+
+2. Derived parameters
+
+A derived parameter cannot be listed in the Parameter_Data input block.  However, it will be necessary to support changing a parameter between non-derived and derived without losing information.  So there should be a field added to TParam that indicates if a parameter should be put in the Parameter_Data block or in the Derived_Parameters block.  TParam could have a "Derived" boolean field, which when true would indicate it's a derived parameter.  
+
+Add to TParam:
+
+private
+  fDerived: boolean; 
+  fDerivEqn: string;
+published
+  Property Derived: boolean;
+  Property DerivEqn: string;
+
+This should work OK.  Derived and DerivEqn do not need to be parameter attributes because derived parameters should not show up in the parameters table on the Parameters tab of the main form.  Only parameters with Derived=False should be listed on the Parameters tab.  Instead, make a form that would list all parameters, with three columns:
+
+Parameter Name (string), Derived (checkbox), and Derived-Parameter Equation (string).  
+
+Implementation of derived observations and derived predictions would be similar...the same fields would be added to TDep.
+
+References to TParam.count and pretty much all routines that use parameters would need to be checked to make sure they function correctly after a derived parameters capability is implemented.
+
+8/17/2009 note: Derived parameter capability was implemented in April 2009.  Capability uses fDerivEqn and DerivEqn, but not fDerived or Derived.  Instead, a new yes/no attribute type called patDerived was added to TParamAttType.
+
+************************************************
+
+3. Use of project name and Ucode input file names
+
+Mary suggested eliminating project name and/or eliminating the Ucode input file: Why not just use one string for both?  Can the ModelMate file name be used instead of both?  Possible alternatives:
+
+a. Eliminate two Ucode input file names and use a single string for both project name and Ucode input file name:  If this is done, then if you want separate Ucode input files for calibration and prediction, you would have to change that string.
+
+b. Use two Ucode input file names and eliminate project name: Makes it difficult to use relative paths for Ucode input files because the input file names would be used in naming the RunUcode batch file.
+
+c. Eliminate two Ucode input file names and combine project name with Ucode mode when forming Ucode input file names and RunUcode batch files:  Difficult to use relative paths.
+
+d. Don't eliminate anything, but combine project name with Ucode mode when naming RunUcode batch files.
+
+e. Eliminate project name; use ModelMate file name in combination with Ucode mode when naming RunUcode batch files.  Eliminate the Project Name and Title form.  This would limit the what-if options available to the user unless multiple ModelMate files are used, which I would like to avoid.
+
+f. Do (e), and instead of asking user to provide names for Ucode input files, ask only to provide relative paths to the directories where the input files () are to be written.  By default, this would be the directory where the ModelMate file resides.  Use ModelMate file name and mode when naming RunUcode batch files.
+
+g. Keep project name, but in Basic Ucode Settings, have user specify directories instead of Ucode input file names (default is directory where ModelMate file resides).  Use project name and mode to name Ucode input files and RunUcode batch files.
+
+************************************************
+
+4. Read _pasub file and code form to provide option to replace parameter values. (This is in item 5 now.)
+
+************************************************
+
+5. Things that need to be done before initial release of ModelMate:
+
+a. (DONE) Add support for Derived_Parameters input block.
+
+b. (DONE) Add form for control of parallel processing.
+
+c. (DONE) Add capability to generate a ModelMate project by importing an existing UCODE input file.
+
+d. (DO THIS) Extract key data from UCODE output (#uout and dx) files and display on a form.
+
+e. (MAYBE DO THIS) Implement capability (form & code) to read an _pasub file and replace current parameter values with a parameter set selected from set read from _pasub.
+
+f. (LEAVE UNTIL AFTER INITIAL RELEASE) Implement an Equation Builder form (like Formula Editor in ModelMuse).
+
+************************************************
+
+6. Add capability to rewrite extraction-instruction files; this may need to be done when observation names are changed.  Currently, for MODFLOW-2005 observations, the only way to rewrite the instruction files is to reimport observations from MODFLOW-2005.  One option would be to take an existing instruction file and replace the observation (or prediction) names with the new ones.
+
+************************************************
+
+7. (DONE) Add support for residual_analysis_adv and fix eigenvalues check box, as requested in this 8/11/09 email from Eileen:
+
+"Hi Ned
+
+A have just a few comments about modelmate. Perhaps you have already 
+done these things, but if not, please add them to your list.
+
+- Even when in more ucode settings one checks the calc and print 
+eigenvalues box it does not place EigenValues=yes in the 
+ucode_data_control block
+
+ERB: EigenValues=yes is not written because EigenValues is true by default, and default values are not written.
+
+- Can you add residual_analysis_adv to the post-processing. I think 
+it can simply mimic what you have done for residual_analysis.
+
+ERB: Done as of version 0.14.
+
+I suppose you saw my earlier email. Hopefully it was OK with you. I 
+so want to see a more advanced ModelMate that I had to speak up.
+
+Eileen"
+
+************************************************
+
+8. Need to make it possible to delete all observations read from Observation Process output files, keeping observations to be extracted from other model output files, and import observations from a Modflow-2005 data set, to be added to the undeleted observations.
+
+************************************************
+
+9. Work on UCODE Settings window:
+  a. Increase width of box labeled "calculation of statistics"
+  b. Add check boxes for writing derived parameters and prior info
+       (requires adding two boolean fields to TUcProject)
+  c. Is status bar needed? If not, get rid of it.
+  
+ERB: done 7/22/2010 with ver. 0.23.0
+
+************************************************
+
+10.
+
+On another topic I was thinking about the extra command line argument and I think the only thing you need to do is write the path&filename that you already have for the prediction run in the batch file that launches ucode. 
+
+If it is present for an old version the old version will ignore it and work as usual.  As it is old versions will not work with a different name for the root files of a prediction run.  
+
+If it is present for version 1.020 then it is used when needed and ignored when not needed. 
+
+So I am thinking it is a very easy fix. If so I would like to have an update if possible because tomorrow I will be giving the techies the software I need to load on the computers for the coming school year and it would be nice to have that working. 
+
+If not do not worry, I will try to sweet talk them into making changes midyear as I do not use it until spring.  I have always treated them well so usually they try to accommodate my requests. 
+
+let me know if you have questions about this command line argument issue 
+take care 
+Eileen 
+
+
+- Added the option to assign different root file names 
+  including folders/paths for the regression and the prediction
+  phases of ucode. The third arugument on the command line is 
+  now used for the root of prediction runs and subsequent
+  analyses related to predictions. If a third argument is not
+  present then this root is set to the same name as the root of 
+  the regression output, thus making this back compatible with
+  previous versions of ucode. Output file that will carry this
+  3rd argument as a root include the following files: 
+   from a ucode prediction run:
+     dmp, mvp, p, prp, pv, sppp, sppr, spsp, spsr, spu, suprip, 
+     wtprip, gmp, paoptp, #upred
+   from a linear_uncertainty run:
+     linp, #linunc
+   from a corfac run:
+     cfsu, cfconf, cfpred, b3conf, b3pred, b1advconf, b1advpred, 
+     #corfac_conf, #corfac_pred
+   from a ucode model linearity advanced run:
+     #umodlinadv_conf, #umodlinadv_pred
+   from a model_linearity_adv run:
+     #modlinadv, #modlinadv_conf, #modlinadv_pred
+   from a ucode non-linear uncertainty run:
+     #unonlinint_conf, #unonlinint_pred, intconf, intpred, 
+     intconf_wr, intpred_wr, intconf_sum, intpred_sum,
+     intconf_par, intpred_par, DATE-intconf, DATE-intpred
+
+************************************************
+
+11.  Add support for dragging and dropping filenames from Windows Explorer to datagrid in Files To Be Copied To Runner Directories window -- Add new files to existing list, if any files are present.
+
+************************************************
+
+

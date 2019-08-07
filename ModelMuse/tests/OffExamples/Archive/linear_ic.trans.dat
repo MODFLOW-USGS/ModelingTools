@@ -1,0 +1,128 @@
+TITLE
+.      Linear initial conditions: head, solutions, exchange,
+.      equilibrium_phases, gases, kinetics, surfaces, solid solutions
+PRINT_INITIAL
+      -boundary_conditions false
+      -components true
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print true
+      -HDF_chemistry true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_chemistry true
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 1E-9
+UNITS
+      -time seconds
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/seconds
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 10 11
+      -uniform   Y   0 10 2
+      -uniform   Z   0 10 2
+      -chemistry_dimensions X
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 10 10 10
+            -Kx 0.1
+            -Ky 0.1
+            -Kz 0.1
+            -porosity 0.1
+            -specific_storage 0
+            -longitudinal_dispersivity 0.1
+            -horizontal_dispersivity 0.1
+            -vertical_dispersivity 0.1
+      -zone 0 0 0 10 10 10
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW false
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0
+      -time_differencing 1
+      -cross_dispersion true
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 10 10 10
+            -head X 1 0 0 10
+CHEMISTRY_IC
+      -zone 0 0 0 10 10 10
+            -solution X 1 0 2 10
+            -equilibrium_phases X 1 0 2 10
+            -surface X 1 0 2 10
+            -exchange X 1 0 2 10
+            -gas_phase X 1 0 2 10
+            -solid_solutions X 1 0 2 10
+            -kinetics X 1 0 2 10
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 1 step
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 1 step
+      -HDF_chemistry 0 
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 0 
+      -wells 0 
+      -xyz_chemistry 1 step
+      -xyz_components 0 
+      -xyz_heads 0 
+      -xyz_velocities 0 
+      -xyz_wells 0 
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 10 10 10
+            -sample X 2
+            -sample Y 2
+            -sample Z 2
+      -xyz_chemistry
+      -zone 0 0 0 10 10 10
+            -sample X 2
+            -sample Y 2
+            -sample Z 2
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 0.5 10 10
+            -head
+                  0 1
+            -associated_solution
+                  0 1
+      -zone 9.5 0 0 10 10 10
+            -head
+                  0 0
+            -associated_solution
+                  0 2
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 0.5 seconds
+            -time_end
+                  0.5 seconds
+END

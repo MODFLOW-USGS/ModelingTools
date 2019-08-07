@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Archive_Structure>
+  <ArchiveLists>
+    <ArchiveList_File_Name File_Source="Manual">rma\rma.axml</ArchiveList_File_Name>
+    <ArchiveList_File_Name File_Source="Manual">WaterSupply\WaterSupply.axml</ArchiveList_File_Name>
+  </ArchiveLists>
+  <Archive_Root File_Source="Manual" Description="A file that documents the structure of the model archive" ModelDirectory="">readme.txt<Model_FileName File_Source="Manual" Description="readme file for this archive." ModelDirectory="">readme.txt</Model_FileName>
+  </Archive_Root>
+  <Archive_Root File_Source="Manual" Description="ASCII file with the four corners of the model domain" ModelDirectory="">modelgeoref.txt</Archive_Root>
+  <Compressed_Category File_Source="Manual" Description="This directory contains the executables used to do the analysis." ModelDirectory="">bin<Model_FileName File_Source="ArchiveListDeleted" Model_Name="rma" Description="MT3DMS" ModelDirectory="rma\">C:\mt3dms5\bin\mt3dms5b.exe</Model_FileName>
+    <Model_FileName File_Source="ArchiveListDeleted" Model_Name="rma" Description="single precision version of MODFLOW used with MT3DMS" ModelDirectory="rma\">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</Model_FileName>
+    <Model_FileName File_Source="ArchiveListDeleted" Model_Name="WaterSupply" Description="double precision version of MODFLOW" ModelDirectory="WaterSupply\">C:\WRDAPP\MF2005.1_12\bin\mf2005dbl.exe</Model_FileName>
+    <Model_FileName File_Source="ArchiveListDeleted" Model_Name="rma" Description="MODPATH version 5" ModelDirectory="rma\">C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe</Model_FileName>
+  </Compressed_Category>
+  <Compressed_Category File_Source="Manual" Description="This directory contains a shape file defining the active and inactive areas of the model." ModelDirectory="">georef<Model_FileName File_Source="Manual" Description="Shapefile attribute database" ModelDirectory="rma\">rma\Rma_Model_Outline.dbf</Model_FileName>
+    <Model_FileName File_Source="Manual" Description="Shapefile shapes file" ModelDirectory="rma\">rma\Rma_Model_Outline.shp</Model_FileName>
+    <Model_FileName File_Source="Manual" Description="Shapefile shape index file" ModelDirectory="rma\">rma\Rma_Model_Outline.shx</Model_FileName>
+  </Compressed_Category>
+  <Category File_Source="Manual" Description="This directory contains all the input files for the models and usgs.model.reference files." ModelDirectory="">model<Model File_Source="ArchiveListEdited" Model_Name="rma" Description="Input for Simplified Rocky Mountain Arsenal model" ModelDirectory="rma\">rma<Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Basic Package input file" ModelDirectory="rma\">rma\rma.bas</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Time-Variant Specified Head Package input file" ModelDirectory="rma\">rma\rma.chd</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Discretization file" ModelDirectory="rma\">rma\rma.dis</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="PEST Grid Specification file" ModelDirectory="rma\">rma\rma.gsf</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Link to MT3DMS or MT3D-USGS input file" ModelDirectory="rma\">rma\rma.lmt</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Layer Property Flow Package input file" ModelDirectory="rma\">rma\rma.lpf</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Name file" ModelDirectory="rma\">rma\rma.nam.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Output Control input file" ModelDirectory="rma\">rma\rma.oc</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Preconditioned Conjugate Gradient Package input file" ModelDirectory="rma\">rma\rma.pcg</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Well Package input file" ModelDirectory="rma\">rma\rma.wel</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Batch file used to run a model" ModelDirectory="rma\">rma\RunModflow.Bat.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Georeference file" ModelDirectory="rma\">rma\usgs.rma.reference</Model_FileName>
+    </Model>
+    <Model File_Source="ArchiveListEdited" Model_Name="rma_Modpath" Description="Modpath input model for Simplified Rocky Mountain Arsenal model." ModelDirectory="rma\">rma_Modpath<Model_FileName File_Source="ArchiveListEdited" Model_Name="rma" Description="This file lists the name of the MODPATH response file," ModelDirectory="rma\">rma\MpIn.txt</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Batch file used to run a model" ModelDirectory="rma\">rma\Mp.bat.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Main input file" ModelDirectory="rma\">rma\rma.mpm</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Name file" ModelDirectory="rma\">rma\rma.mpn.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Response input file" ModelDirectory="rma\">rma\rma.mprsp.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Starting Locations input file" ModelDirectory="rma\">rma\rma.strt</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Batch file used to run a model" ModelDirectory="rma\">rma\RunModpath.Bat.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Georeference file" ModelDirectory="rma\">rma\usgs.rma_Modpath.reference</Model_FileName>
+    </Model>
+    <Model File_Source="ArchiveListEdited" Model_Name="rma_Mt3dms" Description="MT3DMS model input for Simplified Rocky Mountain Arsenal model." ModelDirectory="rma\">rma_Mt3dms<Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Advection Package input file" ModelDirectory="rma\">rma\rma.adv</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Basic Transport Package input file" ModelDirectory="rma\">rma\rma.btn</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Dispersion Package input file" ModelDirectory="rma\">rma\rma.dsp</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Generalized Conjugate Gradient Solver Package input file" ModelDirectory="rma\">rma\rma.gcg</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Name file" ModelDirectory="rma\">rma\rma.mt_nam.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Sink and Source Mixing Package input file" ModelDirectory="rma\">rma\rma.ssm</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Batch file used to run a model" ModelDirectory="rma\">rma\RunMt3dms.Bat.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="Georeference file" ModelDirectory="rma\">rma\usgs.rma_MT3DMS.reference</Model_FileName>
+    </Model>
+    <Model File_Source="ArchiveListEdited" Model_Name="WaterSupply" Description="Water Supply model input" ModelDirectory="WaterSupply\">WaterSupply<Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="Batch file used to run a model" ModelDirectory="WaterSupply\">WaterSupply\RunModflow.Bat.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="Georeference file" ModelDirectory="WaterSupply\">WaterSupply\usgs.WaterSupply.reference</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Basic Package input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.bas</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Discretization file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.dis</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="PEST Grid Specification file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.gsf</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Layer Property Flow Package input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.lpf</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Name file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.nam.archive</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Head Observation Package input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.ob_hob</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Output Control input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.oc</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Preconditioned Conjugate Gradient Package input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.pcg</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW River Package input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.riv</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Well Package input file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.wel</Model_FileName>
+    </Model>
+  </Category>
+  <Category File_Source="Manual" Description="This directory contains all the output files for the models." ModelDirectory="">output<Model File_Source="ArchiveListEdited" Model_Name="rma" Description="Output for Simplified Rocky Mountain Arsenal model" ModelDirectory="rma\">rma<Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Cell-By-Cell flow file" ModelDirectory="rma\">rma\rma.cbc</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Formatted Drawdown file" ModelDirectory="rma\">rma\rma.fdn</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Formatted Head file" ModelDirectory="rma\">rma\rma.fhd</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW MT3DMS or MT3D-USGS Flow Transport Link output file" ModelDirectory="rma\">rma\rma.ftl</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODFLOW Listing file" ModelDirectory="rma\">rma\rma.lst</Model_FileName>
+    </Model>
+    <Model File_Source="ArchiveListEdited" Model_Name="rma_Modpath" Description="Modpath output model for Simplified Rocky Mountain Arsenal model." ModelDirectory="rma\">rma_Modpath<Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Endpoint file" ModelDirectory="rma\">rma\rma.end</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Listing file" ModelDirectory="rma\">rma\rma.mplst</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MODPATH Pathline file" ModelDirectory="rma\">rma\rma.path</Model_FileName>
+    </Model>
+    <Model File_Source="ArchiveListEdited" Model_Name="rma_Mt3dms" Description="MT3DMS model output for Simplified Rocky Mountain Arsenal model." ModelDirectory="rma\">rma_Mt3dms<Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Grid Configuration output file" ModelDirectory="rma\">rma\rma.cnf</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS listing file" ModelDirectory="rma\">rma\rma.mls</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Mass Budget Output file" ModelDirectory="rma\">rma\rma_Cl._mas</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="MT3DMS or MT3D-USGS Concentration output file" ModelDirectory="rma\">rma\rma_Cl.ucn</Model_FileName>
+    </Model>
+    <Model File_Source="ArchiveListEdited" Model_Name="WaterSupply" Description="Water Supply model output" ModelDirectory="WaterSupply\">WaterSupply<Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Cell-By-Cell flow file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.cbc</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Formatted Drawdown file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.fdn</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Formatted Head file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.fhd</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Head Observations output file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.hob_out</Model_FileName>
+      <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="MODFLOW Listing file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.lst</Model_FileName>
+    </Model>
+  </Category>
+  <Compressed_Category File_Source="Manual" Description="Source code for the models used to run the model simulations." ModelDirectory="">source</Compressed_Category>
+  <Uncompressed_Category File_Source="Manual" Description="FGDC metadata and thumbnail image of maximum model domain" ModelDirectory="">webrelease<Model_FileName File_Source="Manual" Description="Metadata file for model" ModelDirectory="">ExampleArchiveMetadata.xml</Model_FileName>
+    <Model_FileName File_Source="Manual" Description="Browse graphic for archive." ModelDirectory="rma\">rma\ExampleArchiveBrowseGraphic.png</Model_FileName>
+  </Uncompressed_Category>
+  <Compressed_Category File_Source="Manual" Description="This directory contains ancillary data." ModelDirectory="">ancillary<Model_FileName File_Source="ArchiveList" Model_Name="rma" Description="ModelMuse text file" ModelDirectory="rma\">rma\rma.gpt</Model_FileName>
+    <Model_FileName File_Source="ArchiveList" Model_Name="WaterSupply" Description="ModelMuse text file" ModelDirectory="WaterSupply\">WaterSupply\WaterSupply.gpt</Model_FileName>
+  </Compressed_Category>
+  <Compressed_Category File_Source="Manual" Description="Non-public data such as PII, proprietary data, or proprietary code (optional)" ModelDirectory="">nonpublic</Compressed_Category>
+  <Archive_Directory>..\test-out</Archive_Directory>
+  <Append_Descriptions>True</Append_Descriptions>
+  <Append_Metadata_Descriptions>True</Append_Metadata_Descriptions>
+</Archive_Structure>

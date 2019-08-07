@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectType="typeDynamicLibrary" ProjectCreator="Intel Fortran" Keyword="Dll" Version="11.0" ProjectIdGuid="{8FEBBA5B-C44A-4AA4-9E73-5AFBE4169A5C}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32" ConfigurationType="typeDynamicLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" AdditionalIncludeDirectories="..\jupiter_api\$(ConfigurationName)" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true" IgnoreDefaultLibraryNames="MSVCRTD, LIBCMT" GenerateDebugInformation="true" SubSystem="subSystemWindows" LinkDLL="true"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetNotSet"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool" CommandLine="copy_debug_dll.bat" Description="Copy Debug DLL to ModelMate"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32" ConfigurationType="typeDynamicLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" AdditionalIncludeDirectories="..\jupiter_api\$(ConfigurationName)"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true" IgnoreDefaultLibraryNames="MSVCRT, MSVCRTD, LIBCMTD" SubSystem="subSystemWindows" LinkDLL="true"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetNotSet"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool" CommandLine="copy_release_dll.bat" Description="Copy Release DLL to ModelMate"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		<File RelativePath="..\jupiter_api\Release\jupiter_api.lib"/></Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath=".\src\aj.f90"/>
+		<File RelativePath=".\src\aj_mod.f90"/>
+		<File RelativePath=".\src\pll_data.f90"/>
+		<File RelativePath=".\src\ucode_data.f90"/></Filter></Files>
+	<Globals/></VisualStudioProject>

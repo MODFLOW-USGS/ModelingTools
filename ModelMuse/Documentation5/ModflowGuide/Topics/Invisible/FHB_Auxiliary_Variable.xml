@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">FHB Auxiliary Variable</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Real</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">AuxVar is value of real auxiliary variable at specified-flow and specified-head cells. A list of NBDTIM values must be specified for each of NFLW specified-flow cells and for each of NHED specified-head cells.</text></para>
+  </body>
+</topic>

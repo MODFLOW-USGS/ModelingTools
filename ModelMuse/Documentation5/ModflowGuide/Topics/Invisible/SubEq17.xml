@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SubEq17</title>
+  <body>
+    <para styleclass="Normal"><image src="SubEq17.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Equation 17 from Subsidence package report</title><caption translate="true"><![CDATA[Equation 17 from Subsidence package report]]></caption></image></para>
+  </body>
+</topic>

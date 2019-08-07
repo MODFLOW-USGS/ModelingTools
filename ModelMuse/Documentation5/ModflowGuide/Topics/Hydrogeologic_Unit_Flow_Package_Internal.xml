@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Hydrogeologic Unit Flow Package</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Hydrogeologic Unit Flow Package</text></para>
+    </header>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Source file]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">gwf2huf7.f</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Module]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[GWFHUFMODULE]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Variables]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHUFCB - is a flag and a unit number for saving cell-by-cell flows</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NHUF - is the number of hydrogeologic units </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">NPHUF - is the number of HUF parameters</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IWETIT - is the iteration interval for attempting to wet cells</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHDWET - is a flag that determines which equation is used to define the initial head at cells that become wet:</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IOHUFHDS - is a flag and unit number for saving computed heads</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IOHUFFLWS - is a flag and unit number for saving computed flows</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">WETFCT - Wetting factor</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HGUNAM(NHUF) - Hydrogeologic unit names</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LTHUF(NLAY) - is a flag specifying the layer type</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">LAYWT(NLAY) - is a flag that indicates if wetting is active. Read one value per layer.</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">0 – indicates wetting is inactive.</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1 – indicates wetting is active.</text></para>
+                      <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IHGUFLG(5,NHUF) - Formats for printing HUF arrays</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IHGUFLG(1,*) - Format for printing HK</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IHGUFLG(2,*) - Format for printing HANI</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IHGUFLG(3,*) - Format for printing VK</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IHGUFLG(4,*) - Format for printing SS</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">IHGUFLG(5,*) - Format for printing SY</text></para>
+                      <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HGUHANI(NHUF) - horizontal anisotropy for hydrogeologic units</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HGUVANI(NHUF) - vertical anisotropy for hydrogeologic units</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFHK(NHUF) - horizontal hydraulic conductivity for hydrogeologic units for a particular column and row</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFVK(NHUF:) - vertical hydraulic conductivity for hydrogeologic units for a particular column and row</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFSS(NHUF) - specific storage for hydrogeologic units for a particular column and row</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFSY(NHUF) - specific yield for hydrogeologic units for a particular column and row</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFHANI(NHUF) - horizontal anisotropy for hydrogeologic units for a particular column and row</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFKDEP(NHUF) - the depth-dependence coefficient used to modify horizontal hydraulic conductivity for a particular column and row</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GS(NCOL,NROW) - ground surface</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">SC2HUF(NCOL,NROW) - the head coefficient for the uppermost active cell. SC2HUF is set but not used in HUF. It is used by the SFR and UZF packages.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VKAH(NCOL,NROW,NLAY) - Vertical hydraulic conductivity between the middle of the layer and the middle of the layer beneath it.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">SC1(NCOL,NROW,NLAY) - Specific storage for cells.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">WETDRY(NCOL,NROW,NWETD) (NWETD = number of convertible layers) - WETDRY is a combination of the wetting threshold and a flag to indicate which neighboring cells can cause a cell to become wet</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HK(NCOL,NROW,NLAY) - Horizontal transmissivity in the X (row) direction. Later, it is sometimes converted to hydraulic conductivity</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HKCC(NCOL,NROW,NLAY) - Horizontal transmissivity in the Y (column) direction. Later, it is sometimes converted to hydraulic conductivity</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFTMP(NCOL,NROW,NHUF) - A temporary array used in printing HUF data.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VDHD(NCOL,NROW,NLAY) - the angle between the grid axis and the principal direction of horizontal hydraulic conductivity. </text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">HUFTHK(NCOL,NROW,NHUF,2) - Define the geometry of hydrogeologic units</text></li>
+                      </list>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">HUFTHK(*,*,*,1) - Top elevation of hydrogeologic unit</text></para>
+                      <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">HUFTHK(*,*,*,2) - Thickness of hydrogeologic unit</text></para>
+                      <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">VDHT(NCOL,NROW,NLAY,3:) - Hydraulic Conductivity Tensor for LVDA</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">A9(NCOL,NROW,NLAY,5) - Stiffness-Coefficient Matrix for 9-Point Stencil in LVDA.</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GWFHUFDAT(10) - an array of GWFHUFTYPE for multiple grids</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Type]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">GWFHUFTYPE</text></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Subroutines]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading3_atocs_"><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Diagram of Subroutine Connections]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><image src="HufDiagram.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram illustrating how the subroutines are connected.</title></image></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Primary Subroutines</text></para>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7AR - Allocate Array Storage for Hydrogeologic Unit Package</text></li>
+          </list>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Heading3_atocs_" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Heading3_atocs_"><text styleclass="Normal" translate="true">GWF2HUF7AD - Set HOLD to BOTM Whenever a Wettable Cell is Dry</text></li>
+          </list>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7FM - Add Leakage Correction and Storage to HCOF and RHS, and Calculate Conductance as Required.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7BDS - Compute Storage Budget Flow Term for HUF</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7BDADJ - .Compute Flow Between Adjacent Cells in a Subregion of the Grid</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7BDCH - Compute Flow from Constant-Head Cells</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7OT - Print and Record Heads and Flows Interpolated to HGU&apos;s</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7DA - Deallocate HUF Data</text></li>
+          </list>
+          <para styleclass="Heading3_atocs_"><text styleclass="Heading3_atocs_" translate="true">Secondary Subroutines</text></para>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7GEOMRP - Read and Prepare Hydrogeologic-Unit Geometry. Called by GWF2HUF7AR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7SP - Substitute and Prepare Data for Hydrogeologic-Unit Flow Package. Called by GWF2HUF7AR, and GWF2HUF7FM</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7HK - Substitute for HK parameters. Called by SGWF2HUF7SP, and SGWF2HUF7VDHHV</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VKA - Substitute for VKA parameters. Called by SGWF2HUF7SP.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VKL - Calculate VK for a given layer. This subroutine is never called.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VSRCH - Search for top and bottom layer the unit applies to. Called by SGWF2HUF7VKA, SGWF2HUF7FLOT, and SGWF2HUF7HDOT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7HSRCH - Search for top and bottom layer the unit applies to.</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Values for IFLG on input:</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG = 0, Do not adjust top of unconfined layer to HNEW</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG &lt;&gt; 0, Adjust top of unconfined layer to HNEW</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Values for IFLG on output:</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG = 0, Unit successfully found</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG = 1, Unit not found</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Called by SGWF2HUF7SP, SGWF2HUF7VKL, SGWF2HUF7FLOT, and SGWF2HUF7VDHHV</text></para>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7SC1 - Substitute for SS parameters. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7N - Initialize and Check HUF Data. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7HCND - Calculate Horizontal Conductances. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VCND - Calculate Vertical Conductances. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7SYTP - Replace SC1 With SY for Topmost Active Cell for Any I,J. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7SC - Calculate SC1. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7HCOND - Compute Horizontal Branch Conductance for One Layer. Called by SGWF2HUF7HCND</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7WETCHK - Check for Cells That Go Dry/Rewet. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7WET - Convert Dry Cells to Wet. Called by SGWF2HUF7WETCHK</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7WDMSG - Print Message When Cells Convert Between Wet and Dry. Called by SGWF2HUF7HCOND, SGWF2HUF7WETCHK, and SGWF2HUF7WET</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7HHARM - Compute Horizontal Branch Conductance Using Harmonic Mean of Block Conductances (Distance Weighted Harmonic Mean of Transmissivity). Cell Thickness is in CC Upon Entry. Called by SGWF2HUF7HCOND</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7SC2 - Compute contributions to HCOF and RHS for convertible cell</text></li>
+          </list>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Enter subroutine when HO and/or HN are below TOP</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Values for IFLG:</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG = 0, Calculate contributions to HCOF and RHS</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG = 1, Calculate contributions to flow within cell</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true"> &#160;IFLG = 2, Calculate contributions to sensitivity calculations</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Subroutine will halt execution if Sy is not defined.</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">This subroutine is called from lmt7.f as well as from within HUF.</text></para>
+          <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">Called by GWF2HUF7AR, GWF2HUF7FM, and GWF2HUF7BDS</text></para>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7FLOT - Calculate Flows Within a Given Hydrogeologic Unit. Called by GWF2HUF7OT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7HDOT - Calculate Heads Within a Given Hydrogeologic &#160;Called by GWF2HUF7OT.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7CHFLOT - Compute Flow from Constant-Head Cells in HGU&apos;s. Called by GWF2HUF7OT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7C - Calculate Horizontal Branch Conductances for Single HGU or for Layer Within An HGU. for Units that pinch out, the equivalent thickness in the adjacent unit is used. Called by SGWF2HUF7FLOT, SGWF2HUF7CHFLOT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7IND - Index Hydrogeologic Units for a Given Row/Column Location. Called by SGWF2HUF7HDOT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7KDEP1RPGD - Read Parameters for KDEP Capability. Called by GWF2HUF7AR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7KDEP - Calculate KDEP Multiplier for Interval. Called by SGWF2HUF7HK, SGWF2HUF7VKA, SGWF2HUF7VKL, SGWF2HUF7HDOT, and SGWF2HUF7C</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7LVDA1RPGD - Read Parameters for LVDA Capability. Called by GWF2HUF7AR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7VDFM - Calculate stiffness matrix and RHS for LVDA. Called by GWF2HUF7FM</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDHHV - Populate the Hydraulic Conductivity Arrays for LVDA. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDHT - Populate the Hydraulic Conductivity Tensor for LVDA. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDF9 - Compute Flow Through Cell Faces Using the 9-Point Stencil. This subroutine is also called by lmt7.f. Called by GWF2HUF7BDADJ, and GWF2HUF7BDCH</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDA9F9 - Compute Flow Through Cell Faces Using the Stored 9-Point Stencil. Called by GWF2HUF7VDFM</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDA9 - Compute and Store Stiffness-Coefficient Matrix for 9-Point Stencil. Called by SGWF2HUF7SP</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDHGET - Grab heads and IBOUND for all local cells. Called by SGWF2HUF7VDF9, and SGWF2HUF7VDA9F9</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDA1 - Calculate the A coefficients for Quadrant I. Called by SGWF2HUF7VDF9, and SGWF2HUF7VDA9</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDA2 - Calculate the A coefficients for Quadrant II. Called by SGWF2HUF7VDF9, and SGWF2HUF7VDA9</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDA3 - Calculate the A coefficients for Quadrant III. Called by SGWF2HUF7VDF9, and SGWF2HUF7VDA9</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDA4 - Calculate the A coefficients for Quadrant IV. Called by SGWF2HUF7VDF9, and SGWF2HUF7VDA9</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFD - Calculate the D coefficient. Called by SGWF2HUF7VDA1, SGWF2HUF7VDA2, SGWF2HUF7VDA3, and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAS1 - Calculate the AS1 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA2</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAS2 - Calculate the AS2 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA2</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAS3 - Calculate the AS3 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA2</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAS4 - Calculate the AS4 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA2</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAW1 - Calculate the AW1 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAW2 - Calculate the AW2 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAW3 - Calculate the AW3 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAW4 - Calculate the AW4 coefficient. Called by SGWF2HUF7VDA1 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAE1 - Calculate the AE1 coefficient. Called by SGWF2HUF7VDA2 and SGWF2HUF7VDA3</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAE2 - Calculate the AE2 coefficient. Called by SGWF2HUF7VDA2 and SGWF2HUF7VDA3</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAE3 - Calculate the AE3 coefficient. Called by SGWF2HUF7VDA2 and SGWF2HUF7VDA3</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAE4 - Calculate the AE4 coefficient. Called by SGWF2HUF7VDA2 and SGWF2HUF7VDA3</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAN1 - Calculate the AN1 coefficient. Called by SGWF2HUF7VDA3 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAN2 - Calculate the AN2 coefficient. Called by SGWF2HUF7VDA3 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAN3 - Calculate the AN3 coefficient. Called by SGWF2HUF7VDA3 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7VDCOFAN4 - Calculate the AN4 coefficient. Called by SGWF2HUF7VDA3 and SGWF2HUF7VDA4</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">SGWF2HUF7PNT - Point to HUF Data for a Specific Grid. This subroutine is also called from lmt7.f as well as from within HUF. Called by GWF2HUF7AD, GWF2HUF7FM, GWF2HUF7BDS, GWF2HUF7BDADJ, GWF2HUF7BDCH, and GWF2HUF7OT</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">GWF2HUF7PSV - Save HUF Data for a Grid. Called by GWF2HUF7AR.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

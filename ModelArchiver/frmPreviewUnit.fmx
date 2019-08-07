@@ -1,0 +1,77 @@
+object frmPreview: TfrmPreview
+  Left = 0
+  Top = 0
+  Caption = 'Preview'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object tbc1: TTabControl
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabHeight = 1.000000000000000000
+    TabIndex = 0
+    TabOrder = 0
+    TabPosition = PlatformDefault
+    Sizes = (
+      640s
+      479s
+      640s
+      479s)
+    object tabText: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 60.000000000000000000
+      Size.Height = 1.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'tabText'
+      ExplicitSize.cx = 60.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object memoPreview: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        StyledSettings = [Family, Style, FontColor]
+        TextSettings.Font.Size = 16.000000000000000000
+        Align = Client
+        Size.Width = 640.000000000000000000
+        Size.Height = 479.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Viewport.Width = 636.000000000000000000
+        Viewport.Height = 475.000000000000000000
+      end
+    end
+    object tabImage: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 71.000000000000000000
+      Size.Height = 1.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'tabImage'
+      ExplicitSize.cx = 71.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object img1: TImage
+        MultiResBitmap = <
+          item
+          end>
+        Align = Client
+        Size.Width = 640.000000000000000000
+        Size.Height = 479.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+end

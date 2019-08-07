@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Import DXF File Dialog Box</title>
+  <keywords>
+    <keyword translate="true">DXF</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Import DXF File Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Drawing Exchange Format (DXF) (</text><link displaytype="text" defaultstyle="true" type="weblink" href="http://www.autodesk.com/techpubs/autocad/acad2000/dxf/" target="_blank" styleclass="Normal" translate="true">Autodesk, Inc., accessed July 21, 2005</link><text styleclass="Normal" translate="true">) is a commonly used file format for Computer Aided Design (CAD) programs. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Import DXF File</text><text styleclass="Normal" translate="true"> dialog box is used to import DXF files into ModelMuse as a series of objects on the top view of the model. The dialog box is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Import|DXF File... </text><text styleclass="Normal" translate="true"> The DXF file is then read, and the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Import DXF File</text><text styleclass="Normal" translate="true"> dialog box is displayed.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Objects in DXF files can contain a Z coordinate. The value of this coordinate is assigned to a data set. The data set can be either a new or an existing one; however, the orientation of the data set must be &quot;2-D Top.” The user can determine whether the objects that are imported will set the values of enclosed or intersected cells or set values by interpolation. If the data are being used with a new data set, the user can choose an interpolation method for the new data set. (See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Interpolation_Methods" styleclass="Normal" translate="true">Interpolation Methods</link><text styleclass="Normal" translate="true">.)  The names of the imported objects will be based on the name of the file from which the objects are imported. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Select_Objects_by_Name" styleclass="Normal" style="font-weight:bold;" translate="true">Select Objects by Name</link><text styleclass="Normal" translate="true"> dialog box can be used to select all these objects at a later time. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Objects in DXF files may cross themselves. Such objects are invalid in ModelMuse so such objects are skipped when importing into ModelMuse.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

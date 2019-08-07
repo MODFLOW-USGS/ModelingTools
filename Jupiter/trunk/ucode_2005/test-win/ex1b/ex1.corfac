@@ -1,0 +1,22 @@
+BEGIN CORRECTION_FACTOR_DATA KEYWORDS
+confidenceORprediction=confidence
+read_cov=no
+RegressionUsedTrueCov=yes
+END CORRECTION_FACTOR_DATA
+
+BEGIN PREDICTION_LIST TABLE
+nrow=12 ncol=1  columnlabels  
+PREDNAME    
+AD10_X		
+AD10_Y		
+AD10_Z		
+AD50_X		
+AD50_Y		
+AD50_Z		
+A100_X		
+A100_Y		
+A100_Z		
+A175_X		
+A175_Y		
+A175_Z		
+END PREDICTION_LIST

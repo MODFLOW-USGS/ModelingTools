@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Title and Units Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">PHAST Title and Units Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The</text><text styleclass="Normal" style="font-weight:bold;" translate="true"> PHAST Title and Units</text><text styleclass="Normal" translate="true"> dialog box is used to specify the title and the default units for the PHAST model. It is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Title and Units…</text><text styleclass="Normal" translate="true"> The entire title will be included in the input, but PHAST only prints the first two lines of the title in the “*.o” output file.</text></para>
+  </body>
+</topic>

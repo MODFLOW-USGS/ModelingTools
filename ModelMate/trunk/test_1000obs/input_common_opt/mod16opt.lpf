@@ -1,0 +1,135 @@
+# LPF input with option to turn off Vertical Flow Correction
+2 -2.000000000000E+020 24  NOVFC   ; ILPFCB, HDRY, NPLPF, option to turn off Vertical Flow Correction
+1 1 0 1 0 1 0 1 0 1 0 1 ; LAYTYP(NLAY)
+0 0 0 0 0 0 0 0 0 0 0 0 ; LAYAVG(NLAY)
+1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 
+1.000000000000E+000 1.000000000000E+000 1.000000000000E+000 1.000000000000E+000  ; CHANI(NLAY)
+1 1 1 1 1 1 1 1 1 1 1 1 ; LAYVKA(NLAY)
+0 0 0 0 0 0 0 0 0 0 0 0 ; LAYWET(NLAY)
+VANI_QPlat VANI 1.0 1 ; PARNAM, PARTYP, Parval, NCLU
+1 NONE RchGeol  1 2  ; Layer, Mltarr, Zonarr, IZ
+VANI_Qbas  VANI 2.0 1 ; PARNAM, PARTYP, Parval, NCLU
+1 NONE RchGeol  3 4  ; Layer, Mltarr, Zonarr, IZ
+K_qal HK 5.000000000000E+001 11 ; PARNAM, PARTYP, Parval, NCLU
+1 NONE RCHZONE 31 32 33 34 1 2 3 4  ; Layer, Mltarr, Zonarr, IZ
+2 NONE ZONEUNIT2 1  ; Layer, Mltarr, Zonarr, IZ
+3 NONE ZONEUNIT3 1  ; Layer, Mltarr, Zonarr, IZ
+4 NONE ZONEUNIT4 1  ; Layer, Mltarr, Zonarr, IZ
+5 NONE ZONEUNIT5 1  ; Layer, Mltarr, Zonarr, IZ
+6 NONE ZONEUNIT6 1  ; Layer, Mltarr, Zonarr, IZ
+7 NONE ZONEUNIT7 1  ; Layer, Mltarr, Zonarr, IZ
+8 NONE ZONEUNIT8 1  ; Layer, Mltarr, Zonarr, IZ
+9 NONE ZONEUNIT9 1  ; Layer, Mltarr, Zonarr, IZ
+10 NONE ZONEUNIT10 1  ; Layer, Mltarr, Zonarr, IZ
+11 NONE ZONEUNIT11 1  ; Layer, Mltarr, Zonarr, IZ
+K_utdw HK 7.800000000000E-002 1 ; PARNAM, PARTYP, Parval, NCLU
+2 UTDW_SDPCT ZONEUNIT2 2  ; Layer, Mltarr, Zonarr, IZ
+VANI_BR VANI 1.000000000000E+000 11 ; PARNAM, PARTYP, Parval, NCLU
+2 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+3 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+4 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+5 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+6 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+7 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+8 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+9 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+10 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+11 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+12 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+Sy_TDW SY 1.500000000000E-001 2 ; PARNAM, PARTYP, Parval, NCLU
+2 UTDW_SDPCT ALL  ; Layer, Mltarr, Zonarr, IZ
+4 LTDW_SDPCT ALL  ; Layer, Mltarr, Zonarr, IZ
+Sy_TKD SY 1.500000000000E-001 1 ; PARNAM, PARTYP, Parval, NCLU
+6 TKD_SDPCT ALL  ; Layer, Mltarr, Zonarr, IZ
+Sy_KA SY 1.500000000000E-001 2 ; PARNAM, PARTYP, Parval, NCLU
+8 UKA_SDPCT ALL  ; Layer, Mltarr, Zonarr, IZ
+10 LKA_SDPCT ALL  ; Layer, Mltarr, Zonarr, IZ
+Sy_KLF SY 1.500000000000E-001 1 ; PARNAM, PARTYP, Parval, NCLU
+12 KLF_SDPCT ALL  ; Layer, Mltarr, Zonarr, IZ
+SS_coarse SS 5.200000000000E-007  7 ; PARNAM, PARTYP, Parval, NCLU
+ 1 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+ 2 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+ 4 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+ 6 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+ 8 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+10 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+12 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+SS_fine   SS 1.700000000000E-006 5 ; PARNAM, PARTYP, Parval, NCLU
+3 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+5 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+7 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+9 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+11 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+K_tdwc HK 5.000000000000E-005 1 ; PARNAM, PARTYP, Parval, NCLU
+3 NONE ZONEUNIT3 3  ; Layer, Mltarr, Zonarr, IZ
+K_ltdw HK 6.000000000000E-003 3 ; PARNAM, PARTYP, Parval, NCLU
+4 LTDW_SDPCT ZONEUNIT4 4  ; Layer, Mltarr, Zonarr, IZ
+2 LTDW_SDPCT ZONEUNIT2 20  ; Layer, Mltarr, Zonarr, IZ
+3 LTDW_SDPCT ZONEUNIT3 30  ; Layer, Mltarr, Zonarr, IZ
+K_tkduc HK 5.193100000000E-006 1 ; PARNAM, PARTYP, Parval, NCLU
+5 NONE ZONEUNIT5 5  ; Layer, Mltarr, Zonarr, IZ
+K1_06 HK 1.0 1 ; PARNAM, PARTYP, Parval, NCLU
+6 K_aq_06 ZONEUNIT6 6  ; Layer, Mltarr, Zonarr, IZ
+K_tkdlc HK 2.129000000000E-004 1 ; PARNAM, PARTYP, Parval, NCLU
+7 NONE ZONEUNIT7 7  ; Layer, Mltarr, Zonarr, IZ
+K1_08 HK 1.0 1 ; PARNAM, PARTYP, Parval, NCLU
+8 K_aq_08 ZONEUNIT8 8  ; Layer, Mltarr, Zonarr, IZ
+K_kac HK 4.000000000000E-005 1 ; PARNAM, PARTYP, Parval, NCLU
+9 NONE ZONEUNIT9 9  ; Layer, Mltarr, Zonarr, IZ
+K1_10 HK 1.0 3 ; PARNAM, PARTYP, Parval, NCLU
+10 K_aq_10 ZONEUNIT10 10  ; Layer, Mltarr, Zonarr, IZ
+8  K_aq_10 ZONEUNIT8  80  ; Layer, Mltarr, Zonarr, IZ
+9  K_aq_10 ZONEUNIT9  90  ; Layer, Mltarr, Zonarr, IZ
+K_klc HK 1.000000000000E-004 1 ; PARNAM, PARTYP, Parval, NCLU
+11 NONE ZONEUNIT11 11  ; Layer, Mltarr, Zonarr, IZ
+K1_12 HK 1.0 1 ; PARNAM, PARTYP, Parval, NCLU
+12 K_aq_12 ALL  ; Layer, Mltarr, Zonarr, IZ
+K_Q_BigSdy HK 2.000000000000E+000 1 ; PARNAM, PARTYP, Parval, NCLU
+1 NONE RCHZONE 12 13  ; Layer, Mltarr, Zonarr, IZ
+K_Q_BlkSql HK 3.000000000000E+001 1 ; PARNAM, PARTYP, Parval, NCLU
+1 NONE RCHZONE 21 22  ; Layer, Mltarr, Zonarr, IZ
+Sy_Qal SY 1.500000000000E-001 1 ; PARNAM, PARTYP, Parval, NCLU
+1 NONE ALL  ; Layer, Mltarr, Zonarr, IZ
+12  Print code, HK layer  1
+-1  Print code, VKA layer 1
+-1  Print code, SS layer  1
+-1  Print code, SY layer  1
+12  Print code, HK layer  2
+-1  Print code, VKA layer 2
+-1  Print code, SS layer  2 
+-1  Print code, SY layer  2 
+-1  Print code, HK layer  3 
+-1  Print code, VKA layer 3 
+-1  Print code, SS layer  3 
+12  Print code, HK layer  4 
+-1  Print code, VKA layer 4 
+-1  Print code, SS layer  4 
+-1  Print code, SY layer  4 
+-1  Print code, HK layer  5 
+-1  Print code, VKA layer 5 
+-1  Print code, SS layer  5 
+12  Print code, HK layer  6 
+-1  Print code, VKA layer 6 
+-1  Print code, SS layer  6 
+-1  Print code, SY layer  6 
+-1  Print code, HK layer  7 
+-1  Print code, VKA layer 7 
+-1  Print code, SS layer  7 
+12  Print code, HK layer  8 
+-1  Print code, VKA layer 8 
+-1  Print code, SS layer  8 
+-1  Print code, SY layer  8 
+-1  Print code, HK layer  9 
+-1  Print code, VKA layer 9 
+-1  Print code, SS layer  9 
+12  Print code, HK layer  10
+-1  Print code, VKA layer 10 
+-1  Print code, SS layer  10 
+-1  Print code, SY layer  10 
+-1  Print code, HK layer  11
+-1  Print code, VKA layer 11 
+-1  Print code, SS layer  11 
+12  Print code, HK layer  12
+-1  Print code, VKA layer 12 
+-1  Print code, SS layer  12 
+-1  Print code, SY layer  12 

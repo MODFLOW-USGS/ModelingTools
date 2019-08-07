@@ -1,0 +1,11 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.DrnParamtest\DrnParamtest.lst REPLACE
+DIS              12 ..\..\model\model.DrnParamtest\DrnParamtest.dis OLD
+BAS6             13 ..\..\model\model.DrnParamtest\DrnParamtest.bas OLD
+OC               39 ..\..\model\model.DrnParamtest\DrnParamtest.oc OLD
+DATA(BINARY)     38 ..\..\output\output.DrnParamtest\DrnParamtest.bdn REPLACE
+PCG              18 ..\..\model\model.DrnParamtest\DrnParamtest.pcg OLD
+LPF              14 ..\..\model\model.DrnParamtest\DrnParamtest.lpf OLD
+CHD              17 ..\..\model\model.DrnParamtest\DrnParamtest.chd OLD
+DRN              22 ..\..\model\model.DrnParamtest\DrnParamtest.drn OLD
+PVAL             52 ..\..\model\model.DrnParamtest\DrnParamtest.pval OLD

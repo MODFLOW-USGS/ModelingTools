@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HYD - HYDMOD Package</title>
+  <keywords>
+    <keyword translate="true">ARR</keyword>
+    <keyword translate="true">HYD</keyword>
+    <keyword translate="true">HYDLBL</keyword>
+    <keyword translate="true">HYDNOH</keyword>
+    <keyword translate="true">IHYDUN</keyword>
+    <keyword translate="true">INTYP</keyword>
+    <keyword translate="true">KLAY</keyword>
+    <keyword translate="true">NHYD</keyword>
+    <keyword translate="true">PCKG</keyword>
+    <keyword translate="true">XL</keyword>
+    <keyword translate="true">YL</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">HYD - HYDMOD Package</text></para>
+    </header>
+    <para styleclass="Normal"><table rowcount="4" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><snippet src="Abbreviation"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HYD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Purpose</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The HYDMOD package is used to record time-series data for selected data types.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
+        </td>
+        <td>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr98564" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., and Leake, S.A., 1999, Documentation for HYDMOD, a program for extracting and processing time-series data from the U.S. Geological Survey&apos;s modular three-dimensional finite-difference ground-water flow model: U.S. Geological Survey Open-File Report 98-564, 57 p.</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="Hydmod7.pdf" styleclass="Normal" translate="true">Hydmod7.pdf</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:middle;">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
+        </td>
+        <td>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2000</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
+          </list>
+          <list id="16" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-LGR</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-CFP</text></li>
+          </list>
+          <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
+          </list>
+          <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Input Instructions</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Input to the HYDMOD package is read from the file name and unit specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">name</link><text styleclass="Normal" translate="true"> file for MODFLOW-2000. The file type that is added to the name file for HYDMOD is specified as HYD. </text></para>
+    <para styleclass="Normal"><table rowcount="3" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NHYD IHYDUN HYDNOH </text><text styleclass="New Materials" translate="true">(free format)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="New Materials"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[NHYD]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="NHYD" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">NHYD </text><text styleclass="Normal" translate="true">is the maximum number of observation points that may be read in. </text></para>
+                      <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="New Materials" translate="true">In MODFLOW-2005 and other later versions of MODFLOW, the number of hydrographs (NHYD) specified by the user is ignored. The program initially counts the number of hydrographs (NTOT). Note that there may be less than NHTOT hydrographs because some may be eliminated due to invalid values.</text><conditional-text type="END"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[IHYDUN]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">IHYDUN is a unit number to which hydrograph records are written.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HYDNOH]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">HYDNOH is a user-specified value that is output if a value cannot be computed at a hydrograph location. For example, the cell in which the hydrograph is located may be a no-flow cell.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PCKG ARR INTYP KLAY XL YL HYDLBL </text><text styleclass="New Materials" translate="true">(free format)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">(Input item 2 consists of one record for each hydrograph. No more than </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HYD" anchor="NHYD" styleclass="Normal" translate="true">NHYD</link><text styleclass="Normal" translate="true"> hydrograph records will be read.)</text></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[PCKG]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">PCKG is a flag to indicate which package and which array in the X vector is to be addressed by HYDMOD for the hydrograph of each observation point. As new model packages are added, the Read-and-Prepare module can be appended with additional subroutines to access new packages or new arrays. These are the same names specified in the CUNIT array. The three current package options are the basic (BAS), streamflow routing (STR), and interbed storage (IBS) packages. </text><conditional-text type="END"/></para>
+                      <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-LGR, and MODFLOW-OWHM) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">PCKG is a 3-character flag to indicate which package is to be addressed by HYDMOD for the hydrograph of each observation point. The current packages are:</text><conditional-text type="END"/></para>
+                      <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">BAS for the Basic Package,</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">IBS for the Interbed-Storage Package,</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">SUB for the Subsidence Package,</text><conditional-text type="END"/></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">STR for the Streamflow Routing Package</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">, and</text></li>
+                        <li styleclass="Normal"><text styleclass="Normal" translate="true">SFR for the SFR2 Streamflow Routing Package.</text><conditional-text type="END"/></li>
+                      </list>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ARR]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">ARR is a text code indicating which model data value is to be accessed for the hydrograph of each observation point. The table of available values:</text></para>
+                      <para styleclass="Normal"><table rowcount="10" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">ARR</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Value Feature to be recorded by HYDMOD</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">HD</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Head &#160;(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="Normal" translate="true">BAS</link><text styleclass="Normal" translate="true"> package)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">DD</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Drawdown &#160;(</text><link displaytype="text" defaultstyle="true" type="topiclink" href="BAS6" styleclass="Normal" translate="true">BAS</link><text styleclass="Normal" translate="true"> package)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">HC</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Preconsolidation-head (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">IBS1</link><text styleclass="Normal" translate="true"> package)</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-LGR, and MODFLOW-OWHM) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Preconsolidation-head (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" styleclass="Normal" translate="true">SUB</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">IBS1</link><text styleclass="Normal" translate="true"> packages)</text><conditional-text type="END"/></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">CP</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Instantaneous compaction (</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" styleclass="Normal" translate="true">SUB</link><text styleclass="Normal" translate="true"> and </text><conditional-text type="END"/><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">IBS1</link><text styleclass="Normal" translate="true"> packages)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SB</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">Instantaneous subsidence array (</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" styleclass="Normal" translate="true">SUB</link><text styleclass="Normal" translate="true"> and </text><conditional-text type="END"/><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">IBS1</link><text styleclass="Normal" translate="true"> packages)</text></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">ST</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Stream stage (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> package)</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT MODFLOW-LGR, and MODFLOW-OWHM) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Stream stage (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> packages)</text><conditional-text type="END"/></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SI</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Streamflow into reach (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> Package)</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT, MODFLOW-LGR, and MODFLOW-OWHM) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Streamflow into reach array (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> packages)</text><conditional-text type="END"/></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SO</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Streamflow out of reach (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> Package)</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT MODFLOW-LGR, and MODFLOW-OWHM) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Streamflow out of reach (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> packages)</text><conditional-text type="END"/></para>
+                          </td>
+                        </tr>
+                        <tr style="vertical-align:top">
+                          <td>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">SA</text></para>
+                          </td>
+                          <td>
+                            <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">(MODFLOW-2000) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Streamflow into or out of aquifer array (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> Package)</text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS"/></para>
+                            <para styleclass="Normal"><text styleclass="Normal" translate="true">(MODFLOW-2005, MODFLOW-CFP, MODFLOW-NWT MODFLOW-LGR, and MODFLOW-OWHM) </text><conditional-text type="END"/><text styleclass="Normal" translate="true">Streamflow into or out of aquifer array (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true">STR</link><text styleclass="Normal" translate="true"> packages)</text><conditional-text type="END"/></para>
+                          </td>
+                        </tr>
+                      </table></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[INTYP]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="INTYP" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">INTYP is a 1-character value to indicate how the data from the specified feature are to be accessed. The two options are </text><text styleclass="Keywords" translate="true">I</text><text styleclass="Normal" translate="true"> for interpolated value or </text><text styleclass="Keywords" translate="true">C</text><text styleclass="Normal" translate="true"> for cell value. Interpolated value indicates that the value is linearly interpolated from values at the 4 nodes surrounding the hydrograph location. Cell value means the value at the node closest to the hydrograph location. INTYP must be </text><text styleclass="Keywords" translate="true">C</text><text styleclass="Normal" translate="true"> for STR and SFR hydrographs.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[KLAY]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">KLAY is the layer sequence number of the array to be addressed by HYDMOD. For arrays that exist for each model layer, such as head (HNEW), KLAY is the layer number. For arrays that exist for only certain model layers, KLAY is the sequence number of the array starting with the uppermost array as 1, the next lower array as 2, and so forth. For the subsidence option (ARR = ‘SB’), KLAY designates the range of layers (from layer 1 to layer &quot;KLAY&quot;) used to sum compaction from individual layers into total subsidence for these layers.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[XL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">XL is the coordinate of the hydrograph point in model units of length measured parallel to model rows, with the origin at the lower left corner of the model grid (fig. 2). The value of XL does not need to correspond with the location of any particular model node. For streamflow-related data, XL designates the segment number that contains the reach from the streamflow-input data set for which data are to be output.</text></para>
+                      <para styleclass="Normal"><snippet src="Hydmod_Figure_2"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[YL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><text styleclass="Normal" translate="true">YL is the coordinate of the hydrograph point in model units of length measured parallel to model columns, with the origin at the lower left corner of the model grid (fig. 2). The value of YL does not need to correspond with the location of any particular model node. For streamflow-related data, YL designates the reach number that is the cell location from the streamflow-input data set for which data are to be output.</text></para>
+                      <para styleclass="Normal"><snippet src="Hydmod_Figure_2"/></para>
+                    </td>
+                  </tr>
+                </table></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[HYDLBL]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+                  <tr style="vertical-align:top">
+                    <td>
+                      <para styleclass="Normal"><anchor id="HYDLBL" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">HYDLBL is used to form a label for the hydrograph. The purpose of the label is to identify output and allow users to reorder, add, or subtract from the input list and still maintain location identity. HYDLBL is up to 14 characters for the BAS, IBS, and SUB Packages. An additional 6 characters are added as a prefix to make a 20-character label. The first two characters of the prefix are the ARR characters. The third character is the INTYP value. Characters 4 through 6 are the KLAY value. For stream hydrographs, HYDLBL is up to 12 characters. The constructed prefix consists of the 2-character ARR value, the 3-digit stream-segment number (character locations 3 to 5), and the 3-digit stream-reach number (character locations 6 to 8). The prefix is added to HYDLBL to again make a 20-character hydrograph label.</text></para>
+                    </td>
+                  </tr>
+                </table></para>
+              </td>
+            </tr>
+          </table></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

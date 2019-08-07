@@ -1,0 +1,27 @@
+inherited frameChoicePlusDate: TframeChoicePlusDate
+  Size.Height = 345.000000000000000000
+  inherited memoDescription: TMemo
+    Viewport.Width = 316.000000000000000000
+    Viewport.Height = 73.000000000000000000
+  end
+  inherited pnlBottom: TPanel
+    Size.Height = 256.000000000000000000
+    object comboChoices: TComboBox
+      Anchors = [akLeft, akTop, akRight]
+      Position.X = 7.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 305.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnChange = comboChoicesChange
+    end
+    inline frameDate: TframeDateEdits
+      Align = Client
+      Margins.Top = 50.000000000000000000
+      Size.Width = 320.000000000000000000
+      Size.Height = 206.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+end

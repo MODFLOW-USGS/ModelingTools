@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Activating Packages</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Activating Packages</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This model uses the CHD (Time-varying specified head) and RCH (Recharge) packages. To activate them, select &quot;Model|MODFLOW Packages and Programs&quot;. Expand &quot;Boundary conditions|Specified head&quot; and check the check box for the CHD package. Expand &quot;Boundary conditions|Specified flux&quot; and check the check box for the RCH package. Change the &quot;Recharge location option&quot; to &quot;Top active cell&quot;. Then click OK.</text></para>
+  </body>
+</topic>

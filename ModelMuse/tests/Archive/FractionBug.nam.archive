@@ -1,0 +1,10 @@
+# Name File for MODFLOW created on 2/1/2017 by ModelMuse Version 3.8.1.27
+LIST             11 ..\..\output\output.FractionBug\FractionBug.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.FractionBug\FractionBug.cbc REPLACE
+DIS              12 ..\..\model\model.FractionBug\FractionBug.dis OLD
+BAS6             13 ..\..\model\model.FractionBug\FractionBug.bas OLD
+OC               39 ..\..\model\model.FractionBug\FractionBug.oc OLD
+DATA             37 ..\..\output\output.FractionBug\FractionBug.fhd REPLACE
+DATA             38 ..\..\output\output.FractionBug\FractionBug.fdn REPLACE
+PCG              18 ..\..\model\model.FractionBug\FractionBug.pcg OLD
+LPF              14 ..\..\model\model.FractionBug\FractionBug.lpf OLD

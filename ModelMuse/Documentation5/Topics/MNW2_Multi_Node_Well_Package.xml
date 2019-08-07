@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MNW2: Multi-Node Well Package (Version 2) Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MNW2: Multi-Node Well Package (Version 2) Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Multi-Node Well (version 2) package simulates wells whose open intervals extend beyond a single model cell. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Dependant_Flux" styleclass="Normal" style="font-weight:bold;" translate="true">Head Dependant Flux</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">Multi-Node Well package</text><text styleclass="Normal" translate="true"> pane, the user can specify comments that can appear at the beginning of the MNW2 input file as well as the amount of data to be printed to the output file by the MNW2 package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Multi-Node Well Information (MNWI) Package package provides a way to create output files with extra information about the model. </text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><text styleclass="Strong" translate="true">WEL1flag</text><text styleclass="Normal" translate="true"> checkbox is checked, a file formatted like a WEL package input file will be created. It will have the pumping rates for every cell in the multi-node wells at the end of each stress period. The file is a text file and can be opened with any text editor.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><text styleclass="Strong" translate="true">QSUMflag</text><text styleclass="Normal" translate="true"> checkbox is checked, a file will be created containing the flow rates for each multi-node well at each time step. The file is a text file and can be opened with any text editor.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If the </text><text styleclass="Strong" translate="true">BYNDflag</text><text styleclass="Normal" translate="true"> checkbox is checked, a file will be created containing the flow rates for every node in the multi-node well at each time step. The file is a text file and can be opened with any text editor.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectSectionIntersectLength</title>
+  <keywords>
+    <keyword translate="true">ObjectSectionIntersectLength</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectSectionIntersectLength</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectSectionIntersectLength</text><text styleclass="Normal" translate="true">({Section, Column, Row, Layer}) returns the length of intersection between a cell or element and a 2-D projection of one section of the object. The function has four optional arguments: Section, Column, Row, and Layer. If these arguments are provided, they specify the section of the object and the cell for which the length should be calculated. If they are not provided, the function uses the current section of the object and the column, row, and layer of the node or element for which the formula is being calculated. If any of the arguments has an invalid value, the function returns zero. If the section of the object being evaluated intersects the cell or element being evaluated more than once, ObjectSectionIntersectLength returns the sum of all the individual lengths of intersection.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DRN_Object_Pane" styleclass="Normal" translate="true">DRN: Drain package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DRT_Object_Pane" styleclass="Normal" translate="true">DRT: Drain Return Package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GHB_Object_Pane" styleclass="Normal" translate="true">GHB: General-Head Boundary Package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="RIV_Object_Pane" styleclass="Normal" translate="true">RIV: River Package pane</link></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="WEL_Object_Pane" styleclass="Normal" translate="true">WEL: Well Package pane</link></para>
+  </body>
+</topic>

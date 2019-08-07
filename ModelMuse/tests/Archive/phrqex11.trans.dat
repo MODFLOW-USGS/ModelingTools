@@ -1,0 +1,124 @@
+TITLE
+.      1D transport and ion exchange
+.      PHREEQC example 11 (Parkhurst and Appelo, 1999)
+PRINT_INITIAL
+      -boundary_conditions false
+      -components false
+      -conductance false
+      -echo_input true
+      -fluid_properties true
+      -force_chemistry_print false
+      -HDF_chemistry true
+      -HDF_heads true
+      -heads true
+      -media_properties false
+      -solution_method true
+      -wells true
+      -xyz_chemistry false
+      -xyz_components false
+      -xyz_heads false
+      -xyz_wells false
+SOLUTE_TRANSPORT true
+      -diffusivity 0
+UNITS
+      -time days
+      -horizontal_grid meters
+      -vertical_grid meters
+      -head meters
+      -hydraulic_conductivity meters/days
+      -specific_storage 1/meters
+      -dispersivity meters
+      -flux meters/seconds
+      -leaky_hydraulic_conductivity meters/seconds
+      -leaky_thickness meters
+      -well_diameter centimeters
+      -well_flow_rate meters3/seconds
+      -river_bed_hydraulic_conductivity meters/seconds
+      -river_bed_thickness  meters
+GRID
+      -uniform   X   0 1 2
+      -uniform   Y   0 1 2
+      -nonuniform   Z    0 0.002 0.004 0.006 0.008 0.01 0.012 0.014 0.016 0.018 0.02
+             0.022 0.024 0.026 0.028 0.03 0.032 0.034 0.036 0.038 0.04
+             0.042 0.044 0.046 0.048 0.05 0.052 0.054 0.056 0.058 0.06
+             0.062 0.064 0.066 0.068 0.07 0.072 0.074 0.076 0.078 0.08
+      -chemistry_dimensions Z
+      -print_orientation XY
+MEDIA
+      -zone 0 0 0 1 1 0.08
+            -Kx 1
+            -Ky 1
+            -Kz 0.024
+            -porosity 0.1
+            -specific_storage 0
+            -longitudinal_dispersivity 0.002
+            -horizontal_dispersivity 0.002
+            -vertical_dispersivity 0.002
+      -zone 0 0 0 1 1 0.08
+            -active 1
+FREE_SURFACE_BC false
+STEADY_FLOW false
+SOLUTION_METHOD
+      -direct_solver true
+      -space_differencing 0.5
+      -time_differencing 0.5
+      -cross_dispersion false
+      -rebalance_fraction 0.5
+      -rebalance_by_cell false
+HEAD_IC
+      -zone 0 0 0 1 1 0.08
+            -head Z 0.8 0 0 0.8
+CHEMISTRY_IC
+      -zone 0 0 0 1 1 0.08
+            -solution 1
+            -exchange 1
+PRINT_FREQUENCY
+                  0 
+      -bc_flow_rates 0 
+      -boundary_conditions false
+      -components 0 
+      -conductance 0 
+      -flow_balance 0 
+      -force_chemistry_print 0 
+      -HDF_chemistry 0.01 day
+      -HDF_heads 0 
+      -HDF_velocities 0 
+      -heads 0 
+      -progress_statistics 0 
+      -restart 0 
+      -save_final_heads false
+      -velocities 0 
+      -wells 0 
+      -xyz_chemistry 0.01 day
+      -xyz_components 0 
+      -xyz_heads 1 day
+      -xyz_velocities 1 day
+      -xyz_wells 0 
+      -end_of_period_default false
+PRINT_LOCATIONS
+      -chemistry
+      -zone 0 0 0 1 1 0.08
+            -print 0
+      -xyz_chemistry
+      -zone 0 0 0 1 1 0.079
+            -print 0
+      -zone 0 0 0.079 1 1 0.08
+            -print 1
+SPECIFIED_HEAD_BC
+      -zone 0 0 0 1 1 0.001
+            -head
+                  0 0.08
+            -associated_solution
+                  0 0
+      -zone 0 0 0.079 1 1 0.08
+            -head
+                  0 0
+            -associated_solution
+                  0 1
+TIME_CONTROL
+            -start_time 0
+            -time_step
+                  0 0.005 days
+            -time_end
+                  1 days
+END

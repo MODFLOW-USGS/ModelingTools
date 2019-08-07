@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Define Hydraulic Conductivity Parameters</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Define Hydraulic Conductivity Parameters</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The confining bed has a hydraulic conductivity of 10</text><text style="font-family:'Times New Roman'; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-7</text><text styleclass="Normal" translate="true"> m/s. The rest of the layers have hydraulic conductivities of 10</text><text style="font-family:'Times New Roman'; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-4</text><text styleclass="Normal" translate="true"> m/s. We will define these values using parameters. Select &quot;Model|MODFLOW Packages and Programs...&quot; On the pane for the LPF package, change the number of HK parameters to 2. Set the values of the two parameters to 1E-4 and 1E-7 respectively. Check the Use Zones checkboxes for both parameters. Click OK.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection12.bmp" scale="70.00%" width="560" height="405" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">How do I specify MT3D Observations?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">How do I specify MT3D Observations?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are two different types of observations in MT3DMS and MT3D-USGS.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Table Cell" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The first type is specified with the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Required_by_MT3DMS" anchor="MT3DMS_Observation_Locations" styleclass="Table Cell" translate="true">MT3DMS_Observation_Locations</link><text styleclass="Table Cell" translate="true"> data set. This corresponds to data sets 18 and 19 on the MT3D Basic Package. With it a value of simulated concentration is saved for every transport step. This type of observation is most appropriate if you want to plot concentration against time.</text></li>
+      <li styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The second type is specified with the Transport Observation Package. It is activated on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="TOB_Transport_Observation_Pack" styleclass="Table Cell" translate="true">TOB: Transport Observation Package Pane</link><text styleclass="Table Cell" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Table Cell" translate="true">MODFLOW Packages and Programs Dialog Box</link><text styleclass="Table Cell" translate="true">. Then you use an object to specify the locations and times on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Concentration_Observations_TOB" styleclass="Table Cell" translate="true">Concentration Observations: TOB: Transport Observation Package Pane</link><text styleclass="Table Cell" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Table Cell" translate="true">Object Properties Dialog Box</link><text styleclass="Table Cell" translate="true">. This type of observation is most appropriate if you want to use observations in automated parameter estimation.</text></li>
+    </list>
+    <para styleclass="Table Cell"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

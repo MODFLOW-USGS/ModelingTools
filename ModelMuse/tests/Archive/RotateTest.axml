@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RotateTest" FileType="bin">
+    <FileName Model_Name="RotateTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RotateTest" FileType="ancillary">
+    <FileName Model_Name="RotateTest" FileType="ancillary">RotateTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RotateTest" FileType="Model Input">
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.bas</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.dis</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.gsf</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.lpf</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.nam.archive</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.oc</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RotateTest.pcg</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Input">usgs.RotateTest.reference</FileName>
+  </model>
+  <output Model_Name="RotateTest" FileType="Model Output">
+    <FileName Model_Name="RotateTest" FileType="Model Output">RotateTest.cbc</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Output">RotateTest.fdn</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Output">RotateTest.fhd</FileName>
+    <FileName Model_Name="RotateTest" FileType="Model Output">RotateTest.lst</FileName>
+  </output>
+</Model_Archive_List>

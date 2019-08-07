@@ -1,0 +1,47 @@
+# MNW2: Multi-Node Well package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+    -5    18     9     2 AUXILIARY IFACE # DataSet 1: MNWMAX, NODTOT, IWL2CB, MNWPRNT, OPTION
+MnwWell1      4 # Data Set 2A: WELLID, NNODES
+THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-001  # Data Set 2C; Rw
+     1     6     2 # Data Set 2D; LAY, ROW, COL
+     3     6     2 # Data Set 2D; LAY, ROW, COL
+     5     6     2 # Data Set 2D; LAY, ROW, COL
+     7     6     2 # Data Set 2D; LAY, ROW, COL
+Mnw2      4 # Data Set 2A: WELLID, NNODES
+THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-001  # Data Set 2C; Rw
+     1     8     2 # Data Set 2D; LAY, ROW, COL
+     3     8     2 # Data Set 2D; LAY, ROW, COL
+     5     8     2 # Data Set 2D; LAY, ROW, COL
+     7     8     2 # Data Set 2D; LAY, ROW, COL
+Mnw3      4 # Data Set 2A: WELLID, NNODES
+THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-001  # Data Set 2C; Rw
+     1    10     2 # Data Set 2D; LAY, ROW, COL
+     3    10     2 # Data Set 2D; LAY, ROW, COL
+     5    10     2 # Data Set 2D; LAY, ROW, COL
+     7    10     2 # Data Set 2D; LAY, ROW, COL
+Mnw4      3 # Data Set 2A: WELLID, NNODES
+THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-001  # Data Set 2C; Rw
+     3     3    19 # Data Set 2D; LAY, ROW, COL
+     5     3    19 # Data Set 2D; LAY, ROW, COL
+     7     3    19 # Data Set 2D; LAY, ROW, COL
+Mnw5      3 # Data Set 2A: WELLID, NNODES
+THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP
+  1.000000000000E-001  # Data Set 2C; Rw
+     3     6    17 # Data Set 2D; LAY, ROW, COL
+     5     6    17 # Data Set 2D; LAY, ROW, COL
+     7     6    17 # Data Set 2D; LAY, ROW, COL
+     5 # Data Set 3, Stress Period 1: ITMP
+MnwWell1   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw2   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw3   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw4   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw5   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+     5 # Data Set 3, Stress Period 2: ITMP
+MnwWell1   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw2   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw3   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw4   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE
+Mnw5   0.000000000000E+000      0 # Data Set 4A: WELLID, QDes, IFACE

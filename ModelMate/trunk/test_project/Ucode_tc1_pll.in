@@ -1,0 +1,108 @@
+BEGIN Options Keywords
+  Verbose = 5
+END Options
+ 
+BEGIN UCODE_Control_Data Keywords
+  Sensitivities = True
+  Optimize = True
+END UCODE_Control_Data
+ 
+BEGIN Reg_GN_Controls Keywords
+  OmitDefault = 1
+END Reg_GN_Controls
+ 
+BEGIN Model_Command_Lines Keywords
+  Command = 'C:\WRDAPP\MF2005.1_6\bin\mf2005.exe "D:\Delphi_Projects\ModelMate\test_project\tc1.nam"'
+    Purpose = Forward
+    CommandID = ForwardModel
+END Model_Command_Lines
+ 
+BEGIN Parameter_Groups Table
+  NROW=1 NCOL=6 COLUMNLABELS
+  GroupName Adjustable Transform MaxChange SenMethod LowerValue
+  ParamType1 Yes No 2.0 1 -9.0E-9
+END Parameter_Groups
+ 
+BEGIN Parameter_Data Table
+  NROW=11 NCOL=6 COLUMNLABELS
+  ParamName GroupName StartValue Constrain LowerConstraint UpperConstraint
+  SS_1 ParamType1 0.0013 Yes 1E-10 1E39
+  HK_1 ParamType1 0.0003 No 1E-10 1E39
+  VERT_ANI_1 ParamType1 1 Yes 1 1000
+  VERT_K_CB ParamType1 1E-7 No 1E-10 1E39
+  SS_2 ParamType1 0.0002 No 1E-10 1E39
+  HK_2 ParamType1 4E-5 No 1E-10 1E39
+  VERT_ANI_2 ParamType1 1 Yes 1 1000
+  WELLS_TR ParamType1 -1.1 No 1E-10 1E39
+  RIVERS ParamType1 0.0012 No 1E-10 1E39
+  RCH_ZONE_1 ParamType1 63.1 No 0 1E39
+  RCH_ZONE_2 ParamType1 31.5 No 0 1E39
+END Parameter_Data
+ 
+BEGIN Observation_Groups Table
+  NROW=2 NCOL=3 COLUMNLABELS
+  GroupName Statistic StatFlag
+  Heads 1.0025 VAR
+  Head_Changes 0.0025 VAR
+END Observation_Groups
+ 
+BEGIN Observation_Data Table
+  NROW=32 NCOL=3 COLUMNLABELS
+  ObsName GroupName ObsValue
+  B.0 Heads 101.804
+  B.1 Head_Changes -0.0289999999999964
+  B.12 Head_Changes -0.129000000000005
+  C.0 Heads 128.117
+  C.1 Head_Changes -0.0409999999999968
+  C.2 Head_Changes -0.556999999999988
+  C.8 Head_Changes -11.531
+  C.12 Head_Changes -14.184
+  D.0 Heads 156.678
+  D.1 Head_Changes -4.381
+  D.12 Head_Changes -42.54
+  E.0 Heads 124.893
+  E.1 Head_Changes -0.0670000000000073
+  E.12 Head_Changes -14.304
+  F.0 Heads 140.961
+  F.1 Head_Changes -0.0600000000000023
+  F.12 Head_Changes -21.676
+  G.0 Heads 126.537
+  G.1 Head_Changes 0.00499999999999545
+  G.12 Head_Changes -14.365
+  H.0 Heads 101.112
+  H.1 Head_Changes 0.0480000000000018
+  H.12 Head_Changes -0.567999999999998
+  I.0 Heads 158.135
+  I.1 Head_Changes -5.53299999999999
+  I.12 Head_Changes -43.217
+  J.0 Heads 176.374
+  J.1 Head_Changes -0.00100000000000477
+  J.12 Head_Changes -38.242
+  A.0 Heads 142.02
+  A.1 Head_Changes -0.0130000000000052
+  A.12 Head_Changes -19.921
+END Observation_Data
+ 
+BEGIN Model_Input_Files Keywords
+  ModInFile = tc1.pval
+    TemplateFile = tc1_pval.jtf
+END Model_Input_Files
+ 
+BEGIN Model_Output_Files Keywords
+  ModOutFile = tc1._os
+    InstructionFile = tc1_unit_23.jif
+    Category = Obs
+END Model_Output_Files
+ 
+BEGIN Parallel_Control Keywords
+  Parallel = True
+  Wait = 0.1
+  VerboseRunner = 5
+END Parallel_Control
+ 
+BEGIN Parallel_Runners Table
+  NROW=1 NCOL=3 COLUMNLABELS
+  RunnerName RunnerDir RunTime
+  Maynard1 \\Igskahcwltcerb\shared\ModelMate\test_project\Maynard1\ 8
+END Parallel_Runners
+ 

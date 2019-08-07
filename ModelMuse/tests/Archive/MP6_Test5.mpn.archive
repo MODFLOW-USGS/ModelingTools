@@ -1,0 +1,4 @@
+MPBAS 12 MP6_Test5.mpbas
+DIS 13 ..\..\model\model.MP6_Test5\MP6_Test5.dis
+BUDGET 20 ..\..\output\output.MP6_Test5\MP6_Test5.cbc
+HEAD 22 ..\..\output\output.MP6_Test5\MP6_Test5.bhd

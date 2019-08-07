@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Simple Model: Drains</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Simple Model: Drains</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The drains could be created in much the same way as the wells. However, this is time consuming. Instead open the file Drains.txt (in the &quot;My Documents\examples\data\SimpleModel&quot; folder) in a text editor, select all the text in the file and copy it to the clipboard. Then go back to ModelMuse and select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit|Paste</text><text styleclass="Normal" translate="true">. The objects in Drains.txt define the drains required for the model.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,644 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Suggested input values for the NWT input file</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Table 2. Suggested input values for the NWT input file</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">[Dashes (–) indicate that values are not applicable]</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="46" colcount="5" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Input variable name</text></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Default values</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Range</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Iteration Control</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="HEADTOL" styleclass="Normal" translate="true">HEADTOL</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10-4 (L)</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" anchor="1" styleclass="Normal" translate="true">*</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">–</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="FLUXTOL" styleclass="Normal" translate="true">FLUXTOL</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">500 (L3/T)</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" anchor="1" styleclass="Normal" translate="true">*</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">–</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="MAXITEROUT" styleclass="Normal" translate="true">MAXITEROUT</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">100</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10–2,000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Dry Cell Tolerance</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="THICKFACT" styleclass="Normal" translate="true">THICKFACT</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.00001</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-6</text><text styleclass="Normal" translate="true">-1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NWT Options</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="LINMETH" styleclass="Normal" translate="true">LINMETH</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1 or 2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="IPRNWT" styleclass="Normal" translate="true">IPRNWT</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0 or 2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="IBOTAV" styleclass="Normal" translate="true">IBOTAV</link></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" anchor="2" styleclass="Normal" translate="true">**</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0 or 1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Under relaxation Input</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Model Complexity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Simple</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Moderate</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Complex</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="DBDTHETA" styleclass="Normal" translate="true">DBDTHETA</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.97</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.90</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.85</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0–1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="DBDKAPPA" styleclass="Normal" translate="true">DBDKAPPA</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0001</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.00001</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.00001</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0–1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="DBDGAMMA" styleclass="Normal" translate="true">DBDGAMMA</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0–1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="MOMFACT" styleclass="Normal" translate="true">MOMFACT</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0–1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Residual Control</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Model Complexity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Simple</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Moderate</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Complex</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKFLAG" styleclass="Normal" translate="true">BACKFLAG</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Suggested_input_values_for_the" anchor="3" styleclass="Normal" translate="true">***</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0 or 1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="MAXBACKITER" styleclass="Normal" translate="true">MAXBACKITER</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">20</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">50</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1–100</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKTOL" styleclass="Normal" translate="true">BACKTOL</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1.5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1.1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1.1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1–2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="BACKREDUCE" styleclass="Normal" translate="true">BACKREDUCE</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.97</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.9</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.7</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.05–0.99</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Linear Solution Control and Options for GMRES</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Model Complexity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Simple</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Moderate</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Complex</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="MAXITINNER" styleclass="Normal" translate="true">MAXITINNER</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">50</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">50</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">50</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">25–1,000</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="ILUMETHOD" styleclass="Normal" translate="true">ILUMETHOD</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1 or 2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="LEVFILL" styleclass="Normal" translate="true">LEVFILL</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5–10 for ILUMETHOD=1</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0–2 for ILUMETHOD=2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="STOPTOL" styleclass="Normal" translate="true">STOPTOL</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-8</text><text styleclass="Normal" translate="true">-1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-12</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="MSDR" styleclass="Normal" translate="true">MSDR</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5–20</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="5">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Linear Solution Control and Options for χMD</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td colspan="3">
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Model Complexity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Simple</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Moderate</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Complex</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="IACL" styleclass="Normal" translate="true">IACL</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">2</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0,1, or 2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="NORDER" styleclass="Normal" translate="true">NORDER</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0,1, or 2</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="LEVEL" styleclass="Normal" translate="true">LEVEL</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1–10</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="NORTH" styleclass="Normal" translate="true">NORTH</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">10</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">4-10 for Orthomin</text></para>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">2 otherwise</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="IREDSYS" styleclass="Normal" translate="true">IREDSYS</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0 or 1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="RRCTOLS" styleclass="Normal" translate="true">RRCTOLS</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0.0</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0–0.0001</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="IDROPTOL" styleclass="Normal" translate="true">IDROPTOL</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">0 or 1</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="EPSRN" styleclass="Normal" translate="true">EPSRN</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">5×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-5</text><text styleclass="Normal" translate="true">-1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="HCLOSEXMD" styleclass="Normal" translate="true">HCLOSEXMD</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-3</text><text styleclass="Normal" translate="true">-1×10</text><text style="font-family:&apos;Times New Roman&apos;; font-size:8pt; vertical-align:super; color:#000000;" translate="true">-5</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="NWT_Newton_Solver" anchor="MXITERXMD" styleclass="Normal" translate="true">MXITERXMD</link></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">50</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">100</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">200</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal" style="text-align:center;"><text styleclass="Normal" translate="true">25–1,000</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><anchor id="1" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">*These values are dependent on the units specified in the MODFLOW-2005 discretization input file. Values given are for units of meters and days.</text></para>
+    <para styleclass="Normal"><anchor id="2" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">**The optimal value for IBOTAV is problem specific. Values of 0 and 1 should be tested for each problem.</text></para>
+    <para styleclass="Normal"><anchor id="3" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">***BACKFLAG should be set to 0 (residual control set to inactive) unless there are convergence problems. “OPTIONS” must be set to “SPECIFIED” if the residual control option is used.</text></para>
+  </body>
+</topic>

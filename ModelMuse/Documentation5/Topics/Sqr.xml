@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Sqr</title>
+  <keywords>
+    <keyword translate="true">Sqr</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Sqr</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Sqr</text><text styleclass="Normal" translate="true">(Value) returns Value squared. Value can be either an integer or a real number. The result of Sqr will be an integer if Value is an integer. Otherwise it will be a real number.</text></para>
+  </body>
+</topic>

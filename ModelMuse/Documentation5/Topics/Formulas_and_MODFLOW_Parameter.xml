@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Formulas and MODFLOW Parameters</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Formulas and MODFLOW Parameters</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In certain MODFLOW packages, such as the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="LPF" anchor="PARTYP" domain=".\ModflowGuide\ModflowGuide.hmxp" styleclass="Normal" translate="true">Layer Property Flow</link><text styleclass="Normal" translate="true"> package, it is possible to define &quot;parameters&quot; that are used in combination with &quot;multiplier arrays&quot; and &quot;zone arrays&quot; to define the spatial variability of some input data such as the hydraulic conductivity. When parameters are defined, ModelMuse will not allow the user to define a formula for the related data set. Instead, it will generate a formula that reproduces what MODFLOW will do in assigning values to the input data.</text></para>
+  </body>
+</topic>

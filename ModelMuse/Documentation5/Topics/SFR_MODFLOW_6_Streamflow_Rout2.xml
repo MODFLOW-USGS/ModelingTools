@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SFR: MODFLOW 6 Streamflow Routing Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SFR: MODFLOW 6 Streamflow Routing Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Streamflow-Routing (SFR) package is used to simulate streams in a model. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Dependant_Flux" styleclass="Normal" style="font-weight:bold;" translate="true">Head Dependant Flux</link><text styleclass="Normal" style="font-weight:bold;" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are six options that the user must specify the the SFR package in MODFLOW 6.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Print stage (PRINT_STAGE)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream reach stages will be printed in the listing file when heads are printed.</text></li>
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Print flows (PRINT_FLOWS)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream reach flows will be printed in the listing file when budget is printed.</text></li>
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Save stage (stagefile)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream stages will be saved in in a binary file with the extension &quot;.stage&quot;.</text></li>
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Save budget (budgetfile)</text><text styleclass="Normal" translate="true">: If this option is checked, the stream budget information will be saved in in a binary file with the extension &quot;.sfr_budget&quot;.</text></li>
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Maximum number of streamflow iterations (maximum_iteration)</text><text styleclass="Normal" translate="true">: This defines the maximum number of Streamflow Routing Newton-Raphson iterations allowed for a reach.</text></li>
+      <li styleclass="Strong"><text styleclass="Strong" translate="true">Stream depth closure criterion (maximum_depth_change)</text><text styleclass="Normal" translate="true">: This defines the depth closure tolerance.</text></li>
+    </list>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_MODFLOW_6_Streamflow_Routi" styleclass="Normal" translate="true">SFR: MODFLOW-6 Streamflow Routing Package Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

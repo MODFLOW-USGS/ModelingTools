@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">LimitChoice</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LimitChoice</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">When changing data sets</text><text styleclass="Normal" translate="true">, the same limits (on the filter tab) as in the data set that is currently displayed can be used with a newly selected data set. By default, the limits will be updated based on the values in the newly selected data set. However, if the user wants to compare one similar data set with another, it can be useful to use the same limits with both of them. For example, this might be used when comparing the heads computed in one stress period with those in another. The default setting is called </text><text styleclass="Strong" translate="true">Update limits</text><text styleclass="Normal" translate="true"> whereas </text><text styleclass="Strong" translate="true">Retain limits</text><text styleclass="Normal" translate="true"> describes the case where the limits in the previous data set are also used in the newly selected data set. </text></para>
+  </body>
+</topic>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">GageNote4</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 4</text><text styleclass="Normal" translate="true">: Solute is not routed through the unsaturated zone. For this reason, solute routing between streams and ground water cannot be simulated when using the unsaturated flow option in SFR2.</text></para>
+  </body>
+</topic>

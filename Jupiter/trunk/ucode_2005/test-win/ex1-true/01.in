@@ -1,0 +1,106 @@
+# -------------------------
+# UCODE INPUT EXAMPLE 1
+# -------------------------
+
+BEGIN Options	KEYWORDS
+  Verbose=0
+END Options
+
+# ------------------------------
+# REGRESSION-CONTROL INFORMATION
+# ------------------------------
+
+BEGIN UCODE_CONTROL_DATA KEYWORDS
+ModelName=ex1
+sensitivities=yes          # calculate sensitivities: yes/no
+optimize=yes               # estimate parameters: yes/no
+StartRes=no                # print residuals: yes/no 
+IntermedRes=no             # # same
+FinalRes=no                # # same
+StartSens=css              # print sensitivities:  
+IntermedSens=css           # #   css, dss, unscaled, onepercentss,  
+FinalSens=css              # #   allss,all, or none
+DataExchange=yes           # graphing & postprocessing: yes/no 
+END UCODE_CONTROL_DATA 
+
+BEGIN REG_GN_CONTROLS KEYWORDS
+tolpar=0.001               # GN param conv crit. Also see parameter blocks
+tolsosc=0.0                # GN fit-change conv criteria. 
+MrqtDirection=85.411137668 # angle (degrees) for Mrqt parameter
+MrqtFactor=1.5             # #
+MrqtIncrement=0.001        # #
+quasinewton=no             # option to use QN updating: yes, no
+maxiter=10                 # maximum # of GaussNewton updates
+maxchange=2.0              # max frac param change for GN updates
+maxchangerealm=regression  # how changes apply, log-trans params
+END REG_GN_CONTROLS 
+
+# --------------------------------
+# COMMAND FOR APPLICATION MODEL(S)
+# --------------------------------
+
+BEGIN MODEL_COMMAND_LINES KEYWORDS
+# Single quotes around 'Command=value' are required if the
+# command includes one or more spaces, but are optional 
+# otherwise
+'Command=..\..\test-data-win\data-transient\tc1-fwd.bat'
+purpose=forward   #forward, derivatives, forwad&derivatives
+CommandId=modflow
+END MODEL_COMMAND_LINES
+
+
+# ---------------------
+# PARAMETER INFORMATION
+# ---------------------
+
+BEGIN PARAMETER_GROUPS KEYWORDS
+   GroupName = MyPars  adjustable=yes TOLPAR=.01  maxchange=2.0	  SENMETHOD=1
+END PARAMETER_GROUPS
+
+BEGIN PARAMETER_DATA TABLE
+# By default, the first command line is used and sensitivities
+# are calculated by perturbation, so no need to specify these.
+#    1           2             3          4          5            6          7    
+nrow=9  ncol=7 columnlabels  GroupName=MyPars TolPar=0.001 
+paramname  STARTVALUE  lowervalue uppervalue   scalepval   perturbamt transform   
+Q1&2       -1.1000          -1.4       -0.8      1.0E-3        0.10D0        no    
+RCH_1       60.             30.0       80.0      1.0E-2        0.01D0        no   
+RCH_2       30.             20.0       60.0      1.0E-2        0.01D0        no   
+K_RB        1.2000E-3      1.2E-4     1.2E-2     1.0E-6        0.01D0        yes  
+SS_1        1.3000E-3      1.3E-4     1.3E-2     1.0E-6        0.01D0        yes  
+HK_1        3.0000E-4      3.0E-5     3.0E-3     1.0E-7        0.01D0        yes  
+VK_CB       1.0000E-7      1.0E-8     1.0E-6     1.0E-10       0.01D0        yes  
+SS_2        2.0000E-4      2.0E-5     2.0E-3     1.0E-7        0.01D0        yes  
+HK_2        4.0000E-5      4.0E-6     4.0E-4     1.0E-8        0.01D0        yes  
+END PARAMETER_DATA 
+
+# -----------------------
+# OBSERVATION INFORMATION
+# -----------------------
+
+BEGIN OBSERVATION_GROUPS TABLE
+  nrow=2 ncol=4  columnlabels
+  groupname  plotsymbol  useflag   WTMULTIPLIER
+  heads      1           yes         1.0
+  flows      2           yes         1.0
+END OBSERVATION_GROUPS
+
+BEGIN OBSERVATION_DATA FILES
+tc1.hed.true
+tc1.flo.true
+END OBSERVATION_DATA 
+
+# -----------------------------
+# APPLICATION MODEL INFORMATION
+# -----------------------------
+
+BEGIN MODEL_INPUT_FILES	KEYWORDS
+  modinfile=..\..\test-data-win\data-transient\tc1-fwd.sen  
+  templatefile=tc1sen.tpl
+END MODEL_INPUT_FILES
+
+BEGIN MODEL_OUTPUT_FILES  KEYWORDS
+  modoutfile=..\..\test-data-win\data-transient\tc1._os  
+  instructionfile=ex1-standard.instructions 
+  category=obs
+END MODEL_OUTPUT_FILES

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Model Features in MODFLOW</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Model Features in MODFLOW</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW models, Model Features are used to define some or all of the spatial data in the following packages as well as IFACE and the starting particle distribution in MODPATH. </text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Bullet List" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">CHD: Time-Variant Specified-Head package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">CFP: Conduit Flow package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">CHOB: Specified-Head Flow Observation package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">DRN: Drain package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">DROB: Drain Observation package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">DRT: Drain Return package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">ETS: Evapotranspiration Segments package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">EVT: Evapotranspiration package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">FHB: Flow and Head Boundary package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">FMP: Farm process</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">GHB: General-Head Boundary package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">GBOB: General-Head-Boundary Observation package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">HFB: Horizontal Flow Barrier package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">HOB: Head Observation package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">LAK: Lake package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">MAW: Multi-Aquifer Well package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">MNW1: Multi-Node Well package (version 1)</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">MNW2; Multi-Node Well package (version 2)</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">MVR: Water Mover package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">RCH: Recharge package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">RES: Reservoir package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">RIV: River package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">RVOB: River Observation package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">SFR: Stream-Flow Routing package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">STR: Stream package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">UZF: Unsaturated-Zone Flow package</text></li>
+      <li styleclass="Bullet List"><text styleclass="Bullet List" translate="true">WEL: Well package</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user specifies a start and end time for the boundary condition. The user does not need to define boundary conditions by stress period because ModelMuse can determine the appropriate stress periods based on the times specified by the user. </text></para>
+  </body>
+</topic>

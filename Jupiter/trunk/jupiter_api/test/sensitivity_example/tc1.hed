@@ -1,0 +1,6 @@
+BEGIN observation_Data TABLE
+  NROW=32  NCOL=5  DATAFILES=2  COLUMNLABELS 
+  obsname  obsvalue     statistic  statflag   GROUPNAME
+  tc1a.hed
+  tc1b.hed
+END observation_Data TABLE

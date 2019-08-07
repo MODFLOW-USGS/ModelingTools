@@ -1,0 +1,14 @@
+# LPF: Layer Property Flow package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# LPF Package input file for hypothetical test simulation
+# Test of SFR2 Package
+     9 -9.990000000000E+002      0 # ILPFCB, HDRY, NPLPF
+     1 # LAYTYP
+     0 # LAYAVG
+    -1 # CHANI
+     0 # LAYVKA
+     0 # LAYWET
+CONSTANT     7.999999800000E-004  # HK Layer 1 Layer 1
+CONSTANT     1.000000000000E+000  # HANI Layer 1 Layer 1
+CONSTANT     6.000000200000E-006  # VKA Layer 1 Layer 1
+CONSTANT     0.000000000000E+000  # SS Layer 1 Layer 1
+CONSTANT     2.000000000000E-001  # SY Layer 1 Layer 1

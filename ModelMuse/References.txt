@@ -1,0 +1,16 @@
+@Title(References Cited)
+
+@anchor(CalvertAndOthers2002)Calvert, Charles, Calvert, Marjorie, Kaster, John, and Swart, Bob, 2002, Kylix Developer's Guide: Indianapolis, Indiana, Sams, 960 p.
+
+@anchor(Cantu2003)Cantù, Marco, 2003, Mastering Delphi 7: San Francisco, Sybex, 1011 p.
+
+@anchor(Konopka1997)Konopka, Ray, 1997, Developing Custom Delphi 3 Components: Scottsdale Arizona, Coriolis, 725 p.
+
+@anchor(ORourke1998)O'Rourke, Joseph, 1998. Computational Geometry in C, Second Edition, Cambridge University Press, Cambridge, 376 p.
+
+@anchor(Shemitz2002)Shemitz, Jon, 2002, Kylix—The Professional Developer’s Guide and Reference: New York, Apress, 942 p.
+
+@anchor(Shimrat1980)Shimrat, M. 1980. Algorithm 112, Position of Point Relative to Polygon, in Hanson, R. J. (editor)  Collected Algorithms from ACM, Association for Computing Machinery, Inc. New York, p. 112-p 1- 0
+
+@anchor(Thorpe1997)Thorpe, Danny, 1997, Delphi Component Design: Reading Massachusetts, Addison Wesley, 348 p.
+

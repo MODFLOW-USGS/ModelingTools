@@ -1,0 +1,2 @@
+inherited frameScreenObjectFmpPrecip: TframeScreenObjectFmpPrecip
+end

@@ -1,0 +1,5 @@
+On Archive lists and Archive structure panes, have descriptive text fill the whole left side of the pane. 
+
+Use two lines of text on the button at the bottom of the main form.
+
+In descriptions of archive structure mention ability to move files or folders by drag or cut/paste.

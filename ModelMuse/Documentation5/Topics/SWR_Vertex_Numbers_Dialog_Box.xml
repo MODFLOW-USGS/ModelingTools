@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SWR Reach Numbers Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SWR Reach Numbers Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">SWR Reach Numbers </text><text styleclass="Normal" translate="true">dialog box is used to select reaches for use with tabular data files in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Tab_Files_Dialog_Box" styleclass="Strong" translate="true">SWR Tab Files</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">SWR Reach Numbers</text><text styleclass="Normal" translate="true"> can only be displayed from the </text><text styleclass="Strong" translate="true">Select SWR Objects</text><text styleclass="Normal" translate="true"> dialog box. To display it, set the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Tab_Files_Dialog_Box" anchor="SpecificationMethod" styleclass="Strong" translate="true">Specification Method</link><text styleclass="Normal" translate="true"> to </text><text styleclass="Strong" translate="true">Reaches</text><text styleclass="Normal" translate="true"> and then click the </text><text styleclass="Strong" translate="true">Edit</text><text styleclass="Normal" translate="true"> button in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Tab_Files_Dialog_Box" anchor="ITABRCH" styleclass="Strong" translate="true">Object Names, Vertex Value, or Reach Numbers</link><text styleclass="Normal" translate="true"> column of the table.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter the reaches you wish to use with the tabular data file in the table of the dialog box.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

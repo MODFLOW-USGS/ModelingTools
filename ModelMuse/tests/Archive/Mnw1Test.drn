@@ -1,0 +1,15 @@
+# DRN: Drain package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+     8     9 AUXILIARY IFACE # DataSet 2: MXACTD IDRNCB Option
+     8     0 # Data Set 5: ITMP NP Stress period 1
+     1    13     6  1.310000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13     7  1.310000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13     8  1.300000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13     9  1.300000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13    10  1.290000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13    11  1.290000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13    12  1.280000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+     1    13    13  1.280000000000E+002   1.000000000000E+004      0 # Data Set 6: Layer Row Column Elevation Cond IFACE
+    -1     0 # Data Set 5: ITMP NP Stress period 2
+    -1     0 # Data Set 5: ITMP NP Stress period 3
+    -1     0 # Data Set 5: ITMP NP Stress period 4
+    -1     0 # Data Set 5: ITMP NP Stress period 5

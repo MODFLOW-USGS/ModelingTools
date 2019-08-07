@@ -1,0 +1,12 @@
+# Name File for MT3DMS created on 6/7/2012 by ModelMuse
+LIST 16 ImportMt3dP07.mls
+FTL 10 ImportMt3dP07.ftl
+DATA 17 ImportMt3dP07.cnf
+BTN 1 ImportMt3dP07.btn
+DATA(BINARY) 201 ImportMt3dP07_Comp1.ucn
+DATA 601 ImportMt3dP07_Comp1._mas
+DATA 401 ImportMt3dP07_Comp1.mto
+ADV 2 ImportMt3dP07.adv
+DSP 3 ImportMt3dP07.dsp
+SSM 4 ImportMt3dP07.ssm
+GCG 9 ImportMt3dP07.gcg

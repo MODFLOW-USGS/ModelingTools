@@ -1,0 +1,26 @@
+# Name File for MODFLOW-2005 version of test case tc1 
+#
+# Output files
+#
+LIST         11 tc1pred.lst REPLACE
+DATA(BINARY)  9 tc1pred.cbc REPLACE
+DATA(BINARY) 37 tc1pred.bhd REPLACE
+DATA         23 tc1pred._os REPLACE
+#
+# Input files
+#
+DATA(BINARY) 47 tc1.bhd OLD  # Starting heads
+#
+DIS  12 ..\tc1pred.dis  OLD
+BAS6 13 ..\tc1pred.bas  OLD
+OC   39 ..\tc1.oc       OLD
+PCG  18 ..\tc1.pcg      OLD
+LPF  14 ..\tc1.lpf      OLD
+GHB  19 ..\tc1.ghb      OLD
+WEL  20 ..\tc1pred.wel  OLD
+RIV  21 ..\tc1.riv      OLD
+RCH  24 ..\tc1.rch      OLD
+ZONE 15 ..\tc1.zon      OLD
+MULT 16 ..\tc1.mlt      OLD
+PVAL 52 ..\tc1pred.pval OLD
+HOB  22 ..\tc1pred.obh  OLD

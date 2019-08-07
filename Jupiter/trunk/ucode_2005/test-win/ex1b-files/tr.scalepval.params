@@ -1,0 +1,14 @@
+BEGIN PARAMETER_DATA TABLE
+#     1           2             3          4          5                     6          7        8	     9
+  nrow=9  ncol=10 columnlabels  
+  paramname  STARTVALUE     lowervalue uppervalue   scalepval      perturbamt transform TOLPAR adjustable groupname
+  Q1&2       -1.1000        -1.4       -0.8    1.07337        0.01D0        no     0.01     yes       MyPars
+  RCH_1       60.           30.0       80.0    34.1020        0.01D0        no     0.01 	yes       MyPars
+  RCH_2       30.           20.0       60.0    50.4426        0.01D0        no     0.01     yes       MyPars 	
+  K_RB        1.2000E-3      1.2E-4     1.2E-2  0.131735E-02  0.01D0        yes    0.01 	yes       MyPars 	
+  SS_1        1.3000E-3      1.3E-4     1.3E-2  0.227882E-04  0.01D0        yes    0.01     yes       MyPars 	
+  HK_1        3.0000E-4      3.0E-5     3.0E-3  0.425426E-03  0.01D0        yes    0.01 	yes       MyPars 	
+  VK_CB       1.0000E-7      1.0E-8     1.0E-6  0.217227E-06  0.01D0        yes    0.01     yes       MyPars 	
+  SS_2        2.0000E-4      2.0E-5     2.0E-3  0.120701E-05  0.01D0        yes    0.01 	yes       MyPars 	
+  HK_2        4.0000E-5      4.0E-6     4.0E-4  0.481563E-04  0.01D0        yes    0.01     yes       MyPars 
+END PARAMETER_DATA

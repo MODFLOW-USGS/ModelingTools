@@ -1,0 +1,12 @@
+  1  7  0  0  2  0  0  Item 1: NBDTIM NFLW NHED IFHBSS IFHBCB NFHBX1 NFHBX2
+ 50  1.0   1           Item 4a: IFHBUN CNSTM IFHBPT
+0.0                    Item 4b: BDTIM(NBDTIM)
+ 50  86400.0  1        Item 5a: IFHBUN CNSTM IFHBPT (convert CFS to CFD)
+  1 13 65  0  -0.43    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+  1 12 65  0  -2.72    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+  1 12 66  0  -3.00    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+  1 11 67  0  -2.95    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+  1 11 68  0  -2.63    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+  1 10 69  0  -1.89    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+  1 10 70  0  -0.49    Item 5b: Layer Row Column IAUX FLWRAT(NBDTIM) (cfs)
+ 

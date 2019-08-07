@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">How can I estimate the step size for my MODFLOW model?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">How can I estimate the step size for my MODFLOW model?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A rough estimate of the required time step size for a transient model can be determined using the following equation.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Δt = Sa</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true">/4Kb = S</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">S</text><text styleclass="Normal" style="font-size:12pt; vertical-align:baseline;" translate="true">b</text><text styleclass="Normal" translate="true">a</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true">/4Kb = S</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">S</text><text styleclass="Normal" translate="true">a</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true">/4K</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Where S = storativity (dimensionless), S</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">S</text><text styleclass="Normal" style="font-size:12pt; vertical-align:baseline;" translate="true"> = specific storage (1/L), a = length of cell side, K = hydraulic conductivity, b = cell thickness (</text><text styleclass="Normal" translate="true">Anderson and others, 2015, p. 319). The time step size varies with cell dimensions and aquifer properties. You can use one of the following formulas in a 3D data set to see how the required time step size varies. The formulas will return 0 where no time step size can be estimated. the time step size can be estimated on active cells in simulated layers that are not specified head cells and where the transmissivity or hydraulic conductivity is greater than zero.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">LPF or UPW package</text></para>
+    <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">With no convertible layers</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If((((Active and SimulatedLayer) and not(Modflow_Specified_Head)) and (Kx &gt; 0.)), ((BlockAreaTop * Specific_Storage) / (4. * Kx)), 0.)</text></para>
+    <para styleclass="Normal"><text styleclass="Heading3_atoc_" translate="true">With at least one convertible layer</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If((((Active and SimulatedLayer) and not(Modflow_Specified_Head)) and (Kx &gt; 0.)), If(ConfinedLayer, ((BlockAreaTop * Specific_Storage) / (4. * Kx)), ((BlockAreaTop * Specific_Yield) / ((4. * Kx) * LayerHeight))), 0.)</text></para>
+    <para styleclass="Heading2_atoc_"></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">BCF package</text></para>
+    <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">With no convertible or unconfined layers</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If((((Active and SimulatedLayer) and not(Modflow_Specified_Head)) and (Transmissivity &gt; 0.)), ((BlockAreaTop * Confined_Storage_Coefficient) / (4. * Transmissivity)), 0.)</text></para>
+    <para styleclass="Normal"><text styleclass="Heading3_atoc_" translate="true">With at least one convertible or unconfined layer</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If(((Active and SimulatedLayer) and not(Modflow_Specified_Head)), If(ConfinedLayer, If((Transmissivity &gt; 0.), ((BlockAreaTop * Confined_Storage_Coefficient) / (4. * Transmissivity)), 0.), If((Kx &gt; 0.), ((BlockAreaTop * Specific_Yield) / ((4. * Kx) * LayerHeight)), 0.)), 0.)</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">HUF package</text></para>
+    <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">With no convertible layers</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If((((Active and SimulatedLayer) and not(Modflow_Specified_Head)) and (Kx &gt; 0.)), ((BlockAreaTop * HUF_SS) / (4. * Kx)), 0.)</text></para>
+    <para styleclass="Normal"><text styleclass="Heading3_atoc_" translate="true">With at least one convertible layer</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If((((Active and SimulatedLayer) and not(Modflow_Specified_Head)) and (Kx &gt; 0.)), If(ConfinedLayer, ((BlockAreaTop * HUF_SS) / (4. * Kx)), ((BlockAreaTop * HUF_SY) / ((4. * Kx) * LayerHeight))), 0.)</text></para>
+  </body>
+</topic>

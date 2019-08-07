@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Starting Locations File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Starting Locations File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The starting locations file consists of one line of data for each particle:</text></para>
+    <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">1. J I K X Y Z JCODE ICODE KCODE TRELEAS</text></para>
+    <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">J-- is the column index of the cell containing the particle.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">I-- is the row index of the cell containing the particle.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">K-- is the layer index of the cell containing the particle. If K=0, K is set equal to the top-most active model layer at the specified row and column location.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">X-- is the x-coordinate of the particle.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Y-- is the y-coordinate of the particle.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Z-- is the z-coordinate of the particle.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[JCODE-- indicates whether X is a global or local coordinate.]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">JCODE=0; X is a local coordinate within the range 0 to 1 in a cell located in column J. The global value of the particle</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s x-coordinate is computed by MODPATH.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">JCODE=1; X is a global coordinate and the particle is located in a cell in column J. If the value of X lies outside the range of cells in column J, the particle is discarded.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">JCODE=2; X is a global coordinate. The column number, J, that contains X is computed by MODPATH from the specified global value of X and grid spacing data. The value of J read as input is ignored.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ICODE-- indicates whether Y is a global or local coordinate.]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">ICODE=0; Y is a local coordinate within the range 0 to 1 in a cell located in row I. The global value of the particle</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s y-coordinate is computed by MODPATH.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">ICODE=1; Y is a global coordinate and the particle is located in a cell in row I. If the value of Y lies outside the range of cells in row I, the particle is discarded. </text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">ICODE=2; Y is a global coordinate. The row number, I, that contains Y is computed by MODPATH from the specified global value of Y and grid spacing data. The value of I read as input is ignored.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[KCODE-- indicates whether Z is a global or local coordinate.]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table rowcount="1" colcount="1" style="cell-padding:0px; cell-spacing:0px; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">KCODE=0; Z is a local coordinate within the range 0 to 1 in a cell located in layer K. The global value of the particle</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s z-coordinate is computed by MODPATH. If the layer includes an underlying quasi-3D confining layer, starting locations within the confining layer are specified using values between -1 (bottom of the confining layer) to 0 (top of confining layer and bottom of model layer).</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">KCODE=1; Z is a global coordinate and the particle is located in a cell in layer K. If the value of Z lies outside the range of cells in layer K, the particle is discarded. This option is only available for true rectangular grids (IGRID=1). If KCODE=1 and IGRID=0, the particle is discarded.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">KCODE=2; Z is a global coordinate. The layer number, K, that contains Z is computed by MODPATH from the specified global value of Z and grid spacing data. The value of K read as input is ignored. This option is only available for true rectangular grids (IGRID=1). If KCODE=2 and IGRID=0, the particle is discarded.</text></li>
+          </list>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">TRELEAS-- is the release time for the particle. The release time is measured relative to the reference value of simulation time defined by the user (see section </text><text styleclass="Normal" style="font-style:italic;" translate="true">Definitions of Time Concepts used by MODPATH</text><text styleclass="Normal" translate="true"> in chapter 3 of the MODPATH documentation). Particles released at the reference simulation time have a release time equal to 0. The release time has the same time units as used in the MODFLOW simulation. Release times greater than 0 are only allowed for forward tracking runs. For backward tracking runs, it is assumed that all particles have a release time of zero. </text><text styleclass="New Materials" translate="true">In backwards tracking any particles with a release time not equal to zero will be skipped.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If JCODE, ICODE, KCODE, and TRELEAS are all omitted, they are all set equal to 0 and the particle coordinates are assumed to be specified in terms of local coordinates. This feature allows starting location files from previous versions of MODPATH to be used by the current version of the program. However, if any of these four parameters are non-zero, all of the values must be specified explicitly.</text></para>
+  </body>
+</topic>

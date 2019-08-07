@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{0090FB31-165F-4C7B-AC7B-14B5659D42B3}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ModelArchiver.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FgdcMetaEditor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ModelArchiver">
+        <MSBuild Projects="ModelArchiver.dproj"/>
+    </Target>
+    <Target Name="ModelArchiver:Clean">
+        <MSBuild Projects="ModelArchiver.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelArchiver:Make">
+        <MSBuild Projects="ModelArchiver.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FgdcMetaEditor">
+        <MSBuild Projects="FgdcMetaEditor.dproj"/>
+    </Target>
+    <Target Name="FgdcMetaEditor:Clean">
+        <MSBuild Projects="FgdcMetaEditor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FgdcMetaEditor:Make">
+        <MSBuild Projects="FgdcMetaEditor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ModelArchiver;FgdcMetaEditor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ModelArchiver:Clean;FgdcMetaEditor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ModelArchiver:Make;FgdcMetaEditor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

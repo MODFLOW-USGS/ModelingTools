@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 12/14/2015 by ModelMuse
+LIST             11 rma.lst REPLACE
+DATA(BINARY)      9 rma.cbc REPLACE
+DIS              12 rma.dis OLD
+BAS6             13 rma.bas OLD
+OC               39 rma.oc OLD
+DATA             37 rma.fhd REPLACE
+DATA             38 rma.fdn REPLACE
+PCG              18 rma.pcg OLD
+LPF              14 rma.lpf OLD
+CHD              17 rma.chd OLD
+WEL              20 rma.wel OLD

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SampleModelLgr" FileType="bin">
+    <FileName Model_Name="SampleModelLgr" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="bin">C:\WRDAPP\Zonbud.3_01\Bin\zonbud.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SampleModelLgr" FileType="ancillary">
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom1.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom1.shp</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom1.shx</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom2.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom2.shp</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom2.shx</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom3.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom3.shp</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom3.shx</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\ContourLayer.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\ContourLayer.shp</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\ContourLayer.shx</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="ancillary">SampleModelLgr.gpt</FileName>
+  </ancillary>
+  <ancillary Model_Name="SampleModelLgr_Child_1" FileType="ancillary">
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom1.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom1.shp</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom1.shx</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom2.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom2.shp</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom2.shx</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom3.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom3.shp</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\Bottom3.shx</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\ContourLayer.dbf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\ContourLayer.shp</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\ContourLayer.shx</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\SampleModel.2.csv</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\SampleModel.csv</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\SampleModel.zb_response</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\SampleModel.zb_zones</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="ancillary">C:\Colab\GWModelTools\ModelMuse\SampleModel.zblst</FileName>
+  </ancillary>
+  <model Model_Name="SampleModelLgr" FileType="Model Input">
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.bas</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.dis</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.drn</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.gsf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.jtf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.lgr.archive</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.lpf</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.mlt</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.nam.archive</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.ob_hob</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.ob_rvob</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.oc</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.pcg</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.pval</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.rch</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.riv</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">SampleModelLgr.zon</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Input">usgs.SampleModelLgr.reference</FileName>
+  </model>
+  <model Model_Name="SampleModelLgr_Child_1" FileType="Model Input">
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.bas</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.dis</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.drn</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.gsf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.jtf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.lpf</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.mlt</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.nam.archive</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.ob_hob</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.ob_rvob</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.oc</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.pcg</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.pval</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.rch</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.riv</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Input">SampleModelLgr_Child_1.zon</FileName>
+  </model>
+  <output Model_Name="SampleModelLgr" FileType="Model Output">
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.bfh_flux</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.bfh_head</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.cbc</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.fdn</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.fhd</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.hob_out</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.lst</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Model Output">SampleModelLgr.rvob_out</FileName>
+  </output>
+  <output Model_Name="SampleModelLgr_Child_1" FileType="Model Output">
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Output">SampleModelLgr_Child_1.cbc</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Output">SampleModelLgr_Child_1.fdn</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Output">SampleModelLgr_Child_1.fhd</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Output">SampleModelLgr_Child_1.hob_out</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Output">SampleModelLgr_Child_1.lst</FileName>
+    <FileName Model_Name="SampleModelLgr_Child_1" FileType="Model Output">SampleModelLgr_Child_1.rvob_out</FileName>
+  </output>
+  <Zonebudget_Input_Files Model_Name="SampleModelLgr" FileType="Zonebudget Input">
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Input">RunZoneBudget.bat.archive</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Input">SampleModelLgr.zb_response.archive</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Input">SampleModelLgr.zb_zones</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Input">usgs.SampleModelLgr_ZoneBudget.reference</FileName>
+  </Zonebudget_Input_Files>
+  <Zonebudget_Output_Files Model_Name="SampleModelLgr" FileType="Zonebudget Output">
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Output">SampleModelLgr.2.csv</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Output">SampleModelLgr.csv</FileName>
+    <FileName Model_Name="SampleModelLgr" FileType="Zonebudget Output">SampleModelLgr.zblst</FileName>
+  </Zonebudget_Output_Files>
+</Model_Archive_List>

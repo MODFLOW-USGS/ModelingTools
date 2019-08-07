@@ -1,0 +1,90 @@
+object frameDateEdits: TframeDateEdits
+  Size.Width = 320.000000000000000000
+  Size.Height = 295.000000000000000000
+  Size.PlatformDefault = False
+  object numbxYear: TNumberBox
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 0
+    Cursor = crIBeam
+    DecimalDigits = 0
+    Min = -1.000000015047466E30
+    Max = 9999.000000000000000000
+    Value = 1.000000000000000000
+    TextSettings.Font.Size = 16.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 32.000000000000000000
+    HorzIncrement = 0.000000000000000000
+    VertIncrement = 0.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    OnChange = numbxYearChange
+  end
+  object calDate: TCalendar
+    Date = 42771.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 180.000000000000000000
+    Size.Height = 160.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    OnChange = calDateChange
+  end
+  object Year: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 8.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 16.000000000000000000
+    Text = 'Year'
+  end
+  object lblMonth: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 96.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 16.000000000000000000
+    Text = 'Month'
+  end
+  object lblDay: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 184.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 16.000000000000000000
+    Text = 'Day'
+  end
+  object edMonth: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 6
+    TextSettings.Font.Size = 16.000000000000000000
+    Position.X = 96.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    OnChange = edMonthChange
+    OnPaint = edMonthPaint
+  end
+  object edDay: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 5
+    TextSettings.Font.Size = 16.000000000000000000
+    Position.X = 184.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    OnChange = edDayChange
+    OnPaint = edDayPaint
+  end
+end

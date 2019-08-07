@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Water Supply: Activating Packages</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Water Supply: Activating Packages</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This model uses the River and Well packages so those two packages need to be activated.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|MODFLOW Packages and Programs...</text><text styleclass="Normal" translate="true"> to display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. Use the splitter control between the tree control on the left and the rest of the dialog box to see more or less of the tree control. Check the check boxes for the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">River</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Well</text><text styleclass="Normal" translate="true"> packages which are found on the tree control under </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Boundary conditions|Specified flux</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Boundary conditions|Head-dependent flux</text><text styleclass="Normal" translate="true">. Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the dialog box.</text></para>
+  </body>
+</topic>

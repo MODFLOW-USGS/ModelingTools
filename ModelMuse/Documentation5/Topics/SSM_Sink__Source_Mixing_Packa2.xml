@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SSM: Sink &amp; Source Mixing Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SSM: Sink &amp; Source Mixing Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SSM: Sink &amp; Source Mixing Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MT3DMS allows the user to associate concentrations for chemical species with certain types of sinks and sources in MODFLOW. If one of the supported boundary conditions is defined by an object, this pane can be used to define the associated concentration. The times associated with the concentrations do not need to correspond to the times defining the MODFLOW source or sink. MT3DMS also allows the users to define specified concentration and mass loading boundaries that are not associated with MODFLOW boundary conditions. To define one of those types of MT3DMS boundary conditions, check the appropriate check box on this tab and specify the concentrations.</text></para>
+  </body>
+</topic>

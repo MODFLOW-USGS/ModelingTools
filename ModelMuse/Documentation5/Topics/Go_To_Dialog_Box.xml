@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Go To Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Go To Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Go To </text><text styleclass="Normal" translate="true">dialog box is used to change one or more of the views of the model so that a particular location, element, object or image is visible. It can also be used to select a particular object. To show the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Go To</text><text styleclass="Normal" translate="true"> dialog box, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Navigation|Go To...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Go To</text><text styleclass="Normal" translate="true"> dialog box has several tabs. However, some of those tabs are hidden when they cannot be used. The tabs are</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Position_Tab" styleclass="Normal" translate="true">Position</link><text styleclass="Normal" translate="true"> tab,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Element_Tab" styleclass="Normal" translate="true">Block or Element</link><text styleclass="Normal" translate="true"> tab,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Mesh_Tab" styleclass="Normal" translate="true">Mesh</link><text styleclass="Normal" translate="true"> tab,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Object_Tab" styleclass="Normal" translate="true">Object</link><text styleclass="Normal" translate="true"> tab, and </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Image_Tab" styleclass="Normal" translate="true">Image</link><text styleclass="Normal" translate="true"> tab.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user selects one of the tabs, chooses what is to be made visible and clicks on the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button to change what is visible.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">Daflow linkage</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Following the three header lines, eight fields of bed property and linkage information are needed for each interior node of each SW branch. The data fields include;</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(1) branch number (N),</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(2) node number (I),</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(3) bed elevation of subreach upstream of the node (BEL),</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(4) average bed thickness of the subreach (BTH),</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(5) bed hydraulic conductivity of subreach (CND), and</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">(6), (7), (8) layer (NLY), row (NRW), and column (NCL) number respectively, of the cell in MODFLOW that is in hydraulic connection with the subreach.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">These columns of information are read using free format so it is not important that the numbers be in any particular column or that the numbers line up. It is necessary, however that there be at least one blank space between each data field and that a number be available for each field. There must be one row of data for each interior node of each branch. For example, branch 1 contains nine nodes so seven entries are needed, for nodes 2 through 8. Node 2 defines the groundwater interaction for subreach 1 and GW interaction is not allowed for the last subreach. If a SW subreach is not connected to a GW cell enter zero for the layer, row, and column numbers.</text></para>
+    <para styleclass="Normal"><text styleclass="New Materials" translate="true">The time unit of CND is always seconds regardless of the time unit used in the rest of the model (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="DIS" anchor="ITMUNI" styleclass="New Materials" translate="true">ITMUNI</link><text styleclass="New Materials" translate="true">). &#160;The length unit of CND is determined by </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DAFLOW" anchor="IENG" styleclass="New Materials" translate="true">IENG</link><text styleclass="New Materials" translate="true">.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Name File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Name File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The name file contains one line for each input data file. This file provides the information needed to manage the input data files. MODPATH and MODPATH-PLOT prompt the user to specify the name file. The file then is opened internally within the program. Each line consists of 3 items: (1) a character string signifying the type of data file, (2) an integer file unit number, and (3) the file name. The data file is read using free format input. Any valid unit number for a given operating system may be specified. However, MODPATH reserves several numbers in the range 80 to 99 for internal use. Files can be specified in any order. For a typical simulation, the name file might look like:</text></para>
+    <para styleclass="Code"><text styleclass="Code" translate="true">main 11 main.dat</text></para>
+    <para styleclass="Code"><text styleclass="Code" translate="true">DIS 12 model.dis</text></para>
+    <para styleclass="Code"><text styleclass="Code" translate="true">data 31 ibound.1</text></para>
+    <para styleclass="Code"><text styleclass="Code" translate="true">budget 50 budget.out</text></para>
+    <para styleclass="Code"><text styleclass="Code" translate="true">head(binary) 60 head.out</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first data item on each line is a string of up to 15 characters that identifies the type of data file. The character string identifier is not case sensitive. MODPATH and MODPATH-PLOT reserve several special character strings to indicate specific data files:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MAIN = main data file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CBF = composite budget file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">DIS = discretization file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">DCF = drawing commands file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ENDPOINT = endpoint file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PATHLINE = pathline file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">TIME-SERIES = time series file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">TIME = time data file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">LOCATIONS = starting locations file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">BUDGET = binary (unformatted) budget file produced by MODFLOW</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">HEAD(BINARY) = binary (unformatted) head file produced by MODFLOW</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">HEAD = text head file produced by MODFLOW</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">DRAWDOWN(BINARY) = binary (unformatted) drawdown file produced by MODFLOW</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">DRAWDOWN = text drawdown file produced by MODFLOW</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CONTOUR-DATA = text file containing 2-D data to contour</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">CONTOUR-LEVEL = text file containing contour levels</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">DATA = ancillary text input data files</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">LIST = summary output file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">GUA = grid unit array file</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Ancillary data files usually contain large arrays that are referenced by array control records in other data files. Ancillary data files always must be declared as type DATA. MODPATH</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s data file requirements are summarized in Table A-1.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW discretization file must be included in the name file. Its file type is DIS.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">The stress packages should no longer be included in the name file. If they are included, they will be ignored.</text></li>
+    </list>
+    <para styleclass="TableTitle"><text styleclass="TableTitle" translate="true">Table A-1. Summary of Data File Requirements</text></para>
+    <para styleclass="Normal"><table rowcount="17" colcount="5" style="cell-padding:2px; cell-spacing:2px; border-width:1px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <tr style="vertical-align:top">
+        <td style="width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Description</text></para>
+        </td>
+        <td style="width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">File Type Keyword</text></para>
+        </td>
+        <td style="width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Needed for MODPATH?</text></para>
+        </td>
+        <td style="width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Needed for MODPATH PLOT?</text></para>
+        </td>
+        <td style="width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Include in Name file?</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Main data file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">MAIN</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Composite budget file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CBF</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">transient only</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">transient cross sections only</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Drawing commands file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DCF</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option for map view plots</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Endpoint file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">ENDPOINT</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Pathline file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">PATHLINE</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">pathline mode</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">pathline mode</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Time series file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TIME-SERIES</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">time series mode</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">time series mode</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optiona</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Time data file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TIME</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Starting locations file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LOCATIONS</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Binary budget file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">BUDGET</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">1</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Head file (text or binary)</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HEAD</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">HEAD(BINARY)</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">1</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">2</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Drawdown file (text or binary)</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DRAWDOWN</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DRAWDOWN(BINARY)</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option for map view plots</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Contour data file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CONTOUR-DATA</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option for map view plots</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Contour level file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CONTOUR-LEVEL</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option for map view plots</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Ancillary text data file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DATA</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">user</text><text styleclass="Normal" translate="true">’</text><text styleclass="Normal" translate="true">s option</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Summary output file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">LIST</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">optional</text><text styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none; text-transform:none; vertical-align:super; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">3</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:185px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Grid unit array file</text></para>
+        </td>
+        <td style="vertical-align:top; width:167px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GUA</text></para>
+        </td>
+        <td style="vertical-align:top; width:177px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">no</text></para>
+        </td>
+        <td style="vertical-align:top; width:216px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">users option</text></para>
+        </td>
+        <td style="vertical-align:top; width:141px; height:16px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">yes</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Notes: 1. MODFLOW stress package, budget, and head files are not used by MODPATH in transient simulations that read data directly from a composite budget file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">2. The MODFLOW head file is not required by MODPATH-PLOT for some plot types. See section Plot Types in Chapter 4.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">3. Users have the option of specifying these files in the name file or allowing MODPATH to prompt for file names or, in some cases, assign default file names.</text></para>
+  </body>
+</topic>

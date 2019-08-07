@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">WellSections</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If an object defines a well in the Well package in MODFLOW and the object has more than one section, each section will be used to define a separate set of wells. If two or more sections of the same object occur in the same cell, a single well will be defined for that cell with the total pumping rate being the sum of the pumping rates for each section considered separately.</text></para>
+  </body>
+</topic>

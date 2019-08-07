@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Show or Hide Images Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Show or Hide Images Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Show or Hide Images</text><text styleclass="Normal" translate="true"> dialog box provides a quick way to show or hide the images that have been imported. It can only be displayed if more than one image has been imported into ModelMuse. It is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit|Show or Hide Images...</text><text styleclass="Normal" translate="true"> Each image is listed next to a checkbox. If the checkbox next to an image is checked, the image will be visible; otherwise, the image will be hidden. Clicking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Show all</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Show none</text><text styleclass="Normal" translate="true"> buttons will show or hide all of the images. Clicking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Toggle</text><text styleclass="Normal" translate="true"> button will show all the images that are hidden and hide all those that are visible.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The order in which the images are displayed can be changed by clicking in the column to the left of the image name and dragging it to a new position in the list. The images are listed in order from back to front.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If only a single image has been imported into ModelMuse, selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit|Show or Hide Image</text><text styleclass="Normal" translate="true"> will show the image if it is hidden and hide it if it is visible. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ImportEdit_Bitmap_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Import/Edit Image</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">SubBinary</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="New Materials" translate="true">The file type of this file must be listed as DATA(BINARY) in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="New Materials" translate="true">Name</link><text styleclass="New Materials" translate="true"> file.</text></para>
+    <para styleclass="Normal"><snippet src="RefToReadBinary"/></para>
+  </body>
+</topic>

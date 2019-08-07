@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="lakeTest" FileType="bin">
+    <FileName Model_Name="lakeTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="lakeTest" FileType="ancillary">
+    <FileName Model_Name="lakeTest" FileType="ancillary">lakeTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="lakeTest" FileType="Model Input">
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.bas</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.chd</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.dis</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.gag</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.gsf</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.lak</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.lpf</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.nam.archive</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.oc</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">lakeTest.pcg</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Input">usgs.lakeTest.reference</FileName>
+  </model>
+  <output Model_Name="lakeTest" FileType="Model Output">
+    <FileName Model_Name="lakeTest" FileType="Model Output">lakeTest.cbc</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Output">lakeTest.fdn</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Output">lakeTest.fhd</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Output">lakeTest.lakg1</FileName>
+    <FileName Model_Name="lakeTest" FileType="Model Output">lakeTest.lst</FileName>
+  </output>
+</Model_Archive_List>

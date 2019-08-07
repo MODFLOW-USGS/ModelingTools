@@ -1,0 +1,307 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{353986F4-CD14-4A1E-A276-005E6F50C7B9}</ProjectGuid>
+        <MainSource>ModelMate.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Release</Config>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+        <ProjectVersion>18.2</ProjectVersion>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <TargetedPlatforms>1</TargetedPlatforms>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_UsePackage>vcl;vclx;VclSmp;rtl;vclimg;svnui;svn;bdertl;TeeUI;TeeDB;Tee;vclactnband;vcldb;dbrtl;vcldbx;vcltouch;xmlrtl;dsnap;dsnapcon;vclib;ibxpress;adortl;IndyCore;IndySystem;IndyProtocols;inet;intrawebdb_110_150;Intraweb_110_150;vclie;inetdb;webdsnap;websnap;inetdbbde;inetdbxpress;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;dbexpress;dbxcds;CodeSiteExpressVcl;JclDeveloperTools;Jcl;JclVcl;JclContainers;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;siComboBoxPkgXE;RbwDataGridPkgXE;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_E>false</DCC_E>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_F>false</DCC_F>
+        <DCC_S>false</DCC_S>
+        <DCC_N>false</DCC_N>
+        <DCC_K>false</DCC_K>
+        <SanitizedProjectName>ModelMate</SanitizedProjectName>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
+        <VerInfo_Release>3</VerInfo_Release>
+        <VerInfo_Build>114</VerInfo_Build>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=U.S. Geological Survey;FileDescription=ModelMate -- A GUI for model analysis;FileVersion=1.0.3.114;InternalName=ModelMate;LegalCopyright=;LegalTrademarks=;OriginalFilename=ModelMate.exe;ProductName=ModelMate;ProductVersion=1.0.3;Comments=Programmed by E.R. Banta, USGS.  Compiled using Embarcadero Delphi XE ver. 15.0</VerInfo_Keys>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <Icon_MainIcon>ModelMate_Icon5.ico</Icon_MainIcon>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <VerInfo_Release>0</VerInfo_Release>
+        <VerInfo_Build>0</VerInfo_Build>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Icon_MainIcon>ModelMate_Icon5.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <DCC_UnitSearchPath>$(COMPONENTS)\RbwDataGrid;$(COMPONENTS)\datagrid;$(MadCollection)\MadExcept\BDS8;$(MadCollection)\MadBasic\BDS8;$(MadCollection)\MadDisAsm\BDS8;$(JCL_lib)\d15;$(JCL_JVCL_lib)\lib\d15;$(COMPONENTS)\rmControls;D:\Embarcadero\lib\Release;C:\Documents and Settings\All Users\Application Data\{7DE921C9-42C8-4DA3-8A44-043C3349FD1D}\corewin32\8247FA69\39A96E9D;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_ExeOutput>Release</DCC_ExeOutput>
+        <DCC_Description>ModelMate--A graphical user interface for model analysis</DCC_Description>
+        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_Define>RELEASE;madExcept;$(DCC_Define)</DCC_Define>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <Debugger_RunParams>D:\support\Hiett\Hiett_PRDelta_SS\Hiett_PRdelta_SS.mtc</Debugger_RunParams>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_ExeOutput>Debug</DCC_ExeOutput>
+        <DCC_AdditionalSwitches>-UC:\Progra~1\Embarcadero\RADStu~1\8.0\lib\win32\debug</DCC_AdditionalSwitches>
+        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_UnitSearchPath>$(COMPONENTS)\RbwDataGrid;$(COMPONENTS)\datagrid;$(MadCollection)\MadExcept\BDS8;$(MadCollection)\MadBasic\BDS8;$(MadCollection)\MadDisAsm\BDS8;$(JCL_lib)\d15;$(JCL_JVCL_lib)\lib\d15;$(COMPONENTS)\rmControls;D:\Embarcadero\lib\Release;C:\Documents and Settings\All Users\Application Data\{7DE921C9-42C8-4DA3-8A44-043C3349FD1D}\corewin32\8247FA69\39A96E9D;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_Define>DEBUG;madExcept;$(DCC_Define)</DCC_Define>
+        <DCC_Optimize>false</DCC_Optimize>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="frmStartUp.pas">
+            <Form>FormStartUp</Form>
+        </DCCReference>
+        <DCCReference Include="frmMainUnit.pas">
+            <Form>FormMain</Form>
+        </DCCReference>
+        <DCCReference Include="frmUcodeSettingsUnit.pas">
+            <Form>frmUcodeSettings</Form>
+        </DCCReference>
+        <DCCReference Include="frmParEstSettingsUnit.pas">
+            <Form>frmParEstSettings</Form>
+        </DCCReference>
+        <DCCReference Include="GlobalData.pas"/>
+        <DCCReference Include="CustomFileWriterUnit.pas"/>
+        <DCCReference Include="ModelMateUtilities.pas"/>
+        <DCCReference Include="frmHelpUcodeMethodsUnit.pas">
+            <Form>frmHelpUcodeMethods</Form>
+        </DCCReference>
+        <DCCReference Include="DataFileWriterUnit.pas"/>
+        <DCCReference Include="DataItemUnit.pas"/>
+        <DCCReference Include="frmConfigureParTablesUnit.pas">
+            <Form>FormConfigureParTables</Form>
+        </DCCReference>
+        <DCCReference Include="frmAddGroupUnit.pas">
+            <Form>frmAddGroup</Form>
+        </DCCReference>
+        <DCCReference Include="frmAddParOrDepUnit.pas">
+            <Form>frmAddParOrDep</Form>
+        </DCCReference>
+        <DCCReference Include="JupiterUnit.pas"/>
+        <DCCReference Include="UcodeUnit.pas"/>
+        <DCCReference Include="GlobalTypesUnit.pas"/>
+        <DCCReference Include="ModelMateClassesUnit.pas"/>
+        <DCCReference Include="Utilities.pas"/>
+        <DCCReference Include="frmProjectName.pas">
+            <Form>frmProjName</Form>
+        </DCCReference>
+        <DCCReference Include="GlobalBasicData.pas"/>
+        <DCCReference Include="frmModelCommandsUnit.pas">
+            <Form>FormModelCommands</Form>
+        </DCCReference>
+        <DCCReference Include="frmModelIO.pas">
+            <Form>FormModelIO</Form>
+        </DCCReference>
+        <DCCReference Include="frmObservations.pas">
+            <Form>FormObservations</Form>
+        </DCCReference>
+        <DCCReference Include="DependentsUnit.pas"/>
+        <DCCReference Include="frmConfigureObsTablesUnit.pas">
+            <Form>FormConfigureObsTables</Form>
+        </DCCReference>
+        <DCCReference Include="frmProgramLocationsUnit.pas">
+            <Form>FormProgramLocations</Form>
+        </DCCReference>
+        <DCCReference Include="Modflow2005Unit.pas"/>
+        <DCCReference Include="frmModelSettings.pas">
+            <Form>FormModflow</Form>
+        </DCCReference>
+        <DCCReference Include="frmParEstAdvancedUnit.pas">
+            <Form>FormParEstAdvanced</Form>
+        </DCCReference>
+        <DCCReference Include="ModflowUnit.pas"/>
+        <DCCReference Include="frmOutput.pas">
+            <Form>FormOutput</Form>
+        </DCCReference>
+        <DCCReference Include="frmAbout.pas">
+            <Form>FormAbout</Form>
+        </DCCReference>
+        <DCCReference Include="sskutils.pas"/>
+        <DCCReference Include="frmModelDirectories.pas">
+            <Form>FormModelDir</Form>
+        </DCCReference>
+        <DCCReference Include="frmSelectDirectory.pas">
+            <Form>FormSelectDirectory</Form>
+        </DCCReference>
+        <DCCReference Include="Link_Jupiter.pas"/>
+        <DCCReference Include="frmParallelJupiter.pas">
+            <Form>FormParallelJupiter</Form>
+        </DCCReference>
+        <DCCReference Include="frmPredictions.pas">
+            <Form>FormPredictions</Form>
+        </DCCReference>
+        <DCCReference Include="frmConfigurePredTablesUnit.pas">
+            <Form>FormConfigurePredTables</Form>
+        </DCCReference>
+        <DCCReference Include="frmEditor.pas">
+            <Form>FormEditor</Form>
+        </DCCReference>
+        <DCCReference Include="frmUcodeBasicSettingsUnit.pas">
+            <Form>FormUcodeFileNames</Form>
+        </DCCReference>
+        <DCCReference Include="frmPriorInfo.pas">
+            <Form>FormPriorInfo</Form>
+        </DCCReference>
+        <DCCReference Include="PriorInfoUnit.pas"/>
+        <DCCReference Include="frmConfigurePriTablesUnit.pas">
+            <Form>FormConfigPriTables</Form>
+        </DCCReference>
+        <DCCReference Include="frmParamSetsByIter.pas">
+            <Form>FormParamSetsByIter</Form>
+        </DCCReference>
+        <DCCReference Include="frmDerivedParameters.pas">
+            <Form>FormDerivedParameters</Form>
+        </DCCReference>
+        <DCCReference Include="ParallelControlUnit.pas"/>
+        <DCCReference Include="ParallelRunnerUnit.pas"/>
+        <DCCReference Include="frmParallelControl.pas">
+            <Form>FormParallelControl</Form>
+        </DCCReference>
+        <DCCReference Include="frmParallelRunners.pas">
+            <Form>FormParallelRunners</Form>
+        </DCCReference>
+        <DCCReference Include="frmRunnerFiles.pas">
+            <Form>FormRunnerFiles</Form>
+        </DCCReference>
+        <DCCReference Include="frmPriorInfoControl.pas">
+            <Form>FormPriorInfoControl</Form>
+        </DCCReference>
+        <DCCReference Include="frmRenameGroup.pas">
+            <Form>FormRenameGroup</Form>
+        </DCCReference>
+        <DCCReference Include="..\ModelMuse\IniFileUtilities.pas"/>
+        <DCCReference Include="frmNamingConvention.pas">
+            <Form>FormNamingConvention</Form>
+        </DCCReference>
+        <None Include="ModelMate.todo"/>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+    <Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj"/>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">ModelMate.dpr</Source>
+                </Source>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">True</VersionInfo>
+                    <VersionInfo Name="MajorVer">1</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">3</VersionInfo>
+                    <VersionInfo Name="Build">114</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">1033</VersionInfo>
+                    <VersionInfo Name="CodePage">1252</VersionInfo>
+                </VersionInfo>
+                <VersionInfoKeys>
+                    <VersionInfoKeys Name="CompanyName">U.S. Geological Survey</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileDescription">ModelMate -- A GUI for model analysis</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">1.0.3.114</VersionInfoKeys>
+                    <VersionInfoKeys Name="InternalName">ModelMate</VersionInfoKeys>
+                    <VersionInfoKeys Name="LegalCopyright"/>
+                    <VersionInfoKeys Name="LegalTrademarks"/>
+                    <VersionInfoKeys Name="OriginalFilename">ModelMate.exe</VersionInfoKeys>
+                    <VersionInfoKeys Name="ProductName">ModelMate</VersionInfoKeys>
+                    <VersionInfoKeys Name="ProductVersion">1.0.3</VersionInfoKeys>
+                    <VersionInfoKeys Name="Comments">Programmed by E.R. Banta, USGS.  Compiled using Embarcadero Delphi XE ver. 15.0</VersionInfoKeys>
+                </VersionInfoKeys>
+                <Parameters>
+                    <Parameters Name="RunParams">r128.mtc</Parameters>
+                    <Parameters Name="DebugCWD">D:\Delphi_Projects\ModelMate\Support\Carleton\r128test</Parameters>
+                </Parameters>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>

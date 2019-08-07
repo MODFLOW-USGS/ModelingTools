@@ -1,0 +1,13 @@
+# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+FREE CHTOCH PRINTTIME  # OPTIONS
+CONSTANT        1 # IBOUND Upper Aquifer
+CONSTANT        1 # IBOUND Middle Aquifer
+CONSTANT        1 # IBOUND Lower Aquifer
+CONSTANT        1 # IBOUND Aquifer4
+CONSTANT        1 # IBOUND Aquifer5
+ -2.000000000000E+020  # HNOFLO
+CONSTANT     0.000000000000E+000  # STRT Upper Aquifer
+CONSTANT     0.000000000000E+000  # STRT Middle Aquifer
+CONSTANT     0.000000000000E+000  # STRT Lower Aquifer
+CONSTANT     0.000000000000E+000  # STRT Aquifer4
+CONSTANT     0.000000000000E+000  # STRT Aquifer5

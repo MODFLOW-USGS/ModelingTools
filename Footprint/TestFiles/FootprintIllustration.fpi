@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Well_Footprint_File>
+  <FileFormatVersion>1</FileFormatVersion>
+  <Number_Of_Rows>40</Number_Of_Rows>
+  <Number_Of_Columns>40</Number_Of_Columns>
+  <Closure_Criterion>0.01</Closure_Criterion>
+  <Cell_Size>1</Cell_Size>
+  <Max_Iterations>100</Max_Iterations>
+  <Initial_Distribution>False</Initial_Distribution>
+  <Redistribution_Criterion>0</Redistribution_Criterion>
+  <Grid_Angle>0</Grid_Angle>
+  <Outline>4<Point>0<X>0</X>
+      <Y>0</Y>
+    </Point>
+    <Point>1<X>0</X>
+      <Y>-40</Y>
+    </Point>
+    <Point>2<X>40</X>
+      <Y>-40</Y>
+    </Point>
+    <Point>3<X>40</X>
+      <Y>0</Y>
+    </Point>
+  </Outline>
+  <Depth_Rate_Index>
+    <Uniform>1</Uniform>
+  </Depth_Rate_Index>
+  <Withdrawals>
+    <Direct>
+      <Row>13<Column>15<Value>20</Value>
+        </Column>
+        <Column>19<Value>20</Value>
+        </Column>
+      </Row>
+      <Row>30<Column>15<Value>40</Value>
+        </Column>
+      </Row>
+    </Direct>
+  </Withdrawals>
+  <Active>
+    <Uniform>True</Uniform>
+  </Active>
+  <Listing_File>FootprintIllustration.fplst</Listing_File>
+  <Binary_Results_File>FootprintIllustration.fpb</Binary_Results_File>
+</Well_Footprint_File>

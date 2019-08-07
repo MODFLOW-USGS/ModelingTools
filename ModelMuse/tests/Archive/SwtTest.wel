@@ -1,0 +1,61 @@
+# WEL: Well package file created on 12/3/2017 by ModelMuse version 3.9.0.23.
+    20     9 AUXILIARY IFACE # DataSet 2: MXACTW IWELCB Option
+    18     0 # Data Set 5: ITMP NP Stress period 1
+     1     1     8  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2     8  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2     5  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     3     4  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     4    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     5     3  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     5    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     6    14  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     7     2  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    14    14  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    14     2  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    16     3  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    18     4  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    19     7  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    18    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    17    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    16    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+    20     0 # Data Set 5: ITMP NP Stress period 2
+     1     1     8  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2     8  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2     5  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     3     4  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     4    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     5     3  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     5    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     6    14  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     7     2  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    14    14  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    14     2  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    16     3  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    18     4  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    19     7  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    18    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    17    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    16    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     2     9    10 -7.200000000000E+004      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object3 with formula: -72000.
+     4    12     7 -7.200000000000E+004      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object4 with formula: -72000.
+    18     0 # Data Set 5: ITMP NP Stress period 3
+     1     1     8  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2     8  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2     5  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     2    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     3     4  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     4    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     5     3  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     5    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     6    14  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1     7     2  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    14    14  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    14     2  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    16     3  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    18     4  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    19     7  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    18    12  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    17    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200
+     1    16    13  2.200000000000E+003      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Object2 with formula: 2200

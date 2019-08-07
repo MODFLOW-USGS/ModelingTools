@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Animating the MT3DMS Results</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Animating the MT3DMS Results</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It can be interesting the animate the contours of the concentration. First select </text><text styleclass="Strong" translate="true">Data|Data Visualization</text><text styleclass="Normal" translate="true"> and contour the first concentration data set. Then Set the </text><text styleclass="Strong" translate="true">Contour interval</text><text styleclass="Normal" translate="true"> to 50. and click </text><text styleclass="Strong" translate="true">Apply</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Then click the </text><text styleclass="Strong" translate="true">Specify contours</text><text styleclass="Normal" translate="true"> check box and then click the </text><text styleclass="Strong" translate="true">Edit contours</text><text styleclass="Normal" translate="true"> button. In the </text><text styleclass="Strong" translate="true">Specify Contours</text><text styleclass="Normal" translate="true"> dialog box, delete the 0 and 1000 contours. Select the </text><text styleclass="Strong" translate="true">Retain limits and legend</text><text styleclass="Normal" translate="true"> option. Click </text><text styleclass="Strong" translate="true">Apply</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next select </text><text styleclass="Strong" translate="true">File|Export|Image</text><text styleclass="Normal" translate="true"> or click the Export Image button </text><image src="ExportImageButton.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">Text</text><text styleclass="Normal" translate="true"> pane, add the following as the Title</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt; background-color:#00ffff;" translate="true">Transport Step: %TrS</text></para>
+    <para styleclass="Normal"><text styleclass="Courier Fixed" style="font-size:12pt; background-color:#00ffff;" translate="true">Elapsed Time: %ET</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This will display the transport step and elapsed time in the title. There is more information on this subject in the help.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">Animation</text><text styleclass="Normal" translate="true"> pane, select all the data sets under the </text><text styleclass="Strong" translate="true">Optional|Model Results|3D Data</text><text styleclass="Normal" translate="true">. then click the </text><text styleclass="Strong" translate="true">Preview</text><text styleclass="Normal" translate="true"> button. Notice around transport step 160 that high concentrations of solute remain trapped near a stagnation point as shown in the second illustration.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma8ContourTS5.png" scale="60.00%" width="480" height="348" styleclass="Image Caption"><title translate="true">Data Visualization dialog box showing the contour pane and the Specify Contours dialog box.</title></image></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma9Stagnation.png" scale="50.00%" width="470" height="369" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

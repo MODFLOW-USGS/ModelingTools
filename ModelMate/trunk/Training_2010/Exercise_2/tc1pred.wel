@@ -1,0 +1,27 @@
+# WEL: Well package file created on 1/28/2009 by ModelMuse version 1.0.9.0.
+PARAMETER 2 10 # DataSet 1: PARAMETER NPWEL MXL
+ 2 9 AUXILIARY IFACE # DataSet 2: MXACTC IGHBCB Option
+WELLS_TRpred Q -3.000000000000E-001  2 INSTANCES 4 # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+WELLS_TR2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+ 1 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+ 2 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+WELLS_TR3 # Data Set 4a: INSTNAM (Parameter instance for stress period 3)
+ 1 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+ 2 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+WELLS_TR4 # Data Set 4a: INSTNAM (Parameter instance for stress period 4)
+ 1 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+ 2 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+WELLS_TR5 # Data Set 4a: INSTNAM (Parameter instance for stress period 5)
+ 1 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+ 2 9 10 1.000000000000E+000  0 # Data Set 4b: Layer Row Column Qfact IFACE
+WELLS_TR  Q  0.0  1  # Data Set 3: PARNAM PARTYP Parval NLST INSTANCES NUMINST
+ 1 1  1 0.0  0       # Data Set 4b: Layer Row Column Qfact
+ 0 0 # Data Set 5: ITMP NP Stress period 1
+ 0 1 # Data Set 5: ITMP NP Stress period 2
+WELLS_TRpred WELLS_TR2 # Data Set 7: PARNAM Iname
+ 0 1 # Data Set 5: ITMP NP Stress period 3
+WELLS_TRpred WELLS_TR3 # Data Set 7: PARNAM Iname
+ 0 1 # Data Set 5: ITMP NP Stress period 4
+WELLS_TRpred WELLS_TR4 # Data Set 7: PARNAM Iname
+ 0 1 # Data Set 5: ITMP NP Stress period 5
+WELLS_TRpred WELLS_TR5 # Data Set 7: PARNAM Iname

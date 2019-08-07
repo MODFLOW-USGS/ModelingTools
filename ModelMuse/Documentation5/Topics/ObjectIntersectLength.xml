@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectIntersectLength</title>
+  <keywords>
+    <keyword translate="true">ObjectIntersectLength</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectIntersectLength</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectIntersectLength</text><text styleclass="Normal" translate="true">({Column, Row, Layer}) returns the length of intersection between a cell or element and a 2-D projection of the object. The function has three optional arguments: Column, Row, and Layer. If these arguments are provided, they specify the cell for which the length should be calculated. If they are not provided, the function uses the column, row, and layer of the node or element for which the formula is being calculated. If any of the arguments has an invalid value, the function returns zero. If the object being evaluated intersects the cell or element being evaluated more than once, ObjectIntersectLength returns the sum of all the individual lengths of intersection.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW-LGR models, the cells shared between the parent and child models are treated slightly differently in the parent grid. For them </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectIntersectArea</text><text styleclass="Normal" translate="true"> returns the length of intersection between the unshared portion of the parent grid cell and the object.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For SUTRA models with objects drawn on the front view of the model, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectIntersectLength</text><text styleclass="Normal" translate="true"> returns the two-dimensional length of intersection between a a projection of the cell or element on the front view of the model and an object. Use of </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectIntersectLength</text><text styleclass="Normal" translate="true"> on the front view of the model is not recommended for SUTRA and MODFLOW 6 DISV models.</text></para>
+  </body>
+</topic>

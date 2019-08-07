@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportedP1_Case1d" FileType="bin">
+    <FileName Model_Name="ImportedP1_Case1d" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportedP1_Case1d" FileType="ancillary">
+    <FileName Model_Name="ImportedP1_Case1d" FileType="ancillary">ImportedP1_Case1d.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportedP1_Case1d" FileType="Model Input">
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.bas</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.bcf</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.chd</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.dis</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.gsf</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.lmt</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.nam.archive</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.oc</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">ImportedP1_Case1d.pcg</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Input">usgs.ImportedP1_Case1d.reference</FileName>
+  </model>
+  <output Model_Name="ImportedP1_Case1d" FileType="Model Output">
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Output">ImportedP1_Case1d.cbc</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Output">ImportedP1_Case1d.fdn</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Output">ImportedP1_Case1d.fhd</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Output">ImportedP1_Case1d.ftl</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Model Output">ImportedP1_Case1d.lst</FileName>
+  </output>
+  <Mt3dms_Input_Files Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.adv</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.btn</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.dsp</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.gcg</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.mt_nam.archive</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.rct</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">ImportedP1_Case1d.ssm</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Input">usgs.ImportedP1_Case1d_MT3DMS.reference</FileName>
+  </Mt3dms_Input_Files>
+  <Mt3dms_Output_Files Model_Name="ImportedP1_Case1d" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Output">ImportedP1_Case1d.cnf</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Output">ImportedP1_Case1d.mls</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Output">ImportedP1_Case1d_Comp1._mas</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Output">ImportedP1_Case1d_Comp1.mto</FileName>
+    <FileName Model_Name="ImportedP1_Case1d" FileType="Mt3dms Output">ImportedP1_Case1d_Comp1.ucn</FileName>
+  </Mt3dms_Output_Files>
+</Model_Archive_List>

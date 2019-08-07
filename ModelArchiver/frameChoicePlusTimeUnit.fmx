@@ -1,0 +1,33 @@
+inherited frameChoicePlusTime: TframeChoicePlusTime
+  Size.Width = 353.000000000000000000
+  Size.Height = 367.000000000000000000
+  inherited memoDescription: TMemo
+    Size.Width = 353.000000000000000000
+    Viewport.Width = 349.000000000000000000
+    Viewport.Height = 73.000000000000000000
+  end
+  inherited splResize: TSplitter
+    Size.Width = 353.000000000000000000
+  end
+  inherited pnlBottom: TPanel
+    Size.Width = 353.000000000000000000
+    Size.Height = 278.000000000000000000
+    object comboChoices: TComboBox
+      Anchors = [akLeft, akTop, akRight]
+      Position.X = 7.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 338.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnChange = comboChoicesChange
+    end
+    inline frameTimeEdits: TframeTimeEdits
+      Align = Client
+      Margins.Top = 50.000000000000000000
+      Size.Width = 353.000000000000000000
+      Size.Height = 228.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+end

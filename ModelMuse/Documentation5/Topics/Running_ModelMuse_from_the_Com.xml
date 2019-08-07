@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Executing ModelMuse from the Command Line</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Executing ModelMuse from the Command Line</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It is possible to execute ModelMuse from the command line. This capability can be useful when testing ModelMuse after making changes to the source code or to automate the process of creating input files from ModelMuse when using an automatic calibration tool such as UCODE (Poeter and Hill, 1998). When executing ModelMuse from the command line, the first argument must be the name of the file to be opened. Subsequent arguments may be any of the following in any order.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-g FileName, </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-p FileName, </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-il FileName,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-ia FileName,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-e </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-mte</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">-c. </text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the -g, -p, -il, and -ia options, &quot;FileName&quot; is the name or path of a file. If FileName contains any spaces, it must be enclosed in double quotes.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The -g option will cause ModelMuse to read new values for global variables from a global variables file. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Global_Variables_Dialog_Box" styleclass="Strong" translate="true">Global Variables</link><text styleclass="Normal" translate="true"> dialog box for a description of the global variables file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The -p option will cause ModelMuse to read new paramter values from a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Parameter_Value_File" domain="ModflowGuide.hmxp" styleclass="Normal" translate="true">MODFLOW .pval file</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The -il and -ia options are only available for MODFLOW models. FileName should be the name of a file from which ModelMuse can import model results. With the -il option, ModelMuse will read the </text><text styleclass="Normal" style="font-weight:normal;" translate="true">last</text><text styleclass="Normal" translate="true"> set of results from the file and import them. With the -ia option, ModelMuse will read all the results from the file and import them. It is recommended that these options not be used with the -e option because the model might not have finished running when the import command is executed. If the model has multiple stress periods, importing results from a binary file will be faster than importing from a text file. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Output_Control_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Output Control</link><text styleclass="Normal" translate="true"> dialog box can be used to instruct MODFLOW to generate head and drawdown results in binary format.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The -e option causes ModelMuse to export the model input input files with the default file name(s). If MODPATH, ZONEBUDGET or MT3DMS are selected in the model, their input files will be exported too.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The -mte option causes just the MT3DMS input files to be exported. If MT3DMS is not selected, this option is ignored.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The -c option causes ModelMuse to close</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold; font-style:italic;" translate="true">Example</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse ex1.gpt -g GlobalVar.txt -p Model.pval -e –c</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This command would cause ModelMuse to open ex1.gpt, read new values for global variables from GlobalVar.txt, read new parameter values from Model.pval, export the model input files, and then close.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SUTRA/DISV Cross Section Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA/DISV Cross Section Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA/DISV &#160;Cross Section</text><text styleclass="Normal" translate="true"> dialog box is used to change the position of the cross section through the mesh. It is displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Mesh|Specify Cross Section...</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Strong" translate="true">DISV/Mesh|Specify Cross Section...</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can change either the end points of the cross section or specify a new angle for the cross section. Depending on which one the user selects, the user can enter either the new angle or the new end points. When the user clicks the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button, the change is made. When specifying a new angle, the center of rotation is either the center of the visible portion of the cross section line. If the cross section line is not visible on the top view of the model, the center of the cross section line is used as the center of rotation.</text></para>
+  </body>
+</topic>

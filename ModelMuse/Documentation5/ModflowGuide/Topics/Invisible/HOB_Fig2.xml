@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">HOB Fig2</title>
+  <body>
+    <para styleclass="Normal"><image src="ObsFig2.PNG" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Simple Model: Save the Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Simple Model: Save the Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Save</text><text styleclass="Normal" translate="true">&#32;</text><image src="Save.png" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Image Caption" translate="true">,</text><text styleclass="Normal" translate="true"> select a name for your ModelMuse file, and save it.</text></para>
+  </body>
+</topic>

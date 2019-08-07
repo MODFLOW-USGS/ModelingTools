@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Parameters Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Parameters Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Parameters</text><text styleclass="Normal" translate="true"> tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Hydrogeologic_Units" styleclass="Strong" translate="true">MODFLOW Hydrogeologic Units</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">All the parameters for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HUF2_Hydrogeologic_Unit_Flow" styleclass="Strong" translate="true">Hydrogeologic Unit Flow (HUF2)</link><text styleclass="Normal" translate="true"> package that are associated with hydrogeologic units are listed on the </text><text styleclass="Strong" translate="true">Parameters</text><text styleclass="Normal" translate="true"> tab along with the parameter type. To use a particular parameter with a particular hydrogeologic unit, check its check box in the </text><text styleclass="Strong" translate="true">Parameters</text><text styleclass="Normal" translate="true"> column of the table. To use a Zone or Multiplier array with a parameter check the corresponding check box in the table.</text></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="Multiplier_and_Zone_Arrays"/></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="Additive_Parameters"/></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Additive parameters are not allowed for VANI parameters.</text></para>
+  </body>
+</topic>

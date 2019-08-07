@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">HFB: Horizontal Flow Barrier Package Pane</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">HFB: Horizontal Flow Barrier Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">HFB: Horizontal Flow Barrier package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. This pane is only visible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HFB_Horizontal_Flow_Barrier_Package" styleclass="Normal" translate="true">HFB</link><text styleclass="Normal" translate="true"> package is selected and a polyline or polygon object is being edited.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The data that can be specified on this pane include the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Parameter name</text><text styleclass="Normal" translate="true"> (if any), the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Barrier hydraulic conductivity </text><text styleclass="Normal" translate="true">(or </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Barrier hydraulic conductivity factor</text><text styleclass="Normal" translate="true">), the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Barrier thickness</text><text styleclass="Normal" translate="true"> and the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Angle adjustment method</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW 6 models, barriers can change in each stress period. In earlier versions of MODFLOW barriers are specified for the entire duration of the model. the layout of this pane varies depending on whether MODFLOW 6 or an earlier version of MODFLOW is selected.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Parameter name</text><text styleclass="Normal" translate="true"> can be set to either &quot;none&quot; or the names of one of the HFB parameters specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HFB_Horizontal_Flow_Barrier_Package" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Barrier hydraulic conductivity</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Barrier thickness</text><text styleclass="Normal" translate="true"> are used to calculate the hydraulic characteristic of the horizontal-flow barrier. The hydraulic characteristic determines how much resistance to flow the barrier provides. The hydraulic characteristic is the hydraulic conductivity of the barrier divided by its thickness. If an HFB parameter is being used to help specify the hydraulic characteristic, the barrier hydraulic conductivity will be set equal to the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Barrier hydraulic conductivity factor</text><text styleclass="Normal" translate="true"> times the parameter value specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="HFB_Horizontal_Flow_Barrier_Package" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Setting up the flow barrier properly can be a little tricky if the barriers are not aligned with the grid. The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Angle adjustment method</text><text styleclass="Normal" translate="true"> provides a method for adjusting the hydraulic characteristic when the barrier is not aligned with the grid. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The problem is illustrated in the figure 30 below. The only difference between the two models is that in one the area surrounded by the horizontal-flow barrier is rotated 36 degrees. However, when the models were executed, the leakage through the flow barrier in model 2 was much higher than it was in model 1.</text></para>
+    <para></para>
+    <para style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="hfb1.png" scale="50.00%" width="394" height="263" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 30. </text><text styleclass="Image Caption" translate="true">Two models that differ only in the orientation of the area surrounded by a horizontal-flow barrier. </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If model 2 is examined more closely, as illustrated in figure 31 below, the problem is evident. MODFLOW doesn&apos;t have any way to specify a flow barrier that is at an angle to the grid so the flow barrier must be approximated by a zigzag line of flow barriers. The total length of the flow barriers in the model is thus much longer than the angled flow barrier they represent. Thus, there is more area through which flow could occur in the numerical model than in the conceptual model. </text></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="mfh_hfb2.bmp" scale="50.00%" width="297" height="216" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 31. </text><text styleclass="Image Caption" translate="true">Close up of a section of the horizontal-flow barrier in model 2. </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To compensate for the excessive flow barrier length in the numerical model, the hydraulic characteristic of the barriers (HYDCHR) can be reduced by a factor of Sin(a) or Cos(a) as illustrated in figure 32. This method corresponds to the choice </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Distribute conductivity among all sections</text><text styleclass="Normal" translate="true"> in ModelMuse.</text></para>
+    <para></para>
+    <para style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="hfb3.wmf" scale="100.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 32. </text><text styleclass="Image Caption" translate="true">How to calculate the reduction of HYDCHR when the horizontal-flow barriers are at an angle to the grid. </text></para>
+          <para styleclass="Image Caption"><text styleclass="Image Caption" translate="true">HYDCHRnum_mod = Hydraulic characteristic of numerical model.</text></para>
+          <para styleclass="Image Caption"><text styleclass="Image Caption" translate="true">      HYDCHRconc_mod = Hydraulic characteristic of conceptual model. </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Another problem can occur if the barrier is nearly parallel with the grid. In the conceptual model, in the illustration below, the horizontal-flow barrier is at a small angle with the grid resulting in six horizontal-flow barriers. Of the five cells on the downstream side of the barriers, four receive flow from one cell each and the fifth receives flow from two cells. The net result is that the cell that receives flow from two cells, receives too much flow and the other cells receive too little. The total amount of flow is correct (assuming that the hydraulic gradient across the flow barrier is the same everywhere) but the location of flow is not quite correct. One way we could correct the flow locations is to give the barrier at &quot;A&quot; in figure 33 a hydraulic characteristic of 0. The hydraulic characteristics of the other barriers would be multiplied by 1/</text><text style="font-family:'Times New Roman'; font-size:12pt; color:#000000;" translate="true">Cos(</text><text style="font-family:Symbol; font-size:12pt; color:#000000;" translate="true">a</text><text style="font-family:'Times New Roman'; font-size:12pt; color:#000000;" translate="true">)</text><text styleclass="Normal" translate="true"> to compensate for their shorter length. This results in all the downstream cells receiving the same amount of flow and makes the total amount of flow correct. There is no flow across the barrier at A. This method of adjusting the hydraulic characteristic corresponds to the choice </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Distribute conductivity among sections most nearly parallel to the grid </text><text styleclass="Normal" translate="true">in ModelMuse.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="2" colcount="1" style="width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="hfb4.wmf" scale="100.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Caption" translate="true"> </text><text styleclass="Image Number" translate="true">Figure 33</text><text styleclass="Image Caption" translate="true">. Another method to calculate HYDCHR. </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

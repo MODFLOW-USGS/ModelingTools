@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="drttest" FileType="bin">
+    <FileName Model_Name="drttest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="drttest" FileType="ancillary">
+    <FileName Model_Name="drttest" FileType="ancillary">drttest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="drttest" FileType="Model Input">
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.bas</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.chd</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.dis</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.drt</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.gsf</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.lpf</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.nam.archive</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.oc</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">drttest.pcg</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="drttest" FileType="Model Input">usgs.drttest.reference</FileName>
+  </model>
+  <output Model_Name="drttest" FileType="Model Output">
+    <FileName Model_Name="drttest" FileType="Model Output">drttest.cbc</FileName>
+    <FileName Model_Name="drttest" FileType="Model Output">drttest.fdn</FileName>
+    <FileName Model_Name="drttest" FileType="Model Output">drttest.fhd</FileName>
+    <FileName Model_Name="drttest" FileType="Model Output">drttest.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Activating CHD Package</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">RMA: Activating CHD Package</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The lake at the north end of the model and the stream at the south end of the model will be represented by constant head cells. Such cells can be defined using the Time Variant Specified Head package (CHD). The first step in using the CHD package is to activate it.</text></para>
+    <para styleclass="Figure Referrer"><text styleclass="Figure Referrer" translate="true">Select </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Model|MODFLOW Packages and Programs...</text><text styleclass="Figure Referrer" translate="true"> The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Figure Referrer" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Figure Referrer" translate="true"> dialog box will appear (fig. 109). Activate the check box next to the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">CHD</text><text styleclass="Figure Referrer" translate="true"> package. The </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">CHD</text><text styleclass="Figure Referrer" translate="true"> package is found under </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Boundary conditions|Specified head</text><text styleclass="Figure Referrer" translate="true">. It is possible to resize the space between the tree control on the left and the rest of the dialog box by clicking down on the space between them and dragging. Click </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">OK</text><text styleclass="Figure Referrer" translate="true"> to close the dialog box.</text></para>
+    <para styleclass="Image"><image src="RMA_Activating_CHD.ipp" scale="75.00%" styleclass="Image"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 109.</text><text styleclass="Image Caption" translate="true"> The </text><text styleclass="Image Caption" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</text><text styleclass="Image Caption" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

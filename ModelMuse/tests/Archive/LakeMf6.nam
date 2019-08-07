@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 7/31/2019 by ModelMuse Version 4.0.0.7
+BEGIN OPTIONS
+  LIST LakeMf6.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         LakeMf6.dis
+  IC6          LakeMf6.ic
+  NPF6         LakeMf6.npf
+  OC6          LakeMf6.oc
+  CHD6         LakeMf6.chd
+  RCH6         LakeMf6.rch
+  LAK6         LakeMf6.lak6
+END PACKAGES

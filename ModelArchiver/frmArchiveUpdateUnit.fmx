@@ -1,0 +1,136 @@
+object frmArchiveUpdate: TfrmArchiveUpdate
+  Left = 0
+  Top = 0
+  Caption = 'Archive Update'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object tvExistingArchive: TTreeView
+    Align = Client
+    Margins.Left = 4.000000000000000000
+    Size.Width = 292.000000000000000000
+    Size.Height = 440.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'treeviewstyle'
+    TabOrder = 0
+    ItemHeight = 25.000000000000000000
+    MultiSelect = True
+    ShowCheckboxes = True
+    ParentShowHint = False
+    ShowHint = True
+    OnChangeCheck = tvExistingArchiveChangeCheck
+    Viewport.Width = 292.000000000000000000
+    Viewport.Height = 440.000000000000000000
+  end
+  object pnlBottom: TPanel
+    Align = Bottom
+    Position.Y = 440.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object btnUpdate: TButton
+      Anchors = [akTop, akRight]
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 480.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 144.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Update and Close'
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btnUpdateClick
+    end
+    object btnCancel: TButton
+      Anchors = [akTop, akRight]
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 392.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Cancel'
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btnCancelClick
+    end
+    object btnHelp: TButton
+      Anchors = [akTop, akRight]
+      StyledSettings = [Family, Style, FontColor]
+      HelpContext = 220
+      HelpKeyword = 'archive_update_dialog_box.htm'
+      HelpType = htKeyword
+      Position.X = 304.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Help'
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btnHelpClick
+    end
+  end
+  object memo2: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Lines.Strings = (
+      
+        'Files that have a blue background are absent from the archive. I' +
+        'f checked, they will be added to the archive during the update p' +
+        'rocess.'
+      
+        'Files that have a red background are in the archive but are no l' +
+        'onger included in the ModelArchiver project. If checked, they wi' +
+        'll be deleted from the archive during the update process.'
+      
+        'Files that have a yellow background have a different modfication' +
+        ' time in the archive than in the original files. If checked, the' +
+        'y will be replaced.'
+      
+        'The readme.txt and metadata file will always have different modf' +
+        'ication time from the original files because they are updated in' +
+        ' the process of creating the archive. If there are no changes to' +
+        ' the archive other than in them, it is more efficient to just up' +
+        'date them on the "Create Archive" tab of the ModelArchiver main ' +
+        'form.')
+    StyledSettings = [Family, Style, FontColor]
+    TextSettings.Font.Size = 16.000000000000000000
+    TextSettings.WordWrap = True
+    Align = Right
+    Position.X = 304.000000000000000000
+    Size.Width = 336.000000000000000000
+    Size.Height = 440.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Viewport.Width = 336.000000000000000000
+    Viewport.Height = 440.000000000000000000
+  end
+  object spl1: TSplitter
+    Align = Right
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 296.000000000000000000
+    Size.Width = 8.000000000000000000
+    Size.Height = 440.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object zpbrwsExistingZipFile: TAbZipBrowser
+    TarAutoHandle = False
+    Left = 552
+    Top = 216
+  end
+  object zprUpdate: TAbZipper
+    AutoSave = False
+    DOSMode = False
+    Left = 552
+    Top = 288
+  end
+end

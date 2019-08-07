@@ -1,0 +1,19 @@
+ 1.0e4   10   0.5     30000         # RCLOSE IITER HCLOSE MXITER
+ 1.0e-1   2   0       45            # DAMP IADAMP IOUTGMG IUNITMHC
+ 0        1   3.0e-1  5.0E-2  2.0   # ISM ISC DUP DLOW CHGLIMIT
+
+
+ 1.0e4   10   0.1     30000         # RCLOSE IITER HCLOSE MXITER
+ 2.0e-2   2   2       45            # DAMP IADAMP IOUTGMG IUNITMHC
+ 0        1   3.0e-1  1.0E-2  1.0   # ISM ISC DUP DLOW CHGLIMIT
+
+
+ 1.0e4   10   0.1     50000         # RCLOSE IITER HCLOSE MXITER
+ 1.0e-1   2   2       45            # DAMP IADAMP IOUTGMG IUNITMHC
+ 0        1   3.0e-1  5.0E-2  1.5   # ISM ISC DUP DLOW CHGLIMIT
+
+
+prior to 10/12/2007 edits:
+ 1.0e4   10   1.0     10000         # RCLOSE IITER HCLOSE MXITER
+ 1.0e-1   2   2       45            # DAMP IADAMP IOUTGMG IUNITMHC
+ 0        1   3.0e-1  1.0E-1  3.0   # ISM ISC DUP DLOW CHGLIMIT

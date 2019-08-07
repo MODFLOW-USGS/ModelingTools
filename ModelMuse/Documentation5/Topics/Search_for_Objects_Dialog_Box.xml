@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Search for Objects Dialog Box</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Search for Objects Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Search for Objects</text><text styleclass="Normal" translate="true"> dialog box is used to select objects based on the data sets or features they affect. To display the dialog box, select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Object|Search for Objects...</text><text styleclass="Normal" translate="true"> Next the user checks the checkboxes for the a particular object, data set or feature of interest. If any objects set that data set or feature directly, they will be selected. All the objects that are selected must be on the same view of the model (Top, Front, or Side).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Selected_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Selected Objects</link><text styleclass="Normal" translate="true"> dialog box and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Show_or_Hide_Objects_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Show or Hide Objects</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 9/1/2009 by ModelMuse
+LIST 11 EvtImportTest.lst REPLACE
+DATA(BINARY) 9 EvtImportTest.cbc REPLACE
+DIS 12 EvtImportTest.dis OLD
+BAS6 13 EvtImportTest.bas OLD
+OC 39 EvtImportTest.oc OLD
+DATA 37 EvtImportTest.fhd REPLACE
+DATA 38 EvtImportTest.fdn REPLACE
+PCG 18 EvtImportTest.pcg OLD
+LPF 14 EvtImportTest.lpf OLD
+CHD 17 EvtImportTest.chd OLD
+EVT 25 EvtImportTest.evt OLD

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LGR tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">LGR Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">LGR</text><text styleclass="Normal" translate="true"> tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Models affected:</text><text styleclass="Normal" translate="true"> By default an object will apply to both the parent model and all the child models. However, if you want an object to only apply to one or some of the models, the check boxes here can be used for that purpose. For example if the object is used to define a well, it could define it for the parent model, the child model or both.</text></para>
+    <para styleclass="Normal"><anchor id="DefineChild" styleclass="Normal"></anchor><text styleclass="Strong" translate="true">Define boundary of child model</text><text styleclass="Normal" translate="true">: An object drawn on the top view of the model with zero </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Properties_Tab" anchor="Number_Of_Formulas" styleclass="Normal" translate="true">Z formulas</link><text styleclass="Normal" translate="true"> can be used to define the horizontal extent of a child model. The cells intersected by the object will define the edge of the child model. However MODFLOW-LGR does not allow the child grid to extend into the first or last row or column of the parent grid.</text></para>
+  </body>
+</topic>

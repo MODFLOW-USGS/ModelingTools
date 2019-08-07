@@ -1,0 +1,48 @@
+# MODFLOW-2005 Name File
+# Main OUTPUT file
+LIST   11 mod16opt.lst
+#
+# GWF Process input files
+DIS    12 ..\input_common_opt\lsfixedsfr3tr.dis
+BAS6   13 ..\input_common_opt\mod16m.bas
+OC     14 ..\input_common_opt\mod16_spheads_tsflux.oc
+MULT   15 ..\input_common_opt\mod16pest.mul
+ZONE   18 ..\input_common_opt\mod16pest.zon
+LPF    19 ..\input_common_opt\mod16opt.lpf
+RCH    20 ..\input_common_opt\mod16_AgIrr_all.rch
+DRN    21 ..\input_common_opt\mod16m.drn
+RIV    22 ..\input_common_opt\mod16m.riv
+ETS    23 ..\input_common_opt\mod16_coop_new.ets
+GHB    24 ..\input_common_opt\mod16m.ghb
+SFR    25 ..\input_common_opt\mod16m.sfr
+GMG    26 ..\input_common_opt\mod16opt.gmg
+#PCGN  26 ..\input_common_opt\db.pcgn
+MNW1   27 db.mnw
+GAGE   28 ..\input_common_opt\mod16.gag
+WEL    29 ..\input_common_opt\db_new.wel
+FHB    50 ..\input_common_opt\db_weldona.fhb
+#
+# OBS-SEN-PES input files
+DATA        30 mod16opt._os
+HOB         31 mod16opt_1980.obh
+PVAL        32 mod16opt.pvl
+DROB        33 mod16opt.obd
+#
+# DATA output files
+DATA(BINARY)   3 mod16_sphead_ssfix.bhd REPLACE
+DATA(BINARY)   4 mod16_sphead_ssfix.bdn REPLACE
+DATA(BINARY)   2 mod16_tsflux_ssfix.bud REPLACE
+DATA           7 mod16_tsflux_ssfix.bsf2 REPLACE
+DATA          45 mod16_tsfluxmhc.csv REPLACE
+#DATA         101 mod16mf2k.gage01  REPLACE
+#DATA         102 mod16mf2k.gage02  REPLACE
+DATA         103 mod16mf2k.gage03  REPLACE
+DATA         104 mod16mf2k.gage04  REPLACE
+DATA         105 mod16mf2k.gage05  REPLACE
+DATA         106 mod16mf2k.gage06  REPLACE
+DATA         107 mod16mf2k.gage07  REPLACE
+#DATA         108 mod16mf2k.gage08  REPLACE
+#DATA         109 mod16mf2k.gage09  REPLACE
+DATA         110 mod16mf2k.gage10  REPLACE
+DATA         111 mod16mf2k.gage11  REPLACE
+DATA         112 mod16mf2k.gage12  REPLACE

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RMA: Data Sets for MT3DMS</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RMA: Data Sets for MT3DMS</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are several data sets required by MT3DMS. We will leave all of them set to their default values. Sometimes, it may be desirable to only simulate solute transport in part of the grid. The MT3DMS_Active data set can be used to specify those cells that should be used for solute transport. By default, all the active cells in the grid will also be active cells for MT3DMS.</text></para>
+    <para styleclass="Normal"><image src="Mt3dmsRma3DataSets.png" scale="60.00%" width="394" height="304" styleclass="Image Caption"><title translate="true">Edit Data Sets dialog box showing data sets required by MT3DMS</title></image><text styleclass="Image Caption" translate="true">_</text></para>
+  </body>
+</topic>

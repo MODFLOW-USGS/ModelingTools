@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">OBS: Observation Utility Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">OBS: Observation Utility Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW 6 can print a variety of simulated values at every time step. The types and locations of observations are defined </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Pane" styleclass="Normal" translate="true">using objects</link><text styleclass="Normal" translate="true">. The output can be either a text file or a binary file.</text><text styleclass="Strong" translate="true">Output format</text><text styleclass="Normal" translate="true"> determines which format is used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If binary output is selected, </text><text styleclass="Strong" translate="true">Binary output precision</text><text styleclass="Normal" translate="true"> controls whether the data (including simulated values and, for continuous observations, time values) are written as single- or double-precision.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If text output is selected, </text><text styleclass="Strong" translate="true">Text number of digits</text><text styleclass="Normal" translate="true"> controls the number of significant digits with which simulated values are written to the output file. The digits specifier has no effect on the number of significant digits with which the simulation time is written for continuous observations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Pane" styleclass="Normal" translate="true">OBS: Observation Utility Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

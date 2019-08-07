@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
+<topic class="popup" template="Popup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+  <title translate="true">GageNote1</title>
+  <body>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Note 1</text><text styleclass="Normal" translate="true">: A unique unit number must be specified for each stream gaging station and the MODFLOW name file (see Harbaugh and others, 2000, p. 42-44) must specify the file for each unit. The file type in the name file must be “DATA”.</text></para>
+  </body>
+</topic>

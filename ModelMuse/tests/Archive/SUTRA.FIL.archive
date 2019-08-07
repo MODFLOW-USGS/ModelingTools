@@ -1,0 +1,7 @@
+'INP'    20 'NearestTest2.inp'
+'ICS'    21 'NearestTest2.ics'
+'LST'    22 '..\..\output\NearestTest2\NearestTest2.lst'
+'RST'    23 '..\..\output\NearestTest2\NearestTest2.rst'
+'NOD'    24 '..\..\output\NearestTest2\NearestTest2.nod'
+'ELE'    25 '..\..\output\NearestTest2\NearestTest2.ele'
+'SMY'    26 '..\..\output\NearestTest2\NearestTest2.smy'

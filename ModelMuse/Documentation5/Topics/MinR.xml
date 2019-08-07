@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MinR</title>
+  <keywords>
+    <keyword translate="true">MinR</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">MinR</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">MinR</text><text styleclass="Normal" translate="true">(Real_Value1, Real_Value2, ...) returns whichever of its arguments is the smallest. Its arguments must be either integers or real numbers. The result will be a real number.</text></para>
+  </body>
+</topic>

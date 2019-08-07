@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Observations</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Observations</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The various observation packages in MODFLOW-2005 and related programs are used to compare observed values with simulated values. Such comparisons are useful in model calibration.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="HOB_Head_Observation_Package" styleclass="Normal" translate="true">Head observations</link><text styleclass="Normal" translate="true"> are compared with simulated heads interpolated to the location of the head observations. If the observed head represents more than one layer, a weighted average of the heads in the various layers is calculated.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="CHOB_Specified_Head_Flow_Observations" styleclass="Normal" translate="true">Specified-head flow observations</link><text styleclass="Normal" translate="true"> are compared with simulated flows at a group of specified head cells.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="DROB_Drain_Observation_Package" styleclass="Normal" translate="true">Drain observations</link><text styleclass="Normal" translate="true"> are compared with simulated flows at a group of drain cells.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GBOB_General_Head_Boundary_Observations" styleclass="Normal" translate="true">General-head boundary observations</link><text styleclass="Normal" translate="true"> are compared with simulated flows at a group of general-head boundary cells.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="RVOB_River_Observation_Package" styleclass="Normal" translate="true">River observations</link><text styleclass="Normal" translate="true"> are compared with simulated flows at a group of river cells.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="STOB_Stream_Observation_Packag" styleclass="Normal" translate="true">Stream observations</link><text styleclass="Normal" translate="true"> are compared with simulated flows at a group of stream cells in the Stream (STR) package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Packag" styleclass="Normal" translate="true">Observation Utility</link><text styleclass="Normal" translate="true"> in MODFLOW 6 is used to specify locations where heads, flows or other simulated properties are simulated. MODFLOW 6 will generate a file or files in which the simulated values of these properties are reported for every time step.</text></para>
+  </body>
+</topic>

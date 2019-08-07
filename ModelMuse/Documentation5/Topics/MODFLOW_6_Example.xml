@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MODFLOW 6 Example</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Example</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example illustrates how to use some of the features of MODFLOW 6 that are either new or substantially different from how they were in MODFLOW-2005. The following topics are included.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="%0:s." format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use vertical pass through cells specified with the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Required_by_MODFLOW" anchor="IDOMAIN" styleclass="Table Cell" translate="true">IDOMAIN</link><text styleclass="Table Cell" translate="true"> data set</text><text styleclass="Normal" translate="true"> to simulate layers that pinch out.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MAW_MultiAquifer_Well_Package" styleclass="Normal" translate="true">Multi-Aquifer Well</link><text styleclass="Normal" translate="true"> package.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF6_Unsaturated_Zone_Flow_Pa2" styleclass="Normal" translate="true">Unsaturated Zone Flow</link><text styleclass="Normal" translate="true"> package</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MVR_Water_Mover_Package_Pane2" styleclass="Normal" translate="true">Water Mover</link><text styleclass="Normal" translate="true"> package</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_MODFLOW_6_Streamflow_Rout2" styleclass="Normal" translate="true">Stream flow Routing</link><text styleclass="Normal" translate="true"> package.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Discretization_with_Vertices_D" styleclass="Normal" translate="true">Discretization by Vertices</link><text styleclass="Normal" translate="true">.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">How to use MODPATH and ZONEBUDGET with MODFLOW 6.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can download MODFLOW 6 from </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://www.usgs.gov/software/modflow-6-usgs-modular-hydrologic-model" target="_blank" styleclass="Normal" translate="true">https://www.usgs.gov/software/modflow-6-usgs-modular-hydrologic-model</link><text styleclass="Normal" translate="true">. It includes a copy of ZONEBUDGET that works with MODFLOW 6.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">MODPATH version 7 works with MODFLOW 6. You can download it from </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://www.usgs.gov/software/modpath-a-particle-tracking-model-modflow" target="_blank" styleclass="Normal" translate="true">https://www.usgs.gov/software/modpath-a-particle-tracking-model-modflow</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

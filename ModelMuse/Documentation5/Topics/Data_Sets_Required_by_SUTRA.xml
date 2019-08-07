@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets Required by SUTRA</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets Required by SUTRA</text></para>
+    </header>
+    <para styleclass="Normal"><table id="SutraDataSets_srt_" styleclass="Default" rowcount="24" colcount="4" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
+      <thead style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_SUTRA_DataSets_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Data Set</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_SUTRA_Description_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Description</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_SUTRA_Equivalent_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">SUTRA Equivalent</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><anchor id="_sortable_SUTRA_WhenUsed_cicons-graphic_" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">When used</text></para>
+        </td>
+      </thead>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Initial_Head</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The initial head</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">ICS file, PVEC</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When head is used instead of pressure</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Nodal_Porosity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">The porosity in the cell surrounding a node</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 14B: POR</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Nodal_Thickness</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">thickness of mesh at node </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 14B: Z</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="MSHSTR" styleclass="Table Cell" translate="true">when the model is two dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsat_Region_Nodes</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsaturated flow property region number </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 14B: NREG</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="CUNSAT" styleclass="Table Cell" translate="true">when unsaturated conditions are simulated</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsat_Region_Elements</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Unsaturated flow property region number </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: LREG</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="CUNSAT" styleclass="Table Cell" translate="true">when unsaturated conditions are simulated</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Maximum_Permeability</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">maximum permeability value of element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: PMAX</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When pressure is used instead of head</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Middle_Permeability</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">middle permeability value of element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: PMID</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When pressure is used instead of head</link><text styleclass="Table Cell" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="MSHSTR" styleclass="Table Cell" translate="true">the model is three-dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Minimum_Permeability</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">minimum permeability value of element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: PMIN</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When pressure is used instead of head</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Maximum_Hydraulic_Conductivity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">maximum hydraulic conductivity value of element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: PMAX</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When head is used instead of pressure</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Middle_Hydraulic_Conductivity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">middle hydraulic conductivity value of element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: PMID</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When head is used instead of pressure</link><text styleclass="Table Cell" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="MSHSTR" styleclass="Table Cell" translate="true">the model is three-dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Minimum_Hydraulic_Conductivity</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">minimum hydraulic conductivity value of element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: PMIN</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When head is used instead of pressure</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><anchor id="ANGLE1" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Angle_Horizontal</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">first angle, θ</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">1</text><text styleclass="Table Cell" translate="true">(L) [°], used to define the directions of maximum, middle, and minimum permeability in element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ANGLE1</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Angle_Vertical</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">second angle, θ</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">2</text><text styleclass="Table Cell" translate="true">(L) [°], used to define the directions of maximum, middle, and minimum permeability in element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ANGLE2</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" styleclass="Table Cell" translate="true">when the model is three-dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Angle_Rotational</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">third angle, θ</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">3</text><text styleclass="Table Cell" translate="true">(L) [°], used to define the directions of maximum, middle, and minimum permeability in element </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ANGLE3</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" styleclass="Table Cell" translate="true">when the model is three-dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Longitudinal_Dispersivity_Max_Dir</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">longitudinal dispersivity value of element L that controls longitudinal dispersion along the maximum permeability direction when the flow direction is in the maximum permeability direction, αL</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">max</text><text styleclass="Table Cell" translate="true">(L). </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ALMAX</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Longitudinal_Dispersivity_Mid_Dir</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">longitudinal dispersivity value of element L that controls longitudinal dispersion along the middle permeability direction when the flow direction is in the middle permeability direction, αL</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">mid</text><text styleclass="Table Cell" translate="true">(L). </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ALMID</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" styleclass="Table Cell" translate="true">when the model is three-dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Longitudinal_Dispersivity_Min_Dir</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">longitudinal dispersivity value of element L that controls longitudinal dispersion along the minimum permeability direction when the flow direction is in the minimum permeability direction, αL</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">min</text><text styleclass="Table Cell" translate="true">(L). </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ALMIN</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Transverse_Dispersivity_Max_Dir</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">transverse dispersivity value of element L that controls transverse dispersion in the maximum permeability direction when the flow direction is perpendicular to the maximum permeability direction, αT</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">max</text><text styleclass="Table Cell" translate="true">(L). </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ATMAX</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Transverse_Dispersivity_Mid_Dir</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">transverse dispersivity value of element L that controls transverse dispersion in the middle permeability direction when the flow direction is perpendicular to the middle permeability direction, αT</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">mid</text><text styleclass="Table Cell" translate="true">(L). </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ATMID</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" styleclass="Table Cell" translate="true">when the model is three-dimensional</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Transverse_Dispersivity_Min_Dir</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">transverse dispersion in the minimum permeability direction when the flow direction is perpendicular to the minimum permeability direction, αT</text><text styleclass="Table Cell" style="font-size:8pt; vertical-align:sub;" translate="true">min</text><text styleclass="Table Cell" translate="true">(L). </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Data Set 15B: ATMIN</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">always</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">InitialPressure</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">initial (starting) pressures at the start of the simulation </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">ICS Data Set 2: PVEC</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When pressure is used instead of head</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">InitialConcentration</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">initial (starting) concentrations at the start of the simulation </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">ICS Data Set 3: UVEC</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When concentration is used instead of temperature</link></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">InitialTemperature</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">initial (starting) temperatures at the start of the simulation </text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">ICS Data Set 3: UVEC</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><link displaytype="text" defaultstyle="true" type="topiclink" href="Configuration_Pane" anchor="SIMULA" styleclass="Table Cell" translate="true">When temperature is used instead of concentration</link></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

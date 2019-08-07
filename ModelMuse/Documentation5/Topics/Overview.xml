@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Define Layer Groups</title>
+  <body>
+    <header>
+      <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Define Layer Groups</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The example model has nine layers. To see how the layer boundaries are defined, select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|MODFLOW Layer Groups...</link><text styleclass="Normal" translate="true"> This brings up the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Layer Groups</link><text styleclass="Normal" translate="true"> dialog box (fig. </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Normal" translate="true">67</text><conditional-text type="ELSE"/><text styleclass="Normal" translate="true">22</text><conditional-text type="END"/><text styleclass="Normal" translate="true">). Although there are nine layers, only three aquifers are defined. This is because the middle aquifer is divided into seven parts. It is possible to see how the middle layer is divided by clicking on &quot;Middle Aquifer&quot; and selecting the &quot;Discretization&quot; tab. It shows that the layers grow progressively thicker toward the middle of the middle aquifer, and that a number of options exist for how a layer group such as &quot;Middle Aquifer&quot; can be discretized. Click </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Cancel</text><text styleclass="Normal" translate="true"> to close the dialog box. </text></para>
+    <para styleclass="Image Caption" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><table rowcount="2" colcount="1" style="cell-padding:0px; cell-spacing:0px; page-break-inside:avoid; border-width:0px; cell-border-width:0px;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><image src="LayerGroups2.bmp" scale="75.00%" styleclass="Image Caption"><title translate="true">See caption</title></image></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure </text><conditional-text type="IF" value="CHM,HLP,HXS,HTML,DEMO,USER1,USER2,USER3"/><text styleclass="Image Number" translate="true">67</text><conditional-text type="ELSE"/><text styleclass="Image Number" translate="true">22</text><conditional-text type="END"/><text styleclass="Image Number" translate="true">. </text><text styleclass="Image Caption" translate="true">Layer Groups dialog box in ExampleModel.gpt.</text></para>
+        </td>
+      </tr>
+    </table></para>
+  </body>
+</topic>

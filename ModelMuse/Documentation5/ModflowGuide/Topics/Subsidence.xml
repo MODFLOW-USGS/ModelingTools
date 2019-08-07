@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Subsidence</title>
+  <keywords>
+    <keyword translate="true">subsidence</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Subsidence</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When water is removed from an aquifer, the aquifer will frequently undergo compaction which then causes subsidence at the land surface. &#160;Three packages in MODFLOW, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">Interbed-Storage</link><text styleclass="Normal" translate="true"> package, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" styleclass="Normal" translate="true">Subsidence and Aquifer-System Compaction</link><text styleclass="Normal" translate="true"> package, &#160;and the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWT" styleclass="Normal" translate="true">Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers</link><text styleclass="Normal" translate="true"> can be used to model this process. &#160;However, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">Interbed-Storage</link><text styleclass="Normal" translate="true"> package can not be used in the same model as either of the other two subsidence packages. &#160;Attempting to do so will cause MODFLOW to print an error message and stop. &#160;The &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">Interbed-Storage</link><text styleclass="Normal" translate="true"> package has no capabilities that are not provided by the other two packages. &#160;It simulates compaction of clay interbeds within an aquifer but does not account for possible delays between when the head is reduced and the compaction occurs. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUB" styleclass="Normal" translate="true">Subsidence and Aquifer-System Compaction</link><text styleclass="Normal" translate="true"> package was developed by modifying the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="IBS" styleclass="Normal" translate="true">Interbed-Storage</link><text styleclass="Normal" translate="true"> package to simulate such time delays. &#160;</text></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Data Sets in MODFLOW</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Data Sets in MODFLOW</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">2-D data sets for the front and side views can not be used with MODFLOW. Data sets used in MODFLOW will always have a value for each cell. Geometrically, a MODFLOW cell is equivalent to a PHAST element.</text></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="Formulas_for_Data_Sets_assigne"/></para>
+  </body>
+</topic>

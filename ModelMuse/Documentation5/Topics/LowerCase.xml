@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">LowerCase</title>
+  <keywords>
+    <keyword translate="true">LowerCase</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">LowerCase</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">LowerCase</text><text styleclass="Normal" translate="true">(Text_Value) returns Text_Value with all its characters converted to lower case. See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="UpperCase" styleclass="Normal" translate="true">UpperCase</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

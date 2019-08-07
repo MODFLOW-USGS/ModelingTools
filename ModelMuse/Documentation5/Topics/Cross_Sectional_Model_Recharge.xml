@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Cross Sectional Model: Recharge</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Cross Sectional Model: Recharge</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Recharge can only be specified with an object drawn on the top view of the model. Draw a polygon or rectangle on the top view of the model and assign a recharge rate of 1E-9.</text></para>
+    <para styleclass="Normal" style="text-align:center;"><image src="CrossSection11.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
+  </body>
+</topic>

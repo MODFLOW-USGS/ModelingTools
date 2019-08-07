@@ -1,0 +1,11 @@
+# RVOB: River Observation package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+3 3 2 49 # Data Set 1: NQRV NQCRV NQTRV IURVOBSV
+1 # Data Set 2: TOMULTRV
+1 1 # Data Set 3: NQOBRV NQCLRV
+Rvob1_1 2  0.000000000000E+000 -1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment 10
+1 1 10  1.000000000000E+000  # Data Set 5: Layer Row Column Factor
+0 1 # Data Set 3: NQOBRV NQCLRV
+1 4 10  1.000000000000E+000  # Data Set 5: Layer Row Column Factor
+1 1 # Data Set 3: NQOBRV NQCLRV
+Rvob3_1 1  5.000000000000E-002 -1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS Comment = comment 12
+1 1 7  1.000000000000E+000  # Data Set 5: Layer Row Column Factor

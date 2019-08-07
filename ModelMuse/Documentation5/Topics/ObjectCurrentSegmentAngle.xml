@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentSegmentAngle</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentSegmentAngle</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectCurrentSegmentAngle</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngle</text><text styleclass="Normal" translate="true"> returns the angle in radians of the current segment of an object. The angle is measured in the counterclockwise direction relative to the grid with zero in the direction of positive </text><link displaytype="text" defaultstyle="true" type="topiclink" href="X_Prime" styleclass="Normal" translate="true">X_Prime</link><text styleclass="Normal" translate="true">. In the side view, zero is in the direction of positive </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Y" styleclass="Normal" translate="true">Y</link><text styleclass="Normal" translate="true">. For SUTRA and MODFLOW 6 DISV models, the angle is measured relative to the X-axis. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ObjectCurrentSegmentAngle</text><text styleclass="Normal" translate="true"> can range from +Pi to -Pi.</text></para>
+  </body>
+</topic>

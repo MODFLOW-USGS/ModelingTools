@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ok" FileType="bin">
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\hdf5dll.dll</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phastinput.exe</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-mpich2.exe</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast-ser.exe</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\szlibdll.dll</FileName>
+    <FileName Model_Name="ok" FileType="bin">C:\Program Files (x86)\USGS\phast-1.5.1\bin\zlib1.dll</FileName>
+  </bin>
+  <ancillary Model_Name="ok" FileType="ancillary">
+    <FileName Model_Name="ok" FileType="ancillary">ok.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ok" FileType="Model Input">
+    <FileName Model_Name="ok" FileType="Model Input">ok.trans.dat</FileName>
+    <FileName Model_Name="ok" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="ok" FileType="Model Input">usgs.ok.reference</FileName>
+  </model>
+  <output Model_Name="ok" FileType="Model Output">
+    <FileName Model_Name="ok" FileType="Model Output">ok.h5</FileName>
+    <FileName Model_Name="ok" FileType="Model Output">ok.log</FileName>
+    <FileName Model_Name="ok" FileType="Model Output">ok.O.head</FileName>
+    <FileName Model_Name="ok" FileType="Model Output">ok.O.probdef</FileName>
+    <FileName Model_Name="ok" FileType="Model Output">ok.O.wel</FileName>
+    <FileName Model_Name="ok" FileType="Model Output">ok.xyz.head</FileName>
+    <FileName Model_Name="ok" FileType="Model Output">ok.xyz.vel</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Edit Text File Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Edit Text File Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each archive must include a &quot;readme.txt&quot; and a modelgeoreft.txt file. The purpose of the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Edit Text File</text><text styleclass="Normal" translate="true"> dialog box is to allow the user to edit the readme.txt and the &#160;modelgeoreft.txt files within ModelArchiver. However, the content of the readme.txt file is not stored as part of the ModelArchiver project.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Modelgeoref.txt_File" styleclass="Normal" translate="true">Modelgeoref.txt File</link><text styleclass="Normal" translate="true"> for more information about the modelgeoreft.txt file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The purpose of the readme.txt file is to explain the structure and content or the model archive and how to use it.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The readme.txt file should include the following</text></para>
+    <list id="2" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">a description of the archive folder structure and of the files contained in each subfolder, </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">instructions for running the model(s), </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">instructions for reconstructing the model archive from the downloaded model files, and</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">a brief description of each model run.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Additional items that might be included in the readme.txt file are</text></para>
+    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the citation of the journal article or USGS report related to the archive,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the citation of the data release,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">citations for any programs included in the model archive, </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">the operating system used for the models, and</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">digital object identifiers for both the data release and the accompanying report.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the &quot;Automatically add file descriptions to readme.txt&quot; checkbox on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Readme.txt_File" styleclass="Normal" translate="true">Readme.txt File</link><text styleclass="Normal" translate="true"> pane is checked, ModelArchiver will append descriptions of each file and folder to the text file that you specify. Many of the file descriptions will be assigned automatically. You can edit the automatically assigned descriptions if you don&apos;t like them. You will need to provide an overall description of the archive and its purpose. For each model in the archive, you also need to tell how to run the model. The file and folder descriptions are only appended when you actually create the archive and they will only be appended to the version of the readme.txt file that is copied to the archive.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The readme.txt file is intended to be read by humans, not machines. A machine-readable </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Metadata" styleclass="Normal" translate="true">metadata</link><text styleclass="Normal" translate="true"> file will also be created in a later step.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You need to include the Digital Object Identifier (DOI) in the readme.txt file so you may wish to reserve a DOI when first creating the readme.txt file. The </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://www1.usgs.gov/csas/doi/" target="_blank" styleclass="Normal" translate="true">USGS Digital Object Identifier (DOI) Creation Tool</link><text styleclass="Normal" translate="true"> can be used to create DOIs for USGS products. Note that journal articles would typically be assigned a DOI by the journal.</text></para>
+  </body>
+</topic>

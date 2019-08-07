@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Conduit Layers Tab</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Conduit Layers Tab</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Conduit Layers</text><text styleclass="Normal" translate="true"> tab is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box. It is only visible if the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP_Conduit_Flow_Process" styleclass="Strong" translate="true">Conduit Flow Process</link><text styleclass="Normal" translate="true"> is selected and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CFP_Conduit_Flow_Process" anchor="Mode" styleclass="Strong" translate="true">Conduit Layers</link><text styleclass="Normal" translate="true"> will be used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Conduit Layers</text><text styleclass="Normal" translate="true"> tab contains a table with one row for each layer in the layer group. If you want a specific layer to be a conduit layer, check the checkbox in the column labeled </text><text styleclass="Strong" translate="true">Conduit Layer (CL)</text><text styleclass="Normal" translate="true"> For each conduit layer, you must specify the void diameter and two critical Reynolds numbers. The lower critical Reynolds number is the Reynolds number at which turbulent flow switches to laminar flow and the higher critical Reynolds number is the Reynolds number at which laminar flow switches to turbulent flow.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PHAST Program Location Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PHAST Program Location Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">PHAST</text><text styleclass="Normal" style="font-weight:bold;" translate="true"> Program Location</text><text styleclass="Normal" translate="true"> dialog box specifies the location where PHAST is installed.  It can be displayed by selecting </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Program Location...</text><text styleclass="Normal" translate="true"> It will be displayed automatically, if the user attempts to export the PHAST input files and no file exists at the location specified. The edit box containing the program location will have a red background if no file is present at the location specified. The user can type in different locations or click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Browse</text><text styleclass="Normal" translate="true"> button to browse to another location. If PHAST is not installed on the computer, the user can click on the URL to open a web browser for the web page for PHAST.</text></para>
+  </body>
+</topic>

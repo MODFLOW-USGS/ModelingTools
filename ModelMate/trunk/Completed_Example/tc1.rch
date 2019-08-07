@@ -1,0 +1,40 @@
+# RCH: Recharge package file created on 1/28/2009 by ModelMuse version 1.0.9.0.
+PARAMETER 2 # PARAMETER NPRCH
+ 1 9 # DataSet 2: NRCHOP IRCHCB
+RCH_ZONE_1 RCH 6.307200000000E+001  1 INSTANCES 5 # Data Set 3: PARNAM PARTYP Parval NCLU INSTANCES NUMINST
+RCH_ZONE_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+R_Mult_1 R_Zone_1 1
+RCH_ZONE_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+R_Mult_2 R_Zone_2 1
+RCH_ZONE_3 # Data Set 4a: INSTNAM (Parameter instance for stress period 3)
+R_Mult_3 R_Zone_3 1
+RCH_ZONE_4 # Data Set 4a: INSTNAM (Parameter instance for stress period 4)
+R_Mult_4 R_Zone_4 1
+RCH_ZONE_5 # Data Set 4a: INSTNAM (Parameter instance for stress period 5)
+R_Mult_5 R_Zone_5 1
+RCH_ZONE_2 RCH 3.153600000000E+001  1 INSTANCES 5 # Data Set 3: PARNAM PARTYP Parval NCLU INSTANCES NUMINST
+RCH_ZONE_1 # Data Set 4a: INSTNAM (Parameter instance for stress period 1)
+R_Mult_6 R_Zone_6 1
+RCH_ZONE_2 # Data Set 4a: INSTNAM (Parameter instance for stress period 2)
+R_Mult_7 R_Zone_7 1
+RCH_ZONE_3 # Data Set 4a: INSTNAM (Parameter instance for stress period 3)
+R_Mult_8 R_Zone_8 1
+RCH_ZONE_4 # Data Set 4a: INSTNAM (Parameter instance for stress period 4)
+R_Mult_9 R_Zone_9 1
+RCH_ZONE_5 # Data Set 4a: INSTNAM (Parameter instance for stress period 5)
+R_Mult_10 R_Zone_10 1
+ 2 1 # Data Set 5: INRECH INIRCH Stress period 1
+RCH_ZONE_1 RCH_ZONE_1 # Data Set 7: PARNAM Iname
+RCH_ZONE_2 RCH_ZONE_1 # Data Set 7: PARNAM Iname
+ 2 1 # Data Set 5: INRECH INIRCH Stress period 2
+RCH_ZONE_1 RCH_ZONE_2 # Data Set 7: PARNAM Iname
+RCH_ZONE_2 RCH_ZONE_2 # Data Set 7: PARNAM Iname
+ 2 1 # Data Set 5: INRECH INIRCH Stress period 3
+RCH_ZONE_1 RCH_ZONE_3 # Data Set 7: PARNAM Iname
+RCH_ZONE_2 RCH_ZONE_3 # Data Set 7: PARNAM Iname
+ 2 1 # Data Set 5: INRECH INIRCH Stress period 4
+RCH_ZONE_1 RCH_ZONE_4 # Data Set 7: PARNAM Iname
+RCH_ZONE_2 RCH_ZONE_4 # Data Set 7: PARNAM Iname
+ 2 1 # Data Set 5: INRECH INIRCH Stress period 5
+RCH_ZONE_1 RCH_ZONE_5 # Data Set 7: PARNAM Iname
+RCH_ZONE_2 RCH_ZONE_5 # Data Set 7: PARNAM Iname

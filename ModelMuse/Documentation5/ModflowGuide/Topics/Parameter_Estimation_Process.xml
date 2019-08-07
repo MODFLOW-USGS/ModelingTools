@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Parameter Estimation Process</title>
+  <keywords>
+    <keyword translate="true">calibration</keyword>
+    <keyword translate="true">parameter estimation</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Parameter Estimation Process</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Parameter Estimation Process, parameters defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Ground-Water_Flow_Process" styleclass="Normal" translate="true">Groundwater Flow</link><text styleclass="Normal" translate="true"> process and selected in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Sensitivity_Process" styleclass="Normal" translate="true">Sensitivity</link><text styleclass="Normal" translate="true"> process are varied so as to minimize an objective function defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Process_Input_File" styleclass="Normal" translate="true">Observation</link><text styleclass="Normal" translate="true"> process and with Prior Information equations defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" styleclass="Normal" translate="true">Parameter-Estimation process input file</link><text styleclass="Normal" translate="true">. &#160;Thus parameter estimation is used for model calibration.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PES" styleclass="Normal" translate="true">Parameter-Estimation process input file</link></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Parameter Estimation Process is not included in MODFLOW-2005 or MODFLOW-LGR. &#160;External programs such as </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://typhoon.mines.edu/freeware/ucode/" target="_blank" styleclass="Normal" translate="true">UCODE</link><text styleclass="Normal" translate="true"> must be used instead.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">STO: Storage Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">STO: Storage Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Storage package is used to specify the storage properties of cells in MODFLOW 6 transient models. The </text><text styleclass="Strong" translate="true">STO: Storage Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flow_Packages" styleclass="Normal" style="font-weight:bold;" translate="true">Flow Packages</link><text styleclass="Normal" translate="true">. A model is transient if it has at least one </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" anchor="TTSMULT" styleclass="Normal" translate="true">transient stress period</link><text styleclass="Normal" translate="true"> as defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Time</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The user must specify whether the confined storage properties will be specified using specific storage or the storage coefficient. (The storage coefficient is the specific storage times the layer height.)</text></para>
+  </body>
+</topic>

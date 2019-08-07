@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Initial Set Up</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Initial Set Up</text></para>
+    </header>
+    <list id="2" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">Start ModelMuse as before and create a new PHAST model. In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Initial_Grid_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Initial Grid</link><text styleclass="Normal" translate="true"> dialog box, set the number of nodes in the X, Y, and Z directions to be 16, 9, and 5 respectively. Set the distance between nodes in the X, Y, and Z directions to be 6000, 6000, and 100 respectively. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Finish</text><text styleclass="Normal" translate="true"> button to close the dialog box.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In the main ModelMuse window select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Title_and_Units_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Title and Units…</link><text styleclass="Normal" translate="true"> Copy the title from ex4.trans.dat to the clipboard and paste it in the title section. Assign the following units. Then click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-align:center; margin-left:0px;"><table rowcount="15" colcount="2" style="cell-padding:2px; cell-spacing:0px; border-width:0px; border-spacing:0px; border-collapse:collapse; cell-border-width:1px; border-color:#000000; border-style:solid;">
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:225px; height:13px;">
+          <para styleclass="Table Header" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Header" translate="true">Option</text></para>
+        </td>
+        <td style="vertical-align:top; width:116px; height:13px;">
+          <para styleclass="Table Header" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Header" translate="true">Units</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Time units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">years</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Horizontal grid units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Vertical grid units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Head units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Hydraulic conductivity units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters per second</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Specific storage units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">1/meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Dispersivity units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Flux units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters per year</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Leaky hydraulic conductivity units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters per second</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Leaky thickness units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Well diameter units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">inches</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">Well flow rate units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">liters/day</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">River bed hydraulic conductivity units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters per second</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:225px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">River bed thickness units</text></para>
+        </td>
+        <td style="width:116px;">
+          <para styleclass="Table Cell" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Table Cell" translate="true">meters</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"></para>
+    <list id="3" type="ol" listtype="decimal" formatstring="%0:s." levelreset="true" legalstyle="false" startfrom="3" styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none; font-family:'Times New Roman'; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-24px; margin-right:0px; margin-left:24px; tabstops:none;"><text styleclass="Normal" translate="true">The next step is to activate the chemistry options. Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Chemistry_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Chemistry Options…</link><text styleclass="Normal" translate="true"> Check the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use solute transport</text><text styleclass="Normal" translate="true"> checkbox. Uncheck the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use gas phases</text><text styleclass="Normal" translate="true">, </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use solid solution</text><text styleclass="Normal" translate="true">, and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use kinetics</text><text styleclass="Normal" translate="true"> checkboxes. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Set the Steady Flow options by selecting </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Steady_Flow_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Steady Flow…</link><text styleclass="Normal" translate="true"> and checking the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Steady flow</text><text styleclass="Normal" translate="true"> checkbox. Change the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Head tolerance</text><text styleclass="Normal" translate="true"> to 1E-6 and click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Free_Surface_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Model|PHAST Free Surface…</link><text styleclass="Normal" translate="true"> and check the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Use free surface</text><text styleclass="Normal" translate="true"> checkbox. Click the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">OK</text><text styleclass="Normal" translate="true"> button to close the dialog box.</text></li>
+    </list>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

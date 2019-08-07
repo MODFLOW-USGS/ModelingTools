@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RIV: River Package Pane</title>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">RIV: River Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The River package is used to boundaries in which the flow into or out of the groundwater system is a function of the head. If the head is above a threshold value the flow is a linear function of head. However, if the head in the cell falls below the threshold, the flow from the river to the model cell is set to a specified lower bound. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Dependant_Flux" styleclass="Normal" style="font-weight:bold;" translate="true">Head Dependant Flux</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">RIV: River package pane</text><text styleclass="Normal" translate="true">, the user can define parameters for the river boundaries. These parameters will be multiplied by user-specified </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RIV_Object_Pane" styleclass="Normal" translate="true">multipliers</link><text styleclass="Normal" translate="true"> to determine the river conductances defined by parameters. The user can also set up river boundaries that do not involve parameters. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Objects" styleclass="Normal" translate="true">Objects</link><text styleclass="Normal" translate="true"> must be used to define the locations of the river boundaries.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The River package is similar to the Drain package except that in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DRN_Drain_Package_Pane" styleclass="Normal" translate="true">Drain</link><text styleclass="Normal" translate="true"> package there can never be flow from the drain to the groundwater system.</text></para>
+    <para styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><snippet src="LinkToManageParameters"/></para>
+  </body>
+</topic>

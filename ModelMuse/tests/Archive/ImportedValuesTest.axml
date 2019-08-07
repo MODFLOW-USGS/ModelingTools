@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ImportedValuesTest" FileType="bin">
+    <FileName Model_Name="ImportedValuesTest" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ImportedValuesTest" FileType="ancillary">
+    <FileName Model_Name="ImportedValuesTest" FileType="ancillary">ImportedValuesTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ImportedValuesTest" FileType="Model Input">
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.bas</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.dis</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.gsf</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.lpf</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.nam.archive</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.oc</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">ImportedValuesTest.pcg</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Input">usgs.ImportedValuesTest.reference</FileName>
+  </model>
+  <output Model_Name="ImportedValuesTest" FileType="Model Output">
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Output">ImportedValuesTest.cbc</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Output">ImportedValuesTest.fdn</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Output">ImportedValuesTest.fhd</FileName>
+    <FileName Model_Name="ImportedValuesTest" FileType="Model Output">ImportedValuesTest.lst</FileName>
+  </output>
+</Model_Archive_List>

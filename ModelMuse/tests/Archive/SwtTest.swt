@@ -1,0 +1,33 @@
+# SWT: Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers file created on 4/9/2019 by ModelMuse version 3.10.0.55.
+     9     1     4     1     1     1     0 # Data Set 1: ISWTCB ISWTOC NSYSTM ITHK IVOID ISTPCS ICRCC
+ 1 2 3 4 # Data Set 2: LNWT
+     0     3     1     3     1     3     1     3     1    12 # Data Set 3: IZCFL IZCFM IGLFL IGLFM IESTFL IESTFM IPCSFL IPCSFM ISTFL ISTFM
+CONSTANT     0.000000000000E+000  # Data Set 4: GL0
+CONSTANT     1.700000000000E+000  # Data Set 5: SGM
+CONSTANT     2.000000000000E+000  # Data Set 6: SGS
+CONSTANT     4.500000000000E+001  # Data set 7: THICK
+CONSTANT     1.000000000000E-002  # Data set 10: Cr
+CONSTANT     2.500000000000E-001  # Data set 11: Cc
+CONSTANT     8.200000000000E-001  # Data set 12: VOID
+CONSTANT     0.000000000000E+000  # Data set 13: SUB
+CONSTANT     7.000000000000E+001  # Data set 7: THICK
+CONSTANT     1.000000000000E-002  # Data set 10: Cr
+CONSTANT     2.500000000000E-001  # Data set 11: Cc
+CONSTANT     8.200000000000E-001  # Data set 12: VOID
+CONSTANT     0.000000000000E+000  # Data set 13: SUB
+CONSTANT     5.000000000000E+001  # Data set 7: THICK
+CONSTANT     1.000000000000E-002  # Data set 10: Cr
+CONSTANT     2.500000000000E-001  # Data set 11: Cc
+CONSTANT     8.200000000000E-001  # Data set 12: VOID
+CONSTANT     0.000000000000E+000  # Data set 13: SUB
+CONSTANT     9.000000000000E+001  # Data set 7: THICK
+CONSTANT     1.000000000000E-002  # Data set 10: Cr
+CONSTANT     2.500000000000E-001  # Data set 11: Cc
+CONSTANT     8.200000000000E-001  # Data set 12: VOID
+CONSTANT     0.000000000000E+000  # Data set 13: SUB
+CONSTANT     1.500000000000E+001  # Data Set 14: PCSOFF, Layer 1
+CONSTANT     1.500000000000E+001  # Data Set 14: PCSOFF, Layer 2
+CONSTANT     1.500000000000E+001  # Data Set 14: PCSOFF, Layer 3
+CONSTANT     1.500000000000E+001  # Data Set 14: PCSOFF, Layer 4
+    10   116    11   116    11     0    11     0     3   116     9     0     3   116     4     0     3   116     9     0     7     0     7     0     7     0 # Data Set 16: Ifm1 Iun1 Ifm2 Iun2 Ifm3 Iun3 ... Ifm13 Iun13
+     2     3     1    60     1     1     1     1     0     0     0     0     1     1     1     0     1     1     1     0     1     1     1     0     0     0     0     0     0     0 # Data Set 17: ISP1 ISP2 ITS1 ITS2 Ifl1 Ifl2 Ifl3 ... Ifl26

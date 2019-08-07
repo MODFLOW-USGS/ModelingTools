@@ -1,0 +1,60 @@
+inherited framePolygon: TframePolygon
+  Size.Height = 336.000000000000000000
+  inherited memoDescription: TMemo
+    Viewport.Width = 320.000000000000000000
+    Viewport.Height = 77.000000000000000000
+  end
+  inherited pnlBottom: TPanel
+    Size.Height = 247.000000000000000000
+    object spnbxRows: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = [akLeft, akBottom]
+      TabOrder = 0
+      Cursor = crIBeam
+      Min = 4.000000000000000000
+      Max = 1.000000015047466E30
+      Value = 4.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 216.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      StyledSettings = [Family, Style, FontColor]
+      OnChange = spnbxRowsChange
+    end
+    object sgPolygon: TStringGrid
+      Align = Client
+      CanFocus = True
+      ClipChildren = True
+      Margins.Bottom = 40.000000000000000000
+      Size.Width = 320.000000000000000000
+      Size.Height = 207.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      StyledSettings = [Family, Style, FontColor]
+      TabOrder = 1
+      RowHeight = 21.000000000000000000
+      OnDrawColumnCell = sgPolygonDrawColumnCell
+      OnEditingDone = sgPolygonEditingDone
+      Viewport.Width = 320.000000000000000000
+      Viewport.Height = 207.000000000000000000
+      object scolLongitude: TStringColumn
+        Header = 'Longitude'
+      end
+      object scolLatitude: TStringColumn
+        Header = 'Latitude'
+      end
+    end
+    object btnPaste: TButton
+      Anchors = [akLeft, akBottom]
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 128.000000000000000000
+      Position.Y = 216.000000000000000000
+      Size.Width = 169.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Paste from Clipboard'
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btnPasteClick
+    end
+  end
+end

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ZONEBUDGET</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ZONEBUDGET</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ZONEBUDGET (Harbaugh, 1990) is a separate program used to compute subregional water budgets in your model. The pane for this program is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Post_Processors" styleclass="Normal" translate="true">Post processors</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When ZONEBUDGET is selected, a new data set names &quot;Zones&quot; is created. It is used to define the zones for the subregional water budgets. Each zone has a number between 1 and 999 inclusive. Assign those values to the Zones data set. In MODFLOW 6, any positive or negative integer other than zero can be used to define a zone.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can also define up to 100 composite zones in the table on the ZONEBUDGET pane. (Composite zones are not supported with MODFLOW 6) The first column is the name of the zone. The other columns define numeric zone numbers that should be included in the composite zone. Up to 50 numeric zones can be included in each composite zone. Composite zone names are limited to 10 characters.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ZONEBUDGET can have up to three output files. For more details on the ZONEBUDGET output files see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Output_Options" domain="ZoneBudgetGuide.hmxp" styleclass="Normal" translate="true">Output Options</link><text styleclass="Normal" translate="true"> in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Online_Guide_to_ZONEBUDGET" domain="ZoneBudgetGuide.hmxp" styleclass="Normal" translate="true">Online Guide to ZONEBUDGET</link><text styleclass="Normal" translate="true">. With MODFLOW 6, a listing file and a single comma-separated value file are always created.</text></para>
+  </body>
+</topic>

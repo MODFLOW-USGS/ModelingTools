@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="NearestTest2" FileType="bin">
+    <FileName Model_Name="NearestTest2" FileType="bin">C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+  </bin>
+  <ancillary Model_Name="NearestTest2" FileType="ancillary">
+    <FileName Model_Name="NearestTest2" FileType="ancillary">NearestTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="NearestTest2" FileType="Model Input">
+    <FileName Model_Name="NearestTest2" FileType="Model Input">NearestTest2.ics</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Input">NearestTest2.inp</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Input">usgs.NearestTest2.reference</FileName>
+  </model>
+  <output Model_Name="NearestTest2" FileType="Model Output">
+    <FileName Model_Name="NearestTest2" FileType="Model Output">NearestTest2.ele</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Output">NearestTest2.lst</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Output">NearestTest2.nod</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Output">NearestTest2.rst</FileName>
+    <FileName Model_Name="NearestTest2" FileType="Model Output">NearestTest2.smy</FileName>
+  </output>
+</Model_Archive_List>

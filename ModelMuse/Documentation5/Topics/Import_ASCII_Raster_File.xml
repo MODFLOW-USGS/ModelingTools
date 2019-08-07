@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Import ASCII Raster File Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import ASCII Raster File Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Import ASCII Raster File dialog box imports or samples a ASCII raster file in the format described in </text><link displaytype="text" defaultstyle="true" type="weblink" href="http://webhelp.esri.com/arcgisdesktop/9.1/index.cfm?TopicName=Raster%20to%20ASCII%20(Conversion)" target="_blank" styleclass="Normal" translate="true">http://webhelp.esri.com/arcgisdesktop/9.1/index.cfm?TopicName=Raster%20to%20ASCII%20(Conversion)</link><text styleclass="Normal" translate="true">. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">File|Import|ASCII Raster File(s)...</text></para>
+    <para styleclass="Normal"><snippet src="Import_Filter_Methods"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If multiple files are selected, they will be listed in a table in which a separate data set can be associated with each file. If only a single file is selected, the data set into which the data are to be imported is selected in a combo box. If multiple files have been selected, they can only be imported if they all have data at the same locations. The order of the files in the table of multiple files can be changed by clicking on the gray cells to the left of the file name and dragging the row to a new position.</text></para>
+    <para styleclass="Normal"><snippet src="ConvertUnits"/></para>
+  </body>
+</topic>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ExampleModel" FileType="bin">
+    <FileName Model_Name="ExampleModel" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ExampleModel" FileType="ancillary">
+    <FileName Model_Name="ExampleModel" FileType="ancillary">ExampleModel.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ExampleModel" FileType="Model Input">
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.bas</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.chd</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.dis</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.gsf</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.jtf</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.lpf</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.mlt</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.nam.archive</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.oc</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.pcg</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.pval</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">ExampleModel.zon</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Input">usgs.ExampleModel.reference</FileName>
+  </model>
+  <output Model_Name="ExampleModel" FileType="Model Output">
+    <FileName Model_Name="ExampleModel" FileType="Model Output">ExampleModel.cbc</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Output">ExampleModel.fdn</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Output">ExampleModel.fhd</FileName>
+    <FileName Model_Name="ExampleModel" FileType="Model Output">ExampleModel.lst</FileName>
+  </output>
+</Model_Archive_List>

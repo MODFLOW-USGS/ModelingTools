@@ -1,0 +1,41 @@
+
+
+{TODO 1 -cInterface : Fix bugs: Failure when project and model files are in top-level directory. E.g. C:\}
+
+
+{TODO 2 -cInterface : Add new edit control in UCODE Parallel-Processing Control window to allow input of WAITRUNNERS (which is used by jrunner) as opposed to WAIT (which is used by UCODE).}
+
+{TODO  -cInterface : The MODFLOW name file should be written to the model command line (Model Commands window) as a relative path (relative to directory where UCODE is invoked).}
+
+{TODO 2 -cInterface : Add button "Run UCODE without updating files" to left side of main form -- disable if no batch file exists.}
+{TODO 2 -cInterface : Add capability to add/insert text (inputblock(s)) into Ucode input file.}
+
+{TODO 2 -cInterface : From Eileen: Perhaps add #resan and  #resanadv to the view menu and have them grayed out until the codes are executed}
+
+
+
+{TODO 2  -cPostprocessing-processors : Linear_Uncertainty: The runs of UCODE conducted produce all of the input files needed by the Linear_Uncertainty post-processor. Could this post-processor be added under the post-processing drop-down menu?}
+{TODO 2 -cPredictions : 
+It would be nice if ModelMate could use the FOR_PREDICTIONS input blocks  for parameters in the prediction run but not in the calibration run.
+Mary}
+
+
+
+
+
+{TODO 3 : Make new form for building equations, based on ModelMuse\frmFormulaUnit.pas}
+
+{TODO 3 -cInterface : Code exception to be thrown when failure to read a .mtc project file due to its being out-of-date}
+
+{TODO 3 -cInput Blocks : In preparing input blocks, need to ensure strings containing blanks are enclosed in quotes.  Esp. ModelName.  Model Command is OK--use as example?}
+
+{TODO 2 -cUcode : Add capability to read main Ucode output file and extract key information.}
+{TODO 2 -cUcode : Add capability to read Ucode output files to get model-fit statistics.}
+
+
+
+{TODO  -cInterface :For Parameters Table: Add field ParameterDescription to TProject, modify Parameters table so that
+clicking on a parameter name puts the description into the label below the table.
+Combine this with changing Parameters and Parameter Groups tables to function like the ModelIO table}
+
+{TODO  -cParameters : Main form: Add capability to rename or delete Parameters and Parameter Groups.}

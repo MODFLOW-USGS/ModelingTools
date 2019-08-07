@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Duplicate Names Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Duplicate Names Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Duplicate Names</text><text styleclass="Normal" translate="true"> dialog box is displayed if the user attempts to </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Shapefile_Dialog_Box" styleclass="Normal" translate="true">import a Shapefile</link><text styleclass="Normal" translate="true"> attribute that matches the name of an existing data set but the user does not specify that the attribute should apply to an existing data set. The names of the attributes that match existing data sets are displayed in the dialog box. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user clicks the </text><text styleclass="Strong" translate="true">OK</text><text styleclass="Normal" translate="true"> button, the Shapefile attributes will be imported. If the user clicks the </text><text styleclass="Strong" translate="true">Cancel</text><text styleclass="Normal" translate="true"> button, the user will be returned to the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_Shapefile_Dialog_Box" styleclass="Normal" translate="true">Import Shapefile dialog box</link><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing the Shapefile attributes, the user has the following choices.</text></para>
+    <list id="7" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Create new data sets with different names.]]></caption></toggle></li>
+  </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The name of the new data set will be the name of the attribute with a number appended to the end of the name. For example if the name of the attribute was &quot;XYZ&quot;, the new data set might be named &quot;XYZ1&quot;. </text></para>
+        </td>
+      </tr>
+    </table></para>
+    <list id="7" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Assign to the existing data set but keep existing objects for that data set.]]></caption></toggle></li>
+  </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The value of the attribute will be used to set the value of the matching existing data set. If there are already objects that set the value of the data set, they will not be changed.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <list id="7" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:-18px; margin-left:18px; font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Assign to the existing data set and delete existing objects for that data set.]]></caption></toggle></li>
+  </list>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The value of the attribute will be used to set the value of the matching existing data set. However, any other objects that also set the value of the same data set, those objects will be deleted. </text><text styleclass="Strong" style="font-style:italic;" translate="true">Important:</text><text styleclass="Normal" translate="true"> Because objects can set the values of multiple data sets, the objects that are deleted might be used in assigning values to other data set for which no new values are supplied. For example, the user might previously have imported a Shapefile with attributes &quot;A&quot; and &quot;B&quot; and in the process created new data sets named &quot;A&quot; and &quot;B&quot;. Later on, the user updated the values of attribute A in the Shapefile but not attribute B. If the user imported the Shapefile again and only chose to import attribute A while selecting this option, all the objects that assign values to data set B would be deleted and the values in data set B would be defined by the default formula for the data set instead of by objects. One simple way to avoid this problem would be to import both A and B even though only A had changed. Another way would be to edit all the objects that set the value of A so that they no longer affect A before importing the Shapefile.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> </text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

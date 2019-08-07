@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 9/9/2009 by ModelMuse
+LIST 11 LabCreek-02.lst REPLACE
+DATA(BINARY) 9 LabCreek-02.cbc REPLACE
+DIS 12 LabCreek-02.dis OLD
+BAS6 13 LabCreek-02.bas OLD
+OC 39 LabCreek-02.oc OLD
+DATA 37 LabCreek-02.fhd REPLACE
+DATA 38 LabCreek-02.fdn REPLACE
+SIP 35 LabCreek-02.sip OLD
+LPF 14 LabCreek-02.lpf OLD
+CHD 17 LabCreek-02.chd OLD
+GHB 19 LabCreek-02.ghb OLD
+MULT 16 LabCreek-02.mlt OLD
+PVAL 52 LabCreek-02.pval OLD

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Farm Process Options</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Farm Process Options</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This pane is a subpane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="FMP_Farm_Process" styleclass="Strong" translate="true">FMP: Farm Process</link><text styleclass="Normal" translate="true"> pane on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Precipitation assignment method</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse has an option to determine how objects are used to define the precipitation rate. If </text><text styleclass="Strong" translate="true">Objects overwrite values of previous objects</text><text styleclass="Normal" translate="true"> is selected and more than one object defines the precipitation rate for a cell, only the precipitation rate from the last object that assigns a value will be used. The rates from previous objects will be ignored. If </text><text styleclass="Strong" translate="true">Sum values of all objects</text><text styleclass="Normal" translate="true"> is used, the precipitation rates from all the objects that assign a rate to a cell will be added together. The latter option is helpful for combining precipitation due to different processes. For example, it might be convenient to define different types of precipitation with separate objects and then have the two added together.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Crop irrigation requirement (AUX NOCIRNOQ)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This option allows the user to specify that whether or not Farm Wells should be pumped if there is no irrigation requirement in that cell.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Recompute farm flows for each time step (RECOMP_Q_BD)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">By default, the head-dependant flow terms in the Farm Process is not recomputed again after the last iteration. However, because of interactions between the Farm Process and other packages, calculating the head-dependant flow terms in the Farm Process after the last iteration can result in improved accuracy and computation speed. (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="References_Cited" anchor="FMP2" styleclass="Normal" translate="true">Schmid and Hanson, 2009</link><text styleclass="Normal" translate="true">, p. 15)</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Reset QMAX in MNW1 package in each stress period (AUX QMAXRESET)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you check this check box, then MODFLOW-OWHM will set the maximum pumping rate back to the QMAX rate specified in the FMP package at the beginning of each stress period.</text></para>
+  </body>
+</topic>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectCurrentSectionIndex</title>
+  <keywords>
+    <keyword translate="true">ObjectCurrentSectionIndex</keyword>
+  </keywords>
+  <body>
+    <header>
+      <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">ObjectCurrentSectionIndex</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ObjectCurrentSectionIndex</text><text styleclass="Normal" translate="true"> returns the number of the current section of the current object. If no object is being evaluated, ObjectCurrentSectionIndex returns zero.</text></para>
+  </body>
+</topic>

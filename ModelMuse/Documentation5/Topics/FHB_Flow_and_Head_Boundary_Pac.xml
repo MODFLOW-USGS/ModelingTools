@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">FHB: Flow and Head Boundary Package Pane</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">FHB: Flow and Head Boundary Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Flow and Head Boundary (FHB) Package allows the user to define specified heads and flows in a way that is independent of the stress periods and time steps in the model. The pane for this package is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under both </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Specified_Head" styleclass="Normal" style="font-weight:bold;" translate="true">Specified Head</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Specified_Flux" styleclass="Strong" translate="true">Specified Flux</link><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The times defined in the FHB package need not correspond to the times when stress periods or time steps start or end. The FHB package will interpolate flow rates and heads between the times that are specified by the user. For example, if the user has specified a flow rate of 1 at time 0 and a flow rate of 2 at time 1, the FHB package will calculate a flow rate of 1.1 at time 0.1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For specified flows, the flow rate for a time step will be the average specified flow for the time step. For specified heads, the head will be the interpolated head at the end of the time step. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Specified heads in the FHB package override those specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CHD_Time_Variant_Specified_Head" styleclass="Normal" translate="true">CHD</link><text styleclass="Normal" translate="true"> package.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>
