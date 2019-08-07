@@ -1,0 +1,18 @@
+ Allows switching between open delphi applications and/or lauching (any) application
+  Note: App to Switch too must have TActivateApp component
+  two Methods:        1) ActivateApp - Switch to open App, if App Closed Then Launch It
+                      2) ExecuteApp - Launch App
+  one Event:          1) BeforeLaunchApp - Allows one to discontinue Lauching of app when
+                         ActivateApp senses app to switch to is not open, does not stop
+                         launching of app when execute method used.
+      Properties:    1) MainFormTitle - Title On Main form of Application to Activate when
+                        using AppActivate Method only. IF An MDI Application then included the
+                        FULL title displayed on the titlebar of the main form
+                     2) ExePath - Full path to executable including Exe name and any parameters
+                        Used by both ActivateApp & Execute App
+  Freeware Use & Abuse
+  Author: Edward de la Rey
+          edwardr@mailbox.ru.ac.za
+          USE AT OWN RISK
+  For Delphi 1,2,3 Will Automatically pickup the correct DCR File,
+  D16 is for Delphi1, D32 for Delphi 2&3, Don't rename them.

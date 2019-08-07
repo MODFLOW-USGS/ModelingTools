@@ -1,0 +1,819 @@
+	--------------------------------------------------------------------------------------------------------
+	*** Documentation sur le composant XBASE1                                              ***
+	*** adapt‚ par GUY CHABANT  30/12/2002                                                 ***
+	-------------------------------------------------------------------------------------------------------
+
+Mise … Jour du 06 F‚vrier 2003 : Version V1.20 : 
+        Nouvelles fonctions : FindRecord et SetFind , UpdFieldX , DBFFormatDate , DBFFormatNum
+
+Mise … Jour du 10 Janvier 2003 : Version V1.10 : plusieurs fonctions ajout‚es , ainsi
+                 que des retouches de d‚tail
+
+-----------------------------------------------------
+OBJECTIF 
+-----------------------------------------------------
+	Ce composant "Non Visuel" pour DELPHI est destin‚ … lire et ‚crire des fichiers au 
+	format DBASE3 ( fichiers de type .DBF )
+	C'est une "Freeware" , gratuit , fourni avec son source ".PAS"
+
+	Il permet de se passer totalement du BDE BORLAND , et donc d'‚conomiser environ 5 
+	M‚ga-Octets lors de la diffusion d'une application , et Ša compte ‚norm‚ment
+	lorqu'il s'agit de t‚l‚charger sur le WEB ( en UpLoad ou DownLoad ).
+
+	Et aussi de n'avoir aucun souci de configuration du BDE sur les postes clients !
+
+-----------------------------------------------------
+CIBLE
+-----------------------------------------------------
+	En principe , toutes les versions de DELPHI , de Delphi-2 … Delphi-7
+	Toutefois le composant, dans son ‚tat actuel , n'a ‚t‚ test‚ et mis au point
+	que sous DELPHI-5
+	Si vous voulez l'utiliser sous d'autres versions ( 4 , 6 , 7 ) , vous aurez
+	probablement … faire quelques retouches directement sur le source :
+	Dans ce cas , veuillez m'exp‚dier vos modifications !
+			mon Mail  : g.chabant@free.fr
+
+-----------------------------------------------------
+ORIGINE et HISTORIQUE
+-----------------------------------------------------
+	J'ai trouv‚ , en l'an 2000  , le composant original dans l'un des
+	sites majeurs sur Delphi ( sur le site de TORRY je crois );
+	Il a ‚t‚ ‚crit par JAMIE HART , pour Delphi 2 & 3 ;
+	Sa version ‚tait 0.99A ( bˆta )
+	Son E-mail est  jay@bitsmart.com , mais j'ignore si c'est toujours valable.
+
+	Il contenait quelques bugs , et surtout ne convenait pas … un Europ‚en ,
+	et … un fran‡ais ( avec par exemple notre VIRGULE d‚cimale , alors que
+	DBASE3 utilise syst‚matiquement le POINT d‚cimal )	;
+	Il n'‚tait pas du tout optimis‚ dans certaines routines ( remplissage ou padding
+		droite ou gauche avec des espaces ).
+
+	J'y ai donc fait quelques rectifications , jusqu'… une date r‚cente , en l'ayant
+	utilis‚ dans plusieurs applications personnelles
+	( la principale : logiciel de Bulletins de Paye pour Employeurs Particuliers
+		==> site  http://aafi.free.fr )
+
+-----------------------------------------------------
+LIMITATIONS et CONTRAINTES
+-----------------------------------------------------
+
+a) Limitations Essentielles :
+	** ce n'est pas un composant "Data-Aware" ; ce n'est pas un descendant de "TDataSet" 
+		ou similaire ;  il ne peut pas ˆtre li‚ automatiquement … des composants 
+		visuels tels que TDBEdit , etc ...
+	** il ne traite pas les index , quel qu'en soit le type ( NDX Dbase3 , MDX , NTX Clipper ...)
+		il ne sait lire et ‚crire les fichiers que dans leur ordre s‚quentiel naturel.
+	** MONO Utilisateur ; pas de gestion multiutilisateurs, de "lock" de record , etc ...
+
+b) Limitations pouvant ˆtre lev‚es par un d‚veloppement compl‚mentaire
+	** il ne traite que les fichier au format "DBASE3" , qui se caract‚rise par :
+		-- un EN-TETE de 32 octets
+		-- des DESCRIPTEURS de Champs de 32 octets
+	** le fichiers .DBF au format des versions plus r‚centes ( Dbase4 , Dbase5 , 
+		voire Dbase2000 , Dbase v7.0 ou DB2K ) ne peuvent ˆtre trait‚s car leurs
+		EnTete sont l‚g‚rement diff‚rents, pour g‚rer des fonctionnalit‚s ‚tendues
+            ** les nouveaux types de champs ne sont pas trait‚s ; seuls les types originaux de
+                       dBase sont utilisables : Car , Num , Date , Logique ,  
+                       et Memo ( sous toutes r‚serves, car je n'ai pas v‚rifi‚ )
+        ** je me suis consacr‚ exclusivement qu'aux champs simples Num, Char , Date
+                les champs LOGIQUES sont pour moi une anecdote , je ne les ai jamais 
+                utilis‚s car je pr‚f‚re … la place un champ CHAR de 1 caractŠre , dont
+                je code moi mˆme les valeurs , par exemple O ou N ( pour OUI ou NON );
+                cela est plus souple , car par exp‚rience j'ai constat‚ que lors des 
+                ‚volutions d'une application , souvent un code … l'origine binaire
+                ( YES/NO ) , devenait Multi-Valeurs. Par exemple, une application
+                qui au d‚part distinguait la situation familiale ( Mari‚ ? OUI/NON ),
+                va quelques temps plus tard devoir distinguer d'autres vari‚t‚s 
+                ( Pacs‚ , Divorc‚ , Veuf ) 
+
+c) Limitations extensibles
+	** il est limit‚ … 128 CHAMPS maximum
+	** la taille maximum de chaque RECORD est 4000 bytes ( les records ont une longueur
+		fixe en Dbase3 )
+
+	Ces limites peuvent trŠs facilement ˆtre modifi‚es par une simple modif de constantes
+		dans le source.
+
+d) Les Champs "MEMO" et les fichiers associ‚s ".DBT"
+	Cela semble avoir ‚t‚ pr‚vu et trait‚ par le d‚veloppeur initial Jamie Heart
+	Je n'ai toutefois jamais test‚ cette partie du composant , car aucune de mes applications
+		n'utilise les champs MEMOS.
+	De plus , toutes les fonctionnalit‚s suppl‚mentaires que j'ai ajout‚es ne s'appliquent
+		qu'aux champs simples ( Num , Char , Date ) , et je n'ai rien cod‚ pour 
+		les champs MEMO ou LOGIQUES. 	 
+	Si c'est votre cas, votre exp‚rience m'int‚resse !
+
+-----------------------------------------------------------
+Quelques rappels sur les fichiers DBASE
+-----------------------------------------------------------
+	Le language DBASE , et le format de fichier , ont ‚t‚ invent‚ d‚s 1981 par la St‚
+	ASTON TATE , et a ‚t‚ un standard sous MS/DOS jusque vers 1995.
+	Le produit Dbase ( depuis Dbase1 jusqu'… Dbase5 ) ‚tait un moteur - interpr‚teur
+	de commandes et de fichier , avec un language de manipulation puissant et trŠs
+	souple. Dans son sillage , de nombreux produits ont vu le jour : DBfast , FoxPro ,
+	mais le principal a ‚t‚ et reste encore CLIPPER ou NANTUCKET ( un compilateur
+	hyper performant , modulaire , acceptant les librairies tierces).
+
+	Chaque fichier DBF forme un tout ind‚pendant , qui inclut  les donn‚es et leur description.
+	Les donn‚es sont structur‚es en une collection de RECORDS , de longeur fixe,
+	 qui sont num‚rot‚s s‚quentiellement  de 1 … N dans l'ordre physique de stockage.
+	Chaque record contient la valeur de chacun des champ , l'ordre et la taille ce chacun
+	‚tant fixe.
+	Les 32 + 32 * N premiers bytes du fichier  forment le HEADER qui d‚crit la structure :
+	* Date , Longueur de chaque record , nombre de records
+	* pour chaque Champ : son type, sa taille , son NOM
+
+	Le format DBase3 ne connait que 5 types de champs :
+	* type C : chaine de caractŠres ,
+	* type N : Num‚rique , avec un nombre de d‚cimales fix‚ 
+	* type D : Date , enregistr‚e en tant que chaine "aaaammjj" ( 8 chiffres )
+	* type L : Logique ( ou Bool‚en )  T = True , F = False 
+	* type M : Memo ; techniquement il s'agit d'un pointeur vers une position dans
+			le fichier ".DBT" associ‚ ou est r‚ellement stock‚ le m‚mo.
+
+	Toutes les donn‚es sont enregistr‚es en ASCII pur ,  sans aucun compactage ,
+		ou mise en binaire ou en flottant scientifique.
+
+	En Dbase3 , les noms des champs sont au plus de 10 caractŠres de long.
+
+	Les records "supprim‚s" ne le sont que logiquement , grace … un Flag positionn‚
+		… "*" en 1-er byte.
+
+	La version de fichier se repŠre … la valeur du 1er byte du Header :
+			=  $03 ou $83  pour un fichier Dbase3.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+Classe TXBASE    : propri‚t‚s 
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+FILENAME		: String	
+			Nom du fichier DBF ( nom complet avec le chemin ) ; limit‚ … 255 car.
+			Vous devez remplir cette propri‚t‚ avant d'ouvrir le fichier.
+
+ACTIVE		: Boolean
+			en lecture ==> Indique si le fichier est OUVERT (true) ou  FERM‚ (false)
+			en ‚criture ==> Modifier sa valeur d‚clenche toutes les op‚rations li‚es …
+			l'ouverture ou la fermeture du fichier
+
+AUTOUPDATE	: Boolean
+			"True" permet d'avoir un comportement proche de celui du DBase3
+			original , qui effectue une m-a-j automatique du record courant quand
+			on navige dans le fichier
+
+DELETED		: Boolean
+			"True" indique que le Record Courant est logiquement supprim‚
+ 			en ‚criture ==> L'affectation de valeur provoque la suppression "logique" , 
+			ou la r‚-activation du record courant
+
+RECNO		: Cardinal		// LECTURE seule //
+			Num‚ro de 1 … N du record courant ( celui en m‚moire )
+
+RECORDCOUNT	: Cardinal		// LECTURE seule //
+			Nombre de Records dans le fichier , y compris ceux supprim‚s.
+			Il y a en principe une corr‚lation entre la taille du fichier S , la taille du
+			Header H , la taille des records L et le RecordCount R
+				S := H +  L * R  + en principe 1 ( pour un octet final valant $1A )
+
+			Si le fichier est vide ,  R = 0 
+
+FIELDCOUNT	: Integer		// LECTURE seule //
+			Nombre de champs  ( le champs sont num‚rot‚s de 1 … F )
+
+RECORDLENGTH	: Word			// LECTURE seule //
+			fournit la taille fixe de chaque record ; c'est la somme des tailles
+			de tous les champs , plus 1 pour le Flag "Deleted"
+
+BOF 			: Boolean		// LECTURE seule //
+			"True" signifie "Begin Of File" ce qui signifie que le record courant
+			est le 1er 
+
+EOF 			: Boolean		// LECTURE seule //
+			"True" signifie "End Of File" ce qui signifie que l'on a tent‚ de se d‚placer
+			au-dela du dernier record ( on a navig‚ pour aller au record R + 1 )
+
+LASTREC 		: Boolean		// LECTURE seule //
+			"True" signifie "Dernier Record" ce qui signifie que le record courant
+			est le dernier ( num‚ro R )
+
+MODIFIED 		: Boolean		// LECTURE seule //
+			"True" indique que une ou plusieurs modifications on ‚t‚ faites , en m‚moire,
+			sur le record courant  ( par les fonction UPDATE ou UPD... )
+
+DEBUGERR		: Boolean
+			Normalement … FALSE , cet indicateur peut ˆtre mis … TRUE lorsque vous
+			faites la mise au point de votre programme.
+			Cela permet d'obtenir des messages d'erreur , au lieu d'erreur bloquantes ,
+			dans de nombreux cas de mauvais usage des fonctions et m‚thodes de TXBASE1
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Classe TXBASE    : Gestion d'EVENEMENTS  
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+ONCHANGING (Self, Allowed)	:   S'ex‚cute … chaque fois qu'une navigation dans le fichier ( changement
+			de record ) est activ‚e ; ALLOWED doit ˆtre charg‚e … TRUE si vous autorisez la
+			navigation , et … FALSE si vous l'interdisez
+
+ONDELETING  (Self, Allowed)	:S'ex‚cute … chaque fois qu'une tentative de SUPPRESSION logique du record
+			COURANT est activ‚e ; ALLOWED doit ˆtre charg‚e … TRUE si vous autorisez la
+			cette suppression , et … FALSE si vous l'interdisez
+
+ONAPPENDED (self )		: Se produit … la fin d'un AJOUT de nouveau record ( en Dbase3 , celui-ci
+			est pla‡‚ en fin physique du fichier, et est int‚gralement … blanc ) 
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+Classe TXBASE    : m‚thodes  
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+********** METHODES pour obtenir des informations sur les CHAMPS *********
+
+GETFIELDNAME( N )   --> donne le NOM du champ num‚ro  N
+
+GETFIELDTYPECHAR( N )   --> donne le TYPE ( C, D , L ,  M , N  )  du champ nø  N
+
+GETFIELDTYPE( N )   --> donne le TYPE du champ nø  N ,  sous une forme typ‚e par JAMIE HART ,
+				… savoir : 
+				xbfChar  ,  xbfDate  ,  xbfLogic ,  xbfMemo  , xbfNumber ,  ou xbUnknown
+
+GETFIELDSIZE( N )   --> donne la TAILLE du champ nø  N  ( nombre fixe d'octets )
+
+GETFIELDDECIMALS(N)  --> donne le Nombre de D‚cimales du champ nø  N  ; 
+					valeur nulle pour les champs de type C , D , M , L
+					il n'est significatif que pour les champs Num‚riques
+
+NOTA : si NUMERO N INVALIDE  ( inf‚rieur … 1 ou sup‚rieur au nombre de champs ) :
+		Ces fonctions retournent respectivement  VIDE , SPACE , xbUnknown , 0 , 0 
+		et d‚clenchent une Erreur Globale.
+
+
+GetFieldNumberFromName(Text: WString) --> fournit le num‚ro   N du champ dont on indique le nom ;
+					r‚sultat nul si aucun champ de ce nom existe.
+
+
+********** METHODES pour NAVIGER dans le fichier *********
+
+GoToBOF		: se placer sur le 1er record 
+	
+GoToEOF		: se placer sur le dernier  record  ( et non pas au-dela ! )
+
+GotoNEXT		: se d‚placer sur le record s‚quentiellement suivant 
+
+GotoPREV		: se d‚placer sur le record pr‚c‚dent
+
+GotoRECORD(X)	: se d‚placer sur le record ayant le n   X
+
+	// NOTE : chaque d‚placement provoque la lecture en m‚moire ( dans un Buffer associ‚ au
+		composant ) du record demand‚
+
+	// NOTE : 	la commande SKIP(x)  de DBASE3  a pour ‚quivalent 
+				GotoRECORD( RecNo + x )
+			un SKIP(1) 	‚quivaut …  GotoNEXT
+			un SKIP(-1)	‚quivaut …  GotoPREV
+
+
+********** METHODES pour obtenir la valeur d'un champ du Record courant *********
+
+GETFIELDBYNAME( NOM )  	-->   donne syst‚matiquement le String Valeur
+							( pour un champ dont on connait le Nom )
+
+GETFIELDBYNUMBER( N )  	-->   donne syst‚matiquement le String  Valeur
+							( pour un champ dont on connait le Num‚ro)
+
+Lorsque l'on connait le type et le nom du Champ , on utilisera de pr‚f‚rence :
+GETFIELDSTR( NOM )  	-->   Champ de type "C" ,  donne son String Valeur
+
+GETFIELDINT( NOM )  	-->   Champ de type "N" ,  avec  ZERO d‚cimale ,
+					donne sa valeur sous forme de Nombre Entier ( INTEGER)
+
+GETFIELDNUM( NOM )  	-->   Champ de type "N" ,  
+					donne sa valeur sous forme de Nombre FLOTTANT (REAL)
+
+GETFIELDDAT( NOM )  	-->   Champ de type "D" ,  
+					donne sa valeur sous forme d'un string "jj/mm/aaaa"
+					( forme imprimable de style Europ‚en fran‡ais )
+
+********** PROCEDURES  pour MODIFIER la valeur de champs du record courant  *********
+
+PUTFIELDBYNAME( NOM , VALEUR string ) 
+
+PUTFIELDBYNUMBER( NUMERO , VALEUR string ) 
+
+Lorsque l'on connait le type et le nom du Champ , on utilisera de pr‚f‚rence :
+UPDFIELDSTR( NOM , VALEUR string )  	-->   Champ de type "C" 
+					( mais est utilisable pour tous les types )
+
+UPDFIELDINT( NOM , VALEUR Integer )  	-->   Champ de type "N"  avec ZERO d‚cimales
+									( nombre Entier )
+
+UPDFIELDDAT( NOM , VALEUR string )  	-->   Champ de type "D"  , la valeur doit
+								ˆtre de forme string "jj/mm/aaaa"
+
+UPDFIELDNUM( NOM , VALEUR Extended )  	-->   Champ de type "N"  , qui doit  ˆtre un
+								nombre 
+
+Pour un champ Num‚rique dont on connait parfaitement le nombre de  d‚cimales :
+UPDFIELDNUM2D( NOM , VALEUR Extended )  	-->   Champ de type "N"  , qui doit  ˆtre un
+					montant mon‚taire avec DEUX d‚cimales
+
+UPDFIELDNUM5D( NOM , VALEUR Extended ) -->   Champ de type "N"  , qui doit  ˆtre un
+					coefficient ou quantit‚ avec CINQ d‚cimales
+
+      // NOTE :	on peut si besoin rajouter d'autres variantes ( autant que de NB d‚cimales )
+		car Dbase cadre toujours le POINT d‚cimal de faŠon fixe ;
+		par exemple , si un champ N est d‚fini de taille 7 avec 3 d‚cimales , le POINT sera
+		toujours au mˆme endroit ; une valeur telle que 123,75  
+				sera enregistr‚e '123.750'
+
+********** PROCEDURES  pour MISE A JOUR REELLE du Fichier  *********
+
+POSTCHANGES 	: pour enregistrer au final les modifications : sur le record courant
+				les modifications faites en m‚moire seront perdues si vous
+				ne faites pas un "PostChanges" explicitement ou implicitement
+				( voir AutoUpdated )
+APPENDBLANK	: Cr‚e physiquement un R + 1 i‚me record , … BLANC , dans le fichier
+				et le charge en zone m‚moire
+				Note : les nouveaux records se placent toujours en fin de fichier
+
+Note : pour "supprimer" logiquement le Record Courant , mettez … True la propri‚t‚ DELETED
+
+
+********** Autres PROCEDURES ***********
+
+REFRESHRECORD	:  Re-Lecture en m‚moire du record courant , ce qui annulle
+					toutes les modifications faites si aucun "PostChanges" n'a 
+					‚t‚ ex‚cut‚.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+********************** Fonctions utilitaires rendues publiques **************************************************
+
+--------------------------------------------------------------------------------------------------------------------------
+PadLeft(Text: WString ; CPT: Integer) : WString  :   La chaine TEXT pass‚e en argument est ajust‚e en longeur
+--------------------------------------------------------------------------------------------------------------------------
+		exactement … la longueur CPT , soit en la tronquant "A GAUCHE"  , soit en lui ajoutant des
+                        ESPACES "A GAUCHE"
+		exemples : 	PadLeft('abcdefgh' ,    5) ==> 'defgh'
+				PadLeft('abcdefgh' , 11 ) ==> '   abcdefgh'  ( 3 espaces ajout‚s au d‚but )
+		Nota : les chaines trait‚es ( WString ) sont des ShortStrings d‚finis  String[255] ;
+
+--------------------------------------------------------------------------------------------------------------------------
+PadRight(Text: WString ; CPT: Integer) : WString  :   Similaire , mais la troncature ( ou l'ajout d'espaces ) ,
+--------------------------------------------------------------------------------------------------------------------------
+		se fait du cot‚ "DROIT" ( c'est … dire … la fin de la chaine ).
+
+--------------------------------------------------------------------------------------------------------------------------
+StandardDBFName(Text: WString): WString ; 
+--------------------------------------------------------------------------------------------------------------------------
+		TEXT ‚tant un nom de fichier ( ‚ventuellemnt avec son chemin relatif ou complet )  , 
+		cette fonction fournit le mˆm nom de fichier , mais compl‚t‚ par l'extension standard
+		".DBF"  des fichiers classiques Dbase3.
+
+--------------------------------------------------------------------------------------------------------------------------
+Procedure DBFSetDateAMJ( var ZAMJ3 : array of byte) :  
+--------------------------------------------------------------------------------------------------------------------------
+		retourne , dans la zone de 3 bytes ZAMJ3 , la DATE actuelle , dans le mˆme format que
+		celui figurant dans le HEADER des fichiers DBF ( octets  2 - 3 - 4 de celui-ci )
+		en tenant compte du fait que DBASE3 n'accepte historiquement que des ann‚es codifi‚es de 
+				00 … 99.
+		Exemple : si nous sommes le 10 Janvier 2003 , le r‚sultat sera :  #03  #01  #10
+
+--------------------------------------------------------------------------------------------------------------------------
+fonction  DBFFormatNumeric( TEXT : WString ; XLEN , XDEC : byte ) : WString		Version 1.20
+--------------------------------------------------------------------------------------------------------------------------
+		Effectue un formattage num‚rique du texte , pour suivre exactement 
+		les rŠgles et normes de Dbase3 
+		TEXT		= le string contenant le nombre exprim‚ en mode commercial
+					peut contenir des chiffres , un signe + ou - , un s‚parateur
+					d‚cimal ( Virgule ou Point suivant vos habitudes )
+					tous les autres caractŠres ( espaces , symbole mon‚taire , etc )
+					sont ignor‚s et ne d‚clenchent aucune Erreur grave.
+					le signe peut ˆtre … gauche ou … droite.
+		XLEC		= taille du champ ( et du r‚sultat ) qui recevra le nombre en ascii
+		XDEC		= nombre de positions d‚cimales
+
+		le R‚sultat de la fonction aura une longueur exacte de XLEC 
+		Si XDEC est nul , le r‚sultat repr‚sentera un nombre entier , form‚ de chiffres 
+			cadr‚ … droite , sans point d‚cimal	
+		Si XDEC est non nul , il y a exactement XDEC positions d‚cimales r‚serv‚es , 
+			pr‚c‚d‚ d'un POINT qui est le s‚parateur d‚cimal obligatoire de DBase3
+		Toutes les positions non utilis‚es sont garnies du caractŠre ZERO.
+		Seul le signe MOINS est retranscrit et pla‡‚ syst‚matiquement en position 1.
+		La fonction corrige au mieux toutes les anomalies trouv‚es. 
+		Les chiffres en exc‚s , soit … droite ( partie d‚cimale , poids faibles ) ,
+			 soit … gauche ( partie entiŠre , poids forts)  , sont simplement tronqu‚s
+			et ceci sans avertissement !
+		Contrairement … la fonction standard StrToFloat() , notre fonction est beaucoup plus
+			souple , universelle , robuste , et en "plante" jamais !
+
+		EXEMPLES :
+			DBFFormatNumeric('  1234,567' , 9 , 2)  ==> '001234.56'
+			DBFFormatNumeric('  1234  '       , 9 , 2)  ==> '001234.00'
+			DBFFormatNumeric('  1234,5    '  , 9 , 0)  ==> '000001234'
+			DBFFormatNumeric('  1234567'  ,  5 , 1)  ==> '567.0'
+			DBFFormatNumeric('  1234,5-  '  ,  9 , 2)  ==> '-01234.50'
+			
+		le r‚sultat peut ˆtre directement inscrit dans un CHAMP NUMERIQUE , … condition
+			expr‚sse qu'il ai exactement  pour tailles XLEN et XDEC .
+
+
+--------------------------------------------------------------------------------------------------------------------------
+fonction   DBFFormatDate( TEXT : WString ; COPT : Char ) : WString 		Version 1.20
+--------------------------------------------------------------------------------------------------------------------------
+		Effectue un formattage DATE , pour suivre exactement 
+		les rŠgles et normes de Dbase3  , … savoir obtenir un string
+		au format 'aaaammjj' 
+		aaaa 		= l'ann‚e en 4 chiffres ( donc avec le siŠcle )
+		mm		= le mois en 2 chiffres ( donc de '01'  … '12' )
+		jj		= le jour   en 2 chiffres ( donc de '01'  … '31' )
+
+		TEXT = date en expression libre , qui doit contenir si possible 3 sous zones 
+				num‚riques exprimant le jour , le mois, l'ann‚e.
+
+		Ces 3 sous-zones 	doivent ˆtre s‚par‚es par un s‚parateur quelconque ,
+			qui peut ˆtre , au gr‚ des habitudes de l'usager :
+			Espace , Tiret , Barre de Fraction ,
+			et tout caractŠre non num‚rique
+
+		les z‚ros non significatifs peuvent ˆtre omis
+
+		Suivant votre localisation g‚ographique ( paramŠtres r‚gionaux Windows ) ,  la fonction
+			suppose que les zones se suivent dans l'ordre suivant :
+			FRANCE et EUROPE 	==>	JOUR   MOIS   ANNEE
+			USA				==>	MOIS  JOUR  ANNEE
+			ANSI ....			==>	ANNEE  MOIS  JOUR
+
+		la fonction corrige les valeurs invalides ( autres que Jours de 01 … 31 , mois de 01 … 12 ,
+			et ann‚e de 0000 … 9999 ) ; mais elle ne corrige pas finement suivant le mois
+			et l'ann‚e bissextile
+
+		COPT = option pour l'indication du SIECLE
+			Si l'ann‚e est exprim‚e sans son si‚cle ( donc une valeur de 00 … 99 ) , le
+			programme g‚n‚re le si‚cle ainsi :
+			option 'A' 	==>  si‚cle est 1900
+			option 'B' 	==>  si‚cle est 2000
+			autres 		==>  	si‚cle est 2000 si l'ann‚e est  de 00 …  49
+						siŠcle est 1900 si l'ann‚e est  de 50 … 99
+
+		EXEMPLES ( pour la France ) :
+			DBFFormatDate( '25 3 97' , '*' ) 		==>	'19970325'
+			DBFFormatDate( ' 1 / 12 / 03' , 'B' ) 	==>	'20031201'
+
+		le r‚sultat est syst‚mtiquement une chaine de 8 chiffres.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+*********************************  Methodes pour gestion des champs MEMO   *******************************
+********************************* non test‚es par moi , et non document‚es ***
+
+Function  GetMemoData(FieldNo: Longint): AnsiString; (* Chaine longue *)
+Procedure UpdateMemoData(FieldNo: integer; Text: AnsiString);
+
+
+
+=================================================================================
+********** NOUVELLES METHODES et FONCTIONS Version V1.10 06-Janvier-2003 ***********************
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFReadRecordToBuffer(var BUFFER : array of char ; CPT : integer ) : integer ;
+--------------------------------------------------------------------------------------------------------------------------
+		Vous permet d'obtenir une copie , dans votre propre buffer , du record courant
+		CPT est la taille de votre buffer , ou le nombre maximum d'octets que vous voulez obtenir 
+                                     ( laquelle doit ˆtre inf‚rieure ou ‚gale … la taille de votre buffer )
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFZap(CPTREC : integer ) : boolean  ; 
+--------------------------------------------------------------------------------------------------------------------------
+		DBFZap(0)  imite la commande "ZAP" de DBASE3 : vide le fichier de tous ses records ,
+				et raccourci la taille sur disque ( en ne conservant que le HEADER )
+		DBFZap(N) : variante qui permet de conserver les N premiers records
+				( ne pas utiliser si N est grand , car peu performant )
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFPack(BIDON : byte    ) : integer  ;
+--------------------------------------------------------------------------------------------------------------------------
+		Compacte physiquement le fichier DBF , en ‚liminant d‚finitivement les records "DELETED"
+		Si le fichier comportait R records , dont  S records "supprim‚s logiquement" , 
+                                    il ne restera plus aprŠs l'op‚ration que X = R - S records conserv‚s.
+		la fonction retourne ce nombre X.
+		Imite la commande "PACK" de DBASE3.
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFCopyStruct(DBFName : WString ) : boolean ;
+--------------------------------------------------------------------------------------------------------------------------
+		Imite la commande "COPY STRUCT" de DBASE3 
+		Cr‚ation d'un  fichier DBFName , ayant une structure identique au fichier courant ,
+			mais totalement vide ( 0 records ).
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFCopyFile(DBFName : WString ; CPTREC : integer ; CopyDELETED : boolean ) : boolean ;
+--------------------------------------------------------------------------------------------------------------------------
+		Cr‚e un nouveau fichier de nom DBFName ,  en copiant les CPTREC premiers records 
+		du fichier courant ( ainsi que sa structure ) ; 
+		si CopyDELETED est false , les enregistrements "supprim‚s"  sont ignor‚s et non recopi‚s.
+		Imite la commande "COPY TO nomfichier NEXT nnnn FOR .not.deleted() " de DBASE3.
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFExtractStruct(var DBFFields : TStringList ; VFIX : boolean ) : boolean ;
+--------------------------------------------------------------------------------------------------------------------------
+		le composant remplit la liste DBFFields avec les descriptifs des champs ;
+		chaque ligne de cette liste recoit un string ayant la forme :			
+				NOM-DU-CHAMP = TYPE TAILLE , DECIMALS
+		Si VFIX est TRUE , chacun des 4 ‚l‚ments descriptifs ci dessus est formatt‚ en 
+				nombre de positions fixes
+
+--------------------------------------------------------------------------------------------------------------------------
+Function DBFCreate(DBFName : WString ; DBFFields :TStringList) : boolean ;
+--------------------------------------------------------------------------------------------------------------------------
+		Vous devez garnir la liste avec le descriptif de tous les champs
+		Chaque ligne de cette liste a le mˆme format que ci-dessus , … savoir :
+				NOM-DU-CHAMP = TYPE TAILLE , DECIMALS
+		L'op‚ration cr‚‚e un fichier de nom DBFName  , vide ( 0 records ) ,  avec 
+				la structure indiqu‚e.
+		Imite la commande "CREATE fichier FROM FicStru " associ‚e … 
+				"COPY STRUCTURE EXTENDED TO FicStru" de DBASE3.
+				
+
+=================================================================================
+*************** NOUVEAUTES  Version V1.20  02-F‚vrier-2003 ***********************
+
+--------------------------------------------------------------------------------------------------------------------------
+Function UpdFieldX(FieldName: WString ; TEXT : WString ; COPT : char ) : boolean ;
+--------------------------------------------------------------------------------------------------------------------------
+	fonction de mise … jour de champ universelle et s‚curis‚e , effectuant de 
+	controles de validit‚ et du formattage de donn‚es.
+	est particuliŠrement utile pour enregistrer directement une donn‚e saisie par
+	l'usager dans la zone "TEXT" d'un controle visuel tel qu'un "TEdit"
+	* Fieldname 		= le NOM du CHAMP
+	* TEXT		= la valeur , sous forme d'un string , de ce champ
+	* COPT		= un code d'action de formattage , qui peut etre :
+			* s'il s' agit d'un champ "CARACTERE" :
+				'U'  --> transforme en UPPER Case ( Majuscules )
+				'L'  --> transforme en LOWER Case ( Minuscules )
+				toute lettre  (y compris U et L) --> cadre … gauche en supprimant lesespaces
+			* pour les autres types de champs, ce code n'a pas de signification actuellement ;
+				il peut toutefois en acqu‚rir dans une prochaine version ,
+				donc le garnir … ESPACE par pr‚caution.
+	le formattage est particuliŠrement important pour les champs DATE et NUMERIC , afin de 
+		respecter les normes et rŠgles de Dbase3 , ce qui vous ‚vite de devoir faire
+		par vous mˆmes des routines complexes de mise en forme des donn‚es
+	R‚sultat = False si le NOM du champ est inconnu , True dans les autres cas
+	Exemple : 	soit TEDPrix  un TEdit ordinaire servant … saisir le prix d'une marchandise ,
+			qui correspond au champ  PRIXUNIT  du DBF.
+			dans un ‚venement ( EXIt de la zone de saisie par exemple ) , on peut faire
+			directement :
+				UpdFieldX('PRIXUNIT' , TEDPrix.Text , '*' )
+					
+--------------------------------------------------------------------------------------------------------------------------
+Function SetFind(NomChamp , Operateur , Valeur : string) : integer ;
+--------------------------------------------------------------------------------------------------------------------------
+         Pr‚pare le "FILTRE" qui servira … la fonction de recherche FindRecord
+         NOMCHAMP  = nom du champ ( en majuscules ) sur lequel se fera la recherche
+         OPERATEUR = nature de la comparaison … faire 
+                     les possibilit‚s sont
+                     =   ‚galit‚ approximative ( sur les 1ers caractŠres ) ; ceci est l'option par d‚faut !
+                     ==  ‚galit‚ stricte
+                     >   sup‚rieur …
+                     <   inf‚rieur …
+                     >=  sup‚rieur ou ‚gal …
+                     <=  inf‚rieur ou ‚gal …
+                     <>  diff‚rent de
+                     #   diff‚rent de 
+         VALEUR    = la valeur que l'on va rechercher
+
+		EXEMPLE : SetFind(VILLE' , '=' , 'SAINT')
+		La fonction FINDRECORD recherchera les records dont le champ VILLE
+			commence par la chaine 'SAINT' ;
+			seront donc trouv‚es les villes telles que :
+			SAINT-ETIENNE , SAINTES-MARIE , ...
+	Attention : la recherche est  sensible aux majuscules / Minuscules !
+
+	Remarque : 	ceci tente d'imiter la commande DBASE3 "SET FILTER TO  champ op‚rateur valeur  "
+			avec l'option habituelle "SET EXACT OFF" 
+
+	SetFind retourne un code d'erreur :
+		0 	= O.K. , pas d'anomalie
+		1	= ERREUR ,  le champ n'existe pas ( le  nom fourni est inconnu )
+		2	= ERREUR ,  vous avez fourni une valeur NON NUMERIQUE , alors que le
+				champ est un champ num‚rique !
+
+	NOTA :
+		* Pour un champ num‚rique ( type "N" ) , la valeur que vous fournissez doit ˆtre un nombre
+		 	en utilisant le s‚parateur d‚cimal en usage dans votre machine 
+			( aux USA : le POINT , en FRANCE : la VIRGULE )
+		* Voir la fonction  TEXTTOFLOAT , ou STRTOFLOAT pour plus d'explications...
+		* En interne , nous convertissons votre 'Valeur' en un nombre flottant (extended) ,
+			et la comparaison pour les recherches se fera entre nombres flottants ;  en cons‚quence,
+			les op‚rateur '=' et '==' se comportent de maniŠre identique.
+		* Faites attention au nombre de d‚cimales :  si vous faites une recherche sur un champ PRIX ,
+			qui a ‚t‚ d‚fini comme N , 7 positions , 2 d‚cimales , une recherche sur ‚galit‚ avec une
+			valeur … 3 d‚cimales telles que '175,689' donnera toujours FAUX ! 			 
+		
+--------------------------------------------------------------------------------------------------------------------------
+Function  FindRecord(SearchType : String ): Integer;
+--------------------------------------------------------------------------------------------------------------------------
+
+	l'argument SearchType  indique le sens de la recherche :
+		'First'		la recherche d‚bute au 1ER record , et progresse jusqu'… trouver la condition
+		'Last'		la recherche d‚bute au DERNIER record , et progresse vers le
+				d‚but du fichier jusqu'… trouver la condition
+		'Next'		la recherche d‚bute au record qui suit le record COURANT 
+		'Prev'		la recherche d‚bute au record qui pr‚c‚de le record COURANT 
+
+		par d‚faut ,  la valeur est trait‚e comme 'NEXT'
+		Seul le 1ER caractŠre du string est significatif , et est accept‚ en Minuscule ou Majuscule :
+				F , L , N , P 
+		Le reste du string SearchType est ignor‚.
+
+	La recherche consiste … appliquer la condition exprim‚e par le SETFIND( C , O , V ) pr‚c‚dent ,
+		au record en lecture , puis … progresser ,
+			* soit dans le sens croissant ( FIRST , NEXT )
+			* soit dans le sens d‚croissant (LAST , PREV )
+		jusqu'… trouver un record qui satisfait la condition.
+
+	le r‚sultat peut donc ˆtre :
+		TROUV‚ 		==> la fonction retourne le NUMERO de record ( donc une valeur >= 1 )
+		NON TROUV‚ 	==> r‚sultat ZERO
+
+	NOTA : cette fonction d‚place syst‚matiquement le curseur , soit vers le RECORD trouv‚ ,
+		soit vers le DEBUT ou la FIN du fichier.
+
+	EXEMPLE d'UTILISATION :
+		** faire quelque chose pour tous les clients qui habitent … LYON
+		** 	MyDBF1.SetFind('VILLE' , '==' , 'LYON' ) ;
+			X1 := MyDBF1.FindRecord('First') ;	
+			while  X1 > 0 do begin
+				//--- ici le traitement que vous voulez faire
+				//    ** attention , ne pas d‚placer involontairement le curseur
+				//    ** ne pas faire un Goto.... sur MyDBF1
+				//---
+				X1 := MyDBF1.FindRecord('Next') ;	
+			end ;
+
+
+-----------------------------------------------------------------
+Classe TXBASE    : Comportement … la marge   
+-----------------------------------------------------------------
+
+Dans les cas suivants :
+  * Fichier Vide
+  * D‚placement avant le 1er Record , ou sur un Num‚ro  de record <= 0
+  * D‚placement aprŠs le dernier record , ou sur un Num‚ro  de record > RecordCount
+
+le composant simule un pseudo record "A BLANC"  en m‚moire.
+
+
+Les recherches ou lectures d'un Champ inexistant  retournent soit un string vide , soit un num‚ro 0.
+
+Les actions sur un fichier NON OUVERT ( Active = False ) , donnent un r‚sultat fictif , ou une erreur
+
+Lorsque une valeur  String est pass‚e … une fonction de mise … jour d'un champ ,  elle est tronqu‚e
+	"A DROITE" si sa taille excŠde celle du champ ; sinon elle est compl‚t‚e par des BLANCS.
+
+
+
+-----------------------------------------------------------------
+Classe TXBASE    : Comportement en ERREURS   
+-----------------------------------------------------------------
+le fichier est trait‚ en fondamental comme un FILE STREAM ;
+on r‚colte donc toutes les erreurs potentielles sur ce genre d'outil , en lecture ou ‚criture.
+
+le cas le plus typique est archi connu :  Fichier DBF Tronqu‚  ;
+	c'est un fichier DBF dont la taille est inf‚rieure … celle calcul‚e avec le Nombre de Records
+
+Si la propri‚t‚ DEBUGERR est … True , chaque erreur d‚clenche l'apparition d'un Message appropri‚.
+
+-----------------------------------------------------------------
+Classe TXBASE    : Formattage des donn‚es
+-----------------------------------------------------------------
+Le formattage des NOMBRES et des DATES suit les r‚gles pos‚es par les  variables globales de
+Delphi :
+	DecimalSeparator
+	ShorDateFormat
+	DateSeparator
+
+Vous devez donc respecter les valeurs actuelles de ces paramŠtres r‚gionaux ( ou nationaux ) tels 
+	qu'ils sont d‚finis sur les machines utilis‚es , lorsque vous fournissez des valeurs
+	DATES ou NOMBRE sous forme d'un STRING.
+
+Par contre , en interne , DBASE3 ( et donc TXBASE ) ,  codera toujours les champs d'une 
+	maniŠre unique , quel que soit vos habitudes nationales :
+	DATES 	==>  toujours un string de 8 car 'aaaammjj'
+	NOMBRE	==>  toujours un string avec un POINT d‚cimal ( sauf si zone avec ZERO d‚cimales )
+				** cadr‚ … droite
+				** toujours avec le NOMBRE de d‚cimales sp‚cifi‚es ( le POINT n'est pas flottant )
+				** les positions non significatives … gauche sont en principe "A BLANC" ,
+					mais peuvent ˆtre garnies avec des ZEROS
+				** le signe "+" n'est jamais explicitement indiqu‚
+				** le signe "-" est accol‚ … gauche du 1ER chiffre mentionn‚.
+				** contrairement … DELPHI5 , une zone totalement … BLANC est interpr‚t‚e
+					comme NULLE ( DELPHI5 d‚clenche h‚las une erreur EConvertError stupide )
+
+En cons‚quence , soyez trŠs VIGILANTS si vous garnissez vous mˆmes les champs par exemple si vous
+	utilisez la fonction    UPDFIELDSTR( NOM , VALEUR )
+	** si PRIX est d‚fini Num,6,2 ,  alors vous devez toujours fournir une VALEUR de 6 caractŠres , 
+		ayant un point d‚cimal en position 4 suivi de 2 chiffres d‚cimaux ;
+		UpdFieldStr('PRIX' , '25.3' ) d‚clenchera des problŠmes de compatibilit‚ ult‚rieurs ( TXBASE
+			enregistre "bˆtement" le string cadr‚ … gauche et compl‚t‚ par des blancs )
+		UpdFieldStr('PRIX','025.30') ==> c'est O.K.
+	** si DTCOM est la date de la Commande ( d‚finie Date ) ,  alors vous devez toujours fournir 
+		une VALEUR de 8 chiffres : 4 pour l'ANNEE , 2 pour le MOIS , 2 pour le JOUR 
+		UpdFieldStr(DTCOM' , '100397' ) sera enregistr‚e "bˆtement" telle que , et sera
+			ult‚rieurement source d'erreur ou d'interpr‚tation fantaisiste ( le jour 00 du mois 97 de
+			l'ann‚e 1003 )
+
+C'est pourquoi nous vous sugg‚rons de toujours utiliser les fonctions typ‚es de mise … jour :
+		UpdFieldStr		pour un champ type 'C'
+		UpdFieldDat		pour un champ type 'D'
+		UpdFieldInt		pour un champ type 'N'  entier ( ZERO d‚cimales )
+		UpdFieldNum	pour un champ type 'N'  non entier ( au moins 1 d‚cimale )
+
+
+-------------------------------------------------------------------------------------------------------------------
+CE COMPOSANT VOUS SEMBLE TROP SIMPLE , pas assez perfectionn‚ ?
+-------------------------------------------------------------------------------------------------------------------
+dans ce cas , il ne vous reste plus qu'… :
+* aller voir si le composant TDBF  de PASCAL GANAYE  ( un  autre fran‡ais ) , en Freeware ,
+		vous conviendrait mieux !
+
+* sinon , il ne reste plus que les composants commerciaux valant entre 100 et 500 Euros :
+	TOPAZ de la St‚ Scientific Software Science Inc  ( SCI )  /// je l'ai utilis‚ dan sune application plus complexe //
+	ALASKA  de VISTA Pro  /// celui-ci aussi je l'ai test‚ , il est pas mal ! ///
+	CODE BASE de .....
+	HALCYON de .........
+
+Tous ces composants ont pour but fondamental ( comme le mien ) , de vous d‚barrasser
+	compl‚tement du BDE BORLAND  ;
+Vous n'avez rien … distribuer en plus , tout est incorpor‚ dans votre ex‚cutable 
+	( avec une taille raisonnable )
+
+
+-------------------------------------------------------------------------------------------------------------------
+INSTALLATION
+-------------------------------------------------------------------------------------------------------------------
+Inutile de d‚tailler cela , tout d‚veloppeur Delphi sait installer un composant simple
+dans la "PALETTE" , et l'incorporer dans un "Paquet" de son choix  ( .DPK )
+
+-------------------------------------------------------------------------------------------------------------------
+EXEMPLE d'UTILISATION SIMPLE
+-------------------------------------------------------------------------------------------------------------------
+Mettez un exemplaire du composant dans votre fiche, et nommez le , par exemple :
+		MON_TARIF
+
+Supposons qu'il s'agisse d'un fichier de fournitures , et que vous vouliez augmenter
+	le prix de chacune de 5%  ( prix situ‚ dans le champ "PRIXSTD" )
+
+Voici les quelques instructions que vous pourriez loger dans le Form.Create par exemple
+
+var    MX : extended ; 
+     
+with MON_TARIF do begin
+     FileName := 'C:\STOCK\TARIF.DBF' ;  // attention , … faire avant d'ouvrir
+     Active := true ;
+     GotoBOF ;
+     while not Eof  do begin
+            MX := GetFieldNum('PRIXSTD') ;
+            MX := MX * 1.05 ;
+            UpdFieldNum('PRIXSTD' , MX ) ;
+            PostChanges ;
+            GotoNext ;          
+     end ;
+     Active := False ;
+end ;
+
+*******************
+pour afficher un champ sur une fiche utilisez des TEdit ou similaires  ; exemple
+
+          EDIT_ZONE_PRIX.Text := FloatToStr( MON_TARIF.GetFieldNum('PRIXSTD') ) ;
+
+*******************
+
+
+-------------------------------------------------------------
+QUELQUES FONCTIONS MANQUANTES
+-------------------------------------------------------------
+
+* les  FILTRES complexes
+
+* l'‚quivalent d'un SEEK  
+
+* les TRIS ( SORT ) ou les INDEX
+
+
+
+
+
+
+Pour tout probl‚me ou renseignement :     GUY CHABANT   g.chabant@free.fr
+
+
+===================================================================
+
+
+
+
+
+
+
+

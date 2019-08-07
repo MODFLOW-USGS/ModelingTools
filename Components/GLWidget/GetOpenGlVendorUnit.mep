@@ -1,0 +1,51 @@
+unit GetOpenGlVendorUnit;
+
+interface
+
+uses Windows, SysUtils;
+
+function GetGlVendor: string;
+
+implementation
+
+uses madExcept;
+
+type
+  UINT = LongWord;
+  TGLenum     = UINT;
+
+var
+  glGetString: function(name: TGLEnum): PAnsiChar; {$ifdef MSWINDOWS} stdcall; {$endif} {$ifdef LINUX} cdecl; {$endif}
+  {$EXTERNALSYM glGetString}
+
+const
+  GL_VENDOR                                         = $1F00;
+  {$EXTERNALSYM GL_VENDOR}
+  SDefaultGLLibrary = 'OpenGL32.dll';
+
+procedure InitGl;
+var
+  GLHandle: HINST;
+begin
+  GLHandle := LoadLibrary(PChar(SDefaultGLLibrary));
+
+  glGetString := GetProcAddress(GLHandle, 'glGetString');
+end;
+
+function GetGlVendor: string;
+begin
+  try
+    InitGl;
+    result := 'Vendor is ' + glGetString(GL_VENDOR);
+  except
+    result := 'Exception occurred.';
+  end;
+end;
+
+
+
+Initialization
+  RegisterBugReportPlugIn('OpenGl_Vendor', 'See the OpenGL Vendor', GetGlVendor);
+finalization
+  UnRegisterBugReportPlugIn('OpenGl_Vendor');
+end.

@@ -1,0 +1,69 @@
+***************************************************************
+*                                                             *
+* TTBNArea - The Component for the Taskbar Notification Area  *
+*                  Version 3.1 - Jan 28, 1999                 *
+*                                                             *
+***************************************************************
+
+
+TTBNArea allows you to easily use the Taskbar Notification Area
+of Windows 95.
+
+
+
+Properties:
+
+Enabled: boolean
+
+Icon: TIcon
+The icon that appears in Taskbar Notification Area.
+
+PopupOnBoth: boolean
+If true, PopupMenuL pops up on left and on right click no 
+matter if PopupMenuR is assigned or not. 
+
+PopupMenuL: TPopupMenu
+PopupMenuR: TPopupMenu
+Here you can assign separate popup menues for the left and
+right mouse button.
+
+Tip: string;
+Hint appearing when you move the mouse over the icon.
+
+
+
+Events:
+
+OnLeftClick, OnRightClick: TNotifyEvent
+These events are only fired if the corresponding mouse button is not
+used for the popup menu.
+
+OnDblClick: TNotifyEvent
+Occurs on double-clicking with the left mouse button, no
+matter whether a popup menu is assigned or not.
+
+OnChanging: TChangingEvent ( = procedure(Sender: TObject; ChangeKind: TChangeKind;
+    var AllowChange: boolean) of object)
+Fired before Tip or Icon are changed.
+
+OnChange: TChangeEvent ( = procedure(Sender: TObject; ChangeKind: TChangeKind) of object)
+Fired after Tip or Icon have been changed. Logically, it is not fired when AllowChange
+in the OnChanging event is set to false.
+
+
+Disclaimer:
+
+TTBNArea is freeware. Please send me an e-mail if you use TTBNArea and let me know your opinion. I am always open for critics, bug reports, and suggestions
+for future versions.
+
+Any use of TTBNArea is at your own risk. No liability whatsoever
+will be assumed by the author.
+
+Enjoy it!
+
+
+© NailySoft Reinhard Nägele 1997 - 99
+
+naegele@fh-nuertingen.de
+http://www.fh-nuertingen.de/~naegele/
+

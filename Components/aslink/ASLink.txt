@@ -1,0 +1,27 @@
+ ASLink Component 1.0 Copyright © 1997
+        Andrey Abakumov (aga@oficina.rnd.su)
+
+ URL Component version 1.0 Copyright © 1997
+        Alexander Meeder (ameeder@dds.nl)
+
+ RXLabel Component Copyright © 1997
+        Fedor Koshevnikov  (kosh@masterbank.msk.ru)
+        Igor Pavluk        (pavluk@masterbank.msk.ru)
+        Serge Korolev      (korolev@masterbank.msk.ru)
+
+ASLink is a component was assembled from RXLabel and URL
+for more convenient work with Internet Link's
+
+With this control it's easy to add www-addresses, mail-addresses etc.
+behind menu-options, buttons etc.
+
+How to use TASLink:
+1. First put this control on your form
+2. Set the URLType property to one of the following nine types:
+   File, Ftp, Gopher, Http, Https, Mailto, News, Telnet, Wais
+3. Set the property Caption to the desired address
+4. Set the property URLEnabled if to use a label as Link
+5. Set the property URLTypeAdd if wish to add to the
+   address string of a type http: // and etc.
+6. Will choose colour active Link
+7. Call the TASLink.Execute method or click a label
