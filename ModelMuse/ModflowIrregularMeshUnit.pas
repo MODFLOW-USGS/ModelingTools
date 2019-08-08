@@ -3688,7 +3688,7 @@ begin
           end
           else
           begin
-            if ColIndex < FLocalGrid.RowCount -1 then
+            if ColIndex < FLocalGrid.ColumnCount -1 then
             begin
               OtherCellSubdivider := CellsPerEdge(RowIndex, ColIndex+1);
               OtherColumnWidth := FLocalGrid.ColumnWidth[ColIndex+1] / OtherCellSubdivider;
@@ -3806,7 +3806,7 @@ begin
           end
           else
           begin
-            if ColIndex < FLocalGrid.RowCount -1 then
+            if ColIndex < FLocalGrid.ColumnCount -1 then
             begin
               OtherCellSubdivider := CellsPerEdge(RowIndex, ColIndex+1);
               OtherColumnWidth := FLocalGrid.ColumnWidth[ColIndex+1] / OtherCellSubdivider;
