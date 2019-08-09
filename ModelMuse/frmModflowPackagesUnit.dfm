@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 514
-    ActivePage = jvspSfrMf6
+    ActivePage = jvspMt3dSft
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -10657,33 +10657,33 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited lblTimeWeightingFactor: TLabel
-          Width = 243
+          Width = 299
           Height = 18
-          ExplicitWidth = 243
+          ExplicitWidth = 299
           ExplicitHeight = 18
         end
         inherited lblSpaceWeightingFactor: TLabel
-          Width = 256
+          Width = 318
           Height = 18
-          ExplicitWidth = 256
+          ExplicitWidth = 318
           ExplicitHeight = 18
         end
         inherited lblClosureCriterion: TLabel
-          Width = 114
+          Width = 216
           Height = 18
-          ExplicitWidth = 114
+          ExplicitWidth = 216
           ExplicitHeight = 18
         end
         inherited lblMaxIterations: TLabel
-          Width = 208
+          Width = 301
           Height = 18
-          ExplicitWidth = 208
+          ExplicitWidth = 301
           ExplicitHeight = 18
         end
         inherited lblSolverPrintChoice: TLabel
-          Width = 137
+          Width = 221
           Height = 18
-          ExplicitWidth = 137
+          ExplicitWidth = 221
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
@@ -10843,7 +10843,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Left = 136
     Top = 96
     Bitmap = {
-      494C010108000D00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000D00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

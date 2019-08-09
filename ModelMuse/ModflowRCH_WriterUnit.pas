@@ -93,7 +93,7 @@ var
   ScreenObject: TScreenObject;
   Boundary: TRchBoundary;
 begin
-  inherited;
+  inherited Evaluate;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheRechargeRatesA);
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin

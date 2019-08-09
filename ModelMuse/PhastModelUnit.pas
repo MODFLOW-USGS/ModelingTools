@@ -8670,9 +8670,16 @@ const
   //                downstream reaches of a reach add up to 1.
   //               Bug fix: MODFLOW 6 files can now be exported from the command
   //                line using command-line parameters.
+  //   '4.0.0.8'   Bug fix: Fixed bug that could cause a range check error when
+  //                Creating a DISV grid in MODFLOW 6.
+  //   '4.0.0.9'   Bug fix: Fixed bug in reading SFR6 data from file.
+  //               Bug fix: Fixed bug in writing idiv in MODFLOW 6 SFR6
+  //                input file.
+  //               Bug fix: not in released version. Fixed getting vertex
+  //                values.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.7';
+  IModelVersion = '4.0.0.9';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -8804,7 +8811,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMawWriterUnit, ModflowGncWriterUnit, Modflow6ObsWriterUnit,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
-  Mt3dLktWriterUnit;
+  Mt3dLktWriterUnit, ModflowSfr6Unit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -9640,7 +9647,6 @@ begin
       AnnotationList.Free;
     end;
   end;
-
 end;
 
 
@@ -18656,6 +18662,9 @@ var
   ParamIndex: Integer;
   AParam: TModflowSteadyParameter;
   ModflowHfbBoundary: THfbBoundary;
+  Sfr6Boundary: TSfrMf6Boundary;
+  Sfr6DiversionCount: Integer;
+  SfrMf6Item: TSfrMf6Item;
 //  Withdrawals: TDataArray;
 begin
   RenameOldVerticalLeakance;
@@ -18683,6 +18692,24 @@ begin
           begin
             SfrBoundary.ChannelValues.Delete(SfrBoundary.ChannelValues.Count-1);
           end;
+        end;
+      end;
+    end;
+  end;
+
+  if Sfr6IsSelected then
+  begin
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreenObject := ScreenObjects[ScreenObjectIndex];
+      Sfr6Boundary := AScreenObject.ModflowSfr6Boundary;
+      if Sfr6Boundary <> nil then
+      begin
+        Sfr6DiversionCount := Sfr6Boundary.Diversions.Count;
+        for ItemIndex := 0 to Sfr6Boundary.Values.Count - 1 do
+        begin
+          SfrMf6Item := Sfr6Boundary.Values[ItemIndex] as TSfrMf6Item;
+          SfrMf6Item.DiversionCount := Sfr6DiversionCount;
         end;
       end;
     end;

@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMTD_Lkt
+        ActivePage = jvspMT3D_UZT_Unsat
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -8274,12 +8274,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited framePumpLocationMethod: TframeLocationMethod
                   Width = 501
                   Font.Pitch = fpVariable
-                  ExplicitWidth = 529
+                  ExplicitWidth = 501
                   inherited pcLocationChoice: TJvPageControl
                     Width = 164
-                    ExplicitWidth = 192
+                    ExplicitWidth = 164
                     inherited tabNone: TTabSheet
-                      ExplicitWidth = 192
+                      ExplicitWidth = 164
                     end
                     inherited tabObject: TTabSheet
                       inherited comboObject: TComboBox
@@ -8321,8 +8321,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited tabDischargeAdjustment: TTabSheet
                 ExplicitLeft = 4
                 ExplicitTop = 29
-                ExplicitWidth = 573
-                ExplicitHeight = 421
+                ExplicitWidth = 601
+                ExplicitHeight = 393
                 inherited rdgLiftTable: TRbwDataGrid4
                   Width = 0
                   Height = 565
@@ -8339,13 +8339,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited tabPumpingRate: TTabSheet
                 ExplicitLeft = 4
                 ExplicitTop = 29
-                ExplicitWidth = 601
-                ExplicitHeight = 393
+                ExplicitWidth = 573
+                ExplicitHeight = 421
                 inherited rdgTimeTable: TRbwDataGrid4
                   Width = 573
                   Height = 315
                   Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
+                  ExplicitWidth = 573
+                  ExplicitHeight = 315
                   RowHeights = (
                     24
                     24)
@@ -8353,9 +8355,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited Panel1: TPanel
                   Top = 380
                   Width = 573
+                  ExplicitTop = 380
+                  ExplicitWidth = 573
                 end
                 inherited Panel2: TPanel
                   Width = 573
+                  ExplicitWidth = 573
                 end
               end
               inherited tabWellScreens: TTabSheet
@@ -12622,9 +12627,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 263
               inherited tabInitialConc: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 229
+                ExplicitWidth = 312
+                ExplicitHeight = 117
                 inherited lblInitialConcentration: TLabel
                   Width = 232
                   Height = 19
@@ -12632,25 +12638,28 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitHeight = 19
                 end
                 inherited rdgInitialConcentration: TRbwDataGrid4
-                  Width = 567
-                  Height = 196
+                  Height = 84
                   FixedCols = 0
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
-                  ExplicitWidth = 567
-                  ExplicitHeight = 196
+                  ExplicitHeight = 84
                 end
               end
               inherited tabPrecipConc: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 312
                 ExplicitHeight = 117
               end
               inherited tabRunoffConc: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitHeight = 117
+                ExplicitWidth = 573
+                ExplicitHeight = 229
                 inherited pnlButtonsRunoff: TPanel
                   Top = 183
                   Width = 573
-                  ExplicitTop = 71
+                  ExplicitTop = 183
+                  ExplicitWidth = 573
                   inherited lbl1: TLabel
                     Width = 119
                     Height = 19
@@ -12663,21 +12672,23 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited btnDeleteRunoff: TBitBtn
                     Left = 750
-                    ExplicitLeft = 489
+                    ExplicitLeft = 750
                   end
                   inherited btnInsertRunoff: TBitBtn
                     Left = 662
                     Top = 6
-                    ExplicitLeft = 401
+                    ExplicitLeft = 662
                     ExplicitTop = 6
                   end
                 end
                 inherited pnlGridRunoff: TPanel
                   Width = 573
                   Height = 183
-                  ExplicitHeight = 71
+                  ExplicitWidth = 573
+                  ExplicitHeight = 183
                   inherited pnl3: TPanel
                     Width = 571
+                    ExplicitWidth = 571
                     inherited lblRunoffFormula: TLabel
                       Width = 59
                       Height = 19
@@ -12690,7 +12701,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Height = 131
                     OnSetEditText = frameMT3D_LKTrdgRunoffConcSetEditText
                     OnButtonClick = frameResdgModflowBoundaryButtonClick
-                    ExplicitHeight = 19
+                    ExplicitWidth = 571
+                    ExplicitHeight = 131
                   end
                 end
               end

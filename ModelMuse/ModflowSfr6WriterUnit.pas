@@ -144,6 +144,10 @@ resourcestring
   '0:d in active downstream reaches does not add up to 1 in reach number %1:' +
   'd defined by %2:s. the downstream segments for this reach are defined by ' +
   'the following Objects. %3:s';
+  StrErrorAssigningDive = 'Error assigning diversions';
+  StrIn0sTheDiversio = 'In %0:s the diversion segment number in SFR is the s' +
+  'ame of the segment itself. The diversion segment number should be the num' +
+  'ber of a different segment from which flow is diverted.';
 
 { TModflowSFR_MF6_Writer }
 
@@ -168,6 +172,7 @@ var
   Cell2D2: TModflowIrregularCell2D;
   SeparationDistance: double;
   CellDistance: Integer;
+  DivSeg: Integer;
   procedure CheckConnectionError;
   begin
     if AReach.Cell <> OtherReach.Cell then
@@ -279,6 +284,19 @@ begin
     for SegIndex := 0 to FSegments .Count - 1 do
     begin
       ASegment := FSegments[SegIndex];
+
+      for DiversionIndex := 0 to ASegment.FSfr6Boundary.Diversions.Count - 1 do
+      begin
+        DivSeg := ASegment.FSfr6Boundary.Diversions[DiversionIndex].DownstreamSegment;
+        if ASegment.FSfr6Boundary.DownstreamSegments.IndexOf(DivSeg) >= 0 then
+        begin
+          frmErrorsAndWarnings.AddError(Model, 'Diversion segment also listed as downstream segment',
+            Format('In %0:s, $1:d is listed as both a downstream segment and diversion segment.',
+            [ASegment.FScreenObject.Name, DivSeg]),  ASegment.FScreenObject);
+        end;
+      end;
+
+
       for ConnectedIndex := 0 to
         ASegment.FSfr6Boundary.DownstreamSegments.Count - 1 do
       begin
@@ -347,10 +365,18 @@ begin
       begin
         ADiversion := ASegment.FSfr6Boundary.Diversions[DiversionIndex];
         Inc(FDiversionCount);
-        ADiversion.DiversionNumber := FDiversionCount;
+//        ADiversion.DiversionNumber := FDiversionCount;
         ADiversionSegIndex := ADiversion.DownstreamSegment;
         if SegmentDictionary.TryGetValue(ADiversionSegIndex, OtherSegment) then
         begin
+          if OtherSegment = ASegment then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrErrorAssigningDive,
+              Format(StrIn0sTheDiversio,
+              [(ASegment.FScreenObject as TScreenObject).Name]),
+              ASegment.FScreenObject);
+//            Continue;
+          end;
           if (ASegment.ReachCount > 0) and (OtherSegment.ReachCount > 0) then
           begin
             AReach := ASegment.Last;
@@ -702,6 +728,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObject);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectDiv);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheRoughnessIsLes);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorAssigningDive);
 
   NextReachNumber := 1;
   ReachStart := 0;
@@ -1358,7 +1385,8 @@ begin
             AReach := ASegment.Last;
             OtherReach := OtherSegment.First;
             WriteInteger(AReach.ReachNumber);
-            WriteInteger(ADiversion.DiversionNumber);
+//            WriteInteger(ADiversion.DiversionNumber);
+            WriteInteger(DiverIndex+1);
             WriteInteger(OtherReach.ReachNumber);
             case ADiversion.Priority of
               cpFraction: WriteString(' FRACTION');
@@ -1805,7 +1833,8 @@ begin
             begin
               WriteInteger(ReachNumber);
               WriteString(' DIVERSION');
-              idv := ASegment.FSfr6Boundary.Diversions[DivIndex].DiversionNumber;
+//              idv := ASegment.FSfr6Boundary.Diversions[DivIndex].DiversionNumber;
+              idv := DivIndex+1;
               WriteInteger(idv);
               WriteFloat(ACell.Values.Diversions[DivIndex]);
               NewLine;

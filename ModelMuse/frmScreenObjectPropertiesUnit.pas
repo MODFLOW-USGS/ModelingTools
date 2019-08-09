@@ -12104,8 +12104,10 @@ begin
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
   {$IFDEF Mt3dUSGS}
-    Used := frmGoPhast.PhastModel.LakMf6IsSelected and
-      frmGoPhast.PhastModel.Mt3d_LktIsSelected
+    //LKT is not currently supported with MF6.
+//    Used := frmGoPhast.PhastModel.LakMf6IsSelected and
+//      frmGoPhast.PhastModel.Mt3d_LktIsSelected
+    Used := False
   {$ELSE}
     Used := False
   {$ENDIF}
@@ -12143,9 +12145,11 @@ begin
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
   {$IFDEF Mt3dUSGS}
-    Used := frmGoPhast.PhastModel.UzfMf6IsSelected and
-      (frmGoPhast.PhastModel.Mt3d_UztIsSelected
-      or frmGoPhast.PhastModel.Mt3dmsIsSelected)
+  // UZT is not currently supported with MODFLOW 6.
+//    Used := frmGoPhast.PhastModel.UzfMf6IsSelected and
+//      (frmGoPhast.PhastModel.Mt3d_UztIsSelected
+//      or frmGoPhast.PhastModel.Mt3dmsIsSelected)
+    Used := False
   {$ELSE}
     Used := False
   {$ENDIF}
@@ -12173,6 +12177,7 @@ var
   Node: TJvPageIndexNode;
 begin
   FMt3d_Uzf_Seep_Node := nil;
+  // UZT is not currently supported with MODFLOW 6.
   if frmGoPhast.PhastModel.UzfSeepageUsed
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
@@ -12193,6 +12198,7 @@ var
   Node: TJvPageIndexNode;
 begin
   FMt3d_UZT_Sat_Node := nil;
+  // UZT is not currently supported with MODFLOW 6.
   if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
@@ -12211,6 +12217,7 @@ var
   Node: TJvPageIndexNode;
 begin
   FMt3d_UZT_Unsat_Node := nil;
+  // UZT is not currently supported with MODFLOW 6.
   if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin

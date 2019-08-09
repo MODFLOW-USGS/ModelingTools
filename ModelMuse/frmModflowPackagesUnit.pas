@@ -1462,7 +1462,9 @@ begin
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-    CanSelect := CanSelect and framePackageSfrMF6.rcSelectionController.Enabled;
+    // SFT is not currently supported with MODFLOW 6
+//    CanSelect := CanSelect and framePackageSfrMF6.rcSelectionController.Enabled;
+    CanSelect := False;
   end
   else
   begin
@@ -2346,7 +2348,9 @@ begin
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-    CanSelect := CanSelect and framePackageLakMf6.rcSelectionController.Enabled;
+    // LKT is not currently supported by MODFLOW 6.
+//    CanSelect := CanSelect and framePackageLakMf6.rcSelectionController.Enabled;
+    CanSelect := False;
   end
   else
   begin
@@ -2449,13 +2453,11 @@ begin
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
   {$IFDEF Mt3dUSGS}
-    framePkgMt3dUZT.CanSelect := framePackageUzfMf6.rcSelectionController.Enabled
-      and framePkgMt3dBasic.rcSelectionController.Enabled
-      and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-    if not framePkgMt3dUZT.CanSelect then
-    begin
-      framePkgMt3dUZT.Selected := False;
-    end;
+    // UZT is not currently supported with MODFLOW 6
+//    framePkgMt3dUZT.CanSelect := framePackageUzfMf6.rcSelectionController.Enabled
+//      and framePkgMt3dBasic.rcSelectionController.Enabled
+//      and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
+    framePkgMt3dUZT.CanSelect := False;
   {$ENDIF}
   end
   else
@@ -2463,10 +2465,10 @@ begin
     framePkgMt3dUZT.CanSelect := framePkgUZF.rcSelectionController.Enabled
       and framePkgMt3dBasic.rcSelectionController.Enabled
       and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-    if not framePkgMt3dUZT.CanSelect then
-    begin
-      framePkgMt3dUZT.Selected := False;
-    end;
+  end;
+  if not framePkgMt3dUZT.CanSelect then
+  begin
+    framePkgMt3dUZT.Selected := False;
   end;
 end;
 
@@ -3662,16 +3664,6 @@ begin
     Packages.Mt3dmsTransObs.Frame := framePkgMt3dmsTob;
     FPackageList.Add(Packages.Mt3dmsTransObs);
 
-  {$IFDEF Mt3dUSGS}
-    Packages.Mt3dLkt.Frame := frameMt3dLktPkg;
-    FPackageList.Add(Packages.Mt3dLkt);
-
-    Packages.Mt3dSft.Frame := frameMt3dSftPkg;
-    FPackageList.Add(Packages.Mt3dSft);
-
-    Packages.Mt3dUnsatTransport.Frame := framePkgMt3dUzt;
-    FPackageList.Add(Packages.Mt3dUnsatTransport);
-  {$ENDIF}
   {$IFNDEF Mt3dUSGS}
   end
   else
@@ -3683,11 +3675,33 @@ begin
     framePkgMt3dmsRct.NilNode;
     frameMt3dmsGcgPackage.NilNode;
     framePkgMt3dmsTob.NilNode;
+  {$ENDIF}
+  end;
+
+  if frmGoPhast.ModelSelection <> msModflow2015 then
+  begin
+  {$IFDEF Mt3dUSGS}
+    Packages.Mt3dLkt.Frame := frameMt3dLktPkg;
+    FPackageList.Add(Packages.Mt3dLkt);
+
+    Packages.Mt3dSft.Frame := frameMt3dSftPkg;
+    FPackageList.Add(Packages.Mt3dSft);
+
+    Packages.Mt3dUnsatTransport.Frame := framePkgMt3dUzt;
+    FPackageList.Add(Packages.Mt3dUnsatTransport);
+  {$ELSE}
     framePkgMt3dUzt.NilNode;
     frameMt3dLktPkg.NilNode;
     frameMt3dSftPkg.NilNode;
   {$ENDIF}
+  end
+  else
+  begin
+    framePkgMt3dUzt.NilNode;
+    frameMt3dLktPkg.NilNode;
+    frameMt3dSftPkg.NilNode;
   end;
+
 
   if frmGoPhast.ModelSelection <> msModflow2015 then
   begin

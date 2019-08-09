@@ -272,14 +272,14 @@ type
   private
     FDownstreamSegment: Integer;
     FPriority: TDivisionPriority;
-    FDiversionNumber: Integer;
+//    FDiversionNumber: Integer;
     procedure SetPriority(const Value: TDivisionPriority);
     procedure SetDownstreamSegment(const Value: Integer);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
-    property DiversionNumber: Integer read FDiversionNumber write FDiversionNumber;
+//    property DiversionNumber: Integer read FDiversionNumber write FDiversionNumber;
   published
     property DownstreamSegment: Integer read FDownstreamSegment
       write SetDownstreamSegment;
@@ -2016,6 +2016,8 @@ begin
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.FValues := BoundaryValues;
+        SetLength(Cell.FValues.Diversions, Length(Cell.FValues.Diversions));
+        SetLength(Cell.FValues.DiversionAnnotations, Length(Cell.FValues.DiversionAnnotations));
         Cell.ScreenObject := ScreenObject;
         LocalModel.AdjustCellPosition(Cell);
       end;

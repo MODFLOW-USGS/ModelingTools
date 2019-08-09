@@ -1330,7 +1330,7 @@ begin
       end
       else
       begin
-        ParamEstBatchFile.Add(AFileName + ' /wait');
+        ParamEstBatchFile.Add(AFileName {+ ' /wait'});
       end;
 
       if frmGoPhast.PhastModel.InterpSwiObsDefined then
