@@ -25,7 +25,8 @@ uses
 {$IFDEF CLX}
   Classes,Graphics,SysUtils,Dialogs,ComCtrls,Math,DXF_Utils, Types;
 {$ELSE}
-  Windows,Classes,Graphics,ComCtrls,SysUtils,Dialogs,Math,DXF_Utils;
+  Windows,Classes,Graphics,ComCtrls,SysUtils,Dialogs,Math,DXF_Utils,
+  System.UITypes, System.Types;
 {$ENDIF}
 ///////////////////////////////////////////////////////////////////////////////
 // Useful definitions

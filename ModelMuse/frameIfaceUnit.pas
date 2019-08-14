@@ -10,7 +10,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, JvExStdCtrls, JvRadioButton, ExtCtrls, JvExExtCtrls,
   JvImage, GLWin32Viewer, GLScene, GLGeomObjects, GLObjects, GLColor,
-  GoPhastTypes, GLCoordinates, GLCrossPlatform,
+  GoPhastTypes, GLCoordinates, GLCrossPlatform, GLMaterial,
 {$IF CompilerVersion < 23}
   BaseClasses;
 {$ELSE}

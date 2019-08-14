@@ -7674,7 +7674,14 @@ begin
       NewLine;
 
       WriteString('  MXITER');
-      WriteInteger(ModelData.MaxIterations);
+      if FModelDataList.Count > 1 then
+      begin
+        WriteInteger(ModelData.MaxIterations);
+      end
+      else
+      begin
+        WriteInteger(1);
+      end;
       NewImsLine := True;
     end;
 

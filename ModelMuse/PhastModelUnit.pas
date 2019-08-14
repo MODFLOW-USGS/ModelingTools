@@ -4344,6 +4344,7 @@ that affects the model output should also have a comment. }
     function Mt3d_UztIsSelected: Boolean;
     function Mt3d_UztEtIsSelected: Boolean;
     function Mt3d_LktIsSelected: Boolean;
+    function Mt3d_SftIsSelected: Boolean;
     function Mt3dmsTobIsSelected: Boolean;
     function PcgIsSelected: Boolean;
     function RchIsSelected: Boolean;
@@ -8677,9 +8678,13 @@ const
   //                input file.
   //               Bug fix: not in released version. Fixed getting vertex
   //                values.
+  //   '4.0.0.10'  bug fix: Fixed bug in which mxiter in the MODFLOW 6
+  //                Simulation Name File was not exported correctly.
+  //   '4.0.0.11'  Bug fix: Fixed bug in identifying MVR sources when
+  //                the UZF package is used.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.9';
+  IModelVersion = '4.0.0.11';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -18272,6 +18277,29 @@ begin
         if ChildModel <> nil then
         begin
           result := result or ChildModel.ModflowPackages.Mt3dLkt.IsSelected;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.Mt3d_SftIsSelected: Boolean;
+var
+  ChildIndex: integer;
+  ChildModel: TChildModel;
+begin
+  result := Mt3dmsIsSelected;
+  if result then
+  begin
+    result := ModflowPackages.Mt3dSft.IsSelected;
+    if not result and LgrUsed then
+    begin
+      for ChildIndex := 0 to ChildModels.Count - 1 do
+      begin
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          result := result or ChildModel.ModflowPackages.Mt3dSft.IsSelected;
         end;
       end;
     end;

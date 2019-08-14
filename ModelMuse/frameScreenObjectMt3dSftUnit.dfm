@@ -6,12 +6,22 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
   inherited pnlBottom: TPanel
     Top = 353
     Width = 482
+    ExplicitTop = 353
+    ExplicitWidth = 482
     DesignSize = (
       482
       46)
+    inherited lblNumTimes: TLabel
+      Height = 19
+      ExplicitHeight = 19
+    end
+    inherited seNumberOfTimes: TJvSpinEdit
+      Top = 12
+      ExplicitTop = 12
+    end
     inherited btnDelete: TBitBtn
-      Left = 390
-      ExplicitLeft = 390
+      Left = 394
+      ExplicitLeft = 394
     end
     inherited btnInsert: TBitBtn
       Left = 306
@@ -20,19 +30,27 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
   end
   inherited pnlTop: TPanel
     Width = 482
+    ExplicitWidth = 482
     inherited pnlCaption: TPanel
       Width = 480
+      ExplicitWidth = 480
     end
   end
   inherited pnlGrid: TPanel
     Width = 482
     Height = 135
+    ExplicitWidth = 482
+    ExplicitHeight = 135
     inherited pnlEditGrid: TPanel
       Width = 480
+      ExplicitWidth = 480
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Width = 480
       Height = 83
+      ExplicitLeft = 1
+      ExplicitWidth = 480
+      ExplicitHeight = 83
     end
   end
   object pgcSft: TPageControl
@@ -44,88 +62,104 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     Align = alBottom
     TabOrder = 3
     object tsSteady: TTabSheet
-      Caption = 'tsSteady'
-      ExplicitLeft = 7
-      ExplicitTop = 27
-      object lblInitialConcentration: TLabel
-        Left = 8
-        Top = 8
-        Width = 97
-        Height = 13
-        Caption = 'Initial Concentration'
-      end
-      object lblDispersion: TLabel
-        Left = 3
-        Top = 56
-        Width = 49
-        Height = 13
-        Caption = 'Dispersion'
-      end
-      object edInitialConcentration: TJvComboEdit
-        Left = 3
-        Top = 27
-        Width = 364
-        Height = 21
-        ButtonWidth = 50
-        DisabledColor = clBtnFace
-        Glyph.Data = {
-          26020000424D260200000000000076000000280000002D000000120000000100
-          040000000000B001000000000000000000001000000000000000000000000000
-          8000008000000080800080000000800080008080000080808000C0C0C0000000
-          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          F000FF000000000FFFF000F0FF0FFF000FF0FFF0FFF0FFFFF000FF0FFFFFFFFF
-          FF0FFF00FF0FFF0FFFFFFFFFFFFFFFFFF000FF0FFFFFFFFFF0FFFFF0FF0FFF0F
-          FFFFFFFFFFFFFFFFF000FF0FFFFFFFFFF0FFFFF0FF0FFF0FFFFFFFFFFFFFFFFF
-          F000FF0FFFFFFFFFF0FFFFF0FF0FFF0FFFFFFFFFFFFFFFFFF000FF0FFFFFFFFF
-          F0FFFFF0FF0FFF0FFFFFFFFFFFFFFFFFF000FF00000000FFF0FFFFF0FF0FFF0F
-          FFFFFFFFFFFFFFFFF000FF0FFFFFFFFFFF0FFF00FF0FFF0FFFFFFFFFFFFFFFFF
-          F000FF0FFFFFFFFFFFF000F0FF0FF0000FFFFFFFFFFFFFFFF000FF0FFFFFFFFF
-          FFFFFFF0FFFFFF0FFFFFFFFFFFFFFFFFF000FF0FFFFFFFFFFFFFFFF0FFFFFF0F
-          FFFFFFFFFFFFFFFFF000FF000000000FFFFFFFF0FF0FFFFFFFFFFFFFFFFFFFFF
-          F000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFF000}
+      Caption = 'Steady'
+      object rdgSftInitConcAndDisp: TRbwDataGrid4
+        Left = 0
+        Top = 0
+        Width = 474
+        Height = 165
+        Align = alClient
+        ColCount = 3
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
         TabOrder = 0
-        Text = ''
-      end
-      object edDispersion: TJvComboEdit
-        Left = 3
-        Top = 75
-        Width = 364
-        Height = 21
-        ButtonWidth = 50
-        DisabledColor = clBtnFace
-        Glyph.Data = {
-          26020000424D260200000000000076000000280000002D000000120000000100
-          040000000000B001000000000000000000001000000000000000000000000000
-          8000008000000080800080000000800080008080000080808000C0C0C0000000
-          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          F000FF000000000FFFF000F0FF0FFF000FF0FFF0FFF0FFFFF000FF0FFFFFFFFF
-          FF0FFF00FF0FFF0FFFFFFFFFFFFFFFFFF000FF0FFFFFFFFFF0FFFFF0FF0FFF0F
-          FFFFFFFFFFFFFFFFF000FF0FFFFFFFFFF0FFFFF0FF0FFF0FFFFFFFFFFFFFFFFF
-          F000FF0FFFFFFFFFF0FFFFF0FF0FFF0FFFFFFFFFFFFFFFFFF000FF0FFFFFFFFF
-          F0FFFFF0FF0FFF0FFFFFFFFFFFFFFFFFF000FF00000000FFF0FFFFF0FF0FFF0F
-          FFFFFFFFFFFFFFFFF000FF0FFFFFFFFFFF0FFF00FF0FFF0FFFFFFFFFFFFFFFFF
-          F000FF0FFFFFFFFFFFF000F0FF0FF0000FFFFFFFFFFFFFFFF000FF0FFFFFFFFF
-          FFFFFFF0FFFFFF0FFFFFFFFFFFFFFFFFF000FF0FFFFFFFFFFFFFFFF0FFFFFF0F
-          FFFFFFFFFFFFFFFFF000FF000000000FFFFFFFF0FF0FFFFFFFFFFFFFFFFFFFFF
-          F000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFF000}
-        TabOrder = 1
-        Text = ''
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            ButtonCaption = 'F()'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = True
+            ButtonWidth = 35
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end
+          item
+            AutoAdjustRowHeights = True
+            ButtonCaption = 'F()'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = True
+            ButtonWidth = 35
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = False
+          end>
+        WordWrapRowCaptions = False
       end
     end
     object tsHeadWaters: TTabSheet
-      Caption = 'Head Water Concentration'
+      Caption = 'Head Water Conc.'
       ImageIndex = 1
     end
     object tsPrecipitation: TTabSheet
-      Caption = 'Precipitation Concentration'
+      Caption = 'Precipitation Conc.'
       ImageIndex = 2
       object pnlBottomPrecip: TPanel
         Left = 0
@@ -147,17 +181,17 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         end
         object seNumberOfTimesPrecip: TJvSpinEdit
           Left = 9
-          Top = 5
+          Top = 12
           Width = 49
           Height = 21
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
-          OnChange = seNumberOfTimesChange
+          OnChange = seNumberOfTimesPrecipChange
         end
         object btnDeletePrecip: TBitBtn
-          Left = 390
-          Top = 5
+          Left = 394
+          Top = 6
           Width = 82
           Height = 33
           Anchors = [akTop, akRight]
@@ -191,7 +225,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             FFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 2
-          OnClick = btnDeleteClick
+          OnClick = btnDeletePrecipClick
         end
         object btnInsertPrecip: TBitBtn
           Left = 306
@@ -211,7 +245,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             CC0FF0FF0CCCCCCCCC0FFFFF00000000000FFFFF0FFFFFFFFF0FFFFF0FFFFFFF
             FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
           TabOrder = 1
-          OnClick = btnInsertClick
+          OnClick = btnInsertPrecipClick
         end
       end
       object pnlPrecip: TPanel
@@ -246,7 +280,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             Enabled = False
             TabOrder = 0
             Text = ''
-            OnChange = rdeFormulaChange
+            OnChange = rdePrecipFormulaChange
             Max = 1.000000000000000000
             ChangeDisabledColor = True
           end
@@ -262,9 +296,9 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           RowCount = 2
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
           TabOrder = 1
-          OnMouseUp = rdgModflowBoundaryMouseUp
-          OnSelectCell = rdgModflowBoundarySelectCell
-          OnSetEditText = rdgModflowBoundarySetEditText
+          OnMouseUp = rdgPrecipMouseUp
+          OnSelectCell = rdgPrecipSelectCell
+          OnSetEditText = rdgPrecipSetEditText
           ExtendedAutoDistributeText = False
           AutoMultiEdit = True
           AutoDistributeText = True
@@ -272,10 +306,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
-          OnBeforeDrawCell = rdgModflowBoundaryBeforeDrawCell
-          OnColSize = rdgModflowBoundaryColSize
+          OnBeforeDrawCell = rdgPrecipBeforeDrawCell
+          OnColSize = rdgPrecipColSize
           ColorRangeSelection = False
-          OnHorizontalScroll = rdgModflowBoundaryHorizontalScroll
+          OnHorizontalScroll = rdgPrecipHorizontalScroll
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -351,7 +385,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       end
     end
     object tsRunoff: TTabSheet
-      Caption = 'Runoff Concentration'
+      Caption = 'Runoff Conc.'
       ImageIndex = 3
       object pnlBottomRunoff: TPanel
         Left = 0
@@ -373,17 +407,17 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         end
         object seNumberOfTimesRunoff: TJvSpinEdit
           Left = 9
-          Top = 5
+          Top = 12
           Width = 49
           Height = 21
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
-          OnChange = seNumberOfTimesChange
+          OnChange = seNumberOfTimesRunoffChange
         end
         object btnDeleteRunoff: TBitBtn
-          Left = 390
-          Top = 5
+          Left = 394
+          Top = 6
           Width = 82
           Height = 33
           Anchors = [akTop, akRight]
@@ -417,7 +451,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             FFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 2
-          OnClick = btnDeleteClick
+          OnClick = btnDeleteRunoffClick
         end
         object btnInsertRunoff: TBitBtn
           Left = 306
@@ -437,7 +471,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             CC0FF0FF0CCCCCCCCC0FFFFF00000000000FFFFF0FFFFFFFFF0FFFFF0FFFFFFF
             FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
           TabOrder = 1
-          OnClick = btnInsertClick
+          OnClick = btnInsertRunoffClick
         end
       end
       object pnlRunoff: TPanel
@@ -472,7 +506,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             Enabled = False
             TabOrder = 0
             Text = ''
-            OnChange = rdeFormulaChange
+            OnChange = rdeFormulaRunoffChange
             Max = 1.000000000000000000
             ChangeDisabledColor = True
           end
@@ -488,9 +522,9 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           RowCount = 2
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
           TabOrder = 1
-          OnMouseUp = rdgModflowBoundaryMouseUp
-          OnSelectCell = rdgModflowBoundarySelectCell
-          OnSetEditText = rdgModflowBoundarySetEditText
+          OnMouseUp = rdgRunoffMouseUp
+          OnSelectCell = rdgRunoffSelectCell
+          OnSetEditText = rdgRunoffSetEditText
           ExtendedAutoDistributeText = False
           AutoMultiEdit = True
           AutoDistributeText = True
@@ -498,10 +532,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
-          OnBeforeDrawCell = rdgModflowBoundaryBeforeDrawCell
-          OnColSize = rdgModflowBoundaryColSize
+          OnBeforeDrawCell = rdgRunoffBeforeDrawCell
+          OnColSize = rdgRunoffColSize
           ColorRangeSelection = False
-          OnHorizontalScroll = rdgModflowBoundaryHorizontalScroll
+          OnHorizontalScroll = rdgRunoffHorizontalScroll
           Columns = <
             item
               AutoAdjustRowHeights = False
@@ -577,7 +611,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       end
     end
     object tsConstantConcentration: TTabSheet
-      Caption = 'Constant Concentration'
+      Caption = 'Constant Conc.'
       ImageIndex = 4
       object pnlBottomConstConc: TPanel
         Left = 0
@@ -592,24 +626,24 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           46)
         object lblNumberOfTimesConstConc: TLabel
           Left = 64
-          Top = 15
+          Top = 16
           Width = 78
           Height = 13
           Caption = 'Number of times'
         end
         object seNumberOfTimesConstConc: TJvSpinEdit
           Left = 9
-          Top = 5
+          Top = 12
           Width = 49
           Height = 21
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
-          OnChange = seNumberOfTimesChange
+          OnChange = seNumberOfTimesConstConcChange
         end
         object btnDeleteConstConc: TBitBtn
           Left = 390
-          Top = 5
+          Top = 6
           Width = 82
           Height = 33
           Anchors = [akTop, akRight]
@@ -643,7 +677,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             FFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 2
-          OnClick = btnDeleteClick
+          OnClick = btnDeleteConstConcClick
         end
         object btnInsertConstConc: TBitBtn
           Left = 306
@@ -698,7 +732,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             Enabled = False
             TabOrder = 0
             Text = ''
-            OnChange = rdeFormulaChange
+            OnChange = rdeFormulaConstConcChange
             Max = 1.000000000000000000
             ChangeDisabledColor = True
           end
@@ -714,9 +748,9 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           RowCount = 2
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
           TabOrder = 1
-          OnMouseUp = rdgModflowBoundaryMouseUp
-          OnSelectCell = rdgModflowBoundarySelectCell
-          OnSetEditText = rdgModflowBoundarySetEditText
+          OnMouseUp = rdgConstConcMouseUp
+          OnSelectCell = rdgConstConcSelectCell
+          OnSetEditText = rdgConstConcSetEditText
           ExtendedAutoDistributeText = False
           AutoMultiEdit = True
           AutoDistributeText = True
@@ -724,10 +758,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           AutoIncreaseRowCount = True
           SelectedRowOrColumnColor = clAqua
           UnselectableColor = clBtnFace
-          OnBeforeDrawCell = rdgModflowBoundaryBeforeDrawCell
-          OnColSize = rdgModflowBoundaryColSize
+          OnBeforeDrawCell = rdgConstConcBeforeDrawCell
+          OnColSize = rdgConstConcColSize
           ColorRangeSelection = False
-          OnHorizontalScroll = rdgModflowBoundaryHorizontalScroll
+          OnHorizontalScroll = rdgConstConcHorizontalScroll
           Columns = <
             item
               AutoAdjustRowHeights = False

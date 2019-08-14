@@ -27,6 +27,7 @@ type
 //    procedure InvalidateModel; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
 //    function ConcName: string; override;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   end;
 
   TMt3dSftDispItem = class(TCustomMt3dmsConcItem)
@@ -50,6 +51,7 @@ type
 //    procedure InvalidateModel; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
 //    function ConcName: string; override;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   end;
 
   TSftBoundaryType = (sbtHeadwater, sbtPrecipitation, sbtRunoff, sbtConstConc);
@@ -213,11 +215,6 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     procedure ClearBoundaries(AModel: TBaseModel); override;
-    procedure InsertNewSpecies(SpeciesIndex: integer; const Name: string); override;
-    procedure RenameSpecies(const OldSpeciesName, NewSpeciesName: string); override;
-    procedure ChangeSpeciesPosition(OldIndex, NewIndex: integer); override;
-    procedure DeleteSpecies(SpeciesIndex: integer); override;
-    function Used: boolean; override;
     function BoundaryObserverPrefix: string; override;
   public
     Procedure Assign(Source: TPersistent); override;
@@ -234,6 +231,11 @@ type
     procedure GetRunOffCells(PrecipTimeList: TList; AModel: TBaseModel);
     procedure GetConstConcCells(PrecipTimeList: TList; AModel: TBaseModel);
     procedure Loaded;
+    procedure InsertNewSpecies(SpeciesIndex: integer; const Name: string); override;
+    procedure RenameSpecies(const OldSpeciesName, NewSpeciesName: string); override;
+    procedure ChangeSpeciesPosition(OldIndex, NewIndex: integer); override;
+    procedure DeleteSpecies(SpeciesIndex: integer); override;
+    function Used: boolean; override;
   published
     property InitialConcentration: TMt3dSftInitConcCollection read FInitialConcentration
       write SetInitialConcentration;
@@ -1314,6 +1316,11 @@ begin
   result := TMt3dSftInitConcItem;
 end;
 
+function TMt3dSftInitConcCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+begin
+  result := False;
+end;
+
 { TMt3dSftDispItem }
 
 procedure TMt3dSftDispItem.AssignObserverEvents(Collection: TCollection);
@@ -1409,6 +1416,11 @@ end;
 class function TMt3dSftDispCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TMt3dSftDispItem;
+end;
+
+function TMt3dSftDispCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+begin
+  result := False;
 end;
 
 end.

@@ -143,6 +143,15 @@ begin
 //  PackageIdentifiers.Add('PROCESSING GNC DIMENSIONS');
 //  PackageIdentifiers.Add('PROCESSING GNCDATA');
   PackageIdentifiers.Add('PROCESSING OC OPTIONS');
+  PackageIdentifiers.Add('PROCESSING SFR PACKAGEDATA');
+  PackageIdentifiers.Add('PROCESSING SFR CONNECTIONDATA');
+  PackageIdentifiers.Add('SFR STATIC REACH DATA');
+  PackageIdentifiers.Add('SFR REACH CONNECTION DATA');
+  PackageIdentifiers.Add('SFR DOWNSTREAM CONNECTIONS');
+  PackageIdentifiers.Add('SFR UPSTREAM CONNECTIONS');
+  PackageIdentifiers.Add('SFR GEOMETRY DATA');
+  PackageIdentifiers.Add('PROCESSING UZF CELLS PACKAGEDATA');
+
 //  PackageIdentifiers.Add('DIS -- STRUCTURED GRID DISCRETIZATION PACKAGE');
 //  PackageIdentifiers.Add('NPF -- NODE PROPERTY FLOW PACKAGE');
 //  PackageIdentifiers.Add('WEL   -- WEL PACKAGE');
@@ -371,6 +380,14 @@ begin
   BoundaryIdentifiers.Add('UZ CELL BOTTOM ELEV.');
 //  BoundaryIdentifiers.Add(StrINSTANCE);
   BoundaryIdentifiers.Add('VOLUMETRIC BUDGET FOR ENTIRE MODEL');
+  BoundaryIdentifiers.Add('BUDGET FOR ENTIRE MODEL');
+  BoundaryIdentifiers.Add('MULTI-AQUIFER WELL');
+
+  BoundaryIdentifiers.Add('REACH           REACH  REACH                  REACH      REACH      REACH       GWF      STREAMBED   STREAMBED');
+  BoundaryIdentifiers.Add('REACH           REACH  REACH                 EXTERNAL      REACH       REACH       REACH       REACH       REACH       REACH     EXTERNAL      REACH      PERCENT');
+  BoundaryIdentifiers.Add('MULTI-AQUIFER WELL DATA');
+  BoundaryIdentifiers.Add('SFR UPSTREAM FRACTIONS');
+
   BoundaryIdentifiers.Add('INPUT DATA FOR EACH STREAM SEGMENT');
   BoundaryIdentifiers.Add('Stream Gages:');
   BoundaryIdentifiers.Add('Lake Gages:');

@@ -702,7 +702,7 @@ procedure TfrmImportSutraModelResults.CreateRestartNodeScreenObject(
   Out ScreenObject: TScreenObject);
 var
   UndoCreateScreenObject: TCustomUndo;
-  NeedLocations: Boolean;
+//  NeedLocations: Boolean;
   Mesh: TSutraMesh3D;
   NodeIndex: Integer;
   ANode2D: TSutraNode2D;
@@ -717,7 +717,7 @@ begin
   Mesh := frmGoPhast.PhastModel.SutraMesh;
   Nodes := TNodeDataList.Create;
   try
-    NeedLocations := False;
+//    NeedLocations := False;
     case Mesh.MeshType of
       mt2D, mtProfile:
         begin

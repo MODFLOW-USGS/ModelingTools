@@ -27,6 +27,10 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
     TabOrder = 3
     object tabInitialConc: TTabSheet
       Caption = 'Initial concentration'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblInitialConcentration: TLabel
         Left = 4
         Top = 3
@@ -107,10 +111,18 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
     object tabPrecipConc: TTabSheet
       Caption = 'Precipitation concentration'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tabRunoffConc: TTabSheet
       Caption = ' Runoff concentration'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pnlButtonsRunoff: TPanel
         Left = 0
         Top = 77

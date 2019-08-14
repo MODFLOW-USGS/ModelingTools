@@ -5,8 +5,8 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
   ClientHeight = 417
   ClientWidth = 417
   ExplicitWidth = 433
-  ExplicitHeight = 455
-  PixelsPerInch = 120
+  ExplicitHeight = 456
+  PixelsPerInch = 96
   TextHeight = 18
   object lblTimeStepsToImport: TLabel
     Left = 223

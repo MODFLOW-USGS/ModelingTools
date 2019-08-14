@@ -319,7 +319,7 @@ begin
   try
     with Undo.FNewPrintFrequency do
     begin
-      Time := 0;
+//      Time := 0;
       Clear;
       SaveFinalHeads := cbSaveFinalHeads.Checked;
 

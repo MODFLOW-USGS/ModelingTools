@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameGridUnit, Vcl.Grids, RbwDataGrid4,
   Vcl.StdCtrls, Vcl.Mask, JvExMask, JvSpin, Vcl.Buttons, Vcl.ExtCtrls,
   ModflowLakMf6Unit, JvExStdCtrls, JvCombobox, JvListComb, ArgusDataEntry,
-  frameFormulaGridUnit;
+  frameFormulaGridUnit, System.UITypes;
 
 type
   TOutletColumn = (ocStart, ocEnd, ocRate, ocInvert, ocWidth, ocSlope, coRoughness);

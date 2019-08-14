@@ -3817,7 +3817,7 @@ var
   CellText: AnsiString;
   CachedPosition: Integer;
   FieldStorage: TFieldNumStorage;
-  SFR_Mf6_Package: TSfrModflow6PackageSelection;
+//  SFR_Mf6_Package: TSfrModflow6PackageSelection;
   StatusIndex: Integer;
   StatusStr: String;
   DownstreamIndex: Integer;
@@ -3829,7 +3829,7 @@ var
   StringValue: string;
   NoDiversionColCount: Integer;
 begin
-  SFR_Mf6_Package := frmGoPhast.PhastModel.ModflowPackages.SfrModflow6Package;
+//  SFR_Mf6_Package := frmGoPhast.PhastModel.ModflowPackages.SfrModflow6Package;
 //  First := True;
   AScreenObject.CreateSfr6Boundary;
   Boundary := AScreenObject.ModflowSfr6Boundary;

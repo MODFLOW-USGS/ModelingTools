@@ -10,7 +10,7 @@ unit AbstractGridUnit;
 
 interface
 
-uses Types, SysUtils, Classes, Graphics, Controls,
+uses System.UITypes, Winapi.Windows, Types, SysUtils, Classes, Graphics, Controls,
   Forms,
   OpenGL,
   GR32, // TBitmap32 and TFloatRect are declared in GR32.

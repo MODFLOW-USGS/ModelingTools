@@ -3309,7 +3309,7 @@ view. }
     procedure CreateMt3dUztUnsatEtConcBoundary;
     procedure CreateMt3dUzSsmSinkConcBoundary;
     procedure CreateMt3dLktConcBoundary;
-    procedure CreateMt3dSFtConcBoundary;
+    procedure CreateMt3dSftConcBoundary;
     procedure CreateFhbHeadBoundary;
     procedure CreateFhbFlowBoundary;
     procedure CreateFarmWell;
@@ -24396,8 +24396,8 @@ var
   CellList: TCellAssignmentList;
   CellAssignment: TCellAssignment;
   AssignmentIndex: Integer;
-  UsedFunction: string;
-  UsedExpression: TExpression;
+//  UsedFunction: string;
+//  UsedExpression: TExpression;
 begin
   CellList := TCellAssignmentList.Create;
   try
@@ -36788,7 +36788,7 @@ begin
   end;
 end;
 
-procedure TScreenObject.CreateMt3dSFtConcBoundary;
+procedure TScreenObject.CreateMt3dSftConcBoundary;
 begin
   if (ModflowBoundaries.FMt3dSftConcBoundary = nil) then
   begin

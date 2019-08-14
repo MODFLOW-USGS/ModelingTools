@@ -1340,7 +1340,9 @@ var
   Time: Double;
   Formula: string;
   DataArray: TDataArray;
+{$IFNDEF SutraUsedFormulas}
   TimeIndex: Integer;
+{$ENDIF}
   UsedFormula: string;
 begin
   if not frmProgressMM.ShouldContinue then

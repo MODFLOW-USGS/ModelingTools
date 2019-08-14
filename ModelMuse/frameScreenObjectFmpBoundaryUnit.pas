@@ -195,9 +195,9 @@ var
   BoundaryUsed: Boolean;
   NewBoundary: TModflowBoundary;
   RowIndex: Integer;
-  FirstTime: Double;
-  StressPeriods: TModflowStressPeriods;
-  LastTime: Double;
+//  FirstTime: Double;
+//  StressPeriods: TModflowStressPeriods;
+//  LastTime: Double;
   StartTime: double;
   EndTime: double;
   NewItem: TCustomModflowBoundaryItem;
@@ -208,9 +208,9 @@ begin
     begin
       NewBoundary := CreateNewBoundary;
 
-      StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
-      FirstTime := StressPeriods.First.StartTime;
-      LastTime :=  StressPeriods.Last.EndTime;
+//      StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
+//      FirstTime := StressPeriods.First.StartTime;
+//      LastTime :=  StressPeriods.Last.EndTime;
 
       for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
       begin

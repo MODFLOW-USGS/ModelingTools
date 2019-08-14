@@ -321,7 +321,7 @@ implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit,
-  ScreenObjectUnit, ModflowTimeUnit;
+  ScreenObjectUnit, ModflowTimeUnit, ModflowMvrUnit;
 
 resourcestring
   StrUZFInfiltrationDat = 'UZF infiltration';
@@ -1462,7 +1462,9 @@ begin
   LocalModel := AModel as TCustomModel;
   LocalBoundaryStorage := BoundaryStorage as TUzfMf6Storage;
   LocalScreenObject := ScreenObject as TScreenObject;
-  MvrUsed := (LocalScreenObject.ModflowMvr <> nil);
+  MvrUsed := (LocalScreenObject.ModflowMvr <> nil)
+    and LocalScreenObject.ModflowMvr.Used
+    and (LocalScreenObject.ModflowMvr.SourcePackageChoice = spcUzf);
   for TimeIndex := 0 to
     LocalModel.ModflowFullStressPeriods.Count - 1 do
   begin

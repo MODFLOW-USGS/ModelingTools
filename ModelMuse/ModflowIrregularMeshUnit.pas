@@ -5745,7 +5745,7 @@ begin
     Edges.YMax := TwoDGrid.CellCorners.Count;
 
     IDomainDataArray := (Model as TCustomModel).DataArrayManager.GetDataSetByName(K_IDOMAIN);
-    ALayer := nil;
+//    ALayer := nil;
     for CellIndex := 0 to TwoDGrid.Cells.Count - 1 do
     begin
 //      if CheckAllLayers then

@@ -641,7 +641,7 @@ begin
     LakeId := nil;
   end;
 
-  OK := True;
+//  OK := True;
   for RowIndex := 0 to IUZFBND.RowCount - 1 do
   begin
     for ColIndex := 0 to IUZFBND.ColumnCount - 1 do

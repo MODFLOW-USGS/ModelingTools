@@ -40,11 +40,6 @@ object frameIface: TframeIface
       Caption = 'Bottom (5)'
       TabOrder = 7
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbFront: TJvRadioButton
@@ -57,11 +52,6 @@ object frameIface: TframeIface
       Caption = 'Front (3)'
       TabOrder = 5
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbRight: TJvRadioButton
@@ -74,11 +64,6 @@ object frameIface: TframeIface
       Caption = 'Right (2)'
       TabOrder = 4
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbLeft: TJvRadioButton
@@ -91,11 +76,6 @@ object frameIface: TframeIface
       Caption = 'Left (1)'
       TabOrder = 3
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbTop: TJvRadioButton
@@ -108,11 +88,6 @@ object frameIface: TframeIface
       Caption = 'Top (6)'
       TabOrder = 8
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbBack: TJvRadioButton
@@ -125,11 +100,6 @@ object frameIface: TframeIface
       Caption = 'Back (4)'
       TabOrder = 6
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbInternal: TJvRadioButton
@@ -143,11 +113,6 @@ object frameIface: TframeIface
       TabOrder = 1
       TabStop = True
       OnClick = rbHorizontalClick
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object rbHorizontal: TJvRadioButton
@@ -162,11 +127,6 @@ object frameIface: TframeIface
       WordWrap = True
       OnClick = rbHorizontalClick
       AutoSize = False
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -16
-      HotTrackFont.Name = 'Arial'
-      HotTrackFont.Style = []
       LinkedControls = <>
     end
     object glsvViewer: TGLSceneViewer
@@ -176,6 +136,7 @@ object frameIface: TframeIface
       Height = 146
       Camera = GLCamera1
       FieldOfView = 111.183052062988300000
+      PenAsTouch = False
       TabOrder = 2
     end
   end
@@ -201,7 +162,6 @@ object frameIface: TframeIface
       object GLCube1: TGLCube
         Position.Coordinates = {00000000000000000000C0BF0000803F}
         TurnAngle = -20.000000000000000000
-        Up.Coordinates = {000000000000803F0000008000000000}
         Visible = False
       end
       object GLLightSource2: TGLLightSource

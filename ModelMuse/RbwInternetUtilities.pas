@@ -159,7 +159,7 @@ begin
       FreeMem(lpEntryInfo, dwEntrySize);
     end;
   finally
-        FindCloseUrlCache(Dummy);
+    FindCloseUrlCache(Dummy);
   end;
 end;
 {$IFDEF LINUX}

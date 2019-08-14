@@ -50,6 +50,7 @@ type
     function ShouldEnableRunoffMultisetControls: Boolean;
     function GetDeletedRunoffCells(ACol, ARow: integer): boolean;
     procedure SetDeletedRunoffCells(ACol, ARow: integer; const Value: boolean);
+    procedure InitializeControls;
     { Private declarations }
   public
     procedure ClearDeletedRunoffCells;
@@ -68,7 +69,7 @@ implementation
 
 uses
   ScreenObjectUnit, Mt3dLktUnit, PhastModelUnit, frmGoPhastUnit, GoPhastTypes,
-  frmCustomGoPhastUnit, System.Math;
+  frmCustomGoPhastUnit, System.Math, System.UITypes;
 
 resourcestring
   StrChemicalSpecies = 'Chemical species';
@@ -229,84 +230,20 @@ var
   FoundFirst: Boolean;
   PrecipConc: TMt3dLktConcCollection;
   NCOMP: Integer;
-  Model: TPhastModel;
-  CIndex: Integer;
-  SpeciesName: string;
   ComponentIndex: Integer;
   TimeIndex: Integer;
   ConcItem: TMt3dLktConcItem;
   RunoffConcentration: TMt3dLktConcCollection;
   FirstPrecipConc: TMt3dLktConcCollection;
   FirstRunoffConcentration: TMt3dLktConcCollection;
-  AColumn: TRbwColumn4;
-  InitCIndex: Integer;
+  Model: TPhastModel;
 begin
-  pcLkt.ActivePageIndex := 0;
-  FoundFirst := False;
+  InitializeControls;
+
   Model := frmGoPhast.PhastModel;
   NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
-  ClearGrid(rdgModflowBoundary);
-  ClearGrid(rdgRunoffConc);
-  ClearGrid(rdgInitialConcentration);
-  rdgModflowBoundary.ColCount := NCOMP+2;
-  rdgRunoffConc.ColCount := NCOMP+2;
-  rdgInitialConcentration.RowCount := NCOMP + 1;
-  rdgInitialConcentration.FixedCols := 1;
-  rdgInitialConcentration.Cells[0,0] := StrChemicalSpecies;
-  rdgInitialConcentration.Cells[1,0] := StrInitialConcentratio;
 
-  Model.ModflowStressPeriods.FillPickListWithStartTimes(rdgRunoffConc, Ord(gcStartTime));
-  Model.ModflowStressPeriods.FillPickListWithEndTimes(rdgRunoffConc, Ord(gcEndTime));
-//  Model.ModflowStressPeriods.FillPickListWithStartTimes(rdeRunoffFormula, Ord(gcStartTime));
-//  Model.ModflowStressPeriods.FillPickListWithEndTimes(rdeRunoffFormula, Ord(gcEndTime));
-
-  rdgModflowBoundary.Cells[Ord(gcStartTime), 0] := StrStartingTime;
-  rdgModflowBoundary.Cells[Ord(gcEndTime), 0] := StrEndingTime;
-  rdgRunoffConc.Cells[Ord(gcStartTime), 0] := StrStartingTime;
-  rdgRunoffConc.Cells[Ord(gcEndTime), 0] := StrEndingTime;
-  CIndex := Ord(gcComponentStart);
-  InitCIndex := 1;
-  for ComponentIndex := 0 to Model.MobileComponents.Count - 1 do
-  begin
-    SpeciesName := Model.MobileComponents[ComponentIndex].Name;
-    rdgModflowBoundary.Cells[CIndex, 0] := SpeciesName;
-    rdgRunoffConc.Cells[CIndex, 0] := SpeciesName;
-    rdgInitialConcentration.Cells[0, InitCIndex] := SpeciesName;
-
-    AColumn := rdgModflowBoundary.Columns[CIndex];
-    AColumn.ButtonUsed := true;
-    AColumn.ButtonWidth := 35;
-    AColumn.ButtonCaption := 'F()';
-
-    AColumn := rdgRunoffConc.Columns[CIndex];
-    AColumn.ButtonUsed := true;
-    AColumn.ButtonWidth := 35;
-    AColumn.ButtonCaption := 'F()';
-
-    Inc(CIndex);
-    Inc(InitCIndex);
-  end;
-  for ComponentIndex := 0 to Model.ImmobileComponents.Count - 1 do
-  begin
-    SpeciesName := Model.ImmobileComponents[ComponentIndex].Name;
-    rdgModflowBoundary.Cells[CIndex, 0] := SpeciesName;
-    rdgRunoffConc.Cells[CIndex, 0] := SpeciesName;
-    rdgInitialConcentration.Cells[0, InitCIndex] := SpeciesName;
-
-    AColumn := rdgModflowBoundary.Columns[CIndex];
-    AColumn.ButtonUsed := true;
-    AColumn.ButtonWidth := 35;
-    AColumn.ButtonCaption := 'F()';
-
-    AColumn := rdgRunoffConc.Columns[CIndex];
-    AColumn.ButtonUsed := true;
-    AColumn.ButtonWidth := 35;
-    AColumn.ButtonCaption := 'F()';
-
-    Inc(CIndex);
-    Inc(InitCIndex);
-  end;
-
+  FoundFirst := False;
   FirstPrecipConc := nil;
   FirstRunoffConcentration := nil;
   for ScreenObjectIndex := 0 to List.Count - 1 do
@@ -423,8 +360,8 @@ var
   begin
     result := ((AScreenObject.ModflowLakBoundary <> nil)
             and AScreenObject.ModflowLakBoundary.Used)
-          or ((AScreenObject.ModflowLak6 <> nil)
-            and AScreenObject.ModflowLak6.Used);
+//          or ((AScreenObject.ModflowLak6 <> nil)
+//            and AScreenObject.ModflowLak6.Used);
   end;
   function RowOk(Grid: TRbwDataGrid4; Row: Integer): Boolean;
   var
@@ -549,6 +486,84 @@ begin
   finally
     PrecipConc.Free;
     RunoffConcentration.Free;
+  end;
+end;
+
+procedure TframeScreenObjectLkt.InitializeControls;
+var
+  Model: TPhastModel;
+  CIndex: Integer;
+  InitCIndex: Integer;
+  SpeciesName: string;
+  AColumn: TRbwColumn4;
+  ComponentIndex: Integer;
+  NCOMP: Integer;
+begin
+  pcLkt.ActivePageIndex := 0;
+
+  Model := frmGoPhast.PhastModel;
+  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+
+  ClearGrid(rdgModflowBoundary);
+  ClearGrid(rdgRunoffConc);
+  ClearGrid(rdgInitialConcentration);
+
+  rdgModflowBoundary.ColCount := NCOMP + 2;
+  rdgRunoffConc.ColCount := NCOMP + 2;
+  rdgInitialConcentration.RowCount := NCOMP + 1;
+  rdgInitialConcentration.FixedCols := 1;
+
+  rdgInitialConcentration.Cells[0, 0] := StrChemicalSpecies;
+  rdgInitialConcentration.Cells[1, 0] := StrInitialConcentratio;
+
+  Model.ModflowStressPeriods.FillPickListWithStartTimes(rdgRunoffConc, Ord(gcStartTime));
+  Model.ModflowStressPeriods.FillPickListWithEndTimes(rdgRunoffConc, Ord(gcEndTime));
+
+  rdgModflowBoundary.Cells[Ord(gcStartTime), 0] := StrStartingTime;
+  rdgModflowBoundary.Cells[Ord(gcEndTime), 0] := StrEndingTime;
+  rdgRunoffConc.Cells[Ord(gcStartTime), 0] := StrStartingTime;
+  rdgRunoffConc.Cells[Ord(gcEndTime), 0] := StrEndingTime;
+  CIndex := Ord(gcComponentStart);
+  InitCIndex := 1;
+  for ComponentIndex := 0 to Model.MobileComponents.Count - 1 do
+  begin
+    SpeciesName := Model.MobileComponents[ComponentIndex].Name;
+    rdgModflowBoundary.Cells[CIndex, 0] := SpeciesName;
+    rdgRunoffConc.Cells[CIndex, 0] := SpeciesName;
+    rdgInitialConcentration.Cells[0, InitCIndex] := SpeciesName;
+
+    AColumn := rdgModflowBoundary.Columns[CIndex];
+    AColumn.ButtonUsed := true;
+    AColumn.ButtonWidth := 35;
+    AColumn.ButtonCaption := 'F()';
+
+    AColumn := rdgRunoffConc.Columns[CIndex];
+    AColumn.ButtonUsed := true;
+    AColumn.ButtonWidth := 35;
+    AColumn.ButtonCaption := 'F()';
+
+    Inc(CIndex);
+    Inc(InitCIndex);
+  end;
+  for ComponentIndex := 0 to Model.ImmobileComponents.Count - 1 do
+  begin
+    SpeciesName := Model.ImmobileComponents[ComponentIndex].Name;
+    rdgModflowBoundary.Cells[CIndex, 0] := SpeciesName;
+    rdgRunoffConc.Cells[CIndex, 0] := SpeciesName;
+    rdgInitialConcentration.Cells[0, InitCIndex] := SpeciesName;
+
+    AColumn := rdgModflowBoundary.Columns[CIndex];
+    AColumn.ButtonUsed := true;
+    AColumn.ButtonWidth := 35;
+    AColumn.ButtonCaption := 'F()';
+
+    AColumn := rdgRunoffConc.Columns[CIndex];
+    AColumn.ButtonUsed := true;
+    AColumn.ButtonWidth := 35;
+    AColumn.ButtonCaption := 'F()';
+
+    Inc(CIndex);
+    Inc(InitCIndex);
   end;
 end;
 

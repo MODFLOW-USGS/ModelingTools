@@ -6,9 +6,9 @@ inherited frmPrintFrequency: TfrmPrintFrequency
   Caption = 'PHAST Print Frequency'
   ClientHeight = 516
   ClientWidth = 606
-  ExplicitWidth = 624
-  ExplicitHeight = 561
-  PixelsPerInch = 120
+  ExplicitWidth = 622
+  ExplicitHeight = 555
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0

@@ -2,7 +2,8 @@ unit ModpathParticleUnit;
 
 interface
 
-uses Classes, SysUtils, GLScene, GLObjects, GoPhastTypes, GLColor;
+uses Classes, SysUtils, GLScene, GLObjects, GoPhastTypes, GLColor,
+  GLCoordinates, GLVectorTypes;
 
 type
   // @name is a collection of @link(TParticleLocation)s.

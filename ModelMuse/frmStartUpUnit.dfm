@@ -8,7 +8,6 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 406
   ClientWidth = 751
   OnClose = FormClose
-  ExplicitTop = -22
   ExplicitWidth = 767
   ExplicitHeight = 445
   PixelsPerInch = 96
@@ -237,6 +236,8 @@ inherited frmStartUp: TfrmStartUp
       HelpKeyword = 'Initial_Grid_Dialog_Box'
       Caption = 'tabInitialGrid'
       ImageIndex = 1
+      ExplicitWidth = 296
+      ExplicitHeight = 121
       object gbInitialGrid: TGroupBox
         Left = 0
         Top = 0
@@ -245,6 +246,8 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 296
+        ExplicitHeight = 121
         object lblZDist: TLabel
           Left = 520
           Top = 110

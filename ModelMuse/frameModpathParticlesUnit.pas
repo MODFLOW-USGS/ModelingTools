@@ -8,7 +8,7 @@ uses
   OctTreeClass, Grids, RbwDataGrid4, ExtCtrls, Mask, JvExMask, JvSpin,
   JvExStdCtrls, JvGroupBox, ComCtrls, Buttons, JvPageList, JvExControls,
   ModpathParticleUnit, ModflowPackageSelectionUnit, GLCoordinates,
-  GLCrossPlatform,
+  GLCrossPlatform, GLVectorTypes,
 {$IF CompilerVersion < 23}
   BaseClasses;
 {$ELSE}
