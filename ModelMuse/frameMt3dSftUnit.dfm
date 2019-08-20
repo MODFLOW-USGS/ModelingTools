@@ -6,42 +6,42 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
     355)
   object lblTimeWeightingFactor: TLabel [2]
     Left = 167
-    Top = 187
+    Top = 211
     Width = 209
     Height = 13
     Caption = 'Stream solver time weighting factor (WIMP)'
   end
   object lblSpaceWeightingFactor: TLabel [3]
     Left = 167
-    Top = 215
+    Top = 239
     Width = 218
     Height = 13
     Caption = 'Stream solver space weighting factor (WUPS)'
   end
   object lblClosureCriterion: TLabel [4]
     Left = 167
-    Top = 243
+    Top = 267
     Width = 140
     Height = 13
     Caption = 'Closure criterion (CCLOSESF)'
   end
   object lblMaxIterations: TLabel [5]
     Left = 167
-    Top = 271
+    Top = 295
     Width = 204
     Height = 13
     Caption = 'Maximum number of iterations (MXITERSF)'
   end
   object lblSolverPrintChoice: TLabel [6]
     Left = 167
-    Top = 298
+    Top = 322
     Width = 150
     Height = 13
     Caption = 'Solution information (IPRTXMD)'
   end
   object cbEvaporateMass: TCheckBox [8]
     Left = 16
-    Top = 161
+    Top = 185
     Width = 391
     Height = 17
     Caption = 'Lose solute mass through evaporation (IETSFR)'
@@ -50,7 +50,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
   end
   object rdeTimeWeightingFactor: TRbwDataEntry [9]
     Left = 16
-    Top = 184
+    Top = 208
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -65,7 +65,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
   end
   object rdeSpaceWeightingFactor: TRbwDataEntry [10]
     Left = 16
-    Top = 212
+    Top = 236
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -80,7 +80,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
   end
   object rdeClosureCriterion: TRbwDataEntry [11]
     Left = 16
-    Top = 240
+    Top = 264
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -94,7 +94,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
   end
   object seMaxIterations: TJvSpinEdit [12]
     Left = 16
-    Top = 268
+    Top = 292
     Width = 145
     Height = 21
     CheckOptions = [coCheckOnExit, coCropBeyondLimit]
@@ -106,7 +106,7 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
   end
   object comboPrintChoice: TJvImageComboBox [13]
     Left = 16
-    Top = 295
+    Top = 319
     Width = 145
     Height = 23
     Style = csOwnerDrawVariable
@@ -135,6 +135,14 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
         Indent = 0
         Text = 'Print details'
       end>
+  end
+  object cbSimulateStreamTransport: TCheckBox [14]
+    Left = 16
+    Top = 162
+    Width = 391
+    Height = 17
+    Caption = 'Simulate solute transport though stream'
+    TabOrder = 7
   end
   inherited rcSelectionController: TRbwController
     ControlList = <

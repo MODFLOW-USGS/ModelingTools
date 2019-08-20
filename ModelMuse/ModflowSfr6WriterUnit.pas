@@ -148,6 +148,10 @@ resourcestring
   StrIn0sTheDiversio = 'In %0:s the diversion segment number in SFR is the s' +
   'ame of the segment itself. The diversion segment number should be the num' +
   'ber of a different segment from which flow is diverted.';
+  StrTheStreambedMinusThe = 'The streambed top minus the streambed thickness is below th' +
+  'e cell bottom in the following SFR reaches';
+  StrLayerRowColumnNameStreambed = '[Layer, Row, Column, Object, Streambed top, S' +
+  'treambed Thickness, Cell Bottom: %0:d, %1:d, %2:d, %3:s, %4:g, %5:g, %6:g';
 
 { TModflowSFR_MF6_Writer }
 
@@ -450,7 +454,7 @@ var
   Formula: string;
   Expression: TExpression;
   ACell: TCellAssignment;
-  Index: Integer;
+  CellIndex: Integer;
   UseList: TStringList;
   VarIndex: Integer;
   ADataSet: TDataArray;
@@ -470,6 +474,8 @@ var
   PropertyNames: TStringList;
   PropertyFormulas: TStringList;
   FormulaIndex: Integer;
+  CellValues: TSfrMF6ConstantRecord;
+  CellBottom: Double;
 begin
   CellList := TCellAssignmentList.Create;
   UseList := TStringList.Create;
@@ -556,16 +562,16 @@ begin
 
 
   //    UpdateCurrentScreenObject(ASegment.FScreenObject);
-      for Index := 0 to CellList.Count - 1 do
+      for CellIndex := 0 to CellList.Count - 1 do
       begin
-        ACell := CellList[Index];
+        ACell := CellList[CellIndex];
         if FormulaIndex = 0 then
         begin
 //          Inc(FReachCount);
 //          ASegment.FSteadyValues[Index].ReachNumber := FReachCount;
-          ASegment.FSteadyValues[Index].Cell.Layer := ACell.Layer;
-          ASegment.FSteadyValues[Index].Cell.Row := ACell.Row;
-          ASegment.FSteadyValues[Index].Cell.Column := ACell.Column;
+          ASegment.FSteadyValues[CellIndex].Cell.Layer := ACell.Layer;
+          ASegment.FSteadyValues[CellIndex].Cell.Row := ACell.Row;
+          ASegment.FSteadyValues[CellIndex].Cell.Column := ACell.Column;
         end;
 //        if (FormulaIndex = UpstreamFractionIndex)
 //          and (Index <> 0) then
@@ -654,14 +660,29 @@ begin
           end;
         end;
         Expression.Evaluate;
-        ASegment.FSteadyValues[Index].BoundaryValue[FormulaIndex] := Expression.DoubleResult;
+        ASegment.FSteadyValues[CellIndex].BoundaryValue[FormulaIndex] := Expression.DoubleResult;
         AnnotationString := ASegment.FScreenObject.IntersectAnnotation(Formula, nil);
-        ASegment.FSteadyValues[Index].BoundaryAnnotation[FormulaIndex] := AnnotationString;
+        ASegment.FSteadyValues[CellIndex].BoundaryAnnotation[FormulaIndex] := AnnotationString;
         if FormulaIndex = 0 then
         begin
-          ASegment.FSteadyValues[Index].BoundName := ASegment.FScreenObject.Name;
+          ASegment.FSteadyValues[CellIndex].BoundName := ASegment.FScreenObject.Name;
         end;
   //      UpdateRequiredListData(DataSets, Variables, ACell, AModel);
+      end;
+    end;
+
+    for CellIndex := 0 to ASegment.ReachCount - 1 do
+    begin
+      CellValues := ASegment.FSteadyValues[CellIndex];
+      CellBottom := Model.DiscretiztionElevation[
+        CellValues.Cell.Column, CellValues.Cell.Row, CellValues.Cell.Layer+1];
+      if CellValues.StreambedTop - CellValues.StreambedThickness < CellBottom then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrTheStreambedMinusThe,
+          Format(StrLayerRowColumnNameStreambed, [CellValues.Cell.Layer+1,
+          CellValues.Cell.Row+1, CellValues.Cell.Column+1, ASegment.ScreenObject.Name,
+          CellValues.StreambedTop, CellValues.StreambedThickness, CellBottom]),
+          ASegment.ScreenObject);
       end;
     end;
 
@@ -713,6 +734,7 @@ var
   MfObs: TModflow6Obs;
   Obs: TSfr6Observation;
   ReachStart: Integer;
+  StreambedThickness: Double;
 begin
 //  Grid := Model.Grid;
   FReachCount := 0;
@@ -729,6 +751,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectDiv);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheRoughnessIsLes);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorAssigningDive);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheStreambedMinusThe);
 
   NextReachNumber := 1;
   ReachStart := 0;
@@ -789,12 +812,14 @@ begin
                 Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
                 ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
             end;
+//            StreambedThickness := ASegment.FSteadyValues[CellIndex].StreambedThickness;
             if ACell.Values.Stage < CellBottom then
             begin
               frmErrorsAndWarnings.AddWarning(Model, StrBelowBottom,
                 Format('%0:d, %1:d, %2:d, %3:s', [ACell.Layer+1,
                 ACell.Row+1, ACell.Column+1, ScreenObject.Name]), ScreenObject);
             end;
+
             if ACell.Values.Roughness <= 0 then
             begin
               frmErrorsAndWarnings.AddError(Model, StrTheRoughnessIsLes,

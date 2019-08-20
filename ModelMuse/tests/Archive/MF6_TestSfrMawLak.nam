@@ -1,0 +1,25 @@
+# Name File for MODFLOW created on 8/19/2019 by ModelMuse Version 4.0.0.12
+BEGIN OPTIONS
+  LIST MF6_TestSfrMawLak.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         MF6_TestSfrMawLak.dis
+  IC6          MF6_TestSfrMawLak.ic
+  NPF6         MF6_TestSfrMawLak.npf
+  OBS6         MF6_TestSfrMawLak.ob_gw
+  OC6          MF6_TestSfrMawLak.oc
+  CHD6         MF6_TestSfrMawLak.chd
+  GHB6         MF6_TestSfrMawLak.ghb
+  WEL6         MF6_TestSfrMawLak.wel
+  RIV6         MF6_TestSfrMawLak.riv
+  DRN6         MF6_TestSfrMawLak.drn
+  SFR6         MF6_TestSfrMawLak.sfr
+  MAW6         MF6_TestSfrMawLak.maw6
+  RCH6         MF6_TestSfrMawLak.rch
+  EVT6         MF6_TestSfrMawLak.evt
+  LAK6         MF6_TestSfrMawLak.lak6
+  MVR6         MF6_TestSfrMawLak.mvr
+END PACKAGES

@@ -508,6 +508,8 @@ begin
     Mt3dmsConcRate[Index] := '0.';
   end;
   inherited;
+  // RemoveFormulaObjects is called by inherited Destroy.
+  // It accesses FStringConcCollection.
   FStringConcCollection.Free;
 end;
 

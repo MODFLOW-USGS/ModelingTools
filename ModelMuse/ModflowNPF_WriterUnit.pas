@@ -51,36 +51,36 @@ procedure TNpfWriter.WriteAngle1;
 var
   DataArray: TDataArray;
 begin
-  if FNpfPackage.UseXT3D then
-  begin
+//  if FNpfPackage.UseXT3D then
+//  begin
     frmProgressMM.AddMessage('  Writing XT3D angle1');
     DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle1);
     WriteMf6_DataSet(DataArray, 'angle1');
-  end;
+//  end;
 end;
 
 procedure TNpfWriter.WriteAngle2;
 var
   DataArray: TDataArray;
 begin
-  if FNpfPackage.UseXT3D then
-  begin
+//  if FNpfPackage.UseXT3D then
+//  begin
     frmProgressMM.AddMessage('  Writing XT3D angle2');
     DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle2);
     WriteMf6_DataSet(DataArray, 'angle2');
-  end;
+//  end;
 end;
 
 procedure TNpfWriter.WriteAngle3;
 var
   DataArray: TDataArray;
 begin
-  if FNpfPackage.UseXT3D then
-  begin
+//  if FNpfPackage.UseXT3D then
+//  begin
     frmProgressMM.AddMessage('  Writing XT3D angle3');
     DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle3);
     WriteMf6_DataSet(DataArray, 'angle3');
-  end;
+//  end;
 end;
 
 procedure TNpfWriter.WriteDataSet1;

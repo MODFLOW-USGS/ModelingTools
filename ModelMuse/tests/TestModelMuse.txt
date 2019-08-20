@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-3972
+4003
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -3972,3 +3972,34 @@ LakeNWT.gpt
 	Archive\LakeNWT.upw
 	Archive\usgs.LakeNWT.reference
 	Archive\usgs.LakeNWT_MT3DMS.reference
+MF6_TestSfrMawLak.gpt
+	Archive\MF6_TestSfrMawLak.axml
+	Archive\MF6_TestSfrMawLak.chd
+	Archive\MF6_TestSfrMawLak.dis
+	Archive\MF6_TestSfrMawLak.drn
+	Archive\MF6_TestSfrMawLak.evt
+	Archive\MF6_TestSfrMawLak.ghb
+	Archive\MF6_TestSfrMawLak.ic
+	Archive\MF6_TestSfrMawLak.ims
+	Archive\MF6_TestSfrMawLak.lak6
+	Archive\MF6_TestSfrMawLak.maw6
+	Archive\MF6_TestSfrMawLak.mvr
+	Archive\MF6_TestSfrMawLak.nam
+	Archive\MF6_TestSfrMawLak.nam.archive
+	Archive\MF6_TestSfrMawLak.npf
+	Archive\MF6_TestSfrMawLak.ob_chob
+	Archive\MF6_TestSfrMawLak.ob_drob
+	Archive\MF6_TestSfrMawLak.ob_evt
+	Archive\MF6_TestSfrMawLak.ob_gbob
+	Archive\MF6_TestSfrMawLak.ob_gw
+	Archive\MF6_TestSfrMawLak.ob_rch
+	Archive\MF6_TestSfrMawLak.ob_rvob
+	Archive\MF6_TestSfrMawLak.ob_sfr
+	Archive\MF6_TestSfrMawLak.ob_wel
+	Archive\MF6_TestSfrMawLak.oc
+	Archive\MF6_TestSfrMawLak.rch
+	Archive\MF6_TestSfrMawLak.riv
+	Archive\MF6_TestSfrMawLak.sfr
+	Archive\MF6_TestSfrMawLak.tdis
+	Archive\MF6_TestSfrMawLak.wel
+	Archive\usgs.MF6_TestSfrMawLak.reference

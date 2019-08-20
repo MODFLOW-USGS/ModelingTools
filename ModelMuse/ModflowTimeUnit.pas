@@ -121,7 +121,7 @@ type
     procedure FillStringsWithEndTimes(Strings: TStrings);
     function MaxStepsInAnyStressPeriod: integer;
     // @name returns the number of the first stress period that contains ATime.
-    // @name stars at zero.
+    // @name starts at zero.
     function FindStressPeriod(ATime: double): integer;
     function FindEndStressPeriod(ATime: double): integer;
     property First: TModflowStressPeriod read GetFirst;

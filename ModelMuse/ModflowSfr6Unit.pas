@@ -748,9 +748,11 @@ end;
 destructor TSfrMf6Item.Destroy;
 begin
   DiversionCount := 0;
+  inherited;
+  // FDiversionFormulas is accessed in RemoveFormulaObjects which is called
+  // in inherited Destroy.
   FDiversionFormulas.Free;
   FDiversions.Free;
-  inherited;
 end;
 
 function TSfrMf6Item.GetBoundaryFormula(Index: integer): string;

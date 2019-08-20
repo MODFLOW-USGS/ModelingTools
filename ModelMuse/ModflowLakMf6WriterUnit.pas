@@ -1626,7 +1626,8 @@ begin
         MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
         MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject;
         LocalScreenObject := ALake.FScreenObject as TScreenObject;
-        MvrUsed := (LocalScreenObject.ModflowMvr <> nil)
+        MvrUsed := (MoverWriter <> nil)
+          and (LocalScreenObject.ModflowMvr <> nil)
           and LocalScreenObject.ModflowMvr.Used
           and (LocalScreenObject.ModflowMvr.SourcePackageChoice = spcLak);
         if MvrUsed then

@@ -679,7 +679,8 @@ uses
   Mt3dLktWriterUnit in 'Mt3dLktWriterUnit.pas',
   Mt3dSftUnit in 'Mt3dSftUnit.pas',
   frameScreenObjectMt3dSftUnit in 'frameScreenObjectMt3dSftUnit.pas' {frameScreenObjectMt3dSft: TFrame},
-  frameMt3dSftUnit in 'frameMt3dSftUnit.pas' {frameMt3dSftPkg: TFrame};
+  frameMt3dSftUnit in 'frameMt3dSftUnit.pas' {frameMt3dSftPkg: TFrame},
+  Mt3dSftWriterUnit in 'Mt3dSftWriterUnit.pas';
 
 {$R *.res}
 {#BACKUP ModelMuse.cfg}

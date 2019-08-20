@@ -1,0 +1,41 @@
+# RCH: Recharge package file created on 8/19/2019 by ModelMuse version 4.0.0.12.
+BEGIN OPTIONS
+  PRINT_INPUT
+    SAVE_FLOWS
+    BOUNDNAMES
+  FIXED_CELL
+    OBS6 FILEIN MF6_TestSfrMawLak.ob_rch
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXBOUND    25
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     5     5  1.000000000000E-008  'RCH' 
+     1     5     4  1.000000000000E-008  'RCH' 
+     1     5     3  1.000000000000E-008  'RCH' 
+     1     5     2  1.000000000000E-008  'RCH' 
+     1     5     1  1.000000000000E-008  'RCH' 
+     1     4     5  1.000000000000E-008  'RCH' 
+     1     4     4  1.000000000000E-008  'RCH' 
+     1     4     3  1.000000000000E-008  'RCH' 
+     1     4     2  1.000000000000E-008  'RCH' 
+     1     4     1  1.000000000000E-008  'RCH' 
+     1     3     5  1.000000000000E-008  'RCH' 
+     1     3     4  1.000000000000E-008  'RCH' 
+     1     3     3  1.000000000000E-008  'RCH' 
+     1     3     2  1.000000000000E-008  'RCH' 
+     1     3     1  1.000000000000E-008  'RCH' 
+     1     2     5  1.000000000000E-008  'RCH' 
+     1     2     4  1.000000000000E-008  'RCH' 
+     1     2     3  1.000000000000E-008  'RCH' 
+     1     2     2  1.000000000000E-008  'RCH' 
+     1     2     1  1.000000000000E-008  'RCH' 
+     1     1     5  1.000000000000E-008  'RCH' 
+     1     1     4  1.000000000000E-008  'RCH' 
+     1     1     3  1.000000000000E-008  'RCH' 
+     1     1     2  1.000000000000E-008  'RCH' 
+     1     1     1  1.000000000000E-008  'RCH' 
+END PERIOD 
+

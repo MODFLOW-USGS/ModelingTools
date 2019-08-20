@@ -48,6 +48,8 @@ type
     rdeFormulaConstConc: TRbwDataEntry;
     rdgConstConc: TRbwDataGrid4;
     rdgSftInitConcAndDisp: TRbwDataGrid4;
+    comboObsLocation: TComboBox;
+    lblObsLocation: TLabel;
     procedure rdgPrecipSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
     procedure rdgPrecipSelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -221,6 +223,8 @@ begin
       begin
         FoundFirst := True;
 
+        comboObsLocation.ItemIndex := Ord(Mt3dSftConcBoundary.ObsLocation);
+
         for ComponentIndex := 0 to NCOMP - 1 do
         begin
           rdgSftInitConcAndDisp.Cells[Ord(sidcInitialConc), ComponentIndex+1] :=
@@ -305,6 +309,11 @@ begin
           end;
         end;
 
+        if comboObsLocation.ItemIndex <> Ord(Mt3dSftConcBoundary.ObsLocation) then
+        begin
+          comboObsLocation.ItemIndex := -1;
+        end;
+
         HeadWater :=  Mt3dSftConcBoundary.Values as THeadWaterMt3dSftReachCollection;
         if not HeadWater.IsSame(FirstHeadWatersConc) then
         begin
@@ -358,6 +367,7 @@ var
   end;
 begin
   pgcSft.ActivePageIndex := 0;
+  comboObsLocation.itemIndex := 0;
 
   pnlBottom.Parent := tsHeadWaters;
   pnlGrid.Parent := tsHeadWaters;
@@ -835,6 +845,12 @@ begin
           end
           else
           begin
+            if comboObsLocation.ItemIndex >= 0 then
+            begin
+              Mt3dSftConcBoundary.ObsLocation :=
+                TSftObsLocation(comboObsLocation.ItemIndex);
+            end;
+
             while Mt3dSftConcBoundary.InitialConcentration.Count < NCOMP do
             begin
               Mt3dSftConcBoundary.InitialConcentration.Add;

@@ -21,6 +21,7 @@ type
     lblClosureCriterion: TLabel;
     lblMaxIterations: TLabel;
     lblSolverPrintChoice: TLabel;
+    cbSimulateStreamTransport: TCheckBox;
   private
     { Private declarations }
   public
@@ -44,6 +45,7 @@ var
 begin
   inherited;
   SftPackage := Package as TMt3dSftPackageSelection;
+  cbSimulateStreamTransport.Checked := SftPackage.SimulateTransportInStream;
   cbEvaporateMass.Checked := SftPackage.EvaporateMass;
   rdeTimeWeightingFactor.RealValue := SftPackage.TimeWeightingFactor;
   rdeSpaceWeightingFactor.RealValue := SftPackage.SpaceWeightingFactor;
@@ -58,6 +60,7 @@ var
 begin
   inherited;
   SftPackage := Package as TMt3dSftPackageSelection;
+  SftPackage.SimulateTransportInStream := cbSimulateStreamTransport.Checked;
   SftPackage.EvaporateMass := cbEvaporateMass.Checked;
   SftPackage.TimeWeightingFactor := rdeTimeWeightingFactor.RealValue;
   SftPackage.SpaceWeightingFactor := rdeSpaceWeightingFactor.RealValue;

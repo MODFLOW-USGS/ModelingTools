@@ -11,10 +11,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     DesignSize = (
       482
       46)
-    inherited lblNumTimes: TLabel
-      Height = 19
-      ExplicitHeight = 19
-    end
     inherited seNumberOfTimes: TJvSpinEdit
       Top = 12
       ExplicitTop = 12
@@ -63,11 +59,23 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     TabOrder = 3
     object tsSteady: TTabSheet
       Caption = 'Steady'
+      object lblObsLocation: TLabel
+        Left = 176
+        Top = 6
+        Width = 241
+        Height = 13
+        Caption = 'Observation location'
+      end
       object rdgSftInitConcAndDisp: TRbwDataGrid4
+        AlignWithMargins = True
         Left = 0
-        Top = 0
+        Top = 35
         Width = 474
-        Height = 165
+        Height = 130
+        Margins.Left = 0
+        Margins.Top = 35
+        Margins.Right = 0
+        Margins.Bottom = 0
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -152,6 +160,23 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 0
+        ExplicitHeight = 165
+      end
+      object comboObsLocation: TComboBox
+        Left = 16
+        Top = 3
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 1
+        Text = 'None'
+        Items.Strings = (
+          'None'
+          'First reach'
+          'Last reach'
+          'All reaches')
       end
     end
     object tsHeadWaters: TTabSheet

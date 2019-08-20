@@ -3,9 +3,31 @@ unit Mt3dSftUnit;
 interface
 
 uses ModflowCellUnit, Mt3dmsChemUnit, System.Classes, ModflowBoundaryUnit,
-  GoPhastTypes, FormulaManagerUnit, SubscriptionUnit;
+  GoPhastTypes, FormulaManagerUnit, SubscriptionUnit,
+  System.Generics.Collections, System.SysUtils;
 
 type
+  TSftSteady = class(TObject)
+  private
+    FCell: TCellLocation;
+    FInitConcentrations: TList<Double>;
+    FDispersions: TList<Double>;
+    FInitConcentrationsAnnotations: TStringList;
+    FDispersionsAnnotations: TStringList;
+    FIsObservation: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    property Cell: TCellLocation read FCell write FCell;
+    property InitConcentrations: TList<Double> read FInitConcentrations;
+    property Dispersions: TList<Double> read FDispersions;
+    property InitConcentrationsAnnotations: TStringList read FInitConcentrationsAnnotations;
+    property DispersionsAnnotations: TStringList read FDispersionsAnnotations;
+    property IsObservation: Boolean read FIsObservation;
+  end;
+
+  TSftSteadyObjectList = TObjectList<TSftSteady>;
+
   TMt3dSftInitConcItem = class(TCustomMt3dmsConcItem)
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
@@ -142,56 +164,11 @@ type
       Model: TBaseModel; ScreenObject: TObject); override;
   end;
 
-{  TCustomMt3dSftReachBoundary = class(TCustomMt3dmsConcBoundary)
-  protected
-    // @name fills ValueTimeList with a series of TObjectLists - one for
-    // each stress period.  Each such TObjectList is filled with
-    // @link(TMt3dmsConc_Cell)s for that stress period.
-    procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
-      ValueTimeList: TList; AModel: TBaseModel); override;
-  public
-    // @name fills ValueTimeList via a call to AssignCells for each
-    // link  @link(TMt3dmsConcStorage) in
-    // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
-    procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
-  end;
-
-  THeadWaterMt3dSftReachBoundary = class(TCustomMt3dSftReachBoundary)
-  protected
-    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
-  public
-    procedure InvalidateDisplay; override;
-  end;
-
-  TPrecipitationMt3dSftReachBoundary = class(TCustomMt3dSftReachBoundary)
-  protected
-    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
-  public
-    procedure InvalidateDisplay; override;
-  end;
-
-  TRunoffMt3dSftReachBoundary = class(TCustomMt3dSftReachBoundary)
-  protected
-    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
-  public
-    procedure InvalidateDisplay; override;
-  end;
-
-  TConstConcMt3dSftReachBoundary = class(TCustomMt3dSftReachBoundary)
-  protected
-    class function BoundaryCollectionClass: TMF_BoundCollClass; override;
-  public
-    procedure InvalidateDisplay; override;
-  end;   }
-
   TSftObsLocation = (solNone, solFirst, solLast, solAll);
 
   TMt3dSftBoundary = class(TCustomMt3dmsConcBoundary)
   private
     FObsLocation: TSftObsLocation;
-//    FInitialConcentrationObserver: TObserver;
-//    FDispCoeffObserver: TObserver;
     FPrecipitation: TPrecipitationMt3dSftReachCollection;
     FRunOff: TRunoffMt3dSftReachCollection;
     FConstConc: TConstConcMt3dSftReachCollection;
@@ -207,7 +184,6 @@ type
     procedure SetDispersionCoefficient(const Value: TMt3dSftDispCollection);
     procedure SetInitialConcentration(const Value: TMt3dSftInitConcCollection);
   protected
-//    procedure HandleChangedValue(Observer: TObserver); override;
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
     // @link(TMt3dmsConc_Cell)s for that stress period.
@@ -236,6 +212,7 @@ type
     procedure ChangeSpeciesPosition(OldIndex, NewIndex: integer); override;
     procedure DeleteSpecies(SpeciesIndex: integer); override;
     function Used: boolean; override;
+    procedure AssignInitConcAndDisp(AModel: TBaseModel; SftSteadyList: TSftSteadyObjectList);
   published
     property InitialConcentration: TMt3dSftInitConcCollection read FInitialConcentration
       write SetInitialConcentration;
@@ -250,14 +227,19 @@ type
 implementation
 
 uses
-  PhastModelUnit, Mt3dmsChemSpeciesUnit,
-  frmGoPhastUnit, ModflowTimeUnit, ScreenObjectUnit;
+  PhastModelUnit, Mt3dmsChemSpeciesUnit, RbwParser,
+  frmGoPhastUnit, ModflowTimeUnit, ScreenObjectUnit, frmFormulaErrorsUnit,
+  DataSetUnit, GlobalVariablesUnit, GIS_Functions;
 
 resourcestring
   StrHeadwater = 'Headwater';
   StrPrecipitation = 'Precipitation';
   StrRunoff = 'Runoff';
   StrConstantConcentrati = 'Constant Concentration';
+  StrSFTInitialConcentr = 'SFT Initial Concentration';
+  StrFormulaDoesNotRes = 'Formula does not result in a real number';
+  StrSFTDispersion = 'SFT Dispersion';
+  StrAssignedBy0sWit = 'Assigned by %0:s with the formula %1:s';
 
 const
   InitialConcPosition = 0;
@@ -539,89 +521,6 @@ end;
 
 { TCustomMt3dSftReachBoundary }
 
-{procedure TCustomMt3dSftReachBoundary.AssignCells(
-  BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
-  AModel: TBaseModel);
-var
-  Cell: TMt3dmsConc_Cell;
-  BoundaryValues: TMt3dmsConcentrationRecord;
-  BoundaryIndex: Integer;
-  StressPeriod: TModflowStressPeriod;
-  TimeIndex: Integer;
-  Cells: TValueCellList;
-  LocalBoundaryStorage: TMt3dmsConcStorage;
-  LocalModel: TCustomModel;
-  LocalScreenObject: TScreenObject;
-//  Grid: TCustomModelGrid;
-begin
-  LocalModel := AModel as TCustomModel;
-
-  Assert(ScreenObject <> nil);
-  LocalScreenObject := ScreenObject as TScreenObject;
-
-  LocalBoundaryStorage := BoundaryStorage as TMt3dmsConcStorage;
-  for TimeIndex := 0 to
-    LocalModel.ModflowFullStressPeriods.Count - 1 do
-  begin
-    if TimeIndex < ValueTimeList.Count then
-    begin
-      Cells := ValueTimeList[TimeIndex];
-    end
-    else
-    begin
-      Cells := TValueCellList.Create(TMt3dmsConc_Cell);
-      ValueTimeList.Add(Cells);
-    end;
-    StressPeriod := LocalModel.ModflowFullStressPeriods[TimeIndex];
-    // Check if the stress period is completely enclosed within the times
-    // of the LocalBoundaryStorage;
-    if (StressPeriod.StartTime + LocalModel.SP_Epsilon >= LocalBoundaryStorage.StartingTime)
-      and (StressPeriod.EndTime - LocalModel.SP_Epsilon <= LocalBoundaryStorage.EndingTime) then
-    begin
-      if Cells.Capacity < Cells.Count
-        + Length(LocalBoundaryStorage.Mt3dmsConcArray) then
-      begin
-        Cells.Capacity := Cells.Count
-          + Length(LocalBoundaryStorage.Mt3dmsConcArray)
-      end;
-      // Cells.CheckRestore;
-      for BoundaryIndex := 0 to
-        Length(LocalBoundaryStorage.Mt3dmsConcArray) - 1 do
-      begin
-        BoundaryValues := LocalBoundaryStorage.Mt3dmsConcArray[BoundaryIndex];
-        Cell := TMt3dmsConc_Cell.Create;
-        Cells.Add(Cell);
-
-        LocalModel.AdjustCellPosition(Cell);
-        Cell.IFace := LocalScreenObject.IFace;
-        Cell.StressPeriod := TimeIndex;
-        Cell.Values := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
-        Cell.SetConcentrationLength(Length(Cell.Values.Concentration));
-      end;
-      Cells.Cache;
-    end;
-  end;
-  LocalBoundaryStorage.CacheData;
-end;
-
-procedure TCustomMt3dSftReachBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
-var
-  ValueIndex: Integer;
-  BoundaryStorage: TMt3dmsConcStorage;
-begin
-  EvaluateArrayBoundaries(AModel);
-  for ValueIndex := 0 to Values.Count - 1 do
-  begin
-    if ValueIndex < Values.BoundaryCount[AModel] then
-    begin
-      BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TMt3dmsConcStorage;
-      AssignCells(BoundaryStorage, ValueTimeList, AModel);
-    end;
-  end;
-  ClearBoundaries(AModel);
-end;
 
 { THeadWaterSftReachTimeListLink }
 
@@ -719,83 +618,8 @@ begin
   result := TConstConcSftReachTimeListLink;
 end;
 
-{ THeadWaterMt3dSftReachBoundary }
 
-{class function THeadWaterMt3dSftReachBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
-begin
-  result := THeadWaterMt3dSftReachCollection;
-end;
-
-procedure THeadWaterMt3dSftReachBoundary.InvalidateDisplay;
-var
-  LocalModel: TPhastModel;
-begin
-  inherited;
-  if Used and (ParentModel <> nil) then
-  begin
-    LocalModel := ParentModel as TPhastModel;
-//    LocalModel.InvalidateUztRechConc(self);
-  end;
-end;
-
-{ TPrecipitationMt3dSftReachBoundary }
-
-{class function TPrecipitationMt3dSftReachBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
-begin
-  result := TPrecipitationMt3dSftReachCollection;
-end;
-
-procedure TPrecipitationMt3dSftReachBoundary.InvalidateDisplay;
-var
-  LocalModel: TPhastModel;
-begin
-  inherited;
-  if Used and (ParentModel <> nil) then
-  begin
-    LocalModel := ParentModel as TPhastModel;
-//    LocalModel.InvalidateUztRechConc(self);
-  end;
-end;
-
-{ TRunoffMt3dSftReachBoundary }
-
-{class function TRunoffMt3dSftReachBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
-begin
-  result := TRunoffMt3dSftReachCollection;
-end;
-
-procedure TRunoffMt3dSftReachBoundary.InvalidateDisplay;
-var
-  LocalModel: TPhastModel;
-begin
-  inherited;
-  if Used and (ParentModel <> nil) then
-  begin
-    LocalModel := ParentModel as TPhastModel;
-//    LocalModel.InvalidateUztRechConc(self);
-  end;
-end;
-
-{ TConstConcMt3dSftReachBoundary }
-
-{class function TConstConcMt3dSftReachBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
-begin
-  result := TConstConcMt3dSftReachCollection;
-end;
-
-procedure TConstConcMt3dSftReachBoundary.InvalidateDisplay;
-var
-  LocalModel: TPhastModel;
-begin
-  inherited;
-  if Used and (ParentModel <> nil) then
-  begin
-    LocalModel := ParentModel as TPhastModel;
-//    LocalModel.InvalidateUztRechConc(self);
-  end;
-end;
-
-{ TSftSteadyBoundary }
+{ TMt3dSftBoundary }
 
 procedure TMt3dSftBoundary.Assign(Source: TPersistent);
 var
@@ -880,6 +704,248 @@ begin
     end;
   end;
   LocalBoundaryStorage.CacheData;
+end;
+
+procedure TMt3dSftBoundary.AssignInitConcAndDisp(AModel: TBaseModel;
+  SftSteadyList: TSftSteadyObjectList);
+var
+  LocalScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  SteadyProp: TSftSteady;
+  Parser: TRbwParser;
+  InitConcExpressions: TList<TExpression>;
+  DispExpressions: TList<TExpression>;
+  FormulaIndex: Integer;
+  AFormula: string;
+  Expression: TExpression;
+  UsedVariables: TStringList;
+  VarIndex: Integer;
+  VarName: string;
+  VarPosition: Integer;
+  Variable: TCustomValue;
+  LocalModel: TCustomModel;
+  AnotherDataSet: TDataArray;
+  Variables: TList<TCustomValue>;
+  DataSets: TList<TDataArray>;
+  GlobalVariable: TGlobalVariable;
+  ExpressionIndex: Integer;
+  InitConcExpressionAnnotations: TStringList;
+  DispExpressionAnnotations: TStringList;
+  procedure UpdateRequiredData;
+  var
+    ADataSet: TDataArray;
+    Variable: TCustomValue;
+    VarIndex: Integer;
+    Layer: Integer;
+    Cell: TCellAssignment;
+  begin
+    Cell := ACell;
+    UpdateGlobalLocations(Cell.Column, Cell.Row, Cell.Layer, eaBlocks,
+      AModel);
+    UpdateCurrentSegment(Cell.Segment);
+    UpdateCurrentSection(Cell.Section);
+    for VarIndex := 0 to Variables.Count - 1 do
+    begin
+      Variable := Variables[VarIndex];
+      ADataSet := DataSets[VarIndex];
+      Layer := -1;
+      case ADataSet.Orientation of
+        dsoTop:
+          begin
+            Layer := 0;
+          end;
+        dso3D:
+          begin
+            Layer := Cell.Layer;
+          end;
+      else
+        begin
+          Assert(False);
+        end;
+      end;
+      case ADataSet.DataType of
+        rdtDouble:
+          begin
+            (Variable as TRealVariable).Value := ADataSet.RealData[Layer, Cell.Row, Cell.Column];
+          end;
+        rdtInteger:
+          begin
+            (Variable as TIntegerVariable).Value := ADataSet.IntegerData[Layer, Cell.Row, Cell.Column];
+          end;
+        rdtBoolean:
+          begin
+            (Variable as TBooleanVariable).Value := ADataSet.BooleanData[Layer, Cell.Row, Cell.Column];
+          end;
+        rdtString:
+          begin
+            (Variable as TStringVariable).Value := ADataSet.StringData[Layer, Cell.Row, Cell.Column];
+          end;
+      else
+        Assert(False);
+      end;
+    end;
+  end;
+begin
+  LocalScreenObject := ScreenObject as TScreenObject;
+  LocalModel := (AModel as TCustomModel);
+  Parser := LocalModel.rpThreeDFormulaCompiler;
+  InitConcExpressions := TList<TExpression>.Create;
+  DispExpressions := TList<TExpression>.Create;
+  InitConcExpressionAnnotations := TStringList.Create;
+  DispExpressionAnnotations := TStringList.Create;
+  UsedVariables := TStringList.Create;
+  Variables := TList<TCustomValue>.Create;
+  DataSets := TList<TDataArray>.Create;
+  try
+    UsedVariables.Sorted := True;
+    UsedVariables.Duplicates := dupIgnore;
+    for FormulaIndex := 0 to InitialConcentration.Count - 1 do
+    begin
+      AFormula := (InitialConcentration[FormulaIndex] as TMt3dSftInitConcItem).BoundaryFormula[0];
+      try
+        Parser.Compile(AFormula);
+      except on E: ERbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError(LocalScreenObject.Name,
+            StrSFTInitialConcentr, AFormula, E.Message);
+          AFormula := '0';
+          Parser.Compile(AFormula);
+        end;
+      end;
+      Expression := Parser.CurrentExpression;
+      if not (Expression.ResultType in [rdtDouble, rdtInteger]) then
+      begin
+        frmFormulaErrors.AddFormulaError(LocalScreenObject.Name,
+          StrSFTInitialConcentr, AFormula, StrFormulaDoesNotRes);
+        AFormula := '0';
+        Parser.Compile(AFormula);
+        Expression := Parser.CurrentExpression;
+      end;
+      InitConcExpressions.Add(Expression);
+      InitConcExpressionAnnotations.Add(Format(StrAssignedBy0sWit, [LocalScreenObject.Name, AFormula]));
+      UsedVariables.AddStrings(Expression.VariablesUsed);
+    end;
+    for FormulaIndex := 0 to DispersionCoefficient.Count - 1 do
+    begin
+      AFormula := (DispersionCoefficient[FormulaIndex] as TMt3dSftInitConcItem).BoundaryFormula[0];
+      try
+        Parser.Compile(AFormula);
+      except on E: ERbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError(LocalScreenObject.Name,
+            StrSFTDispersion, AFormula, E.Message);
+          AFormula := '0';
+          Parser.Compile(AFormula);
+        end;
+      end;
+      Expression := Parser.CurrentExpression;
+      if not (Expression.ResultType in [rdtDouble, rdtInteger]) then
+      begin
+        frmFormulaErrors.AddFormulaError(LocalScreenObject.Name,
+          StrSFTDispersion, AFormula, StrFormulaDoesNotRes);
+        AFormula := '0';
+        Parser.Compile(AFormula);
+        Expression := Parser.CurrentExpression;
+      end;
+      DispExpressions.Add(Expression);
+      DispExpressionAnnotations.Add(Format(StrAssignedBy0sWit, [LocalScreenObject.Name, AFormula]));
+      UsedVariables.AddStrings(Expression.VariablesUsed);
+    end;
+
+    for VarIndex := 0 to UsedVariables.Count - 1 do
+    begin
+      VarName := UsedVariables[VarIndex];
+      VarPosition := Parser.IndexOfVariable(VarName);
+      Variable := Parser.Variables[VarPosition];
+      AnotherDataSet := LocalModel.DataArrayManager.GetDataSetByName(VarName);
+      if AnotherDataSet <> nil then
+      begin
+        Assert(AnotherDataSet.DataType = Variable.ResultType);
+        AnotherDataSet.Initialize;
+        LocalModel.DataArrayManager.AddDataSetToCache(AnotherDataSet);
+        Variables.Add(Variable);
+        DataSets.Add(AnotherDataSet);
+      end
+      else
+      begin
+        GlobalVariable := LocalModel.GlobalVariables.GetVariableByName(VarName);
+        Assert(GlobalVariable <> nil);
+        Assert(Variable.ResultType = GlobalVariable.Format);
+      end;
+    end;
+
+
+
+    CellList := TCellAssignmentList.Create;
+    try
+      LocalScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, AModel);
+      UpdateCurrentScreenObject(LocalScreenObject);
+
+      for CellIndex := 0 to CellList.Count - 1 do
+      begin
+        ACell := CellList[CellIndex];
+        SteadyProp := TSftSteady.Create;
+        SftSteadyList.Add(SteadyProp);
+        SteadyProp.Cell := ACell.Cell;
+        UpdateRequiredData;
+
+        case ObsLocation of
+          solNone:
+            begin
+              SteadyProp.FIsObservation := False;
+            end;
+          solFirst:
+            begin
+              SteadyProp.FIsObservation := CellIndex = 0;
+            end;
+          solLast:
+            begin
+              SteadyProp.FIsObservation := CellIndex = (CellList.Count - 1);
+            end;
+          solAll:
+            begin
+              SteadyProp.FIsObservation := True;
+            end;
+          else
+            Assert(False);
+        end;
+
+        SteadyProp.InitConcentrations.Capacity := InitConcExpressions.Count;
+        SteadyProp.InitConcentrationsAnnotations.Capacity := InitConcExpressions.Count;
+        SteadyProp.Dispersions.Capacity := DispExpressions.Count;
+        SteadyProp.DispersionsAnnotations.Capacity := DispExpressions.Count;
+
+        for ExpressionIndex := 0 to InitConcExpressions.Count - 1 do
+        begin
+          Expression := InitConcExpressions[ExpressionIndex];
+          Expression.Evaluate;
+          SteadyProp.InitConcentrations.Add(Expression.DoubleResult);
+          SteadyProp.InitConcentrationsAnnotations.Add(
+            InitConcExpressionAnnotations[ExpressionIndex]);
+        end;
+        for ExpressionIndex := 0 to DispExpressions.Count - 1 do
+        begin
+          Expression := DispExpressions[ExpressionIndex];
+          Expression.Evaluate;
+          SteadyProp.Dispersions.Add(Expression.DoubleResult);
+          SteadyProp.DispersionsAnnotations.Add(
+            DispExpressionAnnotations[ExpressionIndex]);
+        end;
+      end;
+    finally
+      CellList.Free;
+    end;
+  finally
+    Variables.Free;
+    DataSets.Free;
+    InitConcExpressions.Free;
+    DispExpressions.Free;
+    UsedVariables.Free;
+    InitConcExpressionAnnotations.Free;
+    DispExpressionAnnotations.Free;
+  end;
 end;
 
 procedure TMt3dSftBoundary.AssignSftCells(BoundaryStorage: TMt3dmsConcStorage;
@@ -997,6 +1063,8 @@ begin
 
   FDispersionCoefficient:= TMt3dSftDispCollection.Create(self, Model,
     ScreenObject);
+
+  FObsLocation := solNone;
 end;
 
 
@@ -1162,12 +1230,6 @@ begin
   ConstConc.RenameItems(OldSpeciesName, NewSpeciesName);
 
 end;
-
-//procedure TSftSteadyBoundary.HandleChangedValue(Observer: TObserver);
-//begin
-//  inherited;
-//
-//end;
 
 procedure TMt3dSftBoundary.SetConstConc(
   const Value: TConstConcMt3dSftReachCollection);
@@ -1421,6 +1483,27 @@ end;
 function TMt3dSftDispCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
 begin
   result := False;
+end;
+
+{ TSftSteady }
+
+constructor TSftSteady.Create;
+begin
+  inherited;
+  FInitConcentrations := TList<Double>.Create;
+  FDispersions := TList<Double>.Create;
+  FInitConcentrationsAnnotations := TStringList.Create;
+  FDispersionsAnnotations := TStringList.Create;
+  FIsObservation := False;
+end;
+
+destructor TSftSteady.Destroy;
+begin
+  FInitConcentrations.Free;
+  FDispersions.Free;
+  FInitConcentrationsAnnotations.Free;
+  FDispersionsAnnotations.Free;
+  inherited;
 end;
 
 end.

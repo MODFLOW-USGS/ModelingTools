@@ -671,6 +671,8 @@ type
       ARow: Integer; const Value: string);
     procedure frameMT3D_SFTrdgConstConcSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
+    procedure frameMVRrdgModflowBoundaryButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -24493,6 +24495,20 @@ begin
     StoreMt3d_UztUnsatBoundary;
   end;
 {$ENDIF}
+end;
+
+procedure TfrmScreenObjectProperties.frameMVRrdgModflowBoundaryButtonClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  inherited;
+  if TSourcePackageChoice(frameMVR.comboSourcePackage.ItemIndex) <> spcLak then
+  begin
+    frameChdParamdgModflowBoundaryButtonClick(Sender, ACol, ARow);
+  end
+  else
+  begin
+    frameResdgModflowBoundaryButtonClick(Sender, ACol, ARow);
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.

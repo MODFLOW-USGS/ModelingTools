@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="MF6_TestSfrMawLak" FileType="bin">
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="bin">..\..\..\..\..\WRDAPP\mf6.0.4\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="MF6_TestSfrMawLak" FileType="ancillary">
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="ancillary">..\MF6_TestSfrMawLak.gpt</FileName>
+  </ancillary>
+  <model Model_Name="MF6_TestSfrMawLak" FileType="Model Input">
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.chd</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.dis</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.drn</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.evt</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ghb</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ic</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.lak6</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.maw6</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.mvr</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.nam.archive</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.npf</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_chob</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_drob</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_evt</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_gbob</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_gw</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_rch</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_rvob</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_sfr</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_wel</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.oc</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.rch</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.riv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.sfr</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.tdis</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.wel</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">usgs.MF6_TestSfrMawLak.reference</FileName>
+  </model>
+  <output Model_Name="MF6_TestSfrMawLak" FileType="Model Output">
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.bhd</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.cbc</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.chob_out_chd.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.dis.grb</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.drob_out_drn.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.gbob_out_ghb.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lk_bud</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lk_stg</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lst</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_bud</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_head</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.mvr_budget</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_evt_out_evt.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_drawdown.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_flow-ja-face.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_rch_out_rch.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_wel_out_wel.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.rvob_out_riv.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_budget</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_downstream-flow_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_evaporation_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_gw_exchange_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_inflow_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_outflow_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_rainfall_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_runoff_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_stage_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_upstream-flow_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.Solution.CSV</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.stage</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

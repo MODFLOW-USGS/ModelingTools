@@ -2088,6 +2088,7 @@ Type
     FStoredSpaceWeightingFactor: TRealStorage;
     FStoredTimeWeightingFactor: TRealStorage;
     FEvaporateMass: Boolean;
+    FSimulateTransportInStream: Boolean;
     function GetClosureCriterion: double;
     function GetSpaceWeightingFactor: double;
     function GetTimeWeightingFactor: double;
@@ -2100,6 +2101,7 @@ Type
     procedure SetStoredSpaceWeightingFactor(const Value: TRealStorage);
     procedure SetStoredTimeWeightingFactor(const Value: TRealStorage);
     procedure SetTimeWeightingFactor(const Value: double);
+    procedure SetSimulateTransportInStream(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -2134,6 +2136,9 @@ Type
     // IPRTXMD
     property SolverPrintChoice: TSftSolverPrintChoice read FSolverPrintChoice
       write SetSolverPrintChoice stored True;
+    // Sign of NSFINIT
+    property SimulateTransportInStream: Boolean read FSimulateTransportInStream
+      write SetSimulateTransportInStream stored True;
   end;
 
   TUzfPackageSelection = class(TCustomLayerPackageSelection)
@@ -20010,6 +20015,7 @@ begin
   if Source is TMt3dSftPackageSelection then
   begin
     SftSource := TMt3dSftPackageSelection(Source);
+    SimulateTransportInStream := SftSource.SimulateTransportInStream;
     TimeWeightingFactor := SftSource.TimeWeightingFactor;
     SpaceWeightingFactor := SftSource.SpaceWeightingFactor;
     ClosureCriterion := SftSource.ClosureCriterion;
@@ -20067,6 +20073,7 @@ begin
   ClosureCriterion := 1e-6;
   FMaxSftIterations := 10;
   FSolverPrintChoice := sftDetailed;
+  FSimulateTransportInStream := True;
 end;
 
 procedure TMt3dSftPackageSelection.SetClosureCriterion(const Value: double);
@@ -20076,20 +20083,18 @@ end;
 
 procedure TMt3dSftPackageSelection.SetEvaporateMass(const Value: Boolean);
 begin
-  if FEvaporateMass <> Value then
-  begin
-    FEvaporateMass := Value;
-    InvalidateModel;
-  end;
+  SetBooleanProperty(FEvaporateMass, Value);
 end;
 
 procedure TMt3dSftPackageSelection.SetMaxSftIterations(const Value: Integer);
 begin
-  if FMaxSftIterations <> Value then
-  begin
-    FMaxSftIterations := Value;
-    InvalidateModel;
-  end;
+  SetIntegerProperty(FMaxSftIterations, Value);
+end;
+
+procedure TMt3dSftPackageSelection.SetSimulateTransportInStream(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FSimulateTransportInStream, Value);
 end;
 
 procedure TMt3dSftPackageSelection.SetSolverPrintChoice(

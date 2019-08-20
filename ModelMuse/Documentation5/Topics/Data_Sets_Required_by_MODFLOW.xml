@@ -1212,7 +1212,7 @@
           <para styleclass="Table Cell"><text styleclass="Normal" translate="true">angle1</text></para>
         </td>
         <td>
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODFLOW 6 models in which the XT3D option is used</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODFLOW 6 models </text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -1230,7 +1230,7 @@
           <para styleclass="Table Cell"><text styleclass="Normal" translate="true">angle2</text></para>
         </td>
         <td>
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODFLOW 6 models in which the XT3D option is used</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODFLOW 6 models </text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -1247,7 +1247,7 @@
           <para styleclass="Table Cell"><text styleclass="Normal" translate="true">angle3</text></para>
         </td>
         <td>
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODFLOW 6 models in which the XT3D option is used</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">MODFLOW 6 models </text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

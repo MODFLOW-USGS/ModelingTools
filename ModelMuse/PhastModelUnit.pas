@@ -2041,7 +2041,8 @@ that affects the model output should also have a comment. }
     function Sutra30Used(Sender: TObject): boolean;
     function SutraLakeUsed(Sender: TObject): boolean;
     function UztUsed(Sender: TObject): boolean; virtual;
-    function Xt3DUsed(Sender: TObject): boolean; virtual;
+//    function Xt3DUsed(Sender: TObject): boolean; virtual;
+    function NpfUsed(Sender: TObject): boolean; virtual;
     function Sutra3DModel(Sender: TObject): boolean;
     function SutraConcentrationUsed(Sender: TObject): boolean;
     function SutraTemperatureUsed(Sender: TObject): boolean;
@@ -3756,7 +3757,8 @@ that affects the model output should also have a comment. }
     function SwtOffsetsUsed(Sender: TObject): boolean; override;
     function SwtSpecifiedUsed(Sender: TObject): boolean; override;
     function UztUsed(Sender: TObject): boolean; override;
-    function Xt3DUsed(Sender: TObject): boolean; override;
+//    function Xt3DUsed(Sender: TObject): boolean; override;
+    function NpfUsed(Sender: TObject): boolean; override;
     function WettingActive: boolean; override;
     procedure InternalExportModflowLgrFile(const FileName: string);
     function GetCombinedDisplayColumn: integer;
@@ -8682,9 +8684,20 @@ const
   //                Simulation Name File was not exported correctly.
   //   '4.0.0.11'  Bug fix: Fixed bug in identifying MVR sources when
   //                the UZF package is used.
+  //   '4.0.0.12'  Bug fix: Fixed bug that could cause an access violation
+  //                when editing and SFR stream in MODFLOW 6.
+  //               Bug fix: The data sets for Angle1, Angle2, and Angle3 were
+  //                only created and used if the XT3D option was selected
+  //                instead of whenever the NPF package was selected.
+
+  //               Enhancement: ModelMuse now warns if the bottom of the
+  //                stream bed in an SFR reach in MODFLOW 6 is below the bottom
+  //                of the cell.
+  //               Bug fix: Fixed bug that could cause an error if a lake outlet
+  //                was a source for the MVR package in MODFLOW 6.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.11';
+  IModelVersion = '4.0.0.12';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -16260,24 +16273,24 @@ begin
   end;
 end;
 
-function TPhastModel.Xt3DUsed(Sender: TObject): boolean;
-var
-  ChildIndex: Integer;
-  ChildModel: TChildModel;
-begin
-  result := inherited Xt3DUsed(Sender);
-  if not result and LgrUsed then
-  begin
-    for ChildIndex := 0 to ChildModels.Count - 1 do
-    begin
-      ChildModel := ChildModels[ChildIndex].ChildModel;
-      if ChildModel <> nil then
-      begin
-        result := result or ChildModel.Xt3DUsed(Sender);
-      end;
-    end;
-  end;
-end;
+//function TPhastModel.Xt3DUsed(Sender: TObject): boolean;
+//var
+//  ChildIndex: Integer;
+//  ChildModel: TChildModel;
+//begin
+//  result := inherited Xt3DUsed(Sender);
+//  if not result and LgrUsed then
+//  begin
+//    for ChildIndex := 0 to ChildModels.Count - 1 do
+//    begin
+//      ChildModel := ChildModels[ChildIndex].ChildModel;
+//      if ChildModel <> nil then
+//      begin
+//        result := result or ChildModel.Xt3DUsed(Sender);
+//      end;
+//    end;
+//  end;
+//end;
 
 function TPhastModel.ZoneBudgetIsSelected: Boolean;
 var
@@ -25175,6 +25188,25 @@ begin
   end;
 end;
 
+function TPhastModel.NpfUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited NpfUsed(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.NpfUsed(Sender);
+      end;
+    end;
+  end;
+end;
+
 { TDataSetItem }
 procedure TDataSetItem.Assign(Source: TPersistent);
 var
@@ -33264,7 +33296,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := StrXT3DAngle1;
   FDataArrayCreationRecords[Index].Formula := '0.';
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Xt3DUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.NpfUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -33279,7 +33311,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := StrXT3DAngle2;
   FDataArrayCreationRecords[Index].Formula := '0.';
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Xt3DUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.NpfUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -33294,7 +33326,7 @@ begin
   FDataArrayCreationRecords[Index].DisplayName := StrXT3DAngle3;
   FDataArrayCreationRecords[Index].Formula := '0.';
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
-  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Xt3DUsed;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.NpfUsed;
   FDataArrayCreationRecords[Index].Lock := StandardLock;
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
@@ -35297,6 +35329,12 @@ begin
     and ModflowPackages.Mt3dBasic.IsSelected;
 end;
 
+function TCustomModel.NpfUsed(Sender: TObject): boolean;
+begin
+  result := (ModelSelection = msModflow2015)
+    and ModflowPackages.NpfPackage.IsSelected;
+end;
+
 function TCustomModel.NWT_Format: TNwtFormat;
 var
 //  MfNwtDateVersion1_0_9: TDateTime;
@@ -36494,12 +36532,12 @@ begin
     + '                  ' + UcodeDelimiter);
 end;
 
-function TCustomModel.Xt3DUsed(Sender: TObject): boolean;
-begin
-  result := (ModelSelection = msModflow2015)
-    and ModflowPackages.NpfPackage.IsSelected
-    and ModflowPackages.NpfPackage.UseXT3D;
-end;
+//function TCustomModel.Xt3DUsed(Sender: TObject): boolean;
+//begin
+//  result := (ModelSelection = msModflow2015)
+//    and ModflowPackages.NpfPackage.IsSelected
+//    and ModflowPackages.NpfPackage.UseXT3D;
+//end;
 
 procedure TCustomModel.UpdateHfb(Sender: TObject);
 var

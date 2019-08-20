@@ -111,6 +111,7 @@ const
   StrCNF                    = 'CNF';
   StrPHIRAMPOut = 'PHIRAMP_Out';
   StrLKT                    = 'LKT';
+  StrSFT                    = 'SFT';
 
   StrSTR_OUT = 'STR_OUT';
   StrSTOB = 'STOB';
@@ -284,6 +285,8 @@ const
   Mt3dTob = 7;
   Mt3dCnf = 17;
   mt3dLKT = 18;
+  mt3dSFT = 19;
+  mt3dSftObs = 40;
   nt3dLktOut = 81;
   Mt3dUcnMobileStart = 201;
   Mt3dUcnImmobileStart = 301;

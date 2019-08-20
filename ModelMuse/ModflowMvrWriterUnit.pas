@@ -107,7 +107,8 @@ implementation
 
 uses
   frmProgressUnit, System.SysUtils, frmErrorsAndWarningsUnit, Vcl.Forms,
-  FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math;
+  FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math,
+  ModflowLakMf6Unit, RbwParser;
 
 resourcestring
   StrWritingMVROptions = 'Writing MVR Options';
@@ -214,12 +215,121 @@ var
   MvrBound: TMvrBoundary;
   ReceiverIndex: Integer;
   ReceiverItem: TReceiverItem;
+  ModflowLak6: TLakeMf6;
+  OutletIndex: Integer;
+  LkValues: TMvrRecord;
+  TimeIndex: Integer;
+  MvrItem: TMvrItem;
+  StartStressPeriod: Integer;
+  EndStressPeriod: Integer;
+  MvrIndex: Integer;
+  IndItem: TIndividualMvrItem;
+  Formula: string;
+  Compiler: TRbwParser;
+  Expression: TExpression;
+  AReceiver: TReceiverItem;
 begin
   if not ShouldEvaluate then
   begin
     Exit
   end;
   inherited;
+
+  Compiler := Model.rpThreeDFormulaCompilerNodes;
+
+  for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+    if AScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+
+    MvrBound := AScreenObject.ModflowMvr;
+    if (MvrBound = nil) or not MvrBound.Used then
+    begin
+      Continue;
+    end;
+    if (MvrBound.SourcePackageChoice = spcLak)  then
+    begin
+      ModflowLak6 := AScreenObject.ModflowLak6;
+      if (ModflowLak6 <> nil) and ModflowLak6.Used then
+      begin
+
+
+
+        for TimeIndex := 0 to MvrBound.Values.Count - 1 do
+        begin
+          MvrItem := MvrBound.Values[TimeIndex] as TMvrItem;
+          StartStressPeriod := Model.ModflowFullStressPeriods.FindStressPeriod(MvrItem.StartTime);
+          EndStressPeriod := Model.ModflowFullStressPeriods.FindEndStressPeriod(MvrItem.EndTime);
+          for StressPeriodIndex := StartStressPeriod to EndStressPeriod do
+          begin
+            MvrSourceDictionary := FSourceCellDictionaries[StressPeriodIndex];
+            AList := Values[StressPeriodIndex];
+            if AList.Count > 0 then
+            begin
+              // Ensure cached list is restored.
+              AList.First;
+            end;
+
+            ACell := TMvrSourceCell.Create;
+            ACell.ScreenObject := AScreenObject;
+            ACell.StressPeriod := StressPeriodIndex;
+            LkValues.Cell.Layer := 0;
+            LkValues.Cell.Row := 0;
+            LkValues.Cell.Column := 0;
+            LkValues.Cell.Section := 0;
+            LkValues.StartingTime := MvrItem.StartTime;
+            LkValues.EndingTime := MvrItem.EndTime;
+
+            SetLength(LkValues.Values, MvrItem.Items.Count);
+            SetLength(LkValues.MvrTypes, MvrItem.Items.Count);
+            SetLength(LkValues.ValueAnnotations, MvrItem.Items.Count);
+            Assert(MvrItem.Items.Count = MvrBound.Receivers.Count);
+            for MvrIndex := 0 to MvrItem.Items.Count - 1 do
+            begin
+              AReceiver := MvrBound.Receivers[MvrIndex];
+              LkValues.MvrIndex := AReceiver.LakeOutlet-1;
+
+              IndItem := MvrItem.Items[MvrIndex];
+              LkValues.MvrTypes[MvrIndex] := IndItem.MvrType;
+              Formula := IndItem.Value;
+              try
+                Compiler.Compile(Formula);
+              except on E: ERbwParserError do
+                begin
+                  Formula := '0';
+                  Compiler.Compile(Formula);
+                end;
+              end;
+              Expression := Compiler.CurrentExpression;
+              Expression.Evaluate;
+              LkValues.Values[MvrIndex] := Expression.DoubleResult;
+              LkValues.ValueAnnotations[MvrIndex] := Formula;
+            end;
+
+//            begin
+              ACell.Values := LkValues;
+
+              AList.Add(ACell);
+
+
+//              SourceKey.MvrIndex := OutletIndex;
+//              SourceKey.ScreenObject := AScreenObject;
+//              MvrSourceDictionary.Add(SourceKey, ACell);
+//            end;
+
+          end;
+
+        end;
+
+
+
+      end;
+    end;
+  end;
+
   for StressPeriodIndex := 0 to Values.Count - 1 do
   begin
     AList := Values[StressPeriodIndex];
@@ -250,6 +360,8 @@ begin
     end;
 
     Include(FUsedPackages, MvrBound.SourcePackageChoice);
+
+
     for ReceiverIndex := 0 to MvrBound.Receivers.Count - 1 do
     begin
       ReceiverItem := MvrBound.Receivers[ReceiverIndex];
