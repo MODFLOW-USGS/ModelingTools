@@ -76,6 +76,25 @@ resourcestring
   StrNoUZFBoundariesAr = 'No UZF boundaries are defined in the UZF package';
   StrTheUZFPackageIsA = 'The UZF package is active but no UZF boundaries hav' +
   'e been defined.';
+  StrInTheUZFPackageResid = 'In the UZF package, residual water content must' +
+  ' be greater than zero.';
+  StrInTheUZFPackageInitResid = 'In the UZF package, initial water content must be' +
+  ' greater or equal to residual water content.';
+  StrInTheUZFPackageInitSat = 'In the UZF package, initial water content mus' +
+  't be less than the saturated water content.';
+  StrInTheUZFPackageSatResid = 'In the UZF package, saturated water content ' +
+  'must be greater than residual water content.';
+  StrAtLayerRowColuResid = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), resi' +
+  'dual water content is set to %3:g by "%4:s".';
+  StrAtLayerRowColuSatResid = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), s' +
+  'aturated water content is set to %3:g by "%4:s" and residual water conten' +
+  't is set to %5:g by "%6:s".';
+  StrAtLayerRowColuInitResid = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), ' +
+  'initial water content is set to %3:g by "%4:s" and residual water content' +
+  ' is set to %5:g by "%6:s".';
+  StrAtLayerRowColuInitSat = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), in' +
+  'itial water content is set to %3:g by "%4:s" and saturated water content ' +
+  'is set to %5:g by "%6:s".';
 
 type
   TUzfCellList = TList<TMvrReceiver>;
@@ -430,6 +449,11 @@ var
   ObsWriter: TUzfObsWriter;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoUZFBoundariesAr);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheUZFPackageResid);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheUZFPackageSatResid);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheUZFPackageInitResid);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheUZFPackageInitSat);
+
   if Model.ModelSelection <> msModflow2015 then
   begin
     Exit
@@ -724,12 +748,46 @@ begin
 
           thtr := ReisidualWaterContentDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
           WriteFloat(thtr);
+          if thtr <= 0 then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageResid,
+              Format(StrAtLayerRowColuResid,
+              [LayerIndex+1, RowIndex+1, ColumnIndex+1, thtr,
+              ReisidualWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+          end;
+
 
           thts := SaturatedWaterContentDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
           WriteFloat(thts);
+          if thts - thtr <= 0 then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageSatResid,
+              Format(StrAtLayerRowColuSatResid,
+              [LayerIndex+1, RowIndex+1, ColumnIndex+1, thts,
+              SaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex],
+              thtr, ReisidualWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+          end;
 
           thti := InitialUnsaturatedWaterContentDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
           WriteFloat(thti);
+
+          if thti - thtr < 0 then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageInitResid,
+              Format(StrAtLayerRowColuInitResid,
+              [LayerIndex+1, RowIndex+1, ColumnIndex+1, thti,
+              InitialUnsaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex],
+              thtr, ReisidualWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+          end;
+
+          if thti >= thts then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageInitSat,
+              Format(StrAtLayerRowColuInitSat,
+              [LayerIndex+1, RowIndex+1, ColumnIndex+1, thti,
+              InitialUnsaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex],
+              thts, SaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+          end;
 
           eps := BrooksCoreyEpsilonDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
           WriteFloat(eps);

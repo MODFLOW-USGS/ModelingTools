@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4003
+4037
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4003,3 +4003,37 @@ MF6_TestSfrMawLak.gpt
 	Archive\MF6_TestSfrMawLak.tdis
 	Archive\MF6_TestSfrMawLak.wel
 	Archive\usgs.MF6_TestSfrMawLak.reference
+MF6_TestSfrMawLakMvrUzf.gpt
+	Archive\MF6_TestSfrMawLakMvrUzf.axml
+	Archive\MF6_TestSfrMawLakMvrUzf.chd
+	Archive\MF6_TestSfrMawLakMvrUzf.dis
+	Archive\MF6_TestSfrMawLakMvrUzf.drn
+	Archive\MF6_TestSfrMawLakMvrUzf.evt
+	Archive\MF6_TestSfrMawLakMvrUzf.ghb
+	Archive\MF6_TestSfrMawLakMvrUzf.ic
+	Archive\MF6_TestSfrMawLakMvrUzf.ims
+	Archive\MF6_TestSfrMawLakMvrUzf.lak6
+	Archive\MF6_TestSfrMawLakMvrUzf.maw6
+	Archive\MF6_TestSfrMawLakMvrUzf.mvr
+	Archive\MF6_TestSfrMawLakMvrUzf.nam
+	Archive\MF6_TestSfrMawLakMvrUzf.nam.archive
+	Archive\MF6_TestSfrMawLakMvrUzf.npf
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_chob
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_drob
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_evt
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_gbob
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_gw
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_lak
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_rch
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_rvob
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_sfr
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_uzf
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_wel
+	Archive\MF6_TestSfrMawLakMvrUzf.oc
+	Archive\MF6_TestSfrMawLakMvrUzf.rch
+	Archive\MF6_TestSfrMawLakMvrUzf.riv
+	Archive\MF6_TestSfrMawLakMvrUzf.sfr
+	Archive\MF6_TestSfrMawLakMvrUzf.tdis
+	Archive\MF6_TestSfrMawLakMvrUzf.uzf
+	Archive\MF6_TestSfrMawLakMvrUzf.wel
+	Archive\usgs.MF6_TestSfrMawLakMvrUzf.reference

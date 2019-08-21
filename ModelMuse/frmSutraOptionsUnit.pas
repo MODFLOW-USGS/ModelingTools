@@ -117,8 +117,6 @@ type
     fedRestartInitialConditions: TJvFilenameEdit;
     jvspLake: TJvStandardPage;
     grpLakeDataset1: TGroupBox;
-    seLakeMaxIter: TJvSpinEdit;
-    lblLakeMaxIter: TLabel;
     seLakeOutputCycle: TJvSpinEdit;
     lblLakeOutputCycle: TLabel;
     grpLakeDataset2: TGroupBox;
@@ -494,7 +492,7 @@ begin
     rdeGravZ.RealValue := SutraOptions.GravityZ;
 
     LakeOptions := SutraOptions.LakeOptions;
-    seLakeMaxIter.AsInteger := LakeOptions.MaxLakeIterations;
+//    seLakeMaxIter.AsInteger := LakeOptions.MaxLakeIterations;
     seLakeOutputCycle.AsInteger := LakeOptions.LakeOutputCycle;
     rdeDefaultRechargeFrac.RealValue := LakeOptions.RechargeFraction;
     rdeDefaultDischargeFrac.RealValue := LakeOptions.DischargeFraction;
@@ -844,7 +842,7 @@ begin
     SutraOptions.GravityZ := rdeGravZ.RealValue;
 
     LakeOptions := SutraOptions.LakeOptions;
-    LakeOptions.MaxLakeIterations := seLakeMaxIter.AsInteger;
+//    LakeOptions.MaxLakeIterations := seLakeMaxIter.AsInteger;
     LakeOptions.LakeOutputCycle := seLakeOutputCycle.AsInteger;
     LakeOptions.RechargeFraction := rdeDefaultRechargeFrac.RealValue;
     LakeOptions.DischargeFraction := rdeDefaultDischargeFrac.RealValue;

@@ -1,0 +1,12 @@
+# Output Control file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'MF6_TestSfrMawLakMvrUzf.cbc'
+  HEAD FILEOUT 'MF6_TestSfrMawLakMvrUzf.bhd'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE HEAD ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

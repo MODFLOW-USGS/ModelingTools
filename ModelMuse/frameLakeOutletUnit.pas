@@ -56,8 +56,7 @@ resourcestring
   StrWidth = 'Width';
   StrSlope = 'Slope';
   StrRoughness = 'Roughness';
-  StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d. You shou' +
-  'ld correct this before attempting to run MODFLOW';
+  StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d.';
 
 {$R *.dfm}
 

@@ -1,53 +1,53 @@
 inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
-  Width = 376
+  Width = 451
   Height = 552
-  ExplicitWidth = 376
+  ExplicitWidth = 451
   ExplicitHeight = 552
   inherited pnlBottom: TPanel
     Top = 504
-    Width = 376
+    Width = 451
     Height = 48
     ExplicitTop = 504
     ExplicitWidth = 376
     ExplicitHeight = 48
     DesignSize = (
-      376
+      451
       48)
     inherited lblNumTimes: TLabel
       Top = 8
       ExplicitTop = 8
     end
     inherited btnDelete: TBitBtn
-      Left = 276
+      Left = 351
       ExplicitLeft = 276
     end
     inherited btnInsert: TBitBtn
-      Left = 188
+      Left = 263
       ExplicitLeft = 188
     end
   end
   inherited pnlTop: TPanel
-    Width = 376
+    Width = 451
     ExplicitWidth = 376
     inherited pnlCaption: TPanel
-      Width = 374
+      Width = 449
       ExplicitWidth = 374
     end
   end
   inherited pnlGrid: TPanel
     Top = 360
-    Width = 376
+    Width = 451
     Height = 144
     Align = alBottom
-    ExplicitTop = 336
+    ExplicitTop = 360
     ExplicitWidth = 376
     ExplicitHeight = 144
     inherited pnlEditGrid: TPanel
-      Width = 374
+      Width = 449
       ExplicitWidth = 374
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 374
+      Width = 449
       Height = 92
       ColCount = 8
       Columns = <
@@ -247,16 +247,16 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
   object pcLake: TPageControl
     Left = 0
     Top = 25
-    Width = 376
+    Width = 451
     Height = 335
     ActivePage = tabLakeProperties
     Align = alClient
     TabOrder = 3
-    ExplicitHeight = 311
+    ExplicitWidth = 376
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
       ImageIndex = 2
-      ExplicitHeight = 283
+      ExplicitWidth = 368
       object lblOutletCount: TLabel
         Left = 60
         Top = 3
@@ -532,25 +532,24 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     end
     object tabLakeTransientProperties: TTabSheet
       Caption = 'Lake Time Properties'
-      ExplicitHeight = 283
     end
     object tabLakeTable: TTabSheet
       Caption = 'Lake Table'
       ImageIndex = 1
-      ExplicitHeight = 283
+      ExplicitWidth = 368
       inline frameLakeTable: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 368
+        Width = 443
         Height = 307
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 368
-        ExplicitHeight = 283
+        ExplicitHeight = 307
         inherited Panel: TPanel
           Top = 266
-          Width = 368
-          ExplicitTop = 242
+          Width = 443
+          ExplicitTop = 266
           ExplicitWidth = 368
           inherited lbNumber: TLabel
             Top = 6
@@ -560,23 +559,23 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             ExplicitWidth = 136
           end
           inherited sbAdd: TSpeedButton
-            Left = 278
+            Left = 353
             Anchors = [akTop, akRight]
             ExplicitLeft = 278
           end
           inherited sbInsert: TSpeedButton
-            Left = 308
+            Left = 383
             Anchors = [akTop, akRight]
             ExplicitLeft = 308
           end
           inherited sbDelete: TSpeedButton
-            Left = 338
+            Left = 413
             Anchors = [akTop, akRight]
             ExplicitLeft = 338
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 368
+          Width = 443
           Height = 209
           ColCount = 4
           OnSetEditText = frameLakeTableGridSetEditText
@@ -674,10 +673,10 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 368
-          ExplicitHeight = 185
+          ExplicitHeight = 209
         end
         inherited pnlTop: TPanel
-          Width = 368
+          Width = 443
           ExplicitWidth = 368
           inherited edFormula: TLabeledEdit
             EditLabel.ExplicitLeft = 0

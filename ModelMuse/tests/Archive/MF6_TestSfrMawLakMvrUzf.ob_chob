@@ -1,0 +1,11 @@
+# OBS: Observation Utility file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+BEGIN OPTIONS
+    DIGITS      5
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.chob_out_chd.csv
+  'CHD1' chd CHD1
+  'CHD2' chd CHD2
+END CONTINUOUS
+

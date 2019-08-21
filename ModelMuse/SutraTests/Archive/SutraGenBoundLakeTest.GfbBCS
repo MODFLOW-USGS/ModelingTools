@@ -1,0 +1,5 @@
+# Generalized Flow file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+# Data set 1
+'STEP_0' # BCSSCH
+# Data set 2; Time = 0
+'generalized flow boundaries'     0     0     0     0     0     0 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1, NPBG1, NUBG1

@@ -640,7 +640,7 @@ begin
         if seOutletCount.AsInteger > 0 then
         begin
           Outlets := TLakeOutlets.Create(nil, nil);
-          for OutletIndex := 0 to List.Count - 1 do
+          for OutletIndex := 0 to seOutletCount.asInteger - 1 do
           begin
             AnOutlet := Outlets.Add;
             OutletFrame := FFrameList[OutletIndex];

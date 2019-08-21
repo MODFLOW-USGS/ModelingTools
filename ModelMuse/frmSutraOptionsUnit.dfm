@@ -69,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspDefaultLakeInteractions
+    ActivePage = jvspLake
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -1069,29 +1069,24 @@ inherited frmSutraOptions: TfrmSutraOptions
       Width = 595
       Height = 512
       Caption = 'jvspLake'
+      ExplicitLeft = -4
+      ExplicitTop = 3
       object grpLakeDataset1: TGroupBox
         Left = 0
         Top = 0
         Width = 595
-        Height = 89
+        Height = 57
         Align = alTop
         Caption = 'Lake dataset 1'
         TabOrder = 0
-        object lblLakeMaxIter: TLabel
-          Left = 133
-          Top = 27
-          Width = 238
-          Height = 18
-          Caption = 'Maximum lake iterations (ITLMAX)'
-        end
         object lblLakeOutputCycle: TLabel
           Left = 133
-          Top = 59
+          Top = 27
           Width = 198
           Height = 18
-          Caption = 'Lake output cycle (NPRLAK)'
+          Caption = 'Lake output cycle (NLAKPR)'
         end
-        object seLakeMaxIter: TJvSpinEdit
+        object seLakeOutputCycle: TJvSpinEdit
           Left = 6
           Top = 24
           Width = 121
@@ -1101,25 +1096,16 @@ inherited frmSutraOptions: TfrmSutraOptions
           Value = 1.000000000000000000
           TabOrder = 0
         end
-        object seLakeOutputCycle: TJvSpinEdit
-          Left = 6
-          Top = 56
-          Width = 121
-          Height = 26
-          MaxValue = 2147483647.000000000000000000
-          MinValue = 1.000000000000000000
-          Value = 1.000000000000000000
-          TabOrder = 1
-        end
       end
       object grpLakeDataset2: TGroupBox
         Left = 0
-        Top = 89
+        Top = 57
         Width = 595
         Height = 256
         Align = alTop
         Caption = 'Lake dataset 2'
         TabOrder = 1
+        ExplicitTop = 89
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24

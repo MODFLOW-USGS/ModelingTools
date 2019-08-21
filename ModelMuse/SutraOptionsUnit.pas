@@ -25,25 +25,25 @@ type
     FStoredRechargeFraction: TRealStorage;
     FStoredDischargeFraction: TRealStorage;
     FLakeOutputCycle: Integer;
-    FMaxLakeIterations: Integer;
+//    FMaxLakeIterations: Integer;
     FStoredMinLakeVolume: TRealStorage;
-    FGeneralizedFlowLakeAbsent: TLakeBoundaryInteraction;
+//    FGeneralizedFlowLakeAbsent: TLakeBoundaryInteraction;
     FGeneralizedFlowInteractionType: TGeneralizedFlowInteractionType;
     FFluidSourceSinkLakePresent: TLakeBoundaryInteraction;
-    FSpecifiedULakeAbsent: TLakeBoundaryInteraction;
+//    FSpecifiedULakeAbsent: TLakeBoundaryInteraction;
     FSpecifiedPressureLakePresent: TLakeBoundaryInteraction;
     FUSourceSinkLakePresent: TLakeBoundaryInteraction;
     FGeneralizedTransportLakePresent: TLakeBoundaryInteraction;
     FGeneralizedFlowLakePresent: TLakeBoundaryInteraction;
     FSpecifiedULakePresent: TLakeBoundaryInteraction;
-    FFluidSourceSinkLakeAbsent: TLakeBoundaryInteraction;
-    FSpecifiedPressureLakeAbsent: TLakeBoundaryInteraction;
-    FUSourceSinkLakeAbsent: TLakeBoundaryInteraction;
-    FGeneralizedTransportLakeAbsent: TLakeBoundaryInteraction;
+//    FFluidSourceSinkLakeAbsent: TLakeBoundaryInteraction;
+//    FSpecifiedPressureLakeAbsent: TLakeBoundaryInteraction;
+//    FUSourceSinkLakeAbsent: TLakeBoundaryInteraction;
+//    FGeneralizedTransportLakeAbsent: TLakeBoundaryInteraction;
     FGeneralizedTransportInteractionType: TGeneralizedTransportInteractionType;
     procedure SetStoredDischargeFraction(const Value: TRealStorage);
     procedure SetLakeOutputCycle(const Value: Integer);
-    procedure SetMaxLakeIterations(const Value: Integer);
+//    procedure SetMaxLakeIterations(const Value: Integer);
     procedure SetStoredMinLakeVolume(const Value: TRealStorage);
     procedure SetStoredRechargeFraction(const Value: TRealStorage);
     procedure SetStoredSubmergedOutput(const Value: TRealStorage);
@@ -55,29 +55,29 @@ type
     procedure SetMinLakeVolume(const Value: double);
     procedure SetRechargeFraction(const Value: double);
     procedure SetSubmergedOutput(const Value: double);
-    procedure SetFluidSourceSinkLakeAbsent(
-      const Value: TLakeBoundaryInteraction);
+//    procedure SetFluidSourceSinkLakeAbsent(
+//      const Value: TLakeBoundaryInteraction);
     procedure SetFluidSourceSinkLakePresent(
       const Value: TLakeBoundaryInteraction);
     procedure SetGeneralizedFlowInteractionType(
       const Value: TGeneralizedFlowInteractionType);
-    procedure SetGeneralizedFlowLakeAbsent(
-      const Value: TLakeBoundaryInteraction);
+//    procedure SetGeneralizedFlowLakeAbsent(
+//      const Value: TLakeBoundaryInteraction);
     procedure SetGeneralizedFlowLakePresent(
       const Value: TLakeBoundaryInteraction);
     procedure SetGeneralizedTransportInteractionType(
       const Value: TGeneralizedTransportInteractionType);
-    procedure SetGeneralizedTransportLakeAbsent(
-      const Value: TLakeBoundaryInteraction);
+//    procedure SetGeneralizedTransportLakeAbsent(
+//      const Value: TLakeBoundaryInteraction);
     procedure SetGeneralizedTransportLakePresent(
       const Value: TLakeBoundaryInteraction);
-    procedure SetSpecifiedPressureLakeAbsent(
-      const Value: TLakeBoundaryInteraction);
+//    procedure SetSpecifiedPressureLakeAbsent(
+//      const Value: TLakeBoundaryInteraction);
     procedure SetSpecifiedPressureLakePresent(
       const Value: TLakeBoundaryInteraction);
-    procedure SetSpecifiedULakeAbsent(const Value: TLakeBoundaryInteraction);
+//    procedure SetSpecifiedULakeAbsent(const Value: TLakeBoundaryInteraction);
     procedure SetSpecifiedULakePresent(const Value: TLakeBoundaryInteraction);
-    procedure SetUSourceSinkLakeAbsent(const Value: TLakeBoundaryInteraction);
+//    procedure SetUSourceSinkLakeAbsent(const Value: TLakeBoundaryInteraction);
     procedure SetUSourceSinkLakePresent(const Value: TLakeBoundaryInteraction);
   public
     procedure Assign(Source: TPersistent); override;
@@ -97,9 +97,9 @@ type
       write SetSubmergedOutput;
   published
     // ITLMAX
-    property MaxLakeIterations: Integer read FMaxLakeIterations
-      write SetMaxLakeIterations;
-    // NPRLAK
+//    property MaxLakeIterations: Integer read FMaxLakeIterations
+//      write SetMaxLakeIterations;
+    // NLAKPR
     property LakeOutputCycle: Integer read FLakeOutputCycle
       write SetLakeOutputCycle;
     property StoredRechargeFraction: TRealStorage read FStoredRechargeFraction
@@ -1536,15 +1536,15 @@ end;
 
 { TSutraLakeOptions }
 
-procedure TSutraLakeOptions.SetSpecifiedPressureLakeAbsent(
-  const Value: TLakeBoundaryInteraction);
-begin
-  if FSpecifiedPressureLakeAbsent <> Value then
-  begin
-    FSpecifiedPressureLakeAbsent := Value;
-    InvalidateModel;
-  end;
-end;
+//procedure TSutraLakeOptions.SetSpecifiedPressureLakeAbsent(
+//  const Value: TLakeBoundaryInteraction);
+//begin
+//  if FSpecifiedPressureLakeAbsent <> Value then
+//  begin
+//    FSpecifiedPressureLakeAbsent := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSutraLakeOptions.SetSpecifiedPressureLakePresent(
   const Value: TLakeBoundaryInteraction);
@@ -1556,15 +1556,15 @@ begin
   end;
 end;
 
-procedure TSutraLakeOptions.SetSpecifiedULakeAbsent(
-  const Value: TLakeBoundaryInteraction);
-begin
-  if FSpecifiedULakeAbsent <> Value then
-  begin
-    FSpecifiedULakeAbsent := Value;
-    InvalidateModel;
-  end;
-end;
+//procedure TSutraLakeOptions.SetSpecifiedULakeAbsent(
+//  const Value: TLakeBoundaryInteraction);
+//begin
+//  if FSpecifiedULakeAbsent <> Value then
+//  begin
+//    FSpecifiedULakeAbsent := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSutraLakeOptions.SetSpecifiedULakePresent(
   const Value: TLakeBoundaryInteraction);
@@ -1588,7 +1588,7 @@ begin
   if Source is TSutraLakeOptions then
   begin
     SourceLake := TSutraLakeOptions(Source);
-    MaxLakeIterations := SourceLake.MaxLakeIterations;
+//    MaxLakeIterations := SourceLake.MaxLakeIterations;
     LakeOutputCycle := SourceLake.LakeOutputCycle;
     RechargeFraction := SourceLake.RechargeFraction;
     DischargeFraction := SourceLake.DischargeFraction;
@@ -1657,7 +1657,7 @@ end;
 
 procedure TSutraLakeOptions.Initialize;
 begin
-  MaxLakeIterations := 1;
+//  MaxLakeIterations := 1;
   LakeOutputCycle := 1;
   RechargeFraction := 0;
   DischargeFraction := 0;
@@ -1678,15 +1678,15 @@ begin
   StoredDischargeFraction.Value := Value;
 end;
 
-procedure TSutraLakeOptions.SetFluidSourceSinkLakeAbsent(
-  const Value: TLakeBoundaryInteraction);
-begin
-  if FFluidSourceSinkLakeAbsent <> Value then
-  begin
-    FFluidSourceSinkLakeAbsent := Value;
-    InvalidateModel;
-  end;
-end;
+//procedure TSutraLakeOptions.SetFluidSourceSinkLakeAbsent(
+//  const Value: TLakeBoundaryInteraction);
+//begin
+//  if FFluidSourceSinkLakeAbsent <> Value then
+//  begin
+//    FFluidSourceSinkLakeAbsent := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSutraLakeOptions.SetFluidSourceSinkLakePresent(
   const Value: TLakeBoundaryInteraction);
@@ -1708,15 +1708,15 @@ begin
   end;
 end;
 
-procedure TSutraLakeOptions.SetGeneralizedFlowLakeAbsent(
-  const Value: TLakeBoundaryInteraction);
-begin
-  if FGeneralizedFlowLakeAbsent <> Value then
-  begin
-    FGeneralizedFlowLakeAbsent := Value;
-    InvalidateModel;
-  end;
-end;
+//procedure TSutraLakeOptions.SetGeneralizedFlowLakeAbsent(
+//  const Value: TLakeBoundaryInteraction);
+//begin
+//  if FGeneralizedFlowLakeAbsent <> Value then
+//  begin
+//    FGeneralizedFlowLakeAbsent := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSutraLakeOptions.SetGeneralizedFlowLakePresent(
   const Value: TLakeBoundaryInteraction);
@@ -1738,15 +1738,15 @@ begin
   end;
 end;
 
-procedure TSutraLakeOptions.SetGeneralizedTransportLakeAbsent(
-  const Value: TLakeBoundaryInteraction);
-begin
-  if FGeneralizedTransportLakeAbsent <> Value then
-  begin
-    FGeneralizedTransportLakeAbsent := Value;
-    InvalidateModel;
-  end;
-end;
+//procedure TSutraLakeOptions.SetGeneralizedTransportLakeAbsent(
+//  const Value: TLakeBoundaryInteraction);
+//begin
+//  if FGeneralizedTransportLakeAbsent <> Value then
+//  begin
+//    FGeneralizedTransportLakeAbsent := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSutraLakeOptions.SetGeneralizedTransportLakePresent(
   const Value: TLakeBoundaryInteraction);
@@ -1763,10 +1763,10 @@ begin
   SetIntegerProperty(FLakeOutputCycle, Value);
 end;
 
-procedure TSutraLakeOptions.SetMaxLakeIterations(const Value: Integer);
-begin
-  SetIntegerProperty(FMaxLakeIterations, Value);
-end;
+//procedure TSutraLakeOptions.SetMaxLakeIterations(const Value: Integer);
+//begin
+//  SetIntegerProperty(FMaxLakeIterations, Value);
+//end;
 
 procedure TSutraLakeOptions.SetMinLakeVolume(const Value: double);
 begin
@@ -1798,15 +1798,15 @@ begin
   StoredSubmergedOutput.Value := Value;
 end;
 
-procedure TSutraLakeOptions.SetUSourceSinkLakeAbsent(
-  const Value: TLakeBoundaryInteraction);
-begin
-  if FUSourceSinkLakeAbsent <> Value then
-  begin
-    FUSourceSinkLakeAbsent := Value;
-    InvalidateModel;
-  end;
-end;
+//procedure TSutraLakeOptions.SetUSourceSinkLakeAbsent(
+//  const Value: TLakeBoundaryInteraction);
+//begin
+//  if FUSourceSinkLakeAbsent <> Value then
+//  begin
+//    FUSourceSinkLakeAbsent := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSutraLakeOptions.SetUSourceSinkLakePresent(
   const Value: TLakeBoundaryInteraction);

@@ -287,13 +287,13 @@ end;
 
 procedure TSutraLakeWriter.WriteDataSet1;
 var
-  ITLMAX: Integer;
-  NPRLAK: Integer;
+//  ITLMAX: Integer;
+  NLAKPR: Integer;
 begin
-  ITLMAX := FLakeOptions.MaxLakeIterations;
-  NPRLAK := FLakeOptions.LakeOutputCycle;
-  WriteInteger(ITLMAX);
-  WriteInteger(NPRLAK);
+//  ITLMAX := FLakeOptions.MaxLakeIterations;
+  NLAKPR := FLakeOptions.LakeOutputCycle;
+//  WriteInteger(ITLMAX);
+  WriteInteger(NLAKPR);
   NewLine;
 end;
 
@@ -432,7 +432,7 @@ var
   NNLK: integer;
 begin
   NNLK := FLakeNodes.Count;
-//  WriteString('LAKE');
+  WriteString('LAKE');
   WriteInteger(NNLK);
   WriteString(' ''DEFAULT''');
   NewLine;

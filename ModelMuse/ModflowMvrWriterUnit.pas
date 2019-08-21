@@ -108,7 +108,7 @@ implementation
 uses
   frmProgressUnit, System.SysUtils, frmErrorsAndWarningsUnit, Vcl.Forms,
   FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math,
-  ModflowLakMf6Unit, RbwParser;
+  ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit;
 
 resourcestring
   StrWritingMVROptions = 'Writing MVR Options';
@@ -117,6 +117,8 @@ resourcestring
   StrWritingMVRStressP = 'Writing MVR Stress Periods';
   StrReceiverNotFound = 'Receiver not found';
   StrSourceObject0s = 'Source object: %0:s.';
+  StrTheFormulaDoesNot = 'The formula does not result in a real number.';
+  StrMVRValue = 'MVR Value';
 
 
 
@@ -239,8 +241,16 @@ begin
 
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
     if AScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    if not AScreenObject.UsedModels.UsesModel(Model) then
     begin
       Continue;
     end;
@@ -255,9 +265,6 @@ begin
       ModflowLak6 := AScreenObject.ModflowLak6;
       if (ModflowLak6 <> nil) and ModflowLak6.Used then
       begin
-
-
-
         for TimeIndex := 0 to MvrBound.Values.Count - 1 do
         begin
           MvrItem := MvrBound.Values[TimeIndex] as TMvrItem;
@@ -299,33 +306,30 @@ begin
                 Compiler.Compile(Formula);
               except on E: ERbwParserError do
                 begin
+                  frmFormulaErrors.AddFormulaError(AScreenObject.Name,
+                    StrMVRValue, Formula, E.Message);
                   Formula := '0';
                   Compiler.Compile(Formula);
                 end;
               end;
               Expression := Compiler.CurrentExpression;
+              if not (Expression.ResultType in [rdtDouble, rdtInteger]) then
+              begin
+                frmFormulaErrors.AddFormulaError(AScreenObject.Name,
+                  StrMVRValue, Formula, StrTheFormulaDoesNot);
+                Formula := '0';
+                Compiler.Compile(Formula);
+                Expression := Compiler.CurrentExpression;
+              end;
               Expression.Evaluate;
               LkValues.Values[MvrIndex] := Expression.DoubleResult;
               LkValues.ValueAnnotations[MvrIndex] := Formula;
             end;
 
-//            begin
-              ACell.Values := LkValues;
-
-              AList.Add(ACell);
-
-
-//              SourceKey.MvrIndex := OutletIndex;
-//              SourceKey.ScreenObject := AScreenObject;
-//              MvrSourceDictionary.Add(SourceKey, ACell);
-//            end;
-
+            ACell.Values := LkValues;
+            AList.Add(ACell);
           end;
-
         end;
-
-
-
       end;
     end;
   end;
@@ -340,7 +344,10 @@ begin
       Assert(ACell.ScreenObject <> nil);
       SourceKey.MvrIndex := ACell.MvrIndex;
       SourceKey.ScreenObject := ACell.ScreenObject;
-      MvrSourceDictionary.Add(SourceKey, ACell);
+      if not MvrSourceDictionary.ContainsKey(SourceKey) then
+      begin
+        MvrSourceDictionary.Add(SourceKey, ACell);
+      end;
     end;
   end;
 

@@ -8695,6 +8695,11 @@ const
   //                of the cell.
   //               Bug fix: Fixed bug that could cause an error if a lake outlet
   //                was a source for the MVR package in MODFLOW 6.
+  //               bug fix: Fixed bug in specifying lake outlets that could
+  //                cause them not to be saved properly.
+  //               Bug fix: The MODPATH_Zone data set was sometimes improperly
+  //                marked as required with MODPATH 7 when in reality it wasn't
+  //                used.
 
   // version number of ModelMuse.
   IModelVersion = '4.0.0.12';
@@ -35148,7 +35153,7 @@ function TCustomModel.ModpathZonesNeeded(Sender: TObject): boolean;
 begin
   result :=  (ModelSelection in ModflowSelection)
     and ModflowPackages.ModPath.IsSelected;
-  if result and (ModflowPackages.ModPath.MpathVersion = mp6) then
+  if result and (ModflowPackages.ModPath.MpathVersion in [mp6, mp7]) then
   begin
     result := ModflowPackages.ModPath.StopInZone;
   end;

@@ -184,6 +184,9 @@ resourcestring
   ' outlets. The ext-outflow observation will be skipped.';
   StrSDefinesALakeOu = '%s defines a lake outflow observation but has no out' +
   'lets. The outflow observation will be skipped.';
+  StrNoOutletLakeDefin = 'No outlet lake defined';
+  StrInTheLakeDefined = 'In the lake defined by the object %0:s, no outlet l' +
+  'ake is defined for outlet %1:d.';
 
 { TModflowLAKMf6Writer }
 
@@ -212,6 +215,8 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeExtout);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeOutflow);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
+
   IdentifyLakesAndLakeCells;
   SetLakeCellProperties;
   SetLakeTables;
@@ -960,6 +965,8 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeExtout);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeOutflow);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
+
   IdentifyLakesAndLakeCells;
   SetLakeCellProperties;
 
@@ -1454,6 +1461,13 @@ begin
       for OutletIndex := 0 to ALake.FLakeOutlets.Count - 1 do
       begin
         AnOutlet := ALake.FLakeOutlets[OutletIndex];
+        if AnOutlet.LakeOutNumber < 0 then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrNoOutletLakeDefin,
+            Format(StrInTheLakeDefined,
+            [ALake.FScreenObject.Name, OutletIndex+1]), ALake.FScreenObject);
+        end;
+
         Inc(OutletNumber);
 
         WriteString('  ');
