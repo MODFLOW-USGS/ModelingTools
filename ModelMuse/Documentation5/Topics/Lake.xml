@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Lake</title>
   <body>
     <header>
@@ -8,6 +8,8 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Lake</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Sutra Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. It is used to specify Lake boundaries in SUTRA 3.0.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:normal;" translate="true">The </text><text styleclass="Strong" translate="true">Lake</text><text styleclass="Normal" translate="true"> pane is only visible if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Properties_Tab" anchor="EvaluatedAt" styleclass="Normal" style="font-weight:bold;" translate="true">Evaluated at</link><text styleclass="Normal" translate="true"> is set to </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Nodes</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Lake nodes must not lie along the horizontal edge of the model. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Lakes can only be used in 3D SUTRA models that are layered. If a model has any layers that pinch out, the mesh will be treated as an irregular mesh.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">There are four formulas that can be set on the </text><text styleclass="Strong" translate="true">Lake</text><text styleclass="Normal" translate="true"> pane.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Initial stage (STGI)</text><text styleclass="Normal" translate="true"> Initial stage in the lake to which the specification applies. If STGI is below the lowest point in the lake bathymetry, the lake is initially dry. [L]</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Initial concentration or temperature (UWI)</text><text styleclass="Normal" translate="true"> Initial lake-water concentration or temperature in the lake to which the specification applies. [Ms/M or C°]</text></para>
