@@ -2,20 +2,22 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   HelpType = htKeyword
   HelpKeyword = 'SUTRA_Program_Locations_Dialog'
   Caption = 'SUTRA Program Location'
-  ClientHeight = 183
-  ClientWidth = 613
-  ExplicitWidth = 629
-  ExplicitHeight = 222
+  ClientHeight = 245
+  ClientWidth = 992
+  ExplicitWidth = 1008
+  ExplicitHeight = 284
   PixelsPerInch = 96
   TextHeight = 18
   object htlblSutra22: TJvHTLabel
     Left = 105
     Top = 17
-    Width = 237
+    Width = 835
     Height = 19
     Caption = 
-      '<a href="http://www.usgs.gov/software/sutra">http://www.usgs.gov' +
-      '/software/sutra</a>'
+      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
+      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
+      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
+      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object lblSutra22: TLabel
@@ -26,16 +28,35 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     Caption = 'SUTRA 2.2'
   end
   object lblTextEditor: TLabel
-    Left = 17
-    Top = 73
+    Left = 16
+    Top = 129
     Width = 71
     Height = 18
     Caption = 'Text editor'
   end
+  object htlblSutra3: TJvHTLabel
+    Left = 106
+    Top = 76
+    Width = 835
+    Height = 19
+    Caption = 
+      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
+      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
+      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
+      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
+    SuperSubScriptRatio = 0.666666666666666600
+  end
+  object lblSutra3: TLabel
+    Left = 16
+    Top = 76
+    Width = 78
+    Height = 18
+    Caption = 'SUTRA 3.0'
+  end
   object fedSutra22: TJvFilenameEdit
     Left = 16
     Top = 38
-    Width = 588
+    Width = 967
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -44,20 +65,23 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 0
     Text = ''
     OnChange = fedSutra22Change
+    ExplicitWidth = 588
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 142
-    Width = 613
+    Top = 204
+    Width = 992
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 142
+    ExplicitWidth = 613
     DesignSize = (
-      613
+      992
       41)
     object btnHelp: TBitBtn
-      Left = 349
+      Left = 728
       Top = 6
       Width = 82
       Height = 27
@@ -67,9 +91,10 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
+      ExplicitLeft = 349
     end
     object btnOK: TBitBtn
-      Left = 437
+      Left = 816
       Top = 6
       Width = 82
       Height = 27
@@ -78,9 +103,10 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 437
     end
     object btnCancel: TBitBtn
-      Left = 525
+      Left = 904
       Top = 6
       Width = 83
       Height = 27
@@ -88,12 +114,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 525
     end
   end
   object fedTextEditor: TJvFilenameEdit
-    Left = 17
-    Top = 94
-    Width = 588
+    Left = 16
+    Top = 150
+    Width = 967
     Height = 26
     Filter = 
       'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
@@ -102,5 +129,18 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 1
     Text = ''
     OnChange = fedTextEditorChange
+  end
+  object fedSutra30: TJvFilenameEdit
+    Left = 16
+    Top = 97
+    Width = 967
+    Height = 26
+    Filter = 
+      'Executables (*.exe)|*.exe|Batch Files (*.bat)|*.bat|All files (*' +
+      '.*)|*.*'
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 3
+    Text = ''
+    OnChange = fedSutra30Change
   end
 end

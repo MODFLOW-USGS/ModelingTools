@@ -4,12 +4,16 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
   inherited pnlBottom: TPanel
     Top = 218
     ExplicitTop = 218
+    inherited seNumberOfTimes: TJvSpinEdit
+      Height = 21
+      ExplicitHeight = 21
+    end
   end
   inherited pnlGrid: TPanel
     Top = 131
     Height = 87
     ExplicitTop = 131
-    ExplicitHeight = 63
+    ExplicitHeight = 87
     inherited rdgSutraFeature: TRbwDataGrid4
       Height = 85
       ColCount = 6
@@ -158,9 +162,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitLeft = 2
-      ExplicitTop = 2
-      ExplicitHeight = 61
+      ExplicitHeight = 85
     end
   end
   inherited pnlTop: TPanel
@@ -210,16 +212,6 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       OnChange = rdeFormulaChange
       Max = 1.000000000000000000
       ChangeDisabledColor = True
-    end
-    object cbUsed: TCheckBox
-      Left = 63
-      Top = 27
-      Width = 67
-      Height = 17
-      Caption = 'Used'
-      Enabled = False
-      TabOrder = 1
-      OnClick = cbUsedClick
     end
   end
 end

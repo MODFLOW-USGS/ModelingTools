@@ -473,7 +473,7 @@ begin
     TTransportChoice(rgTransport.ItemIndex);
   PhastModel.SutraOptions.SaturationChoice :=
     TSaturationChoice(rgSaturation.ItemIndex);
-  PhastModel.ModelSelection := msSutra22;
+  PhastModel.ModelSelection := msSutra30;
   Values:= TRealList.Create;
   try
     if PhastModel.SutraMesh.MeshType = mt3D then

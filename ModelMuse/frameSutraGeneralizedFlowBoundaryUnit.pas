@@ -17,7 +17,6 @@ type
     pnlEditGrid: TPanel;
     lblFormula: TLabel;
     rdeFormula: TRbwDataEntry;
-    cbUsed: TCheckBox;
     comboLimit: TJvImageComboBox;
     comboExit: TJvImageComboBox;
     procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -30,7 +29,6 @@ type
     procedure rdgSutraFeatureColSize(Sender: TObject; ACol,
       PriorWidth: Integer);
     procedure rdgSutraFeatureHorizontalScroll(Sender: TObject);
-    procedure cbUsedClick(Sender: TObject);
     procedure comboLimitChange(Sender: TObject);
     procedure comboExitChange(Sender: TObject);
     procedure rdgSutraFeatureMouseUp(Sender: TObject; Button: TMouseButton;
@@ -85,12 +83,6 @@ begin
 //
 end;
 
-procedure TframeSutraGeneralizedFlowBoundary.cbUsedClick(Sender: TObject);
-begin
-  inherited;
-  ChangeSelectedCellsStateInColumn(rdgSutraFeature, Ord(gfcUsed), cbUsed.State);
-end;
-
 procedure TframeSutraGeneralizedFlowBoundary.comboExitChange(Sender: TObject);
 begin
   inherited;
@@ -125,45 +117,16 @@ begin
     begin
       Item := BoundColl[ItemIndex] as TSutraGeneralFlowItem;
       rdgSutraFeature.Cells[Ord(gfcTime),ItemIndex+1] := FloatToStr(Item.StartTime);
-    {$IFNDEF SutraUsedFormulas}
-      rdgSutraFeature.Checked[Ord(gfcUsed),ItemIndex+1] := Item.Used;
-      if Item.Used then
-      begin
-        rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1] := Item.LowerPressureFormula;
-        rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1] := Item.LowerFlowRateFormula;
-        rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1] := Item.HigherPressureFormula;
-        rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1] := Item.HigherFlowRateFormula;
-        rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1] := Ord(Item.LowerLimitType);
-        rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1] := Ord(Item.UpperLimitType);
-        rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1] := Item.UInFormula;
-        rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1] := Ord(Item.ExitSpecMethod);
-        rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1] := Item.UoutFormula;
-      end
-      else
-      begin
-        rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1] := '';
-        rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1] := '';
-        rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1] := '';
-        rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1] := '';
-        rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1] := 0;
-        rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1] := 0;
-        rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1] := '';
-        rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1] := 0;
-        rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1] := '';
-      end;
-    {$ELSE}
-        rdgSutraFeature.Cells[Ord(gfcUsed),ItemIndex+1] := Item.UsedFormula;
-        rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1] := Item.LowerPressureFormula;
-        rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1] := Item.LowerFlowRateFormula;
-        rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1] := Item.HigherPressureFormula;
-        rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1] := Item.HigherFlowRateFormula;
-        rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1] := Ord(Item.LowerLimitType);
-        rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1] := Ord(Item.UpperLimitType);
-        rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1] := Item.UInFormula;
-        rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1] := Ord(Item.ExitSpecMethod);
-        rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1] := Item.UoutFormula;
-
-    {$ENDIF}
+      rdgSutraFeature.Cells[Ord(gfcUsed),ItemIndex+1] := Item.UsedFormula;
+      rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1] := Item.LowerPressureFormula;
+      rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1] := Item.LowerFlowRateFormula;
+      rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1] := Item.HigherPressureFormula;
+      rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1] := Item.HigherFlowRateFormula;
+      rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1] := Ord(Item.LowerLimitType);
+      rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1] := Ord(Item.UpperLimitType);
+      rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1] := Item.UInFormula;
+      rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1] := Ord(Item.ExitSpecMethod);
+      rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1] := Item.UoutFormula;
     end;
   finally
     rdgSutraFeature.EndUpdate;
@@ -220,13 +183,10 @@ var
   SutraBoundaries: TSutraBoundaries;
   ABoundary: TSutraGeneralFlowBoundary;
 begin
-  {$IFDEF SutraUsedFormulas}
   rdgSutraFeature.Columns[Ord(gfcUsed)].Format := rcf4String;
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonWidth := 35;
-  cbUsed.visible := False;
-  {$ENDIF}
 
   rdgSutraFeature.BeginUpdate;
   try
@@ -349,12 +309,6 @@ begin
         AColumn.Format := rcf4String;
         AColumn.LimitToList := True;
       end
-      {$IFNDEF SutraUsedFormulas}
-      else if ColFormat = gfcUsed then
-      begin
-        AColumn.Format := rcf4Boolean;
-      end
-      {$ENDIF}
       else if ColFormat = gfcTime then
       begin
         AColumn.Format := rcf4Real;
@@ -395,24 +349,7 @@ begin
     Exit
   end;
 
-{$IFNDEF SutraUsedFormulas}
-  if rdgSutraFeature.ColVisible[Ord(gfcUsed)] then
-  begin
-    cbUsed.Visible := True;
-    LayoutControls(rdgSutraFeature, cbUsed, nil, Ord(gfcUsed));
-  end
-  else
-  begin
-    cbUsed.Visible := False;
-  end;
-{$ENDIF}
-
-  {$IFDEF SutraUsedFormulas}
   FirstVisibleFormulaCol := gfcUsed;
-  {$ELSE}
-  FirstVisibleFormulaCol := gfcPress1;
-  {$ENDIF}
-
   for ColIndex := FirstVisibleFormulaCol to High(TGenFlowCol) do
   begin
     if ColIndex in [gfcLimit1, gfcLimit2, gfcOutflowType] then
@@ -457,11 +394,7 @@ var
   Col: TGenFlowCol;
 begin
   inherited;
-{$IFDEF SutraUsedFormulas}
   for Col in [gfcUsed, gfcPress1, gfcFlow1, gfcPress2, gfcFlow2, gfcInflowU, gfcOutflowU] do
-{$ELSE}
-  for Col in [gfcPress1, gfcFlow1, gfcPress2, gfcFlow2, gfcInflowU, gfcOutflowU] do
-{$ENDIF}
   begin
     ChangeSelectedCellsInColumn(rdgSutraFeature, Ord(Col), rdeFormula.Text);
   end;
@@ -499,9 +432,6 @@ procedure TframeSutraGeneralizedFlowBoundary.rdgSutraFeatureMouseUp(
   Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
-{$IFNDEF SutraUsedFormulas}
-  EnableMultiEditControl(rdgSutraFeature, cbUsed, Ord(gfcUsed));
-{$ENDIF}
   EnableMultiEditControl(rdgSutraFeature, rdeFormula, [Ord(gfcPress1),
     Ord(gfcFlow1), Ord(gfcPress2), Ord(gfcFlow2), Ord(gfcInflowU),
     Ord(gfcOutflowU)]);
@@ -514,15 +444,6 @@ procedure TframeSutraGeneralizedFlowBoundary.rdgSutraFeatureSelectCell(
   Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-{$IFNDEF SutraUsedFormulas}
-  if ARow > 0 then
-  begin
-    if ACol > Ord(gfcUsed) then
-    begin
-      CanSelect := rdgSutraFeature.Checked[Ord(gfcUsed), ARow];
-    end;
-  end;
-{$ENDIF}
   if not rdgSutraFeature.Drawing then
   begin
     LayoutMultiEditControls;
@@ -569,28 +490,15 @@ begin
       if TryStrToFloat(rdgSutraFeature.Cells[0, RowIndex], ATime) then
       begin
         OK := False;
-      {$IFNDEF SutraUsedFormulas}
-        if not rdgSutraFeature.Checked[1, RowIndex] then
+        StartIndex := Ord(gfcUsed);
+        for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
         begin
-          OK := True;
-        end
-        else
-        begin
-      StartIndex := Ord(gfcPress1);
-      {$ELSE}
-      StartIndex := Ord(gfcUsed);
-      {$ENDIF}
-          for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
+          OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
+          if not OK then
           begin
-            OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
-            if not OK then
-            begin
-              Break;
-            end;
+            Break;
           end;
-      {$IFNDEF SutraUsedFormulas}
         end;
-      {$ENDIF}
         if OK then
         begin
           if ItemIndex < BoundValues.Count then
@@ -601,44 +509,18 @@ begin
           begin
             BoundItem := BoundValues.Add as TSutraGeneralFlowItem;
           end;
-//          if ATime <= Initialtime then
-//          begin
-//            BoundaryTypeString := StrSUTRAGeneralFlowB;
-//            frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-//              StrInvalidBoundaryTim,
-//              Format(StrInSTheFirstSpe, [BoundaryTypeString])
-//              );
-//            frmErrorsAndWarnings.Show;
-//          end;
           BoundItem.StartTime := ATime;
-        {$IFNDEF SutraUsedFormulas}
-          BoundItem.Used := rdgSutraFeature.Checked[UsedColumn, RowIndex];
-          if BoundItem.Used then
-          begin
-            BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1), RowIndex];
-            BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1];
-            BoundItem.LowerFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1];
-            BoundItem.HigherPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1];
-            BoundItem.HigherFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1];
-            BoundItem.LowerLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1]);
-            BoundItem.UpperLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1]);
-            BoundItem.UInFormula := rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1];
-            BoundItem.ExitSpecMethod := TSutraExitSpecificationMethod(rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1]);
-            BoundItem.UoutFormula := rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1];
-          end;
-        {$ELSE}
-            BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(gfcUsed), RowIndex];
-            BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1), RowIndex];
-            BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1];
-            BoundItem.LowerFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1];
-            BoundItem.HigherPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1];
-            BoundItem.HigherFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1];
-            BoundItem.LowerLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1]);
-            BoundItem.UpperLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1]);
-            BoundItem.UInFormula := rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1];
-            BoundItem.ExitSpecMethod := TSutraExitSpecificationMethod(rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1]);
-            BoundItem.UoutFormula := rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1];
-        {$ENDIF}
+          BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(gfcUsed), RowIndex];
+          BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1), RowIndex];
+          BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1];
+          BoundItem.LowerFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1];
+          BoundItem.HigherPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1];
+          BoundItem.HigherFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1];
+          BoundItem.LowerLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1]);
+          BoundItem.UpperLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1]);
+          BoundItem.UInFormula := rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1];
+          BoundItem.ExitSpecMethod := TSutraExitSpecificationMethod(rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1]);
+          BoundItem.UoutFormula := rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1];
           Inc(ItemIndex);
         end;
       end;

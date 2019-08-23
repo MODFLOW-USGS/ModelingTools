@@ -63,6 +63,7 @@ type
     FGeneralFlowNodes: TList<IGeneralFlowNodes>;
     FGeneralTransportNodes: TList<IGeneralTransportNodes>;
     F_NN: Integer;
+    FHasLakes: Boolean;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteDataSet2A;
@@ -95,9 +96,11 @@ type
     procedure WriteDataSet21A;
     procedure WriteDataSet21B;
     procedure WriteDataSet22;
+    procedure SetHasLakes(const Value: Boolean);
   protected
     class function Extension: string; override;
   public
+    property HasLakes: Boolean read FHasLakes write SetHasLakes;
     Constructor Create(AModel: TCustomModel); reintroduce;
     procedure WriteFile(FileName: string; FluidSourceNodes,
       MassEnergySourceNodes, SpecifiedPressureNodes,
@@ -132,6 +135,11 @@ resourcestring
   ' solution. The direct solver uses much more memory than the iterative sol' +
   'ver and may cause SUTRA to run out of memory. Usually one of the iterative ' +
   'solvers is a better choice for a model with over 1000 nodes.';
+  StrLakesUsedWithIrre = 'Lakes used with irregular mesh';
+  StrSomeLayersInThis = 'Some layers in this model pinch out which forces SU' +
+  'TRA to reat this model as having an irregular mesh. Lakes have been defin' +
+  'ed for the model but lakes are only allowed in models with layered meshes' +
+  ' not irregular meshes.';
 //  StrDispersivityMayBe = 'Dispersivity may be too low at the following eleme' +
 //  'nts. See section 7.2 of the SUTRA documentation.';
 
@@ -1327,6 +1335,11 @@ begin
         else
         begin
           MSHSTR := '''3D IRREGULAR''';
+          if HasLakes then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrLakesUsedWithIrre,
+              StrSomeLayersInThis)
+          end;
         end;
       end;
   else
@@ -1859,6 +1872,7 @@ begin
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMidPermMinPerm);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMidKMinK);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrDirectSolverUsed);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakesUsedWithIrre);
 //    frmErrorsAndWarnings.RemoveWarningGroup(Model, StrDispersivityMayBe);
 
 
@@ -1921,6 +1935,11 @@ end;
 class function TSutraInputWriter.Extension: string;
 begin
   Assert(False);
+end;
+
+procedure TSutraInputWriter.SetHasLakes(const Value: Boolean);
+begin
+  FHasLakes := Value;
 end;
 
 procedure TSutraInputWriter.WriteDataSet0;

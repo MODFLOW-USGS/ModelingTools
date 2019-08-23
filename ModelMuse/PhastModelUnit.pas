@@ -513,6 +513,7 @@ const
   StrMT3DMS = 'MT3DMS';
   StrMt3dUsgs = 'MT3D-USGS';
   KSutra22  = 'SUTRA2.2';
+  KSutra30  = 'SUTRA3.0';
   StrDisvgrb = '.disv.grb';
   StrDisgrb = '.dis.grb';
 
@@ -825,6 +826,7 @@ type
     FMt3dUsgsLocation: string;
     FModPathLocationV7: string;
     FZoneBudgetLocationMf6: string;
+    FSutra30Location: string;
     function GetTextEditorLocation: string;
     procedure SetModflowLocation(const Value: string);
     function RemoveQuotes(const Value: string): string;
@@ -848,6 +850,7 @@ type
     procedure SetMt3dUsgsLocation(const Value: string);
     procedure SetModPathLocationV7(const Value: string);
     procedure SetZoneBudgetLocationMf6(const Value: string);
+    procedure SetSutra30Location(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create;
@@ -887,6 +890,8 @@ type
       write SetMt3dUsgsLocation;
     property Sutra22Location: string read FSutra22Location
       write SetSutra22Location;
+    property Sutra30Location: string read FSutra30Location
+      write SetSutra30Location;
     property ModflowCfpLocation: string read FModflowCfpLocation
       write SetModflowCfpLocation;
     property GmshLocation: string read FGmshLocation write SetGmshLocation;
@@ -8700,6 +8705,7 @@ const
   //               Bug fix: The MODPATH_Zone data set was sometimes improperly
   //                marked as required with MODPATH 7 when in reality it wasn't
   //                used.
+  //               Enhancement: Support for SUTRA 3.0 added.
 
   // version number of ModelMuse.
   IModelVersion = '4.0.0.12';
@@ -8838,6 +8844,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
+  KSutra30DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe';
   StrMpathDefaultPath = 'C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe';
   StrMpathDefaultPathVersion6 = 'C:\WRDAPP\modpath.6_0\bin\mp6.exe';
   StrMpathDefaultPathVersion7 = 'C:\WRDAPP\modpath_7_2_001\bin\mpath7.exe';
@@ -14047,8 +14054,10 @@ begin
       ModelFile := ProgramLocations.ModflowOwhmLocation;
     msModflowCfp:
       ModelFile := ProgramLocations.ModflowCfpLocation;
-    msSutra22, msSutra30:
+    msSutra22:
       ModelFile := ProgramLocations.Sutra22Location;
+    msSutra30:
+      ModelFile := ProgramLocations.Sutra30Location;
     msFootPrint:
       ModelFile := ProgramLocations.FootprintLocation;
     msModflow2015:
@@ -26364,6 +26373,7 @@ begin
     GeompackLocation := SourceLocations.GeompackLocation;
     FootprintLocation := SourceLocations.FootprintLocation;
     Modflow6Location := SourceLocations.Modflow6Location;
+    Sutra30Location := SourceLocations.Sutra30Location;
   end
   else
   begin
@@ -26388,6 +26398,7 @@ begin
   Mt3dmsLocation := strMt3dmsDefaultPath;
   Mt3dUsgsLocation := strMt3dUsgsDefaultPath;
   Sutra22Location := KSutraDefaultPath;
+  Sutra30Location := KSutra30DefaultPath;
   ModflowOwhmLocation := DefaultModflowOwhmPath;
   ModflowCfpLocation := strModflowCfpDefaultPath;
   GMshLocation := StrDefaultGmshPath;
@@ -26427,7 +26438,6 @@ var
     begin
       result := FileName;
     end;
-
   end;
 begin
   ModflowLocation := IniFile.ReadString(StrProgramLocations, StrMODFLOW2005,
@@ -26657,6 +26667,20 @@ begin
     end;
   end;
 
+  Sutra30Location := IniFile.ReadString(StrProgramLocations, KSutra30,
+    KSutra30DefaultPath);
+  if (Sutra30Location = '') or not FileExists(Sutra30Location) then
+  begin
+    if FileExists(KSutra30DefaultPath) then
+    begin
+      Sutra30Location := KSutra30DefaultPath;
+    end
+    else if FileExists(AlternatePath(KSutra30DefaultPath)) then
+    begin
+      Sutra30Location := AlternatePath(KSutra30DefaultPath);
+    end;
+  end;
+
   GmshLocation := IniFile.ReadString(StrProgramLocations, StrGmsh,
     StrDefaultGmshPath);
   if (GmshLocation = '') or not FileExists(GmshLocation) then
@@ -26860,6 +26884,11 @@ begin
   FSutra22Location := RemoveQuotes(Value);
 end;
 
+procedure TProgramLocations.SetSutra30Location(const Value: string);
+begin
+  FSutra30Location := RemoveQuotes(Value);
+end;
+
 procedure TProgramLocations.SetZoneBudgetLocation(const Value: string);
 begin
   FZoneBudgetLocation := RemoveQuotes(Value);
@@ -26890,6 +26919,7 @@ begin
   IniFile.WriteString(StrProgramLocations, StrMT3DMS, Mt3dmsLocation);
   IniFile.WriteString(StrProgramLocations, StrMt3dUsgs, Mt3dUsgsLocation);
   IniFile.WriteString(StrProgramLocations, KSutra22, Sutra22Location);
+  IniFile.WriteString(StrProgramLocations, KSutra30, Sutra30Location);
   IniFile.WriteString(StrProgramLocations, strModflowOWHM, ModflowOwhmLocation);
   IniFile.WriteString(StrProgramLocations, strModflowCFP, ModflowCfpLocation);
   IniFile.WriteString(StrProgramLocations, StrGmsh, GmshLocation);

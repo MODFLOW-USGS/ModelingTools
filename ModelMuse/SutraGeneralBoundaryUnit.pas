@@ -69,11 +69,11 @@ type
     procedure Assign(Source: TPersistent); override;
     destructor Destroy; override;
   published
-    property Used: Boolean read GetUsed write SetUsed
-    {$IFDEF SutraUsedFormulas}
-      Stored False
-    {$ENDIF}
-      ;
+    // @name is retained only for backwards compatibility.
+    // Use @link(UsedFormula) instead.
+    property Used: Boolean read GetUsed write SetUsed Stored False;
+    // @name is used to determine whether or not this item is used at a
+    // particular node.
     property UsedFormula: string read GetUsedFormula write SetUsedFormula;
     // CPQL11
     property LowerLimitType: TSutraLimitType read FLowerLimitType
@@ -161,7 +161,6 @@ type
   TSutraGeneralFlowBoundaryList = TList<TSutraGeneralFlowBoundary>;
 
 const
-{$IFDEF SutraUsedFormulas}
   UsedFormulaPosition = 0;
   LowerPressurePosition = 1;
   LowerFlowRatePosition = 2;
@@ -169,15 +168,6 @@ const
   HigherFlowRatePosition = 4;
   UInPosition = 5;
   UoutPosition = 6;
-{$ELSE}
-  UsedFormulaPosition = -1000;
-  LowerPressurePosition = 0;
-  LowerFlowRatePosition = 1;
-  HigherPressurePosition = 2;
-  HigherFlowRatePosition = 3;
-  UInPosition = 4;
-  UoutPosition = 5;
-{$ENDIF}
 
 implementation
 
@@ -193,12 +183,8 @@ begin
   if Source is TSutraGeneralFlowItem then
   begin
     SourceItem := TSutraGeneralFlowItem(Source);
-  {$IFDEF SutraUsedFormulas}
     UsedFormula := SourceItem.UsedFormula;
-  {$ELSE}
-    Used := SourceItem.Used;
-  {$ENDIF}
-    Used := SourceItem.Used;
+//    Used := SourceItem.Used;
     LowerLimitType := SourceItem.LowerLimitType;
     UpperLimitType := SourceItem.UpperLimitType;
     ExitSpecMethod := SourceItem.ExitSpecMethod;
@@ -226,10 +212,8 @@ var
 begin
   ParentCollection := Collection as TSutraGeneralFlowCollection;
 
-{$IFDEF SutraUsedFormulas}
   UsedFormulaObserver := FObserverList[UsedFormulaPosition];
   UsedFormulaObserver.OnUpToDateSet := ParentCollection.UsedFormulaChangeHandler;
-{$ENDIF}
 
   LowerPressureObserver := FObserverList[LowerPressurePosition];
   LowerPressureObserver.OnUpToDateSet := ParentCollection.LowerPressureChangeHandler;
@@ -252,11 +236,7 @@ end;
 
 function TSutraGeneralFlowItem.BoundaryFormulaCount: integer;
 begin
-{$IFDEF SutraUsedFormulas}
   result := 7;
-{$ELSE}
-  result := 6;
-{$ENDIF}
 end;
 
 function TSutraGeneralFlowItem.CreateFormulaObject(
@@ -273,9 +253,7 @@ end;
 procedure TSutraGeneralFlowItem.CreateFormulaObjects;
 begin
   inherited;
-{$IFDEF SutraUsedFormulas}
   FUsedFormulaObject := CreateFormulaObject(dso3D);
-{$ENDIF}
   FLowerPressureFormula := CreateFormulaObject(dso3D);
   FLowerFlowRateFormula := CreateFormulaObject(dso3D);
   FHigherPressureFormula := CreateFormulaObject(dso3D);
@@ -292,9 +270,7 @@ begin
   HigherFlowRateFormula := '0.';
   UInFormula := '0.';
   UoutFormula := '0.';
-{$IFDEF SutraUsedFormulas}
   UsedFormula := 'False';
-{$ENDIF}
   inherited;
 end;
 
@@ -364,12 +340,10 @@ begin
   begin
     List.Add(FObserverList[UoutPosition]);
   end
-{$IFDEF SutraUsedFormulas}
   else if Sender = FUsedFormulaObject then
   begin
     List.Add(FObserverList[UsedFormulaPosition]);
   end
-{$ENDIF}
   else
   begin
     Assert(False);
@@ -396,12 +370,8 @@ end;
 
 function TSutraGeneralFlowItem.GetUsedFormula: string;
 begin
-{$IFDEF SutraUsedFormulas}
   Result := FUsedFormulaObject.Formula;
   ResetItemObserver(UsedFormulaPosition);
-{$ELSE}
-  result := 'False';
-{$ENDIF}
 end;
 
 procedure TSutraGeneralFlowItem.InvalidateModel;
@@ -436,22 +406,15 @@ begin
       and (Item.LowerLimitType = LowerLimitType)
       and (Item.UpperLimitType = UpperLimitType)
       and (Item.ExitSpecMethod = ExitSpecMethod)
-  {$IFNDEF SutraUsedFormulas}
-      and (Item.Used = Used);
-  {$ELSE}
       and (Item.UsedFormula = UsedFormula);
-  {$ENDIF}
-
   end;
 end;
 
 procedure TSutraGeneralFlowItem.RemoveFormulaObjects;
 begin
-{$IFDEF SutraUsedFormulas}
   frmGoPhast.PhastModel.FormulaManager.Remove(FUsedFormulaObject,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
-{$ENDIF}
   frmGoPhast.PhastModel.FormulaManager.Remove(FLowerPressureFormula,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
@@ -492,9 +455,7 @@ end;
 
 procedure TSutraGeneralFlowItem.SetUsedFormula(const Value: string);
 begin
-{$IFDEF SutraUsedFormulas}
   UpdateFormula(Value, UsedFormulaPosition, FUsedFormulaObject);
-{$ENDIF}
 end;
 
 procedure TSutraGeneralFlowItem.SetBoundaryFormula(Index: integer;
@@ -752,7 +713,6 @@ var
   Index: Integer;
   AnItem: TSutraGeneralFlowItem;
 begin
-  {$IFDEF SutraUsedFormulas}
   SutraBoundaryCollection := Values as TSutraGeneralFlowCollection;
   for Index := 0 to SutraBoundaryCollection.Count - 1 do
   begin
@@ -762,7 +722,6 @@ begin
       AnItem.UsedFormula := 'False';
     end;
   end;
-  {$ENDIF}
 end;
 
 { TSutraGeneralFlowTimeLink }

@@ -113,7 +113,7 @@ type
     tabModflowBoundaryConditions: TTabSheet;
     jvtlModflowBoundaryNavigator: TJvPageListTreeView;
     jvplModflowBoundaries: TJvPageList;
-    JvNetscapeSplitter1: TJvNetscapeSplitter;
+    splttrModflowFeature: TJvNetscapeSplitter;
     jvspCHD: TJvStandardPage;
     frameChdParam: TframeScreenObjectParam;
     // @name stores the checkbox images for @link(jvtlModflowBoundaryNavigator).
@@ -2077,12 +2077,10 @@ type
     procedure RipChanged(Sender: TObject);
     procedure CreateSutraLakeNode;
     procedure UpdateWellNodeState;
-{$IFDEF SUTRA30}
     procedure CreateSutraGeneralizedFlowNode;
     function ShouldCreateSutraLakeBoundary : Boolean;
     function ShouldCreateSutraGeneralBoundary: Boolean;
     procedure CreateSutraGeneralizedTransportNode;
-{$ENDIF}
     procedure GetVertexLabels(ScreenObjects: TList);
     procedure RemoveLayerDataArraysFrom3DObject(AScreenObject: TScreenObject;
       DataSetList: TList<TDataArray>);
@@ -5862,13 +5860,10 @@ begin
   CreateSutraFluidFluxNode;
   CreateSutraMassEnergyFluxNode;
   CreateSutraLakeNode;
-{$IFDEF SUTRA30}
   CreateSutraGeneralizedFlowNode;
   CreateSutraGeneralizedTransportNode;
-{$ENDIF}
 end;
 
-{$IFDEF SUTRA30}
 function TfrmScreenObjectProperties.ShouldCreateSutraLakeBoundary: Boolean;
 var
   LocalModel: TPhastModel;
@@ -5908,7 +5903,6 @@ begin
     and (LocalModel.SutraMesh <> nil)
     and (rgEvaluatedAt.ItemIndex = Ord(eaNodes))
 end;
-{$ENDIF}
 
 function TfrmScreenObjectProperties.ShouldCreateSutraBoundary: Boolean;
 var
@@ -12564,13 +12558,10 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.CreateSutraLakeNode;
-{$IFDEF SUTRA30}
 var
   Node: TJvPageIndexNode;
-{$ENDIF}
 begin
   FSutraLake_Node := nil;
-{$IFDEF SUTRA30}
   if ShouldCreateSutraLakeBoundary then
   begin
     Node := jvpltvSutraFeatures.Items.AddChild(nil,
@@ -12581,7 +12572,6 @@ begin
     FSutraLake_Node := Node;
     frameSutraLake.RefreshNodeState;
   end;
-{$ENDIF}
 end;
 
 
@@ -12695,7 +12685,6 @@ begin
   end;
 end;
 
-{$IFDEF SUTRA30}
 procedure TfrmScreenObjectProperties.CreateSutraGeneralizedFlowNode;
 var
   Node: TJvPageIndexNode;
@@ -12713,9 +12702,7 @@ begin
     frameSutraGeneralizedFlowBoundary.RefreshNodeState;
   end;
 end;
-{$ENDIF}
 
-{$IFDEF SUTRA30}
 procedure TfrmScreenObjectProperties.CreateSutraGeneralizedTransportNode;
 var
   Node: TJvPageIndexNode;
@@ -12733,7 +12720,6 @@ begin
     frameSutraGeneralizeTransBoundary.RefreshNodeState;
   end;
 end;
-{$ENDIF}
 
 procedure TfrmScreenObjectProperties.CreateMawNode(AScreenObject: TScreenObject);
 var
@@ -17945,7 +17931,6 @@ begin
   else if (DataGrid = frameSutraGeneralizedFlowBoundary.rdgSutraFeature)
     or (DataGrid = frameSutraGeneralizeTransBoundary.rdgSutraFeature) then
   begin
-  {$IFDEF SutraUsedFormulas}
     if ACol = 1 then
     begin
       ResultType := rdtBoolean;
@@ -17954,9 +17939,6 @@ begin
     begin
       ResultType := rdtDouble;
     end;
-  {$ELSE}
-    ResultType := rdtDouble;
-  {$ENDIF}
   end
   else if
 //    (DataGrid = frameScreenObjectFarm.frameFormulaGridCrops.Grid)

@@ -296,20 +296,8 @@ begin
           AssocItem := ABoundary.Values[DisplayTimeIndex]
             as TCustomSutraAssociatedBoundaryItem;
           BoundaryValues[0].Time := AssocItem.StartTime;
-        {$IFNDEF SutraUsedFormulas}
-          BoundaryValues[0].Used := AssocItem.Used;
-          if AssocItem.Used then
-          begin
-            BoundaryValues[0].Formula := AssocItem.PQFormula;
-          end
-          else
-          begin
-            BoundaryValues[0].Formula := ''
-          end;
-        {$ELSE}
           BoundaryValues[0].UsedFormula := AssocItem.UsedFormula;
           BoundaryValues[0].Formula := AssocItem.PQFormula;
-        {$ENDIF}
         end
         else
         begin
@@ -318,20 +306,8 @@ begin
             AssocItem := ABoundary.Values[TimeIndex]
               as TCustomSutraAssociatedBoundaryItem;
             BoundaryValues[TimeIndex].Time := FixTime(AssocItem, AllTimes);
-          {$IFNDEF SutraUsedFormulas}
-            BoundaryValues[TimeIndex].Used := AssocItem.Used;
-            if AssocItem.Used then
-            begin
-              BoundaryValues[TimeIndex].Formula := AssocItem.PQFormula;
-            end
-            else
-            begin
-              BoundaryValues[TimeIndex].Formula := ''
-            end;
-          {$ELSE}
             BoundaryValues[TimeIndex].UsedFormula := AssocItem.UsedFormula;
             BoundaryValues[TimeIndex].Formula := AssocItem.PQFormula;
-          {$ENDIF}
           end;
         end;
         TimeList.Initialize(BoundaryValues);
@@ -343,20 +319,8 @@ begin
       begin
         Item := ABoundary.Values[DisplayTimeIndex] as TCustomSutraBoundaryItem;
         BoundaryValues[0].Time := Item.StartTime;
-        {$IFNDEF SutraUsedFormulas}
-        BoundaryValues[0].Used := Item.Used;
-        if Item.Used then
-        begin
-          BoundaryValues[0].Formula := Item.UFormula;
-        end
-        else
-        begin
-          BoundaryValues[0].Formula := ''
-        end;
-        {$ELSE}
-          BoundaryValues[0].UsedFormula := Item.UsedFormula;
-          BoundaryValues[0].Formula := Item.UFormula;
-        {$ENDIF}
+        BoundaryValues[0].UsedFormula := Item.UsedFormula;
+        BoundaryValues[0].Formula := Item.UFormula;
       end
       else
       begin
@@ -364,20 +328,8 @@ begin
         begin
           Item := ABoundary.Values[TimeIndex] as TCustomSutraBoundaryItem;
           BoundaryValues[TimeIndex].Time := FixTime(Item, AllTimes);
-        {$IFNDEF SutraUsedFormulas}
-          BoundaryValues[TimeIndex].Used := Item.Used;
-          if Item.Used then
-          begin
-            BoundaryValues[TimeIndex].Formula := Item.UFormula;
-          end
-          else
-          begin
-            BoundaryValues[TimeIndex].Formula := ''
-          end;
-        {$ELSE}
           BoundaryValues[TimeIndex].UsedFormula := Item.UsedFormula;
           BoundaryValues[TimeIndex].Formula := Item.UFormula;
-        {$ENDIF}
         end;
       end;
       TimeList.Initialize(BoundaryValues);
@@ -492,17 +444,6 @@ begin
               begin
                 Assert(APQTimeList.Times[DataSetIndex] = AUTimeList.Times
                   [DataSetIndex]);
-  {$IFNDEF SutraUsedFormulas}
-                Assert(APQTimeList.Used[DataSetIndex] = AUTimeList.Used
-                  [DataSetIndex]);
-                if not APQTimeList.Used[DataSetIndex] then
-                begin
-                  Continue;
-                end;
-  {$ELSE}
-//                Assert(APQTimeList.UsedFormula[DataSetIndex] = AUTimeList.UsedFormula
-//                  [DataSetIndex]);
-  {$ENDIF}
                 PQDataSet := APQTimeList[DataSetIndex]
                   as TTransientRealSparseDataSet;
                 UDataSet := AUTimeList[DataSetIndex]
@@ -700,12 +641,6 @@ begin
             AUTimeList := FUTimeLists[TimeListIndex];
             for DataSetIndex := 0 to AUTimeList.Count - 1 do
             begin
-  {$IFNDEF SutraUsedFormulas}
-              if not AUTimeList.Used[DataSetIndex] then
-              begin
-                Continue;
-              end;
-  {$ENDIF}
               UDataSet := AUTimeList[DataSetIndex]
                 as TTransientRealSparseDataSet;
               Assert(UDataSet <> nil);
@@ -773,17 +708,6 @@ begin
             begin
               Assert(APQTimeList.Times[DataSetIndex] = AUTimeList.Times
                 [DataSetIndex]);
-  {$IFNDEF SutraUsedFormulas}
-              Assert(APQTimeList.Used[DataSetIndex] = AUTimeList.Used
-                [DataSetIndex]);
-              if not APQTimeList.Used[DataSetIndex] then
-              begin
-                Continue;
-              end;
-  {$ELSE}
-//              Assert(APQTimeList.UsedFormula[DataSetIndex] = AUTimeList.UsedFormula
-//                [DataSetIndex]);
-  {$ENDIF}
               PQDataSet := APQTimeList[DataSetIndex]
                 as TTransientRealSparseDataSet;
               UDataSet := AUTimeList[DataSetIndex]
@@ -842,12 +766,6 @@ begin
             AUTimeList := FUTimeLists[TimeListIndex];
             for DataSetIndex := 0 to AUTimeList.Count - 1 do
             begin
-  {$IFNDEF SutraUsedFormulas}
-              if not AUTimeList.Used[DataSetIndex] then
-              begin
-                Continue;
-              end;
-  {$ENDIF}
               UDataSet := AUTimeList[DataSetIndex]
                 as TTransientRealSparseDataSet;
               Assert(UDataSet <> nil);

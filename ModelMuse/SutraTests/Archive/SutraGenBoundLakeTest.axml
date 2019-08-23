@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="SutraGenBoundLakeTest" FileType="bin">
-    <FileName Model_Name="SutraGenBoundLakeTest" FileType="bin">..\..\..\..\..\SutraSuite\SUTRA_3_0_Beta\bin\sutra_3_0.exe</FileName>
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="bin">..\..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
   </bin>
   <ancillary Model_Name="SutraGenBoundLakeTest" FileType="ancillary">
-    <FileName Model_Name="SutraGenBoundLakeTest" FileType="ancillary">..\SutraGenBoundLakeTest.gpt</FileName>
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="ancillary">SutraGenBoundLakeTest.gpt</FileName>
   </ancillary>
   <model Model_Name="SutraGenBoundLakeTest" FileType="Model Input">
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">RunSutra.bat.archive</FileName>

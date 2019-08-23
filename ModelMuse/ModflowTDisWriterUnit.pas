@@ -34,7 +34,7 @@ end;
 
 procedure TTemporalDiscretizationWriter.WriteDataSet0;
 begin
-  WriteString(File_Comment('TDIS'));
+  WriteCommentLine(File_Comment('TDIS'));
   NewLine;
 end;
 

@@ -302,7 +302,6 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitTop = 2
       ExplicitWidth = 456
       ExplicitHeight = 91
     end
@@ -362,16 +361,6 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       OnChange = rdeFormulaChange
       Max = 1.000000000000000000
       ChangeDisabledColor = True
-    end
-    object cbUsed: TCheckBox
-      Left = 63
-      Top = 27
-      Width = 67
-      Height = 17
-      Caption = 'Used'
-      Enabled = False
-      TabOrder = 3
-      OnClick = cbUsedClick
     end
     object comboLimit: TJvImageComboBox
       Left = 264

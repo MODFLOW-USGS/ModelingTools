@@ -32,7 +32,6 @@ inherited frameSutraBoundary: TframeSutraBoundary
       Height = 61
       TabOrder = 1
       OnMouseUp = rdgSutraFeatureMouseUp
-      OnSelectCell = rdgSutraFeatureSelectCell
       OnSetEditText = rdgSutraFeatureSetEditText
       OnBeforeDrawCell = rdgSutraFeatureBeforeDrawCell
       OnColSize = rdgSutraFeatureColSize
@@ -162,16 +161,6 @@ inherited frameSutraBoundary: TframeSutraBoundary
         OnChange = rdeFormulaChange
         Max = 1.000000000000000000
         ChangeDisabledColor = True
-      end
-      object cbUsed: TCheckBox
-        Left = 63
-        Top = 27
-        Width = 67
-        Height = 17
-        Caption = 'Used'
-        Enabled = False
-        TabOrder = 1
-        OnClick = cbUsedClick
       end
     end
   end

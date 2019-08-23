@@ -236,20 +236,8 @@ var
       AnItem := ABoundary.Values[DisplayTimeIndex]
         as TSutraGeneralFlowItem;
       BoundaryValues[0].Time := AnItem.StartTime;
-      {$IFNDEF SutraUsedFormulas}
-      BoundaryValues[0].Used := AnItem.Used;
-      if AnItem.Used then
-      begin
-        BoundaryValues[0].Formula := AnItem.BoundaryFormula[FormulaIndex];
-      end
-      else
-      begin
-        BoundaryValues[0].Formula := ''
-      end;
-      {$ELSE}
-        BoundaryValues[0].Formula := AnItem.BoundaryFormula[FormulaIndex];
-        BoundaryValues[0].UsedFormula := AnItem.UsedFormula;
-      {$ENDIF}
+      BoundaryValues[0].Formula := AnItem.BoundaryFormula[FormulaIndex];
+      BoundaryValues[0].UsedFormula := AnItem.UsedFormula;
     end
     else
     begin
@@ -258,20 +246,8 @@ var
         AnItem := ABoundary.Values[TimeIndex]
           as TSutraGeneralFlowItem;
         BoundaryValues[TimeIndex].Time := FixTime(AnItem, AllTimes);
-        {$IFNDEF SutraUsedFormulas}
-        BoundaryValues[TimeIndex].Used := AnItem.Used;
-        if AnItem.Used then
-        begin
-          BoundaryValues[TimeIndex].Formula := AnItem.BoundaryFormula[FormulaIndex];
-        end
-        else
-        begin
-          BoundaryValues[TimeIndex].Formula := ''
-        end;
-        {$ELSE}
         BoundaryValues[TimeIndex].Formula := AnItem.BoundaryFormula[FormulaIndex];
         BoundaryValues[TimeIndex].UsedFormula := AnItem.UsedFormula;
-        {$ENDIF}
       end;
     end;
     TimeList.Initialize(BoundaryValues);

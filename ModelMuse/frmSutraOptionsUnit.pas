@@ -308,7 +308,7 @@ procedure TfrmSutraOptions.EnableLakeNode;
 begin
   if FLakeNode <> nil then
   begin
-    // Lakes are only allowed in 3D meshes in SUTRA 3.0.
+    // Lakes are only allowed in 3D meshes in SUTRA 3.0 or above.
     FLakeNode.Enabled := (rgMeshType.ItemIndex = 2)
       and (frmGoPhast.ModelSelection <> msSutra22);
 
@@ -377,7 +377,7 @@ begin
   Node := jvpltvNavigation.Items.Add(nil, StrProduction) as TJvPageIndexNode;
   Node.PageIndex := jvspProdGrav.PageIndex;
 
-{$IFDEF SUTRA30}
+  // Lakes are available in SUTRA 3.0 and above.
   if frmGoPhast.ModelSelection <> msSutra22 then
   begin
     FLakeNode := jvpltvNavigation.Items.Add(nil, StrLakes) as TJvPageIndexNode;
@@ -387,7 +387,6 @@ begin
       StrDefaultLakeBoundar) as TJvPageIndexNode;
     FLakeInteractionsNode.PageIndex := jvspDefaultLakeInteractions.PageIndex;
   end;
-{$ENDIF}
 
   jplMain.ActivePageIndex := 0;
 
@@ -439,6 +438,7 @@ begin
     end;
     fedRestartInitialConditionsChange(nil);
 
+    // rdePressureFactor and rdeUFactor are not used in SUTRA 3.0 and above.
     rdePressureFactor.Enabled := frmGoPhast.ModelSelection = msSutra22;
     rdeUFactor.Enabled := frmGoPhast.ModelSelection = msSutra22;
 

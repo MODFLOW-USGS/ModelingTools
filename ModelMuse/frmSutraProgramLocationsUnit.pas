@@ -19,10 +19,14 @@ type
     btnCancel: TBitBtn;
     lblTextEditor: TLabel;
     fedTextEditor: TJvFilenameEdit;
+    htlblSutra3: TJvHTLabel;
+    fedSutra30: TJvFilenameEdit;
+    lblSutra3: TLabel;
     procedure btnOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
     procedure fedSutra22Change(Sender: TObject);
     procedure fedTextEditorChange(Sender: TObject);
+    procedure fedSutra30Change(Sender: TObject);
   private
     procedure SetData;
     procedure GetData;
@@ -86,6 +90,17 @@ begin
     end;
   end;
   fedSutra22Change(nil);
+
+  try
+    fedSutra30.FileName := frmGoPhast.PhastModel.ProgramLocations.Sutra30Location;
+  except on EComboEditError do
+    begin
+      // do nothing.
+    end;
+  end;
+  fedSutra30Change(nil);
+
+
   try
     fedTextEditor.FileName := frmGoPhast.PhastModel.ProgramLocations.TextEditorLocation;
   except on EComboEditError do
@@ -94,6 +109,20 @@ begin
     end;
   end;
   fedTextEditorChange(nil);
+end;
+
+procedure TfrmSutraProgramLocations.fedSutra30Change(Sender: TObject);
+begin
+  inherited;
+  if not FileExists(fedSutra30.FileName) then
+  begin
+    fedSutra30.Color := clRed;
+  end
+  else
+  begin
+    fedSutra30.Color := clWindow;
+  end;
+
 end;
 
 procedure TfrmSutraProgramLocations.SetData;
@@ -105,6 +134,7 @@ begin
   NewLocations := TProgramLocations.Create;
   NewLocations.Assign(frmGoPhast.PhastModel.ProgramLocations);
   NewLocations.Sutra22Location := fedSutra22.FileName;
+  NewLocations.Sutra30Location := fedSutra30.FileName;
   NewLocations.TextEditorLocation := fedTextEditor.FileName;
   Undo := TUndoChangeProgramLocations.Create(NewLocations);
   frmGoPhast.UndoStack.Submit(Undo);

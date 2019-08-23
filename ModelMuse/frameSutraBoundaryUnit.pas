@@ -16,7 +16,6 @@ type
     pnlEditGrid: TPanel;
     lblFormula: TLabel;
     rdeFormula: TRbwDataEntry;
-    cbUsed: TCheckBox;
     procedure edNameChange(Sender: TObject);
     procedure seNumberOfTimesChange(Sender: TObject);
     procedure comboScheduleChange(Sender: TObject);
@@ -34,9 +33,6 @@ type
     procedure rdgSutraFeatureEndUpdate(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
-    procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
-    procedure cbUsedClick(Sender: TObject);
   private
     FInitialTime: Double;
     FBoundaryType: TSutraBoundaryType;
@@ -103,13 +99,10 @@ var
   SutraBoundaries: TSutraBoundaries;
   ABoundary: TSutraBoundary;
 begin
-  {$IFDEF SutraUsedFormulas}
   rdgSutraFeature.Columns[Ord(sbgtUsed)].Format := rcf4String;
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonWidth := 35;
-  cbUsed.visible := False;
-  {$ENDIF}
 
 
   rdgSutraFeature.BeginUpdate;
@@ -369,31 +362,17 @@ begin
       if TryStrToFloat(rdgSutraFeature.Cells[Ord(sbgtTime), RowIndex], ATime) then
       begin
         OK := False;
-    {$IFNDEF SutraUsedFormulas}
-        if not rdgSutraFeature.Checked[Ord(sbgtUsed), RowIndex] then
-        begin
-          OK := True;
-        end
-        else
-        begin
-    {$ENDIF}
-    {$IFDEF SutraUsedFormulas}
-      StartIndex := Ord(sbgtUsed);
-    {$ELSE}
-      StartIndex := Ord(sbgtVariable1);
-    {$ENDIF}
+        StartIndex := Ord(sbgtUsed);
 
-          for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
+        for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
+        begin
+          OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
+          if not OK then
           begin
-            OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
-            if not OK then
-            begin
-              Break;
-            end;
+            Break;
           end;
-    {$IFNDEF SutraUsedFormulas}
         end;
-    {$ENDIF}
+
         if OK then
         begin
           if ItemIndex < BoundValues.Count then
@@ -426,25 +405,17 @@ begin
             frmErrorsAndWarnings.Show;
           end;
           BoundItem.StartTime := ATime;
-    {$IFDEF SutraUsedFormulas}
           BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(sbgtUsed), RowIndex];
-    {$ELSE}
-          BoundItem.Used := rdgSutraFeature.Checked[Ord(sbgtUsed), RowIndex];
-    {$ENDIF}
-    {$IFNDEF SutraUsedFormulas}
-          if BoundItem.Used then
-    {$ENDIF}
+
+          if BoundItem is TCustomSutraAssociatedBoundaryItem then
           begin
-            if BoundItem is TCustomSutraAssociatedBoundaryItem then
-            begin
-              AssocItem := TCustomSutraAssociatedBoundaryItem(BoundItem);
-              AssocItem.PQFormula := rdgSutraFeature.Cells[2, RowIndex];
-              AssocItem.UFormula := rdgSutraFeature.Cells[3, RowIndex];
-            end
-            else
-            begin
-              BoundItem.UFormula := rdgSutraFeature.Cells[2, RowIndex];
-            end;
+            AssocItem := TCustomSutraAssociatedBoundaryItem(BoundItem);
+            AssocItem.PQFormula := rdgSutraFeature.Cells[2, RowIndex];
+            AssocItem.UFormula := rdgSutraFeature.Cells[3, RowIndex];
+          end
+          else
+          begin
+            BoundItem.UFormula := rdgSutraFeature.Cells[2, RowIndex];
           end;
           Inc(ItemIndex);
         end;
@@ -511,24 +482,6 @@ begin
 //
 end;
 
-procedure TframeSutraBoundary.cbUsedClick(Sender: TObject);
-begin
-  inherited;
-  ChangeSelectedCellsStateInColumn(rdgSutraFeature, 1, cbUsed.State);
-end;
-
-//procedure TframeSutraBoundary.ClearBoundaries;
-//var
-//  ColIndex: Integer;
-//begin
-//  seNumberOfTimes.AsInteger := 0;
-//  rdgSutraFeature.RowCount := 2;
-//  for ColIndex := 0 to rdgSutraFeature.ColCount - 1 do
-//  begin
-//    rdgSutraFeature.Cells[ColIndex,1] := '';
-//  end;
-//  rdgSutraFeature.Checked[UsedColumn,1] := False;
-//end;
 
 procedure TframeSutraBoundary.comboScheduleChange(Sender: TObject);
 var
@@ -748,43 +701,16 @@ begin
     begin
       Item := BoundColl[ItemIndex] as TCustomSutraBoundaryItem;
       rdgSutraFeature.Cells[0,ItemIndex+1] := FloatToStr(Item.StartTime);
-    {$IFDEF SutraUsedFormulas}
       rdgSutraFeature.Cells[1,ItemIndex+1] := Item.UsedFormula;
-    {$ELSE}
-      rdgSutraFeature.Checked[1,ItemIndex+1] := Item.Used;
-    {$ENDIF}
       if Item is TCustomSutraAssociatedBoundaryItem then
       begin
-    {$IFNDEF SutraUsedFormulas}
-        if Item.Used then
-    {$ENDIF}
-        begin
-          AssocItem := TCustomSutraAssociatedBoundaryItem(Item);
-          rdgSutraFeature.Cells[2,ItemIndex+1] := AssocItem.PQFormula;
-          rdgSutraFeature.Cells[3,ItemIndex+1] := AssocItem.UFormula;
-    {$IFNDEF SutraUsedFormulas}
-        end
-        else
-        begin
-          rdgSutraFeature.Cells[2,ItemIndex+1] := '';
-          rdgSutraFeature.Cells[3,ItemIndex+1] := '';
-    {$ENDIF}
-        end;
+        AssocItem := TCustomSutraAssociatedBoundaryItem(Item);
+        rdgSutraFeature.Cells[2,ItemIndex+1] := AssocItem.PQFormula;
+        rdgSutraFeature.Cells[3,ItemIndex+1] := AssocItem.UFormula;
       end
       else
       begin
-    {$IFNDEF SutraUsedFormulas}
-        if Item.Used then
-    {$ENDIF}
-        begin
-          rdgSutraFeature.Cells[2,ItemIndex+1] := Item.UFormula;
-    {$IFNDEF SutraUsedFormulas}
-        end
-        else
-        begin
-          rdgSutraFeature.Cells[2,ItemIndex+1] := '';
-    {$ENDIF}
-        end;
+        rdgSutraFeature.Cells[2,ItemIndex+1] := Item.UFormula;
       end;
     end;
   finally
@@ -906,11 +832,7 @@ begin
   begin
     Exit
   end;
-  {$IFDEF SutraUsedFormulas}
   Col := 1;
-  {$ELSE}
-  Col := 2;
-  {$ENDIF}
   for Index := Col to rdgSutraFeature.ColCount - 1 do
   begin
     if rdgSutraFeature.ColVisible[Index] then
@@ -920,26 +842,13 @@ begin
     end;
   end;
   LayoutControls(rdgSutraFeature, rdeFormula, lblFormula, Col);
-  {$IFNDEF SutraUsedFormulas}
-  if rdgSutraFeature.ColVisible[1] then
-  begin
-    cbUsed.Visible := True;
-    LayoutControls(rdgSutraFeature, cbUsed, nil, 1);
-  end
-  else
-  begin
-    cbUsed.Visible := False;
-  end;
-  {$ENDIF}
 
 end;
 
 procedure TframeSutraBoundary.rdeFormulaChange(Sender: TObject);
 begin
   inherited;
-  {$IFDEF SutraUsedFormulas}
   ChangeSelectedCellsInColumn(rdgSutraFeature, 1, rdeFormula.Text);
-  {$ENDIF}
   ChangeSelectedCellsInColumn(rdgSutraFeature, 2, rdeFormula.Text);
   if rdgSutraFeature.ColCount >= 4 then
   begin
@@ -1011,24 +920,6 @@ begin
   begin
     EnableMultiEditControl(rdgSutraFeature, rdeFormula, [2,3]);
   end;
-{$IFNDEF SutraUsedFormulas}
-  EnableMultiEditControl(rdgSutraFeature, cbUsed, 1);
-{$ENDIF}
-
-end;
-
-procedure TframeSutraBoundary.rdgSutraFeatureSelectCell(Sender: TObject; ACol,
-  ARow: Integer; var CanSelect: Boolean);
-begin
-  inherited;
-  {$IFNDEF SutraUsedFormulas}
-  if (ARow >= rdgSutraFeature.FixedRows) and (ACol >= Ord(sbgtVariable1))
-    and (ARow < rdgSutraFeature.RowCount)
-    and (rdgSutraFeature.CheckState[Ord(sbgtUsed), ARow] = cbUnchecked) then
-  begin
-    CanSelect := False;
-  end;
-  {$ENDIF}
 end;
 
 procedure TframeSutraBoundary.rdgSutraFeatureSetEditText(Sender: TObject; ACol,

@@ -30,6 +30,7 @@ type
   private
     FLakeNodes: TLakeNodes;
     FLakeOptions: TSutraLakeOptions;
+    FHasLakes: Boolean;
     procedure Evaluate;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -48,6 +49,7 @@ type
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
+    property HasLakes: Boolean read FHasLakes;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -55,11 +57,15 @@ implementation
 
 uses
   ScreenObjectUnit, SutraBoundariesUnit, GoPhastTypes, DataSetUnit, RbwParser,
-  frmFormulaErrorsUnit, SutraMeshUnit, SutraFileWriterUnit, SutraBoundaryUnit;
+  frmFormulaErrorsUnit, SutraMeshUnit, SutraFileWriterUnit, SutraBoundaryUnit,
+  frmErrorsAndWarningsUnit, MeshRenumberingTypes;
 
 resourcestring
   StrInitialLakeStage = 'Initial Lake Stage';
   StrInitialLakeConcent = 'Initial Lake Concentration or Temperature';
+  StrInvalidLakeNode = 'Invalid Lake Node';
+  StrTheLakeAtNode0 = 'The lake at node %0:d is invalid because it is at the' +
+  ' edge of the mesh. The node is  defined by %1:s.';
 
 { TSutraLakeWriter }
 
@@ -94,7 +100,9 @@ var
   LakeNodes: array of TLakeNode;
   LakeNodeRecord: TLakeNodeRecord;
   ALakeNode: TLakeNode;
+  Node3D: TSutraNode3D;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidLakeNode);
   SetLength(LakeNodes, Model.SutraMesh.Nodes.Count);
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
@@ -146,85 +154,53 @@ begin
 
         try
           ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, InitalStageDataSet,
-            InitialStageFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-            );
+            InitialStageFormula, Model, 'True');
         except on E: ErbwParserError do
           begin
             frmFormulaErrors.AddFormulaError(ScreenObject.Name, StrInitialLakeStage,
               InitialStageFormula, E.Message);
             InitialStageFormula := '0';
             ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, InitalStageDataSet,
-              InitialStageFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-              );
+              InitialStageFormula, Model, 'True');
           end;
         end;
 
         try
           ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, InitialU,
-            InitialUFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-            );
+            InitialUFormula, Model, 'True');
         except on E: ErbwParserError do
           begin
             frmFormulaErrors.AddFormulaError(ScreenObject.Name, StrInitialLakeConcent,
               InitialUFormula, E.Message);
             InitialUFormula := '0';
             ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, InitialU,
-              InitialUFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-              );
+              InitialUFormula, Model, 'True');
           end;
         end;
 
         try
           ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, FractionRechargeDiverted,
-            FractionRechargeDivertedFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-            );
+            FractionRechargeDivertedFormula, Model, 'True');
         except on E: ErbwParserError do
           begin
             frmFormulaErrors.AddFormulaError(ScreenObject.Name, StrInitialLakeConcent,
               FractionRechargeDivertedFormula, E.Message);
             FractionRechargeDivertedFormula := '0';
             ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, FractionRechargeDiverted,
-              FractionRechargeDivertedFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-              );
+              FractionRechargeDivertedFormula, Model, 'True');
           end;
         end;
 
         try
           ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, FractionDischargeDiverted,
-            FractionDischargeDivertedFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-            );
+            FractionDischargeDivertedFormula, Model, 'True');
         except on E: ErbwParserError do
           begin
             frmFormulaErrors.AddFormulaError(ScreenObject.Name, StrInitialLakeConcent,
               FractionDischargeDivertedFormula, E.Message);
             FractionDischargeDivertedFormula := '0';
             ScreenObject.AssignValuesToSutraDataSet(Model.SutraMesh, FractionDischargeDiverted,
-              FractionDischargeDivertedFormula, Model
-  {$IFDEF SutraUsedFormulas}
-            , 'True'
-  {$ENDIF}
-              );
+              FractionDischargeDivertedFormula, Model, 'True');
           end;
         end;
 
@@ -238,7 +214,8 @@ begin
             Assert(FractionRechargeDiverted.IsValue[0,0,ColIndex]);
             Assert(FractionDischargeDiverted.IsValue[0,0,ColIndex]);
 
-            NodeNumber := Model.SutraMesh.NodeArray[0,ColIndex].Number;
+            Node3D :=Model.SutraMesh.NodeArray[0,ColIndex];
+            NodeNumber := Node3D.Number;
 
             LakeNodeRecord.InitialStage := InitalStageDataSet.RealData[0,0,ColIndex];
             LakeNodeRecord.InitialU := InitialU.RealData[0,0,ColIndex];
@@ -257,6 +234,13 @@ begin
               ALakeNode.FCol := ColIndex;
               FLakeNodes.Add(ALakeNode);
               LakeNodes[NodeNumber] := ALakeNode;
+
+              if Node3D.Node2D.NodeType = ntEdge then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrInvalidLakeNode,
+                  Format(StrTheLakeAtNode0, [NodeNumber, ScreenObject.Name]),
+                  ScreenObject);
+              end;
             end
             else
             begin
@@ -357,6 +341,7 @@ var
   LakeNodeFile: string;
   LakeHierarchyFile: string;
 begin
+  FHasLakes := False;
   if Model.ModelSelection = msSutra22 then
   begin
     Exit;
@@ -371,6 +356,7 @@ begin
   begin
     Exit;
   end;
+  FHasLakes := True;
 
   FLakeOptions := Model.SutraOptions.LakeOptions;
 

@@ -16,7 +16,6 @@ type
     pnlEditGrid: TPanel;
     lblFormula: TLabel;
     rdeFormula: TRbwDataEntry;
-    cbUsed: TCheckBox;
     procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgSutraFeatureBeforeDrawCell(Sender: TObject; ACol,
@@ -27,7 +26,6 @@ type
     procedure rdgSutraFeatureColSize(Sender: TObject; ACol,
       PriorWidth: Integer);
     procedure rdgSutraFeatureHorizontalScroll(Sender: TObject);
-    procedure cbUsedClick(Sender: TObject);
     procedure rdgSutraFeatureMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure rdeFormulaChange(Sender: TObject);
@@ -76,11 +74,6 @@ begin
 //
 end;
 
-procedure TframeSutraGeneralizeTransBoundary.cbUsedClick(Sender: TObject);
-begin
-  inherited;
-  ChangeSelectedCellsStateInColumn(rdgSutraFeature, Ord(gtcUsed), cbUsed.State);
-end;
 
 procedure TframeSutraGeneralizeTransBoundary.DisplayBoundaries(
   BoundColl: TSutraGeneralTransportCollection);
@@ -97,29 +90,11 @@ begin
     begin
       Item := BoundColl[ItemIndex] as TSutraGenTransportItem;
       rdgSutraFeature.Cells[Ord(gtcTime),ItemIndex+1] := FloatToStr(Item.StartTime);
-    {$IFNDEF SutraUsedFormulas}
-      rdgSutraFeature.Checked[Ord(gtcUsed),ItemIndex+1] := Item.Used;
-      if Item.Used then
-      begin
-        rdgSutraFeature.Cells[Ord(gtcU1),ItemIndex+1] := Item.LowerUFormula;
-        rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1] := Item.LowerFlowUFormula;
-        rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1] := Item.HigherUFormula;
-        rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1] := Item.HigherFlowUFormula;
-      end
-      else
-      begin
-        rdgSutraFeature.Cells[Ord(gtcU1),ItemIndex+1] := '';
-        rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1] := '';
-        rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1] := '';
-        rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1] := '';
-      end;
-    {$ELSE}
-        rdgSutraFeature.Cells[Ord(gtcUsed),ItemIndex+1] := Item.UsedFormula;
-        rdgSutraFeature.Cells[Ord(gtcU1),ItemIndex+1] := Item.LowerUFormula;
-        rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1] := Item.LowerFlowUFormula;
-        rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1] := Item.HigherUFormula;
-        rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1] := Item.HigherFlowUFormula;
-    {$ENDIF}
+      rdgSutraFeature.Cells[Ord(gtcUsed),ItemIndex+1] := Item.UsedFormula;
+      rdgSutraFeature.Cells[Ord(gtcU1),ItemIndex+1] := Item.LowerUFormula;
+      rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1] := Item.LowerFlowUFormula;
+      rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1] := Item.HigherUFormula;
+      rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1] := Item.HigherFlowUFormula;
     end;
   finally
     rdgSutraFeature.EndUpdate;
@@ -176,13 +151,10 @@ var
   SutraBoundaries: TSutraBoundaries;
   ABoundary: TSutraGeneralTransportBoundary;
 begin
-  {$IFDEF SutraUsedFormulas}
   rdgSutraFeature.Columns[Ord(gtcUsed)].Format := rcf4String;
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonWidth := 35;
-  cbUsed.visible := False;
-  {$ENDIF}
 
   rdgSutraFeature.BeginUpdate;
   try
@@ -277,13 +249,6 @@ begin
     AColumn.AutoAdjustColWidths := True;
     AColumn.AutoAdjustRowHeights := True;
     AColumn.WordWrapCaptions := True;
-  {$IFNDEF SutraUsedFormulas}
-    if ColFormat = gtcUsed then
-    begin
-      AColumn.Format := rcf4Boolean;
-    end
-    else
-  {$ENDIF}
     if ColFormat = gtcTime then
     begin
       AColumn.Format := rcf4Real;
@@ -315,23 +280,7 @@ begin
     Exit
   end;
 
-{$IFNDEF SutraUsedFormulas}
-  if rdgSutraFeature.ColVisible[Ord(gtcUsed)] then
-  begin
-    cbUsed.Visible := True;
-    LayoutControls(rdgSutraFeature, cbUsed, nil, Ord(gtcUsed));
-  end
-  else
-  begin
-    cbUsed.Visible := False;
-  end;
-{$ENDIF}
-
-{$IFDEF SutraUsedFormulas}
   FirstVisibleFormulaCol := gtcUsed;
-{$ELSE}
-  FirstVisibleFormulaCol := gtcU1;
-{$ENDIF}
   for ColIndex := FirstVisibleFormulaCol to High(TGenTransCol) do
   begin
     if rdgSutraFeature.ColVisible[Ord(ColIndex)] then
@@ -349,11 +298,7 @@ var
   Col: TGenTransCol;
 begin
   inherited;
-{$IFDEF SutraUsedFormulas}
   for Col in [gtcUsed, gtcU1, gtcQU1, gtcU2, gtcQU2] do
-{$ELSE}
-  for Col in [gtcU1, gtcQU1, gtcU2, gtcQU2] do
-{$ENDIF}
   begin
     ChangeSelectedCellsInColumn(rdgSutraFeature, Ord(Col), rdeFormula.Text);
   end;
@@ -391,9 +336,6 @@ procedure TframeSutraGeneralizeTransBoundary.rdgSutraFeatureMouseUp(
   Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
-{$IFNDEF SutraUsedFormulas}
-  EnableMultiEditControl(rdgSutraFeature, cbUsed, Ord(gtcUsed));
-{$ENDIF}
   EnableMultiEditControl(rdgSutraFeature, rdeFormula, [Ord(gtcU1),
     Ord(gtcQU1), Ord(gtcU2), Ord(gtcQU2)]);
 end;
@@ -402,15 +344,6 @@ procedure TframeSutraGeneralizeTransBoundary.rdgSutraFeatureSelectCell(
   Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-{$IFNDEF SutraUsedFormulas}
-  if ARow > 0 then
-  begin
-    if ACol > Ord(gtcUsed) then
-    begin
-      CanSelect := rdgSutraFeature.Checked[Ord(gtcUsed), ARow];
-    end;
-  end;
-{$ENDIF}
   if not rdgSutraFeature.Drawing then
   begin
     LayoutMultiEditControls;
@@ -458,28 +391,15 @@ begin
       if TryStrToFloat(rdgSutraFeature.Cells[0, RowIndex], ATime) then
       begin
         OK := False;
-      {$IFNDEF SutraUsedFormulas}
-        if not rdgSutraFeature.Checked[1, RowIndex] then
+        StartIndex := 1;
+        for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
         begin
-          OK := True;
-        end
-        else
-        begin
-          StartIndex := 2;
-      {$ELSE}
-          StartIndex := 1;
-      {$ENDIF}
-          for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
+          OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
+          if not OK then
           begin
-            OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
-            if not OK then
-            begin
-              Break;
-            end;
+            Break;
           end;
-      {$IFNDEF SutraUsedFormulas}
         end;
-      {$ENDIF}
         if OK then
         begin
           if ItemIndex < BoundValues.Count then
@@ -500,22 +420,11 @@ begin
 //            frmErrorsAndWarnings.Show;
 //          end;
           BoundItem.StartTime := ATime;
-        {$IFNDEF SutraUsedFormulas}
-          BoundItem.Used := rdgSutraFeature.Checked[UsedColumn, RowIndex];
-          if BoundItem.Used then
-          begin
-            BoundItem.LowerUFormula := rdgSutraFeature.Cells[Ord(gtcU1), RowIndex];
-            BoundItem.LowerFlowUFormula := rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1];
-            BoundItem.HigherUFormula := rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1];
-            BoundItem.HigherFlowUFormula := rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1];
-          end;
-        {$ELSE}
-            BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(gtcUsed), RowIndex];
-            BoundItem.LowerUFormula := rdgSutraFeature.Cells[Ord(gtcU1), RowIndex];
-            BoundItem.LowerFlowUFormula := rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1];
-            BoundItem.HigherUFormula := rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1];
-            BoundItem.HigherFlowUFormula := rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1];
-        {$ENDIF}
+          BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(gtcUsed), RowIndex];
+          BoundItem.LowerUFormula := rdgSutraFeature.Cells[Ord(gtcU1), RowIndex];
+          BoundItem.LowerFlowUFormula := rdgSutraFeature.Cells[Ord(gtcQU1),ItemIndex+1];
+          BoundItem.HigherUFormula := rdgSutraFeature.Cells[Ord(gtcU2),ItemIndex+1];
+          BoundItem.HigherFlowUFormula := rdgSutraFeature.Cells[Ord(gtcQU2),ItemIndex+1];
           Inc(ItemIndex);
         end;
       end;

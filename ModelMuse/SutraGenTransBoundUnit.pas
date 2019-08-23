@@ -24,8 +24,6 @@ type
     function GetHigherUFormula: string;
     function GetLowerFlowUFormula: string;
     function GetLowerUFormula: string;
-//    function GetUInFormula: string;
-//    function GetUoutFormula: string;
     procedure SetUsed(const Value: Boolean);
     procedure SetHigherFlowUFormula(const Value: string);
     procedure SetHigherUFormula(const Value: string);
@@ -52,14 +50,12 @@ type
     procedure Assign(Source: TPersistent); override;
     destructor Destroy; override;
   published
-    property Used: Boolean read FUsed write SetUsed
-    {$IFDEF SutraUsedFormulas}
-      Stored False
-    {$ENDIF}
-      ;
-    { $IFDEF SutraUsedFormulas}
+    // @name is only retained for backwards compatibility. Use
+    // @link(UsedFormula) instead.
+    property Used: Boolean read FUsed write SetUsed Stored False;
+    // @name is used to determine whether a @classname is used at a
+    // particular node.
     property UsedFormula: string read GetUsedFormula write SetUsedFormula;
-    { $ENDIF}
     // PBG11
     property LowerUFormula: string read GetLowerUFormula
       write SetLowerUFormula;
@@ -124,19 +120,11 @@ type
   TSutraGeneralTransBoundaryList = TList<TSutraGeneralTransportBoundary>;
 
 const
-{$IFDEF SutraUsedFormulas}
   UsedFormulaPosition = 0;
   LowerUPosition = 1;
   LowerFlowUPosition = 2;
   HigherUPosition = 3;
   HigherFlowUPosition = 4;
-{$ELSE}
-  UsedFormulaPosition = -1000;
-  LowerUPosition = 0;
-  LowerFlowUPosition = 1;
-  HigherUPosition = 2;
-  HigherFlowUPosition = 3;
-{$ENDIF}
 
 implementation
 
@@ -152,11 +140,7 @@ begin
   if Source is TSutraGenTransportItem then
   begin
     SourceItem := TSutraGenTransportItem(Source);
-  {$IFDEF SutraUsedFormulas}
     UsedFormula := SourceItem.UsedFormula;
-  {$ELSE}
-    Used := SourceItem.Used;
-  {$ENDIF}
     LowerUFormula := SourceItem.LowerUFormula;
     LowerFlowUFormula := SourceItem.LowerFlowUFormula;
     HigherUFormula := SourceItem.HigherUFormula;
@@ -176,10 +160,8 @@ var
 begin
   ParentCollection := Collection as TSutraGeneralTransportCollection;
 
-{$IFDEF SutraUsedFormulas}
   UsedFormulaObserver := FObserverList[UsedFormulaPosition];
   UsedFormulaObserver.OnUpToDateSet := ParentCollection.UsedFormulaChangeHandler;
-{$ENDIF}
 
   U1Observer := FObserverList[LowerUPosition];
   U1Observer.OnUpToDateSet := ParentCollection.LowerUChangeHandler;
@@ -196,11 +178,7 @@ end;
 
 function TSutraGenTransportItem.BoundaryFormulaCount: integer;
 begin
-{$IFDEF SutraUsedFormulas}
   result := 5;
-{$ELSE}
-  result := 4;
-{$ENDIF}
 end;
 
 function TSutraGenTransportItem.CreateFormulaObject(
@@ -217,9 +195,7 @@ end;
 procedure TSutraGenTransportItem.CreateFormulaObjects;
 begin
   inherited;
-  {$IFDEF SutraUsedFormulas}
   FUsedFormulaObject := CreateFormulaObject(dso3D);
-  {$ENDIF}
   FLowerUFormula := CreateFormulaObject(dso3D);
   FLowerFlowUFormula := CreateFormulaObject(dso3D);
   FHigherUFormula := CreateFormulaObject(dso3D);
@@ -233,18 +209,14 @@ begin
   LowerFlowUFormula := '0';
   HigherUFormula := '0';
   HigherFlowUFormula := '0';
-  {$IFDEF SutraUsedFormulas}
   UsedFormula := 'False';
-  {$ENDIF}
   inherited;
 end;
 
 function TSutraGenTransportItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-  {$IFDEF SutraUsedFormulas}
     UsedFormulaPosition: result := UsedFormula;
-  {$ENDIF}
     LowerUPosition: result := LowerUFormula;
     LowerFlowUPosition: result := LowerFlowUFormula;
     HigherUPosition: result := HigherUFormula;
@@ -297,12 +269,10 @@ begin
   begin
     List.Add(FObserverList[HigherFlowUPosition]);
   end
-{$IFDEF SutraUsedFormulas}
   else if Sender = FUsedFormulaObject then
   begin
     List.Add(FObserverList[UsedFormulaPosition]);
   end
-{$ENDIF}
   else
   begin
     Assert(False);
@@ -311,12 +281,8 @@ end;
 
 function TSutraGenTransportItem.GetUsedFormula: string;
 begin
-{$IFDEF SutraUsedFormulas}
   Result := FUsedFormulaObject.Formula;
   ResetItemObserver(UsedFormulaPosition);
-{$ELSE}
-  result := 'False';
-{$ENDIF}
 end;
 
 procedure TSutraGenTransportItem.InvalidateModel;
@@ -346,21 +312,15 @@ begin
       and (Item.LowerFlowUFormula = LowerFlowUFormula)
       and (Item.HigherUFormula = HigherUFormula)
       and (Item.HigherFlowUFormula = HigherFlowUFormula)
-  {$IFNDEF SutraUsedFormulas}
-      and (Item.Used = Used);
-  {$ELSE}
       and (Item.UsedFormula = UsedFormula);
-  {$ENDIF}
   end;
 end;
 
 procedure TSutraGenTransportItem.RemoveFormulaObjects;
 begin
-{$IFDEF SutraUsedFormulas}
   frmGoPhast.PhastModel.FormulaManager.Remove(FUsedFormulaObject,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
-{$ENDIF}
   frmGoPhast.PhastModel.FormulaManager.Remove(FLowerUFormula,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
@@ -435,9 +395,7 @@ end;
 
 procedure TSutraGenTransportItem.SetUsedFormula(const Value: string);
 begin
-{$IFDEF SutraUsedFormulas}
   UpdateFormula(Value, UsedFormulaPosition, FUsedFormulaObject);
-{$ENDIF}
 end;
 
 { TSutraGeneralTransportCollection }

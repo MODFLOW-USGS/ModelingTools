@@ -124,42 +124,40 @@ begin
 // modified from http://www.delphitricks.com/source-code/internet/delete_the_temporary_internet_files.html
   dwEntrySize := 0;
   Dummy := FindFirstUrlCacheEntry(nil, TInternetCacheEntryInfo(nil^), dwEntrySize);
+  FindCloseUrlCache(Dummy);
+
+  GetMem(lpEntryInfo, dwEntrySize);
   try
-    GetMem(lpEntryInfo, dwEntrySize);
+    if dwEntrySize > 0 then lpEntryInfo^.dwStructSize := dwEntrySize;
+    hCacheDir := FindFirstUrlCacheEntry(nil, lpEntryInfo^, dwEntrySize);
     try
-      if dwEntrySize > 0 then lpEntryInfo^.dwStructSize := dwEntrySize;
-      hCacheDir := FindFirstUrlCacheEntry(nil, lpEntryInfo^, dwEntrySize);
-      try
-        if hCacheDir <> 0 then
-        begin
-  //        FoundCachedUrl := False;
-          repeat
-            CachedUrl := string(lpEntryInfo^.lpszSourceUrlName);
-            AtPosition := Pos('@', CachedUrl);
-            if AtPosition >= 1 then
-            begin
-              CachedUrl := Copy(CachedUrl, AtPosition+1, MaxInt);
-            end;
-            if CachedUrl = Url then
-            begin
-              DeleteUrlCacheEntry(lpEntryInfo^.lpszSourceUrlName);
-              break;
-            end;
-            FreeMem(lpEntryInfo, dwEntrySize);
-            dwEntrySize := 0;
-            FindNextUrlCacheEntry(hCacheDir, TInternetCacheEntryInfo(nil^), dwEntrySize);
-            GetMem(lpEntryInfo, dwEntrySize);
-            if dwEntrySize > 0 then lpEntryInfo^.dwStructSize := dwEntrySize;
-          until not FindNextUrlCacheEntry(hCacheDir, lpEntryInfo^, dwEntrySize);
-        end;
-      finally
-        FindCloseUrlCache(hCacheDir);
+      if hCacheDir <> 0 then
+      begin
+//        FoundCachedUrl := False;
+        repeat
+          CachedUrl := string(lpEntryInfo^.lpszSourceUrlName);
+          AtPosition := Pos('@', CachedUrl);
+          if AtPosition >= 1 then
+          begin
+            CachedUrl := Copy(CachedUrl, AtPosition+1, MaxInt);
+          end;
+          if CachedUrl = Url then
+          begin
+            DeleteUrlCacheEntry(lpEntryInfo^.lpszSourceUrlName);
+            break;
+          end;
+          FreeMem(lpEntryInfo, dwEntrySize);
+          dwEntrySize := 0;
+          FindNextUrlCacheEntry(hCacheDir, TInternetCacheEntryInfo(nil^), dwEntrySize);
+          GetMem(lpEntryInfo, dwEntrySize);
+          if dwEntrySize > 0 then lpEntryInfo^.dwStructSize := dwEntrySize;
+        until not FindNextUrlCacheEntry(hCacheDir, lpEntryInfo^, dwEntrySize);
       end;
     finally
-      FreeMem(lpEntryInfo, dwEntrySize);
+      FindCloseUrlCache(hCacheDir);
     end;
   finally
-    FindCloseUrlCache(Dummy);
+    FreeMem(lpEntryInfo, dwEntrySize);
   end;
 end;
 {$IFDEF LINUX}

@@ -51,23 +51,11 @@ type
       read FSpecifiedConcTemp write SetSpecifiedConcTemp;
     property Observations: TSutraObservations
       read FObservations write SetObservations;
-    property Lake: TSutraLake read FLake write SetLake
-    {$IFNDEF Sutra30}
-      stored False
-    {$ENDIF}
-      ;
+    property Lake: TSutraLake read FLake write SetLake;
     property GeneralFlowBoundary: TSutraGeneralFlowBoundary
-      read FGeneralFlowBoundary write SetGeneralFlowBoundary
-    {$IFNDEF Sutra30}
-      stored False
-    {$ENDIF}
-      ;
+      read FGeneralFlowBoundary write SetGeneralFlowBoundary;
     property GenTransportBoundary: TSutraGeneralTransportBoundary
-      read FGenTransportBoundary write SetGenTransportBoundary
-    {$IFNDEF Sutra30}
-      stored False
-    {$ENDIF}
-      ;
+      read FGenTransportBoundary write SetGenTransportBoundary;
   end;
 
 implementation

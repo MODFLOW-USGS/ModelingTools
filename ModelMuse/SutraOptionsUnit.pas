@@ -25,7 +25,7 @@ type
     FStoredRechargeFraction: TRealStorage;
     FStoredDischargeFraction: TRealStorage;
     FLakeOutputCycle: Integer;
-//    FMaxLakeIterations: Integer;
+    FMaxLakeIterations: Integer;
     FStoredMinLakeVolume: TRealStorage;
 //    FGeneralizedFlowLakeAbsent: TLakeBoundaryInteraction;
     FGeneralizedFlowInteractionType: TGeneralizedFlowInteractionType;
@@ -43,7 +43,7 @@ type
     FGeneralizedTransportInteractionType: TGeneralizedTransportInteractionType;
     procedure SetStoredDischargeFraction(const Value: TRealStorage);
     procedure SetLakeOutputCycle(const Value: Integer);
-//    procedure SetMaxLakeIterations(const Value: Integer);
+    procedure SetMaxLakeIterations(const Value: Integer);
     procedure SetStoredMinLakeVolume(const Value: TRealStorage);
     procedure SetStoredRechargeFraction(const Value: TRealStorage);
     procedure SetStoredSubmergedOutput(const Value: TRealStorage);
@@ -97,8 +97,9 @@ type
       write SetSubmergedOutput;
   published
     // ITLMAX
-//    property MaxLakeIterations: Integer read FMaxLakeIterations
-//      write SetMaxLakeIterations;
+    // @name is retained for backwards compatibility.
+    property MaxLakeIterations: Integer read FMaxLakeIterations
+      write SetMaxLakeIterations stored False;
     // NLAKPR
     property LakeOutputCycle: Integer read FLakeOutputCycle
       write SetLakeOutputCycle;
@@ -591,11 +592,7 @@ type
     property ReadStartRestartFileName: string read GetReadStartRestartFileName
       write SetReadStartRestartFileName;
     property LakeOptions: TSutraLakeOptions read FLakeOptions
-      write SetLakeOptions
-    {$IFNDEF SUTRA30}
-      stored False
-    {$ENDIF}
-      ;
+      write SetLakeOptions;
   end;
 
 
@@ -1763,10 +1760,11 @@ begin
   SetIntegerProperty(FLakeOutputCycle, Value);
 end;
 
-//procedure TSutraLakeOptions.SetMaxLakeIterations(const Value: Integer);
-//begin
+procedure TSutraLakeOptions.SetMaxLakeIterations(const Value: Integer);
+begin
+  FMaxLakeIterations := Value;
 //  SetIntegerProperty(FMaxLakeIterations, Value);
-//end;
+end;
 
 procedure TSutraLakeOptions.SetMinLakeVolume(const Value: double);
 begin

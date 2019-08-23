@@ -34,10 +34,7 @@
   </output>
   <Mt3dms_Input_Files Model_Name="LakeMf6" FileType="Mt3dms Input">
     <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.adv</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.bhd</FileName>
     <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.btn</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.cbc</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.dis.grb</FileName>
     <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.dsp</FileName>
     <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.gcg</FileName>
     <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.lkt</FileName>

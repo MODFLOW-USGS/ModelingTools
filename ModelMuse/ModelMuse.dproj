@@ -64,7 +64,7 @@
         <VerInfo_MajorVer>4</VerInfo_MajorVer>
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileVersion=4.0.0.11;ProductVersion=4.0.0.11</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=4.0.0.12;ProductVersion=4.0.0.12</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
@@ -74,7 +74,7 @@
         <DCC_UsePackage>vcl;rtl;vclx;vclactnband;xmlrtl;VclSmp;vclimg;svnui;svn;bdertl;TeeUI;TeeDB;Tee;vcldb;dbrtl;vcldbx;vcltouch;dsnap;dsnapcon;vclib;ibxpress;adortl;IndyCore;IndySystem;IndyProtocols;inet;intrawebdb_110_150;Intraweb_110_150;vclie;inetdb;webdsnap;websnap;inetdbbde;inetdbxpress;soaprtl;vclribbon;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;dbexpress;dbxcds;DbxClientDriver;AzureCloud;MostRecentFilesXE;QuadTreePkgXE;RbwControllerPackageXE;RbwDataGridPkgXE;DynamicCursorXEPkg;RbwEditPkgXE;RbwParserPkgXE;RbwRulerPkgXE;XBasePkgXE;VirtualTreesR;GR32_DSGN_RSXE1;GR32_RSXE1;ZoomBox2PkgXE;ButtonEditPkgXE;ModelCubeXEPkg;VGlWidgetXEPkg;AdeXEPkg;GLScene_RunTime;addbtn95_DXEpkg;RbwRadioGroupPkgXE;datagridPkgXE;GsMemoPropXE;GsMemoXE;SynEdit_RXE;madBasic_;madDisAsm_;madExcept_;JclVcl;Jcl;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JclDeveloperTools;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_UnitSearchPath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10;D:\Colab\GWModelTools\ModelMuse\FastCode;D:\Colab\GWModelTools\ModelMuse\JediMath;C:\Colab\GWModelTools\ModelMuse\JediMath;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_RangeChecking>true</DCC_RangeChecking>
-        <DCC_Define>LogMemoryLeakDetailToFile;AutoPatchRTL;madExcept;LGR;UseFastGeo;SutraUsedFormulas;$(DCC_Define)</DCC_Define>
+        <DCC_Define>LogMemoryLeakDetailToFile;AutoPatchRTL;madExcept;LGR;UseFastGeo;$(DCC_Define)</DCC_Define>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <DCC_K>false</DCC_K>
         <DCC_N>true</DCC_N>
@@ -84,7 +84,7 @@
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
         <DCC_E>false</DCC_E>
         <SanitizedProjectName>ModelMuse</SanitizedProjectName>
-        <VerInfo_Build>11</VerInfo_Build>
+        <VerInfo_Build>12</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -1630,6 +1630,7 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="Mt3dSftWriterUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

@@ -2389,7 +2389,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpKeyword = 'MODFLOW_Features_Tab'
       Caption = 'MODFLOW Features'
       ImageIndex = 4
-      object JvNetscapeSplitter1: TJvNetscapeSplitter
+      object splttrModflowFeature: TJvNetscapeSplitter
         Left = 185
         Top = 0
         Height = 476
@@ -6939,11 +6939,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited gbObservationTypes: TGroupBox
                   Left = 2
                   Top = 104
-                  Width = 787
+                  Width = 807
                   Height = 329
                   ExplicitLeft = 2
                   ExplicitTop = 104
-                  ExplicitWidth = 787
+                  ExplicitWidth = 807
                   ExplicitHeight = 329
                   inherited cbGag2: TCheckBox
                     Width = 553
@@ -12078,9 +12078,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 259
               inherited tabLakeProperties: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 443
-                ExplicitHeight = 301
+                ExplicitWidth = 573
+                ExplicitHeight = 225
                 inherited lblOutletCount: TLabel
                   Width = 127
                   Height = 19
@@ -12185,21 +12186,20 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited tabLakeTransientProperties: TTabSheet
                 ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 225
+                ExplicitWidth = 443
+                ExplicitHeight = 301
               end
               inherited tabLakeTable: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 443
                 ExplicitHeight = 301
                 inherited frameLakeTable: TframeFormulaGrid
-                  Width = 573
-                  Height = 225
+                  Height = 301
                   ExplicitWidth = 443
                   ExplicitHeight = 301
                   inherited Panel: TPanel
-                    Top = 184
-                    Width = 573
+                    Top = 260
                     ExplicitTop = 260
                     ExplicitWidth = 443
                     inherited lbNumber: TLabel
@@ -12209,15 +12209,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       ExplicitHeight = 19
                     end
                     inherited sbAdd: TSpeedButton
-                      Left = 400
+                      Left = 270
                       ExplicitLeft = 462
                     end
                     inherited sbInsert: TSpeedButton
-                      Left = 430
+                      Left = 300
                       ExplicitLeft = 492
                     end
                     inherited sbDelete: TSpeedButton
-                      Left = 460
+                      Left = 330
                       ExplicitLeft = 522
                     end
                     inherited seNumber: TJvSpinEdit
@@ -12226,14 +12226,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                   end
                   inherited Grid: TRbwDataGrid4
-                    Width = 573
-                    Height = 127
+                    Height = 203
                     OnButtonClick = frameResdgModflowBoundaryButtonClick
                     ExplicitWidth = 443
                     ExplicitHeight = 203
                   end
                   inherited pnlTop: TPanel
-                    Width = 573
                     ExplicitWidth = 443
                     inherited edFormula: TLabeledEdit
                       Height = 27
@@ -12989,7 +12987,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraFluidFlux
+        ActivePage = jvspSutraSpecTempConc
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -13556,7 +13554,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited ilLakeButton: TImageList
               Bitmap = {
-                494C0101040009000C0018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+                494C010104000900100018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
                 0000000000003600000028000000600000003000000001002000000000000048
                 0000000000000000000000000000000000000000000000000000000000000000
                 0000000000000000000000000000000000000000000000000000000000000000
@@ -14211,7 +14209,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 289
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitTop = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 289
                 ColWidths = (
@@ -14331,8 +14328,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 297
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitLeft = 1
-                ExplicitTop = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 297
                 ColWidths = (
@@ -15221,7 +15216,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Left = 648
     Top = 296
     Bitmap = {
-      494C010104000900080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101040009000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

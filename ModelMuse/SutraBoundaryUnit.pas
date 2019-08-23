@@ -17,11 +17,7 @@ type
   TSutraBoundaryValue = record
     Time: double;
     Formula: string;
-  {$IFNDEF SutraUsedFormulas}
-    Used: Boolean;
-  {$ELSE}
     UsedFormula: string;
-  {$ENDIF}
   end;
 
   TSutraBoundaryValueArray = array of TSutraBoundaryValue;
@@ -30,19 +26,12 @@ type
   private
     FScreenObject: TObject;
     FDescription: string;
-  {$IFNDEF SutraUsedFormulas}
-    FUsed: array of boolean;
-    function GetUsed(Index: Integer): Boolean;
-  {$ENDIF}
   protected
     procedure CheckSameModel(const Data: TDataArray); override;
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
     procedure Initialize(BoundaryValues: TSutraBoundaryValueArray); reintroduce;
     property Description: string read FDescription write FDescription;
-  {$IFNDEF SutraUsedFormulas}
-    property Used[Index: Integer]: Boolean read GetUsed;
-  {$ENDIF}
   end;
 
   {
@@ -198,9 +187,7 @@ type
   TCustomSutraBoundaryItem = class(TCustomBoundaryItem)
   private
     FUFormulaObject: TFormulaObject;
-  {$IFDEF SutraUsedFormulas}
     FUsedFormulaObject: TFormulaObject;
-  {$ENDIF}
     FUsed: Boolean;
     procedure SetUFormula(const Value: string);
     function GetUFormula: string;
@@ -229,14 +216,12 @@ type
   published
     // UINC, QUINC, UBC
     property UFormula: string read GetUFormula write SetUFormula;
-    property Used: Boolean read FUsed write SetUsed
-    {$IFDEF SutraUsedFormulas}
-      Stored False
-    {$ENDIF}
-      ;
-    { $IFDEF SutraUsedFormulas}
+    // @name is retained only for backwards compatibility. Use
+    // @link(UsedFormula) instead.
+    property Used: Boolean read FUsed write SetUsed Stored False;
+    // @name is used to determine whether or not a @classname is used
+    // at a particular node.
     property UsedFormula: string read GetUsedFormula write SetUsedFormula;
-    { $ENDIF}
   end;
 
   TAbstractSutraBoundaryCollection = class(TCustomMF_ListBoundColl)
@@ -468,13 +453,8 @@ uses
 
 const
   UFormulaPosition = 0;
-{$IFDEF SutraUsedFormulas}
   UsedFormulaPosition = 1;
   PQFormulaPosition = 2;
-{$ELSE}
-  UsedFormulaPosition = -1000;
-  PQFormulaPosition = 1;
-{$ENDIF}
 
 //  FractionRechargeDivertedPosition = 0;
 
@@ -828,11 +808,7 @@ begin
   if Source is TCustomSutraBoundaryItem then
   begin
     UFormula := TCustomSutraBoundaryItem(Source).UFormula;
-  {$IFDEF SutraUsedFormulas}
     UsedFormula := TCustomSutraBoundaryItem(Source).UsedFormula;
-  {$ELSE}
-    Used := TCustomSutraBoundaryItem(Source).Used;
-  {$ENDIF}
   end;
   inherited;
 end;
@@ -848,29 +824,20 @@ begin
   PumpingRateObserver := FObserverList[UFormulaPosition];
   PumpingRateObserver.OnUpToDateSet := ParentCollection.UChangeHandler;
 
-{$IFDEF SutraUsedFormulas}
   UsedObserver := FObserverList[UsedFormulaPosition];
   UsedObserver.OnUpToDateSet := ParentCollection.UsedChangeHandler;
-{$ENDIF}
 
 end;
 
 function TCustomSutraBoundaryItem.BoundaryFormulaCount: integer;
 begin
-{$IFNDEF SutraUsedFormulas}
-  result := 1;
-{$ELSE}
   result := 2;
-{$ENDIF}
 end;
 
 constructor TCustomSutraBoundaryItem.Create(Collection: TCollection);
 begin
   inherited;
-{$IFDEF SutraUsedFormulas}
   BoundaryFormula[UsedFormulaPosition] := 'False';
-{$ENDIF}
-
 end;
 
 function TCustomSutraBoundaryItem.CreateFormulaObject(
@@ -897,17 +864,13 @@ procedure TCustomSutraBoundaryItem.CreateFormulaObjects;
 begin
   inherited;
   FUFormulaObject := CreateFormulaObject(dso3D);
-{$IFDEF SutraUsedFormulas}
   FUsedFormulaObject := CreateFormulaObject(dso3D);
-{$ENDIF}
 end;
 
 destructor TCustomSutraBoundaryItem.Destroy;
 begin
   UFormula := '0';
-{$IFDEF SutraUsedFormulas}
   UsedFormula := 'False';
-{$ENDIF}
   inherited;
 end;
 
@@ -915,9 +878,7 @@ function TCustomSutraBoundaryItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
     UFormulaPosition: result := UFormula;
-  {$IFDEF SutraUsedFormulas}
     UsedFormulaPosition: result := UsedFormula;
-  {$ENDIF}
     else Assert(False);
   end;
 end;
@@ -929,12 +890,10 @@ begin
   begin
     List.Add(FObserverList[UFormulaPosition]);
   end
-{$IFDEF SutraUsedFormulas}
   else if Sender = FUsedFormulaObject then
   begin
     List.Add(FObserverList[UsedFormulaPosition]);
   end
-{$ENDIF}
   else
   begin
     Assert(False)
@@ -949,12 +908,8 @@ end;
 
 function TCustomSutraBoundaryItem.GetUsedFormula: string;
 begin
-{$IFDEF SutraUsedFormulas}
   Result := FUsedFormulaObject.Formula;
   ResetItemObserver(UsedFormulaPosition);
-{$ELSE}
-  result := 'False';
-{$ENDIF}
 end;
 
 procedure TCustomSutraBoundaryItem.InvalidateModel;
@@ -980,13 +935,8 @@ begin
   if result then
   begin
     Item := TCustomSutraBoundaryItem(AnotherItem);
-  {$IFNDEF SutraUsedFormulas}
-    result := (Item.UFormula = UFormula)
-      and (Item.Used = Used);
-  {$ELSE}
     result := (Item.UFormula = UFormula)
       and (Item.UsedFormula = UsedFormula);
-  {$ENDIF}
   end;
 end;
 
@@ -995,11 +945,9 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FUFormulaObject,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
-{$IFDEF SutraUsedFormulas}
   frmGoPhast.PhastModel.FormulaManager.Remove(FUsedFormulaObject,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
-{$ENDIF}
 end;
 
 procedure TCustomSutraBoundaryItem.SetBoundaryFormula(Index: integer;
@@ -1008,9 +956,7 @@ begin
   inherited;
   case Index of
     UFormulaPosition: UFormula := Value;
-  {$IFDEF SutraUsedFormulas}
     UsedFormulaPosition: UsedFormula := Value;
-  {$ENDIF}
     else Assert(False);
   end;
 end;
@@ -1027,7 +973,6 @@ begin
     FUsed := Value;
     InvalidateModel;
 
-{$IFDEF SutraUsedFormulas}
     if FUsed then
     begin
       UsedFormula := 'True';
@@ -1036,15 +981,12 @@ begin
     begin
       UsedFormula := 'False';
     end;
-{$ENDIF}
   end;
 end;
 
 procedure TCustomSutraBoundaryItem.SetUsedFormula(const Value: string);
 begin
-{$IFDEF SutraUsedFormulas}
   UpdateFormula(Value, UsedFormulaPosition, FUsedFormulaObject);
-{$ENDIF}
 end;
 
 { TCustomAssociatedSutraBoundaryCollection }
@@ -1323,13 +1265,6 @@ begin
   FScreenObject := ScreenObject;
 end;
 
-{$IFNDEF SutraUsedFormulas}
-function TSutraTimeList.GetUsed(Index: Integer): Boolean;
-begin
-  result := FUsed[Index]
-end;
-{$ENDIF}
-
 procedure TSutraTimeList.Initialize(BoundaryValues: TSutraBoundaryValueArray);
 var
   LocalScreenObject: TScreenObject;
@@ -1340,9 +1275,6 @@ var
   Time: Double;
   Formula: string;
   DataArray: TDataArray;
-{$IFNDEF SutraUsedFormulas}
-  TimeIndex: Integer;
-{$ENDIF}
   UsedFormula: string;
 begin
   if not frmProgressMM.ShouldContinue then
@@ -1351,14 +1283,6 @@ begin
   end;
   if UpToDate then
     Exit;
-
-{$IFNDEF SutraUsedFormulas}
-  SetLength(FUsed, Length(BoundaryValues));
-  for TimeIndex := 0 to Length(BoundaryValues) - 1 do
-  begin
-    FUsed[TimeIndex] := BoundaryValues[TimeIndex].Used;
-  end;
-{$ENDIF}
 
   LocalScreenObject := FScreenObject as TScreenObject;
   Assert(LocalScreenObject <> nil);
@@ -1377,85 +1301,42 @@ begin
         Exit;
       end;
       Time := BoundaryValues[Index].Time;
-{$IFNDEF SutraUsedFormulas}
-      if Used[Index] then
-      begin
-        Formula := BoundaryValues[Index].Formula;
-        DataArray := nil;
-        case DataType of
-          rdtDouble:
-            begin
-              DataArray := TTransientRealSparseDataSet.Create(LocalModel);
-              DataArray.DataType := rdtDouble;
-            end;
-          else Assert(False);
-        end;
-        DataArray.Name := ValidName(Description) + '_' + IntToStr(Index+1);
-        Add(Time, DataArray);
-        DataArray.UseLgrEdgeCells := lctUse;
-        DataArray.EvaluatedAt := eaNodes;
-        DataArray.Orientation := dso3D;
-        LocalModel.UpdateDataArrayDimensions(DataArray);
-
-        try
-          LocalScreenObject.AssignValuesToSutraDataSet(Mesh, DataArray,
-            Formula, LocalModel);
-        except on E: ErbwParserError do
+      Formula := BoundaryValues[Index].Formula;
+      UsedFormula := BoundaryValues[Index].UsedFormula;
+      DataArray := nil;
+      case DataType of
+        rdtDouble:
           begin
-            frmFormulaErrors.AddFormulaError(LocalScreenObject.Name, Name,
-              Formula, E.Message);
-            Formula := '0';
-            BoundaryValues[Index].Formula := Formula;
-            LocalScreenObject.AssignValuesToSutraDataSet(Mesh, DataArray,
-              Formula, LocalModel);
+            DataArray := TTransientRealSparseDataSet.Create(LocalModel);
+            DataArray.DataType := rdtDouble;
           end;
-        end;
-        LocalModel.DataArrayManager.CacheDataArrays;
-        DataArray.UpToDate := True;
-        DataArray.CacheData;
-      end
-      else
-      begin
-        Add(Time, nil);
+        else Assert(False);
       end;
-{$ELSE}	  
-        Formula := BoundaryValues[Index].Formula;
-        UsedFormula := BoundaryValues[Index].UsedFormula;
-        DataArray := nil;
-        case DataType of
-          rdtDouble:
-            begin
-              DataArray := TTransientRealSparseDataSet.Create(LocalModel);
-              DataArray.DataType := rdtDouble;
-            end;
-          else Assert(False);
-        end;
-        DataArray.Name := ValidName(Description) + '_' + IntToStr(Index+1);
-        Add(Time, DataArray);
-        DataArray.UseLgrEdgeCells := lctUse;
-        DataArray.EvaluatedAt := eaNodes;
-        DataArray.Orientation := dso3D;
-        LocalModel.UpdateDataArrayDimensions(DataArray);
+      DataArray.Name := ValidName(Description) + '_' + IntToStr(Index+1);
+      Add(Time, DataArray);
+      DataArray.UseLgrEdgeCells := lctUse;
+      DataArray.EvaluatedAt := eaNodes;
+      DataArray.Orientation := dso3D;
+      LocalModel.UpdateDataArrayDimensions(DataArray);
 
-        try
+      try
+        LocalScreenObject.AssignValuesToSutraDataSet(Mesh, DataArray,
+          Formula, LocalModel, UsedFormula);
+      except on E: ErbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError(LocalScreenObject.Name, Name,
+            Formula, E.Message);
+          Formula := '0';
+          UsedFormula := 'True';
+          BoundaryValues[Index].Formula := Formula;
+          BoundaryValues[Index].UsedFormula := UsedFormula;
           LocalScreenObject.AssignValuesToSutraDataSet(Mesh, DataArray,
             Formula, LocalModel, UsedFormula);
-        except on E: ErbwParserError do
-          begin
-            frmFormulaErrors.AddFormulaError(LocalScreenObject.Name, Name,
-              Formula, E.Message);
-            Formula := '0';
-            UsedFormula := 'True';
-            BoundaryValues[Index].Formula := Formula;
-            BoundaryValues[Index].UsedFormula := UsedFormula;
-            LocalScreenObject.AssignValuesToSutraDataSet(Mesh, DataArray,
-              Formula, LocalModel, UsedFormula);
-          end;
         end;
-        LocalModel.DataArrayManager.CacheDataArrays;
-        DataArray.UpToDate := True;
-        DataArray.CacheData;
-{$ENDIF}
+      end;
+      LocalModel.DataArrayManager.CacheDataArrays;
+      DataArray.UpToDate := True;
+      DataArray.CacheData;
     end;
     SetUpToDate(True);
   finally
@@ -1772,7 +1653,6 @@ var
   Index: Integer;
   AnItem: TCustomSutraBoundaryItem;
 begin
-  {$IFDEF SutraUsedFormulas}
   SutraBoundaryCollection := Values as TCustomSutraBoundaryCollection;
   for Index := 0 to SutraBoundaryCollection.Count - 1 do
   begin
@@ -1782,7 +1662,6 @@ begin
       AnItem.UsedFormula := 'False';
     end;
   end;
-  {$ENDIF}
 end;
 
 { TAbstractSutraBoundaryCollection }

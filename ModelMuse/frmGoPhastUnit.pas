@@ -3198,10 +3198,6 @@ begin
 
   RulersVisible := True;
 
-{$IFNDEF Sutra30}
-  acSutra30Active.Visible := False;
-{$ENDIF}
-
   Screen.OnActiveFormChange := ScreenOnActiveFormChange;
   // Some laptops of the Dept. of the Interior contract have a
   // screen height of 600 pixels so ensure that the height of the main
@@ -9035,6 +9031,7 @@ var
   ModelName: string;
   NetworkDrive: Boolean;
   ModelDirectory: string;
+  HasLakes: Boolean;
 begin
   if frmProgressMM = nil then
   begin
@@ -9104,6 +9101,7 @@ begin
         LakeWriter := TSutraLakeWriter.Create(PhastModel, etExport);
         try
           LakeWriter.WriteFile(FileName);
+          HasLakes := LakeWriter.HasLakes;
         finally
           LakeWriter.Free;
         end;
@@ -9124,6 +9122,7 @@ begin
 
         InputWriter := TSutraInputWriter.Create(PhastModel);
         try
+          InputWriter.HasLakes := HasLakes;
           InputWriter.WriteFile(FileName, FluidSourceNodes,
             MassEnergySourceNodes, SpecifiedPressureNodes,
             SpecifiedTempConcNodes, NOBS, Schedules, Observations,
@@ -9149,7 +9148,18 @@ begin
             BatchFile.Add('pushd ' + ModelDirectory);
           end;
 
-          BatchFile.Add('"' + PhastModel.ProgramLocations.Sutra22Location + '"');
+          case ModelSelection of
+            msSutra22:
+              begin
+                BatchFile.Add('"' + PhastModel.ProgramLocations.Sutra22Location + '"');
+              end;
+            msSutra30:
+              begin
+                BatchFile.Add('"' + PhastModel.ProgramLocations.Sutra30Location + '"');
+              end;
+            else
+              Assert(False);
+          end;
 
           AddOpenListFileLine(ChangeFileExt(FileName, '.lst'), True, BatchFile,
             PhastModel.ProgramLocations);
@@ -9167,7 +9177,18 @@ begin
           ModelName := ExtractFileName(ChangeFileExt(FileName, ''));
           BatchFile.Add(Format('if not exist "..\..\output\%0:s\NUL" mkdir "..\..\output\%0:s"', ['output.' + ModelName]));
 
-          BatchFile.Add('..\..\bin\' + ExtractFilename(PhastModel.ProgramLocations.Sutra22Location));
+          case ModelSelection of
+            msSutra22:
+              begin
+                BatchFile.Add('..\..\bin\' + ExtractFilename(PhastModel.ProgramLocations.Sutra22Location));
+              end;
+            msSutra30:
+              begin
+                BatchFile.Add('..\..\bin\' + ExtractFilename(PhastModel.ProgramLocations.Sutra30Location));
+              end;
+            else
+              Assert(False);
+          end;
           BatchFile.Add('pause');
           BatchFile.SaveToFile(BatchFileName + ArchiveExt);
 
@@ -9175,8 +9196,20 @@ begin
           BatchFile.Free;
         end;
         PhastModel.AddModelInputFile(BatchFileName + ArchiveExt);
-        PhastModel.AddModelInputFile(PhastModel.ProgramLocations.
-          Sutra22Location);
+        case ModelSelection of
+          msSutra22:
+            begin
+              PhastModel.AddModelInputFile(PhastModel.ProgramLocations.
+                Sutra22Location);
+            end;
+          msSutra30:
+            begin
+              PhastModel.AddModelInputFile(PhastModel.ProgramLocations.
+                Sutra30Location);
+            end;
+          else
+            Assert(False);
+        end;
         if ShouldRunSutra then
         begin
           RunAProgram(BatchFileName);

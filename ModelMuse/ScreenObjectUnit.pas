@@ -3403,12 +3403,8 @@ view. }
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure AssignValuesToSutraDataSet(const Mesh: TSutraMesh3D;
-      const DataSet: TDataArray; const Formula: string; AModel: TBaseModel
-{$IFDEF SutraUsedFormulas}	  
-      ; 
-      const UsedFormula: string
-{$ENDIF}	  
-	  );
+      const DataSet: TDataArray; const Formula: string; AModel: TBaseModel;
+      const UsedFormula: string);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name is a key method of @classname.  It is used
     // to assign values to a data set based on the function for that data
@@ -17665,12 +17661,8 @@ begin
 end;
 
 procedure TScreenObject.AssignValuesToSutraDataSet(const Mesh: TSutraMesh3D;
-  const DataSet: TDataArray; const Formula: string; AModel: TBaseModel
-{$IFDEF SutraUsedFormulas}	  
-  ; 
-  const UsedFormula: string
-{$ENDIF}	  
-  );
+  const DataSet: TDataArray; const Formula: string; AModel: TBaseModel;
+  const UsedFormula: string);
 var
   Compiler: TRbwParser;
   DataSetFunction: string;
@@ -17691,11 +17683,7 @@ begin
             OtherData.Compiler := Compiler;
             OtherData.DataSetFunction := DataSetFunction;
             OtherData.AlternateName := DataSet.Name;
-{$IFDEF SutraUsedFormulas}
             OtherData.UsedFunction := UsedFormula;
-{$ELSE}			
-            OtherData.UsedFunction := 'True';
-{$ENDIF}			
             Delegate.AssignValuesToTopDataSet(DataSet, OtherData,
               AModel, lctUse, alAll);
           finally
@@ -17708,11 +17696,7 @@ begin
           try
             OtherData.Compiler := Compiler;
             OtherData.DataSetFunction := DataSetFunction;
-{$IFDEF SutraUsedFormulas}
             OtherData.UsedFunction := UsedFormula;
-{$ELSE}			
-            OtherData.UsedFunction := 'True';
-{$ENDIF}			
             Delegate.AssignValuesToFrontDataSet(DataSet, OtherData,
               AModel, lctUse, alAll);
           finally
@@ -17725,11 +17709,7 @@ begin
           try
             OtherData.Compiler := Compiler;
             OtherData.DataSetFunction := DataSetFunction;
-{$IFDEF SutraUsedFormulas}
             OtherData.UsedFunction := UsedFormula;
-{$ELSE}			
-            OtherData.UsedFunction := 'True';
-{$ENDIF}			
             Delegate.AssignValuesToSideDataSet(DataSet, OtherData,
               AModel, lctUse, alAll);
           finally
@@ -43225,18 +43205,12 @@ begin
 
         InitializeVariables(UsedVariables, DataSet, Expression, Compiler);
 
-{$IFNDEF SutraUsedFormulas}
-        GetFrontCellsToAssign(DataSetFunction, OtherData, DataSet,
-          CellList, alAll, AModel);
-{$ELSE}
-
         GetCellsToAssign(DataSetFunction,
           OtherData,
           FScreenObject.EvaluatedAt,
           CellList,
           AssignmentLocation,
           AModel);
-{$ENDIF}
 
         ShowWarningNoCells(CellList);
         FScreenObject.UpdateImportedValues(DataSet);
@@ -43345,17 +43319,12 @@ begin
 
         InitializeVariables(UsedVariables, DataSet, Expression, Compiler);
 
-{$IFNDEF SutraUsedFormulas}
-        GetTopCellsToAssign(DataSetFunction, OtherData, DataSet,
-          CellList, alAll, AModel);
-{$ELSE}
         GetCellsToAssign(DataSetFunction,
           OtherData,
           FScreenObject.EvaluatedAt,
           CellList,
           AssignmentLocation,
           AModel);
-{$ENDIF}
 
         ShowWarningNoCells(CellList);
         FScreenObject.UpdateImportedValues(DataSet);
