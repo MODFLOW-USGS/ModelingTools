@@ -23994,5 +23994,12 @@ object TTaskHistory
         'SUTRA 3.0'
         'Testing'
         'Documentation')
+    end
+    item
+      Date = 43700.440915416670000000
+      Categories.Strings = (
+        'Testing'
+        'Documentation'
+        'MT3D-USGS SFT')
     end>
 end

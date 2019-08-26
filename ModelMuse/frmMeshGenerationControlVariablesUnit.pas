@@ -471,6 +471,6 @@ end;
 initialization
   // See also StrDefaultGmshPath in PhastModelUnit
 //  GMshDate := EncodeDate(2017, 11, 5);
-  GMshDate := EncodeDate(2019, 4, 19);
+  GMshDate := EncodeDate(2019, 7, 25);
 
 end.

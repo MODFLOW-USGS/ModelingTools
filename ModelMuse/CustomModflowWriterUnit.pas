@@ -1040,6 +1040,8 @@ resourcestring
   StrFileNameTooLong = 'FileName too long';
   StrTheMaximumAllowed = 'The maximum allowed file name length in MODFLOW 6 ' +
   'is 300. This file (%0:s) has a length of %1:d.';
+  StrDirectoryDoesNotE = 'Directory does not exist.';
+  StrTheDirectoryFor = 'The directory for "%s" does not exist.';
 
 var
 //  NameFile: TStringList;
@@ -2769,7 +2771,14 @@ begin
   begin
     if not FileExists(FileName) and (Option <> foInputAlreadyExists) then
     begin
-      TFile.Create(FileName).Free;
+      try
+        TFile.Create(FileName).Free;
+      except on EDirectoryNotFoundException do
+        begin
+          frmErrorsAndWarnings.AddError(AModel, StrDirectoryDoesNotE,
+            Format(StrTheDirectoryFor, [FileName]));
+        end;
+      end;
     end;
     if frmGoPhast.ModelSelection <> msModflow2015 then
     begin

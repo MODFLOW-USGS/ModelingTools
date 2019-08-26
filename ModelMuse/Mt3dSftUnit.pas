@@ -829,7 +829,7 @@ begin
     end;
     for FormulaIndex := 0 to DispersionCoefficient.Count - 1 do
     begin
-      AFormula := (DispersionCoefficient[FormulaIndex] as TMt3dSftInitConcItem).BoundaryFormula[0];
+      AFormula := (DispersionCoefficient[FormulaIndex] as TMt3dSftDispItem).BoundaryFormula[0];
       try
         Parser.Compile(AFormula);
       except on E: ERbwParserError do

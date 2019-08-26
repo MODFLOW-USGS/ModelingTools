@@ -2248,6 +2248,7 @@ var
   UpdateObjectDisplay: boolean;
   ShouldInvalidateDataArray: array of boolean;
   DataArrayManager: TDataArrayManager;
+  VarNametoRemove: string;
 begin
   DisallowChildGridUpdates;
   try
@@ -2264,13 +2265,20 @@ begin
 
     for Index := 0 to DataSetProperties.Count - 1 do
     begin
+      VarNametoRemove := '';
       DataStorage := DataSetProperties[Index];
       if (DataStorage.Name <> DataStorage.FDataSet.Name) then
       begin
         UpdateObjectDisplay := True;
+        VarNametoRemove := DataStorage.FDataSet.Name;
       end;
       DataStorage.AssignBasicProperties;
       frmGoPhast.PhastModel.CreateVariables(DataStorage.FDataSet);
+      if VarNametoRemove <> '' then
+      begin
+        frmGoPhast.PhastModel.RemoveVariables(VarNametoRemove,
+          DataStorage.FDataSet.Orientation, DataStorage.FDataSet.EvaluatedAt);
+      end;
     end;
 
     // update the properties of the data sets.

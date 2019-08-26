@@ -24494,6 +24494,7 @@ procedure TPhastDelegate.GetCellsToAssign(
 var
   Grid: TCustomModelGrid;
 begin
+  Assert(not FScreenObject.Deleted);
   Grid := (AModel as TCustomModel).Grid;
   Assert(CellList.Count = 0);
   if (Grid.ColumnCount <= 0) or (Grid.RowCount <= 0)
@@ -27459,6 +27460,7 @@ var
     end;
   end;
 begin
+  Assert(not FScreenObject.Deleted);
   Grid :=  (AModel as TCustomModel).Grid;
   Assert(CellList.Count = 0);
   if (Grid.ColumnCount <= 0) or (Grid.RowCount <= 0)
@@ -33430,6 +33432,7 @@ procedure TScreenObject.GetCellsToAssign(
   const DataSet: TDataArray; CellList: TCellAssignmentList;
   AssignmentLocation: TAssignmentLocation; AModel: TBaseModel);
 begin
+  Assert(not Deleted);
   Assert(CellList.Count = 0);
   case ViewDirection of
     vdTop: Delegate.GetTopCellsToAssign(DataSetFunction, OtherData,
@@ -43368,6 +43371,7 @@ var
   CellIndex: Integer;
   ACell: TCellAssignment;
 begin
+  Assert(not FScreenObject.Deleted);
   Mesh := (AModel as TCustomModel).Mesh3D;
   Assert(CellList.Count = 0);
   if (Mesh.Mesh2DI.NodeCount <= 0) or (Mesh.Mesh2DI.ElementCount <= 0)

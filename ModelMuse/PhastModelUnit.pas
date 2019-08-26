@@ -2658,7 +2658,9 @@ that affects the model output should also have a comment. }
     // @name removes the variables that represent DataSet in any
     // expression.
     // @seealso(CreateVariables).
-    procedure RemoveVariables(const DataSet: TDataArray);
+    procedure RemoveVariables(const DataSet: TDataArray); overload;
+    procedure RemoveVariables(const DataSetName: String;
+      Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt); overload;
     property ThreeDGridObserver: TObserver read GetThreeDGridObserver;
     property TopGridObserver: TObserver read FTopGridObserver;
     property HufKxNotifier: TObserver read FHufKxNotifier;
@@ -8706,6 +8708,8 @@ const
   //                marked as required with MODPATH 7 when in reality it wasn't
   //                used.
   //               Enhancement: Support for SUTRA 3.0 added.
+  //               Bug fix: Fixed bug that could cause an error if the user
+  //                tried to rename a data set.
 
   // version number of ModelMuse.
   IModelVersion = '4.0.0.12';
@@ -8840,7 +8844,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMawWriterUnit, ModflowGncWriterUnit, Modflow6ObsWriterUnit,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
-  Mt3dLktWriterUnit, ModflowSfr6Unit;
+  Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -8865,9 +8869,9 @@ resourcestring
   strModflowOwhmDefaultPath = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe';
   StrMFOwhmDefaultPath64 = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe';
 {$IFDEF WIN64}
-  StrDefaultGmshPath = 'C:\gmsh-4.3.0-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.4.1-Windows64\gmsh.exe';
 {$ELSE}
-  StrDefaultGmshPath = 'C:\gmsh-4.3.0-Windows32\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.4.1-Windows32\gmsh.exe';
 {$ENDIF}
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0\bin\WellFootprint.exe';
@@ -30710,55 +30714,57 @@ begin
 end;
 
 procedure TCustomModel.RemoveVariables(const DataSet: TDataArray);
-var
-  TempCompiler: TRbwParser;
-  Local3DCompiler: TRbwParser;
-  VarIndex: integer;
-  Variable: TCustomVariable;
-  LocalModel: TPhastModel;
-  ChildIndex: Integer;
-  ChildItem: TChildModelItem;
+//var
+//  TempCompiler: TRbwParser;
+//  Local3DCompiler: TRbwParser;
+//  VarIndex: integer;
+//  Variable: TCustomVariable;
+//  LocalModel: TPhastModel;
+//  ChildIndex: Integer;
+//  ChildItem: TChildModelItem;
 begin
-  TempCompiler := GetCompiler(DataSet.Orientation,
+  RemoveVariables(DataSet.Name, DataSet.Orientation,
     DataSet.EvaluatedAt);
-
-  Local3DCompiler := nil;
-  case DataSet.EvaluatedAt of
-    eaBlocks:
-      begin
-        Local3DCompiler := rpThreeDFormulaCompiler;
-      end;
-    eaNodes:
-      begin
-        Local3DCompiler := rpThreeDFormulaCompilerNodes;
-      end;
-  else
-    Assert(False);
-  end;
-  VarIndex := TempCompiler.IndexOfVariable(DataSet.Name);
-  if VarIndex >= 0 then
-  begin
-    Variable := TempCompiler.Variables[VarIndex] as TCustomVariable;
-    TempCompiler.RemoveVariable(Variable);
-  end;
-  if TempCompiler <> Local3DCompiler then
-  begin
-    VarIndex := Local3DCompiler.IndexOfVariable(DataSet.Name);
-    if VarIndex >= 0 then
-    begin
-      Variable := Local3DCompiler.Variables[VarIndex] as TCustomVariable;
-      Local3DCompiler.RemoveVariable(Variable);
-    end;
-  end;
-  if self is TPhastModel then
-  begin
-    LocalModel := TPhastModel(self);
-    for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
-    begin
-      ChildItem := LocalModel.ChildModels[ChildIndex];
-      ChildItem.ChildModel.RemoveVariables(DataSet);
-    end;
-  end;
+//  TempCompiler := GetCompiler(DataSet.Orientation,
+//    DataSet.EvaluatedAt);
+//
+//  Local3DCompiler := nil;
+//  case DataSet.EvaluatedAt of
+//    eaBlocks:
+//      begin
+//        Local3DCompiler := rpThreeDFormulaCompiler;
+//      end;
+//    eaNodes:
+//      begin
+//        Local3DCompiler := rpThreeDFormulaCompilerNodes;
+//      end;
+//  else
+//    Assert(False);
+//  end;
+//  VarIndex := TempCompiler.IndexOfVariable(DataSet.Name);
+//  if VarIndex >= 0 then
+//  begin
+//    Variable := TempCompiler.Variables[VarIndex] as TCustomVariable;
+//    TempCompiler.RemoveVariable(Variable);
+//  end;
+//  if TempCompiler <> Local3DCompiler then
+//  begin
+//    VarIndex := Local3DCompiler.IndexOfVariable(DataSet.Name);
+//    if VarIndex >= 0 then
+//    begin
+//      Variable := Local3DCompiler.Variables[VarIndex] as TCustomVariable;
+//      Local3DCompiler.RemoveVariable(Variable);
+//    end;
+//  end;
+//  if self is TPhastModel then
+//  begin
+//    LocalModel := TPhastModel(self);
+//    for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
+//    begin
+//      ChildItem := LocalModel.ChildModels[ChildIndex];
+//      ChildItem.ChildModel.RemoveVariables(DataSet);
+//    end;
+//  end;
 end;
 
 procedure TCustomModel.SetEdgeDisplay(const Value: TCustomModflowGridEdgeDisplay);
@@ -36103,6 +36109,59 @@ begin
   FTimeLists.Remove(TimeList);
 end;
 
+procedure TCustomModel.RemoveVariables(const DataSetName: String;
+  Orientation: TDataSetOrientation; EvaluatedAt: TEvaluatedAt);
+var
+  TempCompiler: TRbwParser;
+  Local3DCompiler: TRbwParser;
+  VarIndex: integer;
+  Variable: TCustomVariable;
+  LocalModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildItem: TChildModelItem;
+begin
+  TempCompiler := GetCompiler(Orientation,
+    EvaluatedAt);
+
+  Local3DCompiler := nil;
+  case EvaluatedAt of
+    eaBlocks:
+      begin
+        Local3DCompiler := rpThreeDFormulaCompiler;
+      end;
+    eaNodes:
+      begin
+        Local3DCompiler := rpThreeDFormulaCompilerNodes;
+      end;
+  else
+    Assert(False);
+  end;
+  VarIndex := TempCompiler.IndexOfVariable(DataSetName);
+  if VarIndex >= 0 then
+  begin
+    Variable := TempCompiler.Variables[VarIndex] as TCustomVariable;
+    TempCompiler.RemoveVariable(Variable);
+  end;
+  if TempCompiler <> Local3DCompiler then
+  begin
+    VarIndex := Local3DCompiler.IndexOfVariable(DataSetName);
+    if VarIndex >= 0 then
+    begin
+      Variable := Local3DCompiler.Variables[VarIndex] as TCustomVariable;
+      Local3DCompiler.RemoveVariable(Variable);
+    end;
+  end;
+  if self is TPhastModel then
+  begin
+    LocalModel := TPhastModel(self);
+    for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
+    begin
+      ChildItem := LocalModel.ChildModels[ChildIndex];
+      ChildItem.ChildModel.RemoveVariables(DataSetName, Orientation, EvaluatedAt);
+    end;
+  end;
+end;
+
 function TCustomModel.GetTimeLists(Index: integer): TCustomTimeList;
 begin
   result := FTimeLists[Index];
@@ -39066,6 +39125,7 @@ var
   {$IFDEF Mt3dUSGS}
   UztWriter: TMt3dUztWriter;
   LktWriter: TMt3dLktWriter;
+  SftWriter: TMt3dmsSftWriter;
   {$ENDIF}
 begin
   // Note: MT3DMS can not read Unicode text files.
@@ -39117,6 +39177,13 @@ begin
           LktWriter.WriteFile(FileName);
         finally
           LktWriter.Free;
+        end;
+
+        SftWriter := TMt3dmsSftWriter.Create(self, etExport);
+        try
+          SftWriter.WriteFile(FileName);
+        finally
+          SftWriter.Free;
         end;
 
         {$ENDIF}
