@@ -1,0 +1,103 @@
+BEGIN Options Keywords
+  Verbose = 3
+END Options
+ 
+# Block UCODE_Control_Data is omitted because defaults are used for all entries
+ 
+BEGIN Model_Command_Lines Keywords
+  Command = 'C:\WRDAPP\MF2005.1_8\bin\mf2005.exe "D:\Delphi_Projects\ModelMate\temp\ModelMate_0_19\Example\tc1.nam"'
+    Purpose = Forward
+    CommandID = ForwardModel
+END Model_Command_Lines
+ 
+BEGIN Parameter_Groups Table
+  NROW=3 NCOL=5 COLUMNLABELS
+  GroupName Adjustable Transform MaxChange SenMethod
+  ParamDefault Yes No 2.0 2
+  HydCond Yes Yes 2.0 2
+  Fixed No No 2.0 1
+END Parameter_Groups
+ 
+BEGIN Parameter_Data Table
+  NROW=11 NCOL=5 COLUMNLABELS
+  ParamName GroupName StartValue LowerValue UpperValue
+  SS_1 ParamDefault 0.0013 -10.0E38 10.0E38
+  HK_1 HydCond 0.0003 -10.0E38 10.0E38
+  VERT_ANI_1 Fixed 1 -10.0E38 10.0E38
+  VERT_K_CB HydCond 1E-7 -10.0E38 10.0E38
+  SS_2 ParamDefault 0.0002 -10.0E38 10.0E38
+  HK_2 HydCond 4E-5 -10.0E38 10.0E38
+  VERT_ANI_2 Fixed 1 -10.0E38 10.0E38
+  WELLS_TR ParamDefault -1.1 -10.0E38 10.0E38
+  RIVERS HydCond 0.0012 -10.0E38 10.0E38
+  RCH_ZONE_1 ParamDefault 63.1 -10.0E38 10.0E38
+  RCH_ZONE_2 ParamDefault 31.5 -10.0E38 10.0E38
+END Parameter_Data
+ 
+BEGIN Observation_Groups Table
+  NROW=2 NCOL=3 COLUMNLABELS
+  GroupName Statistic StatFlag
+  Heads 1.0025 VAR
+  Head_Changes 0.0025 VAR
+END Observation_Groups
+ 
+BEGIN Observation_Data Table
+  NROW=32 NCOL=3 COLUMNLABELS
+  ObsName GroupName ObsValue
+  B.0 Heads 101.804
+  B.1 Head_Changes -0.0289999999999964
+  B.12 Head_Changes -0.129000000000005
+  C.0 Heads 128.117
+  C.1 Head_Changes -0.0409999999999968
+  C.2 Head_Changes -0.556999999999988
+  C.8 Head_Changes -11.531
+  C.12 Head_Changes -14.184
+  D.0 Heads 156.678
+  D.1 Head_Changes -4.381
+  D.12 Head_Changes -42.54
+  E.0 Heads 124.893
+  E.1 Head_Changes -0.0670000000000073
+  E.12 Head_Changes -14.304
+  F.0 Heads 140.961
+  F.1 Head_Changes -0.0600000000000023
+  F.12 Head_Changes -21.676
+  G.0 Heads 126.537
+  G.1 Head_Changes 0.00499999999999545
+  G.12 Head_Changes -14.365
+  H.0 Heads 101.112
+  H.1 Head_Changes 0.0480000000000018
+  H.12 Head_Changes -0.567999999999998
+  I.0 Heads 158.135
+  I.1 Head_Changes -5.53299999999999
+  I.12 Head_Changes -43.217
+  J.0 Heads 176.374
+  J.1 Head_Changes -0.00100000000000477
+  J.12 Head_Changes -38.242
+  A.0 Heads 142.02
+  A.1 Head_Changes -0.0130000000000052
+  A.12 Head_Changes -19.921
+END Observation_Data
+ 
+BEGIN Prior_Information_Groups Table
+  NROW=1 NCOL=2 COLUMNLABELS
+  GroupName PlotSymbol
+  DefaultPrior 1
+END Prior_Information_Groups
+ 
+BEGIN Linear_Prior_Information Table
+  NROW=1 NCOL=5 COLUMNLABELS
+  PriorName Equation PriorInfoValue Statistic StatFlag
+  Pri_K1 HK_1 0.0004 0.0001 SD
+END Linear_Prior_Information
+ 
+BEGIN Model_Input_Files Keywords
+  ModInFile = tc1.pval
+    TemplateFile = tc1_pval.jtf
+END Model_Input_Files
+ 
+BEGIN Model_Output_Files Keywords
+  ModOutFile = tc1._os
+    InstructionFile = tc1._os.jif
+    Category = Obs
+END Model_Output_Files
+ 

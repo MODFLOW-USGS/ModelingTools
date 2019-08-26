@@ -1,0 +1,12 @@
+  "PARAMETER"  "PINC"  "1 IF PRESENT IN EACH OF MPR EQUATIONS"
+ SS_1             1     0
+ HK_1             1     1
+ VERT_ANI_1      -1     0
+ VERT_K_CB        1     0
+ SS_2             1     0
+ HK_2             1     0
+ VERT_ANI_2      -1     0
+ WELLS_TR         1     0
+ RIVERS           1     0
+ RCH_ZONE_1       1     0
+ RCH_ZONE_2       1     0

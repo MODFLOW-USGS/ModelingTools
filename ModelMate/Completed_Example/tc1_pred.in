@@ -1,0 +1,105 @@
+BEGIN Options Keywords
+  Verbose = 3
+END Options
+ 
+BEGIN UCODE_Control_Data Keywords
+  Prediction = True
+END UCODE_Control_Data
+ 
+BEGIN Model_Command_Lines Keywords
+  Command = 'C:\WRDAPP\MF2005.1_8\bin\mf2005.exe "D:\Delphi_Projects\ModelMate\temp\ModelMate_0_19\Example\tc1pred.nam"'
+    Purpose = Forward
+    CommandID = ForwardModel
+END Model_Command_Lines
+ 
+BEGIN Parameter_Groups Table
+  NROW=3 NCOL=5 COLUMNLABELS
+  GroupName Adjustable Transform MaxChange SenMethod
+  ParamDefault Yes No 2.0 2
+  HydCond Yes Yes 2.0 2
+  Fixed No No 2.0 1
+END Parameter_Groups
+ 
+BEGIN Parameter_Data Table
+  NROW=11 NCOL=5 COLUMNLABELS
+  ParamName GroupName StartValue LowerValue UpperValue
+  SS_1 ParamDefault 0.0013 -10.0E38 10.0E38
+  HK_1 HydCond 0.0003 -10.0E38 10.0E38
+  VERT_ANI_1 Fixed 1 -10.0E38 10.0E38
+  VERT_K_CB HydCond 1E-7 -10.0E38 10.0E38
+  SS_2 ParamDefault 0.0002 -10.0E38 10.0E38
+  HK_2 HydCond 4E-5 -10.0E38 10.0E38
+  VERT_ANI_2 Fixed 1 -10.0E38 10.0E38
+  WELLS_TR ParamDefault -1.1 -10.0E38 10.0E38
+  RIVERS HydCond 0.0012 -10.0E38 10.0E38
+  RCH_ZONE_1 ParamDefault 63.1 -10.0E38 10.0E38
+  RCH_ZONE_2 ParamDefault 31.5 -10.0E38 10.0E38
+END Parameter_Data
+ 
+BEGIN Prediction_Groups Table
+  NROW=2 NCOL=3 COLUMNLABELS
+  GroupName MeasStatistic MeasStatFlag
+  Heads 1.0025 VAR
+  Head_Changes 0.0025 VAR
+END Prediction_Groups
+ 
+BEGIN Prediction_Data Table
+  NROW=32 NCOL=3 COLUMNLABELS
+  PredName GroupName RefValue
+  Bp.0 Heads 0.0
+  Bp.1 Head_Changes 0.0
+  Bp.12 Head_Changes 0.0
+  Cp.0 Heads 0.0
+  Cp.1 Head_Changes 0.0
+  Cp.2 Head_Changes 0.0
+  Cp.8 Head_Changes 0.0
+  Cp.12 Head_Changes 0.0
+  Dp.0 Heads 0.0
+  Dp.1 Head_Changes 0.0
+  Dp.12 Head_Changes 0.0
+  Ep.0 Heads 0.0
+  Ep.1 Head_Changes 0.0
+  Ep.12 Head_Changes 0.0
+  Fp.0 Heads 0.0
+  Fp.1 Head_Changes 0.0
+  Fp.12 Head_Changes 0.0
+  Gp.0 Heads 0.0
+  Gp.1 Head_Changes 0.0
+  Gp.12 Head_Changes 0.0
+  Hp.0 Heads 0.0
+  Hp.1 Head_Changes 0.0
+  Hp.12 Head_Changes 0.0
+  Ip.0 Heads 0.0
+  Ip.1 Head_Changes 0.0
+  Ip.12 Head_Changes 0.0
+  Jp.0 Heads 0.0
+  Jp.1 Head_Changes 0.0
+  Jp.12 Head_Changes 0.0
+  Ap.0 Heads 0.0
+  Ap.1 Head_Changes 0.0
+  Ap.12 Head_Changes 0.0
+END Prediction_Data
+ 
+BEGIN Prior_Information_Groups Table
+  NROW=1 NCOL=2 COLUMNLABELS
+  GroupName PlotSymbol
+  DefaultPrior 1
+END Prior_Information_Groups
+ 
+BEGIN Linear_Prior_Information Table
+  NROW=1 NCOL=5 COLUMNLABELS
+  PriorName Equation PriorInfoValue Statistic StatFlag
+  Pri_K1 HK_1 0.0004 0.0001 SD
+END Linear_Prior_Information
+ 
+BEGIN Model_Input_Files Keywords
+  ModInFile = tc1pred.pval
+    TemplateFile = tc1pred_pval.jtf
+END Model_Input_Files
+ 
+BEGIN Model_Output_Files Keywords
+  ModOutFile = tc1pred._os
+    InstructionFile = tc1pred._os.jif
+    Category = Pred
+END Model_Output_Files
+ 
