@@ -84,8 +84,16 @@ end;
 procedure TframePackageNpf.GetData(Package: TModflowPackageSelection);
 var
   NpfPackage: TNpfPackage;
+  GridSelection: TGridRect;
 begin
   inherited;
+
+  GridSelection.Left := 0;
+  GridSelection.Right := 0;
+  GridSelection.Top := 0;
+  GridSelection.Bottom := 0;
+  rdgOptions.Selection := GridSelection;
+
   NpfPackage := Package as TNpfPackage;
   comboInterblockMethod.ItemIndex := Ord(NpfPackage.CellAveraging);
   rdgOptions.Checked[0, Ord(noThickStrt)] := NpfPackage.UseSaturatedThickness;

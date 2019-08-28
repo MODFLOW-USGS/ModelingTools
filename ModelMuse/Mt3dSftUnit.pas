@@ -4,7 +4,7 @@ interface
 
 uses ModflowCellUnit, Mt3dmsChemUnit, System.Classes, ModflowBoundaryUnit,
   GoPhastTypes, FormulaManagerUnit, SubscriptionUnit,
-  System.Generics.Collections, System.SysUtils;
+  System.Generics.Collections, System.SysUtils, System.ZLib, DataSetUnit;
 
 type
   TSftSteady = class(TObject)
@@ -128,6 +128,10 @@ type
     class function ItemClass: TBoundaryItemClass; override;
     procedure InvalidateModel; override;
     function ConcName: string; override;
+    procedure CountArrayBoundaryCells(var BoundaryCount: Integer;
+      DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel); override;
+    procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
+      AModel: TBaseModel); override;
   public
     property BoundaryType: TSftBoundaryType read FBoundaryType write SetBoundaryType;
   end;
@@ -166,6 +170,21 @@ type
 
   TSftObsLocation = (solNone, solFirst, solLast, solAll);
 
+  TMt3dmsSftConc_Cell = class(TMt3dmsConc_Cell)
+  private
+    FBoundaryType: TSftBoundaryType;
+    // @name starts at zero.
+    FReachNumber: Integer;
+  protected
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
+    procedure Restore(Decomp: TDecompressionStream;
+      Annotations: TStringList); override;
+  public
+    property BoundaryType: TSftBoundaryType read FBoundaryType;
+    // @name starts at zero.
+    property ReachNumber: Integer read FReachNumber;
+  end;
+
   TMt3dSftBoundary = class(TCustomMt3dmsConcBoundary)
   private
     FObsLocation: TSftObsLocation;
@@ -174,6 +193,8 @@ type
     FConstConc: TConstConcMt3dSftReachCollection;
     FInitialConcentration: TMt3dSftInitConcCollection;
     FDispersionCoefficient: TMt3dSftDispCollection;
+    FCurrentBoundaryType: TSftBoundaryType;
+    FStartingReachNumber: Integer;
     procedure SetObsLocation(const Value: TSftObsLocation);
     procedure SetConstConc(const Value: TConstConcMt3dSftReachCollection);
     procedure SetPrecipitation(
@@ -186,7 +207,7 @@ type
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
-    // @link(TMt3dmsConc_Cell)s for that stress period.
+    // @link(TMt3dmsSftConc_Cell)s for that stress period.
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
@@ -213,6 +234,7 @@ type
     procedure DeleteSpecies(SpeciesIndex: integer); override;
     function Used: boolean; override;
     procedure AssignInitConcAndDisp(AModel: TBaseModel; SftSteadyList: TSftSteadyObjectList);
+    property StartingReachNumber: Integer read FStartingReachNumber write FStartingReachNumber;
   published
     property InitialConcentration: TMt3dSftInitConcCollection read FInitialConcentration
       write SetInitialConcentration;
@@ -229,7 +251,7 @@ implementation
 uses
   PhastModelUnit, Mt3dmsChemSpeciesUnit, RbwParser,
   frmGoPhastUnit, ModflowTimeUnit, ScreenObjectUnit, frmFormulaErrorsUnit,
-  DataSetUnit, GlobalVariablesUnit, GIS_Functions;
+  GlobalVariablesUnit, GIS_Functions, ModflowSfrReachUnit;
 
 resourcestring
   StrHeadwater = 'Headwater';
@@ -420,6 +442,91 @@ end;
 
 { TCustomMt3dSftReachCollection }
 
+procedure TCustomMt3dSftReachCollection.AssignArrayCellValues(DataSets: TList;
+  ItemIndex: Integer; AModel: TBaseModel);
+var
+  ConcArray: TDataArray;
+//  LgrReachLengthArray: TDataArray;
+  Boundary: TMt3dmsConcStorage;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  BoundaryIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  SegmentIndex: Integer;
+  Segment: TCellElementSegment;
+  PriorCol, PriorRow, PriorLayer: integer;
+  LocalModel: TCustomModel;
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  LocalModel := AModel as TCustomModel;
+  PriorCol := -1;
+  PriorRow := -1;
+  PriorLayer := -1;
+
+  ConcArray := DataSets[0];
+//  LgrReachLengthArray := DataSets[1];
+
+  BoundaryIndex := -1;
+  Boundary := Boundaries[ItemIndex, AModel] as TMt3dmsConcStorage;
+
+  LocalScreenObject := ScreenObject as TScreenObject;
+  for SegmentIndex := 0 to LocalScreenObject.Segments[LocalModel].Count - 1 do
+  begin
+    Segment := LocalScreenObject.Segments[LocalModel][SegmentIndex];
+    ColIndex := Segment.Col;
+    RowIndex := Segment.Row;
+    LayerIndex := Segment.Layer;
+    if not LocalModel.IsLayerSimulated(LayerIndex) then
+    begin
+      Continue;
+    end;
+    if not ConcArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+    begin
+      Continue;
+    end;
+    if (ColIndex = PriorCol)
+      and (RowIndex = PriorRow)
+      and (LayerIndex = PriorLayer) then
+    begin
+      Continue
+    end;
+    Inc(BoundaryIndex);
+    PriorCol := Segment.Col;
+    PriorRow := Segment.Row;
+    PriorLayer := Segment.Layer;
+
+    Assert(BoundaryIndex < Length(Boundary.Mt3dmsConcArray));
+    if ConcArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+    begin
+//      Boundary := Boundaries[ItemIndex] as TSfrStorage;
+      Assert(BoundaryIndex < Length(Boundary.Mt3dmsConcArray));
+      with Boundary.Mt3dmsConcArray[BoundaryIndex] do
+      begin
+        Cell.Layer := LayerIndex;
+        Cell.Row := RowIndex;
+        Cell.Column := ColIndex;
+
+        for DataArrayIndex := 0 to DataSets.Count - 1 do
+        begin
+          ADataArray := DataSets[DataArrayIndex];
+          Assert(ADataArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+          Concentration[DataArrayIndex] := ADataArray.
+            RealData[LayerIndex, RowIndex, ColIndex];
+          ConcentrationAnnotation[DataArrayIndex] := ADataArray.
+            Annotation[LayerIndex, RowIndex, ColIndex];
+        end;
+
+      end;
+    end;
+  end;
+  ConcArray.CacheData;
+//  LgrReachLengthArray.CacheData;
+
+  Boundary.CacheData;
+end;
+
 function TCustomMt3dSftReachCollection.ConcName: string;
 begin
     case FBoundaryType of
@@ -442,6 +549,15 @@ begin
       else
         Assert(False);
     end;
+end;
+
+procedure TCustomMt3dSftReachCollection.CountArrayBoundaryCells(
+  var BoundaryCount: Integer; DataArray1: TDataArray; DataSets: TList;
+  AModel: TBaseModel);
+begin
+//  inherited;
+  CountArrayBoundaryCellsSfr(BoundaryCount, DataArray1, DataSets, AModel,
+    ScreenObject);
 end;
 
 procedure TCustomMt3dSftReachCollection.InvalidateModel;
@@ -644,7 +760,7 @@ procedure TMt3dSftBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
 var
-  Cell: TMt3dmsConc_Cell;
+  Cell: TMt3dmsSftConc_Cell;
   BoundaryValues: TMt3dmsConcentrationRecord;
   BoundaryIndex: Integer;
   StressPeriod: TModflowStressPeriod;
@@ -670,7 +786,7 @@ begin
     end
     else
     begin
-      Cells := TValueCellList.Create(TMt3dmsConc_Cell);
+      Cells := TValueCellList.Create(TMt3dmsSftConc_Cell);
       ValueTimeList.Add(Cells);
     end;
     StressPeriod := LocalModel.ModflowFullStressPeriods[TimeIndex];
@@ -690,7 +806,7 @@ begin
         Length(LocalBoundaryStorage.Mt3dmsConcArray) - 1 do
       begin
         BoundaryValues := LocalBoundaryStorage.Mt3dmsConcArray[BoundaryIndex];
-        Cell := TMt3dmsConc_Cell.Create;
+        Cell := TMt3dmsSftConc_Cell.Create;
         Cells.Add(Cell);
 
         LocalModel.AdjustCellPosition(Cell);
@@ -699,6 +815,8 @@ begin
         Cell.Values := BoundaryValues;
         Cell.ScreenObject := ScreenObject;
         Cell.SetConcentrationLength(Length(Cell.Values.Concentration));
+        Cell.FBoundaryType := FCurrentBoundaryType;
+        Cell.FReachNumber := BoundaryIndex + StartingReachNumber;
       end;
       Cells.Cache;
     end;
@@ -951,7 +1069,7 @@ end;
 procedure TMt3dSftBoundary.AssignSftCells(BoundaryStorage: TMt3dmsConcStorage;
   ValueTimeList: TList);
 var
-  Cell: TMt3dmsConc_Cell;
+  Cell: TMt3dmsSftConc_Cell;
   BoundaryValues: TMt3dmsConcentrationRecord;
   BoundaryIndex: Integer;
   StressPeriod: TModflowStressPeriod;
@@ -969,7 +1087,7 @@ begin
     end
     else
     begin
-      Cells := TValueCellList.Create(TMt3dmsConc_Cell);
+      Cells := TValueCellList.Create(TMt3dmsSftConc_Cell);
       ValueTimeList.Add(Cells);
     end;
     StressPeriod := (ParentModel as TPhastModel).ModflowFullStressPeriods[TimeIndex];
@@ -983,7 +1101,7 @@ begin
       begin
 //        Cells.Cached := False;
         BoundaryValues := LocalBoundaryStorage.Mt3dmsConcArray[BoundaryIndex];
-        Cell := TMt3dmsConc_Cell.Create;
+        Cell := TMt3dmsSftConc_Cell.Create;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
@@ -1107,6 +1225,8 @@ var
   ValueIndex: Integer;
   BoundaryStorage: TMt3dmsConcStorage;
 begin
+  FCurrentBoundaryType := sbtHeadwater;
+
   EvaluateArrayBoundaries(AModel);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
@@ -1116,6 +1236,8 @@ begin
       AssignCells(BoundaryStorage, ValueTimeList, AModel);
     end;
   end;
+
+  FCurrentBoundaryType := sbtPrecipitation;
   for ValueIndex := 0 to Precipitation.Count - 1 do
   begin
     if ValueIndex < Precipitation.BoundaryCount[AModel] then
@@ -1124,6 +1246,8 @@ begin
       AssignCells(BoundaryStorage, ValueTimeList, AModel);
     end;
   end;
+
+  FCurrentBoundaryType := sbtRunoff;
   for ValueIndex := 0 to RunOff.Count - 1 do
   begin
     if ValueIndex < RunOff.BoundaryCount[AModel] then
@@ -1132,6 +1256,8 @@ begin
       AssignCells(BoundaryStorage, ValueTimeList, AModel);
     end;
   end;
+
+  FCurrentBoundaryType := sbtConstConc;
   for ValueIndex := 0 to ConstConc.Count - 1 do
   begin
     if ValueIndex < ConstConc.BoundaryCount[AModel] then
@@ -1504,6 +1630,25 @@ begin
   FInitConcentrationsAnnotations.Free;
   FDispersionsAnnotations.Free;
   inherited;
+end;
+
+{ TMt3dmsSftConc_Cell }
+
+procedure TMt3dmsSftConc_Cell.Cache(Comp: TCompressionStream;
+  Strings: TStringList);
+begin
+  inherited;
+  WriteCompInt(Comp, Ord(FBoundaryType));
+  WriteCompInt(Comp, FReachNumber);
+
+end;
+
+procedure TMt3dmsSftConc_Cell.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+begin
+  inherited;
+  FBoundaryType := TSftBoundaryType(ReadCompInt(Decomp));
+  FReachNumber := ReadCompInt(Decomp);
 end;
 
 end.

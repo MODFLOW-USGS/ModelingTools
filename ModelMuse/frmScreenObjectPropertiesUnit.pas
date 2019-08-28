@@ -5824,24 +5824,19 @@ begin
       5 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end;
   frameMT3DMS_SSM.rdgModflowBoundary.ColCount :=
-    2 + frmGoPhast.PhastModel.MobileComponents.Count
-    + frmGoPhast.PhastModel.ImmobileComponents.Count;
+    2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
 
   frameMt3d_UZT_Rech.rdgModflowBoundary.ColCount :=
-    2 + frmGoPhast.PhastModel.MobileComponents.Count
-    + frmGoPhast.PhastModel.ImmobileComponents.Count;
+    2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
 
   frameMt3d_UZT_Sat.rdgModflowBoundary.ColCount :=
-    2 + frmGoPhast.PhastModel.MobileComponents.Count
-    + frmGoPhast.PhastModel.ImmobileComponents.Count;
+    2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
 
   frameMt3d_UZT_Unsat.rdgModflowBoundary.ColCount :=
-    2 + frmGoPhast.PhastModel.MobileComponents.Count
-    + frmGoPhast.PhastModel.ImmobileComponents.Count;
+    2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
 
   frameMT3D_Uzf_Ssm_Conc.rdgModflowBoundary.ColCount :=
-    2 + frmGoPhast.PhastModel.MobileComponents.Count
-    + frmGoPhast.PhastModel.ImmobileComponents.Count;
+    2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
 
   frameSWR_Rain.rdgModflowBoundary.ColCount := 3;
   frameSWR_Evap.rdgModflowBoundary.ColCount := 3;
@@ -15395,8 +15390,7 @@ begin
 
     AScreenObject.CreateMt3dmsConcBoundary;
     frameMT3DMS_SSM.rdgModflowBoundary.ColCount := 2
-      + frmGoPhast.PhastModel.MobileComponents.Count
-      + frmGoPhast.PhastModel.ImmobileComponents.Count;
+      + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMT3DMS_SSM.InitializeNoParamFrame(AScreenObject.Mt3dmsConcBoundary);
     if (AScreenObject.Mt3dmsConcBoundary <> nil)
       and not AScreenObject.Mt3dmsConcBoundary.Used then
@@ -15406,8 +15400,7 @@ begin
 
     AScreenObject.CreateMt3dUzfRchConcBoundary;
     frameMt3d_UZT_Rech.rdgModflowBoundary.ColCount := 2
-      + frmGoPhast.PhastModel.MobileComponents.Count
-      + frmGoPhast.PhastModel.ImmobileComponents.Count;
+      + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMt3d_UZT_Rech.InitializeNoParamFrame(AScreenObject.Mt3dUzfRechConc);
     if (AScreenObject.Mt3dUzfRechConc <> nil)
       and not AScreenObject.Mt3dUzfRechConc.Used then
@@ -15417,8 +15410,7 @@ begin
 
     AScreenObject.CreateMt3dUztSatEtConcBoundary;
     frameMt3d_UZT_Sat.rdgModflowBoundary.ColCount := 2
-      + frmGoPhast.PhastModel.MobileComponents.Count
-      + frmGoPhast.PhastModel.ImmobileComponents.Count;
+      + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMt3d_UZT_Sat.InitializeNoParamFrame(AScreenObject.Mt3dUztSatEtConcBoundary);
     if (AScreenObject.Mt3dUztSatEtConcBoundary <> nil)
       and not AScreenObject.Mt3dUztSatEtConcBoundary.Used then
@@ -15428,8 +15420,7 @@ begin
 
     AScreenObject.CreateMt3dUztUnsatEtConcBoundary;
     frameMt3d_UZT_Unsat.rdgModflowBoundary.ColCount := 2
-      + frmGoPhast.PhastModel.MobileComponents.Count
-      + frmGoPhast.PhastModel.ImmobileComponents.Count;
+      + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMt3d_UZT_Unsat.InitializeNoParamFrame(AScreenObject.Mt3dUztUnsatEtConcBoundary);
     if (AScreenObject.Mt3dUztUnsatEtConcBoundary <> nil)
       and not AScreenObject.Mt3dUztUnsatEtConcBoundary.Used then
@@ -15439,8 +15430,7 @@ begin
 
     AScreenObject.CreateMt3dUzSsmSinkConcBoundary;
     frameMT3D_Uzf_Ssm_Conc.rdgModflowBoundary.ColCount := 2
-      + frmGoPhast.PhastModel.MobileComponents.Count
-      + frmGoPhast.PhastModel.ImmobileComponents.Count;
+      + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMT3D_Uzf_Ssm_Conc.InitializeNoParamFrame(AScreenObject.Mt3dUzSsmSinkConcBoundary);
     if (AScreenObject.Mt3dUzSsmSinkConcBoundary <> nil)
       and not AScreenObject.Mt3dUzSsmSinkConcBoundary.Used then

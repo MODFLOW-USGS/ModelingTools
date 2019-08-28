@@ -256,6 +256,7 @@ type
     FBoundary: TCustomMF_BoundColl;
   protected
     procedure CreateTimeLists; virtual; abstract;
+    procedure UpdateTimeLists; virtual;
   public
     property Boundary: TCustomMF_BoundColl read FBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -2982,6 +2983,11 @@ begin
   inherited;
 end;
 
+
+procedure TTimeListsModelLink.UpdateTimeLists;
+begin
+  // do nothing
+end;
 
 { TTimeListModelLinkList }
 

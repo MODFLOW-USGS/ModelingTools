@@ -130,7 +130,7 @@ uses
   PhastModelUnit, RbwParser, SysUtils, ModflowPackageSelectionUnit,
   frmGoPhastUnit, ScreenObjectUnit, Mt3dmsChemUnit, Mt3dmsTobUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit,
-  frameMt3dLktPkgUnit, Mt3dLktUnit;
+  frameMt3dLktPkgUnit, Mt3dLktUnit, Mt3dSftUnit;
 
 const
   kInitConcPrefix = 'Initial_Concentration_';
@@ -273,6 +273,7 @@ var
   Mt3dUztUnsatEtConcBoundary: TMt3dUztUnsatEtConcBoundary;
   Mt3dUzSsmSinkConcBoundary: TMt3dUzSsmSinkConcBoundary;
   Mt3dLktConcBoundary: TMt3dLktConcBoundary;
+  Mt3dSftConcBoundary: TMt3dSftBoundary;
 begin
   inherited;
   FName := 'default name';
@@ -325,7 +326,15 @@ begin
       begin
         Mt3dLktConcBoundary.InsertNewSpecies(SpeciesIndex, Name);
       end;
+
+      Mt3dSftConcBoundary := ScreenObject.Mt3dSftConcBoundary;
+      if Mt3dSftConcBoundary <> nil then
+      begin
+        Mt3dSftConcBoundary.InsertNewSpecies(SpeciesIndex, Name);
+      end;
     end;
+
+
   end;
 end;
 
@@ -342,6 +351,7 @@ var
   Mt3dUztUnsatEtConcBoundary: TMt3dUztUnsatEtConcBoundary;
   Mt3dUzSsmSinkConcBoundary: TMt3dUzSsmSinkConcBoundary;
   Mt3dLktConcBoundary: TMt3dLktConcBoundary;
+  Mt3dSftConcBoundary: TMt3dSftBoundary;
 begin
   if (Model <> nil) and not (csDestroying in Model.ComponentState)
     and not (Model as TCustomModel).Clearing then
@@ -399,6 +409,12 @@ begin
       begin
         Mt3dLktConcBoundary.DeleteSpecies(SpeciesIndex);
       end;
+
+      Mt3dSftConcBoundary := ScreenObject.Mt3dSftConcBoundary;
+      if Mt3dSftConcBoundary <> nil then
+      begin
+        Mt3dSftConcBoundary.DeleteSpecies(SpeciesIndex);
+      end;
     end;
   end;
 
@@ -452,6 +468,7 @@ var
   Mt3dUztUnsatEtConcBoundary: TMt3dUztUnsatEtConcBoundary;
   Mt3dUzSsmSinkConcBoundary: TMt3dUzSsmSinkConcBoundary;
   Mt3dLktConcBoundary: TMt3dLktConcBoundary;
+  Mt3dSftConcBoundary: TMt3dSftBoundary;
 begin
   if FName <> NewName then
   begin
@@ -503,6 +520,12 @@ begin
         begin
           Mt3dLktConcBoundary.RenameSpecies(FName, NewName);
         end;
+
+        Mt3dSftConcBoundary := AScreenObject.Mt3dSftConcBoundary;
+        if Mt3dSftConcBoundary <> nil then
+        begin
+          Mt3dSftConcBoundary.RenameSpecies(FName, NewName);
+        end;
       end;
     end;
   end;
@@ -535,6 +558,7 @@ var
   Mt3dUztUnsatEtConcBoundary: TMt3dUztUnsatEtConcBoundary;
   Mt3dUzSsmSinkConcBoundary: TMt3dUzSsmSinkConcBoundary;
   Mt3dLktConcBoundary: TMt3dLktConcBoundary;
+  Mt3dSftConcBoundary: TMt3dSftBoundary;
 begin
   OldIndex := Index;
   inherited;
@@ -588,6 +612,13 @@ begin
         begin
           Mt3dLktConcBoundary.ChangeSpeciesPosition(OldIndex, Value);
         end;
+
+        Mt3dSftConcBoundary := AScreenObject.Mt3dSftConcBoundary;
+        if Mt3dSftConcBoundary <> nil then
+        begin
+          Mt3dSftConcBoundary.ChangeSpeciesPosition(OldIndex, Value);
+        end;
+
       end;
     end;
   end;

@@ -1,4 +1,4 @@
-1a. Check release dates of all supported programs (MODFLOW, MT3DMS, SUTRA, PHAST, GMSH, GeomPack++, etc) and see if dates in ModelMuse match the release dates.
+1a. Check release dates of all supported programs (MODFLOW, MT3DMS, MT3D-USGS, SUTRA, PHAST, GMSH, GeomPack++, etc) and see if dates in ModelMuse match the release dates.
 1b. Pass all tests.
 2. Update version number.
 2a. Turn off check for resource leaks in MadExcept.

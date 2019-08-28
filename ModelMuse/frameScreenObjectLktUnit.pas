@@ -241,7 +241,7 @@ begin
   InitializeControls;
 
   Model := frmGoPhast.PhastModel;
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
 
   FoundFirst := False;
   FirstPrecipConc := nil;
@@ -379,7 +379,7 @@ var
   end;
 begin
   Model := frmGoPhast.PhastModel;
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
 
   PrecipConc := TMt3dLktConcCollection.Create(nil, nil, nil);
   RunoffConcentration := TMt3dLktConcCollection.Create(nil, nil, nil);
@@ -502,7 +502,7 @@ begin
   pcLkt.ActivePageIndex := 0;
 
   Model := frmGoPhast.PhastModel;
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
 
   ClearGrid(rdgModflowBoundary);
   ClearGrid(rdgRunoffConc);

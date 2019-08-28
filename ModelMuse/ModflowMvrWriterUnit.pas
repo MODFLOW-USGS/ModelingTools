@@ -218,7 +218,7 @@ var
   ReceiverIndex: Integer;
   ReceiverItem: TReceiverItem;
   ModflowLak6: TLakeMf6;
-  OutletIndex: Integer;
+//  OutletIndex: Integer;
   LkValues: TMvrRecord;
   TimeIndex: Integer;
   MvrItem: TMvrItem;

@@ -9,7 +9,7 @@
 AppVerName=ModelMuse 4.1.0.0
 
 ;enable or disable the following to install in 32-bit or 64-bit mode
-;#define Win64
+#define Win64
 
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
@@ -22,14 +22,14 @@ AppSupportURL=https://www.usgs.gov/software/modelmuse-a-graphical-user-interface
 AppUpdatesURL=https://www.usgs.gov/software/modelmuse-a-graphical-user-interface-groundwater-models
 DefaultDirName={commonpf}\USGS\ModelMuse{#MMVersion}
 DefaultGroupName=ModelMuse
-InfoAfterFile=D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\readme.txt
-OutputDir=D:\Colab\GWModelTools\ModelMuse\Installer
+InfoAfterFile=C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\readme.txt
+OutputDir=C:\Colab\GWModelTools\ModelMuse\Installer
 #ifdef Win64
 OutputBaseFilename=ModelMuseSetup64_{#MMCurrentVersion}
 #else
 OutputBaseFilename=ModelMuseSetup32_{#MMCurrentVersion}
 #endif
-SetupIconFile=D:\Colab\GWModelTools\ModelMuse\ModelMuseIcon5.ico
+SetupIconFile=C:\Colab\GWModelTools\ModelMuse\ModelMuseIcon5.ico
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -44,16 +44,16 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse\bin\ModelMuse.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+; Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse\bin\ModelMuse.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\data\*"; DestDir: "{commondocs}\ModelMuse Examples\data"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
+Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\doc\*"; DestDir: "{app}\doc"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
+Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\readme.txt"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "*.svn"
+Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\examples\*"; DestDir: "{commondocs}\ModelMuse Examples\examples"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
 #ifdef Win64
-Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\bin64\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
+Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\bin64\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
 #else
-Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\bin32\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
+Source: "C:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\bin32\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
 #endif
-Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\data\*"; DestDir: "{commondocs}\ModelMuse Examples\data"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
-Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\doc\*"; DestDir: "{app}\doc"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
-Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\examples\*"; DestDir: "{commondocs}\ModelMuse Examples\examples"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.svn"
-Source: "D:\Colab\GWModelTools\ModelMuse\Installer\ModelMuse{#MMCurrentVersion}\readme.txt"; DestDir: "{app}"; Flags: ignoreversion; Excludes: "*.svn"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]

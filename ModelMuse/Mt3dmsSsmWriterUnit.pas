@@ -718,8 +718,7 @@ var
 //  ComponentList: TList;
 begin
   Grid := Model.ModflowGrid;
-  ComponentCount := Model.MobileComponents.Count
-    + Model.ImmobileComponents.Count;
+  ComponentCount := Model.NumberOfMt3dChemComponents;
 
   // Get concentration
   SetLength(Concentration, ComponentCount, Grid.RowCount,
@@ -816,8 +815,7 @@ var
 //  ComponentList: TList;
 begin
   Grid := Model.ModflowGrid;
-  ComponentCount := Model.MobileComponents.Count
-    + Model.ImmobileComponents.Count;
+  ComponentCount := Model.NumberOfMt3dChemComponents;
 
   // Get concentration
   SetLength(Concentration, ComponentCount, Grid.RowCount,
@@ -908,8 +906,7 @@ begin
   if Model.ModflowPackages.RchPackage.IsSelected then
   begin
     AllZero := True;
-    ComponentCount := Model.MobileComponents.Count
-      + Model.ImmobileComponents.Count;
+    ComponentCount := Model.NumberOfMt3dChemComponents;
     for CellIndex := 0 to List.Count - 1 do
     begin
       ACell := List[CellIndex] as TMt3dmsConc_Cell;
@@ -981,8 +978,7 @@ begin
   else
   begin
     AllZero := True;
-    ComponentCount := Model.MobileComponents.Count
-      + Model.ImmobileComponents.Count;
+    ComponentCount := Model.NumberOfMt3dChemComponents;
     for CellIndex := 0 to List.Count - 1 do
     begin
       ACell := List[CellIndex] as TMt3dmsConc_Cell;
@@ -1064,8 +1060,7 @@ begin
     // data set 8 in MT3DMS, data set 12 in MT3D-USGS
     Grid := Model.ModflowGrid;
     LayerCount := Model.ModflowLayerCount;
-    ComponentCount := Model.MobileComponents.Count
-      + Model.ImmobileComponents.Count;
+    ComponentCount := Model.NumberOfMt3dChemComponents;
     List := Values[StressPeriod];
     for CellIndex := 0 to List.Count - 1 do
     begin

@@ -183,6 +183,7 @@ type
     Constructor Create(AModel: TBaseModel;
       ABoundary: TCustomMF_BoundColl); override;
     Destructor Destroy; override;
+    procedure UpdateTimeLists; override;
   end;
 
   TMt3dmsConcTimeListLink = class(TCustomMt3dmsConcTimeListLink)
@@ -456,8 +457,7 @@ begin
     LocalModel := frmGoPhast.PhastModel;
   end;
 //  Mt3dBasic := LocalModel.ModflowPackages.Mt3dBasic;
-  result := LocalModel.MobileComponents.Count
-    + LocalModel.ImmobileComponents.Count;
+  result := LocalModel.NumberOfMt3dChemComponents;
 end;
 
 procedure TCustomMt3dmsConcItem.ChangeSpeciesItemPosition(OldIndex,
@@ -924,8 +924,7 @@ begin
   SetLength((Boundaries[ItemIndex, AModel]
     as TMt3dmsConcStorage).FMt3dmsConclArray, BoundaryCount);
   LocalModel := Model as TCustomModel;
-  ComponentCount := LocalModel.MobileComponents.Count
-    + LocalModel.ImmobileComponents.Count;
+  ComponentCount := LocalModel.NumberOfMt3dChemComponents;
   Mt3dmsConclArray := (Boundaries[ItemIndex, AModel]
     as TMt3dmsConcStorage).FMt3dmsConclArray;
   for BoundaryIndex := 0 to BoundaryCount - 1 do
@@ -1802,6 +1801,11 @@ begin
   inherited;
 end;
 
+procedure TCustomMt3dmsConcTimeListLink.UpdateTimeLists;
+begin
+  CreateTimeLists;
+end;
+
 { TStringConcValueItem }
 
 procedure TStringConcValueItem.Assign(Source: TPersistent);
@@ -2230,7 +2234,7 @@ var
   Index: Integer;
   Boundary: TCustomMt3dmsConcBoundary;
   ScreenObject: TScreenObject;
-  ALink: TTimeListsModelLink;
+  ALink: TCustomMt3dmsConcTimeListLink;
   Item: TCustomMt3dmsConcItem;
   SpeciesIndex: Integer;
   TimeList: TModflowTimeList;
@@ -2239,7 +2243,8 @@ begin
   Boundary := BoundaryGroup as TCustomMt3dmsConcBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
-  ALink := TimeListLink.GetLink(AModel);// as TEvtTimeListLink;
+  ALink := TimeListLink.GetLink(AModel) as TCustomMt3dmsConcTimeListLink;
+  ALink.UpdateTimeLists;
   for SpeciesIndex := 0 to ALink.TimeLists.Count - 1 do
   begin
     for Index := 0 to Count - 1 do
@@ -2400,8 +2405,7 @@ begin
   SetLength((Boundaries[ItemIndex, AModel]
     as TMt3dmsConcStorage).FMt3dmsConclArray, BoundaryCount);
   LocalModel := Model as TCustomModel;
-  ComponentCount := LocalModel.MobileComponents.Count
-    + LocalModel.ImmobileComponents.Count;
+  ComponentCount := LocalModel.NumberOfMt3dChemComponents;
   Mt3dmsConclArray := (Boundaries[ItemIndex, AModel]
     as TMt3dmsConcStorage).FMt3dmsConclArray;
   for BoundaryIndex := 0 to BoundaryCount - 1 do

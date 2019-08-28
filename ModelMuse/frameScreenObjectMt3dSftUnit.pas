@@ -205,7 +205,7 @@ begin
   InitializeControls;
 
   Model := frmGoPhast.PhastModel;
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
 
   FoundFirst := False;
   FirstHeadWatersConc := nil;
@@ -380,7 +380,7 @@ begin
   ClearGrid(rdgConstConc);
 
   Model := frmGoPhast.PhastModel;
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
 
   rdgModflowBoundary.ColCount := NCOMP+2;
   rdgPrecip.ColCount := NCOMP+2;
@@ -738,7 +738,7 @@ var
   end;
 begin
   Model := frmGoPhast.PhastModel;
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
 
   HeadWatersConc := THeadWaterMt3dSftReachCollection.Create(nil, nil, nil);
   Precipitation := TPrecipitationMt3dSftReachCollection.Create(nil, nil, nil);

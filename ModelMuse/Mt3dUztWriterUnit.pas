@@ -435,7 +435,7 @@ begin
   begin
     Assert(FUnsatEtConc.Count = Model.ModflowFullStressPeriods.Count);
   end;
-  SpeciesCount := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  SpeciesCount := Model.NumberOfMt3dChemComponents;
 
   DefaultValue := 0;
   DataType := rdtDouble;

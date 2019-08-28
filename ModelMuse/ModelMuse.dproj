@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>18.4</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -64,7 +64,7 @@
         <VerInfo_MajorVer>4</VerInfo_MajorVer>
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileVersion=4.0.0.12;ProductVersion=4.0.0.12</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=4.1.0.0;ProductVersion=4.1.0.0</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
@@ -84,7 +84,7 @@
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
         <DCC_E>false</DCC_E>
         <SanitizedProjectName>ModelMuse</SanitizedProjectName>
-        <VerInfo_Build>12</VerInfo_Build>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -110,14 +110,13 @@
         <DCC_DebugInformation>2</DCC_DebugInformation>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <DCC_Define>MF2015;LeakChecking;$(DCC_Define)</DCC_Define>
+        <DCC_Define>MF2015;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <BRCC_IncludePath>D:\jedi\jcl\jcl\lib\d16\win64;$(BRCC_IncludePath)</BRCC_IncludePath>
         <DCC_LocalDebugSymbols>true</DCC_LocalDebugSymbols>
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_DebugInformation>2</DCC_DebugInformation>
-        <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
@@ -130,7 +129,6 @@
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
-        <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BRCC_Defines>STR_Package;FullDebugMode;$(BRCC_Defines)</BRCC_Defines>

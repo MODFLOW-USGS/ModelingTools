@@ -734,7 +734,7 @@ var
   MfObs: TModflow6Obs;
   Obs: TSfr6Observation;
   ReachStart: Integer;
-  StreambedThickness: Double;
+//  StreambedThickness: Double;
 begin
 //  Grid := Model.Grid;
   FReachCount := 0;

@@ -48,7 +48,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">New|New SUTRA Model</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates a new SUTRA model.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates a new SUTRA version 3.0 model.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

@@ -110,7 +110,7 @@ var
   StartStressPeriod: Integer;
   EndStressPeriod: Integer;
 begin
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
   Compiler := Model.rpThreeDFormulaCompiler;
   FStressPeriods.Clear;
   FStressPeriods.Capacity := Model.ModflowFullStressPeriods.Count;
@@ -392,7 +392,7 @@ var
   Expression: TExpression;
   LakeNum: Integer;
 begin
-  NCOMP := Model.MobileComponents.Count + Model.ImmobileComponents.Count;
+  NCOMP := Model.NumberOfMt3dChemComponents;
   SetLength(FInitialConcentrations, FLakeObjects.Count, NCOMP);
   Compiler := Model.rpThreeDFormulaCompiler;
   for ScreenObjectIndex := 0 to FLakeObjects.Count - 1 do

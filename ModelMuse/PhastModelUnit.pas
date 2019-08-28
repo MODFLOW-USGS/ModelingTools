@@ -3192,6 +3192,7 @@ that affects the model output should also have a comment. }
     function SfrMf6ScreenObjects: TStringList;
     function LakScreenObjects: TStringList;
     function UzfMf6ScreenObjects: TStringList;
+    function NumberOfMt3dChemComponents: integer;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -8710,9 +8711,12 @@ const
   //               Enhancement: Support for SUTRA 3.0 added.
   //               Bug fix: Fixed bug that could cause an error if the user
   //                tried to rename a data set.
+  //               Bug fix: Fixed a bug that could cause a bug report to be
+  //                generated if the mouse wheel was moved over the NPF options
+  //                grid in the MODFLOW Packages and Programs dialog box.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.12';
+  IModelVersion = '4.1.0.0';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -35374,6 +35378,11 @@ function TCustomModel.NpfUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msModflow2015)
     and ModflowPackages.NpfPackage.IsSelected;
+end;
+
+function TCustomModel.NumberOfMt3dChemComponents: integer;
+begin
+  result := MobileComponents.Count + ImmobileComponents.Count;
 end;
 
 function TCustomModel.NWT_Format: TNwtFormat;

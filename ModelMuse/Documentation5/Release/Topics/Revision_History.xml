@@ -6,11 +6,11 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Revision History</text></para>
     </header>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.1 Aug. 22, 2019]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.1 Aug. 26, 2019]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Enhancements]]></caption></toggle></para>
           <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
@@ -56,13 +56,14 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in specifying lake outlets that could cause them not to be saved properly.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODPATH_Zone data set was sometimes improperly marked as required with MODPATH 7 when in reality it wasn&apos;t used.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if the user tried to rename a data set.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause a bug report to be generated if the mouse wheel was moved over the NPF options grid in the MODFLOW Packages and Programs dialog box.</text></para>
               </td>
             </tr>
           </table></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.0 June 21, 2019]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.0 June 21, 2019]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>

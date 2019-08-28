@@ -1,4 +1,4 @@
-ModelMuse – Version 4.0.0.0
+ModelMuse – Version 4.1.0.0
 
 NOTE: Any use of trade, product or firm names is for descriptive purposes 
       only and does not imply endorsement by the U.S. Government.
@@ -36,11 +36,11 @@ Either version may be used for installing ModelMuse.  Both contain
 the same version of ModelMuse for use on personal computers:
 
 For 32 or 64-bit operating systems:
-         ModelMuseSetup32_4_0.exe
-         ModelMuse32_4_0.zip
+         ModelMuseSetup32_4_1.exe
+         ModelMuse32_4_1.zip
 For 64-bit operating systems:
-         ModelMuseSetup64_4_0.exe
-         ModelMuse64_4_0.zip
+         ModelMuseSetup64_4_1.exe
+         ModelMuse64_4_1.zip
 
 Both distribution files contain:
 
@@ -50,7 +50,7 @@ Both distribution files contain:
           Example models
           Supplementary materials
 
-The file ModelMuseSource4_0.zip contains the source code for ModelMuse, 
+The file ModelMuseSource4_1.zip contains the source code for ModelMuse, 
          ModelMonitor, and MF2005_Importer.exe.
 
 B. INSTALLING
