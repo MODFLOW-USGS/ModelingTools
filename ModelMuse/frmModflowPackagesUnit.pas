@@ -1460,7 +1460,7 @@ var
 begin
   CanSelect := framePkgMt3dBasic.rcSelectionController.Enabled
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-  if frmGoPhast.ModelSelection = msModflow2015 then
+  if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
     // SFT is not currently supported with MODFLOW 6
 //    CanSelect := CanSelect and framePackageSfrMF6.rcSelectionController.Enabled;
@@ -2346,7 +2346,7 @@ var
 begin
   CanSelect := framePkgMt3dBasic.rcSelectionController.Enabled
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-  if frmGoPhast.ModelSelection = msModflow2015 then
+  if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
     // LKT is not currently supported by MODFLOW 6.
 //    CanSelect := CanSelect and framePackageLakMf6.rcSelectionController.Enabled;
@@ -2450,7 +2450,7 @@ end;
 
 procedure TfrmModflowPackages.EnableUnsatTransport;
 begin
-  if frmGoPhast.ModelSelection = msModflow2015 then
+  if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
   {$IFDEF Mt3dUSGS}
     // UZT is not currently supported with MODFLOW 6

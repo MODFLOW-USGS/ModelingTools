@@ -248,6 +248,8 @@ const
   KXT3DAngle2= 'XT3D_Angle_2';
   KXT3DAngle3 = 'XT3D_Angle_3';
 //  KFootprint_Code = 'Footprint_Code';
+  KSFTInitialConcentra = 'SFT_InitialConcentration';
+  KSFTDispersion = 'SFT_Dispersion';
 
 
   // @name is the name of the @link(TDataArray) that specifies
@@ -1822,6 +1824,8 @@ that affects the model output should also have a comment. }
   public
     FDataArrayCreationRecords: array of TDataSetCreationData;
     FZetaDataDefinition: TDataSetCreationData;
+    FSftInitConc: TDataSetCreationData;
+    FSftDispersion: TDataSetCreationData;
     procedure Assign(Source: TDataArrayManager);
     procedure AddDataSetToLookUpList(const DataSet: TDataArray);
     Constructor Create(Model: TCustomModel);
@@ -2053,6 +2057,7 @@ that affects the model output should also have a comment. }
     function SutraTemperatureUsed(Sender: TObject): boolean;
     function ModflowOrPhastUsed(Sender: TObject): boolean; virtual;
     function SwiUsed(Sender: TObject): boolean;
+    function SftUsed(Sender: TObject): boolean;
     function ZetaUsed(Sender: TObject): boolean;
     function IndenticalTransientArray(DataArray: TDataArray; DataArrays: TList;
       var CachedIndex: integer): TDataArray;
@@ -2323,6 +2328,7 @@ that affects the model output should also have a comment. }
     function SwrSelected(Sender: TObject): Boolean;
     procedure UpdateSwrReachNumber(Sender: TObject);
     procedure UpdateSfr6SteadyData(Sender: TObject);
+    procedure UpdateSftSteadyData(Sender: TObject);
     procedure UpdateMawSteadyData(Sender: TObject);
     function FootprintSelected(Sender: TObject): Boolean;
 
@@ -9001,6 +9007,7 @@ resourcestring
   StrSwrReachGroup = 'SWR_Reach_Group_Number';
   StrSwrRoutingType = 'SWR_Routing_Type';
   StrSwrReachLength = 'SWR_Reach_Length';
+  StrSFTInitialConcentra = KSFTInitialConcentra;
   // See also GMshDate in frmMeshGenerationControlVariablesUnit
   StrGmsh = 'Gmsh';
   StrGeompack = 'Geompack';
@@ -9281,6 +9288,10 @@ resourcestring
   's are inactive';
   StrIDOMAINSetToZeroUnder = 'IDOMAIN set to zero because all underlying lay' +
   'ers are inactive';
+  StrStreamTransport = 'Stream Transport';
+  StrSTRPackageDataSet = 'STR Package data set 3 CINITSF';
+  StrSFTDispersion = KSFTDispersion;
+  StrSTRPackageDataSetDISPSF = 'STR Package data set 4 DISPSF';
 //  StrLakeMf6 = 'LakeMf6';
 
 //  StrRoughnessSFR6 = KRoughnessSFR6;
@@ -15475,6 +15486,9 @@ var
   MawArray: TDataArray;
   LakeMf6Array: TDataArray;
   IdomainArray: TDataArray;
+  Index: Integer;
+  DataSetName: string;
+  DataArray: TDataArray;
 begin
   if ModelSelection in SutraSelection then
   begin
@@ -15493,7 +15507,6 @@ begin
   SwrReachLengthArray := FDataArrayManager.GetDataSetByName(KSwrReachLength);
   LakeMf6Array := FDataArrayManager.GetDataSetByName(KLakeMf6);
   IdomainArray := FDataArrayManager.GetDataSetByName(K_IDOMAIN);
-
 
   if SwrReachArray <> nil then
   begin
@@ -15734,6 +15747,26 @@ begin
       SpecifiedHeadArray.TalksTo(ModPathZoneArray);
     end;
   end;
+  
+  if SftUsed(nil) then
+  begin
+    for Index := 1 to NumberOfMt3dChemComponents do
+    begin
+      DataSetName := KSFTInitialConcentra + IntToStr(Index);
+      DataArray := FDataArrayManager.GetDataSetByName(DataSetName);
+      if DataArray <> nil then
+      begin
+        DataArray.OnPostInitialize := UpdateSftSteadyData;
+      end;
+      DataSetName := KSFTDispersion + IntToStr(Index);
+      DataArray := FDataArrayManager.GetDataSetByName(DataSetName);
+      if DataArray <> nil then
+      begin
+        DataArray.OnPostInitialize := UpdateSftSteadyData;
+      end;
+    end;
+  end;
+  
   if self is TPhastModel then
   begin
     PhastModel := TPhastModel(self);
@@ -15756,6 +15789,20 @@ begin
     SfrWriter.Free;
   end;
 end;
+
+procedure TCustomModel.UpdateSftSteadyData(Sender: TObject);
+var
+  SftWriter: TMt3dmsSftWriter;
+begin
+  frmProgressMM.ShouldContinue := True;
+  SftWriter := TMt3dmsSftWriter.Create(Self, etDisplay);
+  try
+    SftWriter.UpdateSteadyData;
+  finally
+    SftWriter.Free;
+  end;
+end;
+
 
 procedure TCustomModel.UpdateSideTimeDataSet(const TimeList: TCustomTimeList;
   const Time: double);
@@ -31300,6 +31347,39 @@ begin
       HandleDataArray(FZetaDataDefinition);
     end;
   end;
+  
+  if FCustomModel.SftUsed(nil) then
+  begin
+    for Index := 1 to FCustomModel.NumberOfMt3dChemComponents do
+    begin
+      DataSetName := FSftInitConc.Name + IntToStr(Index);
+      DisplayName := FSftInitConc.DisplayName + IntToStr(Index);
+      Orientation := FSftInitConc.Orientation;
+      DataType := FSftInitConc.DataType;
+      ArrayNeeded := FSftInitConc.DataSetNeeded;
+      ArrayArrayShouldBeCreated :=
+        FSftInitConc.DataSetShouldBeCreated;
+      NewFormula := FSftInitConc.Formula;
+      Classification := FSftInitConc.Classification;
+      Lock := FSftInitConc.Lock;
+      AngleType := FSftInitConc.AngleType;
+      HandleDataArray(FSftInitConc);
+      
+      DataSetName := FSftDispersion.Name + IntToStr(Index);
+      DisplayName := FSftDispersion.DisplayName + IntToStr(Index);
+      Orientation := FSftDispersion.Orientation;
+      DataType := FSftDispersion.DataType;
+      ArrayNeeded := FSftDispersion.DataSetNeeded;
+      ArrayArrayShouldBeCreated :=
+        FSftDispersion.DataSetShouldBeCreated;
+      NewFormula := FSftDispersion.Formula;
+      Classification := FSftDispersion.Classification;
+      Lock := FSftDispersion.Lock;
+      AngleType := FSftDispersion.AngleType;
+      HandleDataArray(FSftDispersion);
+      
+    end;
+  end;
 
   for Index := 0 to Length(FDataArrayCreationRecords) - 1 do
   begin
@@ -31439,6 +31519,33 @@ begin
   FZetaDataDefinition.Visible := True;
   NoCheck(FZetaDataDefinition);
 
+  FSftInitConc.DataSetType := TModflowBoundaryDisplayDataArray;
+  FSftInitConc.Orientation := dso3D;
+  FSftInitConc.DataType := rdtDouble;
+  FSftInitConc.Name := KSFTInitialConcentra;
+  FSftInitConc.DisplayName := StrSFTInitialConcentra;
+  FSftInitConc.Formula := '0';
+  FSftInitConc.Classification := StrStreamTransport;
+  FSftInitConc.DataSetNeeded := FCustomModel.SftUsed;
+  FSftInitConc.Lock := StandardLock + [dcFormula];
+  FSftInitConc.EvaluatedAt := eaBlocks;
+  FSftInitConc.AssociatedDataSets := StrSTRPackageDataSet;
+  FSftInitConc.Visible := True;
+  NoCheck(FSftInitConc);
+  
+  FSftDispersion.DataSetType := TModflowBoundaryDisplayDataArray;
+  FSftDispersion.Orientation := dso3D;
+  FSftDispersion.DataType := rdtDouble;
+  FSftDispersion.Name := KSFTDispersion;
+  FSftDispersion.DisplayName := StrSFTDispersion;
+  FSftDispersion.Formula := '0';
+  FSftDispersion.Classification := StrStreamTransport;
+  FSftDispersion.DataSetNeeded := FCustomModel.SftUsed;
+  FSftDispersion.Lock := StandardLock + [dcFormula];
+  FSftDispersion.EvaluatedAt := eaBlocks;
+  FSftDispersion.AssociatedDataSets := StrSTRPackageDataSetDISPSF;
+  FSftDispersion.Visible := True;
+  NoCheck(FSftDispersion);
 
   // Whenever something in this is changed, be sure to update the help too.
   SetLength(FDataArrayCreationRecords, ArrayCount);
@@ -36503,6 +36610,13 @@ end;
 function TCustomModel.SfrMf6Selected(Sender: TObject): Boolean;
 begin
   result := ModflowPackages.SfrModflow6Package.IsSelected;
+end;
+
+function TCustomModel.SftUsed(Sender: TObject): boolean;
+begin
+  result := (ModelSelection in [msModflowNWT])
+    and Mt3dMSUsed(Sender)
+    and ModflowPackages.Mt3dSft.IsSelected;
 end;
 
 function TCustomModel.SfrMf6ScreenObjects: TStringList;

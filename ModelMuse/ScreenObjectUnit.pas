@@ -6406,6 +6406,9 @@ var
   BoundarArray: TDataArray;
   AChildModel: TChildModel;
   ABaseModel: TBaseModel;
+  NCOMP: Integer;
+  DataSetName: string;
+  CIndex: Integer;
 begin
   if Source is TScreenObject then
   begin
@@ -6778,6 +6781,51 @@ begin
     AChildModel := ABaseModel as TChildModel;
     AChildModel.HorizontalPositionScreenObject := self;
   end;
+
+  {
+  if FModel <> nil then
+  begin
+    NCOMP := (FModel as TCustomModel).NumberOfMt3dChemComponents;
+    if (Mt3dSftConcBoundary <> nil) and Mt3dSftConcBoundary.Used then
+    begin
+      for CIndex := 1 to NCOMP do
+      begin
+        DataSetName := KSFTInitialConcentra + IntToStr(CIndex);
+        DataArray := (FModel as TCustomModel).DataArrayManager.GetDataSetByName(DataSetName);
+        if DataArray <> nil then
+        begin
+          TalksTo(DataArray);
+        end;
+
+        DataSetName := KSFTDispersion + IntToStr(CIndex);
+        DataArray := (FModel as TCustomModel).DataArrayManager.GetDataSetByName(DataSetName);
+        if DataArray <> nil then
+        begin
+          TalksTo(DataArray);
+        end;
+      end;
+    end
+    else
+    begin
+      for CIndex := 1 to NCOMP do
+      begin
+        DataSetName := KSFTInitialConcentra + IntToStr(CIndex);
+        DataArray := (FModel as TCustomModel).DataArrayManager.GetDataSetByName(DataSetName);
+        if DataArray <> nil then
+        begin
+          StopsTalkingTo(DataArray);
+        end;
+
+        DataSetName := KSFTDispersion + IntToStr(CIndex);
+        DataArray := (FModel as TCustomModel).DataArrayManager.GetDataSetByName(DataSetName);
+        if DataArray <> nil then
+        begin
+          StopsTalkingTo(DataArray);
+        end;
+      end
+    end;
+  end;
+  }
 end;
 
 procedure TScreenObject.Assign3DElevationsFromFront(const Compiler: TRbwParser;
