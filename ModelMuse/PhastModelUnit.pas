@@ -8720,6 +8720,15 @@ const
   //               Bug fix: Fixed a bug that could cause a bug report to be
   //                generated if the mouse wheel was moved over the NPF options
   //                grid in the MODFLOW Packages and Programs dialog box.
+  //               Bug fix: Fixed a bug that could cause an error if the number
+  //                of time steps in a stress period was greater than or equal
+  //                to 100,000.
+  //               Bug fix: Fixed bug that could cause an error if multiple
+  //                copies of ModelMuse are being run from the command line at
+  //                the same time.
+  //               Bug fix: Fixed a bug that could case an error if the last
+  //                time defined for a stream in a MODFLOW 6 model was earlier
+  //                than the last time in the model.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.0';

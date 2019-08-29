@@ -728,6 +728,7 @@ type
     FNewDescription: TCaption;
     FNeedFirstRedraw: Boolean;
     FCreatingModel: Boolean;
+    FNoIniFile: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
     procedure WMMenuSelect(var Msg: TWMMenuSelect); message WM_MENUSELECT;
@@ -2952,6 +2953,10 @@ var
   Index: integer;
   BackUpFileName: string;
 begin
+  if FNoIniFile then
+  begin
+    Exit;
+  end;
   for Index := 0 to MostRecentlyUsed.FileNames.Count -1 do
   begin
     FileName := MostRecentlyUsed.FileNames[Index];
@@ -6456,6 +6461,7 @@ begin
           end
           else if Option = 'c' then
           begin
+            FNoIniFile := True;
             Application.Terminate;
           end;
         end;

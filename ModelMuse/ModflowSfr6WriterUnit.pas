@@ -152,6 +152,9 @@ resourcestring
   'e cell bottom in the following SFR reaches';
   StrLayerRowColumnNameStreambed = '[Layer, Row, Column, Object, Streambed top, S' +
   'treambed Thickness, Cell Bottom: %0:d, %1:d, %2:d, %3:s, %4:g, %5:g, %6:g';
+  StrStreamTimeExtended = 'Stream time extended';
+  StrIn0sTheLastDe = 'In %0:s, the last defined time was %1:g which was befo' +
+  're the end of the model. It has been extended to %2:g';
 
 { TModflowSFR_MF6_Writer }
 
@@ -734,6 +737,8 @@ var
   MfObs: TModflow6Obs;
   Obs: TSfr6Observation;
   ReachStart: Integer;
+  EndTime: Double;
+  SfrMf6Item: TSfrMf6Item;
 //  StreambedThickness: Double;
 begin
 //  Grid := Model.Grid;
@@ -744,6 +749,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrBelowBottom);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrStreambedTopElevat);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrDownstreamSFRSegme);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrStreamTimeExtended);
 
 
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingPairO);
@@ -752,6 +758,8 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheRoughnessIsLes);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorAssigningDive);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheStreambedMinusThe);
+
+  EndTime := Model.ModflowFullStressPeriods.Last.Endtime;
 
   NextReachNumber := 1;
   ReachStart := 0;
@@ -776,6 +784,16 @@ begin
       Continue;
     end;
     frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
+
+    SfrMf6Item := Boundary.Values.Last as TSfrMf6Item;
+    if SfrMf6Item.Endtime < Endtime then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrStreamTimeExtended,
+        Format(StrIn0sTheLastDe, [ScreenObject.Name, SfrMf6Item.Endtime,
+        Endtime]), ScreenObject);
+      SfrMf6Item.Endtime := Endtime;
+    end;
+
 
     Dummy := TStringList.Create;
     try
@@ -1892,6 +1910,7 @@ begin
       begin
         ASegment := FSegments[SegmentIndex];
         ACellList := ASegment.FReaches[StressPeriodIndex];
+        Assert(ACellList.Count = Length(ASegment.SteadyValues));
         for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
         begin
           AReach := ASegment.SteadyValues[ReachIndex];

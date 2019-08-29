@@ -153,7 +153,7 @@ resourcestring
   'th formatted head or drawdown files is 9999. This model as %d stress peri' +
   'ods.';
   StrTooManyTimeSteps = 'Too many time steps for formatted output';
-  StrInStressPeriod1 = 'In stress period %1:d, the number of steps (%2:d) co' +
+  StrInStressPeriod1 = 'In stress period %0:d, the number of steps (%1:d) is not co' +
   'mpatible with formatted output files.';
   StrWhenUsingTheFarm = 'When using the Farm Process with Crop Consumptive u' +
   'se Concept 1, the minimum step length should be 1 day or more because of ' +
