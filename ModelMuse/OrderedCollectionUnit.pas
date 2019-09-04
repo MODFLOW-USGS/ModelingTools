@@ -1340,7 +1340,8 @@ begin
   end;
 end;
 
-procedure TFormulaOrderedItem.UpdateFormula(Value: string; Position: integer; var FormulaObject: TFormulaObject);
+procedure TFormulaOrderedItem.UpdateFormula(Value: string; Position: integer;
+  var FormulaObject: TFormulaObject);
 var
   ParentModel: TPhastModel;
   Compiler: TRbwParser;

@@ -28,9 +28,21 @@ type
 
   TSftSteadyObjectList = TObjectList<TSftSteady>;
 
-  TMt3dSftInitConcItem = class(TCustomMt3dmsConcItem)
+  TCustomSftItem = class(TCustomMt3dmsConcItem)
   protected
+    function GetObserver(Index: Integer): TObserver; override;
+    procedure Loaded;
+    function GetMt3dmsConc(Index: integer): string; override;
+    procedure SetMt3dmsConc(Index: integer; const Value: string); override;
+  end;
+
+  TMt3dSftInitConcItem = class(TCustomSftItem)
+  protected
+//    function GetObserver(Index: Integer): TObserver; override;
     procedure AssignObserverEvents(Collection: TCollection); override;
+//    procedure Loaded;
+//    function GetMt3dmsConc(Index: integer): string; override;
+//    procedure SetMt3dmsConc(Index: integer; const Value: string); override;
 //    procedure InvalidateModel; override;
   end;
 
@@ -39,9 +51,17 @@ type
     procedure CreateTimeLists; override;
   end;
 
-  TMt3dSftInitConcCollection = class(TCustomMt3dmsArrayConcCollection)
+  TCustomSftSteadyCollection = class(TCustomMt3dmsArrayConcCollection)
+  private
+    procedure Loaded;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
+
+  end;
+
+  TMt3dSftInitConcCollection = class(TCustomSftSteadyCollection)
   private
     procedure InvalidateSftInitConc(Sender: TObject);
+//    procedure Loaded;
   protected
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
@@ -49,10 +69,11 @@ type
 //    procedure InvalidateModel; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
 //    function ConcName: string; override;
-    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
+//    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
+  public
   end;
 
-  TMt3dSftDispItem = class(TCustomMt3dmsConcItem)
+  TMt3dSftDispItem = class(TCustomSftItem)
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
 //    procedure InvalidateModel; override;
@@ -63,9 +84,10 @@ type
     procedure CreateTimeLists; override;
   end;
 
-  TMt3dSftDispCollection = class(TCustomMt3dmsArrayConcCollection)
+  TMt3dSftDispCollection = class(TCustomSftSteadyCollection)
   private
-    procedure InvalidateSftInitConc(Sender: TObject);
+    procedure InvalidateSftDisp(Sender: TObject);
+//    procedure Loaded;
   protected
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
@@ -73,7 +95,7 @@ type
 //    procedure InvalidateModel; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
 //    function ConcName: string; override;
-    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
+//    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   end;
 
   TSftBoundaryType = (sbtHeadwater, sbtPrecipitation, sbtRunoff, sbtConstConc);
@@ -1338,8 +1360,8 @@ end;
 
 procedure TMt3dSftBoundary.Loaded;
 begin
-//  FInitialConcentration.Loaded;
-//  FDispersionCoefficient.Loaded;
+  FInitialConcentration.Loaded;
+  FDispersionCoefficient.Loaded;
 end;
 
 procedure TMt3dSftBoundary.RenameSpecies(const OldSpeciesName,
@@ -1413,15 +1435,85 @@ procedure TMt3dSftInitConcItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TMt3dSftInitConcCollection;
   InitConcObserver: TObserver;
-//  ScreenTopObserver: TObserver;
-//  SkinKObserver: TObserver;
-//  SkinRadiusObserver: TObserver;
+  ComponentIndex: Integer;
+  DataSetName: string;
+  DataArray: TDataArray;
 begin
-  ParentCollection := Collection as TMt3dSftInitConcCollection;
+  if Model <> nil then
+  begin
+    ParentCollection := Collection as TMt3dSftInitConcCollection;
+    for ComponentIndex := 0 to FObserverList.Count - 1 do
+    begin
+      InitConcObserver := FObserverList[ComponentIndex];
+      InitConcObserver.OnUpToDateSet := ParentCollection.InvalidateSftInitConc;
 
-//  InitConcObserver := FObserverList[InitConcPosition];
-//  InitConcObserver.OnUpToDateSet := ParentCollection.InvalidateLktConc;
+      DataSetName := KSFTInitialConcentra + IntToStr(ComponentIndex+1);
+      DataArray := (Model as TCustomModel).DataArrayManager.GetDataSetByName(DataSetName);
+      if DataArray <> nil then
+      begin
+        InitConcObserver.TalksTo(DataArray);
+      end;
+    end;
+  end;
 end;
+
+function TCustomSftItem.GetMt3dmsConc(Index: integer): string;
+var
+  Observer: TObserver;
+begin
+  result := inherited;
+  Observer := FObserverList[Index];
+  if not Observer.UpToDate then
+  begin
+    Observer.UpToDate := True;
+  end;
+end;
+
+function TCustomSftItem.GetObserver(Index: Integer): TObserver;
+begin
+  result := FObserverList[Index];
+end;
+
+procedure TCustomSftItem.Loaded;
+var
+  ComponentIndex: Integer;
+  OldFormula: string;
+begin
+  inherited;
+  AssignObserverEvents(Collection);
+  // Update subscriptions.
+  for ComponentIndex := 0 to FObserverList.Count - 1 do
+  begin
+    OldFormula := Mt3dmsConcRate[ComponentIndex];
+    Mt3dmsConcRate[ComponentIndex] := '0';
+    Mt3dmsConcRate[ComponentIndex] := OldFormula;
+  end;
+end;
+
+procedure TCustomSftItem.SetMt3dmsConc(Index: integer; const Value: string);
+var
+  OldFormula: String;
+  NewFormula: String;
+  ParentModel: TPhastModel;
+  Compiler: TRbwParser;
+  Observer: TObserver;
+begin
+  OldFormula := GetMt3dmsConc(Index);
+  inherited;
+  NewFormula := Value;
+
+  if (Model <> nil) and (OldFormula <> NewFormula) then
+  begin
+    ParentModel := Model as TPhastModel;
+    Compiler := ParentModel.rpThreeDFormulaCompiler;
+
+    Observer := FObserverList[Index];
+    UpdateFormulaDependencies(OldFormula, NewFormula, Observer,
+      Compiler);
+  end;
+
+end;
+
 
 { TMt3dSftInitConcTimeListLink }
 
@@ -1482,18 +1574,33 @@ var
   Link: TMt3dSftInitConcTimeListLink;
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  NCOMP: Integer;
+  CompIndex: Integer;
+  DataSetName: string;
+  DataArray: TDataArray;
 //  ScreenTopDataArray: TDataArray;
 begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
-    Link := TimeListLink.GetLink(PhastModel) as TMt3dSftInitConcTimeListLink;
-//    Link.FInitCondData.Invalidate;
+    NCOMP := PhastModel.NumberOfMt3dChemComponents;
+    for CompIndex := 1 to NCOMP do
+    begin
+      DataSetName := KSFTInitialConcentra + IntToStr(CompIndex);
+      DataArray := PhastModel.DataArrayManager.GetDataSetByName(DataSetName);
+      DataArray.Invalidate
+    end;
+
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMt3dSftInitConcTimeListLink;
-//      Link.FInitCondData.Invalidate;
+
+      for CompIndex := 1 to NCOMP do
+      begin
+        DataSetName := KSFTInitialConcentra + IntToStr(CompIndex);
+        DataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSetName);
+        DataArray.Invalidate
+      end;
     end;
 
   end;
@@ -1504,7 +1611,18 @@ begin
   result := TMt3dSftInitConcItem;
 end;
 
-function TMt3dSftInitConcCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+procedure TCustomSftSteadyCollection.Loaded;
+var
+  index: Integer;
+begin
+  inherited;
+  for index := 0 to Count - 1 do
+  begin
+    (Items[Index] as TCustomSftItem).Loaded;
+  end;
+end;
+
+function TCustomSftSteadyCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
 begin
   result := False;
 end;
@@ -1514,15 +1632,28 @@ end;
 procedure TMt3dSftDispItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TMt3dSftDispCollection;
+  DispObserver: TObserver;
   InitConcObserver: TObserver;
-//  ScreenTopObserver: TObserver;
-//  SkinKObserver: TObserver;
-//  SkinRadiusObserver: TObserver;
+  ComponentIndex: Integer;
+  DataSetName: string;
+  DataArray: TDataArray;
 begin
-  ParentCollection := Collection as TMt3dSftDispCollection;
+  if Model <> nil then
+  begin
+    ParentCollection := Collection as TMt3dSftDispCollection;
+    for ComponentIndex := 0 to FObserverList.Count - 1 do
+    begin
+      DispObserver := FObserverList[ComponentIndex];
+      DispObserver.OnUpToDateSet := ParentCollection.InvalidateSftDisp;
 
-//  InitConcObserver := FObserverList[InitConcPosition];
-//  InitConcObserver.OnUpToDateSet := ParentCollection.InvalidateLktConc;
+      DataSetName := KSFTDispersion + IntToStr(ComponentIndex+1);
+      DataArray := (Model as TCustomModel).DataArrayManager.GetDataSetByName(DataSetName);
+      if DataArray <> nil then
+      begin
+        DispObserver.TalksTo(DataArray);
+      end;
+    end;
+  end;
 end;
 
 { TMt3dSftDispTimeListLink }
@@ -1533,10 +1664,13 @@ var
 //  Mt3dmsConcData: TModflowTimeList;
 //  Item: TChemSpeciesItem;
   LocalModel: TPhastModel;
+  NCOMP: Integer;
 begin
   TimeLists.Clear;
 //  FListOfTimeLists.Clear;
   LocalModel := frmGoPhast.PhastModel;
+  NCOMP := LocalModel.NumberOfMt3dChemComponents;
+
   for Index := 0 to LocalModel.MobileComponents.Count - 1 do
   begin
 //    Item := LocalModel.MobileComponents[Index];
@@ -1578,24 +1712,39 @@ begin
   result := TMt3dSftDispTimeListLink;
 end;
 
-procedure TMt3dSftDispCollection.InvalidateSftInitConc(Sender: TObject);
+procedure TMt3dSftDispCollection.InvalidateSftDisp(Sender: TObject);
 var
   PhastModel: TPhastModel;
   Link: TMt3dSftDispTimeListLink;
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  NCOMP: Integer;
+  CompIndex: Integer;
+  DataSetName: string;
+  DataArray: TDataArray;
 //  ScreenTopDataArray: TDataArray;
 begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
-    Link := TimeListLink.GetLink(PhastModel) as TMt3dSftDispTimeListLink;
-//    Link.FInitCondData.Invalidate;
+    NCOMP := PhastModel.NumberOfMt3dChemComponents;
+    for CompIndex := 1 to NCOMP do
+    begin
+      DataSetName := KSFTDispersion + IntToStr(CompIndex);
+      DataArray := PhastModel.DataArrayManager.GetDataSetByName(DataSetName);
+      DataArray.Invalidate
+    end;
+
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMt3dSftDispTimeListLink;
-//      Link.FInitCondData.Invalidate;
+
+      for CompIndex := 1 to NCOMP do
+      begin
+        DataSetName := KSFTDispersion + IntToStr(CompIndex);
+        DataArray := ChildModel.DataArrayManager.GetDataSetByName(DataSetName);
+        DataArray.Invalidate
+      end;
     end;
 
   end;
@@ -1606,10 +1755,21 @@ begin
   result := TMt3dSftDispItem;
 end;
 
-function TMt3dSftDispCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
-begin
-  result := False;
-end;
+//procedure TMt3dSftDispCollection.Loaded;
+//var
+//  index: Integer;
+//begin
+//  inherited;
+//  for index := 0 to Count - 1 do
+//  begin
+//    (Items[Index] as TMt3dSftDispItem).Loaded;
+//  end;
+//end;
+
+//function TMt3dSftDispCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+//begin
+//  result := False;
+//end;
 
 { TSftSteady }
 

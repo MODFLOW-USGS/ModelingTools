@@ -130,8 +130,6 @@ type
     // See @link(Mt3dmsConcRate).
     FStringConcCollection: TStringConcCollection;
     // See @link(Mt3dmsConcRate).
-    procedure SetMt3dmsConc(Index: integer; const Value: string);
-    function GetMt3dmsConc(Index: integer): string;
     procedure SetStringConcCollection(const Value: TStringConcCollection);
     function BoundaryFormulaName(Index: integer): string;
     procedure RenameItems(const OldSpeciesName, NewSpeciesName: string);
@@ -149,6 +147,8 @@ type
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function BoundaryFormulaCount: integer; override;
     property Collection: TCustomMF_BoundColl read GetCollection;
+    function GetMt3dmsConc(Index: integer): string; virtual;
+    procedure SetMt3dmsConc(Index: integer; const Value: string); virtual;
   public
     Destructor Destroy; override;
     property Mt3dmsConcRate[Index: integer]: string read GetMt3dmsConc
