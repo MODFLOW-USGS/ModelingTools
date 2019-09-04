@@ -38,12 +38,7 @@ type
 
   TMt3dSftInitConcItem = class(TCustomSftItem)
   protected
-//    function GetObserver(Index: Integer): TObserver; override;
     procedure AssignObserverEvents(Collection: TCollection); override;
-//    procedure Loaded;
-//    function GetMt3dmsConc(Index: integer): string; override;
-//    procedure SetMt3dmsConc(Index: integer; const Value: string); override;
-//    procedure InvalidateModel; override;
   end;
 
   TMt3dSftInitConcTimeListLink = class(TCustomMt3dmsConcTimeListLink)
@@ -54,23 +49,19 @@ type
   TCustomSftSteadyCollection = class(TCustomMt3dmsArrayConcCollection)
   private
     procedure Loaded;
+  protected
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
-
   end;
 
   TMt3dSftInitConcCollection = class(TCustomSftSteadyCollection)
   private
     procedure InvalidateSftInitConc(Sender: TObject);
-//    procedure Loaded;
   protected
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
 //    procedure InvalidateModel; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
-//    function ConcName: string; override;
-//    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
-  public
   end;
 
   TMt3dSftDispItem = class(TCustomSftItem)
@@ -87,15 +78,12 @@ type
   TMt3dSftDispCollection = class(TCustomSftSteadyCollection)
   private
     procedure InvalidateSftDisp(Sender: TObject);
-//    procedure Loaded;
   protected
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
 //    procedure InvalidateModel; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
-//    function ConcName: string; override;
-//    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   end;
 
   TSftBoundaryType = (sbtHeadwater, sbtPrecipitation, sbtRunoff, sbtConstConc);
