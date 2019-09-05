@@ -155,10 +155,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     object tabConnections: TTabSheet
       Caption = 'Connections'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblSourcePackage: TLabel
         Left = 3
         Top = 3
@@ -345,10 +341,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
     end
     object tabTime: TTabSheet
       Caption = 'Time'
-      ExplicitLeft = 9
-      ExplicitTop = 22
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   inherited pnlBottom: TPanel [3]

@@ -896,7 +896,7 @@ begin
   begin
     Inc(Result);
   end;
-  if FhbPackage.IsSelected then
+  if FhbPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
@@ -904,15 +904,15 @@ begin
   begin
     Inc(Result);
   end;
-  if LpfPackage.IsSelected then
+  if LpfPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if PcgPackage.IsSelected then
+  if PcgPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if PcgnPackage.IsSelected then
+  if PcgnPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
@@ -929,7 +929,7 @@ begin
   begin
     Inc(Result);
   end;
-  if DrtPackage.IsSelected then
+  if DrtPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
@@ -938,7 +938,7 @@ begin
   begin
     Inc(Result);
   end;
-  if EvtPackage.IsSelected then
+  if EvtPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
@@ -946,37 +946,37 @@ begin
   begin
     Inc(Result);
   end;
-  if ResPackage.IsSelected then
+  if ResPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
 
-  if LakPackage.IsSelected then
+  if LakPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if SfrPackage.IsSelected then
+  if SfrPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if UzfPackage.IsSelected then
+  if UzfPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if GmgPackage.IsSelected then
+  if GmgPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
 
-  if SipPackage.IsSelected then
+  if SipPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if De4Package.IsSelected then
+  if De4Package.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if HobPackage.IsSelected then
+  if HobPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
@@ -984,27 +984,27 @@ begin
   begin
     Inc(Result);
   end;
-  if ChobPackage.IsSelected then
+  if ChobPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if DrobPackage.IsSelected then
+  if DrobPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if GbobPackage.IsSelected then
+  if GbobPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if RvobPackage.IsSelected then
+  if RvobPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if StobPackage.IsSelected then
+  if StobPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if HufPackage.IsSelected then
+  if HufPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
     if (FModel as TCustomModel).HufParameters.CountParameters(
@@ -1018,42 +1018,42 @@ begin
       Inc(Result);
     end;
   end;
-  if Mnw2Package.IsSelected then
+  if Mnw2Package.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if BcfPackage.IsSelected then
+  if BcfPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if SubPackage.IsSelected then
+  if SubPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if SwtPackage.IsSelected then
+  if SwtPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if HydmodPackage.IsSelected then
+  if HydmodPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if UpwPackage.IsSelected then
+  if UpwPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if NwtPackage.IsSelected then
+  if NwtPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if StrPackage.IsSelected then
+  if StrPackage.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;
-  if FHfbPackage.IsSelected then
-  begin
-    Inc(Result);
-  end;
+//  if FHfbPackage.IsSelected then
+//  begin
+//    Inc(Result);
+//  end;
 
   if FarmProcess.IsSelected and (Model.ModelSelection = msModflowFmp) then
   begin
@@ -1077,12 +1077,12 @@ begin
   end;
 
   if SwrPackage.IsSelected
-    and (Model.ModelSelection = msModflowNWT) then
+    and (Model.ModelSelection in [msModflow, msModflowNWT, msModflowFmp]) then
   begin
     Inc(Result);
   end;
 
-  if Mnw1Package.IsSelected then
+  if Mnw1Package.IsSelected and (Model.ModelSelection <> msModflow2015) then
   begin
     Inc(Result);
   end;

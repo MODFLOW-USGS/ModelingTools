@@ -8703,8 +8703,7 @@ const
   //               Bug fix: The data sets for Angle1, Angle2, and Angle3 were
   //                only created and used if the XT3D option was selected
   //                instead of whenever the NPF package was selected.
-
-  //               Enhancement: ModelMuse now warns if the bottom of the
+  //    '4.0.0.13' Enhancement: ModelMuse now warns if the bottom of the
   //                stream bed in an SFR reach in MODFLOW 6 is below the bottom
   //                of the cell.
   //               Bug fix: Fixed bug that could cause an error if a lake outlet
@@ -8729,9 +8728,12 @@ const
   //               Bug fix: Fixed a bug that could case an error if the last
   //                time defined for a stream in a MODFLOW 6 model was earlier
   //                than the last time in the model.
+  //               Bug fix: Transient data for the MVR package was not displayed
+  //                properly in the Object Properties dialog bos if the number
+  //                of times was not equal to 1.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.0';
+  IModelVersion = '4.0.0.13';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

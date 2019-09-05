@@ -673,6 +673,7 @@ type
       ARow: Integer; const Value: string);
     procedure frameMVRrdgModflowBoundaryButtonClick(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameMVRseNumberOfTimesChange(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -24481,6 +24482,14 @@ begin
   begin
     frameResdgModflowBoundaryButtonClick(Sender, ACol, ARow);
   end;
+end;
+
+procedure TfrmScreenObjectProperties.frameMVRseNumberOfTimesChange(
+  Sender: TObject);
+begin
+  inherited;
+  frameMVR.seNumberOfTimesChange(Sender);
+
 end;
 
 procedure TfrmScreenObjectProperties.

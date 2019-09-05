@@ -432,9 +432,10 @@ var
   AReceiverItem: TIndividualMvrItem;
   ColIndex: Integer;
 begin
+  rdgModflowBoundary.Handle;
+  seNumberOfTimes.Handle;
   pcMain.ActivePageIndex := 0;
   InitializeGrids;
-  rdgModflowBoundary.Handle;
 //  FMoverChoices.Assign(rdgModflowBoundary.Columns[3].PickList);
 
   MoveGridToTabSheet(tabTime);
@@ -588,7 +589,9 @@ begin
   rdgModflowBoundary.BeginUpdate;
   try
     ClearGrid(rdgModflowBoundary);
-    rdgModflowBoundary.RowCount := 2;
+
+    seNumberOfTimes.AsInteger := 0;
+//    rdgModflowBoundary.RowCount := 2;
 
     frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes
       (rdgModflowBoundary, Ord(mtcStartTime));

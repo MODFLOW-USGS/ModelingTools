@@ -4,7 +4,8 @@ interface
 
 uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModpathParticleUnit, ModflowBoundaryDisplayUnit, ScreenObjectUnit,
-  ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections;
+  ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
+  Mt3dSftUnit;
 
 Type
   TSelectionType = (stCheckBox, stRadioButton);
@@ -2090,6 +2091,9 @@ Type
     FEvaporateMass: Boolean;
     FSimulateTransportInStream: Boolean;
     FHeadWatersTimeLists: TObjectModflowBoundListOfTimeLists;
+    FPrecipTimeLists: TObjectModflowBoundListOfTimeLists;
+    FRunOffTimeLists: TObjectModflowBoundListOfTimeLists;
+    FConstConcTimeLists: TObjectModflowBoundListOfTimeLists;
     function GetClosureCriterion: double;
     function GetSpaceWeightingFactor: double;
     function GetTimeWeightingFactor: double;
@@ -2103,11 +2107,14 @@ Type
     procedure SetStoredTimeWeightingFactor(const Value: TRealStorage);
     procedure SetTimeWeightingFactor(const Value: double);
     procedure SetSimulateTransportInStream(const Value: Boolean);
-    procedure UpdateHedWaterConcTimeLists;
+    procedure UpdateTimeLists;
     procedure InitializeSftDisplay(Sender: TObject);
+    procedure GetUseList(CompIndex: Integer; NewUseList: TStringList;
+      const DisplayName: string; SftBoundaryType: TSftBoundaryType);
     procedure GetHeadWatersUseList(Sender: TObject; NewUseList: TStringList);
-    procedure GetUseList(ParameterIndex: Integer; NewUseList: TStringList;
-      const DisplayName: string);
+    procedure GetPrecipUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetRunoffUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetConstConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -2124,6 +2131,8 @@ Type
     // CCLOSESF
     property ClosureCriterion: double read GetClosureCriterion
       write SetClosureCriterion;
+
+    procedure ChangeChemSpecies;
   published
     // IETSFR
     property EvaporateMass: Boolean read FEvaporateMass write SetEvaporateMass;
@@ -5294,7 +5303,7 @@ uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, ModelMuseUtilities,
   Mt3dUztWriterUnit, Mt3dUzfSeepageUnit, ModflowPackagesUnit, ModflowSfr6WriterUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
-  ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftUnit;
+  ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -20033,6 +20042,11 @@ begin
 
 end;
 
+procedure TMt3dSftPackageSelection.ChangeChemSpecies;
+begin
+  UpdateTimeLists;
+end;
+
 constructor TMt3dSftPackageSelection.Create(Model: TBaseModel);
 begin
   inherited;
@@ -20045,12 +20059,18 @@ begin
   FStoredTimeWeightingFactor.OnChange := OnValueChanged;
 
   FHeadWatersTimeLists := TObjectModflowBoundListOfTimeLists.Create;
+  FPrecipTimeLists := TObjectModflowBoundListOfTimeLists.Create;
+  FRunOffTimeLists := TObjectModflowBoundListOfTimeLists.Create;
+  FConstConcTimeLists := TObjectModflowBoundListOfTimeLists.Create;
 
   InitializeVariables;
 end;
 
 destructor TMt3dSftPackageSelection.Destroy;
 begin
+  FPrecipTimeLists.Free;
+  FRunOffTimeLists.Free;
+  FConstConcTimeLists.Free;
   FHeadWatersTimeLists.Free;
 
   FStoredTimeWeightingFactor.Free;
@@ -20064,15 +20084,52 @@ begin
   result := FStoredClosureCriterion.Value;
 end;
 
+procedure TMt3dSftPackageSelection.GetConstConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  CompIndex: Integer;
+begin
+  CompIndex := FConstConcTimeLists.IndexOf(Sender
+    as TModflowBoundaryDisplayTimeList);
+  Assert(CompIndex >= 0);
+  GetUseList(CompIndex, NewUseList,
+    'SFT_Runoff_Conc_' + IntToStr(CompIndex+1), sbtConstConc);
+end;
+
 procedure TMt3dSftPackageSelection.GetHeadWatersUseList(Sender: TObject;
   NewUseList: TStringList);
 var
-  FormulaIndex: Integer;
+  CompIndex: Integer;
 begin
-  FormulaIndex := FHeadWatersTimeLists.IndexOf(Sender
+  CompIndex := FHeadWatersTimeLists.IndexOf(Sender
     as TModflowBoundaryDisplayTimeList);
-  Assert(FormulaIndex >= 0);
-  GetUseList(FormulaIndex+1, NewUseList, StrRIPCoverage);
+  Assert(CompIndex >= 0);
+  GetUseList(CompIndex, NewUseList,
+    'SFT_Head_Water_Conc_' + IntToStr(CompIndex+1), sbtHeadwater);
+end;
+
+procedure TMt3dSftPackageSelection.GetPrecipUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  CompIndex: Integer;
+begin
+  CompIndex := FPrecipTimeLists.IndexOf(Sender
+    as TModflowBoundaryDisplayTimeList);
+  Assert(CompIndex >= 0);
+  GetUseList(CompIndex, NewUseList,
+    'SFT_Precip_Conc_' + IntToStr(CompIndex+1), sbtPrecipitation);
+end;
+
+procedure TMt3dSftPackageSelection.GetRunoffUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  CompIndex: Integer;
+begin
+  CompIndex := FRunOffTimeLists.IndexOf(Sender
+    as TModflowBoundaryDisplayTimeList);
+  Assert(CompIndex >= 0);
+  GetUseList(CompIndex, NewUseList,
+    'SFT_Runoff_Conc_' + IntToStr(CompIndex+1), sbtRunoff);
 end;
 
 function TMt3dSftPackageSelection.GetSpaceWeightingFactor: double;
@@ -20085,8 +20142,9 @@ begin
   result := FStoredTimeWeightingFactor.Value;
 end;
 
-procedure TMt3dSftPackageSelection.GetUseList(ParameterIndex: Integer;
-  NewUseList: TStringList; const DisplayName: string);
+procedure TMt3dSftPackageSelection.GetUseList(CompIndex: Integer;
+  NewUseList: TStringList; const DisplayName: string;
+  SftBoundaryType: TSftBoundaryType);
 var
   ScreenObjectIndex: Integer;
   LocalModel: TCustomModel;
@@ -20095,7 +20153,9 @@ var
 //  Boundary: TRipBoundary;
   Item: TSftReachItem;
   Boundary: TMt3dSftBoundary;
+  SftCollection: TCustomMt3dSftReachCollection;
 begin
+//  SftCollection := ACollection as TCustomMt3dSftReachCollection;
   { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
   LocalModel := FModel as TCustomModel;
   for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
@@ -20108,10 +20168,28 @@ begin
     Boundary := ScreenObject.Mt3dSftConcBoundary;
     if (Boundary <> nil) and Boundary.Used then
     begin
+      case SftBoundaryType of
+        sbtHeadwater:
+          begin
+            SftCollection := Boundary.Values as TCustomMt3dSftReachCollection;
+          end;
+        sbtPrecipitation:
+          begin
+            SftCollection := Boundary.Precipitation;
+          end;
+        sbtRunoff:
+          begin
+            SftCollection := Boundary.RunOff;
+          end;
+        sbtConstConc:
+          begin
+            SftCollection := Boundary.ConstConc;
+          end;
+      end;
       for ValueIndex := 0 to Boundary.Values.Count - 1 do
       begin
         Item := Boundary.Values[ValueIndex] as TSftReachItem;
-        UpdateUseList(ParameterIndex, NewUseList, Item, DisplayName);
+        UpdateUseList(CompIndex, NewUseList, Item, DisplayName);
       end;
     end;
   end;
@@ -20193,32 +20271,79 @@ begin
   FStoredTimeWeightingFactor.Value := Value;
 end;
 
-procedure TMt3dSftPackageSelection.UpdateHedWaterConcTimeLists;
+procedure TMt3dSftPackageSelection.UpdateTimeLists;
 var
   TimeListIndex: Integer;
   NCOMP: Integer;
   CompIndex: Integer;
-  HeadWaaterTimeList: TModflowBoundaryDisplayTimeList;
+  ATimeList: TModflowBoundaryDisplayTimeList;
 begin
   if FModel <> nil then
   begin
+    NCOMP := (FModel as TCustomModel).NumberOfMt3dChemComponents;
+
     for TimeListIndex := 0 to FHeadWatersTimeLists.Count - 1 do
     begin
       RemoveTimeList(FHeadWatersTimeLists[TimeListIndex])
     end;
     FHeadWatersTimeLists.Clear;
-    NCOMP := (FModel as TCustomModel).NumberOfMt3dChemComponents;
     for CompIndex := 1 to NCOMP do
     begin
-      HeadWaaterTimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      HeadWaaterTimeList.OnInitialize := InitializeSftDisplay;
-      HeadWaaterTimeList.OnGetUseList := GetHeadWatersUseList;
-      HeadWaaterTimeList.OnTimeListUsed := PackageUsed;
-      HeadWaaterTimeList.Name := 'Head_Waters_Conc_' + IntToStr(CompIndex);
-      FHeadWatersTimeLists.Add(HeadWaaterTimeList);
-//      FCoverageIDs.Insert(PlantGroupIndex, APlantGroup.ID);
-      AddTimeList(HeadWaaterTimeList);
+      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      ATimeList.OnInitialize := InitializeSftDisplay;
+      ATimeList.OnGetUseList := GetHeadWatersUseList;
+      ATimeList.OnTimeListUsed := PackageUsed;
+      ATimeList.Name := 'SFT_Head_Waters_Conc_' + IntToStr(CompIndex);
+      FHeadWatersTimeLists.Add(ATimeList);
+      AddTimeList(ATimeList);
+    end;
 
+    for TimeListIndex := 0 to FPrecipTimeLists.Count - 1 do
+    begin
+      RemoveTimeList(FPrecipTimeLists[TimeListIndex])
+    end;
+    FPrecipTimeLists.Clear;
+    for CompIndex := 1 to NCOMP do
+    begin
+      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      ATimeList.OnInitialize := InitializeSftDisplay;
+      ATimeList.OnGetUseList := GetPrecipUseList;
+      ATimeList.OnTimeListUsed := PackageUsed;
+      ATimeList.Name := 'SFT_Precip_Conc_' + IntToStr(CompIndex);
+      FPrecipTimeLists.Add(ATimeList);
+      AddTimeList(ATimeList);
+    end;
+
+    for TimeListIndex := 0 to FRunOffTimeLists.Count - 1 do
+    begin
+      RemoveTimeList(FRunOffTimeLists[TimeListIndex])
+    end;
+    FRunOffTimeLists.Clear;
+    for CompIndex := 1 to NCOMP do
+    begin
+      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      ATimeList.OnInitialize := InitializeSftDisplay;
+      ATimeList.OnGetUseList := GetRunoffUseList;
+      ATimeList.OnTimeListUsed := PackageUsed;
+      ATimeList.Name := 'SFT_Runoff_Conc_' + IntToStr(CompIndex);
+      FRunOffTimeLists.Add(ATimeList);
+      AddTimeList(ATimeList);
+    end;
+
+    for TimeListIndex := 0 to FConstConcTimeLists.Count - 1 do
+    begin
+      RemoveTimeList(FConstConcTimeLists[TimeListIndex])
+    end;
+    FConstConcTimeLists.Clear;
+    for CompIndex := 1 to NCOMP do
+    begin
+      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      ATimeList.OnInitialize := InitializeSftDisplay;
+      ATimeList.OnGetUseList := GetConstConcUseList;
+      ATimeList.OnTimeListUsed := PackageUsed;
+      ATimeList.Name := 'SFT_Constant_Conc_' + IntToStr(CompIndex);
+      FConstConcTimeLists.Add(ATimeList);
+      AddTimeList(ATimeList);
     end;
   end;
 end;
