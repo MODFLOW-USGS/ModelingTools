@@ -8731,9 +8731,11 @@ const
   //               Bug fix: Transient data for the MVR package was not displayed
   //                properly in the Object Properties dialog bos if the number
   //                of times was not equal to 1.
+  //    '4.0.0.14' Bug fix: Fixed coloring pathlines with the Z coordinate when
+  //                DISV is used.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.13';
+  IModelVersion = '4.0.0.14';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

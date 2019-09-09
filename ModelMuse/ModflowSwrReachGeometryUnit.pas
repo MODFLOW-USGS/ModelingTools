@@ -127,6 +127,8 @@ type
     FStoredRoughness: TRealStorage;
     FStoredWidth: TRealStorage;
     FGeoNumber: integer;
+    FminCalc: Boolean;
+    FMinElev: Double;
     function GetBottomElevation: Double;
     function GetCenterDistance: Double;
     function GetConductance: Double;
@@ -159,6 +161,8 @@ type
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
+    function HasMinimum: Boolean;
+    function MinimumElevation: double;
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -525,6 +529,7 @@ begin
     ExtinctionDepth := SourceItem.ExtinctionDepth;
     CrossSection := SourceItem.CrossSection;
     Table := SourceItem.Table;
+    FminCalc := False;
   end;
   inherited;
 end;
@@ -628,6 +633,11 @@ begin
   Result := FStoredWidth.Value
 end;
 
+function TReachGeometryItem.HasMinimum: Boolean;
+begin
+  result := GeometryType in [gtRectangular, gtTrapezoidal, gtIrregular, gtTable]
+end;
+
 function TReachGeometryItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   GeomItem: TReachGeometryItem;
@@ -650,6 +660,42 @@ begin
       and CrossSection.IsSame(GeomItem.CrossSection)
       and Table.IsSame(GeomItem.Table);
   end;
+end;
+
+function TReachGeometryItem.MinimumElevation: double;
+var
+  CrossSectionIndex: Integer;
+begin
+  if not FminCalc then
+  begin
+    case GeometryType of
+      gtRectangular, gtTrapezoidal:
+        begin
+          FMinElev := BottomElevation;
+        end;
+      gtIrregular:
+        begin
+          FMinElev := CrossSection[0].Elev;
+          for CrossSectionIndex := 1 to CrossSection.Count - 1 do
+          begin
+            if CrossSection[CrossSectionIndex].Elev < FMinElev then
+            begin
+              FMinElev := CrossSection[CrossSectionIndex].Elev;
+            end;
+          end;
+        end;
+      gtTable:
+        begin
+          FMinElev := Table[0].Elevation;
+        end;
+      gtWholeCell:
+        begin
+          Assert(False);
+        end;
+    end;
+    FminCalc := True;
+  end;
+  result := FMinElev;
 end;
 
 procedure TReachGeometryItem.SetBottomElevation(const Value: Double);

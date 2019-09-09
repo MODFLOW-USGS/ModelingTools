@@ -501,6 +501,8 @@ type
     acShowCellNumbers: TAction;
     Action11: TMenuItem;
     bhntMeasureRuler: TJvBalloonHint;
+    SimplifySelectedObjects1: TMenuItem;
+    acSimplifyScreenObjects: TAction;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -681,6 +683,7 @@ type
     procedure acShowCellNumbersExecute(Sender: TObject);
     procedure bhntMeasureRulerMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
+    procedure acSimplifyScreenObjectsExecute(Sender: TObject);
   private
     FCreateArchive: Boolean;
     CreateArchiveSet: boolean;
@@ -5321,6 +5324,33 @@ procedure TfrmGoPhast.acSWR_TabfilesExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmSwrTabfiles);
+end;
+
+procedure TfrmGoPhast.acSimplifyScreenObjectsExecute(Sender: TObject);
+var
+  SelectedScreenObjects: TScreenObjectList;
+  Index: Integer;
+  AScreenObject: TScreenObject;
+begin
+  inherited;
+  SelectedScreenObjects := TScreenObjectList.Create;
+  try
+    SelectedScreenObjects.Capacity := PhastModel.ScreenObjectCount;
+    for Index := PhastModel.ScreenObjectCount - 1 downto 0 do
+    begin
+      AScreenObject := PhastModel.ScreenObjects[Index];
+      if AScreenObject.Selected then
+      begin
+        SelectedScreenObjects.Add(AScreenObject);
+      end;
+    end;
+    if SelectedScreenObjects.Count > 0 then
+    begin
+      UndoStack.Submit(TUndoSimplifyObjects.Create(SelectedScreenObjects));
+    end;
+  finally
+    SelectedScreenObjects.Free;
+  end;
 end;
 
 procedure TfrmGoPhast.acShowCellNumbersExecute(Sender: TObject);

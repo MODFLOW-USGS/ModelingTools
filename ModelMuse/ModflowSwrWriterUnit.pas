@@ -50,8 +50,8 @@ type
     procedure ClearTimeLists(AModel: TBaseModel);
     // @seealso(TCustomModel.UpdateSwrReachNumber)
     procedure EvaluateSteadyReachData;
-    procedure EvaluateTransientReachData;
     procedure UpdateKRCH;
+    procedure EvaluateTransientReachData;
     procedure EvaluateRain;
     procedure EvaluateEvaporation;
     procedure EvaluateLatInflow;
@@ -211,6 +211,12 @@ resourcestring
   StrYouMustSpecifyTheFormat = 'You must specify the stage for all SWR reach' +
   'es in the first stress period. Your model has %0:d reaches but the stage ' +
   'was only specified for %1:d';
+  StrTheSWRStreamBotto = 'The SWR stream bottom is above the top of the mode' +
+  'l';
+  StrAtRowColumn = 'At (Row, Column) = (%0:d, %1:d), the bottom of the strea' +
+  'm bed is %2:g, and the stream bed vertical elevation offset is %3:g. Toge' +
+  'ther, these add up to %4:g which is higher than the top of the model (%5:' +
+  'g).';
 //  StrUnusedSWRReachGeo = 'Unused SWR reach geometry';
 //  StrTheSWRReachGeomet = 'The SWR reach geometry named "%s" has not been use' +
 //  'd. This can cause problems for SWR.';
@@ -404,6 +410,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSWRObservat);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingSWRSt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInitialSWRStagesN);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheSWRStreamBotto);
 
   if Model.ModflowPackages.Mt3dBasic.IsSelected then
   begin
@@ -2511,6 +2518,9 @@ var
   NextGeoNumber: integer;
   GeoIndex: Integer;
   GeoItem: TReachGeometryItem;
+  ModelTop: TDataArray;
+  ModelTopElev: Double;
+  ReachBottom: Double;
 begin
   // Data set 10
   for GeoIndex := 0 to Model.SwrReachGeometry.Count - 1 do
@@ -2527,6 +2537,10 @@ begin
       Format(StrInStressPeriodD, [TimeIndex +1]));
     Exit;
   end;
+
+  ModelTop := Model.DataArrayManager.GetDataSetByName(kModelTop);
+  ModelTop.Initialize;
+  
   Assert(ValueCellList.Count = FReachList.Count);
   for CellIndex := 0 to ValueCellList.Count - 1 do
   begin
@@ -2547,6 +2561,22 @@ begin
     WriteFloat(TransientCell.VerticalOffSet);
     WriteString(' # Data Set 10 IGMODRCH IGEONUMR GZSHIFT');
     NewLine;
+    
+    
+    if GeoItem.HasMinimum then
+    begin
+      ModelTopElev := ModelTop.RealData[0, TransientCell.Row, TransientCell.Column];
+      ReachBottom := GeoItem.MinimumElevation + TransientCell.VerticalOffSet;
+      if ReachBottom > ModelTopElev then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model, StrTheSWRStreamBotto,
+          Format(StrAtRowColumn,
+          [TransientCell.Row, TransientCell.Column, GeoItem.MinimumElevation,
+          TransientCell.VerticalOffSet,
+          GeoItem.MinimumElevation + TransientCell.VerticalOffSet, ModelTopElev]), 
+          TransientCell.ScreenObject);
+      end;
+    end;
   end;
 end;
 

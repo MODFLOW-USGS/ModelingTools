@@ -1656,8 +1656,16 @@ procedure TPathLineReader.GetMinMaxValues(var MaxValue: Double;
   var MinValue: Double);
 var
   Grid: TModflowGrid;
+  LocalModel: TCustomModel;
+  Disv: TModflowDisvGrid;
+  MeshLmits: TGridLimit;
 begin
-  Grid := (FModel as TCustomModel).ModflowGrid;
+  LocalModel := FModel as TCustomModel;
+  Grid := LocalModel.ModflowGrid;
+  if LocalModel.DisvUsed then
+  begin
+    Disv := LocalModel.DisvGrid;
+  end;
   if ColorLimits.UseLimit then
   begin
     MinValue := ColorLimits.MinColorLimit;
@@ -1702,8 +1710,18 @@ begin
         end;
       clcZ:
         begin
+        if LocalModel.DisvUsed then
+        begin
+          Disv := LocalModel.DisvGrid;
+          MeshLmits := Disv.MeshLimits(vdFront, Disv.CrossSection.Angle);
+          MinValue := MeshLmits.MinZ;
+          MaxValue := MeshLmits.MaxZ;
+        end
+        else
+        begin
           MinValue := Grid.LowestElevation;
           MaxValue := Grid.HighestElevation;
+        end;
         end;
       clcGroup:
         begin

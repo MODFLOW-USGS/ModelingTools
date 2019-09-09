@@ -1720,6 +1720,9 @@ inherited frmGoPhast: TfrmGoPhast
           Hint = 'Allow object(s) to be moved'
           OnClick = miUnlockSelectedObjectsClick
         end
+        object SimplifySelectedObjects1: TMenuItem
+          Action = acSimplifyScreenObjects
+        end
       end
       object N1: TMenuItem
         Caption = '-'
@@ -3483,12 +3486,17 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Show Cell Numbers'
       OnExecute = acShowCellNumbersExecute
     end
+    object acSimplifyScreenObjects: TAction
+      Category = 'Object'
+      Caption = 'Simplify Selected Objects'
+      OnExecute = acSimplifyScreenObjectsExecute
+    end
   end
   object ilDisabledImageList: TImageList
     Left = 104
     Top = 128
     Bitmap = {
-      494C010148004D00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010148004D00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003001000001002000000000000030
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6132,7 +6140,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 176
     Top = 80
     Bitmap = {
-      494C010161006500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010161006500080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000009001000001002000000000000090
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

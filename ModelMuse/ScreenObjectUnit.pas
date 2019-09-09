@@ -3771,6 +3771,7 @@ view. }
     // Assigns a MODFLOW-2005 STR stream to a MODFLOW-6 SFR stream
     procedure ConvertStr;
     procedure ClearModflowBoundaries;
+    procedure SimplifyStraightEdges(AngleEpsilon, DistanceEpsilon: double);
   published
     // @name is deprecated.
     property ChildModelDiscretization: integer read FChildModelDiscretization
@@ -15978,6 +15979,40 @@ end;
 function TScreenObject.ShouldStorePointPositionValues: Boolean;
 begin
   result := (FPointPositionValues <> nil) and (FPointPositionValues.Count > 0);
+end;
+
+procedure TScreenObject.SimplifyStraightEdges(AngleEpsilon, DistanceEpsilon: double);
+var
+  SectionIndex: Integer;
+  PointIndex: Integer;
+  StartIndex: Integer;
+  Point1: TPoint2D;
+  Point2: TPoint2D;
+  Point3: TPoint2D;
+begin
+  for SectionIndex := SectionCount - 1 downto 0 do
+  begin
+    if SectionLength[SectionIndex] >= 3 then
+    begin
+      StartIndex := SectionStart[SectionIndex];
+      for PointIndex := SectionLength[SectionIndex] - 2 downto 1 do
+      begin
+        Point1 := Points[PointIndex-1 + StartIndex];
+        Point2 := Points[PointIndex + StartIndex];
+        Point3 := Points[PointIndex+1 + StartIndex];
+
+
+        if
+          (FastGeo.Distance(Point1, Point3) < DistanceEpsilon) and
+          (FastGeo.Distance(Point1, Point2) < DistanceEpsilon) and
+          (FastGeo.Distance(Point2, Point3) < DistanceEpsilon) and
+          (Abs(VertexAngle(Point1, Point2, Point3)- 180) < AngleEpsilon) then
+        begin
+          DeletePoint(PointIndex + StartIndex);
+        end;
+      end;
+    end;
+  end;
 end;
 
 function TScreenObject.SingleCellLocation(AModel: TBaseModel): TCellLocation;

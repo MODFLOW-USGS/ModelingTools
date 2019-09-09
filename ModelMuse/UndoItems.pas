@@ -2459,6 +2459,9 @@ var
   VariableIndex: Integer;
   OldVariableName: string;
   NewVariableName: string;
+  DuplicateName: Boolean;
+  BaseName: string;
+  DupIndex: Integer;
 begin
   FOldNames.Clear;
   FNewNames.Clear;
@@ -2484,6 +2487,41 @@ begin
       begin
         OldVariableName := FOldNames[VariableIndex];
         NewVariableName := FNewNames[VariableIndex];
+
+        DuplicateName := False;
+        for CompilerIndex := 0 to CompilerList.Count - 1 do
+        begin
+          Compiler := CompilerList[CompilerIndex];
+          VarIndex := Compiler.IndexOfVariable(NewVariableName);
+          if VarIndex >= 0 then
+          begin
+            DuplicateName := True;
+            Break;
+          end;
+        end;
+
+        if DuplicateName then
+        begin
+          DupIndex := 0;
+          repeat
+            DuplicateName := False;
+            Inc(DupIndex);
+            BaseName := NewVariableName + '_' + IntToStr(DupIndex);
+            for CompilerIndex := 0 to CompilerList.Count - 1 do
+            begin
+              Compiler := CompilerList[CompilerIndex];
+              VarIndex := Compiler.IndexOfVariable(BaseName);
+              if VarIndex >= 0 then
+              begin
+                DuplicateName := True;
+                Break;
+              end;
+            end;
+          until (not DuplicateName );
+          NewVariableName := BaseName;
+          FNewNames[VariableIndex] := NewVariableName;
+        end;
+
         for CompilerIndex := 0 to CompilerList.Count - 1 do
         begin
           Compiler := CompilerList[CompilerIndex];
