@@ -680,7 +680,8 @@ uses
   Mt3dSftUnit in 'Mt3dSftUnit.pas',
   frameScreenObjectMt3dSftUnit in 'frameScreenObjectMt3dSftUnit.pas' {frameScreenObjectMt3dSft: TFrame},
   frameMt3dSftUnit in 'frameMt3dSftUnit.pas' {frameMt3dSftPkg: TFrame},
-  Mt3dSftWriterUnit in 'Mt3dSftWriterUnit.pas';
+  Mt3dSftWriterUnit in 'Mt3dSftWriterUnit.pas',
+  frmSimplifyObjectsCriteriaUnit in 'frmSimplifyObjectsCriteriaUnit.pas' {frmSimplifyObjectsCriteria};
 
 {$R *.res}
 {#BACKUP ModelMuse.cfg}
@@ -696,6 +697,7 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
+  Application.CreateForm(TfrmSimplifyObjectsCriteria, frmSimplifyObjectsCriteria);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
   if frmErrorsAndWarnings.HasMessages then

@@ -15989,6 +15989,9 @@ var
   Point1: TPoint2D;
   Point2: TPoint2D;
   Point3: TPoint2D;
+  Angle1: Extended;
+  Angle2: Extended;
+  DeltaAngle: Integer;
 begin
   for SectionIndex := SectionCount - 1 downto 0 do
   begin
@@ -16001,12 +16004,10 @@ begin
         Point2 := Points[PointIndex + StartIndex];
         Point3 := Points[PointIndex+1 + StartIndex];
 
-
-        if
-          (FastGeo.Distance(Point1, Point3) < DistanceEpsilon) and
+        if //(FastGeo.Distance(Point1, Point3) < DistanceEpsilon) and
           (FastGeo.Distance(Point1, Point2) < DistanceEpsilon) and
           (FastGeo.Distance(Point2, Point3) < DistanceEpsilon) and
-          (Abs(VertexAngle(Point1, Point2, Point3)- 180) < AngleEpsilon) then
+          (Abs(VertexAngle(Point2, Point1, Point3)) < AngleEpsilon) then
         begin
           DeletePoint(PointIndex + StartIndex);
         end;
@@ -22577,6 +22578,8 @@ var
   PointIndex: Integer;
 //  AnisotropicLocation: TPoint2D;
   IntervalCheckIndex: Integer;
+  EpsilonX: double;
+  EpsilonY: double;
   procedure ProcessSegment;
   begin
     if MinX > Segment.X1  then
@@ -22701,6 +22704,11 @@ begin
     Distance := Sqrt(Sqr(FirstPoint.x - Location.x)
       + Sqr(Anisotropy*(FirstPoint.y - Location.y)));
     SecondPoint :=Segment.SecondPointRealCoord(FScreenObject.ViewDirection);
+    if ((SecondPoint.x = Location.x) and (SecondPoint.Y = Location.y)) then
+    begin
+      result := Segment;
+      Exit;
+    end;
     TempDistance := Sqrt(Sqr(SecondPoint.x - Location.x)
       + Sqr(Anisotropy*(SecondPoint.y - Location.y)));
     FMinDistance := Max(Distance, TempDistance);
@@ -22824,16 +22832,19 @@ begin
         end;
     end;
 
+    EpsilonX := (MaxX-MinX)/1e5;
+    EpsilonY := (MaxY-MinY)/1e5;
+
     SetLength(IntervalDefinitions, 4);
-    IntervalDefinitions[0].LowerBoundary := MinX;
+    IntervalDefinitions[0].LowerBoundary := MinX-EpsilonX;
     IntervalDefinitions[0].UpperBoundary := Location.x + FMinDistance;
     IntervalDefinitions[1].LowerBoundary := Location.x - FMinDistance;
-    IntervalDefinitions[1].UpperBoundary := MaxX;
+    IntervalDefinitions[1].UpperBoundary := MaxX+EpsilonX;
 
-    IntervalDefinitions[2].LowerBoundary := MinY{*Anisotropy};
+    IntervalDefinitions[2].LowerBoundary := MinY-EpsilonY{*Anisotropy};
     IntervalDefinitions[2].UpperBoundary := Location.y{*Anisotropy} + FMinDistance;
     IntervalDefinitions[3].LowerBoundary := Location.y{*Anisotropy} - FMinDistance;
-    IntervalDefinitions[3].UpperBoundary := MaxY{*Anisotropy};
+    IntervalDefinitions[3].UpperBoundary := MaxY+EpsilonY{*Anisotropy};
 
     // When searching for the nearest segment for a point outside
     // the grid, the distance between the point and the closest
@@ -22994,7 +23005,7 @@ begin
     Segment := Leaf.FSegment;
     Distance := DistanceToSegment(Segment);
     result := Segment;
-    for SegmentIndex := 0 to SectionList.Count - 1 do
+    for SegmentIndex := 1 to SectionList.Count - 1 do
     begin
       Leaf := SectionList[SegmentIndex];
       Segment := Leaf.FSegment;

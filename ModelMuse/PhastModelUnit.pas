@@ -8733,9 +8733,11 @@ const
   //                of times was not equal to 1.
   //    '4.0.0.14' Bug fix: Fixed coloring pathlines with the Z coordinate when
   //                DISV is used.
+  //    '4.0.0.15' Bug fix: Fixed bug that could cause an error when assigning
+  //                values to a data set using interpolation.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.14';
+  IModelVersion = '4.0.0.15';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

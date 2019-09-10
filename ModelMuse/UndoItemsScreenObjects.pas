@@ -812,6 +812,11 @@ type
   end;
 
   TUndoSimplifyObjects = class(TUndoDeleteVertices)
+  private
+    FRequiredSpacing: Double;
+    FMaxDeltaAngle: double;
+    procedure SetMaxDeltaAngle(const Value: double);
+    procedure SetRequiredSpacing(const Value: Double);
   protected
     function ShouldStoreData(AScreenObject: TScreenObject): Boolean; override;
     function Description: string; override;
@@ -819,6 +824,8 @@ type
     // @name deletes the vertices that are on a straight line.
     // from the selected @link(TScreenObject)s
     procedure DoCommand; override;
+    property MaxDeltaAngle: double read FMaxDeltaAngle write SetMaxDeltaAngle;
+    property RequiredSpacing: Double read FRequiredSpacing write SetRequiredSpacing;
   end;
 
   TUndoAddPart = class(TCustomUpdateScreenObjectUndo)
@@ -4959,9 +4966,9 @@ begin
 end;
 
 procedure TUndoSimplifyObjects.DoCommand;
-const
-  AngleEpsilon = 10;
-  Spacing = 1000;
+//const
+//  AngleEpsilon = 10;
+//  Spacing = 1000;
 var
   Index, VertexIndex: integer;
   AScreenObject: TScreenObject;
@@ -4991,172 +4998,15 @@ begin
     for Index := 0 to FScreenObjects.Count - 1 do
     begin
       AScreenObject := FScreenObjects[Index];
-//      if AScreenObject.SelectedVertexCount = AScreenObject.Count then
-//      begin
-//        AScreenObject.Deleted := True;
-//      end
-//      else
+      AScreenObject.SimplifyStraightEdges(MaxDeltaAngle, RequiredSpacing);
+
+      if not AScreenObject.UpToDate then
       begin
-//        if AScreenObject.SelectedVertexCount > 0 then
-        begin
-//          CloseScreenObject := AScreenObject.Closed
-//            and AScreenObject.SelectedVertices[0];
-
-//          TempScreenObject := frmGoPhast.PhastModel.ScreenObjectClass.Create(nil);
-//          try
-//            PointCount := 0;
-//            SectionIndex := AScreenObject.SectionCount -1;
-//            NextEnd := AScreenObject.SectionEnd[SectionIndex];
-//            NextStart := AScreenObject.SectionStart[SectionIndex];
-//            NewSection := False;
-//            ClosedSection := AScreenObject.SectionClosed[SectionIndex];
-//            for VertexIndex := AScreenObject.Count - 1 downto 0 do
-//            begin
-//              // Test if you have reached the end of a section in the object.
-//              // If so, start a new section.
-//              NextPart := VertexIndex = NextEnd;
-//              if NextPart then
-//              begin
-//                // Test whether the previous section was closed.
-//                ClosedSection := AScreenObject.SectionClosed[SectionIndex];
-//                NewSection := True;
-//                Dec(SectionIndex);
-//                if SectionIndex >= 0  then
-//                begin
-//                  // mark the end of the next section
-//                  NextEnd := AScreenObject.SectionEnd[SectionIndex];
-//                  NextStart := AScreenObject.SectionStart[SectionIndex];
-//                end;
-//              end;
-//              if AScreenObject.SelectedVertices[VertexIndex] then
-//              begin
-//                TempIndex := TempScreenObject.SectionCount-1;
-//                if ClosedSection
-//                  and not TempScreenObject.SectionClosed[TempIndex]
-//                  and (TempScreenObject.SectionLength[TempIndex] > 2)
-//                  and (VertexIndex = NextStart) then
-//                begin
-//                  TempIndex := TempScreenObject.SectionStart[TempIndex];
-//                  LastPoint := TempScreenObject.Points[TempIndex];
-//                  TempScreenObject.AddPoint(LastPoint, False);
-//                  Inc(PointCount);
-//                  if PointCount <> TempScreenObject.Count then
-//                  begin
-//                    FCanDeleteVertices := false;
-//                  end;
-//                end;
-//              end
-//              else
-//              begin
-//                TempScreenObject.AddPoint(AScreenObject.Points[VertexIndex],
-//                  NewSection);
-//                NewSection := False;
-//                Inc(PointCount);
-//                if PointCount <> TempScreenObject.Count then
-//                begin
-//                  FCanDeleteVertices := false;
-//                  break;
-//                end;
-//              end;
-//            end;
-//
-////            if FCanDeleteVertices and CloseScreenObject then
-////            begin
-////              TempSectionIndex := TempScreenObject.SectionCount -1;
-////              TempVertextIndex := TempScreenObject.SectionStart[TempSectionIndex];
-////              TempScreenObject.AddPoint(
-////                TempScreenObject.Points[TempVertextIndex], False);
-////              Inc(PointCount);
-////              if PointCount <> TempScreenObject.Count then
-////              begin
-////                FCanDeleteVertices := false;
-////              end;
-////            end;
-//          finally
-//            TempScreenObject.Free;
-//          end;
-
-//          if FCanDeleteVertices then
-          begin
-            AScreenObject.SimplifyStraightEdges(AngleEpsilon, Spacing);
-//            for SectionIndex := SectionCount - 1 downto 0 do
-//            begin
-//              if SectionLength(SectionIndex) >= 3 then
-//              begin
-//                StartIndex := SectionStart(SectionIndex);
-//                for PointIndex := SectionLength(SectionIndex) - 2 downto 1 do
-//                begin
-//                  Point1 := Points[PointIndex-1 + StartIndex];
-//                  Point2 := Points[PointIndex + StartIndex];
-//                  Point3 := Points[PointIndex+1 + StartIndex];
-//
-//                  if Collinear(Point1.X, Point1.Y, Point2.X, Point2.Y, Point3.X, Point3.Y, AngleEpsilon) then
-//                  begin
-//                    DeletePoint(PointIndex + StartIndex);
-//                  end;
-//                end;
-//              end;
-//            end;
-
-//            SectionIndex := AScreenObject.SectionCount -1;
-//            NextEnd := AScreenObject.SectionEnd[SectionIndex];
-//            CurrentStart := AScreenObject.SectionStart[SectionIndex];
-//            CurrentEnd := NextEnd;
-//            NeedToCloseSection := False;
-//            ClosedSection := AScreenObject.SectionClosed[SectionIndex];
-//            for VertexIndex := AScreenObject.Count - 1 downto 0 do
-//            begin
-//              NextPart := VertexIndex = NextEnd;
-//              if NextPart then
-//              begin
-//                NeedToCloseSection := False;
-//                CurrentStart := AScreenObject.SectionStart[SectionIndex];
-//                CurrentEnd := AScreenObject.SectionEnd[SectionIndex];
-//                ClosedSection := AScreenObject.SectionClosed[SectionIndex];
-//                Dec(SectionIndex);
-//                if SectionIndex >= 0  then
-//                begin
-//                  NextEnd := AScreenObject.SectionEnd[SectionIndex];
-//                end;
-//              end;
-//              if AScreenObject.SelectedVertices[VertexIndex] then
-//              begin
-//                if ClosedSection and (VertexIndex = CurrentEnd) then
-//                begin
-//                  NeedToCloseSection := False;
-//                  for InnerVertexIndex := CurrentStart to CurrentEnd do
-//                  begin
-//                    if not AScreenObject.SelectedVertices[InnerVertexIndex] then
-//                    begin
-//                      NeedToCloseSection := True;
-//                      break;
-//                    end;
-//                  end;
-//                end;
-//                AScreenObject.DeletePoint(VertexIndex);
-//              end;
-//              if (VertexIndex < AScreenObject.Count) then
-//              begin
-//                if NeedToCloseSection and (VertexIndex = CurrentStart)
-//                  and not AScreenObject.SectionClosed[SectionIndex+1]
-//                  and (AScreenObject.SectionLength[SectionIndex+1] > 2) then
-//                begin
-//                  LastPoint := AScreenObject.Points[VertexIndex];
-//                  CurrentEnd := AScreenObject.SectionEnd[SectionIndex+1];
-//                  AScreenObject.InsertPoint(CurrentEnd+1, LastPoint);
-//                  NeedToCloseSection := False;
-//                end;
-//              end;
-//            end;
-            if not AScreenObject.UpToDate then
-            begin
-              AScreenObject.UpToDate := True;
-            end;
-            AScreenObject.Invalidate;
-            AScreenObject.UpToDate := True;
-          end;
-        end;
+        AScreenObject.UpToDate := True;
       end;
+      AScreenObject.Invalidate;
+      AScreenObject.UpToDate := True;
+
       for DataSetIndex := 0 to AScreenObject.DataSetCount - 1 do
       begin
         AScreenObject.DataSets[DataSetIndex].Invalidate;
@@ -5171,6 +5021,16 @@ begin
     frmGoPhast.CanDraw := True;
   end;
   UpdateDisplay;
+end;
+
+procedure TUndoSimplifyObjects.SetMaxDeltaAngle(const Value: double);
+begin
+  FMaxDeltaAngle := Value;
+end;
+
+procedure TUndoSimplifyObjects.SetRequiredSpacing(const Value: Double);
+begin
+  FRequiredSpacing := Value;
 end;
 
 function TUndoSimplifyObjects.ShouldStoreData(
