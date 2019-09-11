@@ -603,6 +603,7 @@ begin
         WriteDataSet7B(TimeIndex);
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
+      SutraFileWriter.AddFile(sftBcoug, ChangeFileExt(FNameOfFile, '.bcoug'));
     finally
       CloseFile;
     end;

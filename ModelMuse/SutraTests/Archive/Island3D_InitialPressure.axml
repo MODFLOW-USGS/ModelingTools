@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Island3D_InitialPressure" FileType="bin">
-    <FileName Model_Name="Island3D_InitialPressure" FileType="bin">C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+    <FileName Model_Name="Island3D_InitialPressure" FileType="bin">..\..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
   </bin>
   <ancillary Model_Name="Island3D_InitialPressure" FileType="ancillary">
     <FileName Model_Name="Island3D_InitialPressure" FileType="ancillary">Island3D_InitialPressure.gpt</FileName>
   </ancillary>
   <model Model_Name="Island3D_InitialPressure" FileType="Model Input">
-    <FileName Model_Name="Island3D_InitialPressure" FileType="Model Input">Island3D_InitialPressure.bcof</FileName>
-    <FileName Model_Name="Island3D_InitialPressure" FileType="Model Input">Island3D_InitialPressure.bcop</FileName>
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Input">Island3D_InitialPressure.FluxBcs</FileName>
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Input">Island3D_InitialPressure.ics</FileName>
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Input">Island3D_InitialPressure.inp</FileName>
@@ -18,6 +16,8 @@
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Input">usgs.Island3D_InitialPressure.reference</FileName>
   </model>
   <output Model_Name="Island3D_InitialPressure" FileType="Model Output">
+    <FileName Model_Name="Island3D_InitialPressure" FileType="Model Output">Island3D_InitialPressure.bcof</FileName>
+    <FileName Model_Name="Island3D_InitialPressure" FileType="Model Output">Island3D_InitialPressure.bcop</FileName>
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Output">Island3D_InitialPressure.ele</FileName>
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Output">Island3D_InitialPressure.lst</FileName>
     <FileName Model_Name="Island3D_InitialPressure" FileType="Model Output">Island3D_InitialPressure.nod</FileName>

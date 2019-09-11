@@ -717,6 +717,7 @@ begin
         WriteDataSet7A(TimeIndex);
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
+      SutraFileWriter.AddFile(sftBcopg, ChangeFileExt(FNameOfFile, '.bcopg'));
     finally
       CloseFile;
     end;

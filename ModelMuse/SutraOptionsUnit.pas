@@ -48,11 +48,11 @@ type
     procedure SetStoredRechargeFraction(const Value: TRealStorage);
     procedure SetStoredSubmergedOutput(const Value: TRealStorage);
     function GetDischargeFraction: double;
-    function GetMinLakeVolume: double;
+//    function GetMinLakeVolume: double;
     function GetRechargeFraction: double;
     function GetSubmergedOutput: double;
     procedure SetDischargeFraction(const Value: double);
-    procedure SetMinLakeVolume(const Value: double);
+//    procedure SetMinLakeVolume(const Value: double);
     procedure SetRechargeFraction(const Value: double);
     procedure SetSubmergedOutput(const Value: double);
 //    procedure SetFluidSourceSinkLakeAbsent(
@@ -91,7 +91,7 @@ type
     property DischargeFraction: double read GetDischargeFraction
       write SetDischargeFraction;
     // VLIM
-    property MinLakeVolume: double read GetMinLakeVolume write SetMinLakeVolume;
+//    property MinLakeVolume: double read GetMinLakeVolume write SetMinLakeVolume;
     // RNOLK
     property SubmergedOutput: double read GetSubmergedOutput
       write SetSubmergedOutput;
@@ -107,8 +107,9 @@ type
       write SetStoredRechargeFraction;
     property StoredDischargeFraction: TRealStorage read FStoredDischargeFraction
       write SetStoredDischargeFraction;
+    // @name is no longer included in the SUTRA 3.0 input.
     property StoredMinLakeVolume: TRealStorage read FStoredMinLakeVolume
-      write SetStoredMinLakeVolume;
+      write SetStoredMinLakeVolume stored False;
     property StoredSubmergedOutput: TRealStorage read FStoredSubmergedOutput
       write SetStoredSubmergedOutput;
     // ILKF
@@ -1589,7 +1590,7 @@ begin
     LakeOutputCycle := SourceLake.LakeOutputCycle;
     RechargeFraction := SourceLake.RechargeFraction;
     DischargeFraction := SourceLake.DischargeFraction;
-    MinLakeVolume := SourceLake.MinLakeVolume;
+//    MinLakeVolume := SourceLake.MinLakeVolume;
     SubmergedOutput := SourceLake.SubmergedOutput;
 
     FluidSourceSinkLakePresent := SourceLake.FluidSourceSinkLakePresent;
@@ -1617,7 +1618,7 @@ begin
 
   FStoredRechargeFraction.OnChange := OnInvalidateModel;
   FStoredDischargeFraction.OnChange := OnInvalidateModel;
-  FStoredMinLakeVolume.OnChange := OnInvalidateModel;
+//  FStoredMinLakeVolume.OnChange := OnInvalidateModel;
   FStoredSubmergedOutput.OnChange := OnInvalidateModel;
 
   Initialize;
@@ -1637,11 +1638,11 @@ begin
   result := StoredDischargeFraction.Value;
 end;
 
-function TSutraLakeOptions.GetMinLakeVolume: double;
-begin
-  result := StoredMinLakeVolume.Value;
-end;
-
+//function TSutraLakeOptions.GetMinLakeVolume: double;
+//begin
+//  result := StoredMinLakeVolume.Value;
+//end;
+//
 function TSutraLakeOptions.GetRechargeFraction: double;
 begin
   result := StoredRechargeFraction.Value;
@@ -1658,7 +1659,7 @@ begin
   LakeOutputCycle := 1;
   RechargeFraction := 0;
   DischargeFraction := 0;
-  MinLakeVolume := 0;
+//  MinLakeVolume := 0;
   SubmergedOutput := 0;
   FluidSourceSinkLakePresent := lbiNoChange;
   USourceSinkLakePresent := lbiNoChange;
@@ -1766,10 +1767,10 @@ begin
 //  SetIntegerProperty(FMaxLakeIterations, Value);
 end;
 
-procedure TSutraLakeOptions.SetMinLakeVolume(const Value: double);
-begin
-  StoredMinLakeVolume.Value := Value;
-end;
+//procedure TSutraLakeOptions.SetMinLakeVolume(const Value: double);
+//begin
+//  StoredMinLakeVolume.Value := Value;
+//end;
 
 procedure TSutraLakeOptions.SetRechargeFraction(const Value: double);
 begin
@@ -1780,7 +1781,7 @@ procedure TSutraLakeOptions.SetStoredMinLakeVolume(const Value: TRealStorage);
 begin
   FStoredMinLakeVolume.Assign(Value);
 end;
-
+//
 procedure TSutraLakeOptions.SetStoredRechargeFraction(const Value: TRealStorage);
 begin
   FStoredRechargeFraction.Assign(Value);

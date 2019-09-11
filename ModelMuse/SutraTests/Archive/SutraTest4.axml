@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="SutraTest4" FileType="bin">
-    <FileName Model_Name="SutraTest4" FileType="bin">C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+    <FileName Model_Name="SutraTest4" FileType="bin">..\..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
   </bin>
   <ancillary Model_Name="SutraTest4" FileType="ancillary">
     <FileName Model_Name="SutraTest4" FileType="ancillary">SutraTest4.gpt</FileName>
@@ -9,10 +9,6 @@
   <model Model_Name="SutraTest4" FileType="Model Input">
     <FileName Model_Name="SutraTest4" FileType="Model Input">RunSutra.bat.archive</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Input">SUTRA.FIL.archive</FileName>
-    <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.bcof</FileName>
-    <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.bcop</FileName>
-    <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.bcos</FileName>
-    <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.bcou</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.FluxBcs</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.ics</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Input">SutraTest4.inp</FileName>
@@ -22,6 +18,10 @@
     <FileName Model_Name="SutraTest4" FileType="Model Input">usgs.SutraTest4.reference</FileName>
   </model>
   <output Model_Name="SutraTest4" FileType="Model Output">
+    <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.bcof</FileName>
+    <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.bcop</FileName>
+    <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.bcos</FileName>
+    <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.bcou</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.ele</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.lst</FileName>
     <FileName Model_Name="SutraTest4" FileType="Model Output">SutraTest4.nod</FileName>

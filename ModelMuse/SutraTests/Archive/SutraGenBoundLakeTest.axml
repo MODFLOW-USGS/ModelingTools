@@ -19,6 +19,8 @@
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">usgs.SutraGenBoundLakeTest.reference</FileName>
   </model>
   <output Model_Name="SutraGenBoundLakeTest" FileType="Model Output">
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.bcopg</FileName>
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.bcoug</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.ele</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lkbu</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lkh</FileName>

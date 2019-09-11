@@ -66,6 +66,17 @@ uses
 
 resourcestring
   StrSUTRAGeneralFlowB = 'SUTRA General Flow Boundary';
+  StrTime = 'Time';
+  StrUsedIPBG = 'Used (IPBG)';
+  StrPressure1PBG1 = 'Pressure 1 (PBG1)';
+  StrFlow1QPBG1 = 'Flow 1 (QPBG1)';
+  StrPressure2PBG2 = 'Pressure 2 (PBG2)';
+  StrFlow2QPBG2 = 'Flow 2 (QPBG2)';
+  StrLimit1CPQL1 = 'Limit 1 (CPQL1)';
+  StrLimit2CPQL2 = 'Limit 2 (CPQL2)';
+  StrInflowUUPBGI = 'Inflow U (UPBGI)';
+  StrOutflowUSpecificat = 'Outflow U Specification Method (CPBGO)';
+  StrOutflowUUPBGO = 'Outflow U (UPBGO)';
 
 {$R *.dfm}
 
@@ -326,17 +337,17 @@ begin
     ExitSpec.Free;
   end;
 
-  rdgSutraFeature.Cells[Ord(gfcTime), 0] := 'Time';
-  rdgSutraFeature.Cells[Ord(gfcUsed), 0] := 'Used (IPBG1)';
-  rdgSutraFeature.Cells[Ord(gfcPress1), 0] := 'Pressure 1 (PBG11)';
-  rdgSutraFeature.Cells[Ord(gfcFlow1), 0] := 'Flow 1 (QPBG11)';
-  rdgSutraFeature.Cells[Ord(gfcPress2), 0] := 'Pressure 2 (PBG21)';
-  rdgSutraFeature.Cells[Ord(gfcFlow2), 0] := 'Flow 2 (QPBG21)';
-  rdgSutraFeature.Cells[Ord(gfcLimit1), 0] := 'Limit 1 (CPQL11)';
-  rdgSutraFeature.Cells[Ord(gfcLimit2), 0] := 'Limit 2 (CPQL21)';
-  rdgSutraFeature.Cells[Ord(gfcInflowU), 0] := 'Inflow U (UPBGI1)';
-  rdgSutraFeature.Cells[Ord(gfcOutflowType), 0] := 'Outflow U Specification Method (CPBGO1)';
-  rdgSutraFeature.Cells[Ord(gfcOutflowU), 0] := 'Outflow U (UPBGO1)';
+  rdgSutraFeature.Cells[Ord(gfcTime), 0] := StrTime;
+  rdgSutraFeature.Cells[Ord(gfcUsed), 0] := StrUsedIPBG;
+  rdgSutraFeature.Cells[Ord(gfcPress1), 0] := StrPressure1PBG1;
+  rdgSutraFeature.Cells[Ord(gfcFlow1), 0] := StrFlow1QPBG1;
+  rdgSutraFeature.Cells[Ord(gfcPress2), 0] := StrPressure2PBG2;
+  rdgSutraFeature.Cells[Ord(gfcFlow2), 0] := StrFlow2QPBG2;
+  rdgSutraFeature.Cells[Ord(gfcLimit1), 0] := StrLimit1CPQL1;
+  rdgSutraFeature.Cells[Ord(gfcLimit2), 0] := StrLimit2CPQL2;
+  rdgSutraFeature.Cells[Ord(gfcInflowU), 0] := StrInflowUUPBGI;
+  rdgSutraFeature.Cells[Ord(gfcOutflowType), 0] := StrOutflowUSpecificat;
+  rdgSutraFeature.Cells[Ord(gfcOutflowU), 0] := StrOutflowUUPBGO;
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.LayoutMultiEditControls;

@@ -286,18 +286,18 @@ var
   NLSPEC: Integer;
   FRROD: Double;
   FDROD: Double;
-  VLIM: Double;
+//  VLIM: Double;
   RNOLK: Double;
 begin
   NLSPEC := FLakeNodes.Count;
   FRROD := FLakeOptions.RechargeFraction;
   FDROD := FLakeOptions.DischargeFraction;
-  VLIM := FLakeOptions.MinLakeVolume;
+//  VLIM := FLakeOptions.MinLakeVolume;
   RNOLK := FLakeOptions.SubmergedOutput;
   WriteInteger(NLSPEC);
   WriteFloat(FRROD);
   WriteFloat(FDROD);
-  WriteFloat(VLIM);
+//  WriteFloat(VLIM);
   WriteFloat(RNOLK);
   NewLine;
 end;

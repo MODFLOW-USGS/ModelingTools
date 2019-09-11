@@ -60,6 +60,10 @@ implementation
 uses
   frmGoPhastUnit;
 
+resourcestring
+  StrChangeFishnetQuadr = 'change fishnet quadrilateral properties';
+  StrBoundaryPosition = 'Boundary Position';
+
 {$R *.dfm}
 
 procedure TfrmFishnetElementProperties.btnOKClick(Sender: TObject);
@@ -92,6 +96,10 @@ begin
   Assert(Assigned(Element));
   FExistingElement := Element;
   FElement.Assign(Element);
+
+  frameDiscretization1.rdgSubLayerBoundaries.Cells[0,0] := StrBoundaryPosition;
+  frameDiscretization2.rdgSubLayerBoundaries.Cells[0,0] := StrBoundaryPosition;
+
 //  seFirstCount.AsInteger := FElement.FirstControl.Count;
 //  seSecondCount.AsInteger := FElement.SecondControl.Count;
   rdgCornerCoordinates.BeginUpdate;
@@ -186,7 +194,7 @@ end;
 
 function TUndoFishnetElementProperties.Description: string;
 begin
-  Result := 'change fishnet quadrilateral properties';
+  Result := StrChangeFishnetQuadr;
 end;
 
 destructor TUndoFishnetElementProperties.Destroy;

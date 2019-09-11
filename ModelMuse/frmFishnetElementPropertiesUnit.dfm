@@ -5,7 +5,7 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
   ClientHeight = 442
   ClientWidth = 480
   ExplicitWidth = 496
-  ExplicitHeight = 480
+  ExplicitHeight = 481
   PixelsPerInch = 96
   TextHeight = 18
   object btnHelp: TBitBtn
@@ -53,10 +53,6 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
     object tabCornerCoordinates: TTabSheet
       Caption = 'Corner Coordinates'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgCornerCoordinates: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -171,8 +167,8 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
             Width = 224
             ExplicitWidth = 224
             inherited lbl3: TLabel
-              Width = 142
-              Height = 36
+              Width = 224
+              Height = 41
               Caption = 'Discretization within quadrilateral'
               ExplicitWidth = 142
               ExplicitHeight = 36

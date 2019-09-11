@@ -122,11 +122,9 @@ type
     grpLakeDataset2: TGroupBox;
     lblDefaultRechargeFrac: TLabel;
     lblDefaultDischargeFrac: TLabel;
-    lblMinLakeVolume: TLabel;
     lblLakeOutput: TLabel;
     rdeDefaultRechargeFrac: TRbwDataEntry;
     rdeDefaultDischargeFrac: TRbwDataEntry;
-    rdeMinLakeVolume: TRbwDataEntry;
     rdeLakeOutput: TRbwDataEntry;
     jvspDefaultLakeInteractions: TJvStandardPage;
     grpLakeFluidSources: TGroupBox;
@@ -167,6 +165,8 @@ type
     procedure fedRestartInitialConditionsChange(Sender: TObject);
     procedure jvpltvNavigationCustomDrawItem(Sender: TCustomTreeView;
       Node: TTreeNode; State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure jvpltvNavigationMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     FGettingData: Boolean;
     FLakeNode: TJvPageIndexNode;
@@ -222,6 +222,7 @@ resourcestring
   StrChangeSUTRAOptions = 'change SUTRA options';
   StrLakes = 'Lakes';
   StrDefaultLakeBoundar = 'Lake-Boundary Interactions';
+  StrLakesCanOnlyBeUs = 'Lakes can only be used with 3D models.';
 
 {$R *.dfm}
 
@@ -439,8 +440,10 @@ begin
     fedRestartInitialConditionsChange(nil);
 
     // rdePressureFactor and rdeUFactor are not used in SUTRA 3.0 and above.
-    rdePressureFactor.Enabled := frmGoPhast.ModelSelection = msSutra22;
-    rdeUFactor.Enabled := frmGoPhast.ModelSelection = msSutra22;
+    rdePressureFactor.Visible := frmGoPhast.ModelSelection = msSutra22;
+    lblPressureFactor.Visible := rdePressureFactor.Visible;
+    rdeUFactor.Visible := frmGoPhast.ModelSelection = msSutra22;
+    lblUFactor.Visible := rdeUFactor.Visible;
 
     seRestartFrequency.AsInteger := SutraOptions.RestartFrequency;
     rdeFractionalUpstreamWeight.RealValue :=
@@ -496,7 +499,7 @@ begin
     seLakeOutputCycle.AsInteger := LakeOptions.LakeOutputCycle;
     rdeDefaultRechargeFrac.RealValue := LakeOptions.RechargeFraction;
     rdeDefaultDischargeFrac.RealValue := LakeOptions.DischargeFraction;
-    rdeMinLakeVolume.RealValue := LakeOptions.MinLakeVolume;
+//    rdeMinLakeVolume.RealValue := LakeOptions.MinLakeVolume;
     rdeLakeOutput.RealValue := LakeOptions.SubmergedOutput;
 
     comboFluidSourceInLakesPresent.ItemIndex
@@ -540,6 +543,22 @@ begin
   begin
     Sender.Canvas.Brush.Color := clMenuHighlight;
   end;
+end;
+
+procedure TfrmSutraOptions.jvpltvNavigationMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  ANode: TTreeNode;
+begin
+  inherited;
+  ANode := jvpltvNavigation.GetNodeAt(X,Y);
+  if ((ANode = FLakeNode) or (ANode = FLakeInteractionsNode))
+    and not ANode.Enabled then
+  begin
+    Beep;
+    MessageDlg(StrLakesCanOnlyBeUs, mtInformation, [mbOK], 0);
+  end;
+//
 end;
 
 procedure TfrmSutraOptions.rdeFractionalUpstreamWeightChange(Sender: TObject);
@@ -846,7 +865,7 @@ begin
     LakeOptions.LakeOutputCycle := seLakeOutputCycle.AsInteger;
     LakeOptions.RechargeFraction := rdeDefaultRechargeFrac.RealValue;
     LakeOptions.DischargeFraction := rdeDefaultDischargeFrac.RealValue;
-    LakeOptions.MinLakeVolume := rdeMinLakeVolume.RealValue;
+//    LakeOptions.MinLakeVolume := rdeMinLakeVolume.RealValue;
     LakeOptions.SubmergedOutput := rdeLakeOutput.RealValue;
 
     LakeOptions.FluidSourceSinkLakePresent

@@ -69,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspLake
+    ActivePage = jvspDefaultLakeInteractions
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -237,12 +237,14 @@ inherited frmSutraOptions: TfrmSutraOptions
           AlignWithMargins = True
           Left = 4
           Top = 4
-          Width = 458
-          Height = 36
+          Width = 587
+          Height = 41
           Align = alClient
           Caption = 
             'The first 80 characters of the first two lines are TITLE1 and TI' +
             'TLE2.'#13#10'The remaining lines will be treated as comments.'
+          ExplicitWidth = 458
+          ExplicitHeight = 36
         end
       end
     end
@@ -365,21 +367,21 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object lblPressureFactor: TLabel
         Left = 79
-        Top = 44
+        Top = 166
         Width = 300
         Height = 18
         Caption = 'Pressure boundary condition factor (GNUP)'
       end
       object lblUFactor: TLabel
         Left = 79
-        Top = 72
+        Top = 194
         Width = 422
         Height = 18
         Caption = 'Concentration/temperature boundary condition factor (GNUU)'
       end
       object lblMaxIterations: TLabel
         Left = 127
-        Top = 96
+        Top = 40
         Width = 381
         Height = 36
         Caption = 
@@ -389,7 +391,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object lblNonLinPressureCriterion: TLabel
         Left = 79
-        Top = 135
+        Top = 79
         Width = 422
         Height = 36
         Caption = 
@@ -399,7 +401,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object lblUCriterion: TLabel
         Left = 79
-        Top = 177
+        Top = 121
         Width = 422
         Height = 36
         Caption = 
@@ -423,7 +425,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdePressureFactor: TRbwDataEntry
         Left = 16
-        Top = 41
+        Top = 163
         Width = 57
         Height = 22
         TabOrder = 1
@@ -435,7 +437,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeUFactor: TRbwDataEntry
         Left = 16
-        Top = 69
+        Top = 191
         Width = 57
         Height = 22
         TabOrder = 2
@@ -447,7 +449,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object seMaxIterations: TJvSpinEdit
         Left = 16
-        Top = 103
+        Top = 47
         Width = 105
         Height = 26
         MaxValue = 2147483647.000000000000000000
@@ -458,7 +460,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeNonLinPressureCriterion: TRbwDataEntry
         Left = 16
-        Top = 132
+        Top = 76
         Width = 57
         Height = 22
         TabOrder = 4
@@ -470,7 +472,7 @@ inherited frmSutraOptions: TfrmSutraOptions
       end
       object rdeUCriterion: TRbwDataEntry
         Left = 16
-        Top = 184
+        Top = 128
         Width = 57
         Height = 22
         TabOrder = 5
@@ -1067,8 +1069,6 @@ inherited frmSutraOptions: TfrmSutraOptions
       Width = 595
       Height = 512
       Caption = 'jvspLake'
-      ExplicitLeft = -4
-      ExplicitTop = 3
       object grpLakeDataset1: TGroupBox
         Left = 0
         Top = 0
@@ -1103,7 +1103,6 @@ inherited frmSutraOptions: TfrmSutraOptions
         Align = alTop
         Caption = 'Lake dataset 2'
         TabOrder = 1
-        ExplicitTop = 89
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24
@@ -1118,16 +1117,9 @@ inherited frmSutraOptions: TfrmSutraOptions
           Height = 18
           Caption = 'Default runoff fraction for discharge (FDROD)'
         end
-        object lblMinLakeVolume: TLabel
-          Left = 6
-          Top = 136
-          Width = 199
-          Height = 18
-          Caption = 'Minimum lake volume (VLIM)'
-        end
         object lblLakeOutput: TLabel
           Left = 6
-          Top = 192
+          Top = 132
           Width = 420
           Height = 18
           Caption = 'Output value for stage at non-submerged lake node (RNOLK)'
@@ -1158,24 +1150,12 @@ inherited frmSutraOptions: TfrmSutraOptions
           CheckMin = True
           ChangeDisabledColor = True
         end
-        object rdeMinLakeVolume: TRbwDataEntry
+        object rdeLakeOutput: TRbwDataEntry
           Left = 6
-          Top = 160
+          Top = 156
           Width = 145
           Height = 22
           TabOrder = 2
-          Text = '0'
-          DataType = dtReal
-          Max = 1.000000000000000000
-          CheckMin = True
-          ChangeDisabledColor = True
-        end
-        object rdeLakeOutput: TRbwDataEntry
-          Left = 6
-          Top = 216
-          Width = 145
-          Height = 22
-          TabOrder = 3
           Text = '0'
           DataType = dtReal
           Max = 1.000000000000000000
@@ -1207,16 +1187,16 @@ inherited frmSutraOptions: TfrmSutraOptions
         object comboFluidSourceInLakesPresent: TComboBox
           Left = 11
           Top = 43
-          Width = 117
+          Width = 286
           Height = 26
           Style = csDropDownList
           ItemIndex = 1
           TabOrder = 0
-          Text = 'No change'
+          Text = 'No change (0)'
           Items.Strings = (
-            'Activate'
-            'No change'
-            'Deactivate')
+            'Apply if lake water absent (-1)'
+            'No change (0)'
+            'Apply if lake water present (1)')
         end
       end
       object grpLakeSoluteMassSources: TGroupBox
@@ -1238,16 +1218,16 @@ inherited frmSutraOptions: TfrmSutraOptions
         object comboSoluteSourceInLakesPresent: TComboBox
           Left = 11
           Top = 43
-          Width = 117
+          Width = 286
           Height = 26
           Style = csDropDownList
           ItemIndex = 1
           TabOrder = 0
-          Text = 'No change'
+          Text = 'No change (0)'
           Items.Strings = (
-            'Activate'
-            'No change'
-            'Deactivate')
+            'Apply if lake water absent (-1)'
+            'No change (0)'
+            'Apply if lake water present (1)')
         end
       end
       object grpLakeSpecifiedPressure: TGroupBox
@@ -1267,16 +1247,16 @@ inherited frmSutraOptions: TfrmSutraOptions
         object comboSpecifiedPressureInLakesPresent: TComboBox
           Left = 11
           Top = 43
-          Width = 117
+          Width = 286
           Height = 26
           Style = csDropDownList
           ItemIndex = 1
           TabOrder = 0
-          Text = 'No change'
+          Text = 'No change (0)'
           Items.Strings = (
-            'Activate'
-            'No change'
-            'Deactivate')
+            'Apply if lake water absent (-1)'
+            'No change (0)'
+            'Apply if lake water present (1)')
         end
       end
       object grpLakeSpecifiedU: TGroupBox
@@ -1298,16 +1278,16 @@ inherited frmSutraOptions: TfrmSutraOptions
         object comboSpecifiedUInLakesPresent: TComboBox
           Left = 11
           Top = 43
-          Width = 117
+          Width = 286
           Height = 26
           Style = csDropDownList
           ItemIndex = 1
           TabOrder = 0
-          Text = 'No change'
+          Text = 'No change (0)'
           Items.Strings = (
-            'Activate'
-            'No change'
-            'Deactivate')
+            'Apply if lake water absent (-1)'
+            'No change (0)'
+            'Apply if lake water present (1)')
         end
       end
       object grpLakeGeneralizedFlow: TGroupBox
@@ -1334,16 +1314,16 @@ inherited frmSutraOptions: TfrmSutraOptions
         object comboGeneralizedFlowPresent: TComboBox
           Left = 11
           Top = 43
-          Width = 117
+          Width = 286
           Height = 26
           Style = csDropDownList
           ItemIndex = 1
           TabOrder = 0
-          Text = 'No change'
+          Text = 'No change (0)'
           Items.Strings = (
-            'Activate'
-            'No change'
-            'Deactivate')
+            'Apply if lake water absent (-1)'
+            'No change (0)'
+            'Apply if lake water present (1)')
         end
         object comboLakeGeneralizedFlowType: TComboBox
           Left = 320
@@ -1383,16 +1363,16 @@ inherited frmSutraOptions: TfrmSutraOptions
         object comboGeneralizedTransportPresent: TComboBox
           Left = 11
           Top = 43
-          Width = 117
+          Width = 286
           Height = 26
           Style = csDropDownList
           ItemIndex = 1
           TabOrder = 0
-          Text = 'No change'
+          Text = 'No change (0)'
           Items.Strings = (
-            'Activate'
-            'No change'
-            'Deactivate')
+            'Apply if lake water absent (-1)'
+            'No change (0)'
+            'Apply if lake water present (1)')
         end
         object comboLakeGeneralizedTransportType: TComboBox
           Left = 320
@@ -1422,6 +1402,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Indent = 19
     TabOrder = 0
     OnCustomDrawItem = jvpltvNavigationCustomDrawItem
+    OnMouseDown = jvpltvNavigationMouseDown
     Items.NodeData = {
       0303000000380000000000000000000000FFFFFFFFFFFFFFFF00000000000000
       0000000000010D43006F006E00660069006700750072006100740069006F006E

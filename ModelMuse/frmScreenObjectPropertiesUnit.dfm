@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -192
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -22,7 +21,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabModflowBoundaryConditions
+    ActivePage = tabSutraFeatures
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -12313,6 +12312,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 276
               inherited tabConnections: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 242
@@ -12368,7 +12368,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabTime: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 312
                 ExplicitHeight = 205
               end
             end
@@ -12986,7 +12988,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraSpecTempConc
+        ActivePage = jvspGeneralizedFlow
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange

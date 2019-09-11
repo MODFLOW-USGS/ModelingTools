@@ -8,8 +8,9 @@ uses
 
 type
   TSutraFileType = (sftInp, sftIcs, sftLst, sftRst, sftNod, sftEle,
-    sftObs, sftObc, sftBcof, sftBcos, sftBcop, sftBcou, sftSmy,
-    sftLkin, sftLkbc, sftLkar, sftLkbu, sftLkst, sftLkrs, sftLkn, sftLkh);
+    sftObs, sftObc, sftBcof, sftBcos, sftBcop, sftBcou, sftSmy, sftBcopg,
+    sftBcoug, sftLkin, sftLkbc, sftLkar, sftLkbu, sftLkst, sftLkrs, sftLkn,
+    sftLkh);
 
   TSutraFileRecord = record
     FileName: string;
@@ -70,11 +71,12 @@ begin
   Inc(FNextUnitNumber);
   FFiles[FileType].FileName := FileName;
   case FileType of
-    sftInp, sftIcs, sftBcof, sftBcos, sftBcop, sftBcou, sftLkin, sftLkbc, sftLkar:
+    sftInp, sftIcs, sftLkin, sftLkbc, sftLkar:
       begin
         Model.AddModelInputFile(FileName);
       end;
-    sftLst, sftRst, sftNod, sftEle, sftSmy, sftLkst, sftLKrs, sftLkbu, sftLkn, sftLkh:
+    sftLst, sftRst, sftNod, sftEle, sftSmy, sftLkst, sftLKrs, sftLkbu, sftLkn,
+      sftLkh, sftBcof, sftBcos, sftBcop, sftBcou, sftBcopg, sftBcoug:
       begin
         Model.AddModelOutputFile(FileName);
       end;
@@ -174,6 +176,10 @@ begin
             WriteString('''BCOP''');
           sftBcou:
             WriteString('''BCOU''');
+          sftBcopg:
+            WriteString('''BCOPG''');
+          sftBcoug:
+            WriteString('''BCOUG''');
           sftSmy:
             WriteString('''SMY''');
           sftLkin:

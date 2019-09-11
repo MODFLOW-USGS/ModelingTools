@@ -58,6 +58,14 @@ uses
   frmCustomGoPhastUnit, SutraTimeScheduleUnit, AdjustSutraBoundaryValuesUnit,
   SutraBoundariesUnit, System.Generics.Collections;
 
+resourcestring
+  StrTime = 'Time';
+  StrUsedIUBG = 'Used (IUBG)';
+  Str1stConcOrTempU = '1''st Conc or Temp (UBG1)';
+  Str1stSoluteOrEnerg = '1''st Solute or Energy Flow (QUBG1)';
+  Str2ndConcOrTempU = '2''nd Conc or Temp (UBG2)';
+  Str2ndSoluteOrEnerg = '2''nd Solute or Energy Flow (QUBG2)';
+
 {$R *.dfm}
 
 { TframeSutraGeneralizeTransBoundary }
@@ -262,12 +270,12 @@ begin
     end;
   end;
 
-  rdgSutraFeature.Cells[Ord(gtcTime), 0] := 'Time';
-  rdgSutraFeature.Cells[Ord(gtcUsed), 0] := 'Used (IUBG)';
-  rdgSutraFeature.Cells[Ord(gtcU1), 0] := '1''st Conc or Temp (UBG1)';
-  rdgSutraFeature.Cells[Ord(gtcQU1), 0] := '1''st Solute or Energy Flow (QUBG1)';
-  rdgSutraFeature.Cells[Ord(gtcU2), 0] := '2''nd Conc or Temp (UBG2)';
-  rdgSutraFeature.Cells[Ord(gtcQU2), 0] := '2''nd Solute or Energy Flow (QUBG2)';
+  rdgSutraFeature.Cells[Ord(gtcTime), 0] := StrTime;
+  rdgSutraFeature.Cells[Ord(gtcUsed), 0] := StrUsedIUBG;
+  rdgSutraFeature.Cells[Ord(gtcU1), 0] := Str1stConcOrTempU;
+  rdgSutraFeature.Cells[Ord(gtcQU1), 0] := Str1stSoluteOrEnerg;
+  rdgSutraFeature.Cells[Ord(gtcU2), 0] := Str2ndConcOrTempU;
+  rdgSutraFeature.Cells[Ord(gtcQU2), 0] := Str2ndSoluteOrEnerg;
 end;
 
 procedure TframeSutraGeneralizeTransBoundary.LayoutMultiEditControls;
