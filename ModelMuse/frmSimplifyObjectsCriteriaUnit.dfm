@@ -28,8 +28,11 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
     Height = 22
     TabOrder = 0
     Text = '0'
+    OnChange = EnableOK
     DataType = dtReal
-    Max = 1.000000000000000000
+    Max = 360.000000000000000000
+    CheckMax = True
+    CheckMin = True
     ChangeDisabledColor = True
   end
   object rdeSpacing: TRbwDataEntry
@@ -39,8 +42,10 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
     Height = 22
     TabOrder = 1
     Text = '0'
+    OnChange = EnableOK
     DataType = dtReal
     Max = 1.000000000000000000
+    CheckMin = True
     ChangeDisabledColor = True
   end
   object pnl1: TPanel
@@ -50,8 +55,6 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitLeft = -44
-    ExplicitWidth = 468
     DesignSize = (
       356
       41)
@@ -71,6 +74,7 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Width = 82
       Height = 33
       Anchors = [akTop, akRight]
+      Enabled = False
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1

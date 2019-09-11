@@ -4966,16 +4966,12 @@ begin
 end;
 
 procedure TUndoSimplifyObjects.DoCommand;
-//const
-//  AngleEpsilon = 10;
-//  Spacing = 1000;
 var
   Index, VertexIndex: integer;
   AScreenObject: TScreenObject;
   DataSetIndex: integer;
   TempScreenObject: TScreenObject;
   PointCount: integer;
-//  CloseScreenObject: boolean;
   SectionIndex: Integer;
   NextPart: Boolean;
   NextEnd: Integer;

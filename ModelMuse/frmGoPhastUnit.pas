@@ -2048,7 +2048,8 @@ uses
   frmModflowRipPlantGroupsUnit, frmExportModelOutlineUnit, SutraLakeWriterUnit,
   frmGeoRefUnit, GeoRefWriterUnit, SutraBoundaryUnit, SutraGeneralFlowNodesUnit,
   SutraGeneralFlowWriterUnit, SutraGeneralTransportWriterUnit, frmFileTypesUnit,
-  ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit;
+  ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
+  frmSimplifyObjectsCriteriaUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2254,6 +2255,7 @@ resourcestring
   'ion 2 in MODFLOW-2005 to multi-aquifer wells in MODFLOW 6?';
   StrYouMustCreateTheDisv = 'You must create the DISV grid before attempting' +
   ' to import gridded data.';
+  StrNoObjectsAreSelec = 'No objects are selected.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -5331,6 +5333,7 @@ var
   SelectedScreenObjects: TScreenObjectList;
   Index: Integer;
   AScreenObject: TScreenObject;
+  Undo: TUndoSimplifyObjects;
 begin
   inherited;
   SelectedScreenObjects := TScreenObjectList.Create;
@@ -5346,7 +5349,23 @@ begin
     end;
     if SelectedScreenObjects.Count > 0 then
     begin
-      UndoStack.Submit(TUndoSimplifyObjects.Create(SelectedScreenObjects));
+      frmSimplifyObjectsCriteria := TfrmSimplifyObjectsCriteria.Create(nil);
+      try
+        if frmSimplifyObjectsCriteria.ShowModal = mrOK then
+        begin
+          Undo := TUndoSimplifyObjects.Create(SelectedScreenObjects);
+          Undo.MaxDeltaAngle := frmSimplifyObjectsCriteria.rdeAngle.RealValue;
+          Undo.RequiredSpacing := frmSimplifyObjectsCriteria.rdeSpacing.RealValue;
+          UndoStack.Submit(Undo);
+        end;
+      finally
+        FreeAndNil(frmSimplifyObjectsCriteria);
+      end;
+    end
+    else
+    begin
+      Beep;
+      MessageDlg(StrNoObjectsAreSelec, mtError, [mbOK], 0);
     end;
   finally
     SelectedScreenObjects.Free;

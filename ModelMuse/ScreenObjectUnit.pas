@@ -15992,7 +15992,13 @@ var
   Angle1: Extended;
   Angle2: Extended;
   DeltaAngle: Integer;
+  ShouldDelete: Boolean;
+  PointsRemoved: Boolean;
 begin
+  Assert((AngleEpsilon > 0) or (DistanceEpsilon > 0));
+  repeat
+  begin
+  PointsRemoved := False;
   for SectionIndex := SectionCount - 1 downto 0 do
   begin
     if SectionLength[SectionIndex] >= 3 then
@@ -16004,16 +16010,29 @@ begin
         Point2 := Points[PointIndex + StartIndex];
         Point3 := Points[PointIndex+1 + StartIndex];
 
-        if //(FastGeo.Distance(Point1, Point3) < DistanceEpsilon) and
-          (FastGeo.Distance(Point1, Point2) < DistanceEpsilon) and
-          (FastGeo.Distance(Point2, Point3) < DistanceEpsilon) and
-          (Abs(VertexAngle(Point2, Point1, Point3)) < AngleEpsilon) then
+        ShouldDelete := True;
+        if DistanceEpsilon > 0 then
+        begin
+          ShouldDelete :=
+            (FastGeo.Distance(Point1, Point2) < DistanceEpsilon) and
+            (FastGeo.Distance(Point2, Point3) < DistanceEpsilon)
+        end;
+        if ShouldDelete and (AngleEpsilon > 0) then
+        begin
+          ShouldDelete :=
+            (Abs(VertexAngle(Point1, Point2, Point3)) > 180 - AngleEpsilon)
+        end;
+
+        if ShouldDelete then
         begin
           DeletePoint(PointIndex + StartIndex);
+          PointsRemoved := True;
         end;
       end;
     end;
   end;
+  end;
+  until not PointsRemoved;
 end;
 
 function TScreenObject.SingleCellLocation(AModel: TBaseModel): TCellLocation;

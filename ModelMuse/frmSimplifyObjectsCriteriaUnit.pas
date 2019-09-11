@@ -17,6 +17,7 @@ type
     btnHelp: TBitBtn;
     btnOK: TBitBtn;
     btnCancel: TBitBtn;
+    procedure EnableOK(Sender: TObject);
   private
     { Private declarations }
   public
@@ -29,5 +30,14 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmSimplifyObjectsCriteria.EnableOK(Sender: TObject);
+begin
+  inherited;
+  if ComponentState = [csFreeNotification] then
+  begin
+    btnOK.Enabled := (rdeAngle.RealValue > 0) or (rdeSpacing.RealValue > 0);
+  end;
+end;
 
 end.
