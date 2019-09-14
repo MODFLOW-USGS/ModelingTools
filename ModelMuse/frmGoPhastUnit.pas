@@ -2256,6 +2256,8 @@ resourcestring
   StrYouMustCreateTheDisv = 'You must create the DISV grid before attempting' +
   ' to import gridded data.';
   StrNoObjectsAreSelec = 'No objects are selected.';
+  StrSDoesNotExistSutra = '"%s" does not exist. Do you want to export the SU' +
+  'TRA input files anyway?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -9087,7 +9089,51 @@ var
   NetworkDrive: Boolean;
   ModelDirectory: string;
   HasLakes: Boolean;
+  SutraFileName: string;
 begin
+  case ModelSelection of
+    msSutra22:
+      begin
+        SutraFileName := PhastModel.ProgramLocations.Sutra22Location;
+      end;
+    msSutra30:
+      begin
+        SutraFileName := PhastModel.ProgramLocations.Sutra30Location;
+      end;
+    else
+      Assert(False);
+  end;
+
+  if not TFile.Exists(SutraFileName) then
+  begin
+    Beep;
+    acSutraProgramLocationsExecute(nil);
+    case ModelSelection of
+      msSutra22:
+        begin
+          SutraFileName := PhastModel.ProgramLocations.Sutra22Location;
+        end;
+      msSutra30:
+        begin
+          SutraFileName := PhastModel.ProgramLocations.Sutra30Location;
+        end;
+      else
+        Assert(False);
+    end;
+    if not TFile.Exists(SutraFileName) then
+    begin
+      if MessageDlg(Format(StrSDoesNotExistSutra, [SutraFileName]), mtError,
+        [mbYes, mbNo], 0) <> mrYes then
+      begin
+        Exit;
+      end
+      else
+      begin
+        ShouldRunSutra := False;
+      end;
+    end;
+  end;
+
   if frmProgressMM = nil then
   begin
     frmProgressMM := TfrmProgressMM.Create(nil);
@@ -9203,18 +9249,7 @@ begin
             BatchFile.Add('pushd ' + ModelDirectory);
           end;
 
-          case ModelSelection of
-            msSutra22:
-              begin
-                BatchFile.Add('"' + PhastModel.ProgramLocations.Sutra22Location + '"');
-              end;
-            msSutra30:
-              begin
-                BatchFile.Add('"' + PhastModel.ProgramLocations.Sutra30Location + '"');
-              end;
-            else
-              Assert(False);
-          end;
+          BatchFile.Add('"' + SutraFileName + '"');
 
           AddOpenListFileLine(ChangeFileExt(FileName, '.lst'), True, BatchFile,
             PhastModel.ProgramLocations);
@@ -9232,18 +9267,7 @@ begin
           ModelName := ExtractFileName(ChangeFileExt(FileName, ''));
           BatchFile.Add(Format('if not exist "..\..\output\%0:s\NUL" mkdir "..\..\output\%0:s"', ['output.' + ModelName]));
 
-          case ModelSelection of
-            msSutra22:
-              begin
-                BatchFile.Add('..\..\bin\' + ExtractFilename(PhastModel.ProgramLocations.Sutra22Location));
-              end;
-            msSutra30:
-              begin
-                BatchFile.Add('..\..\bin\' + ExtractFilename(PhastModel.ProgramLocations.Sutra30Location));
-              end;
-            else
-              Assert(False);
-          end;
+          BatchFile.Add('..\..\bin\' + ExtractFilename(SutraFileName));
           BatchFile.Add('pause');
           BatchFile.SaveToFile(BatchFileName + ArchiveExt);
 
@@ -9251,20 +9275,7 @@ begin
           BatchFile.Free;
         end;
         PhastModel.AddModelInputFile(BatchFileName + ArchiveExt);
-        case ModelSelection of
-          msSutra22:
-            begin
-              PhastModel.AddModelInputFile(PhastModel.ProgramLocations.
-                Sutra22Location);
-            end;
-          msSutra30:
-            begin
-              PhastModel.AddModelInputFile(PhastModel.ProgramLocations.
-                Sutra30Location);
-            end;
-          else
-            Assert(False);
-        end;
+        PhastModel.AddModelInputFile(SutraFileName);
         if ShouldRunSutra then
         begin
           RunAProgram(BatchFileName);
@@ -10002,6 +10013,9 @@ procedure TfrmGoPhast.ScreenObjectSelectionChange(Sender: TObject);
 var
   Index: Integer;
   AScreenObject: TScreenObject;
+  AtLeastOneObjectSelected: Boolean;
+  ExactlyOneObjectSelected: Boolean;
+  MoreThanOneObjectSelected: Boolean;
 begin
   if csDestroying in ComponentState then
   begin
@@ -10011,23 +10025,26 @@ begin
   begin
     Exit;
   end;
-  acEditSelecteObjects.Enabled := (PhastModel <> nil)
+  AtLeastOneObjectSelected := (PhastModel <> nil)
     and (PhastModel.SelectedScreenObjectCount >= 1);
-  acAddPolygonsToObject.Enabled := (PhastModel <> nil)
+  ExactlyOneObjectSelected := (PhastModel <> nil)
     and (PhastModel.SelectedScreenObjectCount = 1);
-  acAddLinesToObject.Enabled := (PhastModel <> nil)
-    and (PhastModel.SelectedScreenObjectCount = 1);
-  acAddPointsToObject.Enabled := (PhastModel <> nil)
-    and (PhastModel.SelectedScreenObjectCount = 1);
-  miScaleRotateorMoveObjects.Enabled := (PhastModel <> nil)
-    and (PhastModel.SelectedScreenObjectCount >= 1);
-  miMergeObjects.Enabled := (PhastModel <> nil)
+  MoreThanOneObjectSelected := (PhastModel <> nil)
     and (PhastModel.SelectedScreenObjectCount > 1);
-  miReverseSelectedObjects.Enabled := (PhastModel <> nil)
-    and (PhastModel.SelectedScreenObjectCount >= 1);
+
+  acEditSelecteObjects.Enabled := AtLeastOneObjectSelected;
+  acAddPolygonsToObject.Enabled := ExactlyOneObjectSelected;
+  acAddLinesToObject.Enabled := ExactlyOneObjectSelected;
+  acAddPointsToObject.Enabled := ExactlyOneObjectSelected;
+  miScaleRotateorMoveObjects.Enabled := AtLeastOneObjectSelected;
+  miMergeObjects.Enabled := MoreThanOneObjectSelected;
+  miReverseSelectedObjects.Enabled := AtLeastOneObjectSelected;
   frameFrontView.miMergeObjects.Enabled := miMergeObjects.Enabled;
   frameTopView.miMergeObjects.Enabled := miMergeObjects.Enabled;
   frameSideView.miMergeObjects.Enabled := miMergeObjects.Enabled;
+  miLockSelectedObjects.Enabled := AtLeastOneObjectSelected;
+  miUnlockSelectedObjects.Enabled := AtLeastOneObjectSelected;
+  acSimplifyScreenObjects.Enabled := AtLeastOneObjectSelected;
 
   miInvertSelectedVertices.Enabled := False;
   miMakeSelectedVerticesASeparateObject.Enabled := False;
@@ -13301,6 +13318,8 @@ begin
       Exit;
     end;
   end;
+
+
   sdSutraInput.FileName := ChangeFileExt(PhastModel.ModelFileName, '.inp');
   if sdSutraInput.Execute then
   begin

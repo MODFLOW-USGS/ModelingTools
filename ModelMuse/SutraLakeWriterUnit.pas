@@ -101,6 +101,12 @@ var
   LakeNodeRecord: TLakeNodeRecord;
   ALakeNode: TLakeNode;
   Node3D: TSutraNode3D;
+  ElementIndex: Integer;
+  Element2D: TSutraElement2D;
+  NodeIndex: Integer;
+  Node2D: TSutraNode2D;
+  NeighborNode: TSutraNode3D;
+  ProblemNode: Boolean;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidLakeNode);
   SetLength(LakeNodes, Model.SutraMesh.Nodes.Count);
@@ -237,9 +243,34 @@ begin
 
               if Node3D.Node2D.NodeType = ntEdge then
               begin
-                frmErrorsAndWarnings.AddError(Model, StrInvalidLakeNode,
-                  Format(StrTheLakeAtNode0, [NodeNumber, ScreenObject.Name]),
-                  ScreenObject);
+                ProblemNode := True;
+                for ElementIndex := 0 to Node3D.Node2D.ElementCount - 1 do
+                begin
+                  Element2D := Node3D.Node2D.Elements[ElementIndex];
+                  for NodeIndex := 0 to Element2D.NodeCount - 1 do
+                  begin
+                    Node2D := Element2D.Nodes[NodeIndex].Node;
+                    if Node3D.Node2D <> Node2D then
+                    begin
+                      NeighborNode :=Model.SutraMesh.NodeArray[0,Node2D.Number];
+                      if NeighborNode.Z < Node3D.Z then
+                      begin
+                        ProblemNode := False;
+                        Break;
+                      end;
+                    end;
+                  end;
+                  if not ProblemNode then
+                  begin
+                    Break;
+                  end;
+                end;
+                if ProblemNode then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrInvalidLakeNode,
+                    Format(StrTheLakeAtNode0, [NodeNumber, ScreenObject.Name]),
+                    ScreenObject);
+                end;
               end;
             end
             else
@@ -350,12 +381,12 @@ begin
   begin
     Exit;
   end;
-  Evaluate;
 
-  if FLakeNodes.Count = 0 then
+  if not Model.SutraOptions.LakeOptions.UseLakes then
   begin
     Exit;
   end;
+  Evaluate;
   FHasLakes := True;
 
   FLakeOptions := Model.SutraOptions.LakeOptions;

@@ -34754,7 +34754,9 @@ end;
 
 function TCustomModel.SutraLakeUsed(Sender: TObject): boolean;
 begin
-  result := Sutra30Used(Sender) and (SutraMesh.MeshType = mt3d);
+  result := Sutra30Used(Sender) and (SutraMesh.MeshType = mt3d)
+    and SutraOptions.LakeOptions.UseLakes;
+
 end;
 
 function TCustomModel.SutraMiddleHydraulicConductivityUsed(Sender: TObject): boolean;

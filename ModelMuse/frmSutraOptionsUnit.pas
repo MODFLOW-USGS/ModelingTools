@@ -149,6 +149,7 @@ type
     lblLakeGeneralizedFlowType: TLabel;
     lbl1: TLabel;
     comboLakeGeneralizedTransportType: TComboBox;
+    cbUseLakes: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure seMaxIterationsChange(Sender: TObject);
@@ -495,6 +496,7 @@ begin
     rdeGravZ.RealValue := SutraOptions.GravityZ;
 
     LakeOptions := SutraOptions.LakeOptions;
+    cbUseLakes.Checked := LakeOptions.UseLakes;
 //    seLakeMaxIter.AsInteger := LakeOptions.MaxLakeIterations;
     seLakeOutputCycle.AsInteger := LakeOptions.LakeOutputCycle;
     rdeDefaultRechargeFrac.RealValue := LakeOptions.RechargeFraction;
@@ -861,6 +863,7 @@ begin
     SutraOptions.GravityZ := rdeGravZ.RealValue;
 
     LakeOptions := SutraOptions.LakeOptions;
+    LakeOptions.UseLakes := cbUseLakes.Checked;
 //    LakeOptions.MaxLakeIterations := seLakeMaxIter.AsInteger;
     LakeOptions.LakeOutputCycle := seLakeOutputCycle.AsInteger;
     LakeOptions.RechargeFraction := rdeDefaultRechargeFrac.RealValue;

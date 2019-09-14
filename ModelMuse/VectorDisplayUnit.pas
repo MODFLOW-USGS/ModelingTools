@@ -584,6 +584,10 @@ begin
               vdTop:
                 begin
                   LayerIndex := Mesh.SelectedLayer;
+                  if LayerIndex >= Mesh.LayerCount then
+                  begin
+                    LayerIndex := Mesh.LayerCount - 1;
+                  end;
                   for ColIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
                   begin
                     AnElement := Mesh.ElementArray[LayerIndex, ColIndex];

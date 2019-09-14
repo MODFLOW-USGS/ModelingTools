@@ -1712,11 +1712,13 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object miLockSelectedObjects: TMenuItem
           Caption = 'Lock Selected Objects'
+          Enabled = False
           Hint = 'Prevent object(s) from being moved'
           OnClick = miLockSelectedObjectsClick
         end
         object miUnlockSelectedObjects: TMenuItem
           Caption = 'Unlock Selected Objects'
+          Enabled = False
           Hint = 'Allow object(s) to be moved'
           OnClick = miUnlockSelectedObjectsClick
         end
@@ -3489,6 +3491,7 @@ inherited frmGoPhast: TfrmGoPhast
     object acSimplifyScreenObjects: TAction
       Category = 'Object'
       Caption = 'Simplify Selected Objects'
+      Enabled = False
       OnExecute = acSimplifyScreenObjectsExecute
     end
   end
@@ -3496,7 +3499,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 104
     Top = 128
     Bitmap = {
-      494C010148004D00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010148004D000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003001000001002000000000000030
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6140,7 +6143,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 176
     Top = 80
     Bitmap = {
-      494C010161006500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101610065000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000009001000001002000000000000090
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

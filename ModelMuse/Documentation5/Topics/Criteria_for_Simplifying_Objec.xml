@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Criteria for Simplifying Objects Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Criteria for Simplifying Objects Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Criteria for Simplifying Objects</text><text styleclass="Normal" translate="true"> dialog box is displayed when the user has one or more objects selected and then selects &quot;Object|Edit|Simplify Selected Objects&quot;. The dialog box has two edit boxes.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Minimum allowable angle at node to be deleted (degrees)</text><text styleclass="Normal" translate="true">: If this angle is greater than zero, only vertices that have an included angle greater than the specified value will be considered for deletion.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Maximum allowable distance between vertex being removed and its neighbors</text><text styleclass="Normal" translate="true">: If this value is greater than zero, only vertices that are no further apart from both their neighbors will be considered for deletion.</text></para>
+  </body>
+</topic>

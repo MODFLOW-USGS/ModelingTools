@@ -119,11 +119,13 @@ var
   CachedUrl: string;
 //  FoundCachedUrl: Boolean;
   AtPosition: integer;
-  Dummy: Cardinal;
+  Dummy: LongWord;
 begin
 // modified from http://www.delphitricks.com/source-code/internet/delete_the_temporary_internet_files.html
   dwEntrySize := 0;
-  Dummy := FindFirstUrlCacheEntry(nil, TInternetCacheEntryInfo(nil^), dwEntrySize);
+  lpEntryInfo := nil;
+  Dummy := FindFirstUrlCacheEntry(nil, lpEntryInfo^, dwEntrySize);
+  FreeMem(lpEntryInfo, dwEntrySize);
   FindCloseUrlCache(Dummy);
 
   GetMem(lpEntryInfo, dwEntrySize);

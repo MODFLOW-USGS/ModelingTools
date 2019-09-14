@@ -1,15 +1,19 @@
 inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
+  HelpType = htKeyword
+  HelpKeyword = 'Criteria_for_Simplifying_Objec'
   Caption = 'Criteria for Simplifying Objects'
-  ClientWidth = 356
-  ExplicitWidth = 372
+  ClientHeight = 198
+  ClientWidth = 416
+  ExplicitWidth = 432
+  ExplicitHeight = 237
   PixelsPerInch = 96
   TextHeight = 18
   object lblAngle: TLabel
-    Left = 15
+    Left = 8
     Top = 24
-    Width = 321
+    Width = 397
     Height = 18
-    Caption = 'Maximum allowable change in angle (degrees)'
+    Caption = 'Minimum allowable angle at node to be deleted (degrees)'
   end
   object lblSpacing: TLabel
     Left = 8
@@ -27,10 +31,10 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
     Width = 145
     Height = 22
     TabOrder = 0
-    Text = '0'
+    Text = '175'
     OnChange = EnableOK
     DataType = dtReal
-    Max = 360.000000000000000000
+    Max = 180.000000000000000000
     CheckMax = True
     CheckMin = True
     ChangeDisabledColor = True
@@ -50,16 +54,18 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
   end
   object pnl1: TPanel
     Left = 0
-    Top = 185
-    Width = 356
+    Top = 157
+    Width = 416
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 185
+    ExplicitWidth = 356
     DesignSize = (
-      356
+      416
       41)
     object btnHelp: TBitBtn
-      Left = 91
+      Left = 151
       Top = 4
       Width = 82
       Height = 33
@@ -67,9 +73,10 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 91
     end
     object btnOK: TBitBtn
-      Left = 179
+      Left = 239
       Top = 4
       Width = 82
       Height = 33
@@ -78,9 +85,10 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 179
     end
     object btnCancel: TBitBtn
-      Left = 267
+      Left = 327
       Top = 4
       Width = 82
       Height = 33
@@ -88,6 +96,7 @@ inherited frmSimplifyObjectsCriteria: TfrmSimplifyObjectsCriteria
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 267
     end
   end
 end

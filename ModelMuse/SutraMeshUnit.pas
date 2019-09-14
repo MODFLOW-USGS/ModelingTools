@@ -1155,8 +1155,19 @@ begin
               begin
                 if MinMax.RMax <> MinMax.RMinPositive then
                 begin
-                  Fraction := (Log10(MinMax.RMax)-Log10(AValue))
-                    /(Log10(MinMax.RMax) - Log10(MinMax.RMinPositive));
+                  if AValue = MinMax.RMax then
+                  begin
+                    Fraction := 0;
+                  end
+                  else if AValue = MinMax.RMinPositive then
+                  begin
+                    Fraction := 1;
+                  end
+                  else
+                  begin
+                    Fraction := (Log10(MinMax.RMax)-Log10(AValue))
+                      /(Log10(MinMax.RMax) - Log10(MinMax.RMinPositive));
+                  end;
                 end
                 else
                 begin

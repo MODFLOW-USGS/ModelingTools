@@ -43,7 +43,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     end
     object btnOK: TBitBtn
       Left = 577
-      Top = 7
+      Top = 6
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
@@ -69,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspDefaultLakeInteractions
+    ActivePage = jvspLake
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -1073,20 +1073,20 @@ inherited frmSutraOptions: TfrmSutraOptions
         Left = 0
         Top = 0
         Width = 595
-        Height = 57
+        Height = 81
         Align = alTop
         Caption = 'Lake dataset 1'
         TabOrder = 0
         object lblLakeOutputCycle: TLabel
           Left = 133
-          Top = 27
+          Top = 50
           Width = 198
           Height = 18
           Caption = 'Lake output cycle (NLAKPR)'
         end
         object seLakeOutputCycle: TJvSpinEdit
           Left = 6
-          Top = 24
+          Top = 47
           Width = 121
           Height = 26
           MaxValue = 2147483647.000000000000000000
@@ -1094,15 +1094,25 @@ inherited frmSutraOptions: TfrmSutraOptions
           Value = 1.000000000000000000
           TabOrder = 0
         end
+        object cbUseLakes: TCheckBox
+          Left = 6
+          Top = 24
+          Width = 97
+          Height = 17
+          Caption = 'Use lakes'
+          TabOrder = 1
+        end
       end
       object grpLakeDataset2: TGroupBox
         Left = 0
-        Top = 57
+        Top = 81
         Width = 595
-        Height = 256
-        Align = alTop
+        Height = 431
+        Align = alClient
         Caption = 'Lake dataset 2'
         TabOrder = 1
+        ExplicitTop = 57
+        ExplicitHeight = 192
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24
@@ -1159,7 +1169,6 @@ inherited frmSutraOptions: TfrmSutraOptions
           Text = '0'
           DataType = dtReal
           Max = 1.000000000000000000
-          CheckMin = True
           ChangeDisabledColor = True
         end
       end

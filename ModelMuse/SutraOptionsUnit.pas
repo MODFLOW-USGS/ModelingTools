@@ -41,6 +41,7 @@ type
 //    FUSourceSinkLakeAbsent: TLakeBoundaryInteraction;
 //    FGeneralizedTransportLakeAbsent: TLakeBoundaryInteraction;
     FGeneralizedTransportInteractionType: TGeneralizedTransportInteractionType;
+    FUseLakes: boolean;
     procedure SetStoredDischargeFraction(const Value: TRealStorage);
     procedure SetLakeOutputCycle(const Value: Integer);
     procedure SetMaxLakeIterations(const Value: Integer);
@@ -79,6 +80,7 @@ type
     procedure SetSpecifiedULakePresent(const Value: TLakeBoundaryInteraction);
 //    procedure SetUSourceSinkLakeAbsent(const Value: TLakeBoundaryInteraction);
     procedure SetUSourceSinkLakePresent(const Value: TLakeBoundaryInteraction);
+    procedure SetUseLakes(const Value: boolean);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -164,6 +166,7 @@ type
     property GeneralizedTransportInteractionType: TGeneralizedTransportInteractionType
       read FGeneralizedTransportInteractionType
       write SetGeneralizedTransportInteractionType stored True;
+    property UseLakes: boolean read FUseLakes write SetUseLakes stored True;
   end;
 
   TSutraOptions = class(TGoPhastPersistent)
@@ -1601,6 +1604,7 @@ begin
     GeneralizedTransportLakePresent := SourceLake.GeneralizedTransportLakePresent;
     GeneralizedFlowInteractionType := SourceLake.GeneralizedFlowInteractionType;
     GeneralizedTransportInteractionType := SourceLake.GeneralizedTransportInteractionType;
+    UseLakes := SourceLake.UseLakes;
   end
   else
   begin
@@ -1669,6 +1673,7 @@ begin
   GeneralizedTransportLakePresent := lbiNoChange;
   GeneralizedFlowInteractionType := gfitFluidSource;
   GeneralizedTransportInteractionType := gtitSpecifiedConcentration;
+  UseLakes := False;
 end;
 
 procedure TSutraLakeOptions.SetDischargeFraction(const Value: double);
@@ -1797,15 +1802,10 @@ begin
   StoredSubmergedOutput.Value := Value;
 end;
 
-//procedure TSutraLakeOptions.SetUSourceSinkLakeAbsent(
-//  const Value: TLakeBoundaryInteraction);
-//begin
-//  if FUSourceSinkLakeAbsent <> Value then
-//  begin
-//    FUSourceSinkLakeAbsent := Value;
-//    InvalidateModel;
-//  end;
-//end;
+procedure TSutraLakeOptions.SetUseLakes(const Value: boolean);
+begin
+  SetBooleanProperty(FUseLakes, Value);
+end;
 
 procedure TSutraLakeOptions.SetUSourceSinkLakePresent(
   const Value: TLakeBoundaryInteraction);

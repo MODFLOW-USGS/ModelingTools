@@ -1650,6 +1650,10 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
+  if ZoomBox.Height <= 2 then
+  begin
+    Exit;
+  end;
   // for the time being, don't worry about coloring the grid.
   FrontPoints := FrontCellPoints(SelectedRow);
   if FrontPoints = nil then
@@ -1817,6 +1821,11 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
+  if ZoomBox.Width <= 2 then
+  begin
+    Exit;
+  end;
+
   // for the time being, don't worry about coloring the grid.
   SidePoints := SideCellPoints(SelectedColumn);
   if SidePoints = nil then

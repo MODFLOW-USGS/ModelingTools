@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4056</config-value>
+      <config-value name="autohelpstart">4059</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -733,6 +733,7 @@ document.write('</frameset>');
       <helpcontext-number href="Creating_Objects" value="1460"/>
       <helpcontext-number href="Creating_Selecting_and_Editing" value="1450"/>
       <helpcontext-number href="Creating_the_Grid" value="2940"/>
+      <helpcontext-number href="Criteria_for_Simplifying_Objec" value="4058"/>
       <helpcontext-number href="Crop_Consumptive_Use_Flags" value="3798"/>
       <helpcontext-number href="Crop_Efficiencies" value="3802"/>
       <helpcontext-number href="Crop_ID_in_FMP_Farm_Process" value="3792"/>
@@ -1192,6 +1193,7 @@ document.write('</frameset>');
       <helpcontext-number href="Object_Properties_Dialog_Box" value="1900"/>
       <helpcontext-number href="Object_VertexValue" value="4020"/>
       <helpcontext-number href="Object2" value="1890"/>
+      <helpcontext-number href="Object2#ReverseSelectedObjects" value="4057"/>
       <helpcontext-number href="ObjectArea" value="1000"/>
       <helpcontext-number href="ObjectBasisFunction" value="3981"/>
       <helpcontext-number href="ObjectCurrentSectionIndex" value="1010"/>
@@ -1357,6 +1359,7 @@ document.write('</frameset>');
       <helpcontext-number href="Sample_Digital_Elevation_Model" value="3564"/>
       <helpcontext-number href="Scale_Rotate_and_Move_Objects" value="3417"/>
       <helpcontext-number href="Search_for_Objects_Dialog_Box" value="2220"/>
+      <helpcontext-number href="Seepage_Face" value="4059"/>
       <helpcontext-number href="Segment_Tab" value="2120"/>
       <helpcontext-number href="Select_Column_Row_and_Layer" value="1730"/>
       <helpcontext-number href="Select_Objects_by_Name" value="2250"/>

@@ -16020,7 +16020,7 @@ begin
         if ShouldDelete and (AngleEpsilon > 0) then
         begin
           ShouldDelete :=
-            (Abs(VertexAngle(Point1, Point2, Point3)) > 180 - AngleEpsilon)
+            (Abs(VertexAngle(Point1, Point2, Point3)) > AngleEpsilon)
         end;
 
         if ShouldDelete then

@@ -204,7 +204,9 @@ begin
       begin
         ScreenObject := Model.ScreenObjects[Index];
         HfbBoundary := ScreenObject.ModflowHfbBoundary;
-        if (HfbBoundary.ParameterName = FParameterName) and (HfbBoundary.ParameterName <> '') then
+        if (HfbBoundary <> nil)
+          and (HfbBoundary.ParameterName = FParameterName)
+          and (HfbBoundary.ParameterName <> '') then
         begin
           HfbBoundary.ParameterName := '';
         end;

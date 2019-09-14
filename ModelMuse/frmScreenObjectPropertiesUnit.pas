@@ -5883,6 +5883,7 @@ begin
   end;
 
   result := (LocalModel.ModelSelection = msSutra30)
+    and LocalModel.SutraOptions.LakeOptions.UseLakes
     and (LocalModel.SutraMesh <> nil)
     and (rgEvaluatedAt.ItemIndex = Ord(eaNodes))
     and (LocalModel.SutraMesh.MeshType = mt3D)

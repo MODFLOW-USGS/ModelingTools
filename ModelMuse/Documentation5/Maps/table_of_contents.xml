@@ -1240,6 +1240,9 @@
       <topicref type="topic" id="393876473318929" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-11-01T17:06:37.343Z" icon="0" href="Select_Objects_by_Name">
         <caption translate="true">Select Objects by Name Dialog Box</caption>
       </topicref>
+      <topicref type="topic" id="437216290900682" build="ALL" modified="2019-09-13T14:04:24.130Z" icon="0" href="Criteria_for_Simplifying_Objec">
+        <caption translate="true">Criteria for Simplifying Objects Dialog Box</caption>
+      </topicref>
     </topicref>
     <topicref type="topic" id="397388056586079" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2008-10-17T16:59:42.296Z" icon="0" href="Navigation">
       <caption translate="true">Navigation</caption>
@@ -2382,6 +2385,9 @@
       </topicref>
       <topicref type="topic" id="41513365800903" build="ALL" modified="2013-08-28T17:12:57.298Z" icon="0" href="Island_3D_model">
         <caption translate="true">Island 3D model</caption>
+      </topicref>
+      <topicref type="topic" id="437217715199794" build="ALL" modified="2019-09-13T14:54:44.307Z" icon="0" href="Seepage_Face">
+        <caption translate="true">Seepage Face</caption>
       </topicref>
     </topicref>
   </topicref>
