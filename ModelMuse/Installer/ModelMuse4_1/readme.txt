@@ -175,9 +175,6 @@ Add the following lines to GR32_Compiler.inc near the beginning.
       {$DEFINE BCB7}
     {$ENDIF}
   {$IFEND}
-{$ENDIF}
-
-{$IFDEF VER320}
   {$DEFINE COMPILERXE5}
   {$IFNDEF BCB}
     {$DEFINE DELPHIXE5}
