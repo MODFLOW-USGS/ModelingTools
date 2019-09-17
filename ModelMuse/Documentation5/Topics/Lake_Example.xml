@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Lake Example</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Lake Example</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example approximately reproduces the lake example from page 35 of the SUTRA 3.0 documentation. It uses the lake capability. Please read that section to better understand this example.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Start by creating a new SUTRA model.</text></para>
+    <para styleclass="Normal"><image src="SutraDam1.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Start new SUTRA model</title></image><text styleclass="Image Caption" translate="true">&#32;</text><image src="SutraDam2.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Set projection to &quot;Not applicable&quot;</title></image><text styleclass="Image Caption" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Set the model as a 3D model using using pressure. The model will end up being 20,000 meters long, 10,000 m wide and 100 m high so set the lower position of X and Y to 0 and the higher positions to 20,000 and 10,000 respectively and the thickness of the single aquifer to 100. (The aquifer will be divided vertically later.) Then click the &quot;Finish&quot; button.</text></para>
+    <para styleclass="Normal"><image src="SutraLake1Extent.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Specify the type and extent of the model.</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">We will use the Fishnet Mesh option to define the mesh. The size of the elements will be 500 x 500 so there will be 40 elements in the X direction and 20 elements in the Y direction. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click the </text><text styleclass="Strong" translate="true">Draw fishnet mesh quadrilaterals</text><text styleclass="Normal" translate="true">&#32;</text><image src="FishnetMeshButton.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Draw Fishnet Mesh Quadrilaterals button</title></image><text styleclass="Image Caption" translate="true">&#32;</text><text styleclass="Normal" translate="true">button and click in the main window to outline an area approximately 20,000 m long by 10,000 meters wide. When you are done, double click inside the quadrilateral and set the four corners of the quadrilateral to (0, 10,000), (20,000,10,000), (20,000,0), and (0,0).</text></para>
+    <para styleclass="Normal"><image src="SutraLake2CornerCoordinates.png" scale="60.00%" width="289" height="284" styleclass="Image Caption"><title translate="true">Coordinates of the corneres of the fishnet mesh element</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Set the Discretization in the first and second directions so that there will be 40 elements in the X direction and 20 in the Y direction.</text></para>
+    <para styleclass="Normal"><image src="SutraLake3Discretization.png" scale="60.00%" width="457" height="452" styleclass="Image Caption"><title translate="true">Discretization in the X and Y directions</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click the Generate Mesh </text><image src="GenerateGrid.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Generate Grid button</title></image><text styleclass="Normal" translate="true"> button and then click the OK button to generate the mesh.</text></para>
+    <para styleclass="Normal"><image src="SutraLake4Mesh.png" scale="60.00%" width="457" height="452" styleclass="Image Caption"><title translate="true">SUTRA mesh</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The top of the model will be defined with the following equation.</text></para>
+    <para styleclass="Normal"><image src="SutraLake5Equation.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Equation used to define the top of the mesh</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">where r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">3</text><text styleclass="Normal" translate="true">, r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">4</text><text styleclass="Normal" translate="true">, and r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">5</text><text styleclass="Normal" translate="true"> are defined by the following equations.</text></para>
+    <para styleclass="Normal"><image src="SutraLake6Equations.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Definitions of r3, r4, and r5</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In ModelMuse, we can create data sets for &#160;r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">3</text><text styleclass="Normal" translate="true">, r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">4</text><text styleclass="Normal" translate="true">, and r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">5</text><text styleclass="Normal" translate="true"> and assign values to them using formulas. </text><text styleclass="Normal" translate="true"> Select &quot;Data|Edit Data Sets&quot; and add new Data Sets names R3, R4, and R5. Each data set should be a 2D data set that is evaluated at nodes. Use the following formulas. </text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="3" colcount="2">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">3</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Distance(X, Y, 16000., 7000.)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">4</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Distance(X, Y, 4000., 5000.)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true"> r</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">5</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Distance(X, Y, 10000., 5000.)</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Be sure that all three data set are evaluated at notdes. Then select the SUTRA_Mesh_Top data set and specify it with the following formula.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">((100. - (15. / (1. + Power((R3 / 1500.), 4.)))) - (20. / (1. + Power((R4 / 1500.), 4.)))) - (30. / (1. + Power((R5 / 1500.), 4.)))</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model should be discretized into 10 elements vertically. To do that select Model|SUTRA Layer Groups and set the vertical discretization to 10. </text></para>
+    <para styleclass="Normal"><image src="SutraLake7VertDis.png" scale="60.00%" width="352" height="281" styleclass="Image Caption"><title translate="true">Set vertical discretization to 10.</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next select </text><text styleclass="Strong" translate="true">Model|SUTRA Options</text><text styleclass="Normal" translate="true"> and set the following values.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="2">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Title</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Lakes example &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Demonstrates the lake capability introduced in SUTRA 3.0.0 </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Solver Controls, CSOLVP</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">CG</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Solver Controls, CSOLVU</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">GMRES</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Solver Controls, TOLU</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">1E-10</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Fluid Properties, DRWDU</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">0</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Lakes, Use lakes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Check box is checked</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next select </text><text styleclass="Strong" translate="true">Model|SUTRA Time Controls</text><text styleclass="Normal" translate="true"> and set the following values.</text></para>
+    <para><table styleclass="Default" rowcount="5" colcount="2">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">NTMAX</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">500</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TIMEL</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">8.64E103</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TIMEC</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">604800</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TCMIN</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">8.64E-16</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">TCMAX</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">8.64E103</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|SUTRA Output Control</text><text styleclass="Normal" translate="true"> and set NPRINT to 100. Unchekc CPANDS, CVEL, and CCORT. On the Node and Ele Files pane, set NOCLPR, LCOLPR to 100</text></para>
+  </body>
+</topic>
