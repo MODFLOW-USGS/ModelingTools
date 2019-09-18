@@ -382,14 +382,14 @@ begin
     Exit;
   end;
 
-  if not Model.SutraOptions.LakeOptions.UseLakes then
+  FLakeOptions := Model.SutraOptions.LakeOptions;
+  if not FLakeOptions.UseLakes then
   begin
     Exit;
   end;
+
   Evaluate;
   FHasLakes := True;
-
-  FLakeOptions := Model.SutraOptions.LakeOptions;
 
   NameOfFile := FileName(AFileName);
   OpenFile(NameOfFile);
@@ -402,15 +402,18 @@ begin
   end;
   SutraFileWriter.AddFile(sftLkin, NameOfFile);
 
-  NameOfFile := ChangeFileExt(AFileName, '.lkar');
-  OpenFile(NameOfFile);
-  try
-    WriteLakeAreaDataSet1a;
-    WriteLakeAreaDataSet1b;
-  finally
-    CloseFile;
+  if not FLakeOptions.AllNodesLakes then
+  begin
+    NameOfFile := ChangeFileExt(AFileName, '.lkar');
+    OpenFile(NameOfFile);
+    try
+      WriteLakeAreaDataSet1a;
+      WriteLakeAreaDataSet1b;
+    finally
+      CloseFile;
+    end;
+    SutraFileWriter.AddFile(sftLkar, NameOfFile);
   end;
-  SutraFileWriter.AddFile(sftLkar, NameOfFile);
 
   NameOfFile := ChangeFileExt(AFileName, '.lkbc');
   OpenFile(NameOfFile);

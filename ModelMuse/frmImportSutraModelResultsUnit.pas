@@ -118,12 +118,14 @@ type
     procedure ImportSoluteSourcesData(NewScreenObjects: TList);
     procedure ImportSpecifiedPressureData(NewScreenObjects: TList);
     procedure ImportSpecifiedConcentrationData(NewScreenObjects: TList);
+    procedure ImportLakeStageData(NewScreenObjects: TList);
     function AskUserIfNewDataSet: boolean;
     procedure ImportRestartData(NewScreenObjects: TList);
     procedure CreateRestartNodeDataSets(DataSets: TList);
     procedure AssignRestartNodeValues(DataSets: TList;
       AScreenObject: TScreenObject; Pressure, UValues: TList<Double>);
     procedure CreateRestartNodeScreenObject(out ScreenObject: TScreenObject);
+    procedure AssignIgnoreValues(DataSet: TDataArray);
   protected
     procedure Loaded; override;
     { Private declarations }
@@ -363,6 +365,10 @@ begin
       begin
         dlgOpenSutraFile.FilterIndex := 7;
       end
+      else if (FileExtension = '.lkst') then
+      begin
+        dlgOpenSutraFile.FilterIndex := 8;
+      end
       else
       begin
         Assert(False);
@@ -437,7 +443,7 @@ begin
             end;
           end;
         end;
-      3..6:
+      3..6, 8:
         begin
           FResultList := TStoredResultsList.Create;
           ReadFileHeader(dlgOpenSutraFile.FileName, FResultList);
@@ -465,7 +471,11 @@ begin
               end;
           end;
           chklstDataToImport.CheckAll(cbChecked);
-        end
+        end;
+//      8:
+//        begin
+//          chklstDataToImport.CheckAll(cbChecked);
+//        end;
       else
         Assert(False);
     end;
@@ -537,7 +547,8 @@ begin
         ADataArray := NewDataSets[DataSetIndex];
         Inc(DataSetIndex);
         DataSetPosition := NodeScreenObject.AddDataSet(ADataArray);
-        NodeScreenObject.DataSetFormulas[DataSetPosition] := rsObjectImportedValuesR + '("' + ADataArray.Name + '")';
+        NodeScreenObject.DataSetFormulas[DataSetPosition] :=
+          rsObjectImportedValuesR + '("' + ADataArray.Name + '")';
         ImportedValueItem := NodeScreenObject.ImportedValues.Add;
         ImportedValueItem.Name := ADataArray.Name;
         ImportedValueItem.Values.DataType := rdtDouble;
@@ -1116,6 +1127,15 @@ begin
             else Assert(False);
           end;
         end;
+      8:
+        begin
+          // lake stage
+          NewFileName := ChangeFileExt(dlgOpenSutraFile.FileName, '.lkst');
+          dlgOpenSutraFile.FileName := NewFileName;
+          UpdateDialogBoxFileName(dlgOpenSutraFile, NewFileName);
+          Labels.Add('Lake Stage');
+          Labels.Add('Lake Depth');
+        end
       else
         Assert(False);
     end;
@@ -1607,6 +1627,20 @@ begin
   end;
 end;
 
+procedure TfrmImportSutraModelResults.AssignIgnoreValues(DataSet: TDataArray);
+var
+  DryLakeValue: Double;
+begin
+  if dlgOpenSutraFile.FilterIndex = 8 then
+  begin
+    // lake
+    DryLakeValue := frmGoPhast.PhastModel.SutraOptions.
+      LakeOptions.SubmergedOutput;
+    (DataSet.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := DryLakeValue;
+    (DataSet.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := -1e98;
+  end;
+end;
+
 procedure TfrmImportSutraModelResults.CreateBoundaryNodeDataSets
   (StepIndex: Integer; NewDataSets: TList);
 var
@@ -1616,6 +1650,7 @@ var
   NewDataType: TRbwDataType;
   NewFormula: string;
   DataSet: TDataArray;
+  DryLakeValue: Double;
 begin
   for ItemIndex := 0 to chklstDataToImport.Items.Count - 1 do
   begin
@@ -1627,11 +1662,21 @@ begin
         + IntToStr(FResultList[StepIndex].TimeStep));
 
       NewDataType := rdtDouble;
-      NewFormula := '0.';
+      if dlgOpenSutraFile.FilterIndex = 8 then
+      begin
+        DryLakeValue := frmGoPhast.PhastModel.SutraOptions.
+          LakeOptions.SubmergedOutput;
+        NewFormula := FortranFloatToStr(DryLakeValue);
+      end
+      else
+      begin
+        NewFormula := '0.';
+      end;
 
       DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
         TDataArray, NewName, NewFormula, NewName, [], NewDataType,
         eaNodes, dso3D, Classification);
+      AssignIgnoreValues(DataSet);
       DataSet.Comment := Format(StrReadFrom0sOn,
         [dlgOpenSutraFile.FileName, DateTimeToStr(Now), FResultList[StepIndex].TimeStep,
         FResultList[StepIndex].Time,
@@ -2070,6 +2115,46 @@ begin
   end;
 end;
 
+procedure TfrmImportSutraModelResults.ImportLakeStageData(
+  NewScreenObjects: TList);
+var
+  NewDataSets: TList;
+  LkstLists: TLkstLists;
+  TimeIndex: Integer;
+  ALkstList: TLkstList;
+  ItemIndex: Integer;
+  CustomList: TCustomItemList;
+  NodeScreenObject: TScreenObject;
+begin
+  GetSelectedTimeSteps;
+  NewDataSets := TList.Create;
+  LkstLists := TLkstLists.Create;
+  try
+    NodeScreenObject := nil;
+    ReadLkstFile(dlgOpenSutraFile.FileName, FResultList, LkstLists);
+    for TimeIndex := 0 to LkstLists.Count - 1 do
+    begin
+      ALkstList := LkstLists[TimeIndex];
+      CustomList := TCustomItemList.Create(False);
+      try
+        CustomList.Capacity := ALkstList.Count;
+        for ItemIndex := 0 to ALkstList.Count - 1 do
+        begin
+          CustomList.Add(ALkstList[ItemIndex]);
+        end;
+        ImportBoundaryDataForOneTimeStep(CustomList, TimeIndex,
+          NewDataSets, NewScreenObjects, NodeScreenObject,
+          dlgOpenSutraFile.FileName);
+      finally
+        CustomList.Free;
+      end;
+    end;
+  finally
+    NewDataSets.Free;
+    LkstLists.Free;
+  end;
+end;
+
 procedure TfrmImportSutraModelResults.ImportSoluteSourcesData(
   NewScreenObjects: TList);
 var
@@ -2406,7 +2491,11 @@ begin
         7:
           begin
             ImportRestartData(NewScreenObjects);
-          end
+          end;
+        8:
+          begin
+            ImportLakeStageData(NewScreenObjects);
+          end;
         else
           begin
             Assert(False);
@@ -2555,7 +2644,7 @@ begin
                end;
              end));
         end;
-      3..6:
+      3..6, 8:
         begin
           BoundaryImportItems := [];
           for ByteIndex := 0 to chklstDataToImport.Count - 1 do
@@ -2607,7 +2696,7 @@ begin
         CCItem := FColorContourList[Index];
         case dlgOpenSutraFile.FilterIndex of
           2: ItemText := chklstDataToImport.Items[Ord(CCItem.ImportChoice)];
-          3..6: ItemText := chklstDataToImport.Items[CCItem.BoundaryImportChoice];
+          3..6, 8: ItemText := chklstDataToImport.Items[CCItem.BoundaryImportChoice];
           else Assert(False);
         end;
         ItemText := Format(Str0sTS1d, [ItemText,CCItem.TimeStep]);

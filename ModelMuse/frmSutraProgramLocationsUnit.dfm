@@ -65,7 +65,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     TabOrder = 0
     Text = ''
     OnChange = fedSutra22Change
-    ExplicitWidth = 588
   end
   object pnlBottom: TPanel
     Left = 0
@@ -75,8 +74,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 142
-    ExplicitWidth = 613
     DesignSize = (
       992
       41)
@@ -91,7 +88,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 349
     end
     object btnOK: TBitBtn
       Left = 816
@@ -103,7 +99,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 437
     end
     object btnCancel: TBitBtn
       Left = 904
@@ -114,7 +109,6 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 525
     end
   end
   object fedTextEditor: TJvFilenameEdit

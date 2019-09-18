@@ -42,6 +42,7 @@ type
 //    FGeneralizedTransportLakeAbsent: TLakeBoundaryInteraction;
     FGeneralizedTransportInteractionType: TGeneralizedTransportInteractionType;
     FUseLakes: boolean;
+    FAllNodesLakes: Boolean;
     procedure SetStoredDischargeFraction(const Value: TRealStorage);
     procedure SetLakeOutputCycle(const Value: Integer);
     procedure SetMaxLakeIterations(const Value: Integer);
@@ -81,6 +82,7 @@ type
 //    procedure SetUSourceSinkLakeAbsent(const Value: TLakeBoundaryInteraction);
     procedure SetUSourceSinkLakePresent(const Value: TLakeBoundaryInteraction);
     procedure SetUseLakes(const Value: boolean);
+    procedure SetAllNodesLakes(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -167,6 +169,8 @@ type
       read FGeneralizedTransportInteractionType
       write SetGeneralizedTransportInteractionType stored True;
     property UseLakes: boolean read FUseLakes write SetUseLakes stored True;
+    property AllNodesLakes: Boolean read FAllNodesLakes write SetAllNodesLakes
+      stored True;
   end;
 
   TSutraOptions = class(TGoPhastPersistent)
@@ -1605,6 +1609,7 @@ begin
     GeneralizedFlowInteractionType := SourceLake.GeneralizedFlowInteractionType;
     GeneralizedTransportInteractionType := SourceLake.GeneralizedTransportInteractionType;
     UseLakes := SourceLake.UseLakes;
+    AllNodesLakes := SourceLake.AllNodesLakes;
   end
   else
   begin
@@ -1674,6 +1679,12 @@ begin
   GeneralizedFlowInteractionType := gfitFluidSource;
   GeneralizedTransportInteractionType := gtitSpecifiedConcentration;
   UseLakes := False;
+  AllNodesLakes := False;
+end;
+
+procedure TSutraLakeOptions.SetAllNodesLakes(const Value: Boolean);
+begin
+  SetBooleanProperty(FAllNodesLakes, Value);
 end;
 
 procedure TSutraLakeOptions.SetDischargeFraction(const Value: double);

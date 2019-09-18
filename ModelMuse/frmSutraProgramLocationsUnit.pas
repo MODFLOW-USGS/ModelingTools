@@ -41,14 +41,15 @@ var
 implementation
 
 uses
-  frmProgramLocationsUnit, PhastModelUnit, frmGoPhastUnit;
+  frmProgramLocationsUnit, PhastModelUnit, frmGoPhastUnit, GoPhastTypes;
 
 {$R *.dfm}
 
 procedure TfrmSutraProgramLocations.fedSutra22Change(Sender: TObject);
 begin
   inherited;
-  if not FileExists(fedSutra22.FileName) then
+  if not FileExists(fedSutra22.FileName)
+    and (frmGoPhast.ModelSelection = msSutra22) then
   begin
     fedSutra22.Color := clRed;
   end
@@ -114,7 +115,8 @@ end;
 procedure TfrmSutraProgramLocations.fedSutra30Change(Sender: TObject);
 begin
   inherited;
-  if not FileExists(fedSutra30.FileName) then
+  if not FileExists(fedSutra30.FileName)
+    and (frmGoPhast.ModelSelection = msSutra30) then
   begin
     fedSutra30.Color := clRed;
   end

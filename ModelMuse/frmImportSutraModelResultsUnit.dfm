@@ -167,11 +167,12 @@ inherited frmImportSutraModelResults: TfrmImportSutraModelResults
     DefaultExt = '.nod'
     Filter = 
       'SUTRA output files (*.nod; *.ele; *.bcof; *.bcos; *.bcop; *.bcou' +
-      ')|*.nod;*.ele;*.bcof;*.bcos;*.bcop;*.bcou;*.rst|SUTRA node and e' +
-      'lement files (*.nod; *.ele)|*.nod;*.ele|Fluid sources and sinks ' +
-      '(*.bcof)|*.bcof|Solute or energy sources and sinks (*.bcos)|*.bc' +
-      'os|Specified pressure (*.bcop)|*.bcop|Specified concentration or' +
-      ' temperature (*.bcou)|*.bcou|Restart Files (*.rst)|*.rst'
+      '; *.lkst)|*.nod;*.ele;*.bcof;*.bcos;*.bcop;*.bcou;*.rst;*.lkst|S' +
+      'UTRA node and element files (*.nod; *.ele)|*.nod;*.ele|Fluid sou' +
+      'rces and sinks (*.bcof)|*.bcof|Solute or energy sources and sink' +
+      's (*.bcos)|*.bcos|Specified pressure (*.bcop)|*.bcop|Specified c' +
+      'oncentration or temperature (*.bcou)|*.bcou|Restart Files (*.rst' +
+      ')|*.rst|Lake stage and depth (*.lkst)|*.lkst'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     OnTypeChange = dlgOpenSutraFileTypeChange
     Height = 0

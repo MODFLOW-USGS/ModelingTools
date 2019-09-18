@@ -1071,22 +1071,24 @@ inherited frmSutraOptions: TfrmSutraOptions
       Caption = 'jvspLake'
       object grpLakeDataset1: TGroupBox
         Left = 0
-        Top = 0
+        Top = 105
         Width = 595
         Height = 81
         Align = alTop
         Caption = 'Lake dataset 1'
         TabOrder = 0
+        ExplicitLeft = -4
+        ExplicitTop = 0
         object lblLakeOutputCycle: TLabel
           Left = 133
-          Top = 50
+          Top = 26
           Width = 198
           Height = 18
           Caption = 'Lake output cycle (NLAKPR)'
         end
         object seLakeOutputCycle: TJvSpinEdit
           Left = 6
-          Top = 47
+          Top = 25
           Width = 121
           Height = 26
           MaxValue = 2147483647.000000000000000000
@@ -1094,25 +1096,17 @@ inherited frmSutraOptions: TfrmSutraOptions
           Value = 1.000000000000000000
           TabOrder = 0
         end
-        object cbUseLakes: TCheckBox
-          Left = 6
-          Top = 24
-          Width = 97
-          Height = 17
-          Caption = 'Use lakes'
-          TabOrder = 1
-        end
       end
       object grpLakeDataset2: TGroupBox
         Left = 0
-        Top = 81
+        Top = 186
         Width = 595
-        Height = 431
+        Height = 326
         Align = alClient
         Caption = 'Lake dataset 2'
         TabOrder = 1
-        ExplicitTop = 57
-        ExplicitHeight = 192
+        ExplicitTop = 81
+        ExplicitHeight = 431
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24
@@ -1170,6 +1164,32 @@ inherited frmSutraOptions: TfrmSutraOptions
           DataType = dtReal
           Max = 1.000000000000000000
           ChangeDisabledColor = True
+        end
+      end
+      object grpGeneral: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 105
+        Align = alTop
+        TabOrder = 2
+        ExplicitLeft = 6
+        ExplicitTop = -6
+        object cbUseLakes: TCheckBox
+          Left = 6
+          Top = 32
+          Width = 97
+          Height = 17
+          Caption = 'Use lakes'
+          TabOrder = 0
+        end
+        object cbAllNodesLakes: TCheckBox
+          Left = 6
+          Top = 55
+          Width = 374
+          Height = 17
+          Caption = 'All nodes on the top layer can be lake nodes'
+          TabOrder = 1
         end
       end
     end
