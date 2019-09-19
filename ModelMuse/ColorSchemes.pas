@@ -837,7 +837,7 @@ begin
   else
   begin
     CustomIndex := ColorScheme-MaxColorScheme-1;
-    if CustomIndex <= frmGoPhast.PhastModel.ColorSchemes.Count then
+    if CustomIndex < frmGoPhast.PhastModel.ColorSchemes.Count then
     begin
       CustomColorScheme := frmGoPhast.PhastModel.ColorSchemes[CustomIndex];
       result := FracToColor(Fraction, CustomColorScheme);

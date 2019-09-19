@@ -143,6 +143,8 @@ var
   SutraXVelocityResults: string;
   SutraYVelocityResults: string;
   SutraZVelocityResults: string;
+  SutraBoundaryResults: string;
+
 
 implementation
 
@@ -1645,7 +1647,6 @@ procedure TfrmImportSutraModelResults.CreateBoundaryNodeDataSets
   (StepIndex: Integer; NewDataSets: TList);
 var
   ItemIndex: Integer;
-  Classification: string;
   NewName: string;
   NewDataType: TRbwDataType;
   NewFormula: string;
@@ -1656,7 +1657,6 @@ begin
   begin
     if chklstDataToImport.Checked[ItemIndex] then
     begin
-      Classification := 'Sutra Boundary Results';
 
       NewName := GenerateNewName(chklstDataToImport.Items[ItemIndex] + '_'
         + IntToStr(FResultList[StepIndex].TimeStep));
@@ -1675,7 +1675,8 @@ begin
 
       DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
         TDataArray, NewName, NewFormula, NewName, [], NewDataType,
-        eaNodes, dso3D, Classification);
+        eaNodes, dso3D,
+        SutraBoundaryResults + '|' + chklstDataToImport.Items[ItemIndex]);
       AssignIgnoreValues(DataSet);
       DataSet.Comment := Format(StrReadFrom0sOn,
         [dlgOpenSutraFile.FileName, DateTimeToStr(Now), FResultList[StepIndex].TimeStep,
@@ -2817,5 +2818,6 @@ initialization
   SutraXVelocityResults := StrModelResults + '|' + 'X Velocity';
   SutraYVelocityResults := StrModelResults + '|' + 'Y Velocity';
   SutraZVelocityResults := StrModelResults + '|' + 'Z Velocity';
+  SutraBoundaryResults := StrModelResults + '|' + 'Sutra Boundary Results';
 
 end.

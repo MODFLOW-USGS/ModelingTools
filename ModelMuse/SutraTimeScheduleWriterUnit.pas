@@ -859,6 +859,7 @@ begin
       ATime2 := FAllTimes[ISLIST];
       Assert(ATime1 = ATime2);
     end;
+    Inc(ISLIST);
     WriteInteger(ISLIST);
     if (TimeIndex+1) mod 10 = 0 then
     begin

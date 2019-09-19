@@ -1,4 +1,4 @@
-# Main SUTRA input file file created on 12/9/2015 by ModelMuse version 3.6.3.5.
+# Main SUTRA input file file created on 9/19/2019 by ModelMuse version 4.0.0.15.
 # Data set 1
 _
 _
@@ -21,13 +21,13 @@ _
 # Schedule 3
 'ObsSched2'  'STEP CYCLE'     4     0 2147483647     2
 # Schedule 4
-'FluidFlux'  'STEP LIST'     1     1
+'FluidFlux'  'STEP LIST'     1     2
 # Schedule 5
-'UFlux'      'STEP LIST'     1     1
+'UFlux'      'STEP LIST'     1     2
 # Schedule 6
-'SpecifiedP' 'STEP LIST'     2     1     3
+'SpecifiedP' 'STEP LIST'     2     2     4
 # Schedule 7
-'SpecifiedU' 'STEP LIST'     1     1
+'SpecifiedU' 'STEP LIST'     1     2
 # Schedule 8
 'Observatio' 'TIME LIST' 'ABSOLUTE'  1.000000000000E+000      2  0.000000000000E+000   1.000000000000E+000 
 -

@@ -50,6 +50,8 @@ resourcestring
   StrThereWasAnErrorR = 'There was an error reading %s. Please check that th' +
   'e file contains properly formatted data.';
   StrCreatedFromTextFi = 'Created from text file';
+  StrErrorDoesNotExist = 'There was an error reading %s. Please check that t' +
+  'he file exists and that you are allowed to open it.';
 
 {$R *.dfm}
 
@@ -164,29 +166,38 @@ begin
     begin
       NewName := FileNames[FileIndex];
 
-      AssignFile(AFile, NewName);
       try
-        Reset(AFile);
-        ValueIndex := 0;
-        for RowIndex := 0 to Grid.RowCount - 1 do
-        begin
-          for ColIndex := 0 to Grid.ColumnCount - 1 do
+        AssignFile(AFile, NewName);
+        try
+          Reset(AFile);
+          ValueIndex := 0;
+          for RowIndex := 0 to Grid.RowCount - 1 do
           begin
-            try
-              read(AFile, Values[ValueIndex]);
-            except on EInOutError do
-              begin
-                Beep;
-                MessageDlg(Format(StrThereWasAnErrorR, [NewName]), mtError, [mbOK], 0);
-                AScreenObject.Deleted := True;
-                Exit;
+            for ColIndex := 0 to Grid.ColumnCount - 1 do
+            begin
+              try
+                read(AFile, Values[ValueIndex]);
+              except on EInOutError do
+                begin
+                  Beep;
+                  MessageDlg(Format(StrThereWasAnErrorR, [NewName]), mtError, [mbOK], 0);
+                  AScreenObject.Deleted := True;
+                  Exit;
+                end;
               end;
+              Inc(ValueIndex);
             end;
-            Inc(ValueIndex);
           end;
+        finally
+          CloseFile(AFile);
         end;
-      finally
-        CloseFile(AFile);
+      except on E: EInOutError do
+        begin
+          Beep;
+          MessageDlg(Format(StrErrorDoesNotExist, [NewName]), mtError, [mbOK], 0);
+          AScreenObject.Deleted := True;
+          Exit;
+        end;
       end;
 
       NewName := ExtractFileName(NewName);

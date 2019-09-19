@@ -340,18 +340,6 @@ object PhastModel: TPhastModel
   ModflowPackages.Mt3dmsTransObs.InterpolateObs = ioBilinear
   ModflowPackages.Mt3dmsTransObs.StoredFluxScaleFactor.Value = 1.000000000000000000
   ModflowPackages.Mt3dmsTransObs.MassFluxObsResult = mfoMassFluxResid
-  ModflowPackages.Mt3dUnsatTransport.IsSelected = False
-  ModflowPackages.Mt3dLkt.IsSelected = False
-  ModflowPackages.Mt3dLkt.EvaporateMass = False
-  ModflowPackages.Mt3dLkt.PrintLakeTransportBudget = True
-  ModflowPackages.Mt3dSft.IsSelected = False
-  ModflowPackages.Mt3dSft.EvaporateMass = False
-  ModflowPackages.Mt3dSft.StoredTimeWeightingFactor.Value = 0.500000000000000000
-  ModflowPackages.Mt3dSft.StoredSpaceWeightingFactor.Value = 1.000000000000000000
-  ModflowPackages.Mt3dSft.StoredClosureCriterion.Value = 0.000001000000000000
-  ModflowPackages.Mt3dSft.MaxSftIterations = 10
-  ModflowPackages.Mt3dSft.SolverPrintChoice = sftDetailed
-  ModflowPackages.Mt3dSft.SimulateTransportInStream = True
   ModflowPackages.StrPackage.IsSelected = False
   ModflowPackages.StrPackage.CalculateStage = False
   ModflowPackages.FhbPackage.IsSelected = False
@@ -3444,7 +3432,6 @@ object PhastModel: TPhastModel
   SutraOptions.LakeOptions.LakeOutputCycle = 1
   SutraOptions.LakeOptions.StoredRechargeFraction.Value = 0.000000000000000000
   SutraOptions.LakeOptions.StoredDischargeFraction.Value = 0.000000000000000000
-  SutraOptions.LakeOptions.StoredMinLakeVolume.Value = 0.000000000000000000
   SutraOptions.LakeOptions.StoredSubmergedOutput.Value = 0.000000000000000000
   SutraOptions.LakeOptions.FluidSourceSinkLakePresent = lbiNoChange
   SutraOptions.LakeOptions.USourceSinkLakePresent = lbiNoChange
@@ -3454,6 +3441,8 @@ object PhastModel: TPhastModel
   SutraOptions.LakeOptions.GeneralizedTransportLakePresent = lbiNoChange
   SutraOptions.LakeOptions.GeneralizedFlowInteractionType = gfitFluidSource
   SutraOptions.LakeOptions.GeneralizedTransportInteractionType = gtitSpecifiedConcentration
+  SutraOptions.LakeOptions.UseLakes = True
+  SutraOptions.LakeOptions.AllNodesLakes = False
   SutraOutputControl.ListingPrintFrequency = 9999
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn]
   SutraOutputControl.NE_PrintFrequency = 9999
@@ -3986,19 +3975,19 @@ object PhastModel: TPhastModel
         ''
         '')
     end>
-  Version = '4.0.0.12'
+  Version = '4.0.0.15'
   GuiSettings.FrontHeight = 170
   GuiSettings.Height = 614
   GuiSettings.FrontX = -6543.898617352821000000
   GuiSettings.FrontY = -4.230590423059073000
-  GuiSettings.Left = 911
+  GuiSettings.Left = 572
   GuiSettings.MagnificationFront = 0.031910439560439560
   GuiSettings.MagnificationSide = 0.031910439560439560
   GuiSettings.MagnificationTop = 0.031910439560439560
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = 48.327909499457580000
   GuiSettings.SideY = -1000.000000000000000000
-  GuiSettings.Top = 420
+  GuiSettings.Top = 273
   GuiSettings.TopViewHeight = 279
   GuiSettings.TopViewWidth = 759
   GuiSettings.TopX = -6543.898617352821000000

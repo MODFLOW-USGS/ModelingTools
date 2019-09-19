@@ -8736,6 +8736,12 @@ const
   //    '4.0.0.15' Bug fix: Fixed bug that could cause an error when assigning
   //                values to a data set using interpolation.
 
+  //               bug fix: Fixed export of Step Schedules in SUTRA. Previously,
+  //                the exported time steps were smaller than then should have
+  //                been by one time step.
+  //               bug fix: Fixed bug that could cause an error when deleting
+  //                a custom color scheme.
+
   // version number of ModelMuse.
   IModelVersion = '4.0.0.15';
   StrPvalExt = '.pval';

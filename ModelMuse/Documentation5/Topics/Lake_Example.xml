@@ -7,7 +7,7 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Lake Example</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">This example approximately reproduces the lake example from page 35 of the SUTRA 3.0 documentation. It uses the lake capability. Please read that section to better understand this example. We will start by creating a steady-state SUTRA model without lakes to determine the initial conditions. Then we will add lakes all over the top surface of the model.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Start by creating a new SUTRA model.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Start by creating a new SUTRA model. Because this is a hypothetical model, the projection of the model doesn&apos;t apply.</text></para>
     <para styleclass="Normal"><image src="SutraDam1.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Start new SUTRA model</title></image><text styleclass="Image Caption" translate="true">&#32;</text><image src="SutraDam2.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Set projection to &quot;Not applicable&quot;</title></image><text styleclass="Image Caption" translate="true">&#32;</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Set the model as a 3D model using using pressure. The model will end up being 20,000 meters long, 10,000 m wide and 100 m high so set the lower position of X and Y to 0 and the higher positions to 20,000 and 10,000 respectively and the thickness of the single aquifer to 100. (The aquifer will be divided vertically later.) Then click the &quot;Finish&quot; button.</text></para>
     <para styleclass="Normal"><image src="SutraLake1Extent.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Specify the type and extent of the model.</title></image></para>
@@ -50,8 +50,9 @@
       </tr>
     </table></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Be sure that all three data set are evaluated at notdes. Then select the SUTRA_Mesh_Top data set and specify it with the following formula.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">((100. - (15. / (1. + Power((R3 / 1500.), 4.)))) - (20. / (1. + Power((R4 / 1500.), 4.)))) - (30. / (1. + Power((R5 / 1500.), 4.)))</text></para>
-    <para styleclass="Normal"><image src="SutraLake8Discretization.png" scale="60.00%" width="571" height="565" styleclass="Image Caption"><title translate="true">Effect of formulas on elevations</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">((100. - (15. / (1. + Power((R3 / 1500.), 4.)))) - (20. / (1. + Power((R4 / 2000.), 4.)))) - (30. / (1. + Power((R5 / 3000.), 4.)))</text></para>
+    <para></para>
+    <para styleclass="Normal"><image src="SutraLake8Discretization.png" scale="60.00%" width="457" height="367" styleclass="Image Caption"><title translate="true">Effect of formulas on elevations</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The model should be discretized into 10 elements vertically. To do that select Model|SUTRA Layer Groups and set the vertical discretization to 10. </text></para>
     <para styleclass="Normal"><image src="SutraLake7VertDis.png" scale="60.00%" width="352" height="281" styleclass="Image Caption"><title translate="true">Set vertical discretization to 10.</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Next, select </text><text styleclass="Strong" translate="true">Data|Edit Data Sets</text><text styleclass="Normal" translate="true"> and change the default formulas for the following data sets.</text></para>
@@ -168,18 +169,18 @@
         </td>
       </tr>
     </table></para>
-    <para><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|SUTRA Output Control</text><text styleclass="Normal" translate="true"> and set NPRINT to 100. Uncheck CPANDS, CVEL, and CCORT. On the Node and Ele Files pane, set NOCLPR, LCOLPR to 100.</text></para>
+    <para><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|SUTRA Output Control</text><text styleclass="Normal" translate="true"> and set NPRINT to 100. Uncheck CPANDS, CVEL, and CCORT. On the </text><text styleclass="Strong" translate="true">Node and Ele Files</text><text styleclass="Normal" translate="true"> pane, set NOCLPR, LCOLPR to 100. On the </text><text styleclass="Strong" translate="true">Obs and Boundary Conditions Files</text><text styleclass="Normal" translate="true"> pane, set all the values to 100 except NLAKPR; set it to 10.</text></para>
     <para><text styleclass="Normal" translate="true">The model has a specified pressure of 0 over the entire upper surface. Create an object that covers the top of the model. The object should be evaluated at nodes and have a single Z formula. The Z formula should be SUTRA_Mesh_Top. On the SUTRA Features tab, define a specified pressure boundary with a pressure of zero.</text></para>
     <para><image src="SutraLake9SpecifiedPressure.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Specified pressure boundary</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Now run the model (File|Export|SUTRA Input Files).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Save the ModelMuse file and run the model (File|Export|SUTRA Input Files).</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">We will use the simulated pressures from this model to specify the initial pressures in the model with lakes. Select &quot;File|Import|Model Results&quot;.Select the .nod file for the model and import the pressure in time step 0. If desired, you can also import the velocities from time step 1.</text></para>
     <para styleclass="Normal"><image src="SutraLake10ImportModelResults.png" scale="60.00%" width="377" height="404" styleclass="Image Caption"><title translate="true">Import Pressure</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can use the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data|Data Visualization</text><text styleclass="Normal" translate="true"> dialog box to color the mesh and display flow vectors.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you imported the velocities, you can use the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Data|Data Visualization</text><text styleclass="Normal" translate="true"> dialog box to color the mesh and display flow vectors.</text></para>
     <para styleclass="Normal"><image src="SutraLake11PressureAndVectors.png" scale="60.00%" width="685" height="553" styleclass="Image Caption"><title translate="true">PressureAndFlowVectors</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Now would be a good time to save your model. Then save it with a different name. The new model will be converted to a transient model with lakes. Initially the lakes are will be dry but that will change. All the nodes on the top surface will be eligible to form lakes.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">We will use the simulated pressures from the steady-state model as the initial heads in the transient model.Select &quot;Data|Edit Data Sets&quot; and rename the &quot;Pressure_0&quot; data set under &quot;Optional|Model Results|Pressure&quot; to &quot;PInitial&quot;. When you click the Apply button, the data set will be renamed and will now be classified under &quot;User Defined&quot; instead of &quot;Optional&quot;. Now change the formula for the &quot;InitialPressure&quot; data set to &quot;PInitial&quot;.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|SUTRA Options</text><text styleclass="Normal" translate="true"> and make the following changes.</text></para>
-    <para styleclass="Normal"><table styleclass="Default" rowcount="3" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:2px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
+    <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:2px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">Configuration, CSSFLO, CSSTRA</text></para>
@@ -198,6 +199,14 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Lakes, All nodes on the top layer can be lake nodes</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Checked</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">Lakes, RNOLK</text></para>
         </td>
         <td>
@@ -205,7 +214,6 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">We will change the maximum number of time steps from 1 to 500. Select </text><text styleclass="Strong" translate="true">Model|SUTRA Time Controls</text><text styleclass="Normal" translate="true"> and change NTMAX to 500.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the modified model, the specified pressure boundary has an associated concentration that changes from 0 to 1 after 30 weeks in a block of nodes in the upper right corner. We will create a new data set to define the concentration associated with the specified pressure and then use that in the formula in the specified pressure boundary.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Data|Edit Data Sets&quot;. Create a new data set named concentration that is evaluated at nodes.</text></para>
     <para styleclass="Normal"><image src="SutraLake12Concentration.png" scale="60.00%" width="574" height="445" styleclass="Image Caption"><title translate="true">Concentration data set</title></image></para>
@@ -238,7 +246,7 @@
       </tr>
     </table></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Then edit the object that defines the specified pressure boundary. Set the schedule to Solute and for the second time set the associated concentration formula to the Concentration data set.</text></para>
-    <para styleclass="Normal"><image src="SutraLake13AssociatedConcentration.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Associated concentration set to &quot;Concentration&quot; in the specified pressure boundary</title></image><text styleclass="Normal" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><image src="SutraLake13AssociatedConcentration.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Associated concentration set to &quot;Concentration&quot; in the specified pressure boundary</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a well at the center of the middle lake in the very center of the model. It will start pumping at 100 weeks. We will define a schedule for it with the following characteristics</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="3" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:2px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
@@ -268,5 +276,6 @@
     </table></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Create a point object in the center of the model. Set </text><text styleclass="Strong" translate="true">Evaluated At</text><text styleclass="Normal" translate="true"> to nodes and set the </text><text styleclass="Strong" translate="true">Number of Z formulas</text><text styleclass="Normal" translate="true"> to 1. Set the Z formula to SUTRA_Mesh_Top. On the </text><text styleclass="Strong" translate="true">SUTRA Features</text><text styleclass="Normal" translate="true"> tab, specify a fluid flux boundary using the Pump schedule and setting the fluid source to -16000.</text></para>
     <para styleclass="Normal"><image src="SutraLake14Well.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Define Fluid Source boundary</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Now run the model again</text></para>
   </body>
 </topic>

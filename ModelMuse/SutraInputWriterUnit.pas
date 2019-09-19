@@ -285,8 +285,11 @@ begin
             Assert(False);
         end;
         WriteString(ADSMOD);
-        WriteFloat(CHI1);
-        WriteFloat(CHI2);
+        if FOptions.SorptionModel <> smNone then
+        begin
+          WriteFloat(CHI1);
+          WriteFloat(CHI2);
+        end;
       end;
     tcEnergy:
       begin

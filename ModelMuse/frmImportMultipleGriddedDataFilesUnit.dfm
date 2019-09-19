@@ -2,9 +2,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
   HelpType = htKeyword
   HelpKeyword = 'Import_Gridded_Data_Files_Dial'
   Caption = 'Import Gridded Data Files'
-  ExplicitWidth = 440
-  ExplicitHeight = 264
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 18
   inline frameGridFiles: TframeGrid
     Left = 0
