@@ -1,5 +1,7 @@
-# Generalized Transport file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+# Generalized Transport file created on 9/20/2019 by ModelMuse version 4.0.0.15.
 # Data set 1
 'STEP_1' # BCSSCH
 # Data set 2; Time = 0
-'generalized transport boundaries'     0     0     0     0     0     0 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1, NPBG1, NUBG1
+'generalized transport boundaries'     0     0     0     0     0     1 # Data Set 2: BCSID, NSOP1, NSOU1, NPBC1, NUBC1, NPBG1, NUBG1
+    77  1.000000000000E+000   1.000000000000E+000   2.000000000000E+000   2.000000000000E+000 
+0

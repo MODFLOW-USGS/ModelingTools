@@ -327,8 +327,12 @@ Procedure UpdateDialogBoxFileName(Dialog: TOpenDialog; NewFileName: string);
 const
   CB_FILENAME_ID = 1148;
 begin
+  // This is supposed to update the file name displayed by the TOpenDialog.
+  // It doesn't seem to work.
   SendMessage( GetParent(Dialog.Handle), CDM_SETCONTROLTEXT,
     CB_FILENAME_ID, LongInt(Pchar(ExtractFileName(NewFileName))));
+//  SendMessage( GetParent(Dialog.Handle), CDM_SETCONTROLTEXT,
+//    CB_FILENAME_ID, LongInt(PAnsiChar(AnsiString(ExtractFileName(NewFileName)))));
 end;
 
 procedure TfrmCustomGoPhast.CustomizeControls;

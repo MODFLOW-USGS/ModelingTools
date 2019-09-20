@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, System.Generics.Collections, PhastModelUnit,
-  SutraOptionsUnit, System.SysUtils;
+  SutraOptionsUnit, System.SysUtils, SutraOutputControlUnit, System.Classes;
 
 type
   TLakeNodeRecord = record
@@ -31,6 +31,8 @@ type
     FLakeNodes: TLakeNodes;
     FLakeOptions: TSutraLakeOptions;
     FHasLakes: Boolean;
+    FSutraOutputControl: TSutraOutputControl;
+    FBcsFileNames: TStringList;
     procedure Evaluate;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -50,7 +52,7 @@ type
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     property HasLakes: Boolean read FHasLakes;
-    procedure WriteFile(const AFileName: string);
+    procedure WriteFile(const AFileName: string; BcsFileNames: TStringList);
   end;
 
 implementation
@@ -306,7 +308,7 @@ var
   NLAKPR: Integer;
 begin
 //  ITLMAX := FLakeOptions.MaxLakeIterations;
-  NLAKPR := FLakeOptions.LakeOutputCycle;
+  NLAKPR := FSutraOutputControl.LakePrintFrequency;
 //  WriteInteger(ITLMAX);
   WriteInteger(NLAKPR);
   NewLine;
@@ -363,7 +365,7 @@ begin
   end;
 end;
 
-procedure TSutraLakeWriter.WriteFile(const AFileName: string);
+procedure TSutraLakeWriter.WriteFile(const AFileName: string; BcsFileNames: TStringList);
 var
   NameOfFile: string;
   LakeStageFile: string;
@@ -373,6 +375,7 @@ var
   LakeHierarchyFile: string;
 begin
   FHasLakes := False;
+  FBcsFileNames := BcsFileNames;
   if Model.ModelSelection = msSutra22 then
   begin
     Exit;
@@ -383,6 +386,8 @@ begin
   end;
 
   FLakeOptions := Model.SutraOptions.LakeOptions;
+  FSutraOutputControl := Model.SutraOutputControl;
+
   if not FLakeOptions.UseLakes then
   begin
     Exit;
@@ -454,7 +459,14 @@ begin
   NNLK := FLakeNodes.Count;
   WriteString('LAKE');
   WriteInteger(NNLK);
-  WriteString(' ''DEFAULT''');
+  if FLakeOptions.SpecifyLakeBottom then
+  begin
+    WriteString(' ''SPECIFIED''');
+  end
+  else
+  begin
+    WriteString(' ''DEFAULT''');
+  end;
   NewLine;
 end;
 
@@ -462,11 +474,28 @@ procedure TSutraLakeWriter.WriteLakeAreaDataSet1b;
 var
   NodeIndex: Integer;
   IL: Integer;
+  Lake_Bottom: TDataArray;
+  ANode: TLakeNode;
+  ELVLB: Double;
 begin
+  if FLakeOptions.SpecifyLakeBottom then
+  begin
+    Lake_Bottom := Model.DataArrayManager.GetDataSetByName(KLake_Bottom);
+  end
+  else
+  begin
+    Lake_Bottom := nil;
+  end;
   for NodeIndex := 0 to FLakeNodes.Count - 1 do
   begin
-    IL := FLakeNodes[NodeIndex].NodeNumber + 1;
+    ANode := FLakeNodes[NodeIndex];
+    IL := ANode.NodeNumber + 1;
     WriteInteger(IL);
+    if FLakeOptions.SpecifyLakeBottom then
+    begin
+      ELVLB := Lake_Bottom.RealData[0, 0, ANode.FCol];
+      WriteFloat(ELVLB);
+    end;
     NewLine;
   end;
   WriteInteger(0);
@@ -483,11 +512,41 @@ var
   NBCIUG: Integer;
 begin
   NBCIF := 1;
+  if FBcsFileNames[0] <> '' then
+  begin
+    Inc(NBCIF);
+  end;
+
   NBCIS := 1;
+  if FBcsFileNames[1] <> '' then
+  begin
+    Inc(NBCIS);
+  end;
+
   NBCIP := 1;
+  if FBcsFileNames[2] <> '' then
+  begin
+    Inc(NBCIP);
+  end;
+
   NBCIU := 1;
+  if FBcsFileNames[3] <> '' then
+  begin
+    Inc(NBCIU);
+  end;
+
   NBCIPG := 1;
+  if FBcsFileNames[4] <> '' then
+  begin
+    Inc(NBCIPG);
+  end;
+
   NBCIUG := 1;
+  if FBcsFileNames[5] <> '' then
+  begin
+    Inc(NBCIUG);
+  end;
+
   WriteInteger(NBCIF);
   WriteInteger(NBCIS);
   WriteInteger(NBCIP);
@@ -498,12 +557,24 @@ begin
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet2;
+var
+  ILKF: Integer;
 begin
   WriteString('# INTERACTIONS WITH FLUID SOURCES');
   NewLine;
   WriteString('''DEFAULT''');
-  WriteInteger(Ord(FLakeOptions.FluidSourceSinkLakePresent)-1);
+  ILKF := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+  WriteInteger(ILKF);
   NewLine;
+  if FBcsFileNames[0] <> '' then
+  begin
+    WriteString('''');
+    WriteString(ExtractFileName(FBcsFileNames[0]));
+    WriteString('''');
+    NewLine;
+    WriteInteger(ILKF);
+    NewLine;
+  end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet3;
@@ -513,6 +584,15 @@ begin
   WriteString('''DEFAULT''');
   WriteInteger(Ord(FLakeOptions.USourceSinkLakePresent)-1);
   NewLine;
+  if FBcsFileNames[1] <> '' then
+  begin
+    WriteString('''');
+    WriteString(ExtractFileName(FBcsFileNames[1]));
+    WriteString('''');
+    NewLine;
+    WriteInteger(Ord(FLakeOptions.USourceSinkLakePresent)-1);
+    NewLine;
+  end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet4;
@@ -522,6 +602,15 @@ begin
   WriteString('''DEFAULT''');
   WriteInteger(Ord(FLakeOptions.SpecifiedPressureLakePresent)-1);
   NewLine;
+  if FBcsFileNames[2] <> '' then
+  begin
+    WriteString('''');
+    WriteString(ExtractFileName(FBcsFileNames[2]));
+    WriteString('''');
+    NewLine;
+    WriteInteger(Ord(FLakeOptions.SpecifiedPressureLakePresent)-1);
+    NewLine;
+  end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet5;
@@ -531,6 +620,15 @@ begin
   WriteString('''DEFAULT''');
   WriteInteger(Ord(FLakeOptions.SpecifiedULakePresent)-1);
   NewLine;
+  if FBcsFileNames[3] <> '' then
+  begin
+    WriteString('''');
+    WriteString(ExtractFileName(FBcsFileNames[3]));
+    WriteString('''');
+    NewLine;
+    WriteInteger(Ord(FLakeOptions.SpecifiedULakePresent)-1);
+    NewLine;
+  end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet6A;
@@ -540,11 +638,24 @@ begin
   WriteString('''DEFAULT''');
   WriteInteger(Ord(FLakeOptions.GeneralizedFlowLakePresent)-1);
   case FLakeOptions.GeneralizedFlowInteractionType of
-    gfitFluidSource: WriteString(' F');
-    gfitSpecifiedPressure: WriteString(' P');
+    gfitFluidSource: WriteString(' ''F''');
+    gfitSpecifiedPressure: WriteString(' ''P''');
     else Assert(False);
   end;
   NewLine;
+  if FBcsFileNames[4] <> '' then
+  begin
+    WriteString('''');
+    WriteString(ExtractFileName(FBcsFileNames[4]));
+    WriteString('''');
+    WriteInteger(Ord(FLakeOptions.GeneralizedFlowLakePresent)-1);
+    case FLakeOptions.GeneralizedFlowInteractionType of
+      gfitFluidSource: WriteString(' ''F''');
+      gfitSpecifiedPressure: WriteString(' ''P''');
+      else Assert(False);
+    end;
+    NewLine;
+  end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet6B;
@@ -554,11 +665,24 @@ begin
   WriteString('''DEFAULT''');
   WriteInteger(Ord(FLakeOptions.GeneralizedTransportLakePresent)-1);
   case FLakeOptions.GeneralizedTransportInteractionType of
-    gtitSoluteSource: WriteString(' S');
-    gtitSpecifiedConcentration: WriteString(' U');
+    gtitSoluteSource: WriteString(' ''S''');
+    gtitSpecifiedConcentration: WriteString(' ''U''');
     else Assert(False);
   end;
   NewLine;
+  if FBcsFileNames[5] <> '' then
+  begin
+    WriteString('''');
+    WriteString(ExtractFileName(FBcsFileNames[5]));
+    WriteString('''');
+    WriteInteger(Ord(FLakeOptions.GeneralizedTransportLakePresent)-1);
+    case FLakeOptions.GeneralizedTransportInteractionType of
+      gtitSoluteSource: WriteString(' ''S''');
+      gtitSpecifiedConcentration: WriteString(' ''U''');
+      else Assert(False);
+    end;
+    NewLine;
+  end;
 end;
 
 end.

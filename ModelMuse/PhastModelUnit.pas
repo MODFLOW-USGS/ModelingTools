@@ -152,6 +152,7 @@ const
   StrUzfMf6SurfaceDepressionDepth = 'UZF6_Surface_Depression_Depth';
   StrUzfMf6VerticalSaturatedK = 'UZF6_Vertical_Saturated_K';
 
+
   rsModflow_Initial_Head = 'Modflow_Initial_Head';
   rsModflow_CBKz = 'Confining_Bed_Kz';
   rsVerticalAnisotropy = 'Vertical_Anisotropy';
@@ -242,6 +243,7 @@ const
   KSUTRAInitialLakeU = 'SUTRA_Initial_Lake_U';
   KSUTRALakeRecharge = 'SUTRA_Lake_Recharge_Fraction_Diverted';
   KSUTRALakeDischarge = 'SUTRA_Lake_Discharge_Fraction_Diverted';
+  KLake_Bottom = 'Lake_Bottom';
 //  KInitialWaterContent = 'InitialWaterContent';
 //  KSaturatedThickness = 'SaturatedThickness';
   KXT3DAngle1 = 'XT3D_Angle_1';
@@ -2049,6 +2051,7 @@ that affects the model output should also have a comment. }
     function SutraUsed(Sender: TObject): boolean;
     function Sutra30Used(Sender: TObject): boolean;
     function SutraLakeUsed(Sender: TObject): boolean;
+    function SutraLakeBottomUsed(Sender: TObject): boolean;
     function UztUsed(Sender: TObject): boolean; virtual;
 //    function Xt3DUsed(Sender: TObject): boolean; virtual;
     function NpfUsed(Sender: TObject): boolean; virtual;
@@ -9070,6 +9073,7 @@ resourcestring
   StrSUTRAInitialLakeU = KSUTRAInitialLakeU;
   StrSUTRALakeRecharge = KSUTRALakeRecharge;
   StrSUTRALakeDischarge = KSUTRALakeDischarge;
+  StrLakeBottom = KLake_Bottom;
 //  StrInitialWaterContent = KInitialWaterContent;
 //  StrSaturatedThickness = KSaturatedThickness;
   StrSUTRALake = 'SUTRA_Lake';
@@ -9313,7 +9317,10 @@ resourcestring
   StrSTRPackageDataSet = 'STR Package data set 3 CINITSF';
   StrSFTDispersion = KSFTDispersion;
   StrSTRPackageDataSetDISPSF = 'STR Package data set 4 DISPSF';
-//  StrLakeMf6 = 'LakeMf6';
+  StrSUTRALakeAreaInpu = 'SUTRA Lake-Area Input File: ELVLB';
+
+
+  //  StrLakeMf6 = 'LakeMf6';
 
 //  StrRoughnessSFR6 = KRoughnessSFR6;
 
@@ -31522,7 +31529,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  ArrayCount = 147;
+  ArrayCount = 148;
 var
   Index: integer;
 begin
@@ -33912,6 +33919,21 @@ begin
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dsoTop;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KLake_Bottom;
+  FDataArrayCreationRecords[Index].DisplayName := StrLakeBottom;
+  FDataArrayCreationRecords[Index].Formula := StrSUTRAMeshTop;
+  FDataArrayCreationRecords[Index].Classification := StrSUTRALake;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SutraLakeBottomUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrSUTRALakeAreaInpu;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
@@ -34756,6 +34778,13 @@ function TCustomModel.SutraHydraulicConductivityUsed(Sender: TObject): boolean;
 begin
   result := SutraUsed(Sender)
     and (SutraOptions.TransportChoice = tcSoluteHead);
+end;
+
+function TCustomModel.SutraLakeBottomUsed(Sender: TObject): boolean;
+begin
+  result := SutraLakeUsed(Sender)
+    and (not SutraOptions.LakeOptions.AllNodesLakes)
+    and SutraOptions.LakeOptions.SpecifyLakeBottom
 end;
 
 function TCustomModel.SutraLakeUsed(Sender: TObject): boolean;

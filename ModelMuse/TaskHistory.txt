@@ -24141,5 +24141,12 @@ object TTaskHistory
         'Testing'
         'SUTRA 3.0'
         'Documentation')
+    end
+    item
+      Date = 43728.440915416670000000
+      Categories.Strings = (
+        'Documentation'
+        'Testing'
+        'SUTRA 3.0')
     end>
 end

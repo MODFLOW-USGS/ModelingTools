@@ -9090,6 +9090,7 @@ var
   ModelDirectory: string;
   HasLakes: Boolean;
   SutraFileName: string;
+  BcsFileNames: TStringList;
 begin
   case ModelSelection of
     msSutra22:
@@ -9155,35 +9156,40 @@ begin
       GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;
       Schedules := TStringList.Create;
       Observations := TStringList.Create;
+      BcsFileNames := TStringList.Create;
       try
         BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
           sbtFluidSource);
         try
-          BoundaryWriter.WriteFile(FileName, FluidSourceNodes);
+          BoundaryWriter.WriteFile(FileName, FluidSourceNodes, BcsFileNames);
         finally
           BoundaryWriter.Free;
         end;
+
         BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
           sbtMassEnergySource);
         try
-          BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes);
+          BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, BcsFileNames);
         finally
           BoundaryWriter.Free;
         end;
+
         BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
           sbtSpecPress);
         try
-          BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes);
+          BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, BcsFileNames);
         finally
           BoundaryWriter.Free;
         end;
+
         BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
           sbtSpecConcTemp);
         try
-          BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes);
+          BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, BcsFileNames);
         finally
           BoundaryWriter.Free;
         end;
+
         TimeSchWriter := TSutraTimeScheduleWriter.Create(PhastModel);
         try
           TimeSchWriter.WriteFile(Schedules);
@@ -9199,26 +9205,26 @@ begin
           ObsWriter.Free;
         end;
 
-        LakeWriter := TSutraLakeWriter.Create(PhastModel, etExport);
-        try
-          LakeWriter.WriteFile(FileName);
-          HasLakes := LakeWriter.HasLakes;
-        finally
-          LakeWriter.Free;
-        end;
-
         GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
         try
-          GenFlowWriter.WriteFile(FileName, GeneralFlowNodes);
+          GenFlowWriter.WriteFile(FileName, GeneralFlowNodes, BcsFileNames);
         finally
           GenFlowWriter.Free;
         end;
 
         GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
         try
-          GenTransWriter.WriteFile(FileName, GeneralTransportNodes);
+          GenTransWriter.WriteFile(FileName, GeneralTransportNodes, BcsFileNames);
         finally
           GenTransWriter.Free;
+        end;
+
+        LakeWriter := TSutraLakeWriter.Create(PhastModel, etExport);
+        try
+          LakeWriter.WriteFile(FileName, BcsFileNames);
+          HasLakes := LakeWriter.HasLakes;
+        finally
+          LakeWriter.Free;
         end;
 
         InputWriter := TSutraInputWriter.Create(PhastModel);
@@ -9299,6 +9305,7 @@ begin
         Schedules.Free;
         GeneralFlowNodes.Free;
         GeneralTransportNodes.Free;
+        BcsFileNames.Free;
 //        FluidSourceNodes.Free;
 //        MassEnergySourceNodes.Free;
 //        SpecifiedPressureNodes.Free;

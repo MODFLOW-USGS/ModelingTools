@@ -37,8 +37,8 @@ type
     FUTimeLists: TObjectList<TSutraTimeList>;
     FNodeNumbers: T3DSparseIntegerArray;
     FCount: Integer;
-//    FBoundaryNodes: TIntegerList;
     FIBoundaryNodes: IBoundaryNodes;
+    FTime1: Double;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -58,10 +58,11 @@ type
     destructor Destroy; override;
     // @name calls @link(Evaluate).
     procedure UpdateMergeLists(PQTimeList, UTimeList: TSutraMergedTimeList);
-    procedure WriteFile(FileName: string; BoundaryNodes: IBoundaryNodes);
+    procedure WriteFile(FileName: string; BoundaryNodes: IBoundaryNodes;
+      BcsFileNames: TStringList);
   end;
 
-function FixTime(AnItem: TCustomBoundaryItem; AllTimes: TRealList): double;
+function FixTime(AnItem: TCustomBoundaryItem; AllTimes: TRealList): double; overload;
 
 const
   KFluidFlux = 'FluidFlux';
@@ -92,8 +93,12 @@ var
   NumberOfLayers: Integer;
   NumberOfRows: Integer;
   NumberOfColumns: Integer;
+  TimeOptions: TSutraTimeOptions;
 begin
   inherited Create(Model, EvaluationType);
+  TimeOptions := (Model as TPhastModel).SutraTimeOptions;
+  TimeOptions.CalculateAllTimes;
+  FTime1 := TimeOptions.AllTimes[1];
   FBoundaryType := BoundaryType;
   FPQTimeLists := TObjectList<TSutraTimeList>.Create;
   FUTimeLists := TObjectList<TSutraTimeList>.Create;
@@ -1178,9 +1183,13 @@ begin
               QINC1 := 0.0;
               UINC1 := 0.0;
             end;
-//            FBoundaryNodes.AddUnique(Abs(IQCP1));
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCP1), QINC1, UINC1));
             WriteALine;
+            if PQTimeList.Times[0] > FTime1 then
+            begin
+              QINC1 := 0.0;
+              UINC1 := 0.0;
+            end;
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCP1), QINC1, UINC1));
           end;
         end;
       end;
@@ -1314,9 +1323,12 @@ begin
               Assert(IQCU1 < 0);
               QUINC1 := 0.0;
             end;
-//            FBoundaryNodes.AddUnique(Abs(IQCU1));
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCU1), 0, QUINC1));
             WriteALine;
+            if UTimeList.Times[0] > FTime1 then
+            begin
+              QUINC1 := 0.0;
+            end;
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCU1), 0, QUINC1));
           end;
         end;
       end;
@@ -1452,9 +1464,13 @@ begin
                 PBC1 := 0.0;
                 UBC1 := 0.0;
               end;
-//              FBoundaryNodes.AddUnique(Abs(IPBC1));
-              FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IPBC1), PBC1, UBC1));
               WriteALine;
+              if PQTimeList.Times[0] > FTime1 then
+              begin
+                PBC1 := 0.0;
+                UBC1 := 0.0;
+              end;
+              FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IPBC1), PBC1, UBC1));
             end;
           end;
         end;
@@ -1588,9 +1604,12 @@ begin
               Assert(IUBC1 < 0);
               UBC1 := 0.0;
             end;
-//            FBoundaryNodes.AddUnique(Abs(IUBC1));
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IUBC1), 0, UBC1));
             WriteALine;
+            if UTimeList.Times[0] > FTime1 then
+            begin
+              UBC1 := 0.0;
+            end;
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IUBC1), 0, UBC1));
           end;
         end;
       end;
@@ -1646,7 +1665,8 @@ begin
   end;
 end;
 
-procedure TSutraBoundaryWriter.WriteFile(FileName: string; BoundaryNodes: IBoundaryNodes);
+procedure TSutraBoundaryWriter.WriteFile(FileName: string;
+  BoundaryNodes: IBoundaryNodes; BcsFileNames: TStringList);
 var
   UTimeList: TSutraMergedTimeList;
   PQTimeList: TSutraMergedTimeList;
@@ -1655,10 +1675,6 @@ var
   FirstTimeSpecified: Boolean;
   InitialTime: double;
 begin
-//  FBoundaryNodes := BoundaryNodes;
-//  FBoundaryNodes.Clear;
-//  FBoundaryNodes.Sorted := True;
-
   FIBoundaryNodes := BoundaryNodes;
   FIBoundaryNodes.Clear;
 
@@ -1695,12 +1711,14 @@ begin
         begin
           PQTimeList.Clear;
           UTimeList.Clear;
+          BcsFileNames.Add('');
           Exit;
         end;
       end;
 
       OpenFile(FileName);
       try
+        BcsFileNames.Add(FileName);
         WriteDataSet0;
         WriteDataSet1;
         for TimeIndex := 0 to UTimeList.Count - 1 do
@@ -1725,6 +1743,10 @@ begin
       finally
         CloseFile;
       end;
+    end
+    else
+    begin
+      BcsFileNames.Add('');
     end;
   finally
     PQTimeList.Free;

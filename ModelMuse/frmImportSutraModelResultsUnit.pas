@@ -204,6 +204,8 @@ resourcestring
 //  StrPressure = 'Pressure';
 //  StrConcentration = 'Concentration';
   StrHead = 'Head';
+  StrYourSelectedFileT = 'Your selected file type did not match your file na' +
+  'me. Did you mean to select %s';
 //  StrTemperature = 'Temperature';
 
 
@@ -332,6 +334,7 @@ var
   ShowWarning: Boolean;
   FileExtension: string;
   SutraOptions: TSutraOptions;
+  RequiredExt: string;
 begin
   if frmGoPhast.PhastModel.ModelFileName <> '' then
   begin
@@ -447,12 +450,66 @@ begin
         end;
       3..6, 8:
         begin
+          case dlgOpenSutraFile.FilterIndex of
+            3:
+              begin
+                RequiredExt := '.bcof';
+              end;
+            4:
+              begin
+                RequiredExt := '.bcos';
+              end;
+            5:
+              begin
+                RequiredExt := '.bcop';
+              end;
+            6:
+              begin
+                RequiredExt := '.bcou';
+              end;
+            8:
+              begin
+                RequiredExt := '.lkst';
+              end;
+            else
+              begin
+                Assert(false);
+              end;
+          end;
+          if LowerCase(ExtractFileExt(dlgOpenSutraFile.FileName)) <> RequiredExt then
+          begin
+            if (MessageDlg(Format(StrYourSelectedFileT,
+              [ChangeFileExt(dlgOpenSutraFile.FileName, RequiredExt)]),
+              mtWarning, [mbYes, mbNo], 0) = mrYes) then
+            begin
+              dlgOpenSutraFile.FileName := ChangeFileExt(dlgOpenSutraFile.FileName, RequiredExt);
+            end
+            else
+            begin
+              Exit;
+            end;
+          end;
+
           FResultList := TStoredResultsList.Create;
           ReadFileHeader(dlgOpenSutraFile.FileName, FResultList);
           ShowAvailableTimeSteps;
         end;
       7:
         begin
+          RequiredExt := '.rst';
+          if LowerCase(ExtractFileExt(dlgOpenSutraFile.FileName)) <> RequiredExt then
+          begin
+            if (MessageDlg(Format(StrYourSelectedFileT,
+              [ChangeFileExt(dlgOpenSutraFile.FileName, RequiredExt)]),
+              mtWarning, [mbYes, mbNo], 0) = mrYes) then
+            begin
+              dlgOpenSutraFile.FileName := ChangeFileExt(dlgOpenSutraFile.FileName, RequiredExt);
+            end
+            else
+            begin
+              Exit;
+            end;
+          end;
           SutraOptions := frmGoPhast.PhastModel.SutraOptions;
           chklstDataToImport.Items.Clear;
           case SutraOptions.TransportChoice of
@@ -474,10 +531,6 @@ begin
           end;
           chklstDataToImport.CheckAll(cbChecked);
         end;
-//      8:
-//        begin
-//          chklstDataToImport.CheckAll(cbChecked);
-//        end;
       else
         Assert(False);
     end;
@@ -1652,6 +1705,7 @@ var
   NewFormula: string;
   DataSet: TDataArray;
   DryLakeValue: Double;
+  DsOrientation: TDataSetOrientation;
 begin
   for ItemIndex := 0 to chklstDataToImport.Items.Count - 1 do
   begin
@@ -1662,11 +1716,13 @@ begin
         + IntToStr(FResultList[StepIndex].TimeStep));
 
       NewDataType := rdtDouble;
+      DsOrientation := dso3D;
       if dlgOpenSutraFile.FilterIndex = 8 then
       begin
         DryLakeValue := frmGoPhast.PhastModel.SutraOptions.
           LakeOptions.SubmergedOutput;
         NewFormula := FortranFloatToStr(DryLakeValue);
+        DsOrientation := dsoTop;
       end
       else
       begin
@@ -1675,7 +1731,7 @@ begin
 
       DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
         TDataArray, NewName, NewFormula, NewName, [], NewDataType,
-        eaNodes, dso3D,
+        eaNodes, DsOrientation,
         SutraBoundaryResults + '|' + chklstDataToImport.Items[ItemIndex]);
       AssignIgnoreValues(DataSet);
       DataSet.Comment := Format(StrReadFrom0sOn,

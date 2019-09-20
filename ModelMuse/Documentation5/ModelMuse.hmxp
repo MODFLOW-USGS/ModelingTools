@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4060</config-value>
+      <config-value name="autohelpstart">4062</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1026,7 +1026,9 @@ document.write('</frameset>');
       <helpcontext-number href="LAK_Lake_Package_Pane#TABLEINPUT" value="3668"/>
       <helpcontext-number href="LAK_Object_Pane" value="2010"/>
       <helpcontext-number href="Lake" value="3985"/>
+      <helpcontext-number href="Lake_Boundary_Interaction" value="4062"/>
       <helpcontext-number href="Lake_Example" value="4060"/>
+      <helpcontext-number href="Lakes_Pane" value="4061"/>
       <helpcontext-number href="LastVertexValue" value="3970"/>
       <helpcontext-number href="Lateral_Inflow_in_SWR_Surface" value="3862"/>
       <helpcontext-number href="Layer" value="470"/>

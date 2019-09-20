@@ -69,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspLake
+    ActivePage = jvspDefaultLakeInteractions
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -1068,45 +1068,18 @@ inherited frmSutraOptions: TfrmSutraOptions
       Top = 0
       Width = 595
       Height = 512
+      HelpType = htKeyword
+      HelpKeyword = 'Lakes_Pane'
       Caption = 'jvspLake'
-      object grpLakeDataset1: TGroupBox
-        Left = 0
-        Top = 105
-        Width = 595
-        Height = 81
-        Align = alTop
-        Caption = 'Lake dataset 1'
-        TabOrder = 0
-        ExplicitLeft = -4
-        ExplicitTop = 0
-        object lblLakeOutputCycle: TLabel
-          Left = 133
-          Top = 26
-          Width = 198
-          Height = 18
-          Caption = 'Lake output cycle (NLAKPR)'
-        end
-        object seLakeOutputCycle: TJvSpinEdit
-          Left = 6
-          Top = 25
-          Width = 121
-          Height = 26
-          MaxValue = 2147483647.000000000000000000
-          MinValue = 1.000000000000000000
-          Value = 1.000000000000000000
-          TabOrder = 0
-        end
-      end
       object grpLakeDataset2: TGroupBox
         Left = 0
-        Top = 186
+        Top = 89
         Width = 595
-        Height = 326
+        Height = 423
         Align = alClient
         Caption = 'Lake dataset 2'
-        TabOrder = 1
-        ExplicitTop = 81
-        ExplicitHeight = 431
+        TabOrder = 0
+        ExplicitLeft = -4
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24
@@ -1133,6 +1106,8 @@ inherited frmSutraOptions: TfrmSutraOptions
           Top = 48
           Width = 145
           Height = 22
+          Color = clBtnFace
+          Enabled = False
           TabOrder = 0
           Text = '0'
           DataType = dtReal
@@ -1146,6 +1121,8 @@ inherited frmSutraOptions: TfrmSutraOptions
           Top = 104
           Width = 145
           Height = 22
+          Color = clBtnFace
+          Enabled = False
           TabOrder = 1
           Text = '0'
           DataType = dtReal
@@ -1159,6 +1136,8 @@ inherited frmSutraOptions: TfrmSutraOptions
           Top = 156
           Width = 145
           Height = 22
+          Color = clBtnFace
+          Enabled = False
           TabOrder = 2
           Text = '0'
           DataType = dtReal
@@ -1170,26 +1149,35 @@ inherited frmSutraOptions: TfrmSutraOptions
         Left = 0
         Top = 0
         Width = 595
-        Height = 105
+        Height = 89
         Align = alTop
-        TabOrder = 2
-        ExplicitLeft = 6
-        ExplicitTop = -6
+        TabOrder = 1
         object cbUseLakes: TCheckBox
           Left = 6
-          Top = 32
+          Top = 16
           Width = 97
           Height = 17
           Caption = 'Use lakes'
           TabOrder = 0
+          OnClick = cbUseLakesClick
         end
         object cbAllNodesLakes: TCheckBox
           Left = 6
-          Top = 55
+          Top = 39
           Width = 374
           Height = 17
-          Caption = 'All nodes on the top layer can be lake nodes'
+          Caption = 'All nodes on the top layer can be lake nodes (LKAR)'
+          Enabled = False
           TabOrder = 1
+          OnClick = EnableLakeBottom
+        end
+        object cbSpecifyLakeBotton: TCheckBox
+          Left = 6
+          Top = 62
+          Width = 273
+          Height = 17
+          Caption = 'Specify lake bottom (CBOT)'
+          TabOrder = 2
         end
       end
     end
@@ -1198,13 +1186,15 @@ inherited frmSutraOptions: TfrmSutraOptions
       Top = 0
       Width = 595
       Height = 512
+      HelpType = htKeyword
+      HelpKeyword = 'Lake_Boundary_Interaction'
       Caption = 'jvspDefaultLakeInteractions'
       object grpLakeFluidSources: TGroupBox
         Left = 3
         Top = 3
         Width = 589
         Height = 81
-        Caption = 'Default effect of lakes on sources or sinks of fluid '
+        Caption = 'Default effect of lakes on sources or sinks of fluid  (ILKF)'
         TabOrder = 0
         object lblFluidSourceInLakesPresent: TLabel
           Left = 11
@@ -1219,6 +1209,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Width = 286
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 1
           TabOrder = 0
           Text = 'No change (0)'
@@ -1235,7 +1226,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         Height = 81
         Caption = 
           'Default effect of lakes on sources or sinks of solute mass or en' +
-          'ergy'
+          'ergy (ILKS)'
         TabOrder = 1
         object lblSoluteSourceInLakesPresent: TLabel
           Left = 11
@@ -1250,6 +1241,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Width = 286
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 1
           TabOrder = 0
           Text = 'No change (0)'
@@ -1264,7 +1256,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         Top = 177
         Width = 589
         Height = 81
-        Caption = 'Default effect of lakes on specified pressure boundaries'
+        Caption = 'Default effect of lakes on specified pressure boundaries (ILKP)'
         TabOrder = 2
         object lblSpecifiedPressureInLakesPresent: TLabel
           Left = 11
@@ -1279,6 +1271,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Width = 286
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 1
           TabOrder = 0
           Text = 'No change (0)'
@@ -1295,7 +1288,7 @@ inherited frmSutraOptions: TfrmSutraOptions
         Height = 81
         Caption = 
           'Default effect of lakes on specified concentration or temperatur' +
-          'e boundaries'
+          'e boundaries (ILKU)'
         TabOrder = 3
         object lblSpecifiedUInLakesPresent: TLabel
           Left = 11
@@ -1310,6 +1303,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Width = 286
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 1
           TabOrder = 0
           Text = 'No change (0)'
@@ -1324,7 +1318,9 @@ inherited frmSutraOptions: TfrmSutraOptions
         Top = 351
         Width = 589
         Height = 81
-        Caption = 'Default effect of lakes on generalized-flow boundaries'
+        Caption = 
+          'Default effect of lakes on generalized-flow boundaries (ILKPG, C' +
+          'TIPG)'
         TabOrder = 4
         object lblGeneralizedFlowPresent: TLabel
           Left = 11
@@ -1341,11 +1337,12 @@ inherited frmSutraOptions: TfrmSutraOptions
           Caption = 'Interaction type'
         end
         object comboGeneralizedFlowPresent: TComboBox
-          Left = 11
+          Left = 3
           Top = 43
           Width = 286
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 1
           TabOrder = 0
           Text = 'No change (0)'
@@ -1360,6 +1357,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Width = 262
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 0
           TabOrder = 1
           Text = 'Like fluid source/sink (F)'
@@ -1373,7 +1371,9 @@ inherited frmSutraOptions: TfrmSutraOptions
         Top = 438
         Width = 589
         Height = 81
-        Caption = 'Default effect of lakes on generalized-transport boundaries'
+        Caption = 
+          'Default effect of lakes on generalized-transport boundaries (ILK' +
+          'UG. CTIUG)'
         TabOrder = 5
         object lblGeneralizedTransportPresent: TLabel
           Left = 11
@@ -1390,11 +1390,12 @@ inherited frmSutraOptions: TfrmSutraOptions
           Caption = 'Interaction type'
         end
         object comboGeneralizedTransportPresent: TComboBox
-          Left = 11
+          Left = 3
           Top = 43
           Width = 286
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 1
           TabOrder = 0
           Text = 'No change (0)'
@@ -1409,6 +1410,7 @@ inherited frmSutraOptions: TfrmSutraOptions
           Width = 262
           Height = 26
           Style = csDropDownList
+          Enabled = False
           ItemIndex = 0
           TabOrder = 1
           Text = 'Like solute/energy source/sink (S)'
@@ -1440,5 +1442,48 @@ inherited frmSutraOptions: TfrmSutraOptions
       FF000000000200000000000000011149006E0069007400690061006C0043006F
       006E0064006900740069006F006E007300}
     Items.Links = {03000000000000000100000002000000}
+  end
+  object rcLakes: TRbwController
+    ControlList = <
+      item
+        Control = cbAllNodesLakes
+      end
+      item
+        Control = rdeDefaultRechargeFrac
+      end
+      item
+        Control = rdeDefaultDischargeFrac
+      end
+      item
+        Control = rdeLakeOutput
+      end
+      item
+        Control = comboFluidSourceInLakesPresent
+      end
+      item
+        Control = comboSoluteSourceInLakesPresent
+      end
+      item
+        Control = comboSpecifiedPressureInLakesPresent
+      end
+      item
+        Control = comboSpecifiedUInLakesPresent
+      end
+      item
+        Control = comboGeneralizedFlowPresent
+      end
+      item
+        Control = comboLakeGeneralizedFlowType
+      end
+      item
+        Control = comboGeneralizedTransportPresent
+      end
+      item
+        Control = comboLakeGeneralizedTransportType
+      end>
+    Enabled = False
+    OnEnabledChange = EnableLakeBottom
+    Left = 96
+    Top = 16
   end
 end

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Lake-Boundary Interaction</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Lake-Boundary Interaction</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Lake-Boundary Interaction</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box. It is used for setting parameters relating to the lake capability in SUTRA 3.0. Lakes can only be used in layered 3D models in which all of the nodes in all the layer are in the same horizontal position as in other layers.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Default effect of lakes on sources or sinks of fluid &#160;(ILKF)</text><text styleclass="Normal" translate="true">: </text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Default effect of lakes on sources or sinks of solute mass or energy (ILKS)</text><text styleclass="Normal" translate="true">: </text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Default effect of lakes on specified pressure boundaries (ILKP)</text><text styleclass="Normal" translate="true">: </text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Default effect of lakes on specified concentration or temperature boundaries (ILKU)</text><text styleclass="Normal" translate="true">: </text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Default effect of lakes on generalized-flow boundaries (ILKPG, CTIPG)</text><text styleclass="Normal" translate="true">: </text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Default effect of lakes on generalized-transport boundaries (ILKUG. CTIUG)</text><text styleclass="Normal" translate="true">: </text></para>
+  </body>
+</topic>

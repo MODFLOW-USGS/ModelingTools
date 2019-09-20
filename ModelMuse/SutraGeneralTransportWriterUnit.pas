@@ -6,7 +6,8 @@ uses
   System.UITypes, Winapi.Windows, System.SysUtils, CustomModflowWriterUnit,
   System.Generics.Collections, SutraGeneralFlowNodesUnit,
   System.Generics.Defaults, SutraBoundaryUnit, PhastModelUnit,
-  SutraGenTransBoundUnit, RealListUnit, IntListUnit, GoPhastTypes, Vcl.Dialogs;
+  SutraGenTransBoundUnit, RealListUnit, IntListUnit, GoPhastTypes, Vcl.Dialogs,
+  System.Classes;
 
 type
   TGeneralTransportNodes = class(TList<TGeneralTransportNode>, IGeneralTransportNodes)
@@ -46,7 +47,8 @@ type
   public
     constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
-    procedure WriteFile(AFileName: string; GeneralBoundaries: TList<IGeneralTransportNodes>);
+    procedure WriteFile(AFileName: string;
+      GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TStringList);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralTransportNodes>);
   end;
 
@@ -577,12 +579,13 @@ begin
 end;
 
 procedure TSutraGeneralTransportWriter.WriteFile(AFileName: string;
-  GeneralBoundaries: TList<IGeneralTransportNodes>);
+  GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TStringList);
 var
   TimeIndex: Integer;
 begin
   if Model.ModelSelection = msSutra22 then
   begin
+    BcsFileNames.Add('');
     Exit;
   end;
 
@@ -595,6 +598,7 @@ begin
     FNameOfFile := FileName(AFileName);
     OpenFile(FNameOfFile);
     try
+      BcsFileNames.Add(FNameOfFile);
       WriteDataSet0;
       WriteDataSet1;
       for TimeIndex := 0 to FTimes.Count - 1 do
@@ -607,6 +611,10 @@ begin
     finally
       CloseFile;
     end;
+  end
+  else
+  begin
+    BcsFileNames.Add('');
   end;
 end;
 

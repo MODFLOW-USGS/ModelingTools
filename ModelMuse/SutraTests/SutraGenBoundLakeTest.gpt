@@ -563,68 +563,70 @@ object PhastModel: TPhastModel
       'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
       '.gpt')
   ModelInputFiles.Strings = (
+    'C:\Colab\GWModelTools\ModelMuse\SutraTests\RunSutra.bat.archive'
+    'C:\Colab\GWModelTools\ModelMuse\SutraTests\SUTRA.FIL.archive'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\RunSutra.bat.' +
-      'archive'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.GfbBCS'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SUTRA.FIL.arc' +
-      'hive'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.GtbBCS'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.GfbBCS'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.ics'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.GtbBCS'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.inp'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.ics'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkar'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.inp'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkbc'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkar'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkin'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkbc'
-    
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkin'
-    
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\usgs.SutraGen' +
-      'BoundLakeTest.reference'
-    'C:\SutraSuite\SUTRA_3_0_Beta\bin\sutra_3_0.exe')
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\usgs.SutraGenBoundLak' +
+      'eTest.reference'
+    'C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe')
   ModelOutputFiles.Strings = (
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.ele'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.bcopg'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkbu'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.bcoug'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkh'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.ele'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkn'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkbu'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkrs'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkh'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lkst'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkn'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.lst'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkrs'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.nod'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lkst'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.rst'
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.lst'
     
-      'C:\Colab\GWModelTools\ModelMuse\SutraTests\Archive\SutraGenBound' +
-      'LakeTest.smy')
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.nod'
+    
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.rst'
+    
+      'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
+      '.smy')
   ModelFileName = 
     'C:\Colab\GWModelTools\ModelMuse\SutraTests\SutraGenBoundLakeTest' +
     '.gpt'
@@ -3429,7 +3431,6 @@ object PhastModel: TPhastModel
   SutraOptions.StoredGravityY.Value = 0.000000000000000000
   SutraOptions.StoredGravityZ.Value = -9.810000000000001000
   SutraOptions.ReadStart = rsNone
-  SutraOptions.LakeOptions.LakeOutputCycle = 1
   SutraOptions.LakeOptions.StoredRechargeFraction.Value = 0.000000000000000000
   SutraOptions.LakeOptions.StoredDischargeFraction.Value = 0.000000000000000000
   SutraOptions.LakeOptions.StoredSubmergedOutput.Value = 0.000000000000000000
@@ -3443,6 +3444,7 @@ object PhastModel: TPhastModel
   SutraOptions.LakeOptions.GeneralizedTransportInteractionType = gtitSpecifiedConcentration
   SutraOptions.LakeOptions.UseLakes = True
   SutraOptions.LakeOptions.AllNodesLakes = False
+  SutraOptions.LakeOptions.SpecifyLakeBottom = False
   SutraOutputControl.ListingPrintFrequency = 9999
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn]
   SutraOutputControl.NE_PrintFrequency = 9999
@@ -3454,6 +3456,7 @@ object PhastModel: TPhastModel
   SutraOutputControl.SpecifiedConcTempPrintFrequency = 9999
   SutraOutputControl.GeneralizedFlowPrintFrequency = 9999
   SutraOutputControl.GeneralizedTransportPrintFrequency = 9999
+  SutraOutputControl.LakePrintFrequency = 9999
   SutraOutputControl.ListAll = True
   SwrTabFiles = <>
   SwrReachGeometry = <>
@@ -3611,6 +3614,7 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
@@ -3664,8 +3668,7 @@ object PhastModel: TPhastModel
     end
     item
       ClassTypeName = 'TScreenObject'
-      HigherElevationFormula = '0'
-      LowerElevationFormula = '0'
+      ElevationFormula = '0'
       Points = <
         item
           X = 165.039516503953600000
@@ -3675,14 +3678,14 @@ object PhastModel: TPhastModel
       ScreenObject.CellSize = 1.000000000000000000
       ScreenObject.CellSizeUsed = False
       ScreenObject.ColorLine = False
-      ScreenObject.ElevationCount = ecTwo
-      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.ElevationCount = ecOne
+      ScreenObject.ElevationFormula = '0'
       ScreenObject.EvaluatedAt = eaNodes
       ScreenObject.FillColor = clBlack
       ScreenObject.FillScreenObject = False
-      ScreenObject.HigherElevationFormula = '0'
+      ScreenObject.HigherElevationFormula = '0.'
       ScreenObject.LineColor = clBlack
-      ScreenObject.LowerElevationFormula = '0'
+      ScreenObject.LowerElevationFormula = '0.'
       ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
@@ -3754,8 +3757,7 @@ object PhastModel: TPhastModel
     end
     item
       ClassTypeName = 'TScreenObject'
-      HigherElevationFormula = '0'
-      LowerElevationFormula = '0'
+      ElevationFormula = '0'
       Points = <
         item
           X = 1885.169688516971000000
@@ -3765,15 +3767,15 @@ object PhastModel: TPhastModel
       ScreenObject.CellSize = 1.000000000000000000
       ScreenObject.CellSizeUsed = False
       ScreenObject.ColorLine = False
-      ScreenObject.ElevationCount = ecTwo
-      ScreenObject.ElevationFormula = '0.'
+      ScreenObject.ElevationCount = ecOne
+      ScreenObject.ElevationFormula = '0'
       ScreenObject.EvaluatedAt = eaNodes
       ScreenObject.FillColor = clBlack
       ScreenObject.FillScreenObject = False
-      ScreenObject.HigherElevationFormula = '0'
+      ScreenObject.HigherElevationFormula = '0.'
       ScreenObject.LineColor = clBlack
-      ScreenObject.LowerElevationFormula = '0'
-      ScreenObject.Selected = False
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -3883,11 +3885,12 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = '0.'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0.'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -3976,10 +3979,10 @@ object PhastModel: TPhastModel
         '')
     end>
   Version = '4.0.0.15'
-  GuiSettings.FrontHeight = 170
+  GuiSettings.FrontHeight = 198
   GuiSettings.Height = 614
-  GuiSettings.FrontX = -6543.898617352821000000
-  GuiSettings.FrontY = -4.230590423059073000
+  GuiSettings.FrontX = -6716.256004958929000000
+  GuiSettings.FrontY = -8.304492311930742000
   GuiSettings.Left = 572
   GuiSettings.MagnificationFront = 0.031910439560439560
   GuiSettings.MagnificationSide = 0.031910439560439560
@@ -3988,10 +3991,10 @@ object PhastModel: TPhastModel
   GuiSettings.SideX = 48.327909499457580000
   GuiSettings.SideY = -1000.000000000000000000
   GuiSettings.Top = 273
-  GuiSettings.TopViewHeight = 279
+  GuiSettings.TopViewHeight = 251
   GuiSettings.TopViewWidth = 759
-  GuiSettings.TopX = -6543.898617352821000000
-  GuiSettings.TopY = 2216.367925340494000000
+  GuiSettings.TopX = -6716.256004958929000000
+  GuiSettings.TopY = 2263.374485596706000000
   GuiSettings.Width = 775
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0

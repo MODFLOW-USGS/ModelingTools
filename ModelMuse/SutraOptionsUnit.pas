@@ -43,6 +43,7 @@ type
     FGeneralizedTransportInteractionType: TGeneralizedTransportInteractionType;
     FUseLakes: boolean;
     FAllNodesLakes: Boolean;
+    FSpecifyLakeBottom: Boolean;
     procedure SetStoredDischargeFraction(const Value: TRealStorage);
     procedure SetLakeOutputCycle(const Value: Integer);
     procedure SetMaxLakeIterations(const Value: Integer);
@@ -83,6 +84,7 @@ type
     procedure SetUSourceSinkLakePresent(const Value: TLakeBoundaryInteraction);
     procedure SetUseLakes(const Value: boolean);
     procedure SetAllNodesLakes(const Value: Boolean);
+    procedure SetSpecifyLakeBottom(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -105,8 +107,9 @@ type
     property MaxLakeIterations: Integer read FMaxLakeIterations
       write SetMaxLakeIterations stored False;
     // NLAKPR
+    // Name is only retained for backwards compatibility.
     property LakeOutputCycle: Integer read FLakeOutputCycle
-      write SetLakeOutputCycle;
+      write SetLakeOutputCycle stored False;
     property StoredRechargeFraction: TRealStorage read FStoredRechargeFraction
       write SetStoredRechargeFraction;
     property StoredDischargeFraction: TRealStorage read FStoredDischargeFraction
@@ -114,6 +117,7 @@ type
     // @name is no longer included in the SUTRA 3.0 input.
     property StoredMinLakeVolume: TRealStorage read FStoredMinLakeVolume
       write SetStoredMinLakeVolume stored False;
+    // RNOLK
     property StoredSubmergedOutput: TRealStorage read FStoredSubmergedOutput
       write SetStoredSubmergedOutput;
     // ILKF
@@ -171,6 +175,9 @@ type
     property UseLakes: boolean read FUseLakes write SetUseLakes stored True;
     property AllNodesLakes: Boolean read FAllNodesLakes write SetAllNodesLakes
       stored True;
+    // CBOT
+    property SpecifyLakeBottom: Boolean read FSpecifyLakeBottom
+      write SetSpecifyLakeBottom stored True;
   end;
 
   TSutraOptions = class(TGoPhastPersistent)
@@ -1581,6 +1588,11 @@ begin
   end;
 end;
 
+procedure TSutraLakeOptions.SetSpecifyLakeBottom(const Value: Boolean);
+begin
+  SetBooleanProperty(FSpecifyLakeBottom, Value);
+end;
+
 procedure TSutraLakeOptions.SetStoredDischargeFraction(const Value: TRealStorage);
 begin
   FStoredDischargeFraction.Assign(Value);
@@ -1610,6 +1622,7 @@ begin
     GeneralizedTransportInteractionType := SourceLake.GeneralizedTransportInteractionType;
     UseLakes := SourceLake.UseLakes;
     AllNodesLakes := SourceLake.AllNodesLakes;
+    SpecifyLakeBottom := SourceLake.SpecifyLakeBottom;
   end
   else
   begin
@@ -1669,7 +1682,7 @@ begin
   RechargeFraction := 0;
   DischargeFraction := 0;
 //  MinLakeVolume := 0;
-  SubmergedOutput := 0;
+  SubmergedOutput := -9e99;
   FluidSourceSinkLakePresent := lbiNoChange;
   USourceSinkLakePresent := lbiNoChange;
   SpecifiedPressureLakePresent := lbiNoChange;
@@ -1680,6 +1693,7 @@ begin
   GeneralizedTransportInteractionType := gtitSpecifiedConcentration;
   UseLakes := False;
   AllNodesLakes := False;
+  SpecifyLakeBottom := False;
 end;
 
 procedure TSutraLakeOptions.SetAllNodesLakes(const Value: Boolean);

@@ -8,7 +8,7 @@ uses System.UITypes,
   SutraOptionsUnit, SutraMeshUnit, ComCtrls, JvExComCtrls,
   JvPageListTreeView, JvPageList, JvExControls, Mask, JvExMask, JvToolEdit,
   JvSpin, JvEditorCommon, JvEditor, ArgusDataEntry, RequiredDataSetsUndoUnit,
-  JvExExtCtrls, JvNetscapeSplitter, Vcl.ImgList;
+  JvExExtCtrls, JvNetscapeSplitter, Vcl.ImgList, RbwController;
 
 type
   TfrmSutraOptions = class(TfrmCustomGoPhast)
@@ -116,9 +116,6 @@ type
     lblRestartInitialConditions: TLabel;
     fedRestartInitialConditions: TJvFilenameEdit;
     jvspLake: TJvStandardPage;
-    grpLakeDataset1: TGroupBox;
-    seLakeOutputCycle: TJvSpinEdit;
-    lblLakeOutputCycle: TLabel;
     grpLakeDataset2: TGroupBox;
     lblDefaultRechargeFrac: TLabel;
     lblDefaultDischargeFrac: TLabel;
@@ -152,6 +149,8 @@ type
     grpGeneral: TGroupBox;
     cbUseLakes: TCheckBox;
     cbAllNodesLakes: TCheckBox;
+    cbSpecifyLakeBotton: TCheckBox;
+    rcLakes: TRbwController;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure seMaxIterationsChange(Sender: TObject);
@@ -170,6 +169,8 @@ type
       Node: TTreeNode; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure jvpltvNavigationMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure EnableLakeBottom(Sender: TObject);
+    procedure cbUseLakesClick(Sender: TObject);
   private
     FGettingData: Boolean;
     FLakeNode: TJvPageIndexNode;
@@ -297,6 +298,12 @@ begin
   end;
 end;
 
+procedure TfrmSutraOptions.cbUseLakesClick(Sender: TObject);
+begin
+  inherited;
+  rcLakes.Enabled := cbUseLakes.Checked;
+end;
+
 procedure TfrmSutraOptions.EnableControls;
 begin
   seMaxIterationsChange(nil);
@@ -306,6 +313,7 @@ begin
   rgTransportClick(nil);
   rgSorptionModelClick(nil);
   rgMeshTypeClick(nil);
+  cbUseLakesClick(nil);
 end;
 
 procedure TfrmSutraOptions.EnableLakeNode;
@@ -500,9 +508,10 @@ begin
     LakeOptions := SutraOptions.LakeOptions;
     cbUseLakes.Checked := LakeOptions.UseLakes;
     cbAllNodesLakes.Checked := LakeOptions.AllNodesLakes;
+    cbSpecifyLakeBotton.Checked := LakeOptions.SpecifyLakeBottom;
 
 //    seLakeMaxIter.AsInteger := LakeOptions.MaxLakeIterations;
-    seLakeOutputCycle.AsInteger := LakeOptions.LakeOutputCycle;
+//    seLakeOutputCycle.AsInteger := LakeOptions.LakeOutputCycle;
     rdeDefaultRechargeFrac.RealValue := LakeOptions.RechargeFraction;
     rdeDefaultDischargeFrac.RealValue := LakeOptions.DischargeFraction;
 //    rdeMinLakeVolume.RealValue := LakeOptions.MinLakeVolume;
@@ -565,6 +574,12 @@ begin
     MessageDlg(StrLakesCanOnlyBeUs, mtInformation, [mbOK], 0);
   end;
 //
+end;
+
+procedure TfrmSutraOptions.EnableLakeBottom(Sender: TObject);
+begin
+  inherited;
+  cbSpecifyLakeBotton.Enabled := rcLakes.Enabled and not cbAllNodesLakes.Checked;
 end;
 
 procedure TfrmSutraOptions.rdeFractionalUpstreamWeightChange(Sender: TObject);
@@ -869,8 +884,9 @@ begin
     LakeOptions := SutraOptions.LakeOptions;
     LakeOptions.UseLakes := cbUseLakes.Checked;
     LakeOptions.AllNodesLakes := cbAllNodesLakes.Checked;
+    LakeOptions.SpecifyLakeBottom := cbSpecifyLakeBotton.Checked;
 //    LakeOptions.MaxLakeIterations := seLakeMaxIter.AsInteger;
-    LakeOptions.LakeOutputCycle := seLakeOutputCycle.AsInteger;
+//    LakeOptions.LakeOutputCycle := seLakeOutputCycle.AsInteger;
     LakeOptions.RechargeFraction := rdeDefaultRechargeFrac.RealValue;
     LakeOptions.DischargeFraction := rdeDefaultDischargeFrac.RealValue;
 //    LakeOptions.MinLakeVolume := rdeMinLakeVolume.RealValue;
@@ -937,7 +953,6 @@ var
   AdjustVerticalExag: Boolean;
   VerticalExag: Double;
 begin
-  inherited;
   AdjustVerticalExag := (FNewMeshType = mtProfile) <> (FOldMeshType = mtProfile);
   if AdjustVerticalExag then
   begin
@@ -973,6 +988,7 @@ begin
     frmGoPhast.frameFrontView.MagnificationChanged := True;
     frmGoPhast.InvalidateAllViews;
   end;
+  inherited;
 end;
 
 procedure TUndoChangeSutraOptions.Undo;
@@ -980,7 +996,6 @@ var
   AdjustVerticalExag: Boolean;
   VerticalExag: Double;
 begin
-  inherited;
   AdjustVerticalExag := (FNewMeshType = mtProfile) <> (FOldMeshType = mtProfile);
   if AdjustVerticalExag then
   begin
@@ -1016,6 +1031,7 @@ begin
     frmGoPhast.frameFrontView.MagnificationChanged := True;
     frmGoPhast.InvalidateAllViews;
   end;
+  inherited;
 end;
 
 end.
