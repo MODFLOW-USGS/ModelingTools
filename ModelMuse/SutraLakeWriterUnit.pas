@@ -4,7 +4,8 @@ interface
 
 uses
   CustomModflowWriterUnit, System.Generics.Collections, PhastModelUnit,
-  SutraOptionsUnit, System.SysUtils, SutraOutputControlUnit, System.Classes;
+  SutraOptionsUnit, System.SysUtils, SutraOutputControlUnit, System.Classes,
+  SutraBoundaryWriterUnit;
 
 type
   TLakeNodeRecord = record
@@ -32,7 +33,7 @@ type
     FLakeOptions: TSutraLakeOptions;
     FHasLakes: Boolean;
     FSutraOutputControl: TSutraOutputControl;
-    FBcsFileNames: TStringList;
+    FBcsFileNames: TLakeInteractionStringLists;
     procedure Evaluate;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -52,7 +53,7 @@ type
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     property HasLakes: Boolean read FHasLakes;
-    procedure WriteFile(const AFileName: string; BcsFileNames: TStringList);
+    procedure WriteFile(const AFileName: string; BcsFileNames: TLakeInteractionStringLists);
   end;
 
 implementation
@@ -365,7 +366,7 @@ begin
   end;
 end;
 
-procedure TSutraLakeWriter.WriteFile(const AFileName: string; BcsFileNames: TStringList);
+procedure TSutraLakeWriter.WriteFile(const AFileName: string; BcsFileNames: TLakeInteractionStringLists);
 var
   NameOfFile: string;
   LakeStageFile: string;
@@ -510,42 +511,41 @@ var
   NBCIU: Integer;
   NBCIPG: Integer;
   NBCIUG: Integer;
+  procedure UpdateCount(const Position: Integer; var Count: Integer);
+  var
+    AStringList: TLakeInteractionStringList;
+    Index: Integer;
+  begin
+    if FBcsFileNames[Position] <> nil then
+    begin
+      AStringList := FBcsFileNames[Position];
+      for Index := 0 to AStringList.Count - 1 do
+      begin
+        if AStringList[Index]  <> '' then
+        begin
+          Inc(Count);
+        end;
+      end;
+    end;
+  end;
 begin
   NBCIF := 1;
-  if FBcsFileNames[0] <> '' then
-  begin
-    Inc(NBCIF);
-  end;
+  UpdateCount(0, NBCIF);
 
   NBCIS := 1;
-  if FBcsFileNames[1] <> '' then
-  begin
-    Inc(NBCIS);
-  end;
+  UpdateCount(1, NBCIS);
 
   NBCIP := 1;
-  if FBcsFileNames[2] <> '' then
-  begin
-    Inc(NBCIP);
-  end;
+  UpdateCount(2, NBCIP);
 
   NBCIU := 1;
-  if FBcsFileNames[3] <> '' then
-  begin
-    Inc(NBCIU);
-  end;
+  UpdateCount(3, NBCIU);
 
   NBCIPG := 1;
-  if FBcsFileNames[4] <> '' then
-  begin
-    Inc(NBCIPG);
-  end;
+  UpdateCount(4, NBCIPG);
 
   NBCIUG := 1;
-  if FBcsFileNames[5] <> '' then
-  begin
-    Inc(NBCIUG);
-  end;
+  UpdateCount(5, NBCIUG);
 
   WriteInteger(NBCIF);
   WriteInteger(NBCIS);
@@ -559,6 +559,8 @@ end;
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet2;
 var
   ILKF: Integer;
+  AStringList: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction;
 begin
   WriteString('# INTERACTIONS WITH FLUID SOURCES');
   NewLine;
@@ -566,122 +568,209 @@ begin
   ILKF := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
   WriteInteger(ILKF);
   NewLine;
-  if FBcsFileNames[0] <> '' then
+  if FBcsFileNames[0] <> nil then
   begin
-    WriteString('''');
-    WriteString(ExtractFileName(FBcsFileNames[0]));
-    WriteString('''');
-    NewLine;
-    WriteInteger(ILKF);
-    NewLine;
+    AStringList := FBcsFileNames[0];
+    for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      if AStringList[Ord(LakeInteraction)] <> '' then
+      begin
+        WriteString('''');
+        WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
+        WriteString('''');
+        ILKF := Ord(LakeInteraction) -1;
+        WriteInteger(ILKF);
+        NewLine;
+      end;
+    end;
   end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet3;
+var
+  AStringList: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction;
+  ILKS: Integer;
 begin
   WriteString('# INTERACTIONS WITH SOLUTE/ENERGY SOURCES');
   NewLine;
   WriteString('''DEFAULT''');
-  WriteInteger(Ord(FLakeOptions.USourceSinkLakePresent)-1);
+  ILKS := Ord(FLakeOptions.USourceSinkLakePresent)-1;
+  WriteInteger(ILKS);
   NewLine;
-  if FBcsFileNames[1] <> '' then
+  if FBcsFileNames[1] <> nil then
   begin
-    WriteString('''');
-    WriteString(ExtractFileName(FBcsFileNames[1]));
-    WriteString('''');
-    NewLine;
-    WriteInteger(Ord(FLakeOptions.USourceSinkLakePresent)-1);
-    NewLine;
+    AStringList := FBcsFileNames[1];
+    for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      if AStringList[Ord(LakeInteraction)] <> '' then
+      begin
+        WriteString('''');
+        WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
+        WriteString('''');
+        ILKS := Ord(LakeInteraction) -1;
+        WriteInteger(ILKS);
+        NewLine;
+      end;
+    end;
   end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet4;
+var
+  AStringList: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction;
+  ILKP: Integer;
 begin
   WriteString('# INTERACTIONS WITH SPECIFIED PRESSURES');
   NewLine;
   WriteString('''DEFAULT''');
-  WriteInteger(Ord(FLakeOptions.SpecifiedPressureLakePresent)-1);
+  ILKP := Ord(FLakeOptions.SpecifiedPressureLakePresent)-1;
+  WriteInteger(ILKP);
   NewLine;
-  if FBcsFileNames[2] <> '' then
+  if FBcsFileNames[2] <> nil then
   begin
-    WriteString('''');
-    WriteString(ExtractFileName(FBcsFileNames[2]));
-    WriteString('''');
-    NewLine;
-    WriteInteger(Ord(FLakeOptions.SpecifiedPressureLakePresent)-1);
-    NewLine;
+    AStringList := FBcsFileNames[2];
+    for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      if AStringList[Ord(LakeInteraction)] <> '' then
+      begin
+        WriteString('''');
+        WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
+        WriteString('''');
+        ILKP := Ord(LakeInteraction) -1;
+        WriteInteger(ILKP);
+        NewLine;
+      end;
+    end;
   end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet5;
+var
+  AStringList: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction;
+  ILKU: Integer;
 begin
   WriteString('# INTERACTIONS WITH CONC/TEMP');
   NewLine;
   WriteString('''DEFAULT''');
-  WriteInteger(Ord(FLakeOptions.SpecifiedULakePresent)-1);
+  ILKU := Ord(FLakeOptions.SpecifiedULakePresent)-1;
+  WriteInteger(ILKU);
   NewLine;
-  if FBcsFileNames[3] <> '' then
+  if FBcsFileNames[3] <> nil then
   begin
-    WriteString('''');
-    WriteString(ExtractFileName(FBcsFileNames[3]));
-    WriteString('''');
-    NewLine;
-    WriteInteger(Ord(FLakeOptions.SpecifiedULakePresent)-1);
-    NewLine;
+    AStringList := FBcsFileNames[3];
+    for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      if AStringList[Ord(LakeInteraction)] <> '' then
+      begin
+        WriteString('''');
+        WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
+        WriteString('''');
+        ILKU := Ord(LakeInteraction) -1;
+        WriteInteger(ILKU);
+        NewLine;
+      end;
+    end;
   end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet6A;
+var
+  AStringList: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction;
+  ILKPG: Integer;
+  NameIndex: Integer;
+  GenLakeInteractionType: TGeneralizedFlowInteractionType;
 begin
   WriteString('# INTERACTIONS WITH GENERALIZED FLOW CONDITIONS');
   NewLine;
   WriteString('''DEFAULT''');
-  WriteInteger(Ord(FLakeOptions.GeneralizedFlowLakePresent)-1);
+  ILKPG := Ord(FLakeOptions.GeneralizedFlowLakePresent)-1;
+  WriteInteger(ILKPG);
   case FLakeOptions.GeneralizedFlowInteractionType of
     gfitFluidSource: WriteString(' ''F''');
     gfitSpecifiedPressure: WriteString(' ''P''');
     else Assert(False);
   end;
   NewLine;
-  if FBcsFileNames[4] <> '' then
+  if FBcsFileNames[4] <> nil then
   begin
-    WriteString('''');
-    WriteString(ExtractFileName(FBcsFileNames[4]));
-    WriteString('''');
-    WriteInteger(Ord(FLakeOptions.GeneralizedFlowLakePresent)-1);
-    case FLakeOptions.GeneralizedFlowInteractionType of
-      gfitFluidSource: WriteString(' ''F''');
-      gfitSpecifiedPressure: WriteString(' ''P''');
-      else Assert(False);
+    AStringList := FBcsFileNames[4];
+    NameIndex := 0;
+    for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      for GenLakeInteractionType := Low(TGeneralizedFlowInteractionType)
+        to High(TGeneralizedFlowInteractionType) do
+      begin
+        if AStringList[NameIndex] <> '' then
+        begin
+          WriteString('''');
+          WriteString(ExtractFileName(AStringList[NameIndex]));
+          WriteString('''');
+          ILKPG := Ord(LakeInteraction) -1;
+          WriteInteger(ILKPG);
+          case GenLakeInteractionType of
+            gfitFluidSource: WriteString(' ''F''');
+            gfitSpecifiedPressure: WriteString(' ''P''');
+            else Assert(False);
+          end;
+          NewLine;
+        end;
+        Inc(NameIndex);
+      end;
     end;
-    NewLine;
   end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeInteractionDataSet6B;
+var
+  AStringList: TLakeInteractionStringList;
+  NameIndex: Integer;
+  LakeInteraction: TLakeBoundaryInteraction;
+  GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
+  ILKUG: Integer;
+//  GenLakeInteractionType: TGeneralizedFlowInteractionType;
 begin
   WriteString('# INTERACTIONS WITH GENERALIZED TRANSPORT CONDITIONS');
   NewLine;
   WriteString('''DEFAULT''');
-  WriteInteger(Ord(FLakeOptions.GeneralizedTransportLakePresent)-1);
+  ILKUG := Ord(FLakeOptions.GeneralizedTransportLakePresent)-1;
+  WriteInteger(ILKUG);
   case FLakeOptions.GeneralizedTransportInteractionType of
     gtitSoluteSource: WriteString(' ''S''');
     gtitSpecifiedConcentration: WriteString(' ''U''');
     else Assert(False);
   end;
   NewLine;
-  if FBcsFileNames[5] <> '' then
+
+  if FBcsFileNames[5] <> nil then
   begin
-    WriteString('''');
-    WriteString(ExtractFileName(FBcsFileNames[5]));
-    WriteString('''');
-    WriteInteger(Ord(FLakeOptions.GeneralizedTransportLakePresent)-1);
-    case FLakeOptions.GeneralizedTransportInteractionType of
-      gtitSoluteSource: WriteString(' ''S''');
-      gtitSpecifiedConcentration: WriteString(' ''U''');
-      else Assert(False);
+    AStringList := FBcsFileNames[5];
+    NameIndex := 0;
+    for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      for GenLakeTransInteractionType := Low(TGeneralizedTransportInteractionType)
+        to High(TGeneralizedTransportInteractionType) do
+      begin
+        if AStringList[NameIndex] <> '' then
+        begin
+          WriteString('''');
+          WriteString(ExtractFileName(AStringList[NameIndex]));
+          WriteString('''');
+          ILKUG := Ord(LakeInteraction) -1;
+          WriteInteger(ILKUG);
+          case GenLakeTransInteractionType of
+            gtitSoluteSource: WriteString(' ''S''');
+            gtitSpecifiedConcentration: WriteString(' ''U''');
+            else Assert(False);
+          end;
+          NewLine;
+        end;
+        Inc(NameIndex);
+      end;
     end;
-    NewLine;
   end;
 end;
 

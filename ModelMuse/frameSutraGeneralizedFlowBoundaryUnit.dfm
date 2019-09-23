@@ -1,46 +1,103 @@
 inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
-  Width = 458
-  Height = 275
-  ExplicitWidth = 458
-  ExplicitHeight = 275
+  Width = 587
+  Height = 423
+  ExplicitWidth = 587
+  ExplicitHeight = 423
   inherited pnlBottom: TPanel
-    Top = 229
-    Width = 458
+    Top = 310
+    Width = 587
+    Height = 113
     TabOrder = 3
-    ExplicitTop = 229
-    ExplicitWidth = 458
+    ExplicitTop = 296
+    ExplicitWidth = 587
+    ExplicitHeight = 113
     DesignSize = (
-      458
-      46)
+      587
+      113)
+    inherited lblNumTimes: TLabel
+      Left = 61
+      Top = 79
+      ExplicitLeft = 61
+      ExplicitTop = 79
+    end
+    object lblGeneralizedFlowPresent: TLabel [1]
+      Left = 11
+      Top = 19
+      Width = 150
+      Height = 13
+      Caption = 'If lake water present or absent'
+    end
+    object lblLakeGeneralizedFlowType: TLabel [2]
+      Left = 320
+      Top = 19
+      Width = 78
+      Height = 13
+      Caption = 'Interaction type'
+    end
     inherited seNumberOfTimes: TJvSpinEdit
+      Left = 5
+      Top = 70
       Height = 21
       TabOrder = 1
+      ExplicitLeft = 5
+      ExplicitTop = 70
       ExplicitHeight = 21
     end
     inherited btnDelete: TBitBtn
-      Left = 374
-      Top = 5
+      Left = 500
+      Top = 70
       TabOrder = 0
-      ExplicitLeft = 374
-      ExplicitTop = 5
+      ExplicitLeft = 500
+      ExplicitTop = 70
     end
     inherited btnInsert: TBitBtn
-      Left = 286
+      Left = 412
+      Top = 70
       TabOrder = 2
-      ExplicitLeft = 286
+      ExplicitLeft = 412
+      ExplicitTop = 70
+    end
+    object comboGeneralizedFlowPresent: TComboBox
+      Left = 3
+      Top = 43
+      Width = 286
+      Height = 21
+      Style = csDropDownList
+      Enabled = False
+      ItemIndex = 1
+      TabOrder = 3
+      Text = 'No change (0)'
+      Items.Strings = (
+        'Apply if lake water absent (-1)'
+        'No change (0)'
+        'Apply if lake water present (1)')
+    end
+    object comboLakeGeneralizedFlowType: TComboBox
+      Left = 320
+      Top = 43
+      Width = 262
+      Height = 21
+      Style = csDropDownList
+      Enabled = False
+      ItemIndex = 0
+      TabOrder = 4
+      Text = 'Like fluid source/sink (F)'
+      Items.Strings = (
+        'Like fluid source/sink (F)'
+        'Like specified pressure (P)')
     end
   end
   inherited pnlGrid: TPanel
     Top = 136
-    Width = 458
-    Height = 93
+    Width = 587
+    Height = 174
     TabOrder = 2
     ExplicitTop = 136
     ExplicitWidth = 458
     ExplicitHeight = 93
     inherited rdgSutraFeature: TRbwDataGrid4
-      Width = 456
-      Height = 91
+      Width = 585
+      Height = 172
       ColCount = 11
       OnMouseUp = rdgSutraFeatureMouseUp
       OnSelectCell = rdgSutraFeatureSelectCell
@@ -307,12 +364,12 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     end
   end
   inherited pnlTop: TPanel
-    Width = 458
+    Width = 587
     Height = 86
     ExplicitWidth = 458
     ExplicitHeight = 86
     DesignSize = (
-      458
+      587
       86)
     inherited lblSchedule: TLabel
       Left = 14
@@ -321,13 +378,13 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       ExplicitTop = 24
     end
     inherited pnlCaption: TPanel
-      Width = 456
+      Width = 585
       ExplicitWidth = 456
     end
     inherited comboSchedule: TComboBox
       Left = 8
       Top = 46
-      Width = 429
+      Width = 558
       ExplicitLeft = 8
       ExplicitTop = 46
       ExplicitWidth = 429
@@ -336,11 +393,12 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
   object pnlEditGrid: TPanel
     Left = 0
     Top = 86
-    Width = 458
+    Width = 587
     Height = 50
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 458
     object lblFormula: TLabel
       Left = 136
       Top = 5

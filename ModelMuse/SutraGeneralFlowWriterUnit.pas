@@ -7,7 +7,7 @@ uses System.UITypes,
   System.Generics.Collections, SutraGeneralFlowNodesUnit,
   System.Generics.Defaults, SutraBoundaryUnit, PhastModelUnit,
   SutraGeneralBoundaryUnit, RealListUnit, IntListUnit, GoPhastTypes,
-  Vcl.Dialogs, System.Classes;
+  Vcl.Dialogs, System.Classes, SutraBoundaryWriterUnit, SutraOptionsUnit;
 
 type
   TGeneralFlowNodes = class(TList<TGeneralFlowNode>, IGeneralFlowNodes)
@@ -28,6 +28,15 @@ type
     property TimeIndex: Integer read GetTimeIndex write SetTimeIndex;
   end;
 
+  TGenFlowInteractionStringList = class(TLakeInteractionStringList)
+  private
+    FFlowInteraction: TGeneralizedFlowInteractionType;
+    procedure SetFlowInteraction(const Value: TGeneralizedFlowInteractionType);
+  public
+    property FlowInteraction: TGeneralizedFlowInteractionType
+      read FFlowInteraction write SetFlowInteraction;
+  end;
+
   TSutraGeneralFlowWriter = class(TCustomFileWriter)
   private
     FNameOfFile: string;
@@ -42,6 +51,7 @@ type
     FGeneralBoundaries: TList<IGeneralFlowNodes>;
     FExitSpecificationLists: TObjectList<TSutraExitSpecificationMethodList>;
     FTimes: TRealList;
+    FBcsFileNames: TGenFlowInteractionStringList;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -52,7 +62,9 @@ type
   public
     constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
-    procedure WriteFile(AFileName: string; GeneralBoundaries: TList<IGeneralFlowNodes>; BcsFileNames: TStringList);
+    procedure WriteFile(AFileName: string;
+      GeneralBoundaries: TList<IGeneralFlowNodes>;
+      BcsFileNames: TGenFlowInteractionStringList);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralFlowNodes>);
   end;
 
@@ -62,8 +74,8 @@ const
 implementation
 
 uses
-  SutraOptionsUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit,
-  SutraBoundaryWriterUnit, SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
+  frmErrorsAndWarningsUnit, ScreenObjectUnit,
+  SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
   SutraMeshUnit, SutraFileWriterUnit;
 
 resourcestring
@@ -302,6 +314,14 @@ begin
     ABoundary := ScreenObject.SutraBoundaries.GeneralFlowBoundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
+      if (FBcsFileNames <> nil)
+        and ((FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction)
+        or (FBcsFileNames.FlowInteraction <> ABoundary.LakeInteractionType))
+        then
+      begin
+        Continue;
+      end;
+
       if not TransientAllowed and (ABoundary.Values.Count > 1) then
       begin
         frmErrorsAndWarnings.AddWarning(Model, RootError, ScreenObject.Name,
@@ -691,13 +711,19 @@ begin
 end;
 
 procedure TSutraGeneralFlowWriter.WriteFile(AFileName: string;
-  GeneralBoundaries: TList<IGeneralFlowNodes>; BcsFileNames: TStringList);
+  GeneralBoundaries: TList<IGeneralFlowNodes>; BcsFileNames: TGenFlowInteractionStringList);
 var
   TimeIndex: Integer;
+  LakeExtension: string;
+  FlowTypeExtension: string;
 begin
-  if Model.ModelSelection = msSutra22 then
+  FBcsFileNames := BcsFileNames;
+  if (Model.ModelSelection = msSutra22) then
   begin
-    BcsFileNames.Add('');
+    if BcsFileNames <> nil then
+    begin
+      BcsFileNames.Add('');
+    end;
     Exit;
   end;
 
@@ -705,12 +731,51 @@ begin
 
   Evaluate;
 
-  if FGeneralBoundaries.count > 0 then
+
+  if FPressure1TimeLists.count > 0 then
   begin
-    FNameOfFile := FileName(AFileName);
+    if BcsFileNames <> nil then
+    begin
+      case BcsFileNames.LakeInteraction of
+        lbiActivate:
+          begin
+            LakeExtension := '.ActivateLake';
+          end;
+        lbiNoChange:
+          begin
+            LakeExtension := '.NoChangeLake';
+          end;
+        lbiInactivate:
+          begin
+            LakeExtension := '.InactivateLake';
+          end;
+      end;
+
+      case BcsFileNames.FlowInteraction of
+        gfitFluidSource:
+          begin
+            FlowTypeExtension := '.F'
+          end;
+        gfitSpecifiedPressure:
+          begin
+            FlowTypeExtension := '.P'
+          end;
+      end;
+    end
+    else
+    begin
+      LakeExtension := '';
+      FlowTypeExtension := ''
+    end;
+
+    FNameOfFile := ChangeFileExt(AFileName, '') + LakeExtension
+      + FlowTypeExtension + Extension;
     OpenFile(FNameOfFile);
     try
-      BcsFileNames.Add(FNameOfFile);
+      if BcsFileNames <> nil then
+      begin
+        BcsFileNames.Add(FNameOfFile);
+      end;
       WriteDataSet0;
       WriteDataSet1;
       for TimeIndex := 0 to FTimes.Count - 1 do
@@ -726,8 +791,19 @@ begin
   end
   else
   begin
-    BcsFileNames.Add('')
+    if BcsFileNames <> nil then
+    begin
+      BcsFileNames.Add('')
+    end;
   end;
+end;
+
+{ TGenFlowInteractionStringList }
+
+procedure TGenFlowInteractionStringList.SetFlowInteraction(
+  const Value: TGeneralizedFlowInteractionType);
+begin
+  FFlowInteraction := Value;
 end;
 
 end.

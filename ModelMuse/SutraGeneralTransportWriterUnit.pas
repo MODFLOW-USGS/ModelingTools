@@ -7,7 +7,7 @@ uses
   System.Generics.Collections, SutraGeneralFlowNodesUnit,
   System.Generics.Defaults, SutraBoundaryUnit, PhastModelUnit,
   SutraGenTransBoundUnit, RealListUnit, IntListUnit, GoPhastTypes, Vcl.Dialogs,
-  System.Classes;
+  System.Classes, SutraBoundaryWriterUnit, SutraOptionsUnit;
 
 type
   TGeneralTransportNodes = class(TList<TGeneralTransportNode>, IGeneralTransportNodes)
@@ -28,6 +28,15 @@ type
     property TimeIndex: Integer read GetTimeIndex write SetTimeIndex;
   end;
 
+  TGenTransportInteractionStringList = class(TLakeInteractionStringList)
+  private
+    FTransportInteraction: TGeneralizedTransportInteractionType;
+    procedure SetTransportInteraction(const Value: TGeneralizedTransportInteractionType);
+  public
+    property TransportInteraction: TGeneralizedTransportInteractionType
+      read FTransportInteraction write SetTransportInteraction;
+  end;
+
   TSutraGeneralTransportWriter = class(TCustomFileWriter)
   private
     FNameOfFile: string;
@@ -37,6 +46,7 @@ type
     FOutflowUTimeLists: TObjectList<TSutraTimeList>;
     FGeneralBoundaries: TList<IGeneralTransportNodes>;
     FTimes: TRealList;
+    FBcsFileNames: TGenTransportInteractionStringList;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -48,7 +58,7 @@ type
     constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(AFileName: string;
-      GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TStringList);
+      GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TGenTransportInteractionStringList);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralTransportNodes>);
   end;
 
@@ -58,8 +68,8 @@ const
 implementation
 
 uses
-  SutraOptionsUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit,
-  SutraBoundaryWriterUnit, SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
+  frmErrorsAndWarningsUnit, ScreenObjectUnit,
+  SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
   SutraMeshUnit, SutraFileWriterUnit;
 
 resourcestring
@@ -273,6 +283,14 @@ begin
     ABoundary := ScreenObject.SutraBoundaries.GenTransportBoundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
+      if (FBcsFileNames <> nil)
+        and ((FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction)
+        or (FBcsFileNames.TransportInteraction <> ABoundary.LakeInteractionType))
+        then
+      begin
+        Continue;
+      end;
+
       if not TransientAllowed and (ABoundary.Values.Count > 1) then
       begin
         frmErrorsAndWarnings.AddWarning(Model, RootError, ScreenObject.Name,
@@ -579,26 +597,69 @@ begin
 end;
 
 procedure TSutraGeneralTransportWriter.WriteFile(AFileName: string;
-  GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TStringList);
+  GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TGenTransportInteractionStringList);
 var
   TimeIndex: Integer;
+  LakeExtension: string;
+  TransportTypeExtension: string;
 begin
   if Model.ModelSelection = msSutra22 then
   begin
-    BcsFileNames.Add('');
+    if BcsFileNames <> nil then
+    begin
+      BcsFileNames.Add('');
+    end;
     Exit;
   end;
+  FBcsFileNames := BcsFileNames;
 
   FGeneralBoundaries := GeneralBoundaries;
 
   Evaluate;
 
-  if FGeneralBoundaries.Count > 0 then
+  if FU1TimeLists.Count > 0 then
   begin
-    FNameOfFile := FileName(AFileName);
+    if BcsFileNames <> nil then
+    begin
+      case BcsFileNames.LakeInteraction of
+        lbiActivate:
+          begin
+            LakeExtension := '.ActivateLake';
+          end;
+        lbiNoChange:
+          begin
+            LakeExtension := '.NoChangeLake';
+          end;
+        lbiInactivate:
+          begin
+            LakeExtension := '.InactivateLake';
+          end;
+      end;
+
+      case BcsFileNames.TransportInteraction of
+        gtitSoluteSource:
+          begin
+            TransportTypeExtension := '.S'
+          end;
+        gtitSpecifiedConcentration:
+          begin
+            TransportTypeExtension := '.U'
+          end;
+      end;
+    end
+    else
+    begin
+      LakeExtension := '';
+      TransportTypeExtension := ''
+    end;
+    FNameOfFile := ChangeFileExt(AFileName, '') + LakeExtension
+      + TransportTypeExtension + Extension;
     OpenFile(FNameOfFile);
     try
-      BcsFileNames.Add(FNameOfFile);
+      if BcsFileNames <> nil then
+      begin
+        BcsFileNames.Add(FNameOfFile);
+      end;
       WriteDataSet0;
       WriteDataSet1;
       for TimeIndex := 0 to FTimes.Count - 1 do
@@ -614,8 +675,19 @@ begin
   end
   else
   begin
-    BcsFileNames.Add('');
+    if BcsFileNames <> nil then
+    begin
+      BcsFileNames.Add('');
+    end;
   end;
+end;
+
+{ TGenTransportInteractionStringList }
+
+procedure TGenTransportInteractionStringList.SetTransportInteraction(
+  const Value: TGeneralizedTransportInteractionType);
+begin
+  FTransportInteraction := Value;
 end;
 
 end.

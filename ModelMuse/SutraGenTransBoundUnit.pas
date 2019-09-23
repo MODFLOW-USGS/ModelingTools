@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, FormulaManagerUnit, GoPhastTypes,
   OrderedCollectionUnit, RbwParser, SutraBoundaryUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, SutraOptionsUnit;
 
 type
   TSutraGenTransportItem = class(TCustomBoundaryItem)
@@ -107,14 +107,23 @@ type
   end;
 
   TSutraGeneralTransportBoundary = class(TSutraBoundary)
+  private
+    FLakeInteractionType: TGeneralizedTransportInteractionType;
+    procedure SetLakeInteractionType(
+      const Value: TGeneralizedTransportInteractionType);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
   public
+    procedure Assign(Source: TPersistent); override;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
+  published
+    property LakeInteractionType: TGeneralizedTransportInteractionType
+      read FLakeInteractionType write SetLakeInteractionType stored True;
   end;
 
   TSutraGeneralTransBoundaryList = TList<TSutraGeneralTransportBoundary>;
@@ -520,6 +529,16 @@ end;
 
 { TSutraGeneralTransportBoundary }
 
+procedure TSutraGeneralTransportBoundary.Assign(Source: TPersistent);
+begin
+  if Source is TSutraGeneralTransportBoundary then
+  begin
+    LakeInteractionType := TSutraGeneralTransportBoundary(Source).LakeInteractionType
+  end;
+  inherited;
+
+end;
+
 procedure TSutraGeneralTransportBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
@@ -534,12 +553,29 @@ begin
   result := TSutraGeneralTransportCollection;
 end;
 
+constructor TSutraGeneralTransportBoundary.Create(Model: TBaseModel;
+  ScreenObject: TObject);
+begin
+  inherited;
+  FLakeInteractionType := gtitSoluteSource;
+end;
+
 procedure TSutraGeneralTransportBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 begin
   inherited;
   // does this need to change?
   Assert(False);
+end;
+
+procedure TSutraGeneralTransportBoundary.SetLakeInteractionType(
+  const Value: TGeneralizedTransportInteractionType);
+begin
+  if FLakeInteractionType <> Value then
+  begin
+    FLakeInteractionType := Value;
+    InvalidateModel;
+  end;
 end;
 
 { TSutraGeneralFlowTimeLink }

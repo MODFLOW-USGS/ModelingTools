@@ -60,8 +60,8 @@ type
     FFileName: string;
     FSchedules: TStringList;
     FObservations: TStringList;
-    FGeneralFlowNodes: TList<IGeneralFlowNodes>;
-    FGeneralTransportNodes: TList<IGeneralTransportNodes>;
+    FGeneralFlowNodes: TObjectList<TList<IGeneralFlowNodes>>;
+    FGeneralTransportNodes: TObjectList<TList<IGeneralTransportNodes>>;
     F_NN: Integer;
     FHasLakes: Boolean;
     procedure WriteDataSet0;
@@ -106,8 +106,8 @@ type
       MassEnergySourceNodes, SpecifiedPressureNodes,
       SpecifiedTempConcNodes: IBoundaryNodes; NOBS: integer;
       Schedules, Observations: TStringList;
-      GeneralFlowNodes: TList<IGeneralFlowNodes>;
-      GeneralTransportNodes: TList<IGeneralTransportNodes>);
+      GeneralFlowNodes: TObjectList<TList<IGeneralFlowNodes>>;
+      GeneralTransportNodes: TObjectList<TList<IGeneralTransportNodes>>);
   end;
 
 
@@ -1100,45 +1100,93 @@ var
   NodeArray: TArray<TGeneralFlowNode>;
   NodeIndex: Integer;
   ANode: TGeneralFlowNode;
+  ListIndex: Integer;
+  NodeList: TList<IGeneralFlowNodes>;
+  FoundFirst: Boolean;
 begin
   if Model.ModelSelection = msSutra22 then
   begin
     Exit;
   end;
-  if FGeneralFlowNodes.Count > 0 then
+  FoundFirst := False;
+  for ListIndex := 0 to FGeneralFlowNodes.Count - 1 do
   begin
-    FlowNodes := FGeneralFlowNodes[0];
-    if FlowNodes.Count > 0 then
+    NodeList := FGeneralFlowNodes[ListIndex];
+    if NodeList.Count > 0 then
     begin
-      WriteCommentLine('Data set 21A');
-      NodeArray := FlowNodes.ToArray;
-      for NodeIndex := 0 to Length(NodeArray) - 1 do
+      FlowNodes := NodeList[0];
+      if FlowNodes.Count > 0 then
       begin
-        ANode := NodeArray[NodeIndex];
-        if ANode.Active and (FlowNodes.TimeIndex <= 1) then
+        if not FoundFirst then
         begin
-          WriteInteger(ANode.NodeNumber+1);
-          WriteFloat(ANode.P1.Value);
-          WriteFloat(ANode.Q1.Value);
-          WriteFloat(ANode.P2.Value);
-          WriteFloat(ANode.Q2.Value);
-          WriteLimit(ANode.Limit1);
-          WriteLimit(ANode.Limit2);
-          WriteFloat(ANode.U1.Value);
-          WriteExitSpec(ANode.ExitSpecification);
-          WriteFloat(ANode.U2.Value);
-        end
-        else
-        begin
-          WriteInteger(-(ANode.NodeNumber+1));
+          WriteCommentLine('Data set 21A');
+          FoundFirst := True;
         end;
-        NewLine;
-      end;
-      WriteString('0');
-      NewLine;
-
+        NodeArray := FlowNodes.ToArray;
+        for NodeIndex := 0 to Length(NodeArray) - 1 do
+        begin
+          ANode := NodeArray[NodeIndex];
+          if ANode.Active and (FlowNodes.TimeIndex <= 1) then
+          begin
+            WriteInteger(ANode.NodeNumber+1);
+            WriteFloat(ANode.P1.Value);
+            WriteFloat(ANode.Q1.Value);
+            WriteFloat(ANode.P2.Value);
+            WriteFloat(ANode.Q2.Value);
+            WriteLimit(ANode.Limit1);
+            WriteLimit(ANode.Limit2);
+            WriteFloat(ANode.U1.Value);
+            WriteExitSpec(ANode.ExitSpecification);
+            WriteFloat(ANode.U2.Value);
+          end
+          else
+          begin
+            WriteInteger(-(ANode.NodeNumber+1));
+          end;
+          NewLine;
+        end;
+      end
     end;
   end;
+  if FoundFirst then
+  begin
+    WriteString('0');
+    NewLine;
+  end;
+//  if FGeneralFlowNodes.Count > 0 then
+//  begin
+//    FlowNodes := FGeneralFlowNodes[0];
+//    if FlowNodes.Count > 0 then
+//    begin
+//      WriteCommentLine('Data set 21A');
+//      NodeArray := FlowNodes.ToArray;
+//      for NodeIndex := 0 to Length(NodeArray) - 1 do
+//      begin
+//        ANode := NodeArray[NodeIndex];
+//        if ANode.Active and (FlowNodes.TimeIndex <= 1) then
+//        begin
+//          WriteInteger(ANode.NodeNumber+1);
+//          WriteFloat(ANode.P1.Value);
+//          WriteFloat(ANode.Q1.Value);
+//          WriteFloat(ANode.P2.Value);
+//          WriteFloat(ANode.Q2.Value);
+//          WriteLimit(ANode.Limit1);
+//          WriteLimit(ANode.Limit2);
+//          WriteFloat(ANode.U1.Value);
+//          WriteExitSpec(ANode.ExitSpecification);
+//          WriteFloat(ANode.U2.Value);
+//        end
+//        else
+//        begin
+//          WriteInteger(-(ANode.NodeNumber+1));
+//        end;
+//        NewLine;
+//      end;
+//      WriteString('0');
+//      NewLine;
+//
+//    end;
+//  end;
 end;
 
 procedure TSutraInputWriter.WriteDataSet21B;
@@ -1147,39 +1195,83 @@ var
   NodeArray: TArray<TGeneralTransportNode>;
   NodeIndex: Integer;
   ANode: TGeneralTransportNode;
+  FoundFirst: Boolean;
+  ListIndex: Integer;
+  TransList: TList<IGeneralTransportNodes>;
 begin
   if Model.ModelSelection = msSutra22 then
   begin
     Exit;
   end;
-  if FGeneralTransportNodes.Count > 0 then
+  FoundFirst := False;
+  for ListIndex := 0 to FGeneralTransportNodes.Count - 1 do
   begin
-    TransportNodes := FGeneralTransportNodes[0];
-    if TransportNodes.Count > 0 then
+    TransList := FGeneralTransportNodes[ListIndex];
+    if TransList.Count > 0 then
     begin
-      WriteCommentLine('Data set 21B');
-      NodeArray := TransportNodes.ToArray;
-      for NodeIndex := 0 to Length(NodeArray) - 1 do
+      TransportNodes := TransList[0];
+      if TransportNodes.Count > 0 then
       begin
-        ANode := NodeArray[NodeIndex];
-        if ANode.Active and (TransportNodes.TimeIndex <= 1) then
+        if not FoundFirst then
         begin
-          WriteInteger(ANode.NodeNumber+1);
-          WriteFloat(ANode.FUValue1.Value);
-          WriteFloat(ANode.FSoluteEnergyInflow.Value);
-          WriteFloat(ANode.FUValue2.Value);
-          WriteFloat(ANode.FSoluteEnergyOutflow.Value);
-        end
-        else
-        begin
-          WriteInteger(-(ANode.NodeNumber+1));
+          WriteCommentLine('Data set 21B');
+          FoundFirst := True;
         end;
-        NewLine;
+        NodeArray := TransportNodes.ToArray;
+        for NodeIndex := 0 to Length(NodeArray) - 1 do
+        begin
+          ANode := NodeArray[NodeIndex];
+          if ANode.Active and (TransportNodes.TimeIndex <= 1) then
+          begin
+            WriteInteger(ANode.NodeNumber+1);
+            WriteFloat(ANode.FUValue1.Value);
+            WriteFloat(ANode.FSoluteEnergyInflow.Value);
+            WriteFloat(ANode.FUValue2.Value);
+            WriteFloat(ANode.FSoluteEnergyOutflow.Value);
+          end
+          else
+          begin
+            WriteInteger(-(ANode.NodeNumber+1));
+          end;
+          NewLine;
+        end;
       end;
-      WriteString('0');
-      NewLine;
     end;
   end;
+  if FoundFirst then
+  begin
+    WriteString('0');
+    NewLine;
+  end;
+
+//  if FGeneralTransportNodes.Count > 0 then
+//  begin
+//    TransportNodes := FGeneralTransportNodes[0];
+//    if TransportNodes.Count > 0 then
+//    begin
+//      WriteCommentLine('Data set 21B');
+//      NodeArray := TransportNodes.ToArray;
+//      for NodeIndex := 0 to Length(NodeArray) - 1 do
+//      begin
+//        ANode := NodeArray[NodeIndex];
+//        if ANode.Active and (TransportNodes.TimeIndex <= 1) then
+//        begin
+//          WriteInteger(ANode.NodeNumber+1);
+//          WriteFloat(ANode.FUValue1.Value);
+//          WriteFloat(ANode.FSoluteEnergyInflow.Value);
+//          WriteFloat(ANode.FUValue2.Value);
+//          WriteFloat(ANode.FSoluteEnergyOutflow.Value);
+//        end
+//        else
+//        begin
+//          WriteInteger(-(ANode.NodeNumber+1));
+//        end;
+//        NewLine;
+//      end;
+//      WriteString('0');
+//      NewLine;
+//    end;
+//  end;
 end;
 
 procedure TSutraInputWriter.WriteDataSet22;
@@ -1369,6 +1461,9 @@ var
   NSOU: Integer;
   NPBG: Integer;
   NUBG: Integer;
+  ListIndex: Integer;
+  AFlowList: TList<IGeneralFlowNodes>;
+  ATransportList: TList<IGeneralTransportNodes>;
 begin
   WriteCommentLine('Data set 3');
   NN := 0;
@@ -1390,21 +1485,34 @@ begin
   NUBC := FSpecifiedTempConcNodes.Count;
   NSOP := FFluidSourceNodes.Count;
   NSOU := FMassEnergySourceNodes.Count;
-  if Assigned(FGeneralFlowNodes) and (FGeneralFlowNodes.Count > 0)  then
-  begin
-    NPBG := FGeneralFlowNodes[0].Count;
-  end
-  else
+
+  if Model.ModelSelection <> msSutra22 then
   begin
     NPBG := 0;
-  end;
-  if Assigned(FGeneralTransportNodes) and (FGeneralTransportNodes.Count > 0)  then
-  begin
-    NUBG := FGeneralTransportNodes[0].Count;
-  end
-  else
-  begin
+    if Assigned(FGeneralFlowNodes) and (FGeneralFlowNodes.Count > 0)  then
+    begin
+      for ListIndex := 0 to FGeneralFlowNodes.Count - 1 do
+      begin
+        AFlowList := FGeneralFlowNodes[ListIndex];
+        if AFlowList.Count > 0 then
+        begin
+          NPBG := NPBG + AFlowList[0].Count;
+        end;
+      end;
+    end;
+
     NUBG := 0;
+    if Assigned(FGeneralTransportNodes) and (FGeneralTransportNodes.Count > 0)  then
+    begin
+      for ListIndex := 0 to FGeneralTransportNodes.Count - 1 do
+      begin
+        ATransportList := FGeneralTransportNodes[ListIndex];
+        if ATransportList.Count > 0 then
+        begin
+          NUBG := NUBG + ATransportList[0].Count;
+        end;
+      end;
+    end;
   end;
 
   WriteInteger(NN);
@@ -1862,8 +1970,8 @@ procedure TSutraInputWriter.WriteFile(FileName: string; FluidSourceNodes,
   MassEnergySourceNodes, SpecifiedPressureNodes,
   SpecifiedTempConcNodes: IBoundaryNodes; NOBS: integer;
   Schedules, Observations: TStringList;
-  GeneralFlowNodes: TList<IGeneralFlowNodes>;
-  GeneralTransportNodes: TList<IGeneralTransportNodes>);
+  GeneralFlowNodes: TObjectList<TList<IGeneralFlowNodes>>;
+  GeneralTransportNodes: TObjectList<TList<IGeneralTransportNodes>>);
 begin
 
   frmErrorsAndWarnings.BeginUpdate;

@@ -19,6 +19,10 @@ type
     rdeFormula: TRbwDataEntry;
     comboLimit: TJvImageComboBox;
     comboExit: TJvImageComboBox;
+    lblGeneralizedFlowPresent: TLabel;
+    comboGeneralizedFlowPresent: TComboBox;
+    lblLakeGeneralizedFlowType: TLabel;
+    comboLakeGeneralizedFlowType: TComboBox;
     procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgSutraFeatureBeforeDrawCell(Sender: TObject; ACol,
@@ -40,6 +44,7 @@ type
     FBoundariesTheSame: Boolean;
     procedure InitializeColumns;
     procedure GetScheduleName(BoundaryList: TSutraGeneralFlowBoundaryList);
+    procedure GetLakeInteractions(BoundaryList: TSutraGeneralFlowBoundaryList);
     procedure GetBoundaryValues(BoundaryList: TSutraGeneralFlowBoundaryList);
     procedure SetBoundaryValues(BoundValues: TSutraGeneralFlowCollection);
     procedure DisplayBoundaries(BoundColl: TSutraGeneralFlowCollection);
@@ -62,7 +67,8 @@ implementation
 uses
   SutraBoundaryUnit, SutraBoundariesUnit, SutraTimeScheduleUnit,
   AdjustSutraBoundaryValuesUnit, ScreenObjectUnit, System.Generics.Collections,
-  frmGoPhastUnit, frmErrorsAndWarningsUnit, GoPhastTypes, frmCustomGoPhastUnit;
+  frmGoPhastUnit, frmErrorsAndWarningsUnit, GoPhastTypes, frmCustomGoPhastUnit,
+  SutraOptionsUnit;
 
 resourcestring
   StrSUTRAGeneralFlowB = 'SUTRA General Flow Boundary';
@@ -240,6 +246,7 @@ begin
       end;
 
       GetScheduleName(BoundaryList);
+      GetLakeInteractions(BoundaryList);
       GetBoundaryValues(BoundaryList);
 
     finally
@@ -249,6 +256,63 @@ begin
     rdgSutraFeature.EndUpdate;
   end;
   LayoutMultiEditControls;
+end;
+
+procedure TframeSutraGeneralizedFlowBoundary.GetLakeInteractions(
+  BoundaryList: TSutraGeneralFlowBoundaryList);
+var
+//  ScheduleName: AnsiString;
+  Same: Boolean;
+  FirstBoundary: TSutraGeneralFlowBoundary;
+//  ABoundColl: TSutraGeneralFlowCollection;
+//  BoundColl: TSutraGeneralFlowCollection;
+  Index: Integer;
+  ABoundary: TSutraGeneralFlowBoundary;
+  LakeInteraction: TLakeBoundaryInteraction;
+  LakeInteractionType: TGeneralizedFlowInteractionType;
+begin
+  FirstBoundary := BoundaryList[0];
+//  BoundColl := FirstBoundary.Values as TSutraGeneralFlowCollection;
+  LakeInteraction := FirstBoundary.LakeInteraction;
+  Same := True;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    Same := LakeInteraction = ABoundary.LakeInteraction;
+    if not Same then
+    begin
+      Break;
+    end;
+  end;
+  if Same then
+  begin
+    comboGeneralizedFlowPresent.ItemIndex := Ord(LakeInteraction);
+  end
+  else
+  begin
+    comboGeneralizedFlowPresent.ItemIndex := 1
+  end;
+
+  LakeInteractionType := FirstBoundary.LakeInteractionType;
+  Same := True;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    Same := LakeInteractionType = ABoundary.LakeInteractionType;
+    if not Same then
+    begin
+      Break;
+    end;
+  end;
+  if Same then
+  begin
+    comboLakeGeneralizedFlowType.ItemIndex := Ord(LakeInteractionType);
+  end
+  else
+  begin
+    comboLakeGeneralizedFlowType.ItemIndex := 1
+  end;
+
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.GetScheduleName(
@@ -585,6 +649,18 @@ begin
       else
       begin
         BoundValues.ScheduleName := '';
+      end;
+
+      if comboGeneralizedFlowPresent.ItemIndex >= 0 then
+      begin
+        ABoundary.LakeInteraction :=
+          TLakeBoundaryInteraction(comboGeneralizedFlowPresent.ItemIndex);
+      end;
+
+      if comboLakeGeneralizedFlowType.ItemIndex >= 0 then
+      begin
+        ABoundary.LakeInteractionType :=
+          TGeneralizedFlowInteractionType(comboLakeGeneralizedFlowType.ItemIndex);
       end;
 
       SetBoundaryValues(BoundValues);

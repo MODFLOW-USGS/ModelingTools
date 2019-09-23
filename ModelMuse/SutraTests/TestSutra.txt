@@ -63,11 +63,11 @@ Island3D_InitialPressure.gpt
 	Archive\usgs.Island3D_InitialPressure.reference
 SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.axml
-	Archive\SutraGenBoundLakeTest.GfbBCS
-	Archive\SutraGenBoundLakeTest.GtbBCS
 	Archive\SutraGenBoundLakeTest.ics
 	Archive\SutraGenBoundLakeTest.inp
 	Archive\SutraGenBoundLakeTest.lkar
 	Archive\SutraGenBoundLakeTest.lkbc
 	Archive\SutraGenBoundLakeTest.lkin
+	Archive\SutraGenBoundLakeTest.NoChangeLake.F.GfbBCS
+	Archive\SutraGenBoundLakeTest.NoChangeLake.S.GtbBCS
 	Archive\usgs.SutraGenBoundLakeTest.reference

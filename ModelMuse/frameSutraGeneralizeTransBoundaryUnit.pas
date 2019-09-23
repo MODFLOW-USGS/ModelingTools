@@ -16,6 +16,10 @@ type
     pnlEditGrid: TPanel;
     lblFormula: TLabel;
     rdeFormula: TRbwDataEntry;
+    lblGeneralizedTransportPresent: TLabel;
+    comboGeneralizedTransportPresent: TComboBox;
+    lbl1: TLabel;
+    comboLakeGeneralizedTransportType: TComboBox;
     procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgSutraFeatureBeforeDrawCell(Sender: TObject; ACol,
@@ -36,6 +40,7 @@ type
     procedure InitializeColumns;
     procedure LayoutMultiEditControls;
     procedure GetScheduleName(BoundaryList: TSutraGeneralTransBoundaryList);
+    procedure GetLakeInteractions(BoundaryList: TSutraGeneralTransBoundaryList);
     procedure GetBoundaryValues(BoundaryList: TSutraGeneralTransBoundaryList);
     procedure SetBoundaryValues(BoundValues: TSutraGeneralTransportCollection);
     procedure DisplayBoundaries(BoundColl: TSutraGeneralTransportCollection);
@@ -56,7 +61,7 @@ implementation
 
 uses
   frmCustomGoPhastUnit, SutraTimeScheduleUnit, AdjustSutraBoundaryValuesUnit,
-  SutraBoundariesUnit, System.Generics.Collections;
+  SutraBoundariesUnit, System.Generics.Collections, SutraOptionsUnit;
 
 resourcestring
   StrTime = 'Time';
@@ -163,6 +168,8 @@ begin
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonWidth := 35;
+  comboGeneralizedTransportPresent.ItemIndex := Ord(lbiNoChange);
+  comboLakeGeneralizedTransportType.ItemIndex := Ord(gtitSoluteSource);
 
   rdgSutraFeature.BeginUpdate;
   try
@@ -205,6 +212,7 @@ begin
       end;
 
       GetScheduleName(BoundaryList);
+      GetLakeInteractions(BoundaryList);
       GetBoundaryValues(BoundaryList);
 
     finally
@@ -214,6 +222,59 @@ begin
     rdgSutraFeature.EndUpdate;
   end;
   LayoutMultiEditControls;
+end;
+
+procedure TframeSutraGeneralizeTransBoundary.GetLakeInteractions(
+  BoundaryList: TSutraGeneralTransBoundaryList);
+var
+  Same: Boolean;
+  FirstBoundary: TSutraGeneralTransportBoundary;
+  Index: Integer;
+  ABoundary: TSutraGeneralTransportBoundary;
+  LakeInteraction: TLakeBoundaryInteraction;
+  LakeInteractionType: TGeneralizedTransportInteractionType;
+begin
+  FirstBoundary := BoundaryList[0];
+  LakeInteraction := FirstBoundary.LakeInteraction;
+  Same := True;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    Same := LakeInteraction = ABoundary.LakeInteraction;
+    if not Same then
+    begin
+      Break;
+    end;
+  end;
+  if Same then
+  begin
+    comboGeneralizedTransportPresent.ItemIndex := Ord(LakeInteraction);
+  end
+  else
+  begin
+    comboGeneralizedTransportPresent.ItemIndex := 1
+  end;
+
+  LakeInteractionType := FirstBoundary.LakeInteractionType;
+  Same := True;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    Same := LakeInteractionType = ABoundary.LakeInteractionType;
+    if not Same then
+    begin
+      Break;
+    end;
+  end;
+  if Same then
+  begin
+    comboLakeGeneralizedTransportType.ItemIndex := Ord(LakeInteractionType);
+  end
+  else
+  begin
+    comboLakeGeneralizedTransportType.ItemIndex := 1
+  end;
+
 end;
 
 procedure TframeSutraGeneralizeTransBoundary.GetScheduleName(
@@ -486,6 +547,27 @@ begin
       else
       begin
         BoundValues.ScheduleName := '';
+      end;
+
+      if comboSchedule.ItemIndex > 0 then
+      begin
+        BoundValues.ScheduleName := AnsiString(comboSchedule.Text);
+      end
+      else
+      begin
+        BoundValues.ScheduleName := '';
+      end;
+
+      if comboGeneralizedTransportPresent.ItemIndex >= 0 then
+      begin
+        ABoundary.LakeInteraction :=
+          TLakeBoundaryInteraction(comboGeneralizedTransportPresent.ItemIndex);
+      end;
+
+      if comboLakeGeneralizedTransportType.ItemIndex >= 0 then
+      begin
+        ABoundary.LakeInteractionType :=
+          TGeneralizedTransportInteractionType(comboLakeGeneralizedTransportType.ItemIndex);
       end;
 
       SetBoundaryValues(BoundValues);

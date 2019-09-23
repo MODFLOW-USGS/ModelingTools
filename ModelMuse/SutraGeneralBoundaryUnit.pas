@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, FormulaManagerUnit, GoPhastTypes,
   OrderedCollectionUnit, RbwParser, SutraBoundaryUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, SutraOptionsUnit;
 
 type
   TSutraGeneralFlowItem = class(TCustomBoundaryItem)
@@ -147,7 +147,14 @@ type
   end;
 
   TSutraGeneralFlowBoundary = class(TSutraBoundary)
+  private
+    FLakeInteractionType: TGeneralizedFlowInteractionType;
+    procedure SetLakeInteractionType(
+      const Value: TGeneralizedFlowInteractionType);
   protected
+  public
+    procedure Assign(Source: TPersistent); override;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
@@ -156,6 +163,9 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure Loaded;
+  published
+    property LakeInteractionType: TGeneralizedFlowInteractionType
+      read FLakeInteractionType write SetLakeInteractionType stored True;
   end;
 
   TSutraGeneralFlowBoundaryList = TList<TSutraGeneralFlowBoundary>;
@@ -685,6 +695,15 @@ end;
 
 { TSutraGeneralFlowBoundary }
 
+procedure TSutraGeneralFlowBoundary.Assign(Source: TPersistent);
+begin
+  if Source is TSutraGeneralFlowBoundary then
+  begin
+    LakeInteractionType := TSutraGeneralFlowBoundary(Source).LakeInteractionType;
+  end;
+  inherited;
+end;
+
 procedure TSutraGeneralFlowBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
@@ -697,6 +716,13 @@ end;
 class function TSutraGeneralFlowBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TSutraGeneralFlowCollection;
+end;
+
+constructor TSutraGeneralFlowBoundary.Create(Model: TBaseModel;
+  ScreenObject: TObject);
+begin
+  inherited;
+  FLakeInteractionType := gfitFluidSource;
 end;
 
 procedure TSutraGeneralFlowBoundary.GetCellValues(ValueTimeList: TList;
@@ -721,6 +747,16 @@ begin
     begin
       AnItem.UsedFormula := 'False';
     end;
+  end;
+end;
+
+procedure TSutraGeneralFlowBoundary.SetLakeInteractionType(
+  const Value: TGeneralizedFlowInteractionType);
+begin
+  if FLakeInteractionType <> Value then
+  begin
+    FLakeInteractionType := Value;
+    InvalidateModel;
   end;
 end;
 

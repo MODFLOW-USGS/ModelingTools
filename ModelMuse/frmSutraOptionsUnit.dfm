@@ -1079,7 +1079,6 @@ inherited frmSutraOptions: TfrmSutraOptions
         Align = alClient
         Caption = 'Lake dataset 2'
         TabOrder = 0
-        ExplicitLeft = -4
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24
@@ -1324,21 +1323,21 @@ inherited frmSutraOptions: TfrmSutraOptions
         TabOrder = 4
         object lblGeneralizedFlowPresent: TLabel
           Left = 11
-          Top = 19
+          Top = 28
           Width = 207
           Height = 18
           Caption = 'If lake water present or absent'
         end
         object lblLakeGeneralizedFlowType: TLabel
-          Left = 320
-          Top = 19
+          Left = 328
+          Top = 28
           Width = 104
           Height = 18
           Caption = 'Interaction type'
         end
         object comboGeneralizedFlowPresent: TComboBox
-          Left = 3
-          Top = 43
+          Left = 11
+          Top = 52
           Width = 286
           Height = 26
           Style = csDropDownList
@@ -1352,8 +1351,8 @@ inherited frmSutraOptions: TfrmSutraOptions
             'Apply if lake water present (1)')
         end
         object comboLakeGeneralizedFlowType: TComboBox
-          Left = 320
-          Top = 43
+          Left = 328
+          Top = 52
           Width = 262
           Height = 26
           Style = csDropDownList
@@ -1390,8 +1389,8 @@ inherited frmSutraOptions: TfrmSutraOptions
           Caption = 'Interaction type'
         end
         object comboGeneralizedTransportPresent: TComboBox
-          Left = 3
-          Top = 43
+          Left = 11
+          Top = 42
           Width = 286
           Height = 26
           Style = csDropDownList

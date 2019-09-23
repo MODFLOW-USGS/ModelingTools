@@ -9082,15 +9082,26 @@ var
   LakeWriter: TSutraLakeWriter;
   GeoRefWriter: TGeoRefWriter;
   GeneralFlowNodes: TList<IGeneralFlowNodes>;
+  GenFlowNodeLists: TObjectList<TList<IGeneralFlowNodes>>;
   GenFlowWriter: TSutraGeneralFlowWriter;
   GeneralTransportNodes: TList<IGeneralTransportNodes>;
+  GeneralTransportList: TObjectList<TList<IGeneralTransportNodes>>;
   GenTransWriter: TSutraGeneralTransportWriter;
   ModelName: string;
   NetworkDrive: Boolean;
   ModelDirectory: string;
   HasLakes: Boolean;
   SutraFileName: string;
-  BcsFileNames: TStringList;
+  BcsFileNames: TLakeInteractionStringLists;
+  FluidSourceBcsNames: TLakeInteractionStringList;
+  MassEnergyBcsNames: TLakeInteractionStringList;
+  SpecifiedPressureBcsNames: TLakeInteractionStringList;
+  SpecifiedTempConcBcsNames: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction;
+  GenFlowInteractionBcsNames: TGenFlowInteractionStringList;
+  GenLakeInteractionType: TGeneralizedFlowInteractionType;
+  GenTransportInteractionBcsNames: TGenTransportInteractionStringList;
+  GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
 begin
   case ModelSelection of
     msSutra22:
@@ -9152,42 +9163,127 @@ begin
       MassEnergySourceNodes := TBoundaryNodes.Create;
       SpecifiedPressureNodes := TBoundaryNodes.Create;
       SpecifiedTempConcNodes := TBoundaryNodes.Create;
-      GeneralFlowNodes := TList<IGeneralFlowNodes>.Create;
-      GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;
+      GenFlowNodeLists := TObjectList<TList<IGeneralFlowNodes>>.Create;
+//      GeneralFlowNodes := TList<IGeneralFlowNodes>.Create;
+//      GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;
+      GeneralTransportList := TObjectList<TList<IGeneralTransportNodes>>.Create;
       Schedules := TStringList.Create;
       Observations := TStringList.Create;
-      BcsFileNames := TStringList.Create;
+      BcsFileNames := TLakeInteractionStringLists.Create;
       try
-        BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
-          sbtFluidSource);
-        try
-          BoundaryWriter.WriteFile(FileName, FluidSourceNodes, BcsFileNames);
-        finally
-          BoundaryWriter.Free;
+        if (ModelSelection = msSutra22)
+          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        begin
+          BcsFileNames.Add(nil);
+          BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+            sbtFluidSource);
+          try
+            BoundaryWriter.WriteFile(FileName, FluidSourceNodes, nil);
+          finally
+            BoundaryWriter.Free;
+          end;
+        end
+        else
+        begin
+          FluidSourceBcsNames := TLakeInteractionStringList.Create;
+          BcsFileNames.Add(FluidSourceBcsNames);
+          for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+          begin
+            FluidSourceBcsNames.LakeInteraction := LakeInteraction;
+            BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+              sbtFluidSource);
+            try
+              BoundaryWriter.WriteFile(FileName, FluidSourceNodes, FluidSourceBcsNames);
+            finally
+              BoundaryWriter.Free;
+            end;
+          end;
         end;
 
-        BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
-          sbtMassEnergySource);
-        try
-          BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, BcsFileNames);
-        finally
-          BoundaryWriter.Free;
+        if (ModelSelection = msSutra22) or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        begin
+          BcsFileNames.Add(nil);
+          BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+            sbtMassEnergySource);
+          try
+            BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, nil);
+          finally
+            BoundaryWriter.Free;
+          end;
+        end
+        else
+        begin
+          MassEnergyBcsNames := TLakeInteractionStringList.Create;
+          BcsFileNames.Add(MassEnergyBcsNames);
+          for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+          begin
+            MassEnergyBcsNames.LakeInteraction := LakeInteraction;
+            BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+              sbtMassEnergySource);
+            try
+              BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, MassEnergyBcsNames);
+            finally
+              BoundaryWriter.Free;
+            end;
+          end;
         end;
 
-        BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
-          sbtSpecPress);
-        try
-          BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, BcsFileNames);
-        finally
-          BoundaryWriter.Free;
+        if (ModelSelection = msSutra22)
+          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        begin
+          BcsFileNames.Add(nil);
+          BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+            sbtSpecPress);
+          try
+            BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, nil);
+          finally
+            BoundaryWriter.Free;
+          end;
+        end
+        else
+        begin
+          SpecifiedPressureBcsNames := TLakeInteractionStringList.Create;
+          BcsFileNames.Add(SpecifiedPressureBcsNames);
+          for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+          begin
+            SpecifiedPressureBcsNames.LakeInteraction := LakeInteraction;
+            BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+              sbtSpecPress);
+            try
+              BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, SpecifiedPressureBcsNames);
+            finally
+              BoundaryWriter.Free;
+            end;
+          end;
         end;
 
-        BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
-          sbtSpecConcTemp);
-        try
-          BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, BcsFileNames);
-        finally
-          BoundaryWriter.Free;
+        if (ModelSelection = msSutra22)
+          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        begin
+          BcsFileNames.Add(nil);
+          BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+            sbtSpecConcTemp);
+          try
+            BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, nil);
+          finally
+            BoundaryWriter.Free;
+          end;
+        end
+        else
+        begin
+          SpecifiedTempConcBcsNames := TLakeInteractionStringList.Create;
+          BcsFileNames.Add(SpecifiedTempConcBcsNames);
+          for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+          begin
+            SpecifiedTempConcBcsNames.LakeInteraction := LakeInteraction;
+            BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
+              sbtSpecConcTemp);
+            try
+              BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, SpecifiedTempConcBcsNames);
+            finally
+              BoundaryWriter.Free;
+            end;
+          end;
         end;
 
         TimeSchWriter := TSutraTimeScheduleWriter.Create(PhastModel);
@@ -9205,18 +9301,84 @@ begin
           ObsWriter.Free;
         end;
 
-        GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
-        try
-          GenFlowWriter.WriteFile(FileName, GeneralFlowNodes, BcsFileNames);
-        finally
-          GenFlowWriter.Free;
+        if (ModelSelection = msSutra22)
+          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        begin
+          BcsFileNames.Add(nil);
+          GeneralFlowNodes := TList<IGeneralFlowNodes>.Create;
+          GenFlowNodeLists.Add(GeneralFlowNodes);
+
+          GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
+          try
+            GenFlowWriter.WriteFile(FileName, GeneralFlowNodes, nil);
+          finally
+            GenFlowWriter.Free;
+          end;
+        end
+        else
+        begin
+          GenFlowInteractionBcsNames := TGenFlowInteractionStringList.Create;
+          BcsFileNames.Add(GenFlowInteractionBcsNames);
+          for LakeInteraction := Low(TLakeBoundaryInteraction)
+            to High(TLakeBoundaryInteraction) do
+          begin
+            GenFlowInteractionBcsNames.LakeInteraction := LakeInteraction;
+            for GenLakeInteractionType := Low(TGeneralizedFlowInteractionType)
+              to High(TGeneralizedFlowInteractionType) do
+            begin
+              GenFlowInteractionBcsNames.FlowInteraction := GenLakeInteractionType;
+
+              GeneralFlowNodes := TList<IGeneralFlowNodes>.Create;
+              GenFlowNodeLists.Add(GeneralFlowNodes);
+              GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
+              try
+                GenFlowWriter.WriteFile(FileName, GeneralFlowNodes,
+                  GenFlowInteractionBcsNames);
+              finally
+                GenFlowWriter.Free;
+              end;
+            end;
+          end;
         end;
 
-        GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
-        try
-          GenTransWriter.WriteFile(FileName, GeneralTransportNodes, BcsFileNames);
-        finally
-          GenTransWriter.Free;
+        if (ModelSelection = msSutra22)
+          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        begin
+          BcsFileNames.Add(nil);
+          GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;
+          GeneralTransportList.Add(GeneralTransportNodes);
+
+          GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
+          try
+            GenTransWriter.WriteFile(FileName, GeneralTransportNodes, nil);
+          finally
+            GenTransWriter.Free;
+          end;
+        end
+        else
+        begin
+          GenTransportInteractionBcsNames := TGenTransportInteractionStringList.Create;
+          BcsFileNames.Add(GenTransportInteractionBcsNames);
+          for LakeInteraction := Low(TLakeBoundaryInteraction)
+            to High(TLakeBoundaryInteraction) do
+          begin
+            GenTransportInteractionBcsNames.LakeInteraction := LakeInteraction;
+            for GenLakeTransInteractionType := Low(TGeneralizedTransportInteractionType)
+              to High(TGeneralizedTransportInteractionType) do
+            begin
+              GenTransportInteractionBcsNames.TransportInteraction := GenLakeTransInteractionType;
+
+              GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;
+              GeneralTransportList.Add(GeneralTransportNodes);
+
+              GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
+              try
+                GenTransWriter.WriteFile(FileName, GeneralTransportNodes, GenTransportInteractionBcsNames);
+              finally
+                GenTransWriter.Free;
+              end;
+            end;
+          end;
         end;
 
         LakeWriter := TSutraLakeWriter.Create(PhastModel, etExport);
@@ -9233,7 +9395,7 @@ begin
           InputWriter.WriteFile(FileName, FluidSourceNodes,
             MassEnergySourceNodes, SpecifiedPressureNodes,
             SpecifiedTempConcNodes, NOBS, Schedules, Observations,
-            GeneralFlowNodes, GeneralTransportNodes);
+            GenFlowNodeLists, GeneralTransportList);
         finally
           InputWriter.Free;
         end;
@@ -9303,8 +9465,9 @@ begin
       finally
         Observations.Free;
         Schedules.Free;
-        GeneralFlowNodes.Free;
-        GeneralTransportNodes.Free;
+        GenFlowNodeLists.Free;
+        GeneralTransportList.Free;
+//        GeneralTransportList: TObjectList<TList<IGeneralTransportNodes>>;
         BcsFileNames.Free;
 //        FluidSourceNodes.Free;
 //        MassEnergySourceNodes.Free;

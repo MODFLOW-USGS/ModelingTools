@@ -1,21 +1,92 @@
 inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
-  Height = 264
-  ExplicitHeight = 264
+  Width = 586
+  Height = 489
+  ExplicitWidth = 586
+  ExplicitHeight = 489
   inherited pnlBottom: TPanel
-    Top = 218
-    ExplicitTop = 218
+    Top = 392
+    Width = 586
+    Height = 97
+    ExplicitTop = 392
+    ExplicitWidth = 586
+    ExplicitHeight = 97
+    inherited lblNumTimes: TLabel
+      Top = 71
+      ExplicitTop = 71
+    end
+    object lblGeneralizedTransportPresent: TLabel [1]
+      Left = 8
+      Top = 6
+      Width = 150
+      Height = 13
+      Caption = 'If lake water present or absent'
+    end
+    object lbl1: TLabel [2]
+      Left = 317
+      Top = 6
+      Width = 78
+      Height = 13
+      Caption = 'Interaction type'
+    end
     inherited seNumberOfTimes: TJvSpinEdit
+      Left = 9
+      Top = 63
       Height = 21
+      ExplicitLeft = 9
+      ExplicitTop = 63
       ExplicitHeight = 21
+    end
+    inherited btnDelete: TBitBtn
+      Left = 498
+      Top = 62
+      ExplicitLeft = 904
+      ExplicitTop = 62
+    end
+    inherited btnInsert: TBitBtn
+      Left = 414
+      Top = 62
+      ExplicitLeft = 820
+      ExplicitTop = 62
+    end
+    object comboGeneralizedTransportPresent: TComboBox
+      Left = 9
+      Top = 29
+      Width = 286
+      Height = 21
+      Style = csDropDownList
+      Enabled = False
+      ItemIndex = 1
+      TabOrder = 3
+      Text = 'No change (0)'
+      Items.Strings = (
+        'Apply if lake water absent (-1)'
+        'No change (0)'
+        'Apply if lake water present (1)')
+    end
+    object comboLakeGeneralizedTransportType: TComboBox
+      Left = 317
+      Top = 29
+      Width = 262
+      Height = 21
+      Style = csDropDownList
+      Enabled = False
+      ItemIndex = 0
+      TabOrder = 4
+      Text = 'Like solute/energy source/sink (S)'
+      Items.Strings = (
+        'Like solute/energy source/sink (S)'
+        'Like spec. conc./temp. (U)')
     end
   end
   inherited pnlGrid: TPanel
     Top = 131
-    Height = 87
+    Width = 586
+    Height = 261
     ExplicitTop = 131
     ExplicitHeight = 87
     inherited rdgSutraFeature: TRbwDataGrid4
-      Height = 85
+      Width = 584
+      Height = 259
       ColCount = 6
       OnMouseUp = rdgSutraFeatureMouseUp
       OnSelectCell = rdgSutraFeatureSelectCell
@@ -166,10 +237,11 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
     end
   end
   inherited pnlTop: TPanel
+    Width = 586
     Height = 81
     ExplicitHeight = 81
     DesignSize = (
-      320
+      586
       81)
     inherited lblSchedule: TLabel
       Left = 8
@@ -177,9 +249,13 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       ExplicitLeft = 8
       ExplicitTop = 30
     end
+    inherited pnlCaption: TPanel
+      Width = 584
+    end
     inherited comboSchedule: TComboBox
       Left = 8
       Top = 49
+      Width = 572
       ExplicitLeft = 8
       ExplicitTop = 49
     end
@@ -187,11 +263,12 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
   object pnlEditGrid: TPanel
     Left = 0
     Top = 81
-    Width = 320
+    Width = 586
     Height = 50
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
+    ExplicitWidth = 320
     object lblFormula: TLabel
       Left = 136
       Top = 5

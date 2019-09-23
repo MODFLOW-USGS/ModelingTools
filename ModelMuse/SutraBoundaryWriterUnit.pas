@@ -6,7 +6,7 @@ uses Windows,
   CustomModflowWriterUnit, GoPhastTypes, SutraBoundariesUnit,
   Generics.Collections, PhastModelUnit, DataSetUnit, SparseDataSets,
   SysUtils, RealListUnit, SutraBoundaryUnit, ModflowBoundaryUnit,
-  System.Classes;
+  System.Classes, SutraOptionsUnit;
 
 type
   TBoundaryNodes = class(TDictionary<Integer, TBoundaryNode>, IBoundaryNodes)
@@ -30,6 +30,16 @@ type
     procedure Initialize; override;
   end;
 
+  TLakeInteractionStringList = class(TStringList)
+  private
+    FLakeInteraction: TLakeBoundaryInteraction;
+    procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
+  public
+    property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction write SetLakeInteraction;
+  end;
+
+  TLakeInteractionStringLists = TObjectList<TLakeInteractionStringList>;
+
   TSutraBoundaryWriter = class(TCustomFileWriter)
   private
     FBoundaryType: TSutraBoundaryType;
@@ -39,6 +49,7 @@ type
     FCount: Integer;
     FIBoundaryNodes: IBoundaryNodes;
     FTime1: Double;
+    FBcsFileNames: TLakeInteractionStringList;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -59,7 +70,7 @@ type
     // @name calls @link(Evaluate).
     procedure UpdateMergeLists(PQTimeList, UTimeList: TSutraMergedTimeList);
     procedure WriteFile(FileName: string; BoundaryNodes: IBoundaryNodes;
-      BcsFileNames: TStringList);
+      BcsFileNames: TLakeInteractionStringList);
   end;
 
 function FixTime(AnItem: TCustomBoundaryItem; AllTimes: TRealList): double; overload;
@@ -76,7 +87,7 @@ uses
   ScreenObjectUnit,
   frmGoPhastUnit, SutraTimeScheduleUnit,
   RbwParser, SutraMeshUnit, SparseArrayUnit, Math, SutraFileWriterUnit,
-  SutraOptionsUnit, frmErrorsAndWarningsUnit, System.Generics.Defaults;
+  frmErrorsAndWarningsUnit, System.Generics.Defaults;
 
 resourcestring
   StrFluidSource = 'Fluid Source';
@@ -96,6 +107,7 @@ var
   TimeOptions: TSutraTimeOptions;
 begin
   inherited Create(Model, EvaluationType);
+  FBcsFileNames := nil;
   TimeOptions := (Model as TPhastModel).SutraTimeOptions;
   TimeOptions.CalculateAllTimes;
   FTime1 := TimeOptions.AllTimes[1];
@@ -267,6 +279,12 @@ begin
     end;
     if ABoundary.Used then
     begin
+      if (FBcsFileNames <> nil) and
+        (FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction) then
+      begin
+        Continue;
+      end;
+
       if not TransientAllowed and (ABoundary.Values.Count > 1) then
       begin
         frmErrorsAndWarnings.AddWarning(Model, RootError, ScreenObject.Name,
@@ -303,6 +321,7 @@ begin
           BoundaryValues[0].Time := AssocItem.StartTime;
           BoundaryValues[0].UsedFormula := AssocItem.UsedFormula;
           BoundaryValues[0].Formula := AssocItem.PQFormula;
+//          BoundaryValues[0].LakeInteraction := ABoundary.LakeInteraction;
         end
         else
         begin
@@ -313,6 +332,7 @@ begin
             BoundaryValues[TimeIndex].Time := FixTime(AssocItem, AllTimes);
             BoundaryValues[TimeIndex].UsedFormula := AssocItem.UsedFormula;
             BoundaryValues[TimeIndex].Formula := AssocItem.PQFormula;
+//            BoundaryValues[TimeIndex].LakeInteraction := ABoundary.LakeInteraction;
           end;
         end;
         TimeList.Initialize(BoundaryValues);
@@ -326,6 +346,7 @@ begin
         BoundaryValues[0].Time := Item.StartTime;
         BoundaryValues[0].UsedFormula := Item.UsedFormula;
         BoundaryValues[0].Formula := Item.UFormula;
+//        BoundaryValues[0].LakeInteraction := ABoundary.LakeInteraction;
       end
       else
       begin
@@ -335,6 +356,7 @@ begin
           BoundaryValues[TimeIndex].Time := FixTime(Item, AllTimes);
           BoundaryValues[TimeIndex].UsedFormula := Item.UsedFormula;
           BoundaryValues[TimeIndex].Formula := Item.UFormula;
+//          BoundaryValues[TimeIndex].LakeInteraction := ABoundary.LakeInteraction;
         end;
       end;
       TimeList.Initialize(BoundaryValues);
@@ -1666,7 +1688,7 @@ begin
 end;
 
 procedure TSutraBoundaryWriter.WriteFile(FileName: string;
-  BoundaryNodes: IBoundaryNodes; BcsFileNames: TStringList);
+  BoundaryNodes: IBoundaryNodes; BcsFileNames: TLakeInteractionStringList);
 var
   UTimeList: TSutraMergedTimeList;
   PQTimeList: TSutraMergedTimeList;
@@ -1674,21 +1696,47 @@ var
   SimulationType: TSimulationType;
   FirstTimeSpecified: Boolean;
   InitialTime: double;
+  LakeExtension: string;
 begin
+  FBcsFileNames := BcsFileNames;
   FIBoundaryNodes := BoundaryNodes;
-  FIBoundaryNodes.Clear;
+//  FIBoundaryNodes.Clear;
+
+  if BcsFileNames <> nil then
+  begin
+    case BcsFileNames.LakeInteraction of
+      lbiActivate:
+        begin
+          LakeExtension := '.ActivateLake';
+        end;
+      lbiNoChange:
+        begin
+          LakeExtension := '.NoChangeLake';
+        end;
+      lbiInactivate:
+        begin
+          LakeExtension := '.InactivateLake';
+        end;
+    end;
+  end
+  else
+  begin
+    LakeExtension := '';
+  end;
+  FileName := ChangeFileExt(FileName, LakeExtension);
 
   case FBoundaryType of
-    sbtFluidSource: FileName := ChangeFileExt(FileName, '.FluxBcs');
-    sbtMassEnergySource: FileName := ChangeFileExt(FileName, '.UFluxBcs');
-    sbtSpecPress: FileName := ChangeFileExt(FileName, '.SPecPBcs');
-    sbtSpecConcTemp: FileName := ChangeFileExt(FileName, '.SPecUBcs');
+    sbtFluidSource: FileName := FileName + '.FluxBcs';
+    sbtMassEnergySource: FileName := FileName + '.UFluxBcs';
+    sbtSpecPress: FileName := FileName + '.SPecPBcs';
+    sbtSpecConcTemp: FileName := FileName + '.SPecUBcs';
     else Assert(False);
   end;
 
   UTimeList := TSutraMergedTimeList.Create(Model);
   PQTimeList := TSutraMergedTimeList.Create(Model);
   try
+    // UpdateMergeLists calls Evaluate.
     UpdateMergeLists(PQTimeList, UTimeList);
 
     if (PQTimeList.Count > 0) or (UTimeList.Count > 0) then
@@ -1711,14 +1759,20 @@ begin
         begin
           PQTimeList.Clear;
           UTimeList.Clear;
-          BcsFileNames.Add('');
+          if BcsFileNames <> nil then
+          begin
+            BcsFileNames.Add('');
+          end;
           Exit;
         end;
       end;
 
       OpenFile(FileName);
       try
-        BcsFileNames.Add(FileName);
+        if BcsFileNames <> nil then
+        begin
+          BcsFileNames.Add(FileName);
+        end;
         WriteDataSet0;
         WriteDataSet1;
         for TimeIndex := 0 to UTimeList.Count - 1 do
@@ -1746,7 +1800,10 @@ begin
     end
     else
     begin
-      BcsFileNames.Add('');
+      if BcsFileNames <> nil then
+      begin
+        BcsFileNames.Add('');
+      end;
     end;
   finally
     PQTimeList.Free;
@@ -1820,6 +1877,14 @@ begin
   Result := InterlockedDecrement(FRefCount);
   if Result = 0 then
     Destroy;
+end;
+
+{ TLakeInteractionStringList }
+
+procedure TLakeInteractionStringList.SetLakeInteraction(
+  const Value: TLakeBoundaryInteraction);
+begin
+  FLakeInteraction := Value;
 end;
 
 end.

@@ -16,6 +16,8 @@ type
     pnlEditGrid: TPanel;
     lblFormula: TLabel;
     rdeFormula: TRbwDataEntry;
+    lblFluidSourceInLakesPresent: TLabel;
+    comboFluidSourceInLakesPresent: TComboBox;
     procedure edNameChange(Sender: TObject);
     procedure seNumberOfTimesChange(Sender: TObject);
     procedure comboScheduleChange(Sender: TObject);
@@ -38,6 +40,7 @@ type
     FBoundaryType: TSutraBoundaryType;
     FBoundariesTheSame: Boolean;
     procedure GetScheduleName(BoundaryList: TSutraBoundaryList);
+    procedure GetLakeEffect(BoundaryList: TSutraBoundaryList);
     procedure DisplayBoundaries(BoundColl: TCustomSutraBoundaryCollection);
     procedure SetBoundaryType(const Value: TSutraBoundaryType);
     procedure InitializeColumnHeadings;
@@ -103,7 +106,7 @@ begin
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonWidth := 35;
-
+  comboFluidSourceInLakesPresent.ItemIndex := Ord(lbiNoChange);
 
   rdgSutraFeature.BeginUpdate;
   try
@@ -166,6 +169,7 @@ begin
         Exit;
       end;
       GetScheduleName(BoundaryList);
+      GetLakeEffect(BoundaryList);
       GetBoundaryValues(BoundaryList);
   //    comboScheduleChange(nil);
   //    CheckSchedule(BoundaryList);
@@ -178,6 +182,41 @@ begin
     comboScheduleChange(nil);
   finally
     rdgSutraFeature.EndUpdate;
+  end;
+end;
+
+procedure TframeSutraBoundary.GetLakeEffect(BoundaryList: TSutraBoundaryList);
+var
+//  ScheduleName: AnsiString;
+  Same: Boolean;
+  FirstBoundary: TSutraBoundary;
+  ABoundColl: TCustomSutraBoundaryCollection;
+  BoundColl: TCustomSutraBoundaryCollection;
+  Index: Integer;
+  ABoundary: TSutraBoundary;
+  LakeInteraction: TLakeBoundaryInteraction;
+begin
+  FirstBoundary := BoundaryList[0];
+//  BoundColl := FirstBoundary.Values as TCustomSutraBoundaryCollection;
+  LakeInteraction := FirstBoundary.LakeInteraction;
+  Same := True;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+//    ABoundColl := ABoundary.Values as TCustomSutraBoundaryCollection;
+    Same := LakeInteraction = ABoundary.LakeInteraction;
+    if not Same then
+    begin
+      Break;
+    end;
+  end;
+  if Same then
+  begin
+    comboFluidSourceInLakesPresent.ItemIndex := Ord(LakeInteraction);
+  end
+  else
+  begin
+    comboFluidSourceInLakesPresent.ItemIndex := -1;
   end;
 end;
 
@@ -270,6 +309,12 @@ begin
       else
       begin
         BoundValues.ScheduleName := '';
+      end;
+
+      if comboFluidSourceInLakesPresent.ItemIndex >= 0 then
+      begin
+        ABoundary.LakeInteraction :=
+          TLakeBoundaryInteraction(comboFluidSourceInLakesPresent.ItemIndex)
       end;
 
       SetBoundaryValues(BoundValues);

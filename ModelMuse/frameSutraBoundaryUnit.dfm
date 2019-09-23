@@ -1,35 +1,71 @@
 inherited frameSutraBoundary: TframeSutraBoundary
+  Height = 322
+  ExplicitHeight = 322
   inherited pnlBottom: TPanel
+    Top = 227
+    Height = 95
+    ExplicitTop = 184
+    ExplicitHeight = 95
     inherited lblNumTimes: TLabel
-      Top = 12
-      ExplicitTop = 12
+      Left = 65
+      Top = 62
+      ExplicitLeft = 65
+      ExplicitTop = 62
+    end
+    object lblFluidSourceInLakesPresent: TLabel [1]
+      Left = 10
+      Top = 5
+      Width = 150
+      Height = 13
+      Caption = 'If lake water present or absent'
     end
     inherited seNumberOfTimes: TJvSpinEdit
-      Left = 9
-      Top = 9
+      Left = 10
+      Top = 56
       Height = 21
       TabOrder = 2
-      ExplicitLeft = 9
-      ExplicitTop = 9
+      ExplicitLeft = 10
+      ExplicitTop = 56
       ExplicitHeight = 21
     end
     inherited btnDelete: TBitBtn
-      Left = 236
+      Left = 237
+      Top = 56
       TabOrder = 1
-      ExplicitLeft = 236
+      ExplicitLeft = 237
+      ExplicitTop = 56
     end
     inherited btnInsert: TBitBtn
+      Left = 149
+      Top = 56
       TabOrder = 0
+      ExplicitLeft = 149
+      ExplicitTop = 56
+    end
+    object comboFluidSourceInLakesPresent: TComboBox
+      Left = 10
+      Top = 29
+      Width = 286
+      Height = 21
+      Style = csDropDownList
+      Enabled = False
+      ItemIndex = 1
+      TabOrder = 3
+      Text = 'No change (0)'
+      Items.Strings = (
+        'Apply if lake water absent (-1)'
+        'No change (0)'
+        'Apply if lake water present (1)')
     end
   end
   inherited pnlGrid: TPanel
     Top = 81
-    Height = 113
+    Height = 146
     ExplicitTop = 81
     ExplicitHeight = 113
     inherited rdgSutraFeature: TRbwDataGrid4
       Top = 51
-      Height = 61
+      Height = 94
       TabOrder = 1
       OnMouseUp = rdgSutraFeatureMouseUp
       OnSetEditText = rdgSutraFeatureSetEditText

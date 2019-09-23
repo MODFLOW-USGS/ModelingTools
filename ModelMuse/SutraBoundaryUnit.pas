@@ -5,7 +5,7 @@ interface
 uses
   GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
-  SysUtils, SubscriptionUnit;
+  SysUtils, SubscriptionUnit, SutraOptionsUnit;
 
 type
   TObservationFormat = (ofOBS, ofOBC);
@@ -18,6 +18,7 @@ type
     Time: double;
     Formula: string;
     UsedFormula: string;
+//    LakeInteraction: TLakeBoundaryInteraction;
   end;
 
   TSutraBoundaryValueArray = array of TSutraBoundaryValue;
@@ -76,10 +77,18 @@ type
   end;
 
   TSutraBoundary = class(TModflowBoundary)
+  private
+    FLakeInteraction: TLakeBoundaryInteraction;
+    procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
   public
+    procedure Assign(Source: TPersistent); override;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
 //    procedure ResetObserversUptodate;
     procedure Changed;
     procedure Loaded;
+  published
+    property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction
+      write SetLakeInteraction stored True;
   end;
 
   TSutraBoundaryList = TList<TSutraBoundary>;
@@ -1627,6 +1636,15 @@ end;
 
 { TSutraBoundary }
 
+procedure TSutraBoundary.Assign(Source: TPersistent);
+begin
+  if Source is TSutraBoundary then
+  begin
+    LakeInteraction := TSutraBoundary(Source).LakeInteraction;
+  end;
+  inherited;
+end;
+
 procedure TSutraBoundary.Changed;
 begin
   if Used then
@@ -1647,6 +1665,12 @@ end;
 //  end;
 //end;
 
+constructor TSutraBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  FLakeInteraction := lbiNoChange;
+end;
+
 procedure TSutraBoundary.Loaded;
 var
   SutraBoundaryCollection: TCustomSutraBoundaryCollection;
@@ -1661,6 +1685,16 @@ begin
     begin
       AnItem.UsedFormula := 'False';
     end;
+  end;
+end;
+
+procedure TSutraBoundary.SetLakeInteraction(
+  const Value: TLakeBoundaryInteraction);
+begin
+  if FLakeInteraction <> Value then
+  begin
+    FLakeInteraction := Value;
+    InvalidateModel;
   end;
 end;
 
