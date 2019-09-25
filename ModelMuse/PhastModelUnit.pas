@@ -2060,7 +2060,7 @@ that affects the model output should also have a comment. }
     function SutraTemperatureUsed(Sender: TObject): boolean;
     function ModflowOrPhastUsed(Sender: TObject): boolean; virtual;
     function SwiUsed(Sender: TObject): boolean;
-    function SftUsed(Sender: TObject): boolean;
+    function SftUsed(Sender: TObject): boolean; virtual;
     function ZetaUsed(Sender: TObject): boolean;
     function IndenticalTransientArray(DataArray: TDataArray; DataArrays: TList;
       var CachedIndex: integer): TDataArray;
@@ -2225,14 +2225,14 @@ that affects the model output should also have a comment. }
     procedure ExportSfrPackage(const FileName: string);
     procedure EvaluateSfrPackage;
     procedure ExportUzfPackage(const FileName: string);
-    function Mt3dMSUsed(Sender: TObject): boolean;
-    function Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
-    function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
+    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
+    function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; virtual;
+    function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; virtual;
     procedure SetMt3dmsOutputControl(const Value: TMt3dmsOutputControl); virtual; abstract;
     function GetMt3dmsOutputControl: TMt3dmsOutputControl; virtual; abstract;
     function GetMt3dmsTimes: TMt3dmsTimeCollection; virtual; abstract;
     procedure SetMt3dmsTimes(const Value: TMt3dmsTimeCollection); virtual; abstract;
-    function LongitudinalDispersionUsed(Sender: TObject): boolean;
+    function LongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
     procedure UpdateMt3dmsActive(Sender: TObject);
     function CountStepsInMt3dExport: Integer;
     procedure SetMt3dmsHeadMassFluxObservations(
@@ -3775,6 +3775,7 @@ that affects the model output should also have a comment. }
     function SwtOffsetsUsed(Sender: TObject): boolean; override;
     function SwtSpecifiedUsed(Sender: TObject): boolean; override;
     function UztUsed(Sender: TObject): boolean; override;
+    function LongitudinalDispersionUsed(Sender: TObject): boolean; override;
 //    function Xt3DUsed(Sender: TObject): boolean; override;
     function NpfUsed(Sender: TObject): boolean; override;
     function WettingActive: boolean; override;
@@ -3919,6 +3920,10 @@ that affects the model output should also have a comment. }
     function GetContourLegend: TLegend; override;
     function GetUseGsflowFormat: boolean; override;
     procedure SetUseGsflowFormat(const Value: boolean); override;
+    function Mt3dMSUsed(Sender: TObject): boolean; override;
+    function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; override;
+    function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; override;
+    function SftUsed(Sender: TObject): boolean; virtual;
   public
     procedure RefreshGlobalVariables(CompilerList: TList);
     procedure CreateGlobalVariables;
@@ -11058,6 +11063,21 @@ begin
   end;
 end;
 
+function TPhastModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+begin
+  result := inherited LongitudinalDispersionUsed(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      result := result or
+        ChildModels[ChildIndex].ChildModel.LongitudinalDispersionUsed(Sender);
+    end;
+  end;
+end;
+
 procedure TPhastModel.LocateNearestSfrMf6Stream(TestScreenObject: TScreenObject;
   var NearestStream: TScreenObject; Tolerance: double);
 var
@@ -14164,7 +14184,7 @@ begin
         FileNames.Add(ModelFile);
 //      end;
     end;
-    if Mt3dmsIsSelected and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvMs) then
+    if ModflowPackages.Mt3dBasic.IsSelected and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvMs) then
     begin
       ModelFile := ProgramLocations.Mt3dmsLocation;
       GetOldFileVersion;
@@ -14173,7 +14193,7 @@ begin
         FileNames.Add(ModelFile);
 //      end;
     end;
-    if Mt3dmsIsSelected and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvUsgs) then
+    if ModflowPackages.Mt3dBasic.IsSelected and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvUsgs) then
     begin
       ModelFile := ProgramLocations.Mt3dUsgsLocation;
       GetOldFileVersion;
@@ -18114,6 +18134,29 @@ begin
   end;
 end;
 
+function TPhastModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited Mt3dMSUsed(Sender) and inherited Mt3dMSBulkDensityUsed(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.Mt3dMSBulkDensityUsed(Sender);
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
 function TPhastModel.Mt3dMsFirstSorbParamUsed(Sender: TObject): boolean;
 var
   DataArray: TDataArray;
@@ -18143,6 +18186,29 @@ begin
     DataArray := Sender as TDataArray;
     result := DataArrayUsed(MobileComponents)
       or DataArrayUsed(ImmobileComponents);
+  end;
+end;
+
+function TPhastModel.Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited Mt3dMSUsed(Sender) and inherited Mt3dMSImmobPorosityUsed(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.Mt3dMSImmobPorosityUsed(Sender);
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
   end;
 end;
 
@@ -18357,6 +18423,29 @@ begin
         if ChildModel <> nil then
         begin
           result := result or ChildModel.ModflowPackages.Mt3dmsTransObs.IsSelected;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.Mt3dMSUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.Mt3dMSUsed(Sender);
+        if result then
+        begin
+          Exit;
         end;
       end;
     end;
@@ -20889,6 +20978,29 @@ begin
       if ChildModel <> nil then
       begin
         result := result or ChildModel.ModflowPackages.SfrPackage.IsSelected;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.SftUsed(Sender: TObject): boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited Mt3dMSUsed(Sender) and inherited SftUsed(Sender);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.SftUsed(Sender);
+        if result then
+        begin
+          Exit;
+        end;
       end;
     end;
   end;

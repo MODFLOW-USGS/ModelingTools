@@ -301,6 +301,13 @@ begin
 
   end;
 
+  if (Model is TChildModel) and (Model.ModelSelection = msModflowLGR) then
+  begin
+    Inc(MaximumNumberOfCells, Grid.ColumnCount * Grid.LayerCount * 2);
+    Inc(MaximumNumberOfCells, (Grid.RowCount -2) * Grid.LayerCount * 2);
+    Inc(MaximumNumberOfCells, (Grid.RowCount -2) * (Grid.ColumnCount -2));
+  end;
+
 end;
 
 constructor TMt3dmsSsmWriter.Create(Model: TCustomModel;

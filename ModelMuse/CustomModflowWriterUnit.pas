@@ -290,7 +290,8 @@ type
     FMvrWriter: TObject;
     procedure SetMvrWriter(const Value: TObject);
   protected
-    procedure SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists);
+    procedure SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists); overload;
+    procedure SetTimeListsUpToDate(TimeLists: TList<TModflowBoundListOfTimeLists>); overload;
     // @name identifies the package that is being exported.
     function Package: TModflowPackageSelection; virtual; abstract;
     // @name writes the comments for the current package.
@@ -298,7 +299,8 @@ type
     procedure WriteDataSet0;
     // @name prepares the lists in TimeLists for display when the
     // lists in question are not used.
-    procedure UpdateNotUsedDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure UpdateNotUsedDisplay(TimeLists: TModflowBoundListOfTimeLists); overload;
+    procedure UpdateNotUsedDisplay(TimeLists: TList<TModflowBoundListOfTimeLists>); overload;
     // @name updates the @link(TDataArray)s in DataArrayList
     // using the cells @link(TValueCellList CellList).
     // @param(ParameterIndicies indicates which properties of the cells are
@@ -5733,6 +5735,17 @@ begin
   end;
 end;
 
+procedure TCustomPackageWriter.UpdateNotUsedDisplay(
+  TimeLists: TList<TModflowBoundListOfTimeLists>);
+var
+  index: Integer;
+begin
+  for index := 0 to TimeLists.Count - 1 do
+  begin
+    UpdateNotUsedDisplay(TimeLists[index]);
+  end;
+end;
+
 procedure TCustomPackageWriter.SetMvrWriter(const Value: TObject);
 begin
   if Value <> nil then
@@ -5740,6 +5753,17 @@ begin
     Assert(Value is TModflowMvrWriter);
   end;
   FMvrWriter := Value;
+end;
+
+procedure TCustomPackageWriter.SetTimeListsUpToDate(
+  TimeLists: TList<TModflowBoundListOfTimeLists>);
+var
+  Index: Integer;
+begin
+  for Index := 0 to TimeLists.Count - 1 do
+  begin
+    SetTimeListsUpToDate(TimeLists[Index]);
+  end;
 end;
 
 procedure TCustomPackageWriter.SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists);

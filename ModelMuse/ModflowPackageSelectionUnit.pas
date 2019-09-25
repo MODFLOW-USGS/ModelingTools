@@ -2094,6 +2094,11 @@ Type
     FPrecipTimeLists: TObjectModflowBoundListOfTimeLists;
     FRunOffTimeLists: TObjectModflowBoundListOfTimeLists;
     FConstConcTimeLists: TObjectModflowBoundListOfTimeLists;
+
+//    FHeadWatersConcentrations: TModflowBoundaryDisplayTimeList;
+//    FPrecipConcentrations: TModflowBoundaryDisplayTimeList;
+//    FRunoffConcentrations: TModflowBoundaryDisplayTimeList;
+    FConstConcentrations: TModflowBoundaryDisplayTimeList;
     function GetClosureCriterion: double;
     function GetSpaceWeightingFactor: double;
     function GetTimeWeightingFactor: double;
@@ -5303,7 +5308,7 @@ uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, ModelMuseUtilities,
   Mt3dUztWriterUnit, Mt3dUzfSeepageUnit, ModflowPackagesUnit, ModflowSfr6WriterUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
-  ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit;
+  ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -20196,8 +20201,31 @@ begin
 end;
 
 procedure TMt3dSftPackageSelection.InitializeSftDisplay(Sender: TObject);
+var
+  SftWriter: TMt3dmsSftWriter;
+  List: TList<TModflowBoundListOfTimeLists>;
 begin
+//  FHeadWatersTimeLists.CreateDataSets;
+//  FPrecipTimeLists.CreateDataSets;
+//  FRunOffTimeLists.CreateDataSets;
+//  FConstConcTimeLists.CreateDataSets;
 
+  List := TList<TModflowBoundListOfTimeLists>.Create;
+  SftWriter := TMt3dmsSftWriter.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(FHeadWatersTimeLists);
+    List.Add(FPrecipTimeLists);
+    List.Add(FRunOffTimeLists);
+    List.Add(FConstConcTimeLists);
+    SftWriter.UpdateDisplay(List);
+  finally
+    SftWriter.Free;
+    List.Free;
+  end;
+//  FHeadWatersTimeLists.ComputeAverage;
+//  FPrecipTimeLists.ComputeAverage;
+//  FRunOffTimeLists.ComputeAverage;
+//  FConstConcTimeLists.ComputeAverage;
 end;
 
 procedure TMt3dSftPackageSelection.InitializeVariables;

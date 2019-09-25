@@ -6,7 +6,7 @@ uses
   CustomModflowWriterUnit, PhastModelUnit, ScreenObjectUnit, System.Classes,
   System.SysUtils, ModflowPackageSelectionUnit, ModflowCellUnit,
   System.Generics.Collections, Mt3dSftUnit, GoPhastTypes, Vcl.Forms,
-  ModflowBoundaryUnit, OrderedCollectionUnit;
+  ModflowBoundaryUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit;
 
 type
   TMt3dmsSftWriter = class(TCustomParameterTransientWriter)
@@ -51,13 +51,14 @@ type
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
     procedure UpdateSteadyData;
+    procedure UpdateDisplay(TimeLists: TList<TModflowBoundListOfTimeLists>);
   end;
 
 implementation
 
 uses
   frmProgressUnit, ModflowSfrUnit, Access2000, frmErrorsAndWarningsUnit,
-  ModflowUnitNumbers, Mt3dmsChemUnit, ModflowBoundaryDisplayUnit;
+  ModflowUnitNumbers, Mt3dmsChemUnit, DataSetUnit, Vcl.Dialogs, RbwParser;
 
 resourcestring
   StrTheFollowingObjectSft = 'The following objects define SFT boundaries bu' +
@@ -113,7 +114,7 @@ begin
     Exit;
   end;
 
-  inherited Evaluate;
+//  inherited Evaluate;
 
   if not frmProgressMM.ShouldContinue then
   begin
@@ -151,6 +152,146 @@ end;
 function TMt3dmsSftWriter.ParameterType: TParameterType;
 begin
   result := ptUndefined
+end;
+
+procedure TMt3dmsSftWriter.UpdateDisplay(
+  TimeLists: TList<TModflowBoundListOfTimeLists>);
+var
+  HeadWaters: TModflowBoundListOfTimeLists;
+  Precip: TModflowBoundListOfTimeLists;
+  RunoffConc: TModflowBoundListOfTimeLists;
+  ConstConc: TModflowBoundListOfTimeLists;
+
+  DataArray: TModflowBoundaryDisplayDataArray;
+  CellList: TValueCellList;
+  FilteredCellList: TValueCellList;
+  TimeIndex: Integer;
+  ACell: TMt3dmsSftConc_Cell;
+  CellIndex: Integer;
+  ListIndex: Integer;
+  ATimeList: TModflowBoundaryDisplayTimeList;
+begin
+  if not Package.IsSelected then
+  begin
+    UpdateNotUsedDisplay(TimeLists);
+    Exit;
+  end;
+  Evaluate;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+
+  if (Values.Count = 0) then
+  begin
+    SetTimeListsUpToDate(TimeLists);
+    Exit;
+  end;
+
+  try
+    frmErrorsAndWarnings.BeginUpdate;
+    FilteredCellList := TValueCellList.Create(TMt3dmsSftConc_Cell);
+    try
+      FilteredCellList.OwnsObjects := False;
+      HeadWaters := TimeLists[0];
+      Precip := TimeLists[1];
+      RunoffConc := TimeLists[2];
+      ConstConc := TimeLists[3];
+
+      for TimeIndex := 0 to Values.Count - 1 do
+      begin
+        CellList := Values[TimeIndex];
+
+        FilteredCellList.Clear;
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex] as TMt3dmsSftConc_Cell;
+          if ACell.BoundaryType = sbtHeadwater then
+          begin
+            FilteredCellList.Add(ACell);
+          end;
+        end;
+        for ListIndex := 0 to HeadWaters.Count - 1 do
+        begin
+          ATimeList := HeadWaters[ListIndex];
+          DataArray := ATimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          AssignTransient2DArray(DataArray, ListIndex, FilteredCellList, 0,
+            rdtDouble, umAssign);
+          Model.AdjustDataArray(DataArray);
+        end;
+
+        FilteredCellList.Clear;
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex] as TMt3dmsSftConc_Cell;
+          if ACell.BoundaryType = sbtPrecipitation then
+          begin
+            FilteredCellList.Add(ACell);
+          end;
+        end;
+        for ListIndex := 0 to Precip.Count - 1 do
+        begin
+          ATimeList := Precip[ListIndex];
+          DataArray := ATimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          AssignTransient2DArray(DataArray, ListIndex, FilteredCellList, 0,
+            rdtDouble, umAssign);
+          Model.AdjustDataArray(DataArray);
+        end;
+
+        FilteredCellList.Clear;
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex] as TMt3dmsSftConc_Cell;
+          if ACell.BoundaryType = sbtRunoff then
+          begin
+            FilteredCellList.Add(ACell);
+          end;
+        end;
+        for ListIndex := 0 to RunoffConc.Count - 1 do
+        begin
+          ATimeList := RunoffConc[ListIndex];
+          DataArray := ATimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          AssignTransient2DArray(DataArray, ListIndex, FilteredCellList, 0,
+            rdtDouble, umAssign);
+          Model.AdjustDataArray(DataArray);
+        end;
+
+        FilteredCellList.Clear;
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex] as TMt3dmsSftConc_Cell;
+          if ACell.BoundaryType = sbtConstConc then
+          begin
+            FilteredCellList.Add(ACell);
+          end;
+        end;
+        for ListIndex := 0 to ConstConc.Count - 1 do
+        begin
+          ATimeList := ConstConc[ListIndex];
+          DataArray := ATimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          AssignTransient2DArray(DataArray, ListIndex, FilteredCellList, 0,
+            rdtDouble, umAssign);
+          Model.AdjustDataArray(DataArray);
+        end;
+
+        CellList.Cache;
+      end;
+
+    finally
+      FilteredCellList.Free;
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  except on E: EInvalidTime do
+    begin
+      Beep;
+      MessageDlg(E.Message, mtError, [mbOK], 0);
+    end;
+  end;
+
 end;
 
 procedure TMt3dmsSftWriter.UpdateSteadyData;
@@ -315,9 +456,29 @@ var
   ScreenObject: TScreenObject;
   CellList: TCellAssignmentList;
   SftObsOutputFileName: string;
+  TimeIndex: Integer;
+  SftRateList: TValueCellList;
+  NTMP: Integer;
 begin
   NSFINIT := 0;
   MXSFBC := 0;
+  for TimeIndex := 0 to Values.Count - 1 do
+  begin
+//    FTimeIndex := TimeIndex;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    SftRateList := Values[TimeIndex];
+
+    // Data Set 7
+    NTMP := SftRateList.Count;
+    if NTMP > MXSFBC then
+    begin
+      MXSFBC := NTMP;
+    end;
+  end;
   CellList := TCellAssignmentList.Create;
   try
     for ScreenObjectIndex := 0 to FStreamObjects.Count - 1 do
@@ -326,26 +487,6 @@ begin
       ScreenObject := FStreamObjects[ScreenObjectIndex];
       ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
       NSFINIT := NSFINIT + CellList.Count;
-      if (ScreenObject.Mt3dSftConcBoundary <> nil)
-        and ScreenObject.Mt3dSftConcBoundary.Used then
-      begin
-        if ScreenObject.Mt3dSftConcBoundary.Values.Count > 0 then
-        begin
-          MXSFBC := MXSFBC + CellList.Count;
-        end;
-        if ScreenObject.Mt3dSftConcBoundary.Precipitation.Count > 0 then
-        begin
-          MXSFBC := MXSFBC + CellList.Count;
-        end;
-        if ScreenObject.Mt3dSftConcBoundary.RunOff.Count > 0 then
-        begin
-          MXSFBC := MXSFBC + CellList.Count;
-        end;
-        if ScreenObject.Mt3dSftConcBoundary.ConstConc.Count > 0 then
-        begin
-          MXSFBC := MXSFBC + CellList.Count;
-        end;
-      end;
     end;
   finally
     CellList.Free;

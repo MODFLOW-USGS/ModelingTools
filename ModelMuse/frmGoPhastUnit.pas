@@ -6272,6 +6272,8 @@ var
   RunSutraOK: Boolean;
   Options: TSutraOptions;
   SutraInputFileName: string;
+  Mt3dExtension: string;
+  Mt3dFileName: string;
   procedure WriteModflowFile;
   var
     SimNameWriter: IMf6_SimNameFileWriter;
@@ -6378,6 +6380,29 @@ begin
             finally
               NameWriter.Free;
               PhastModel.NameFileWriter := nil;
+            end;
+          end;
+          if PhastModel.LgrUsed then
+          begin
+            for Index := 0 to PhastModel.ChildModels.Count - 1 do
+            begin
+              ChildModel := PhastModel.ChildModels[Index].ChildModel;
+              if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+              begin
+                Mt3dExtension := ExtractFileExt(NewFileName);
+                Mt3dFileName := ChildModel.Child_NameFile_Name(NewFileName);
+                Mt3dFileName := ChangeFileExt(Mt3dFileName, Mt3dExtension);
+
+                NameWriter := TMt3dmsNameWriter.Create(
+                  ChildModel, Mt3dFileName, etExport);
+                try
+                  ChildModel.NameFileWriter := NameWriter;
+                  ChildModel.ExportMt3dmsModel(Mt3dFileName, False, False);
+                finally
+                  NameWriter.Free;
+                  ChildModel.NameFileWriter := nil;
+                end;
+              end;
             end;
           end;
           PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
@@ -7310,7 +7335,8 @@ var
 begin
   result := True;
   if (PhastModel.ModelSelection = msModflow)
-    and PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
+    and PhastModel.Mt3dmsIsSelected then
+//    and PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
   begin
     ModelProgramName := PhastModel.ModflowLocation;
     if FileExists(ModelProgramName)
@@ -13423,17 +13449,17 @@ begin
       MessageDlg(StrSorryTheFileName, mtError, [mbOK], 0);
       Exit;
     end;
-    case PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion of
+    case FRunMt3dModel.ModflowPackages.Mt3dBasic.Mt3dVersion of
       mvUSGS:
         begin
-          if not TestMt3dUsgsLocationOK(PhastModel) or not Mt3dUsgsUpToDate then
+          if not TestMt3dUsgsLocationOK(FRunMt3dModel) or not Mt3dUsgsUpToDate then
           begin
             Exit;
           end;
         end;
       mvMS:
         begin
-          if not TestMt3dmsLocationOK(PhastModel) or not Mt3dUpToDate then
+          if not TestMt3dmsLocationOK(FRunMt3dModel) or not Mt3dUpToDate then
           begin
             Exit;
           end;
@@ -13462,7 +13488,9 @@ begin
 
     frmFormulaErrors.sgErrors.BeginUpdate;
     try
-      PhastModel.ClearMt3dmsFiles;
+      FRunMt3dModel.Mt3dmsInputFiles.Clear;
+      FRunMt3dModel.Mt3dmsOutputFiles.Clear;
+//      PhastModel.ClearMt3dmsFiles;
       NameWriter := TMt3dmsNameWriter.Create(FRunMt3dModel, FileName, etExport);
       try
         FRunMt3dModel.NameFileWriter := NameWriter;
