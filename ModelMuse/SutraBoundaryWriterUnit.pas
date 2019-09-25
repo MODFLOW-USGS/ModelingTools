@@ -1717,6 +1717,12 @@ begin
         begin
           LakeExtension := '.InactivateLake';
         end;
+      lbiUseDefaults:
+        begin
+          LakeExtension := '';
+        end;
+      else 
+        Assert(False);
     end;
   end
   else
@@ -1769,9 +1775,16 @@ begin
 
       OpenFile(FileName);
       try
-        if BcsFileNames <> nil then
+        if (BcsFileNames <> nil) then
         begin
-          BcsFileNames.Add(FileName);
+          if (BcsFileNames.LakeInteraction <> lbiUseDefaults) then
+          begin
+            BcsFileNames.Add(FileName);
+          end
+          else
+          begin
+            BcsFileNames.Add('');
+          end;
         end;
         WriteDataSet0;
         WriteDataSet1;

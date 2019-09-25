@@ -106,7 +106,7 @@ begin
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(sbgtUsed)].ButtonWidth := 35;
-  comboFluidSourceInLakesPresent.ItemIndex := Ord(lbiNoChange);
+  comboFluidSourceInLakesPresent.ItemIndex := Ord(lbiUseDefaults);
 
   rdgSutraFeature.BeginUpdate;
   try

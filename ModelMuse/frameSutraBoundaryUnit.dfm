@@ -4,7 +4,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
   inherited pnlBottom: TPanel
     Top = 227
     Height = 95
-    ExplicitTop = 184
+    ExplicitTop = 227
     ExplicitHeight = 95
     inherited lblNumTimes: TLabel
       Left = 65
@@ -48,21 +48,21 @@ inherited frameSutraBoundary: TframeSutraBoundary
       Width = 286
       Height = 21
       Style = csDropDownList
-      Enabled = False
-      ItemIndex = 1
+      ItemIndex = 3
       TabOrder = 3
-      Text = 'No change (0)'
+      Text = 'Use defaults'
       Items.Strings = (
         'Apply if lake water absent (-1)'
         'No change (0)'
-        'Apply if lake water present (1)')
+        'Apply if lake water present (1)'
+        'Use defaults')
     end
   end
   inherited pnlGrid: TPanel
     Top = 81
     Height = 146
     ExplicitTop = 81
-    ExplicitHeight = 113
+    ExplicitHeight = 146
     inherited rdgSutraFeature: TRbwDataGrid4
       Top = 51
       Height = 94
@@ -167,7 +167,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
         end>
       OnEndUpdate = rdgSutraFeatureEndUpdate
       ExplicitTop = 51
-      ExplicitHeight = 61
+      ExplicitHeight = 94
     end
     object pnlEditGrid: TPanel
       Left = 1

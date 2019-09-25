@@ -634,6 +634,12 @@ begin
           begin
             LakeExtension := '.InactivateLake';
           end;
+         lbiUseDefaults:
+           begin
+             LakeExtension := '';
+           end;
+         else
+           Assert(False);
       end;
 
       case BcsFileNames.TransportInteraction of
@@ -645,6 +651,12 @@ begin
           begin
             TransportTypeExtension := '.U'
           end;
+        gtitUseDefaults:
+          begin
+            TransportTypeExtension := '';
+          end;
+         else 
+           Assert(False);
       end;
     end
     else
@@ -658,7 +670,15 @@ begin
     try
       if BcsFileNames <> nil then
       begin
-        BcsFileNames.Add(FNameOfFile);
+        if (BcsFileNames.LakeInteraction <> lbiUseDefaults)
+          or (BcsFileNames.TransportInteraction <> gtitUseDefaults) then
+        begin
+          BcsFileNames.Add(FNameOfFile);
+        end
+        else
+        begin
+          BcsFileNames.Add('');
+        end;
       end;
       WriteDataSet0;
       WriteDataSet1;

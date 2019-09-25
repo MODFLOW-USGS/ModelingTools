@@ -9,16 +9,18 @@
   <model Model_Name="SutraGenBoundLakeTest" FileType="Model Input">
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">RunSutra.bat.archive</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.GfbBCS</FileName>
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.GtbBCS</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.ics</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.inp</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.lkar</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.lkbc</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.lkin</FileName>
-    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.NoChangeLake.F.GfbBCS</FileName>
-    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">SutraGenBoundLakeTest.NoChangeLake.S.GtbBCS</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Input">usgs.SutraGenBoundLakeTest.reference</FileName>
   </model>
   <output Model_Name="SutraGenBoundLakeTest" FileType="Model Output">
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.bcopg</FileName>
+    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.bcoug</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.ele</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lkbu</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lkh</FileName>
@@ -26,8 +28,6 @@
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lkrs</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lkst</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.lst</FileName>
-    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.NoChangeLake.F.bcopg</FileName>
-    <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.NoChangeLake.S.bcoug</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.nod</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.rst</FileName>
     <FileName Model_Name="SutraGenBoundLakeTest" FileType="Model Output">SutraGenBoundLakeTest.smy</FileName>

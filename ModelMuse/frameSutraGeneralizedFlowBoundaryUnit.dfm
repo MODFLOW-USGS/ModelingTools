@@ -8,7 +8,7 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     Width = 587
     Height = 113
     TabOrder = 3
-    ExplicitTop = 296
+    ExplicitTop = 310
     ExplicitWidth = 587
     ExplicitHeight = 113
     DesignSize = (
@@ -63,14 +63,12 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Width = 286
       Height = 21
       Style = csDropDownList
-      Enabled = False
-      ItemIndex = 1
       TabOrder = 3
-      Text = 'No change (0)'
       Items.Strings = (
         'Apply if lake water absent (-1)'
         'No change (0)'
-        'Apply if lake water present (1)')
+        'Apply if lake water present (1)'
+        'Use defaults')
     end
     object comboLakeGeneralizedFlowType: TComboBox
       Left = 320
@@ -78,13 +76,13 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Width = 262
       Height = 21
       Style = csDropDownList
-      Enabled = False
-      ItemIndex = 0
+      ItemIndex = 2
       TabOrder = 4
-      Text = 'Like fluid source/sink (F)'
+      Text = 'Use defaults'
       Items.Strings = (
         'Like fluid source/sink (F)'
-        'Like specified pressure (P)')
+        'Like specified pressure (P)'
+        'Use defaults')
     end
   end
   inherited pnlGrid: TPanel
@@ -93,8 +91,8 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     Height = 174
     TabOrder = 2
     ExplicitTop = 136
-    ExplicitWidth = 458
-    ExplicitHeight = 93
+    ExplicitWidth = 587
+    ExplicitHeight = 174
     inherited rdgSutraFeature: TRbwDataGrid4
       Width = 585
       Height = 172
@@ -359,14 +357,14 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitWidth = 456
-      ExplicitHeight = 91
+      ExplicitWidth = 585
+      ExplicitHeight = 172
     end
   end
   inherited pnlTop: TPanel
     Width = 587
     Height = 86
-    ExplicitWidth = 458
+    ExplicitWidth = 587
     ExplicitHeight = 86
     DesignSize = (
       587
@@ -379,7 +377,7 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     end
     inherited pnlCaption: TPanel
       Width = 585
-      ExplicitWidth = 456
+      ExplicitWidth = 585
     end
     inherited comboSchedule: TComboBox
       Left = 8
@@ -387,7 +385,7 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Width = 558
       ExplicitLeft = 8
       ExplicitTop = 46
-      ExplicitWidth = 429
+      ExplicitWidth = 558
     end
   end
   object pnlEditGrid: TPanel
@@ -398,7 +396,6 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 458
     object lblFormula: TLabel
       Left = 136
       Top = 5

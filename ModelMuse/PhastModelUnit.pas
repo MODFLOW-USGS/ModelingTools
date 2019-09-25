@@ -3202,6 +3202,7 @@ that affects the model output should also have a comment. }
     function LakScreenObjects: TStringList;
     function UzfMf6ScreenObjects: TStringList;
     function NumberOfMt3dChemComponents: integer;
+    function Mt3dIsSelected: Boolean; virtual;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -4429,6 +4430,7 @@ that affects the model output should also have a comment. }
     property FixingModel: boolean read FFixingModel;
     function UzfSeepageUsed: boolean; override;
     procedure InvalidateContours; override;
+    function Mt3dIsSelected: Boolean; override;
   published
     // The following properties are obsolete.
 
@@ -18086,6 +18088,29 @@ begin
     DataArray := Sender as TDataArray;
     result := DataArrayUsed(MobileComponents)
       or DataArrayUsed(ImmobileComponents);
+  end;
+end;
+
+function TPhastModel.Mt3dIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := inherited;
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := ChildModel.Mt3dIsSelected;
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
   end;
 end;
 
@@ -35511,6 +35536,12 @@ function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;
 begin
   result := ChemistryUsed(Sender)
     or (Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected);
+end;
+
+function TCustomModel.Mt3dIsSelected: Boolean;
+begin
+  result := (ModelSelection in ModflowSelection)
+    and ModflowPackages.Mt3dBasic.IsSelected
 end;
 
 function TCustomModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;

@@ -123,7 +123,7 @@ type
       AModel: TBaseModel); override;
   published
     property LakeInteractionType: TGeneralizedTransportInteractionType
-      read FLakeInteractionType write SetLakeInteractionType stored True;
+      read FLakeInteractionType write SetLakeInteractionType default gtitUseDefaults;
   end;
 
   TSutraGeneralTransBoundaryList = TList<TSutraGeneralTransportBoundary>;
@@ -557,7 +557,7 @@ constructor TSutraGeneralTransportBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
   inherited;
-  FLakeInteractionType := gtitSoluteSource;
+  FLakeInteractionType := gtitUseDefaults;
 end;
 
 procedure TSutraGeneralTransportBoundary.GetCellValues(ValueTimeList: TList;

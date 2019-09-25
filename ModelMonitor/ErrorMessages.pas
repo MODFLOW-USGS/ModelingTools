@@ -615,7 +615,7 @@ begin
     ErrorValues.Add('is not permitted');
     ErrorValues.Add('is not the upstream connected reach for reach');
     ErrorValues.Add('is invalid or has not been defined');
-    ErrorValues.Add('is not possible');
+    ErrorValues.Add('is not possible.');
     ErrorValues.Add('ERROR: upstream fractions for reach ');
     ErrorValues.Add('ERROR. UNKNOWN STORAGE DATA TAG');
     ErrorValues.Add('ERROR. UNKNOWN STO OPTION');

@@ -749,6 +749,12 @@ begin
           begin
             LakeExtension := '.InactivateLake';
           end;
+         lbiUseDefaults:
+           begin
+             LakeExtension := '';
+           end;
+         else
+           Assert(False);
       end;
 
       case BcsFileNames.FlowInteraction of
@@ -760,12 +766,18 @@ begin
           begin
             FlowTypeExtension := '.P'
           end;
+        gfitUseDefaults:
+          begin
+            FlowTypeExtension := '';
+          end;
+         else 
+           Assert(False);
       end;
     end
     else
     begin
       LakeExtension := '';
-      FlowTypeExtension := ''
+      FlowTypeExtension := '';
     end;
 
     FNameOfFile := ChangeFileExt(AFileName, '') + LakeExtension
@@ -774,7 +786,15 @@ begin
     try
       if BcsFileNames <> nil then
       begin
-        BcsFileNames.Add(FNameOfFile);
+        if (BcsFileNames.LakeInteraction <> lbiUseDefaults)
+          or (BcsFileNames.FlowInteraction <> gfitUseDefaults) then
+        begin
+          BcsFileNames.Add(FNameOfFile);
+        end
+        else
+        begin
+          BcsFileNames.Add('');
+        end;
       end;
       WriteDataSet0;
       WriteDataSet1;

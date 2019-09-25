@@ -165,7 +165,7 @@ type
     procedure Loaded;
   published
     property LakeInteractionType: TGeneralizedFlowInteractionType
-      read FLakeInteractionType write SetLakeInteractionType stored True;
+      read FLakeInteractionType write SetLakeInteractionType default gfitUseDefaults;
   end;
 
   TSutraGeneralFlowBoundaryList = TList<TSutraGeneralFlowBoundary>;
@@ -722,7 +722,7 @@ constructor TSutraGeneralFlowBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
   inherited;
-  FLakeInteractionType := gfitFluidSource;
+  FLakeInteractionType := gfitUseDefaults;
 end;
 
 procedure TSutraGeneralFlowBoundary.GetCellValues(ValueTimeList: TList;

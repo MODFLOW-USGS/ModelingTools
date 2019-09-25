@@ -88,7 +88,7 @@ type
     procedure Loaded;
   published
     property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction
-      write SetLakeInteraction stored True;
+      write SetLakeInteraction default lbiUseDefaults;
   end;
 
   TSutraBoundaryList = TList<TSutraBoundary>;
@@ -1668,7 +1668,7 @@ end;
 constructor TSutraBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FLakeInteraction := lbiNoChange;
+  FLakeInteraction := lbiUseDefaults;
 end;
 
 procedure TSutraBoundary.Loaded;

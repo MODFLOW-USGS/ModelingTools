@@ -3,8 +3,8 @@ object frmRunMt3dms: TfrmRunMt3dms
   Top = 0
   BorderStyle = bsNone
   Caption = 'frmRunMt3dms'
-  ClientHeight = 29
-  ClientWidth = 115
+  ClientHeight = 74
+  ClientWidth = 228
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,6 +14,13 @@ object frmRunMt3dms: TfrmRunMt3dms
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
+  object lblMt3dModelSelection: TLabel
+    Left = 8
+    Top = 29
+    Width = 74
+    Height = 13
+    Caption = 'Model Selection'
+  end
   object cbRun: TCheckBox
     Left = 8
     Top = 6
@@ -23,5 +30,13 @@ object frmRunMt3dms: TfrmRunMt3dms
     Checked = True
     State = cbChecked
     TabOrder = 0
+  end
+  object comboMt3dModelSelection: TComboBox
+    Left = 8
+    Top = 45
+    Width = 201
+    Height = 21
+    Style = csDropDownList
+    TabOrder = 1
   end
 end

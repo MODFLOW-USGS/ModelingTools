@@ -168,8 +168,8 @@ begin
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(gtcUsed)].ButtonWidth := 35;
-  comboGeneralizedTransportPresent.ItemIndex := Ord(lbiNoChange);
-  comboLakeGeneralizedTransportType.ItemIndex := Ord(gtitSoluteSource);
+  comboGeneralizedTransportPresent.ItemIndex := Ord(lbiUseDefaults);
+  comboLakeGeneralizedTransportType.ItemIndex := Ord(gtitUseDefaults);
 
   rdgSutraFeature.BeginUpdate;
   try
@@ -252,7 +252,7 @@ begin
   end
   else
   begin
-    comboGeneralizedTransportPresent.ItemIndex := 1
+    comboGeneralizedTransportPresent.ItemIndex := -11
   end;
 
   LakeInteractionType := FirstBoundary.LakeInteractionType;
@@ -272,7 +272,7 @@ begin
   end
   else
   begin
-    comboLakeGeneralizedTransportType.ItemIndex := 1
+    comboLakeGeneralizedTransportType.ItemIndex := -1
   end;
 
 end;

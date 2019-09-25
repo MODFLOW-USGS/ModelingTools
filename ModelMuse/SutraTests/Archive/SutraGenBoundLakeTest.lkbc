@@ -1,4 +1,4 @@
-     1     1     1     1     2     2
+     1     1     1     1     1     1
 # INTERACTIONS WITH FLUID SOURCES
 'DEFAULT'     0
 # INTERACTIONS WITH SOLUTE/ENERGY SOURCES
@@ -9,7 +9,5 @@
 'DEFAULT'     0
 # INTERACTIONS WITH GENERALIZED FLOW CONDITIONS
 'DEFAULT'     0 'F'
-'SutraGenBoundLakeTest.NoChangeLake.F.GfbBCS'     0 'F'
 # INTERACTIONS WITH GENERALIZED TRANSPORT CONDITIONS
 'DEFAULT'     0 'U'
-'SutraGenBoundLakeTest.NoChangeLake.S.GtbBCS'     0 'S'

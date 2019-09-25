@@ -732,6 +732,7 @@ type
     FNeedFirstRedraw: Boolean;
     FCreatingModel: Boolean;
     FNoIniFile: Boolean;
+    FRunMt3dModel: TCustomModel;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
     procedure WMMenuSelect(var Msg: TWMMenuSelect); message WM_MENUSELECT;
@@ -5967,9 +5968,7 @@ end;
 
 procedure TfrmGoPhast.EnableMt3dmsMenuItems;
 begin
-  acRunMt3dms.Enabled :=
-    (PhastModel.ModelSelection in ModflowSelection)
-    and PhastModel.ModflowPackages.Mt3dBasic.IsSelected
+  acRunMt3dms.Enabled := PhastModel.Mt3dIsSelected;
 end;
 
 procedure TfrmGoPhast.EnableSwrObs;
@@ -9564,17 +9563,35 @@ procedure TfrmGoPhast.dlgSaveMt3dmsClose(Sender: TObject);
 begin
   inherited;
   FRunMt3dms := FRunMt3dmsForm.cbRun.Checked;
+  FRunMt3dModel := FRunMt3dmsForm.comboMt3dModelSelection.Items.Objects[FRunMt3dmsForm.comboMt3dModelSelection.ItemIndex] as TCustomModel;
   FRunMt3dmsForm.Free;
 end;
 
 procedure TfrmGoPhast.dlgSaveMt3dmsShow(Sender: TObject);
 var
   ADialog: TSaveDialog;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
   inherited;
   ADialog := Sender as TSaveDialog;
   FRunMt3dmsForm := TfrmRunMt3dms.createfordialog(ADialog);
   FRunMt3dmsForm.cbRun.Checked := FRunMt3dms;
+  if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
+  begin
+    FRunMt3dmsForm.comboMt3dModelSelection.Items.AddObject(PhastModel.DisplayName, PhastModel);
+  end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel.ModflowPackages.Mt3dBasic.IsSelected then
+      begin
+      FRunMt3dmsForm.comboMt3dModelSelection.Items.AddObject(
+        ChildModel.DisplayName, ChildModel);
+       end;
+    end;
+  Assert(FRunMt3dmsForm.comboMt3dModelSelection.Items.Count > 0);
+  FRunMt3dmsForm.comboMt3dModelSelection.ItemIndex := 0;
 end;
 
 procedure TfrmGoPhast.miGeneralClick(Sender: TObject);
@@ -13372,6 +13389,7 @@ var
   FileName: string;
   NameWriter: TMt3dmsNameWriter;
   FileDir: string;
+  Mt3dExtension: string;
 begin
   inherited;
   if not PhastModel.Mt3dmsIsSelected then
@@ -13424,6 +13442,12 @@ begin
     end;
 
     FileName := dlgSaveMt3dms.FileName;
+    if FRunMt3dModel is TChildModel then
+    begin
+      Mt3dExtension := ExtractFileExt(FileName);
+      FileName := TChildModel(FRunMt3dModel).Child_NameFile_Name(FileName);
+      FileName := ChangeFileExt(FileName, Mt3dExtension);
+    end;
     if Length(ExtractFileName(FileName)) > 50 then
     begin
       Beep;
@@ -13439,13 +13463,13 @@ begin
     frmFormulaErrors.sgErrors.BeginUpdate;
     try
       PhastModel.ClearMt3dmsFiles;
-      NameWriter := TMt3dmsNameWriter.Create(PhastModel, FileName, etExport);
+      NameWriter := TMt3dmsNameWriter.Create(FRunMt3dModel, FileName, etExport);
       try
-        PhastModel.NameFileWriter := NameWriter;
-        PhastModel.ExportMt3dmsModel(FileName, FRunMt3dms, True);
+        FRunMt3dModel.NameFileWriter := NameWriter;
+        FRunMt3dModel.ExportMt3dmsModel(FileName, FRunMt3dms, True);
       finally
         NameWriter.Free;
-        PhastModel.NameFileWriter := nil;
+        FRunMt3dModel.NameFileWriter := nil;
       end;
 
     finally

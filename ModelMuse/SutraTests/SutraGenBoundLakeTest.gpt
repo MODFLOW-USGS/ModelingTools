@@ -3686,7 +3686,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = '0.'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0.'
-      ScreenObject.Selected = False
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -3775,7 +3775,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = '0.'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0.'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -3983,14 +3983,14 @@ object PhastModel: TPhastModel
   GuiSettings.Height = 614
   GuiSettings.FrontX = -6716.256004958929000000
   GuiSettings.FrontY = -8.304492311930742000
-  GuiSettings.Left = 572
+  GuiSettings.Left = 295
   GuiSettings.MagnificationFront = 0.031910439560439560
   GuiSettings.MagnificationSide = 0.031910439560439560
   GuiSettings.MagnificationTop = 0.031910439560439560
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = 48.327909499457580000
   GuiSettings.SideY = -1000.000000000000000000
-  GuiSettings.Top = 273
+  GuiSettings.Top = 57
   GuiSettings.TopViewHeight = 251
   GuiSettings.TopViewWidth = 759
   GuiSettings.TopX = -6716.256004958929000000

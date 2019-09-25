@@ -204,6 +204,9 @@ begin
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonWidth := 35;
+  
+  comboGeneralizedFlowPresent.ItemIndex := Ord(lbiUseDefaults);
+  comboLakeGeneralizedFlowType.ItemIndex := Ord(gfitUseDefaults);
 
   rdgSutraFeature.BeginUpdate;
   try
@@ -290,7 +293,7 @@ begin
   end
   else
   begin
-    comboGeneralizedFlowPresent.ItemIndex := 1
+    comboGeneralizedFlowPresent.ItemIndex := -1
   end;
 
   LakeInteractionType := FirstBoundary.LakeInteractionType;

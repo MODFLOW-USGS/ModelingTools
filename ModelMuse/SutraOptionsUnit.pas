@@ -15,9 +15,9 @@ type
   TUSolutionMethod = (usmDirect, usmGMRES, usmOthomin);
   TSorptionModel = (smNone, smLinear, smFreundlich, smLangmuir);
   TReadStart = (rsNone, rsPressure, rsU, rsBoth);
-  TLakeBoundaryInteraction = (lbiActivate, lbiNoChange, lbiInactivate);
-  TGeneralizedFlowInteractionType = (gfitFluidSource, gfitSpecifiedPressure);
-  TGeneralizedTransportInteractionType = (gtitSoluteSource, gtitSpecifiedConcentration);
+  TLakeBoundaryInteraction = (lbiActivate, lbiNoChange, lbiInactivate, lbiUseDefaults);
+  TGeneralizedFlowInteractionType = (gfitFluidSource, gfitSpecifiedPressure, gfitUseDefaults);
+  TGeneralizedTransportInteractionType = (gtitSoluteSource, gtitSpecifiedConcentration, gtitUseDefaults);
 
   TSutraLakeOptions = class(TGoPhastPersistent)
   private

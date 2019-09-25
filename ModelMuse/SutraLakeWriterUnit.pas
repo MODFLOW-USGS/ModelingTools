@@ -578,7 +578,14 @@ begin
         WriteString('''');
         WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
         WriteString('''');
-        ILKF := Ord(LakeInteraction) -1;
+        if LakeInteraction = lbiUseDefaults then
+        begin
+          ILKF := Ord(LakeInteraction) -1;
+        end
+        else
+        begin
+          ILKF := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+        end;
         WriteInteger(ILKF);
         NewLine;
       end;
@@ -608,7 +615,14 @@ begin
         WriteString('''');
         WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
         WriteString('''');
-        ILKS := Ord(LakeInteraction) -1;
+        if LakeInteraction = lbiUseDefaults then
+        begin
+          ILKS := Ord(LakeInteraction) -1;
+        end
+        else
+        begin
+          ILKS := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+        end;
         WriteInteger(ILKS);
         NewLine;
       end;
@@ -638,7 +652,14 @@ begin
         WriteString('''');
         WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
         WriteString('''');
-        ILKP := Ord(LakeInteraction) -1;
+        if LakeInteraction = lbiUseDefaults then
+        begin
+          ILKP := Ord(LakeInteraction) -1;
+        end
+        else
+        begin
+          ILKP := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+        end;
         WriteInteger(ILKP);
         NewLine;
       end;
@@ -668,7 +689,14 @@ begin
         WriteString('''');
         WriteString(ExtractFileName(AStringList[Ord(LakeInteraction)]));
         WriteString('''');
-        ILKU := Ord(LakeInteraction) -1;
+        if LakeInteraction = lbiUseDefaults then
+        begin
+          ILKU := Ord(LakeInteraction) -1;
+        end
+        else
+        begin
+          ILKU := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+        end;
         WriteInteger(ILKU);
         NewLine;
       end;
@@ -709,11 +737,26 @@ begin
           WriteString('''');
           WriteString(ExtractFileName(AStringList[NameIndex]));
           WriteString('''');
-          ILKPG := Ord(LakeInteraction) -1;
+          if LakeInteraction = lbiUseDefaults then
+          begin
+            ILKPG := Ord(LakeInteraction) -1;
+          end
+          else
+          begin
+            ILKPG := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+          end;
           WriteInteger(ILKPG);
           case GenLakeInteractionType of
             gfitFluidSource: WriteString(' ''F''');
             gfitSpecifiedPressure: WriteString(' ''P''');
+            gfitUseDefaults:
+              begin
+                case FLakeOptions.GeneralizedFlowInteractionType of
+                  gfitFluidSource: WriteString(' ''F''');
+                  gfitSpecifiedPressure: WriteString(' ''P''');
+                  else Assert(False);
+                end;
+              end
             else Assert(False);
           end;
           NewLine;
@@ -759,11 +802,27 @@ begin
           WriteString('''');
           WriteString(ExtractFileName(AStringList[NameIndex]));
           WriteString('''');
+          if LakeInteraction = lbiUseDefaults then
+          begin
+            ILKUG := Ord(LakeInteraction) -1;
+          end
+          else
+          begin
+            ILKUG := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+          end;
           ILKUG := Ord(LakeInteraction) -1;
           WriteInteger(ILKUG);
           case GenLakeTransInteractionType of
             gtitSoluteSource: WriteString(' ''S''');
             gtitSpecifiedConcentration: WriteString(' ''U''');
+            gtitUseDefaults:
+              begin
+                case FLakeOptions.GeneralizedTransportInteractionType of
+                  gtitSoluteSource: WriteString(' ''S''');
+                  gtitSpecifiedConcentration: WriteString(' ''U''');
+                  else Assert(False);
+                end;
+              end
             else Assert(False);
           end;
           NewLine;

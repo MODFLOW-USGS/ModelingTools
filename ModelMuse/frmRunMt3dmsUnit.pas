@@ -9,6 +9,8 @@ uses
 type
   TfrmRunMt3dms = class(TCustomExtendedDialog)
     cbRun: TCheckBox;
+    comboMt3dModelSelection: TComboBox;
+    lblMt3dModelSelection: TLabel;
   private
     { Private declarations }
   public
