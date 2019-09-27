@@ -112,7 +112,6 @@ type
     procedure InvalidateModel; override;
     function BoundaryFormulaCount: integer; override;
     procedure UpdateBoundaryObservers;
-    procedure Loaded;
   public
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
@@ -122,6 +121,7 @@ type
     property DiversionFormulas[Index: Integer]: string read GetDiversionFormula
       write SetDiversionFormula;
     property DiversionCount: Integer read GetDiversionCount write SetDiversionCount;
+    procedure Loaded;
   published
     property Inflow: string read GetInflow write SetInflow;
     property Rainfall: string read GetRainfall write SetRainfall;
@@ -134,6 +134,9 @@ type
     // for backwards compatibility
     property Status: Boolean read FStatus write SetStatus stored False;
     property StreamStatus: TStreamStatus read FStreamStatus write SetStreamStatus;
+    // @name is used to store @link(DiversionFormulas) to file and to read
+    // @link(DiversionFormulas) from a file but otherwise, use
+    // @link(DiversionFormulas) instead of @name.
     property Diversions: TStrings read GetDiversions write SetDiversions;
   end;
 
@@ -1632,13 +1635,46 @@ end;
 procedure TSDiversionItem.Assign(Source: TPersistent);
 var
   Diversion: TSDiversionItem;
+  SfrParamIcalc: TSfrParamIcalcItem;
+  StrItem: TStrItem;
 begin
   if Source is TSDiversionItem then
   begin
     Diversion := TSDiversionItem(Source);
     Priority := Diversion.Priority;
     DownstreamSegment := Diversion.DownstreamSegment;
+  end
+  else if Source is TSfrParamIcalcItem then
+  begin
+    SfrParamIcalc := TSfrParamIcalcItem(Source);
+    DownstreamSegment := SfrParamIcalc.SegmentNumber;
+    case Abs(SfrParamIcalc.IPRIOR) of
+      0:
+        begin
+          Priority := cpUpTo;
+        end;
+      1:
+        begin
+          Priority := cpThreshold;
+        end;
+      2:
+        begin
+          Priority := cpFraction;
+        end;
+      3:
+        begin
+          Priority := cpExcess;
+        end;
+    end;
+  end
+  else if Source is TStrItem then
+  begin
+    StrItem := TStrItem(Source);
+    DownstreamSegment := StrItem.SegmentNumber;
+    Priority := cpUpTo;
   end;
+
+
   inherited;
 end;
 
@@ -1719,10 +1755,10 @@ var
   SfrMf6Item: TSfrMf6Item;
   FlowItem: TSfrSegmentFlowItem;
   ParamItem: TSfrParamIcalcItem;
-  DiversionItem: TSDiversionItem;
+//  DiversionItem: TSDiversionItem;
   SourceStr: TStrBoundary;
   StrItem: TStrItem;
-  DiversionSeg: TSDiversionItem;
+//  DiversionSeg: TSDiversionItem;
 begin
   if Source is TSfrMf6Boundary then
   begin
@@ -1841,30 +1877,30 @@ begin
       DownstreamSegments.Add.Value := ParamItem.OutflowSegment;
     end;
 
-    Diversions.Clear;
-    if ParamItem.DiversionSegment <> 0 then
-    begin
-      DiversionItem := Diversions.Add;
-      DiversionItem.DownstreamSegment := ParamItem.DiversionSegment;
-      case Abs(ParamItem.IPRIOR) of
-        0:
-          begin
-            DiversionItem.Priority := cpUpTo;
-          end;
-        1:
-          begin
-            DiversionItem.Priority := cpThreshold;
-          end;
-        2:
-          begin
-            DiversionItem.Priority := cpFraction;
-          end;
-        3:
-          begin
-            DiversionItem.Priority := cpExcess;
-          end;
-      end;
-    end;
+//    Diversions.Clear;
+//    if ParamItem.DiversionSegment <> 0 then
+//    begin
+//      DiversionItem := Diversions.Add;
+//      DiversionItem.DownstreamSegment := ParamItem.DiversionSegment;
+//      case Abs(ParamItem.IPRIOR) of
+//        0:
+//          begin
+//            DiversionItem.Priority := cpUpTo;
+//          end;
+//        1:
+//          begin
+//            DiversionItem.Priority := cpThreshold;
+//          end;
+//        2:
+//          begin
+//            DiversionItem.Priority := cpFraction;
+//          end;
+//        3:
+//          begin
+//            DiversionItem.Priority := cpExcess;
+//          end;
+//      end;
+//    end;
 
     Values.Assign(SourceSfrMf2005.ParamIcalc);
     Assert(Values.Count = SourceSfrMf2005.UpstreamSegmentValues.Count);
@@ -1939,12 +1975,12 @@ begin
         DownstreamSegments.Add.Value := StrItem.OutflowSegment
       end;
 	  
-      if StrItem.DiversionSegment > 0 then
-      begin
-        DiversionSeg := Diversions.Add;
-        DiversionSeg.DownstreamSegment := StrItem.DiversionSegment;
-        DiversionSeg.Priority := cpUpTo;
-      end;
+//      if StrItem.DiversionSegment > 0 then
+//      begin
+//        DiversionSeg := Diversions.Add;
+//        DiversionSeg.DownstreamSegment := StrItem.DiversionSegment;
+//        DiversionSeg.Priority := cpUpTo;
+//      end;
 
     end;
     Values := SourceStr.Values;

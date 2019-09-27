@@ -512,6 +512,7 @@ begin
       AColumn.UseButton := True;
       AColumn.ButtonCaption := 'F()';
       AColumn.AutoAdjustColWidths := True;
+      AColumn.AutoAdjustRowHeights := True;
       AColumn.ButtonWidth := 50;
       AColumn.WordWrapCells := False;
     end;
@@ -573,6 +574,7 @@ begin
   finally
     rdgFormulas.EndUpdate;
   end;
+  rdgFormulas.ColWidths[1] := rdgFormulas.Width - rdgFormulas.ColWidths[0] - 16;
 
 
 end;

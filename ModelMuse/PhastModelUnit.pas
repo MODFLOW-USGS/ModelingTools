@@ -3923,7 +3923,7 @@ that affects the model output should also have a comment. }
     function Mt3dMSUsed(Sender: TObject): boolean; override;
     function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; override;
     function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; override;
-    function SftUsed(Sender: TObject): boolean; virtual;
+    function SftUsed(Sender: TObject): boolean; override;
   public
     procedure RefreshGlobalVariables(CompilerList: TList);
     procedure CreateGlobalVariables;
@@ -8745,15 +8745,22 @@ const
   //                DISV is used.
   //    '4.0.0.15' Bug fix: Fixed bug that could cause an error when assigning
   //                values to a data set using interpolation.
-
-  //               bug fix: Fixed export of Step Schedules in SUTRA. Previously,
+  //    '4.0.0.16' bug fix: Fixed export of Step Schedules in SUTRA. Previously,
   //                the exported time steps were smaller than then should have
   //                been by one time step.
   //               bug fix: Fixed bug that could cause an error when deleting
   //                a custom color scheme.
+  //               Enhancement. MT3D can now be used with child models in
+  //                MODFLOW-LGR.
+  //    '4.0.0.17' Bug fix: Fixed a bug that could cause an access violation
+  //                importing a MODFLOW model containing the MNW2 package.
+
+  //               Bug fix: Fixed the conversion of diversions from the
+  //                the MODFLOW-2005 version of SFR and STR to the MODFLOW 6
+  //                version of SFR.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.15';
+  IModelVersion = '4.0.0.17';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -8885,7 +8892,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMawWriterUnit, ModflowGncWriterUnit, Modflow6ObsWriterUnit,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
-  Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit;
+  Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -35229,15 +35236,67 @@ procedure TCustomModel.ConvertSfr;
 var
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
+  SfrSegments: array of TScreenObject;
+  SegNumber: Integer;
+  ParamItem: TSfrParamIcalcItem;
+  UpstreamObject: TScreenObject;
+  DiversionItem: TSDiversionItem;
+  TimeIndex: Integer;
+  SfrItem: TSfrSegmentFlowItem;
+  Sfr6Item: TSfrMf6Item;
+//  Diversions: TStringList;
 begin
   if ModflowPackages.SfrPackage.IsSelected
     and not ModflowPackages.SfrModflow6Package.IsSelected then
   begin
     ModflowPackages.SfrModflow6Package.IsSelected := True;
+    SetLength(SfrSegments, ScreenObjectCount+1);
     for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
     begin
       AScreenObject := ScreenObjects[ScreenObjectIndex];
       AScreenObject.ConvertSfr;
+      if AScreenObject.ModflowSfr6Boundary <> nil then
+      begin
+        SegNumber := AScreenObject.ModflowSfr6Boundary.SegmentNumber;
+        if SegNumber >= Length(SfrSegments) then
+        begin
+          SetLength(SfrSegments, SegNumber+1);
+        end;
+        Assert(SfrSegments[SegNumber] = nil);
+        SfrSegments[SegNumber] := AScreenObject;
+      end;
+    end;
+
+    // assign diversions.
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreenObject := ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.ModflowSfr6Boundary <> nil then
+      begin
+        Assert(AScreenObject.ModflowSfrBoundary  <> nil);
+        ParamItem := AScreenObject.ModflowSfrBoundary.ParamIcalc[0] as TSfrParamIcalcItem;
+        // ParamItem.DiversionSegment < 0 is a diversion from a lake.
+        if ParamItem.DiversionSegment > 0 then
+        begin
+          Assert(ParamItem.DiversionSegment < Length(SfrSegments));
+//          Assert(ParamItem.DiversionSegment > 0);
+          UpstreamObject := SfrSegments[ParamItem.DiversionSegment];
+          Assert(UpstreamObject <> nil);
+          Assert(UpstreamObject.ModflowSfr6Boundary <> nil);
+          DiversionItem := UpstreamObject.ModflowSfr6Boundary.Diversions.Add;
+          DiversionItem.Assign(ParamItem);
+          Assert(AScreenObject.ModflowSfrBoundary.SegmentFlows.Count
+            = UpstreamObject.ModflowSfr6Boundary.Values.Count);
+
+          for TimeIndex := 0 to AScreenObject.ModflowSfrBoundary.SegmentFlows.Count - 1 do
+          begin
+            SfrItem := AScreenObject.ModflowSfrBoundary.SegmentFlows[TimeIndex] as TSfrSegmentFlowItem;
+            Sfr6Item := UpstreamObject.ModflowSfr6Boundary.Values[TimeIndex] as TSfrMf6Item;
+            Sfr6Item.DiversionCount := Sfr6Item.DiversionCount+1;
+            Sfr6Item.DiversionFormulas[Sfr6Item.DiversionCount-1] := SfrItem.Flow;
+          end;
+        end;
+      end;
     end;
   end;
 end;
@@ -35246,15 +35305,65 @@ procedure TCustomModel.ConvertStr;
 var
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
+  StrSegments: array of TScreenObject;
+  SegNumber: Integer;
+  StrItem: TStrItem;
+  UpstreamObject: TScreenObject;
+  DiversionItem: TSDiversionItem;
+  TimeIndex: Integer;
+  Sfr6Item: TSfrMf6Item;
 begin
   if ModflowPackages.StrPackage.IsSelected
     and not ModflowPackages.SfrModflow6Package.IsSelected then
   begin
     ModflowPackages.SfrModflow6Package.IsSelected := True;
+    SetLength(StrSegments, ScreenObjectCount+1);
     for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
     begin
       AScreenObject := ScreenObjects[ScreenObjectIndex];
       AScreenObject.ConvertStr;
+      if AScreenObject.ModflowSfr6Boundary <> nil then
+      begin
+        SegNumber := AScreenObject.ModflowSfr6Boundary.SegmentNumber;
+        if SegNumber >= Length(StrSegments) then
+        begin
+          SetLength(StrSegments, SegNumber+1);
+        end;
+        Assert(StrSegments[SegNumber] = nil);
+        StrSegments[SegNumber] := AScreenObject;
+      end;
+    end;
+
+    // assign diversions.
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreenObject := ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.ModflowSfr6Boundary <> nil then
+      begin
+        Assert(AScreenObject.ModflowStrBoundary  <> nil);
+        StrItem := AScreenObject.ModflowStrBoundary.Values[0] as TStrItem;
+        // StrItem.DiversionSegment < 0 is a diversion from a lake.
+        if StrItem.DiversionSegment > 0 then
+        begin
+          Assert(StrItem.DiversionSegment < Length(StrSegments));
+//          Assert(StrItem.DiversionSegment > 0);
+          UpstreamObject := StrSegments[StrItem.DiversionSegment];
+          Assert(UpstreamObject <> nil);
+          Assert(UpstreamObject.ModflowSfr6Boundary <> nil);
+          DiversionItem := UpstreamObject.ModflowSfr6Boundary.Diversions.Add;
+          DiversionItem.Assign(StrItem);
+          Assert(AScreenObject.ModflowStrBoundary.Values.Count
+            = UpstreamObject.ModflowSfr6Boundary.Values.Count);
+
+          for TimeIndex := 0 to AScreenObject.ModflowStrBoundary.Values.Count - 1 do
+          begin
+            StrItem := AScreenObject.ModflowStrBoundary.Values[TimeIndex] as TStrItem;
+            Sfr6Item := UpstreamObject.ModflowSfr6Boundary.Values[TimeIndex] as TSfrMf6Item;
+            Sfr6Item.DiversionCount := Sfr6Item.DiversionCount+1;
+            Sfr6Item.DiversionFormulas[Sfr6Item.DiversionCount-1] := StrItem.Flow;
+          end;
+        end;
+      end;
     end;
   end;
 end;

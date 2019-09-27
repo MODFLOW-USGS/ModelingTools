@@ -23635,7 +23635,10 @@ begin
           end;
         wsReuse:
           begin
-            TimeItem.EndTime := StressPeriod.EndTime;
+            if TimeItem <> nil then
+            begin
+              TimeItem.EndTime := StressPeriod.EndTime;
+            end;
           end
         else Assert(False);
       end;

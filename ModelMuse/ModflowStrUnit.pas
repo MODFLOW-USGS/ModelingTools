@@ -74,6 +74,7 @@ type
     procedure SetWidth(const Value: string);
     procedure SetDiversionSegment(const Value: integer);
     procedure SetOutflowSegment(const Value: integer);
+    function GetSegmentNumber: Integer;
   protected
     // See @link(Stage).
     FStage: TFormulaObject;
@@ -101,6 +102,7 @@ type
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
     Destructor Destroy; override;
+    property SegmentNumber: Integer read GetSegmentNumber;
   published
     // @name is the formula used to set the stage
     // of this boundary.
@@ -646,6 +648,16 @@ function TStrItem.GetRoughness: string;
 begin
   Result := FRoughness.Formula;
   ResetItemObserver(StreamRoughnessPosition);
+end;
+
+function TStrItem.GetSegmentNumber: Integer;
+var
+  StrCollection: TStrCollection;
+  StrBoundary: TStrBoundary;
+begin
+  StrCollection := Collection as TStrCollection;
+  StrBoundary := StrCollection.BoundaryGroup as TStrBoundary;
+  result := StrBoundary.SegmentNumber;
 end;
 
 function TStrItem.GetSlope: string;

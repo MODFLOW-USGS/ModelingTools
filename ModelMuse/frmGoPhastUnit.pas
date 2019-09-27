@@ -2050,7 +2050,7 @@ uses
   frmGeoRefUnit, GeoRefWriterUnit, SutraBoundaryUnit, SutraGeneralFlowNodesUnit,
   SutraGeneralFlowWriterUnit, SutraGeneralTransportWriterUnit, frmFileTypesUnit,
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
-  frmSimplifyObjectsCriteriaUnit;
+  frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2259,6 +2259,9 @@ resourcestring
   StrNoObjectsAreSelec = 'No objects are selected.';
   StrSDoesNotExistSutra = '"%s" does not exist. Do you want to export the SU' +
   'TRA input files anyway?';
+  StrMODPATH7RequiresA = 'MODPATH 7 requires a binary head output file. You ' +
+  'need to change the head output file type under "Model|MODFLOW Output Cont' +
+  'rol" and run MODFLOW again before running MODPATH 7.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -6294,8 +6297,17 @@ var
     end;
     if PhastModel.ModflowPackages.ModPath.IsSelected then
     begin
-      PhastModel.ExportModpathModel(
-        ChangeFileExt(FileName, '.mpn'), False, True);
+      if (PhastModel.ModflowPackages.ModPath.MpathVersion = mp7)
+        and (PhastModel.ModflowOutputControl.HeadOC.OutputFileType <> oftBinary) then
+      begin
+        Beep;
+        MessageDlg(StrMODPATH7RequiresA, mtError, [mbOK], 0);
+      end
+      else
+      begin
+        PhastModel.ExportModpathModel(
+          ChangeFileExt(FileName, '.mpn'), False, True);
+      end;
     end;
     if PhastModel.ModflowPackages.ZoneBudget.IsSelected then
     begin
@@ -12525,6 +12537,14 @@ begin
     else
     begin
       UsedModel := PhastModel;
+    end;
+
+    if (UsedModel.ModflowPackages.ModPath.MpathVersion = mp7)
+      and (UsedModel.ModflowOutputControl.HeadOC.OutputFileType <> oftBinary) then
+    begin
+      Beep;
+      MessageDlg(StrMODPATH7RequiresA, mtError, [mbOK], 0);
+      Exit;
     end;
 
     if sdModpathInput.FileName <> string(AnsiString(sdModpathInput.FileName)) then

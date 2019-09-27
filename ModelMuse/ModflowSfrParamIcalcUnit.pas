@@ -24,6 +24,7 @@ type
     procedure SetIPRIOR(const Value: integer);
     procedure SetOutflowSegment(const Value: integer);
     procedure InvalidateSegmentNumberArray;
+    function GetSegmentNumber: Integer;
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -36,6 +37,8 @@ type
     // @name checks whether AnotherItem is the same as the current @classname.
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function BoundaryFormulaCount: integer; override;
+  public
+    property SegmentNumber: Integer read GetSegmentNumber;
   published
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
@@ -200,6 +203,16 @@ end;
 procedure TSfrParamIcalcItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   // do nothing
+end;
+
+function TSfrParamIcalcItem.GetSegmentNumber: Integer;
+var
+  SfrCollection: TSfrParamIcalcCollection;
+  SfrBoundary: TSfrBoundary;
+begin
+  SfrCollection := Collection as TSfrParamIcalcCollection;
+  SfrBoundary := SfrCollection.BoundaryGroup as TSfrBoundary;
+  result := SfrBoundary.SegmentNumber;
 end;
 
 function TSfrParamIcalcItem.IsSame(AnotherItem: TOrderedItem): boolean;

@@ -1,7 +1,7 @@
 inherited frmImportModflow: TfrmImportModflow
   HelpType = htKeyword
   HelpKeyword = 'Import_MODFLOW_Model_Dialog_Box'
-  Caption = 'Import MODFLOW-2005 on -NWT Model'
+  Caption = 'Import MODFLOW-2005 or -NWT Model'
   ClientHeight = 445
   ClientWidth = 491
   ExplicitWidth = 507

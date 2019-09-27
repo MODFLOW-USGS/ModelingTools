@@ -1327,6 +1327,9 @@ inherited frmGoPhast: TfrmGoPhast
         object miDataSetstoCSV: TMenuItem
           Caption = 'Data Sets to CSV'
           HelpContext = 1550
+          Hint = 
+            'Export data set values to CSV file|Export data set values to com' +
+            'ma-separated values (CSV) file'
           OnClick = miDataSetstoCSVClick
         end
         object ExportImage1: TMenuItem
@@ -1419,6 +1422,9 @@ inherited frmGoPhast: TfrmGoPhast
       end
       object miClearUndoRedostack: TMenuItem
         Caption = 'Clear Undo/Redo Stack'
+        Hint = 
+          'Delete all undo and redo items|Reclaim memory by deleting all un' +
+          'do and redo items'
         OnClick = miClearUndoRedostackClick
       end
     end
@@ -1432,18 +1438,24 @@ inherited frmGoPhast: TfrmGoPhast
       end
       object miViewMeshInformation1: TMenuItem
         Caption = '&View Mesh Information'
+        Hint = 'View information relating to the mesh and the mesh quality'
         OnClick = miViewMeshInformation1Click
       end
       object miRenumberMesh: TMenuItem
         Caption = '&Renumber Mesh...'
+        Hint = 
+          'reassign cell and element numbers to (possibly) reduce the bandw' +
+          'idth'
         OnClick = miRenumberMeshClick
       end
       object miSpecifyMesh: TMenuItem
         Caption = 'Specify Mesh...'
+        Hint = 'Directly specify the mesh'
         OnClick = miSpecifyMeshClick
       end
       object miSpecifyFishnetQuadrilateral: TMenuItem
         Caption = 'Specify Fishnet-Mesh Quadrilaterals...'
+        Hint = 'Specify the properties of the fishnet mesh quadrilaterals'
         OnClick = miSpecifyFishnetQuadrilateralClick
       end
       object N11: TMenuItem
@@ -1995,6 +2007,7 @@ inherited frmGoPhast: TfrmGoPhast
       object miEditGeoRef: TMenuItem
         Caption = 'Edit &Geo Reference'
         GroupIndex = 1
+        Hint = 'Specify the location and projection of the model'
         OnClick = miEditGeoRefClick
       end
       object miPackages: TMenuItem
@@ -2318,6 +2331,7 @@ inherited frmGoPhast: TfrmGoPhast
       object miFileTypes: TMenuItem
         Caption = 'File Types'
         GroupIndex = 1
+        Hint = 'Display descriptions of input and output file types'
         OnClick = miFileTypesClick
       end
       object miAbout: TMenuItem
@@ -2978,6 +2992,7 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Show All'
       Checked = True
       GroupIndex = 2
+      Hint = 'Show all the grid lines'
       ImageIndex = 71
       OnExecute = SetGridLineDrawingChoice
     end
@@ -2986,6 +3001,7 @@ inherited frmGoPhast: TfrmGoPhast
       AutoCheck = True
       Caption = 'Show Exterior'
       GroupIndex = 2
+      Hint = 'Show only the outermost grid lines'
       ImageIndex = 78
       OnExecute = SetGridLineDrawingChoice
     end
@@ -2994,6 +3010,7 @@ inherited frmGoPhast: TfrmGoPhast
       AutoCheck = True
       Caption = 'Show Active'
       GroupIndex = 2
+      Hint = 'Show the grid lines for active cells'
       ImageIndex = 80
       OnExecute = SetGridLineDrawingChoice
     end
@@ -3002,6 +3019,7 @@ inherited frmGoPhast: TfrmGoPhast
       AutoCheck = True
       Caption = 'Show Active Edge'
       GroupIndex = 2
+      Hint = 'Show outline of the actve area'
       ImageIndex = 79
       OnExecute = SetGridLineDrawingChoice
     end
@@ -3378,6 +3396,9 @@ inherited frmGoPhast: TfrmGoPhast
     object acExportSutra2DMesh: TAction
       Category = 'File'
       Caption = 'SUTRA 2D Mesh'
+      Hint = 
+        'Export SUTRA Mesh to Argus ONE|Export SUTRA Mesh to a file in th' +
+        'e format used by Argus ONE'
       OnExecute = acExportSutra2DMeshExecute
     end
     object acEditFarms: TAction
@@ -3389,6 +3410,9 @@ inherited frmGoPhast: TfrmGoPhast
     object acFootprintProperties: TAction
       Category = 'Model'
       Caption = 'WellFootprint Properties...'
+      Hint = 
+        'Speciy variables controlling the generation of the well footprin' +
+        'ts'
       OnExecute = acFootprintPropertiesExecute
     end
     object acNewFootprintModel: TAction
@@ -3406,6 +3430,7 @@ inherited frmGoPhast: TfrmGoPhast
     object acFootprintProgramLocation: TAction
       Category = 'Model'
       Caption = 'WellFootprint Program Location...'
+      Hint = 'Specify where the well footprint program is located'
       OnExecute = acFootprintProgramLocationExecute
     end
     object acModflow6Active: TAction
@@ -3414,7 +3439,7 @@ inherited frmGoPhast: TfrmGoPhast
       GroupIndex = 1
       HelpContext = 2390
       HelpKeyword = 'Model'
-      Hint = 'Make MODFLOW-2015 the selected model type'
+      Hint = 'Make MODFLOW 6 the selected model type'
       OnExecute = acModflow6ActiveExecute
     end
     object acRunModflow6: TAction
@@ -3434,11 +3459,15 @@ inherited frmGoPhast: TfrmGoPhast
     object acOutlineToShapefile: TAction
       Category = 'File'
       Caption = 'Model Outline or Grid Lines...'
+      Hint = 
+        'Export the outline of the model or the model grid lines to a sha' +
+        'pefile.'
       OnExecute = acOutlineToShapefileExecute
     end
     object acShowOrHideRulers: TAction
       Category = 'Customize'
       Caption = 'Show or Hide Rulers'
+      Hint = 'Show or hide rulers in 2D views|Show or hide rulers in 2D views'
       OnExecute = acShowOrHideRulersExecute
     end
     object acQuadmesh: TAction
@@ -3481,17 +3510,24 @@ inherited frmGoPhast: TfrmGoPhast
     object acMoveGrid: TAction
       Category = 'Grid'
       Caption = 'Move Grid'
+      Hint = 
+        'Move the grid to a new position|Change where the grid origin is ' +
+        'located'
       OnExecute = acMoveGridExecute
     end
     object acShowCellNumbers: TAction
       Category = 'View'
       Caption = 'Show Cell Numbers'
+      Hint = 'Display cell numbers on the top view of the grid'
       OnExecute = acShowCellNumbersExecute
     end
     object acSimplifyScreenObjects: TAction
       Category = 'Object'
       Caption = 'Simplify Selected Objects'
       Enabled = False
+      Hint = 
+        'Delete un-needed vertices|Delete un-needed vertices from the sel' +
+        'ected object(s)'
       OnExecute = acSimplifyScreenObjectsExecute
     end
   end
@@ -6061,17 +6097,17 @@ inherited frmGoPhast: TfrmGoPhast
     Font.Name = 'helvetica'
     Font.Pitch = fpVariable
     Font.Style = []
-    Left = 224
-    Top = 80
+    Left = 680
+    Top = 8
   end
   object cdColorDialog: TColorDialog
-    Left = 200
-    Top = 80
+    Left = 648
+    Top = 8
   end
   object timTimer: TTimer
     Enabled = False
-    Left = 248
-    Top = 80
+    Left = 576
+    Top = 48
   end
   object dcSetSpacing: TRbwDynamicCursor
     Cursor = 46
@@ -6106,8 +6142,8 @@ inherited frmGoPhast: TfrmGoPhast
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Open ModelMuse file'
     OnTypeChange = sdSaveDialogTypeChange
-    Left = 296
-    Top = 80
+    Left = 616
+    Top = 56
   end
   object sdPhastInput: TSaveDialog
     OnClose = sdPhastInputClose
@@ -6126,8 +6162,8 @@ inherited frmGoPhast: TfrmGoPhast
     OnClick = OpenMostRecentlyUsed
     PreviousItem = N5
     ShowHint = True
-    Left = 472
-    Top = 62
+    Left = 464
+    Top = 14
   end
   object sdModflowInput: TSaveDialog
     OnClose = sdModflowInputClose
@@ -6140,8 +6176,8 @@ inherited frmGoPhast: TfrmGoPhast
     Top = 160
   end
   object ilImageList: TImageList
-    Left = 176
-    Top = 80
+    Left = 616
+    Top = 8
     Bitmap = {
       494C010161006500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000009001000001002000000000000090
@@ -9489,8 +9525,8 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object menuGridLineChoice: TPopupMenu
     Images = ilImageList
-    Left = 344
-    Top = 112
+    Left = 504
+    Top = 48
     object Showall1: TMenuItem
       Action = acShowAllGridLines
       AutoCheck = True
@@ -9542,8 +9578,8 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object pmExportModel: TPopupMenu
     Alignment = paCenter
-    Left = 560
-    Top = 72
+    Left = 504
+    Top = 16
     object miExportModpathPopUp: TMenuItem
       Action = acExportModpath
       Caption = 'Export MODPATH Input Files'
@@ -9564,8 +9600,8 @@ inherited frmGoPhast: TfrmGoPhast
     Filter = 'SUTRA input files|*.inp|All Files|*.*'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
     Title = 'Save SUTRA input files'
-    Left = 680
-    Top = 64
+    Left = 544
+    Top = 8
   end
   object dlgSaveHeadObsToShapefile: TSaveDialog
     DefaultExt = '.shp'
@@ -9579,14 +9615,14 @@ inherited frmGoPhast: TfrmGoPhast
     Filter = 
       'Known mesh types|*.exp;*.msh|Argus ONE quadrilateral mesh (*.exp' +
       ')|*.exp|Gmsh mesh (*.msh)|*.msh|All files (*.*)|*.*'
-    Left = 448
-    Top = 64
+    Left = 424
+    Top = 8
   end
   object tmrImportErrors: TTimer
     Enabled = False
     OnTimer = tmrImportErrorsTimer
-    Left = 616
-    Top = 80
+    Left = 576
+    Top = 16
   end
   object sdSaveSutraMesh: TSaveDialog
     DefaultExt = 'exp'
@@ -9608,6 +9644,6 @@ inherited frmGoPhast: TfrmGoPhast
     ApplicationHintOptions = []
     OnMouseMove = bhntMeasureRulerMouseMove
     Left = 384
-    Top = 40
+    Top = 8
   end
 end
