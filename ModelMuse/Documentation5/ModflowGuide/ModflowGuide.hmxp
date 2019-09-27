@@ -112,7 +112,7 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS,INSIDE-MODFLOW,OPT_ATOC,OPT_BREADTRAIL,OPT_COMMENTS,OPT_POPUPS,OPT_PRINT,OPT_SORTABLE,OPT_SUBTITLE,OPT_TOGGLE,OPT_TOGTOC,OPT_URL</config-value>
       <config-value name="make3status">*</config-value>
-      <config-value name="make5include">PRINT</config-value>
+      <config-value name="make5include">PRINT,ALLMODELS</config-value>
       <config-value name="make5status">*</config-value>
     </config-group>
     <config-group name="hlp">
@@ -400,7 +400,7 @@
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">5</config-value>
+          <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
     </config-group>

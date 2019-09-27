@@ -24168,5 +24168,25 @@ object TTaskHistory
         'Testing'
         'SUTRA 3.0'
         'MT3DMS')
+    end
+    item
+      Date = 43733.440915416670000000
+      Categories.Strings = (
+        'MT3D-USGS SFT'
+        'MT3DMS')
+    end
+    item
+      Date = 43734.440915416670000000
+      Categories.Strings = (
+        'Bug fix'
+        'SFR'
+        'MT3DMS')
+    end
+    item
+      Date = 43735.440915416670000000
+      Categories.Strings = (
+        'Bug fix'
+        'SFR'
+        'Documentation')
     end>
 end
