@@ -42,7 +42,7 @@ type
     btMfMnw, btMt3dSsm, btMfHfb, btSutraSpecifiedPressure, btSutraSpecifiedHead,
     btSutraSpecConcTemp, btSutraFluidFlux, btMassEnergyFlux, btSutraGeneralFlow,
     btSutraGenTransp, btMfFhb, btCFP, btMfFarm, btSWR, btMnw1, btMtmsObs, btRIP,
-    btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6);
+    btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6, mtSft);
 
   TBoundaryTypes = set of TBoundaryType;
 
@@ -1624,6 +1624,7 @@ resourcestring
   StrThereWasAProblem2 = 'There was a problem reading the cached values for ' +
   'data set %s. ModelMuse will attempt to skip the cached values and recalcu' +
   'late them.';
+  StrSFT = 'SFT_';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
 begin
@@ -7228,6 +7229,10 @@ begin
   begin
     result := btUzfMf6;
   end
+  else if Pos(StrSFT, Name) = 1 then
+  begin
+    result := mtSft;
+  end
 
   else
   begin
@@ -7404,6 +7409,10 @@ begin
       btUzfMf6:
         begin
           Result := StrMODFLOW6UZF;
+        end;
+      mtSft:
+        begin
+          Result := 'MT3d-USGS SFT';
         end;
 
       else

@@ -8754,13 +8754,14 @@ const
   //                MODFLOW-LGR.
   //    '4.0.0.17' Bug fix: Fixed a bug that could cause an access violation
   //                importing a MODFLOW model containing the MNW2 package.
-
-  //               Bug fix: Fixed the conversion of diversions from the
+  //    '4.0.0.18' Bug fix: Fixed the conversion of diversions from the
   //                the MODFLOW-2005 version of SFR and STR to the MODFLOW 6
   //                version of SFR.
+  //               Bug fix: Fixed bug in export of the MODPATH input files
+  //                for models with DISV grids.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.17';
+  IModelVersion = '4.0.0.18';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -35793,7 +35794,14 @@ end;
 
 function TCustomModel.NumberOfMt3dChemComponents: integer;
 begin
-  result := MobileComponents.Count + ImmobileComponents.Count;
+  if (MobileComponents <> nil) and (ImmobileComponents <> nil) then
+  begin
+    result := MobileComponents.Count + ImmobileComponents.Count;
+  end
+  else
+  begin
+    result := 0;
+  end;
 end;
 
 function TCustomModel.NWT_Format: TNwtFormat;

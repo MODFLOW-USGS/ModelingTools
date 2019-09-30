@@ -411,6 +411,7 @@ type
     FOldImmobileComponents: TChemSpeciesCollection;
     FNewImmobileComponents: TChemSpeciesCollection;
     FOldMt3dTimes: TMt3dmsTimeCollection;
+    FComponentsSame: Boolean;
     procedure UpdateLayerGroupProperties(BcfPackage: TModflowPackageSelection);
     procedure RecreateMt3dTimeLists;
     procedure SetMt3dCaption;
@@ -438,7 +439,7 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   frameSfrParamInstancesUnit, LayerStructureUnit, frmErrorsAndWarningsUnit, 
   frmManageFluxObservationsUnit, ModflowSubsidenceDefUnit, Mt3dmsChemUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
-  Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit;
+  Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -3936,6 +3937,9 @@ begin
   finally
     PhastModel.ModflowPackages.SfrPackage.AssignParameterInstances := True;
   end;
+
+  FComponentsSame := PhastModel.MobileComponents.IsSame(FNewMobileComponents)
+    and PhastModel.ImmobileComponents.IsSame(FNewImmobileComponents);
   PhastModel.MobileComponents := FNewMobileComponents;
   PhastModel.ImmobileComponents := FNewImmobileComponents;
 
@@ -3954,6 +3958,11 @@ begin
   end;
 
   RecreateMt3dTimeLists;
+
+  if not FComponentsSame then
+  begin
+    PhastModel.ModflowPackages.Mt3dSft.ChangeChemSpecies;
+  end;
 
   inherited;
   frmGoPhast.EnableLinkStreams;
@@ -3981,6 +3990,7 @@ var
   Mt3dUztSatEtConcBoundary: TMt3dUztSatEtConcBoundary;
   Mt3dUztUnsatEtConcBoundary: TMt3dUztUnsatEtConcBoundary;
   Mt3dUzSsmSinkConcBoundary: TMt3dUzSsmSinkConcBoundary;
+  Mt3dSftConcBoundary: TMt3dSftBoundary;
 begin
   LocalModel := frmGoPhast.PhastModel;
   if (LocalModel <> nil) and not (csDestroying in LocalModel.ComponentState)
@@ -4018,6 +4028,12 @@ begin
       if Mt3dUzSsmSinkConcBoundary <> nil then
       begin
         Mt3dUzSsmSinkConcBoundary.CreateTimeLists;
+      end;
+
+      Mt3dSftConcBoundary := ScreenObject.Mt3dSftConcBoundary;
+      if Mt3dSftConcBoundary <> nil then
+      begin
+        Mt3dSftConcBoundary.CreateTimeLists;
       end;
     end;
   end;
@@ -4062,6 +4078,12 @@ begin
   frmGoPhast.PhastModel.MobileComponents := FOldMobileComponents;
   frmGoPhast.PhastModel.ImmobileComponents := FOldImmobileComponents;
   RecreateMt3dTimeLists;
+
+  if not FComponentsSame then
+  begin
+    frmGoPhast.PhastModel.ModflowPackages.Mt3dSft.ChangeChemSpecies;
+  end;
+
   inherited;
   frmGoPhast.PhastModel.HydrogeologicUnits.Assign(FOldHydroGeologicUnits);
   frmGoPhast.EnableLinkStreams;

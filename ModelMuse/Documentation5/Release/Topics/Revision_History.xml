@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Revision History</text></para>
     </header>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.1 Aug. 26, 2019]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.1 Sept. 30, 2019]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -18,6 +18,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA boundary conditions, &quot;Used&quot; can now be set using a formula.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In the SFR package for MODFLOW 6, there is now a check that the sum of the upstream fractions of the downstream reaches of a reach add up to 1.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns if the bottom of the stream bed in an SFR reach in MODFLOW 6 is below the bottom of the cell.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">MT3D can now be used with child models in MODFLOW-LGR.</text></para>
               </td>
             </tr>
           </table></para>
@@ -57,6 +58,17 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODPATH_Zone data set was sometimes improperly marked as required with MODPATH 7 when in reality it wasn&apos;t used.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if the user tried to rename a data set.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause a bug report to be generated if the mouse wheel was moved over the NPF options grid in the MODFLOW Packages and Programs dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error if the number of time steps in a stress period was greater than or equal to 100,000.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error if multiple copies of ModelMuse are being run from the command line at the same time.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could case an error if the last time defined for a stream in a MODFLOW 6 model was earlier than the last time in the model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Transient data for the MVR package was not displayed properly in the Object Properties dialog bos if the number of times was not equal to 1.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed coloring pathlines with the Z coordinate when DISV is used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when assigning values to a data set using interpolation.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of Step Schedules in SUTRA. Previously, the exported time steps were smaller than then should have been by one time step.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when deleting a custom color scheme.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation importing a MODFLOW model containing the MNW2 package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed the conversion of diversions from the the MODFLOW-2005 version of SFR and STR to the MODFLOW 6 version of SFR.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of the MODPATH input files for models with DISV grids.</text></para>
               </td>
             </tr>
           </table></para>

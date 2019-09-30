@@ -593,7 +593,7 @@ begin
       end;
       WriteInteger(LAYCON);
       Inc(LayerCount);
-      if ((LayerCount mod 10) = 0) or (Index = Model.Grid.LayerCount - 1) then
+      if ((LayerCount mod 10) = 0) or (Index = Model.LayerCount - 1) then
       begin
         NewLine;
       end;

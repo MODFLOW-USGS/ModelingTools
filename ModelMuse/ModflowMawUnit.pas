@@ -469,6 +469,7 @@ type
     procedure LinkRadius;
     procedure LinkBottom;
     procedure LinkInitialHead;
+    procedure CreateObservers;
   protected
     property RadiusObserver: TObserver read GetRadiusObserver;
     property BottomObserver: TObserver read GetBottomObserver;
@@ -482,7 +483,6 @@ type
     Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
-    procedure CreateObservers;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     // The well number is assigned in the export process.

@@ -205,6 +205,10 @@ type
     FDispersionCoefficient: TMt3dSftDispCollection;
     FCurrentBoundaryType: TSftBoundaryType;
     FStartingReachNumber: Integer;
+    FConstConcObserver: TObserver;
+    FHeadWaterObserver: TObserver;
+    FPrecipObserver: TObserver;
+    FRunoffObserver: TObserver;
     procedure SetObsLocation(const Value: TSftObsLocation);
     procedure SetConstConc(const Value: TConstConcMt3dSftReachCollection);
     procedure SetPrecipitation(
@@ -214,6 +218,11 @@ type
       ValueTimeList: TList);
     procedure SetDispersionCoefficient(const Value: TMt3dSftDispCollection);
     procedure SetInitialConcentration(const Value: TMt3dSftInitConcCollection);
+    procedure CreateObservers;
+    function GetConstConcObserver: TObserver;
+    function GetHeadWaterObserver: TObserver;
+    function GetPrecipObserver: TObserver;
+    function GetRunoffObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -223,6 +232,11 @@ type
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     procedure ClearBoundaries(AModel: TBaseModel); override;
     function BoundaryObserverPrefix: string; override;
+    property HeadWaterObserver: TObserver read GetHeadWaterObserver;
+    property PrecipObserver: TObserver read GetPrecipObserver;
+    property RunoffObserver: TObserver read GetRunoffObserver;
+    property ConstConcObserver: TObserver read GetConstConcObserver;
+
   public
     Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -1181,7 +1195,7 @@ begin
 //  CreateFormulaObjects;
   CreateBoundaryObserver;
 
-//  CreateObservers;
+  CreateObservers;
 
   FPrecipitation := TPrecipitationMt3dSftReachCollection.Create(Self, Model, ScreenObject);
   FRunOff := TRunoffMt3dSftReachCollection.Create(Self, Model, ScreenObject);
@@ -1195,6 +1209,17 @@ begin
   FObsLocation := solNone;
 end;
 
+
+procedure TMt3dSftBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(HeadWaterObserver);
+    FObserverList.Add(PrecipObserver);
+    FObserverList.Add(RunoffObserver);
+    FObserverList.Add(ConstConcObserver);
+  end;
+end;
 
 procedure TMt3dSftBoundary.DeleteSpecies(SpeciesIndex: integer);
 begin
@@ -1296,6 +1321,24 @@ begin
 end;
 
 
+function TMt3dSftBoundary.GetConstConcObserver: TObserver;
+begin
+  if FConstConcObserver = nil then
+  begin
+    CreateObserver('SFT_ConstConc', FConstConcObserver, nil);
+  end;
+  result := FConstConcObserver;
+end;
+
+function TMt3dSftBoundary.GetHeadWaterObserver: TObserver;
+begin
+  if FHeadWaterObserver = nil then
+  begin
+    CreateObserver('SFT_HeadWaterConc', FHeadWaterObserver, nil);
+  end;
+  result := FHeadWaterObserver;
+end;
+
 procedure TMt3dSftBoundary.GetPrecipCells(PrecipTimeList: TList;
   AModel: TBaseModel);
 var
@@ -1313,6 +1356,15 @@ begin
 end;
 
 
+function TMt3dSftBoundary.GetPrecipObserver: TObserver;
+begin
+  if FPrecipObserver = nil then
+  begin
+    CreateObserver('SFT_PrecipConc', FPrecipObserver, nil);
+  end;
+  result := FPrecipObserver;
+end;
+
 procedure TMt3dSftBoundary.GetRunOffCells(PrecipTimeList: TList;
   AModel: TBaseModel);
 var
@@ -1327,6 +1379,15 @@ begin
       AssignSftCells(BoundaryStorage, PrecipTimeList);
     end;
   end;
+end;
+
+function TMt3dSftBoundary.GetRunoffObserver: TObserver;
+begin
+  if FRunoffObserver = nil then
+  begin
+    CreateObserver('SFT_Runoff', FRunoffObserver, nil);
+  end;
+  result := FRunoffObserver;
 end;
 
 procedure TMt3dSftBoundary.InsertNewSpecies(SpeciesIndex: integer;

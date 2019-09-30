@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-72
+71
 SutraTest1.gpt
 	Archive\SutraTest1.axml
 	Archive\SutraTest1.FluxBcs
@@ -63,7 +63,6 @@ Island3D_InitialPressure.gpt
 	Archive\usgs.Island3D_InitialPressure.reference
 SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.axml
-	Archive\SutraGenBoundLakeTest.bak
 	Archive\SutraGenBoundLakeTest.GfbBCS
 	Archive\SutraGenBoundLakeTest.GtbBCS
 	Archive\SutraGenBoundLakeTest.ics

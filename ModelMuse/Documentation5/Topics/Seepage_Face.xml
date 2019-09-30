@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Seepage Face</title>
   <body>
     <header>
@@ -31,7 +31,7 @@
     <para styleclass="Normal"><image src="SutraDam9GlobalVariables.png" scale="60.00%" width="319" height="190" styleclass="Image Caption"><title translate="true">Global variables</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">To create the specified pressure boundary, click the </text><text styleclass="Strong" translate="true">create straight line</text><text styleclass="Normal" translate="true">&#32;</text><image src="CreateStraightLine.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Create Straight-Line Object button</title></image><text styleclass="Normal" translate="true"> button and draw an object just inside the left edge of the model. On the Properties tab, set </text><text styleclass="Strong" translate="true">Evaluated At</text><text styleclass="Normal" translate="true"> to </text><text styleclass="Strong" translate="true">Nodes</text><text styleclass="Normal" translate="true">. </text></para>
     <para styleclass="Normal"><image src="SutraDam10SpecPresNodes.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Set &quot;Evaluated At&quot; to &quot;Nodes&quot;</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pressure along the boundary will be ρg*Depth. ModelMuse can calculate the depth as &quot;10-Y&quot; so the formula for depth will be (ρ * g) * (10. - Y).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pressure along the boundary will be ρg*Depth. ModelMuse can calculate the depth as &quot;10-Y&quot; so the formula for specified pressure will be (ρ * g) * (10. - Y).</text></para>
     <para styleclass="Normal"><image src="SutraDam11SpecPresFormula.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Define specified pressure boundary</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You can color the grid with the specified pressure to make sure it is being calculated properly. The pressure should be 0 in the top node and 98,100 in the bottom node.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The generalized-flow boundary is along the right edge of the mesh. So draw another object just inside the right edge of the mesh. As with the specified pressure boundary, set &quot;Evaluated At&quot; to &quot;Nodes&quot;. &#160;Set the properties of the Generalized Flow Boundary as illustrated below and click OK.</text></para>
@@ -54,7 +54,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">TCMAX = 3600</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Then click OK.</text></para>
     <para styleclass="Normal"><image src="SutraDam12TimeControls.png" scale="60.00%" width="419" height="349" styleclass="Image Caption"><title translate="true">Time Controls</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|SUTRA Output Control</text><text styleclass="Normal" translate="true"> and change NPRINT to 10 and </text><text styleclass="Strong" translate="true">Listing File</text><text styleclass="Normal" translate="true"> tab and NCOLPR and LCOLPR to 10 on the </text><text styleclass="Strong" translate="true">Nod and Ele Files</text><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Model|SUTRA Output Control</text><text styleclass="Normal" translate="true"> and change NPRINT to 10 on the </text><text styleclass="Strong" translate="true">Listing File</text><text styleclass="Normal" translate="true"> tab and NCOLPR and LCOLPR to 10 on the </text><text styleclass="Strong" translate="true">Nod and Ele Files</text><text styleclass="Normal" translate="true"> tab.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The aquifer properties all all uniform. Specify the following properties in the </text><text styleclass="Strong" translate="true">Data|Edit Data Sets</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="2" colcount="2" style="width:300px;">
       <tr style="vertical-align:top">

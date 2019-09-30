@@ -2120,6 +2120,7 @@ Type
     procedure GetPrecipUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetRunoffUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetConstConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure SetIsSelected(const Value: boolean); override;
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -5425,6 +5426,10 @@ resourcestring
   StrMNW1WellRadius = 'MNW1 Well Radius';
   StrRIPLandElevation = 'RIP LandElevation';
   StrRIPCoverage = 'RIP Coverage';
+  StrSFTHeadWatersConc = 'SFT_Head_Waters_Conc_%d';
+  StrSFTPrecipConcd = 'SFT_Precip_Conc_%d';
+  StrSFTRunoffConcd = 'SFT_Runoff_Conc_%d';
+  StrSFTConstantConcd = 'SFT_Constant_Conc_%d';
 
 
 
@@ -20069,6 +20074,11 @@ begin
   FConstConcTimeLists := TObjectModflowBoundListOfTimeLists.Create;
 
   InitializeVariables;
+
+  if Model <> nil then
+  begin
+    UpdateTimeLists;
+  end;
 end;
 
 destructor TMt3dSftPackageSelection.Destroy;
@@ -20201,6 +20211,24 @@ begin
 end;
 
 procedure TMt3dSftPackageSelection.InitializeSftDisplay(Sender: TObject);
+  procedure CreateDataSets(TimeLists: TObjectModflowBoundListOfTimeLists);
+  var
+    ListIndex: Integer;
+  begin
+    for ListIndex := 0 to TimeLists.Count - 1 do
+    begin
+      TimeLists[ListIndex].CreateDataSets
+    end;
+  end;
+  procedure ComputeAverage(TimeLists: TObjectModflowBoundListOfTimeLists);
+  var
+    ListIndex: Integer;
+  begin
+    for ListIndex := 0 to TimeLists.Count - 1 do
+    begin
+      TimeLists[ListIndex].ComputeAverage
+    end;
+  end;
 var
   SftWriter: TMt3dmsSftWriter;
   List: TList<TModflowBoundListOfTimeLists>;
@@ -20209,6 +20237,11 @@ begin
 //  FPrecipTimeLists.CreateDataSets;
 //  FRunOffTimeLists.CreateDataSets;
 //  FConstConcTimeLists.CreateDataSets;
+
+  CreateDataSets(FHeadWatersTimeLists);
+  CreateDataSets(FPrecipTimeLists);
+  CreateDataSets(FRunOffTimeLists);
+  CreateDataSets(FConstConcTimeLists);
 
   List := TList<TModflowBoundListOfTimeLists>.Create;
   SftWriter := TMt3dmsSftWriter.Create(FModel as TCustomModel, etDisplay);
@@ -20226,6 +20259,11 @@ begin
 //  FPrecipTimeLists.ComputeAverage;
 //  FRunOffTimeLists.ComputeAverage;
 //  FConstConcTimeLists.ComputeAverage;
+
+  ComputeAverage(FHeadWatersTimeLists);
+  ComputeAverage(FPrecipTimeLists);
+  ComputeAverage(FRunOffTimeLists);
+  ComputeAverage(FConstConcTimeLists);
 end;
 
 procedure TMt3dSftPackageSelection.InitializeVariables;
@@ -20248,6 +20286,12 @@ end;
 procedure TMt3dSftPackageSelection.SetEvaporateMass(const Value: Boolean);
 begin
   SetBooleanProperty(FEvaporateMass, Value);
+end;
+
+procedure TMt3dSftPackageSelection.SetIsSelected(const Value: boolean);
+begin
+  inherited;
+  ChangeChemSpecies;
 end;
 
 procedure TMt3dSftPackageSelection.SetMaxSftIterations(const Value: Integer);
@@ -20315,15 +20359,18 @@ begin
       RemoveTimeList(FHeadWatersTimeLists[TimeListIndex])
     end;
     FHeadWatersTimeLists.Clear;
-    for CompIndex := 1 to NCOMP do
+    if IsSelected then
     begin
-      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      ATimeList.OnInitialize := InitializeSftDisplay;
-      ATimeList.OnGetUseList := GetHeadWatersUseList;
-      ATimeList.OnTimeListUsed := PackageUsed;
-      ATimeList.Name := 'SFT_Head_Waters_Conc_' + IntToStr(CompIndex);
-      FHeadWatersTimeLists.Add(ATimeList);
-      AddTimeList(ATimeList);
+      for CompIndex := 1 to NCOMP do
+      begin
+        ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+        ATimeList.OnInitialize := InitializeSftDisplay;
+        ATimeList.OnGetUseList := GetHeadWatersUseList;
+        ATimeList.OnTimeListUsed := PackageUsed;
+        ATimeList.Name := Format(StrSFTHeadWatersConc, [CompIndex]);
+        FHeadWatersTimeLists.Add(ATimeList);
+        AddTimeList(ATimeList);
+      end;
     end;
 
     for TimeListIndex := 0 to FPrecipTimeLists.Count - 1 do
@@ -20331,15 +20378,18 @@ begin
       RemoveTimeList(FPrecipTimeLists[TimeListIndex])
     end;
     FPrecipTimeLists.Clear;
-    for CompIndex := 1 to NCOMP do
+    if IsSelected then
     begin
-      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      ATimeList.OnInitialize := InitializeSftDisplay;
-      ATimeList.OnGetUseList := GetPrecipUseList;
-      ATimeList.OnTimeListUsed := PackageUsed;
-      ATimeList.Name := 'SFT_Precip_Conc_' + IntToStr(CompIndex);
-      FPrecipTimeLists.Add(ATimeList);
-      AddTimeList(ATimeList);
+      for CompIndex := 1 to NCOMP do
+      begin
+        ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+        ATimeList.OnInitialize := InitializeSftDisplay;
+        ATimeList.OnGetUseList := GetPrecipUseList;
+        ATimeList.OnTimeListUsed := PackageUsed;
+        ATimeList.Name := Format(StrSFTPrecipConcd, [CompIndex]);
+        FPrecipTimeLists.Add(ATimeList);
+        AddTimeList(ATimeList);
+      end;
     end;
 
     for TimeListIndex := 0 to FRunOffTimeLists.Count - 1 do
@@ -20347,15 +20397,18 @@ begin
       RemoveTimeList(FRunOffTimeLists[TimeListIndex])
     end;
     FRunOffTimeLists.Clear;
-    for CompIndex := 1 to NCOMP do
+    if IsSelected then
     begin
-      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      ATimeList.OnInitialize := InitializeSftDisplay;
-      ATimeList.OnGetUseList := GetRunoffUseList;
-      ATimeList.OnTimeListUsed := PackageUsed;
-      ATimeList.Name := 'SFT_Runoff_Conc_' + IntToStr(CompIndex);
-      FRunOffTimeLists.Add(ATimeList);
-      AddTimeList(ATimeList);
+      for CompIndex := 1 to NCOMP do
+      begin
+        ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+        ATimeList.OnInitialize := InitializeSftDisplay;
+        ATimeList.OnGetUseList := GetRunoffUseList;
+        ATimeList.OnTimeListUsed := PackageUsed;
+        ATimeList.Name := Format(StrSFTRunoffConcd, [CompIndex]);
+        FRunOffTimeLists.Add(ATimeList);
+        AddTimeList(ATimeList);
+      end;
     end;
 
     for TimeListIndex := 0 to FConstConcTimeLists.Count - 1 do
@@ -20363,15 +20416,18 @@ begin
       RemoveTimeList(FConstConcTimeLists[TimeListIndex])
     end;
     FConstConcTimeLists.Clear;
-    for CompIndex := 1 to NCOMP do
+    if IsSelected then
     begin
-      ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      ATimeList.OnInitialize := InitializeSftDisplay;
-      ATimeList.OnGetUseList := GetConstConcUseList;
-      ATimeList.OnTimeListUsed := PackageUsed;
-      ATimeList.Name := 'SFT_Constant_Conc_' + IntToStr(CompIndex);
-      FConstConcTimeLists.Add(ATimeList);
-      AddTimeList(ATimeList);
+      for CompIndex := 1 to NCOMP do
+      begin
+        ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+        ATimeList.OnInitialize := InitializeSftDisplay;
+        ATimeList.OnGetUseList := GetConstConcUseList;
+        ATimeList.OnTimeListUsed := PackageUsed;
+        ATimeList.Name := Format(StrSFTConstantConcd, [CompIndex]);
+        FConstConcTimeLists.Add(ATimeList);
+        AddTimeList(ATimeList);
+      end;
     end;
   end;
 end;
