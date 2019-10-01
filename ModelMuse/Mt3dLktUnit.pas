@@ -898,7 +898,7 @@ end;
 procedure TMt3dLktConcItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TMt3dLktConcCollection;
-  InitConcObserver: TObserver;
+//  InitConcObserver: TObserver;
 //  ScreenTopObserver: TObserver;
 //  SkinKObserver: TObserver;
 //  SkinRadiusObserver: TObserver;

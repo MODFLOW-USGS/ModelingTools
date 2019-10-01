@@ -259,6 +259,7 @@ type
     function Used: boolean; override;
     procedure AssignInitConcAndDisp(AModel: TBaseModel; SftSteadyList: TSftSteadyObjectList);
     property StartingReachNumber: Integer read FStartingReachNumber write FStartingReachNumber;
+    procedure InvalidateDisplay; override;
   published
     property InitialConcentration: TMt3dSftInitConcCollection read FInitialConcentration
       write SetInitialConcentration;
@@ -330,19 +331,19 @@ begin
     case BoundaryType of
       sbtHeadwater:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftHeadwatersConc(self);
         end;
       sbtPrecipitation:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftPrecipConc(self);
         end;
       sbtRunoff:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftRunoffConc(self);
         end;
       sbtConstConc:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftConstConc(self);
         end;
       else
         Assert(False);
@@ -597,19 +598,19 @@ begin
     case BoundaryType of
       sbtHeadwater:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftHeadwatersConc(self);
         end;
       sbtPrecipitation:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftPrecipConc(self);
         end;
       sbtRunoff:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftRunoffConc(self);
         end;
       sbtConstConc:
         begin
-//          PhastModel.InvalidateUztRechConc(self);
+          PhastModel.InvalidateSftConstConc(self);
         end;
       else
         Assert(False);
@@ -1405,6 +1406,21 @@ begin
 
   SftItem := FDispersionCoefficient.Add;
   SftItem.Index := SpeciesIndex;
+end;
+
+procedure TMt3dSftBoundary.InvalidateDisplay;
+var
+  LocalModel: TPhastModel;
+begin
+  inherited;
+  if Used and (ParentModel <> nil) then
+  begin
+    LocalModel := ParentModel as TPhastModel;
+    LocalModel.InvalidateSftHeadwatersConc(self);
+    LocalModel.InvalidateSftPrecipConc(self);
+    LocalModel.InvalidateSftRunoffConc(self);
+    LocalModel.InvalidateSftConstConc(self);
+  end;
 end;
 
 procedure TMt3dSftBoundary.Loaded;

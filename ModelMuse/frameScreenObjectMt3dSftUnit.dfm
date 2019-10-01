@@ -54,15 +54,11 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     Top = 160
     Width = 482
     Height = 193
-    ActivePage = tsSteady
+    ActivePage = tsRunoff
     Align = alBottom
     TabOrder = 3
     object tsSteady: TTabSheet
       Caption = 'Steady'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblObsLocation: TLabel
         Left = 176
         Top = 6
@@ -164,8 +160,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 0
-        ExplicitHeight = 165
       end
       object comboObsLocation: TComboBox
         Left = 16
@@ -186,18 +180,10 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     object tsHeadWaters: TTabSheet
       Caption = 'Head Water Conc.'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tsPrecipitation: TTabSheet
       Caption = 'Precipitation Conc.'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlBottomPrecip: TPanel
         Left = 0
         Top = 119
@@ -227,7 +213,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnChange = seNumberOfTimesPrecipChange
         end
         object btnDeletePrecip: TBitBtn
-          Left = 394
+          Left = 390
           Top = 6
           Width = 82
           Height = 33
@@ -424,10 +410,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     object tsRunoff: TTabSheet
       Caption = 'Runoff Conc.'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlBottomRunoff: TPanel
         Left = 0
         Top = 119
@@ -457,7 +439,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnChange = seNumberOfTimesRunoffChange
         end
         object btnDeleteRunoff: TBitBtn
-          Left = 394
+          Left = 390
           Top = 6
           Width = 82
           Height = 33
@@ -654,10 +636,6 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     object tsConstantConcentration: TTabSheet
       Caption = 'Constant Conc.'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlBottomConstConc: TPanel
         Left = 0
         Top = 119

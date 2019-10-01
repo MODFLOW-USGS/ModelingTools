@@ -74,6 +74,7 @@ type
     FUzfMf6Package: TUzfMf6PackageSelection;
     FMt3dLkt: TMt3dLktPackage;
     FMt3dSft: TMt3dSftPackageSelection;
+    FMt3dCts: TMt3dCtsPackageSelection;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -138,6 +139,7 @@ type
     procedure SetUzfMf6Package(const Value: TUzfMf6PackageSelection);
     procedure SetMt3dLkt(const Value: TMt3dLktPackage);
     procedure SetMt3dSft(const Value: TMt3dSftPackageSelection);
+    procedure SetMt3dCts(const Value: TMt3dCtsPackageSelection);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -151,6 +153,7 @@ type
     // @name is used to set the progress bar limits when exporting
     // the MODFLOW input files.
     function SelectedModflowPackageCount: integer;
+    procedure Loaded;
   published
     property ChdBoundary: TChdPackage read FChdBoundary write SetChdBoundary;
     property GhbBoundary: TGhbPackage read FGhbBoundary write SetGhbBoundary;
@@ -260,8 +263,12 @@ type
     property MvrPackage: TMvrPackage read FMvrPackage write SetMvrPackage;
     property UzfMf6Package: TUzfMf6PackageSelection read FUzfMf6Package
       write SetUzfMf6Package;
-    // Assign, Create, Destroy, SelectedModflowPackageCount
-    // and Reset must be updated each time a new package is added.
+    property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
+    // Assign, Create, Destroy, and Reset must be updated each time a new
+    // package is added.
+    // SelectedModflowPackageCount must be updated if the new package is a
+    // MODFLOW package.
+    // Sometimes Loaded must be updated too.
   end;
 
 resourcestring
@@ -356,6 +363,7 @@ resourcestring
   StrUZFUnsaturatedZonMf6 = 'UZF6: Unsaturated-Zone Flow Package for MODFLOW 6';
   StrLKTLakeTransport = 'LKT: Lake Transport Package';
   StrSFTStreamFlowTra = 'SFT: Stream Flow Transport Package';
+  StrCTSContaminantTre = 'CTS: Contaminant Treatment System Package';
 
 
 { TModflowPackages }
@@ -431,6 +439,7 @@ begin
     UzfMf6Package := SourcePackages.UzfMf6Package;
     Mt3dLkt := SourcePackages.Mt3dLkt;
     Mt3dSft := SourcePackages.Mt3dSft;
+    Mt3dCts := SourcePackages.Mt3dCts;
   end
   else
   begin
@@ -672,6 +681,11 @@ begin
   FMt3dSft.Classification := StrMT3DMS_Classificaton;
   FMt3dSft.SelectionType := stCheckBox;
 
+  FMt3dCts := TMt3dCtsPackageSelection.Create(Model);
+  FMt3dCts.PackageIdentifier := StrCTSContaminantTre;;
+  FMt3dCts.Classification := StrMT3DMS_Classificaton;
+  FMt3dCts.SelectionType := stCheckBox;
+
   FFarmProcess := TFarmProcess.Create(Model);
   FFarmProcess.PackageIdentifier := StrFarmProcess;
   FFarmProcess.Classification := StrFarmProcessClassification;
@@ -819,7 +833,13 @@ begin
   FMawPackage.Free;
   FMt3dLkt.Free;
   FMt3dSft.Free;
+  FMt3dCts.Free;
   inherited;
+end;
+
+procedure TModflowPackages.Loaded;
+begin
+  Mt3dSft.Loaded;
 end;
 
 procedure TModflowPackages.Reset;
@@ -887,6 +907,7 @@ begin
   MvrPackage.InitializeVariables;
   UzfMf6Package.InitializeVariables;
   Mt3dSft.InitializeVariables;
+  Mt3dCts.InitializeVariables;
 end;
 
 function TModflowPackages.SelectedModflowPackageCount: integer;
@@ -1305,6 +1326,11 @@ end;
 procedure TModflowPackages.SetMt3dBasic(const Value: TMt3dBasic);
 begin
   FMt3dBasic.Assign(Value);
+end;
+
+procedure TModflowPackages.SetMt3dCts(const Value: TMt3dCtsPackageSelection);
+begin
+  FMt3dCts.Assign(Value);
 end;
 
 procedure TModflowPackages.SetMt3dLkt(const Value: TMt3dLktPackage);

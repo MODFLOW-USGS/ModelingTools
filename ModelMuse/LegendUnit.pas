@@ -198,6 +198,10 @@ begin
     DataArray := TDataArray(ValueSource);
     DataArray.Initialize;
     Fractions.Count := Values.Count;
+    if Values.DataType <> DataArray.DataType then
+    begin
+      Exit;
+    end;
     case DataArray.DataType of
       rdtDouble:
         begin

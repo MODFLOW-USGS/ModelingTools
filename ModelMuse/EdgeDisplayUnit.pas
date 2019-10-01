@@ -323,7 +323,7 @@ begin
         List.Add(Feature)
       end;
     end;
-    Color := clWhite;
+//    Color := clWhite;
     for FeatureIndex := 0 to List.Count - 1 do
     begin
       Feature := List[FeatureIndex];

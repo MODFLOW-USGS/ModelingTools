@@ -14,7 +14,7 @@
           <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for SUTRA 3.0 added.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for SUTRA 3.0 added. The new features are accessible through the SUTRA Options dialog box and the Object Properties dialog box and are documented in the help for those dialog boxes. The Examples/Tutorials item in the help also includes two new SUTRA example models.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In SUTRA boundary conditions, &quot;Used&quot; can now be set using a formula.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In the SFR package for MODFLOW 6, there is now a check that the sum of the upstream fractions of the downstream reaches of a reach add up to 1.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns if the bottom of the stream bed in an SFR reach in MODFLOW 6 is below the bottom of the cell.</text></para>
@@ -37,7 +37,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause division by zero errors when drawing the top, front, or side views.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause errors in determining which cells were inside objects with multiple parts.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when deactivating SFR in objects.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed bug that could cause access violations when exporting the SFR package input in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause access violations when exporting the SFR package input in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause the wrong identifier to be displayed for an invalid formula in a model feature.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause divide by zero errors when drawing the top, front or side views.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failure when generating the input for the SFR package.</text></para>
@@ -48,7 +48,6 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause a range check error when Creating a DISV grid in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in reading SFR6 data from file.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in writing idiv in MODFLOW 6 SFR6 input file.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">not in released version. Fixed getting vertex values.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in which mxiter in the MODFLOW 6 Simulation Name File was not exported correctly.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in identifying MVR sources when the UZF package is used.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when editing and SFR stream in MODFLOW 6.</text></para>
@@ -69,6 +68,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation importing a MODFLOW model containing the MNW2 package.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed the conversion of diversions from the the MODFLOW-2005 version of SFR and STR to the MODFLOW 6 version of SFR.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of the MODPATH input files for models with DISV grids.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when coloring the grid.</text></para>
               </td>
             </tr>
           </table></para>

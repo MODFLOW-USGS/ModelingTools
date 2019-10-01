@@ -419,6 +419,10 @@ object TTaskHistory
     item
       Name = 'Simplify Objects'
       Display = True
+    end
+    item
+      Name = 'MT3D-USGS CTS'
+      Display = True
     end>
   History = <
     item
@@ -24191,9 +24195,26 @@ object TTaskHistory
     end
     item
       Date = 43736.440915416670000000
+    end
+    item
+      Date = 43737.440915416670000000
+    end
+    item
+      Date = 43738.440915416670000000
       Categories.Strings = (
         'Documentation'
+        'Installer'
         'MT3D-USGS SFT'
-        'Installer')
+        'Bug fix'
+        'Graphics')
+    end
+    item
+      Date = 43739.440915416670000000
+      Categories.Strings = (
+        'MT3D-USGS SFT'
+        'Bug fix'
+        'Graphics'
+        'MT3D-USGS CTS'
+        'Dialog boxes')
     end>
 end

@@ -681,7 +681,8 @@ uses
   frameScreenObjectMt3dSftUnit in 'frameScreenObjectMt3dSftUnit.pas' {frameScreenObjectMt3dSft: TFrame},
   frameMt3dSftUnit in 'frameMt3dSftUnit.pas' {frameMt3dSftPkg: TFrame},
   Mt3dSftWriterUnit in 'Mt3dSftWriterUnit.pas',
-  frmSimplifyObjectsCriteriaUnit in 'frmSimplifyObjectsCriteriaUnit.pas' {frmSimplifyObjectsCriteria};
+  frmSimplifyObjectsCriteriaUnit in 'frmSimplifyObjectsCriteriaUnit.pas' {frmSimplifyObjectsCriteria},
+  frameMt3dCtsPkgUnit in 'frameMt3dCtsPkgUnit.pas' {frameMt3dCtsPkg: TFrame};
 
 {$R *.res}
 {#BACKUP ModelMuse.cfg}

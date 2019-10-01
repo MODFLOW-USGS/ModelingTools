@@ -1625,6 +1625,7 @@ resourcestring
   'data set %s. ModelMuse will attempt to skip the cached values and recalcu' +
   'late them.';
   StrSFT = 'SFT_';
+//  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
 begin
@@ -7412,7 +7413,7 @@ begin
         end;
       mtSft:
         begin
-          Result := 'MT3d-USGS SFT';
+          Result := StrStreamTransport;
         end;
 
       else

@@ -889,12 +889,10 @@ inherited frmDisplayData: TfrmDisplayData
         ExplicitWidth = 578
         inherited pcChoices: TPageControl
           Width = 578
-          ActivePage = frameColorGrid.tabFilters
           ExplicitWidth = 578
           inherited tabSelection: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 570
             ExplicitHeight = 468
             inherited lblDataSet: TLabel
               Width = 212
@@ -903,7 +901,7 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblColorScheme: TLabel
-              Top = 274
+              Top = 269
               Width = 97
               Height = 18
               ExplicitTop = 289
@@ -911,8 +909,8 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblCycles: TLabel
-              Left = 469
-              Top = 325
+              Left = 476
+              Top = 320
               Width = 47
               Height = 18
               ExplicitLeft = 455
@@ -922,14 +920,14 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited pbColorScheme: TPaintBox
               Left = 8
-              Top = 342
-              Width = 447
+              Top = 337
+              Width = 454
               ExplicitLeft = 8
               ExplicitTop = 352
               ExplicitWidth = 433
             end
             inherited lblColorAdjustment: TLabel
-              Top = 381
+              Top = 376
               Width = 117
               Height = 18
               ExplicitTop = 401
@@ -943,7 +941,7 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblTime: TLabel
-              Left = 457
+              Left = 464
               Top = 2
               Width = 34
               Height = 18
@@ -954,44 +952,44 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited comboColorScheme: TComboBox
               Left = 8
-              Top = 298
-              Width = 291
+              Top = 293
+              Width = 298
               Height = 26
               ExplicitLeft = 8
-              ExplicitTop = 298
+              ExplicitTop = 293
               ExplicitWidth = 291
               ExplicitHeight = 26
             end
             inherited seCycles: TJvSpinEdit
-              Left = 469
-              Top = 349
+              Left = 468
+              Top = 344
               Height = 26
-              ExplicitLeft = 469
-              ExplicitTop = 349
+              ExplicitLeft = 468
+              ExplicitTop = 344
               ExplicitHeight = 26
             end
             inherited jsColorExponent: TJvxSlider
               Left = 8
-              Top = 413
+              Top = 408
             end
             inherited seColorExponent: TJvSpinEdit
               Left = 164
-              Top = 400
+              Top = 395
               Height = 26
               ExplicitLeft = 164
-              ExplicitTop = 400
+              ExplicitTop = 395
               ExplicitHeight = 26
             end
             inherited cbLogTransform: TCheckBox
               Left = 263
-              Top = 400
+              Top = 395
               Height = 20
               ExplicitLeft = 263
-              ExplicitTop = 400
+              ExplicitTop = 395
               ExplicitHeight = 20
             end
             inherited udDataSets: TJvUpDown
-              Left = 432
+              Left = 439
               Width = 16
               Height = 26
               ExplicitLeft = 432
@@ -999,52 +997,53 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 26
             end
             inherited rgUpdateLimitChoice: TRadioGroup
-              Top = 190
-              Width = 372
-              ExplicitTop = 190
+              Top = 185
+              Width = 379
+              ExplicitTop = 185
               ExplicitWidth = 372
             end
             inherited virttreecomboDataSets: TRbwStringTreeCombo
-              Width = 422
+              Width = 429
               Height = 26
               ExplicitWidth = 438
               ExplicitHeight = 26
             end
             inherited reComment: TRichEdit
-              Width = 557
-              Height = 101
+              Width = 564
+              Height = 96
               ParentFont = True
               ExplicitWidth = 557
-              ExplicitHeight = 101
+              ExplicitHeight = 96
             end
             inherited btnColorSchemes: TButton
-              Left = 322
-              Top = 291
+              Left = 329
+              Top = 286
               Width = 120
               ExplicitLeft = 322
-              ExplicitTop = 291
+              ExplicitTop = 286
               ExplicitWidth = 120
             end
             inherited udTime: TJvUpDown
-              Left = 551
+              Left = 552
               Top = 26
               Width = 17
               Height = 26
-              ExplicitLeft = 551
+              ExplicitLeft = 552
               ExplicitTop = 26
               ExplicitWidth = 17
               ExplicitHeight = 26
             end
             inherited comboTime3D: TJvComboBox
-              Left = 446
+              Left = 461
               Height = 26
-              ExplicitLeft = 446
+              ExplicitLeft = 461
               ExplicitHeight = 26
             end
           end
           inherited tabFilters: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
+            ExplicitWidth = 570
             ExplicitHeight = 468
             inherited lblLowerLimit: TLabel
               Width = 75
@@ -1066,7 +1065,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited lblNumberOfValuesToIgnore: TLabel
               Left = 135
-              Top = 472
+              Top = 467
               Width = 185
               Height = 18
               ExplicitLeft = 135
@@ -1107,8 +1106,8 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitWidth = 145
             end
             inherited rdgValuesToIgnore: TRbwDataGrid4
-              Height = 346
-              ExplicitHeight = 346
+              Height = 341
+              ExplicitHeight = 341
               ColWidths = (
                 64)
               RowHeights = (
@@ -1116,9 +1115,9 @@ inherited frmDisplayData: TfrmDisplayData
                 24)
             end
             inherited seNumberOfValuesToIgnore: TJvSpinEdit
-              Top = 464
+              Top = 459
               Height = 26
-              ExplicitTop = 464
+              ExplicitTop = 459
               ExplicitHeight = 26
             end
           end

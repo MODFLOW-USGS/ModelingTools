@@ -1665,6 +1665,10 @@ begin
   if LocalModel.DisvUsed then
   begin
     Disv := LocalModel.DisvGrid;
+  end
+  else
+  begin
+    Disv := nil;
   end;
   if ColorLimits.UseLimit then
   begin
@@ -1710,9 +1714,8 @@ begin
         end;
       clcZ:
         begin
-        if LocalModel.DisvUsed then
+        if Disv <> nil then
         begin
-          Disv := LocalModel.DisvGrid;
           MeshLmits := Disv.MeshLimits(vdFront, Disv.CrossSection.Angle);
           MinValue := MeshLmits.MinZ;
           MaxValue := MeshLmits.MaxZ;

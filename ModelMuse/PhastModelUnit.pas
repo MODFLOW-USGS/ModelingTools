@@ -3025,6 +3025,11 @@ that affects the model output should also have a comment. }
     procedure InvalidateUztSatConc(Sender: TObject);
     procedure InvalidateUzfSsmSinkConc(Sender: TObject);
 
+    procedure InvalidateSftHeadwatersConc(Sender: TObject);
+    procedure InvalidateSftPrecipConc(Sender: TObject);
+    procedure InvalidateSftRunoffConc(Sender: TObject);
+    procedure InvalidateSftConstConc(Sender: TObject);
+
     procedure InvalidateSfr6Inflow(Sender: TObject);
     procedure InvalidateSfr6Rainfall(Sender: TObject);
     procedure InvalidateSfr6Evaporation(Sender: TObject);
@@ -8759,9 +8764,12 @@ const
   //                version of SFR.
   //               Bug fix: Fixed bug in export of the MODPATH input files
   //                for models with DISV grids.
+  //    '4.0.0.19' Bug fix: Fixed bug that could cause an access violation
+  //                when coloring the grid.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.18';
+  IModelVersion = '4.1.0.0';
+//  IModelVersion = '4.0.0.19';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -9328,7 +9336,6 @@ resourcestring
   's are inactive';
   StrIDOMAINSetToZeroUnder = 'IDOMAIN set to zero because all underlying lay' +
   'ers are inactive';
-  StrStreamTransport = 'Stream Transport';
   StrSTRPackageDataSet = 'STR Package data set 3 CINITSF';
   StrSFTDispersion = KSFTDispersion;
   StrSTRPackageDataSetDISPSF = 'STR Package data set 4 DISPSF';
@@ -24496,6 +24503,46 @@ begin
   ModflowPackages.SfrModflow6Package.UpstreamFraction.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateSftConstConc(Sender: TObject);
+var
+  Index: Integer;
+begin
+  for Index := 0 to ModflowPackages.Mt3dSft.ConstConcTimeLists.Count - 1 do
+  begin
+    ModflowPackages.Mt3dSft.ConstConcTimeLists[Index].Invalidate;
+  end;
+end;
+
+procedure TCustomModel.InvalidateSftHeadwatersConc(Sender: TObject);
+var
+  Index: Integer;
+begin
+  for Index := 0 to ModflowPackages.Mt3dSft.HeadWatersTimeLists.Count - 1 do
+  begin
+    ModflowPackages.Mt3dSft.HeadWatersTimeLists[Index].Invalidate;
+  end;
+end;
+
+procedure TCustomModel.InvalidateSftPrecipConc(Sender: TObject);
+var
+  Index: Integer;
+begin
+  for Index := 0 to ModflowPackages.Mt3dSft.PrecipTimeLists.Count - 1 do
+  begin
+    ModflowPackages.Mt3dSft.PrecipTimeLists[Index].Invalidate;
+  end;
+end;
+
+procedure TCustomModel.InvalidateSftRunoffConc(Sender: TObject);
+var
+  Index: Integer;
+begin
+  for Index := 0 to ModflowPackages.Mt3dSft.RunOffTimeLists.Count - 1 do
+  begin
+    ModflowPackages.Mt3dSft.RunOffTimeLists[Index].Invalidate;
+  end;
+end;
+
 procedure TCustomModel.InvalidateSutraFluidFlux(Sender: TObject);
 begin
   FSutraFluidFluxTimeList.Invalidate;
@@ -35752,6 +35799,7 @@ begin
   begin
     DisvGrid.Loaded;
   end;
+  ModflowPackages.Loaded;
 end;
 
 function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;

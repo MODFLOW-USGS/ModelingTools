@@ -343,6 +343,8 @@ begin
 end;
 
 procedure TframeScreenObjectMt3dSft.InitializeControls;
+const
+  LeftAdjustment = 8;
 var
   Model: TPhastModel;
   NCOMP: Integer;
@@ -372,6 +374,14 @@ begin
   pnlBottom.Parent := tsHeadWaters;
   pnlGrid.Parent := tsHeadWaters;
   pgcSft.Align := alClient;
+
+  btnInsertPrecip.Left := btnInsert.Left -LeftAdjustment;
+  btnInsertConstConc.Left := btnInsert.Left -LeftAdjustment;
+  btnInsertRunoff.Left := btnInsert.Left -LeftAdjustment;
+
+  btnDeletePrecip.Left := btnDelete.Left -LeftAdjustment;
+  btnDeleteConstConc.Left := btnDelete.Left -LeftAdjustment;
+  btnDeleteRunoff.Left := btnDelete.Left -LeftAdjustment;
 
   ClearGrid(rdgSftInitConcAndDisp);
   ClearGrid(rdgModflowBoundary);

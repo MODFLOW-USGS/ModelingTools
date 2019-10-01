@@ -1614,7 +1614,7 @@ begin
     Assert(HigherSegmentIndex > LowerSegmentIndex);
 
 
-    NNode := nil;
+//    NNode := nil;
     NodeIndex := 0;
     SetLength(Polygon1, HigherNode.Position - LowerNode.Position + 1);
     for SegmentIndex := LowerSegmentIndex to HigherSegmentIndex do

@@ -1089,17 +1089,17 @@ end;
 
 procedure TSfrCollection.CountArrayBoundaryCells(var BoundaryCount: Integer;
   DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel);
-var
-  DSIndex: Integer;
-  ColIndex: Integer;
-  RowIndex: Integer;
-  LayerIndex: Integer;
-  DataArray2: TDataArray;
-  SO: TScreenObject;
-  Index: Integer;
-  Segment: TCellElementSegment;
-  PriorCol, PriorRow, PriorLayer: integer;
-  LocalModel: TCustomModel;
+//var
+//  DSIndex: Integer;
+//  ColIndex: Integer;
+//  RowIndex: Integer;
+//  LayerIndex: Integer;
+//  DataArray2: TDataArray;
+//  SO: TScreenObject;
+//  Index: Integer;
+//  Segment: TCellElementSegment;
+//  PriorCol, PriorRow, PriorLayer: integer;
+//  LocalModel: TCustomModel;
 begin
   CountArrayBoundaryCellsSfr(BoundaryCount, DataArray1, DataSets, AModel, ScreenObject);
 {  LocalModel := AModel as TCustomModel;

@@ -733,6 +733,7 @@ resourcestring
   StrWritingDimensions = '  Writing Dimensions';
   StrWritingPackageData = 'Writing Package Data';
   StrWritingStressPerio = 'Writing Stress Periods';
+  StrStreamTransport = 'SFT Stream Transport';
 
 
   {@name is used as the default name for a new data set.

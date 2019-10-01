@@ -2098,7 +2098,7 @@ Type
 //    FHeadWatersConcentrations: TModflowBoundaryDisplayTimeList;
 //    FPrecipConcentrations: TModflowBoundaryDisplayTimeList;
 //    FRunoffConcentrations: TModflowBoundaryDisplayTimeList;
-    FConstConcentrations: TModflowBoundaryDisplayTimeList;
+//    FConstConcentrations: TModflowBoundaryDisplayTimeList;
     function GetClosureCriterion: double;
     function GetSpaceWeightingFactor: double;
     function GetTimeWeightingFactor: double;
@@ -2120,6 +2120,7 @@ Type
     procedure GetPrecipUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetRunoffUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetConstConcUseList(Sender: TObject; NewUseList: TStringList);
+  protected
     procedure SetIsSelected(const Value: boolean); override;
   public
     procedure InitializeVariables; override;
@@ -2139,6 +2140,11 @@ Type
       write SetClosureCriterion;
 
     procedure ChangeChemSpecies;
+    property HeadWatersTimeLists: TObjectModflowBoundListOfTimeLists read FHeadWatersTimeLists;
+    property PrecipTimeLists: TObjectModflowBoundListOfTimeLists read FPrecipTimeLists;
+    property RunOffTimeLists: TObjectModflowBoundListOfTimeLists read FRunOffTimeLists;
+    property ConstConcTimeLists: TObjectModflowBoundListOfTimeLists read FConstConcTimeLists;
+    procedure Loaded;
   published
     // IETSFR
     property EvaporateMass: Boolean read FEvaporateMass write SetEvaporateMass;
@@ -2160,6 +2166,28 @@ Type
     // Sign of NSFINIT
     property SimulateTransportInStream: Boolean read FSimulateTransportInStream
       write SetSimulateTransportInStream stored True;
+  end;
+
+  TCtsForceOption = (ctsDontForce, ctsForce);
+  TCtsWellPackageChoice = (cwpcMnw2, cwpcWel);
+
+  TMt3dCtsPackageSelection = class(TModflowPackageSelection)
+  private
+    FWellPackageChoice: TCtsWellPackageChoice;
+    FForceOption: TCtsForceOption;
+    procedure SetForceOption(const Value: TCtsForceOption);
+    procedure SetWellPackageChoice(const Value: TCtsWellPackageChoice);
+  public
+    procedure InitializeVariables; override;
+    procedure Assign(Source: TPersistent); override;
+    { TODO -cRefactor : Consider replacing Model with an interface. }
+    //
+    Constructor Create(Model: TBaseModel);
+  published
+    // IFORCE
+    property ForceOption: TCtsForceOption read FForceOption write SetForceOption;
+    property WellPackageChoice: TCtsWellPackageChoice read FWellPackageChoice
+      write SetWellPackageChoice;
   end;
 
   TUzfPackageSelection = class(TCustomLayerPackageSelection)
@@ -20201,9 +20229,9 @@ begin
             SftCollection := Boundary.ConstConc;
           end;
       end;
-      for ValueIndex := 0 to Boundary.Values.Count - 1 do
+      for ValueIndex := 0 to SftCollection.Count - 1 do
       begin
-        Item := Boundary.Values[ValueIndex] as TSftReachItem;
+        Item := SftCollection[ValueIndex] as TSftReachItem;
         UpdateUseList(CompIndex, NewUseList, Item, DisplayName);
       end;
     end;
@@ -20276,6 +20304,11 @@ begin
   FMaxSftIterations := 10;
   FSolverPrintChoice := sftDetailed;
   FSimulateTransportInStream := True;
+end;
+
+procedure TMt3dSftPackageSelection.Loaded;
+begin
+  UpdateTimeLists;
 end;
 
 procedure TMt3dSftPackageSelection.SetClosureCriterion(const Value: double);
@@ -20354,15 +20387,17 @@ begin
   begin
     NCOMP := (FModel as TCustomModel).NumberOfMt3dChemComponents;
 
-    for TimeListIndex := 0 to FHeadWatersTimeLists.Count - 1 do
-    begin
-      RemoveTimeList(FHeadWatersTimeLists[TimeListIndex])
-    end;
-    FHeadWatersTimeLists.Clear;
     if IsSelected then
     begin
-      for CompIndex := 1 to NCOMP do
+      while FHeadWatersTimeLists.Count > NCOMP do
       begin
+        TimeListIndex := FHeadWatersTimeLists.Count-1;
+        RemoveTimeList(FHeadWatersTimeLists[TimeListIndex]);
+        FHeadWatersTimeLists.Delete(TimeListIndex);
+      end;
+      while FHeadWatersTimeLists.Count < NCOMP do
+      begin
+        CompIndex := FHeadWatersTimeLists.Count+1;
         ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
         ATimeList.OnInitialize := InitializeSftDisplay;
         ATimeList.OnGetUseList := GetHeadWatersUseList;
@@ -20371,17 +20406,27 @@ begin
         FHeadWatersTimeLists.Add(ATimeList);
         AddTimeList(ATimeList);
       end;
+    end
+    else
+    begin
+      for TimeListIndex := 0 to FHeadWatersTimeLists.Count - 1 do
+      begin
+        RemoveTimeList(FHeadWatersTimeLists[TimeListIndex])
+      end;
+      FHeadWatersTimeLists.Clear;
     end;
 
-    for TimeListIndex := 0 to FPrecipTimeLists.Count - 1 do
-    begin
-      RemoveTimeList(FPrecipTimeLists[TimeListIndex])
-    end;
-    FPrecipTimeLists.Clear;
     if IsSelected then
     begin
-      for CompIndex := 1 to NCOMP do
+      while FPrecipTimeLists.Count > NCOMP do
       begin
+        TimeListIndex := FPrecipTimeLists.Count-1;
+        RemoveTimeList(FPrecipTimeLists[TimeListIndex]);
+        FPrecipTimeLists.Delete(TimeListIndex);
+      end;
+      while FPrecipTimeLists.Count < NCOMP do
+      begin
+        CompIndex := FPrecipTimeLists.Count+1;
         ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
         ATimeList.OnInitialize := InitializeSftDisplay;
         ATimeList.OnGetUseList := GetPrecipUseList;
@@ -20390,17 +20435,27 @@ begin
         FPrecipTimeLists.Add(ATimeList);
         AddTimeList(ATimeList);
       end;
+    end
+    else
+    begin
+      for TimeListIndex := 0 to FPrecipTimeLists.Count - 1 do
+      begin
+        RemoveTimeList(FPrecipTimeLists[TimeListIndex])
+      end;
+      FPrecipTimeLists.Clear;
     end;
 
-    for TimeListIndex := 0 to FRunOffTimeLists.Count - 1 do
-    begin
-      RemoveTimeList(FRunOffTimeLists[TimeListIndex])
-    end;
-    FRunOffTimeLists.Clear;
     if IsSelected then
     begin
-      for CompIndex := 1 to NCOMP do
+      while FRunOffTimeLists.Count > NCOMP do
       begin
+        TimeListIndex := FRunOffTimeLists.Count-1;
+        RemoveTimeList(FRunOffTimeLists[TimeListIndex]);
+        FRunOffTimeLists.Delete(TimeListIndex);
+      end;
+      while FRunOffTimeLists.Count < NCOMP do
+      begin
+        CompIndex := FRunOffTimeLists.Count+1;
         ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
         ATimeList.OnInitialize := InitializeSftDisplay;
         ATimeList.OnGetUseList := GetRunoffUseList;
@@ -20409,17 +20464,27 @@ begin
         FRunOffTimeLists.Add(ATimeList);
         AddTimeList(ATimeList);
       end;
+    end
+    else
+    begin
+      for TimeListIndex := 0 to FRunOffTimeLists.Count - 1 do
+      begin
+        RemoveTimeList(FRunOffTimeLists[TimeListIndex])
+      end;
+      FRunOffTimeLists.Clear;
     end;
 
-    for TimeListIndex := 0 to FConstConcTimeLists.Count - 1 do
-    begin
-      RemoveTimeList(FConstConcTimeLists[TimeListIndex])
-    end;
-    FConstConcTimeLists.Clear;
     if IsSelected then
     begin
-      for CompIndex := 1 to NCOMP do
+      while FConstConcTimeLists.Count > NCOMP do
       begin
+        TimeListIndex := FConstConcTimeLists.Count-1;
+        RemoveTimeList(FConstConcTimeLists[TimeListIndex]);
+        FConstConcTimeLists.Delete(TimeListIndex);
+      end;
+      while FConstConcTimeLists.Count < NCOMP do
+      begin
+        CompIndex := FConstConcTimeLists.Count+1;
         ATimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
         ATimeList.OnInitialize := InitializeSftDisplay;
         ATimeList.OnGetUseList := GetConstConcUseList;
@@ -20428,7 +20493,63 @@ begin
         FConstConcTimeLists.Add(ATimeList);
         AddTimeList(ATimeList);
       end;
+    end
+    else
+    begin
+      for TimeListIndex := 0 to FConstConcTimeLists.Count - 1 do
+      begin
+        RemoveTimeList(FConstConcTimeLists[TimeListIndex])
+      end;
+      FConstConcTimeLists.Clear;
     end;
+  end;
+end;
+
+{ TMt3dCtsPackageSelection }
+
+procedure TMt3dCtsPackageSelection.Assign(Source: TPersistent);
+var
+  CtsSource: TMt3dCtsPackageSelection;
+begin
+  if Source is TMt3dCtsPackageSelection then
+  begin
+    CtsSource := TMt3dCtsPackageSelection(Source);
+    ForceOption := CtsSource.ForceOption;
+    WellPackageChoice := CtsSource.WellPackageChoice;
+  end;
+  inherited;
+end;
+
+constructor TMt3dCtsPackageSelection.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables;
+
+end;
+
+procedure TMt3dCtsPackageSelection.InitializeVariables;
+begin
+  inherited;
+  FWellPackageChoice := cwpcMnw2;
+  FForceOption := ctsDontForce;
+end;
+
+procedure TMt3dCtsPackageSelection.SetForceOption(const Value: TCtsForceOption);
+begin
+  if FForceOption <> Value then
+  begin
+    FForceOption := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TMt3dCtsPackageSelection.SetWellPackageChoice(
+  const Value: TCtsWellPackageChoice);
+begin
+  if FWellPackageChoice <> Value then
+  begin
+    FWellPackageChoice := Value;
+    InvalidateModel;
   end;
 end;
 

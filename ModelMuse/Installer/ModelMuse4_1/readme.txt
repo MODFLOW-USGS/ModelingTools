@@ -55,9 +55,10 @@ The file ModelMuseSource4_1.zip contains the source code for ModelMuse,
 
 B. INSTALLING
 
-The distribution file is an installer.  Execution of the distribution 
-file will install ModelMuse in a directory chosen by the user. If no previous 
-version of ModelMuse is installed, the default installation directory will be
+The recommended method of installing ModelMuse is to run one of the 
+installers. Execution of the installer will install ModelMuse in a 
+directory chosen by the user. If no previous version of ModelMuse 
+is installed, the default installation directory will be
 C:\Program Files\USGS\ModelMuse4 or
 C:\Program Files (x86)\USGS\ModelMuse4. If a previous version of ModelMuse 
 is installed, the default installation directory will be the directory for 
@@ -85,7 +86,7 @@ The Acrobat Reader is freely available from the following World Wide Web
 site:
       http://www.adobe.com/
 
-The zip file contains the same files in the same directory structure. 
+The zip files contains the same files in the same directory structure. 
 To install it, unzip the file retaining the directory structure of the zip
 file. Unlike the installer, unzipping the files from a zip file will not 
 associate ModelMuse project files with extensions .gpt, .gpb, or .mmZLib 
@@ -175,6 +176,9 @@ Add the following lines to GR32_Compiler.inc near the beginning.
       {$DEFINE BCB7}
     {$ENDIF}
   {$IFEND}
+{$ENDIF}
+
+{$IFDEF VER320}
   {$DEFINE COMPILERXE5}
   {$IFNDEF BCB}
     {$DEFINE DELPHIXE5}
