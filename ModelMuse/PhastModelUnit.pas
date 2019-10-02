@@ -8769,6 +8769,9 @@ const
 
   //               Bug fix: Fixed bug that could cause EVT and RCH cells to
   //                be defined in the wrong layers in MODFLOW 6 models.
+  //               Enhancement: ModelMuse now warns about grid columns and
+  //                rows that vary in size in MODFLOW 6 models that use
+  //                MODPATH.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.0';
