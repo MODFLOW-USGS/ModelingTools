@@ -771,8 +771,8 @@ begin
     for CellIndex := EtRateList.Count - 1 downto 0 do
     begin
       EvtCell := EtRateList[CellIndex] as TEvt_Cell;
-      if OkLocation(IDomain, UsedLocations, EvtCell.Layer, EvtCell.Row,
-        EvtCell.Column) then
+      if OkLocationMF6(IDomain, UsedLocations, EvtCell.Layer, EvtCell.Row,
+        EvtCell.Column, FEtsPackage.LayerOption) then
 //      if (IDomain.IntegerData[EvtCell.Layer, EvtCell.Row, EvtCell.Column] > 0)
 //        and (not UsedLocations.IsValue[EvtCell.Row, EvtCell.Column])  then
       begin
@@ -889,7 +889,7 @@ begin
   for TimeIndex := 0 to Values.Count - 1 do
   begin
     EtRateList := Values[TimeIndex];
-    MAXBOUND := Max(MAXBOUND, CountCellsMF6(EtRateList));
+    MAXBOUND := Max(MAXBOUND, CountCellsMF6(EtRateList, FEtsPackage.LayerOption));
   end;
 
   CountParametersAndParameterCells(NPETS, MXL);

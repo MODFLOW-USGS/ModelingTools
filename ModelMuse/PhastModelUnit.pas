@@ -8767,6 +8767,9 @@ const
   //    '4.0.0.19' Bug fix: Fixed bug that could cause an access violation
   //                when coloring the grid.
 
+  //               Bug fix: Fixed bug that could cause EVT and RCH cells to
+  //                be defined in the wrong layers in MODFLOW 6 models.
+
   // version number of ModelMuse.
   IModelVersion = '4.1.0.0';
 //  IModelVersion = '4.0.0.19';

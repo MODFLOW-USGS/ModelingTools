@@ -388,7 +388,7 @@ begin
   for TimeIndex := 0 to Values.Count - 1 do
   begin
     RchRateList := Values[TimeIndex];
-    MAXBOUND := Max(MAXBOUND, CountCellsMF6(RchRateList));
+    MAXBOUND := Max(MAXBOUND, CountCellsMF6(RchRateList, FRchPackage.LayerOption));
   end;
 
   CountParametersAndParameterCells(NPRCH, MXL);
@@ -599,8 +599,8 @@ begin
     for CellIndex := RchRateList.Count - 1 downto 0 do
     begin
       RchCell := RchRateList[CellIndex] as TRch_Cell;
-      if OkLocation(IDomain, UsedLocations, RchCell.Layer, RchCell.Row,
-        RchCell.Column) then
+      if OkLocationMF6(IDomain, UsedLocations, RchCell.Layer, RchCell.Row,
+        RchCell.Column, FRchPackage.LayerOption) then
       begin
         UsedLocations.Items[RchCell.Row, RchCell.Column] := True;
         WriteInteger(RchCell.Layer+1);

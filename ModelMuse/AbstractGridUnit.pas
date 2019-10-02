@@ -1016,6 +1016,8 @@ side views of the model.}
     // CellList will be filled with the horizontal neighbors of that element.
     procedure GetHorizontalNeighbors(const Layer, Row, Col: integer;
       CellList: TCellLocationList);
+    function UniformColumns(out MaxWidth, MinWidth: Double): boolean;
+    function UniformRows(out MaxWidth, MinWidth: Double): boolean;
   published
     { @name is the number of columns in the grid.
       Each column has a width that is greater than or equal to 0.}
@@ -3743,6 +3745,69 @@ begin
   result.X := ColumnPosition[Column];
   result.Y := RowPosition[Row];
   result.Z := CellElevation[Column, Row, Layer];
+end;
+
+function TCustomModelGrid.UniformColumns(out MaxWidth,
+  MinWidth: Double): boolean;
+var 
+  ColIndex: Integer;
+  AColWidth: double;
+begin
+  if ColumnCount >= 1 then
+  begin
+    MaxWidth := ColumnWidth[0];
+    MinWidth := MaxWidth;
+    for ColIndex := 1 to ColumnCount-1 do
+    begin
+      AColWidth := ColumnWidth[ColIndex];
+      if AColWidth < MinWidth then
+      begin
+        MinWidth := AColWidth;
+      end
+      else if AColWidth > MaxWidth then
+      begin
+        MaxWidth := AColWidth;
+      end;
+    end;
+    result := MaxWidth = MinWidth;
+  end
+  else
+  begin
+    MaxWidth := 0;
+    MinWidth := 0;
+    result := False;
+  end;
+end;
+
+function TCustomModelGrid.UniformRows(out MaxWidth, MinWidth: Double): boolean;
+var 
+  RowIndex: Integer;
+  ARowWidth: double;
+begin
+  if RowCount >= 1 then
+  begin
+    MaxWidth := RowWidth[0];
+    MinWidth := MaxWidth;
+    for RowIndex := 1 to RowCount-1 do
+    begin
+      ARowWidth := RowWidth[RowIndex];
+      if ARowWidth < MinWidth then
+      begin
+        MinWidth := ARowWidth;
+      end
+      else if ARowWidth > MaxWidth then
+      begin
+        ARowWidth := ARowWidth;
+      end;
+    end;
+    result := MaxWidth = MinWidth;
+  end
+  else
+  begin
+    MaxWidth := 0;
+    MinWidth := 0;
+    result := False;
+  end;
 end;
 
 function TCustomModelGrid.UnrotatedTwoDElementCenter(const Column,

@@ -53,7 +53,7 @@ implementation
 
 uses
   frmErrorsAndWarningsUnit, LayerStructureUnit, ModflowPackagesUnit, Forms,
-  frmProgressUnit, GoPhastTypes, ArchiveNodeInterface;
+  frmProgressUnit, GoPhastTypes, ArchiveNodeInterface, ModflowGridUnit;
 
 resourcestring
   StrUndefinedLengthUni = 'Undefined length units';
@@ -70,6 +70,9 @@ resourcestring
   StrInvalidDefaultIFace = 'Invalid DefaultIFaceValue';
   StrDefaultIFaceValueMu = 'DefaultIFaceValue must be in the range 0 to 6 in' +
   ' this version of MODPATH.';
+  StrMOSPATH7RequiresA = 'MODPATH 7 requires a uniform grid (except for quad' +
+  'grid refinement). In your model the largest and smallest %0:s widths are' +
+  ' %1:g and %2:g.';
 
 const
   ETS_ID = '     ET SEGMENTS';
@@ -381,10 +384,31 @@ procedure TModpathBasicFileWriter.Evaluate;
 var
   Packages: TModflowPackages;
   IFaceIndex: integer;
+  ModflowGrid: TModflowGrid;
+  UniformGrid: Boolean;
+  MaxWidth: double;
+  MinWidth: double;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidGridStructu);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidDefaultIFace);
   FMpathVersion := FOptions.MpathVersion;
+
+  if FMpathVersion = mp7 then
+  begin
+    ModflowGrid := Model.ModflowGrid;
+    UniformGrid := ModflowGrid.UniformColumns(MaxWidth, MinWidth);
+    if not UniformGrid then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrInvalidGridStructu,
+        Format(StrMOSPATH7RequiresA, ['column', MaxWidth, MinWidth]));
+    end;
+    UniformGrid := ModflowGrid.UniformRows(MaxWidth, MinWidth);
+    if not UniformGrid then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrInvalidGridStructu,
+        Format(StrMOSPATH7RequiresA, ['row', MaxWidth, MinWidth]));
+    end;
+  end;
 
   FFlowTerms.Clear;
   FIfaceTerms.Clear;

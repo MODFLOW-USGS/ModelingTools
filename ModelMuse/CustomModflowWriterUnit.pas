@@ -824,10 +824,10 @@ type
       DS5, D7PNameIname, D7PName: string); override;
     function ParameterCount: integer; override;
     procedure WriteEndPeriod;
-    function OkLocation(IDomain: TDataArray;
+    function OkLocationMF6(IDomain: TDataArray;
       UsedLocations: T2DSparseBooleanArray;
-      Layer, Row, Column: integer): boolean;
-    function CountCellsMF6(RateList: TValueCellList): integer;
+      Layer, Row, Column: integer; Option: TLayerOption): boolean;
+    function CountCellsMF6(RateList: TValueCellList; Option: TLayerOption): integer;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     // @name destroys the current instance of @classname.
@@ -8048,15 +8048,23 @@ begin
   NewLine;
 end;
 
-function TCustomTransientArrayWriter.OkLocation(IDomain: TDataArray;
-UsedLocations: T2DSparseBooleanArray; Layer, Row, Column: integer): boolean;
+function TCustomTransientArrayWriter.OkLocationMF6(IDomain: TDataArray;
+UsedLocations: T2DSparseBooleanArray; Layer, Row, Column: integer;
+Option: TLayerOption): boolean;
 begin
   result := (IDomain.IntegerData[Layer, Row, Column] > 0) and
     (not UsedLocations.IsValue[Row, Column]);
+  if result and (Option <> loSpecified) then
+  begin
+    if (Layer > 0) and (IDomain.IntegerData[Layer-1, Row, Column] > 0) then
+    begin
+      result := False;
+    end;
+  end;
 end;
 
 function TCustomTransientArrayWriter.CountCellsMF6
-  (RateList: TValueCellList): integer;
+  (RateList: TValueCellList; Option: TLayerOption): integer;
 var
   CellIndex: integer;
   // ValueCell: TRch_Cell;
@@ -8072,8 +8080,8 @@ begin
     for CellIndex := RateList.Count - 1 downto 0 do
     begin
       ValueCell := RateList[CellIndex];
-      if OkLocation(IDomain, UsedLocations, ValueCell.Layer, ValueCell.Row,
-        ValueCell.Column) then
+      if OkLocationMF6(IDomain, UsedLocations, ValueCell.Layer, ValueCell.Row,
+        ValueCell.Column, Option) then
       begin
         UsedLocations.Items[ValueCell.Row, ValueCell.Column] := True;
         Inc(result);
