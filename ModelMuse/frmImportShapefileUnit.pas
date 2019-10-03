@@ -627,7 +627,7 @@ type
     FCsvAttributes: TCsvAttributes;
     FCsvDictionary: TDictionary<String,TCsvAttribute>;
     FCsvFiles: TStringList;
-    FShapeFileFieldCount: Integer;
+    FShapeFileValidFieldCount: Integer;
     FShapeFileRealFieldCount: Integer;
     FValidIndiciesCount: Integer;
     FRealFieldGlobalsAndDataSetsNamesCount: Integer;
@@ -1342,16 +1342,16 @@ begin
         end;
       end;
     end;
-    dgFields.RowCount := FShapeFileFieldCount + FCsvAttributes.Count + 1;
+    dgFields.RowCount := FShapeFileValidFieldCount + FCsvAttributes.Count + 1;
     SetLength(FFieldTypes, FValidIndiciesCount + FCsvAttributes.Count);
 
     for AttribIndex := 0 to FCsvAttributes.Count - 1 do
     begin
-      dgFields.Cells[Ord(fgcAttributes), AttribIndex+FShapeFileFieldCount+1]
+      dgFields.Cells[Ord(fgcAttributes), AttribIndex+FShapeFileValidFieldCount+1]
         := FCsvAttributes[AttribIndex].AttributeName;
-      dgFields.Cells[Ord(fgcDataSet), AttribIndex+FShapeFileFieldCount + 1] := rsNewDataSet;
-      dgFields.Cells[Ord(fgcInterpolator), AttribIndex+FShapeFileFieldCount + 1] := StrNone;
-      FFieldTypes[AttribIndex+FShapeFileFieldCount] := rdtDouble;
+      dgFields.Cells[Ord(fgcDataSet), AttribIndex+FShapeFileValidFieldCount + 1] := rsNewDataSet;
+      dgFields.Cells[Ord(fgcInterpolator), AttribIndex+FShapeFileValidFieldCount + 1] := StrNone;
+      FFieldTypes[AttribIndex+FShapeFileValidFieldCount] := rdtDouble;
     end;
 
     AssignRealFieldNamesToControls;
@@ -1675,7 +1675,7 @@ begin
             comboRiverDescripton.Items := FStringFieldNames;
             rdgBoundaryConditions.Columns[2].PickList := FIntegerFieldNames;
 
-            FShapeFileFieldCount := ValidFields.Count;
+            FShapeFileValidFieldCount := ValidFields.Count;
             FShapeFileRealFieldCount := FRealFieldNames.Count;
             dgFields.RowCount := ValidFields.Count + 1;
             for Index := 0 to ValidFields.Count - 1 do
@@ -10980,24 +10980,24 @@ var
   RowIndex: integer;
   VariableName: string;
   AttrIndex: Integer;
+  FieldName: AnsiString;
+  FieldNumber: Integer;
 begin
-  for RowIndex := 1 to FShapeFileFieldCount do
+  for RowIndex := 1 to FShapeFileValidFieldCount do
   begin
+    FieldName := AnsiString(dgFields.Cells[Ord(fgcAttributes),RowIndex]);
+    FieldNumber := xbShapeDataBase.GetFieldNumberFromName(FieldName);
     VariableName := FieldToVarName(dgFields.Cells[Ord(fgcAttributes),RowIndex]);
     if VariableName <> '' then
     begin
-      case xbShapeDataBase.GetFieldType(xbShapeDataBase.
-        GetFieldNumberFromName(AnsiString(
-        dgFields.Cells[Ord(fgcAttributes),RowIndex]))) of
+      case xbShapeDataBase.GetFieldType(FieldNumber) of
         xbfChar:
           begin
             Parser.CreateVariable(VariableName, StrAttributes, '', TValueStr, VariableName);
           end;
         xbfNumber:
           begin
-            if xbShapeDataBase.GetFieldDecimals(xbShapeDataBase.
-              GetFieldNumberFromName(AnsiString(
-              dgFields.Cells[Ord(fgcAttributes),RowIndex]))) = 0 then
+            if xbShapeDataBase.GetFieldDecimals(FieldNumber) = 0 then
             begin
               Parser.CreateVariable(VariableName, StrAttributes, 0, TValueInt, VariableName);
             end
@@ -11010,8 +11010,10 @@ begin
           begin
             Parser.CreateVariable(VariableName, StrAttributes, False, TValueBool, VariableName);
           end;
-      else
-        Assert(False);
+        else
+          begin
+            Assert(False);
+          end;
       end;
     end;
   end;

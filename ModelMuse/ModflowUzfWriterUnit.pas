@@ -170,12 +170,25 @@ end;
 
 procedure TModflowUzfWriter.GetFlowUnitNumber(var UnitNumber: Integer);
 begin
-  inherited GetFlowUnitNumber(UnitNumber);
-  if Model.ModflowOutputControl.SaveCellFlows = csfListing then
-  begin
-    // UZF does not provide an option to save values to the
-    // listing file.
-    UnitNumber := 0;
+  case Model.ModflowOutputControl.SaveCellFlows of
+    csfNone:
+      begin
+        UnitNumber := 0;
+      end;
+    csfBinary:
+      begin
+        UnitNumber := -Model.UnitNumbers.UnitNumber(StrCBC);
+      end;
+    csfListing:
+      begin
+        // UZF does not provide an option to save values to the
+        // listing file.
+        UnitNumber := 0;
+      end;
+  else
+    begin
+      Assert(False);
+    end;
   end;
 end;
 
@@ -569,16 +582,14 @@ begin
   begin
     IETFLG := 0;
   end;
+  IUZFCB1 := 0;
+  IUZFCB2 := 0;
   if Model.ModflowOutputControl.Compact then
   begin
-    IUZFCB1 := 0;
-    IUZFCB2 := 0;
     GetFlowUnitNumber(IUZFCB2);
   end
   else
   begin
-    IUZFCB2 := 0;
-    IUZFCB1 := 0;
     GetFlowUnitNumber(IUZFCB1);
   end;
   NTRAIL2 := Model.ModflowPackages.UzfPackage.NumberOfTrailingWaves;

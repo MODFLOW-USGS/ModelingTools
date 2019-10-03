@@ -28,6 +28,8 @@ type
     procedure FillListOfScreenObjects(ListOfScreenObjects: TList;
       List: TScreenObjectEditCollection);
     procedure FillListOfParameterNames(ParameterNames: TStringList);
+    procedure FillListOfInvalidScreenObjects(ListOfScreenObjects: TList;
+      List: TScreenObjectEditCollection);
     { Private declarations }
   protected
     procedure SetEnabled(Value: boolean); override;
@@ -35,6 +37,7 @@ type
     procedure GetData(List: TScreenObjectEditCollection);
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
+    procedure ClearInvalidHfbs(List: TScreenObjectEditCollection);
     { Public declarations }
   end;
 
@@ -160,15 +163,12 @@ var
   ListOfScreenObjects: TList;
   ScreenObject: TScreenObject;
   Boundary: THfbBoundary;
-//  ParameterNames: TStringList;
   Index: Integer;
 begin
-//  ParameterNames := TStringList.Create;
   ListOfScreenObjects := TList.Create;
   try
     Assert(List.Count >= 1);
     FillListOfScreenObjects(ListOfScreenObjects, List);
-//    FillListOfParameterNames(ParameterNames);
 
     for Index := 0 to ListOfScreenObjects.Count - 1 do
     begin
@@ -240,6 +240,35 @@ begin
   end;
 end;
 
+procedure TframeHfbScreenObject.ClearInvalidHfbs(
+  List: TScreenObjectEditCollection);
+var
+  ListOfScreenObjects: TList;
+  ScreenObject: TScreenObject;
+  Boundary: THfbBoundary;
+  Index: Integer;
+begin
+  ListOfScreenObjects := TList.Create;
+  try
+    Assert(List.Count >= 1);
+    FillListOfInvalidScreenObjects(ListOfScreenObjects, List);
+
+    for Index := 0 to ListOfScreenObjects.Count - 1 do
+    begin
+      ScreenObject := ListOfScreenObjects[Index];
+      Boundary := ScreenObject.ModflowHfbBoundary;
+
+      if Boundary <> nil then
+      begin
+        Boundary.IsUsed := False;
+        Boundary.Values.Clear;
+      end;
+    end;
+  finally
+    ListOfScreenObjects.Free;
+  end;
+end;
+
 procedure TframeHfbScreenObject.comboHfbParametersChange(Sender: TObject);
 begin
   if comboHfbParameters.ItemIndex > 0 then
@@ -271,7 +300,25 @@ begin
   for Index := 0 to List.Count - 1 do
   begin
     ScreenObject := List[Index].ScreenObject;
-    if (ScreenObject.ViewDirection = vdTop) and (ScreenObject.Count > 1) then
+    if (ScreenObject.ViewDirection = vdTop) and (ScreenObject.Count > ScreenObject.SectionCount) then
+    begin
+      ListOfScreenObjects.Add(ScreenObject);
+    end;
+  end;
+end;
+
+procedure TframeHfbScreenObject.FillListOfInvalidScreenObjects(
+  ListOfScreenObjects: TList; List: TScreenObjectEditCollection);
+var
+  Index: Integer;
+  ScreenObject: TScreenObject;
+begin
+  for Index := 0 to List.Count - 1 do
+  begin
+    ScreenObject := List[Index].ScreenObject;
+    if (ScreenObject.ViewDirection <> vdTop)
+      or (ScreenObject.Count <= ScreenObject.SectionCount)
+      and (ScreenObject.ModflowHfbBoundary <> nil) then
     begin
       ListOfScreenObjects.Add(ScreenObject);
     end;

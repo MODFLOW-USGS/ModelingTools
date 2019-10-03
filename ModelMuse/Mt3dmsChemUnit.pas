@@ -100,6 +100,9 @@ type
     property Name: string read FName write FName;
   end;
 
+  TStringConcValueItemClass = class of TStringConcValueItem;
+
+
   TStringConcCollection = class(TOrderedCollection)
   private
     FScreenObject: TObject;
@@ -109,7 +112,9 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Model: TBaseModel; ScreenObject: TObject;
-      Mt3dmsConcCollection: TCollection);
+      Mt3dmsConcCollection: TCollection); overload;
+    constructor Create(ItemClass: TStringConcValueItemClass; Model: TBaseModel;
+      ScreenObject: TObject; Mt3dmsConcCollection: TCollection); overload;
     property Items[Index: integer]: TStringConcValueItem read GetItem
       write SetItem; default;
     function IndexOfFormulaObject(AFormulaObject: TFormulaObject): integer;
@@ -1960,12 +1965,18 @@ begin
 
 end;
 
+constructor TStringConcCollection.Create(ItemClass: TStringConcValueItemClass;
+  Model: TBaseModel; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
+begin
+  inherited Create(ItemClass, Model);
+  FScreenObject := ScreenObject;
+  FMt3dmsConcCollection := Mt3dmsConcCollection;
+end;
+
 constructor TStringConcCollection.Create(Model: TBaseModel;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
-  inherited Create(TStringConcValueItem, Model);
-  FScreenObject := ScreenObject;
-  FMt3dmsConcCollection := Mt3dmsConcCollection;
+  Create(TStringConcValueItem, Model, ScreenObject, Mt3dmsConcCollection);
 end;
 
 function TStringConcCollection.GetItem(Index: integer): TStringConcValueItem;

@@ -20,10 +20,6 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       Caption = 'Parameter name'
       Enabled = False
     end
-    inherited seNumberOfTimes: TJvSpinEdit
-      Height = 21
-      ExplicitHeight = 21
-    end
     inherited btnDelete: TBitBtn
       Left = 371
       ExplicitLeft = 371

@@ -6756,6 +6756,10 @@ begin
         (FHFB_Node.StateIndex = 2),
         (FHFB_Node.StateIndex = 1) and frmGoPhast.PhastModel.HfbIsSelected);
     end;
+  end
+  else
+  begin
+    frameHfbBoundary.ClearInvalidHfbs(FNewProperties);
   end;
 
   if (FHydmod_Node <> nil) then

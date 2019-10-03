@@ -91,10 +91,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         763
         522)

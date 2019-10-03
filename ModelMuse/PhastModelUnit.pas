@@ -8766,15 +8766,17 @@ const
   //                for models with DISV grids.
   //    '4.0.0.19' Bug fix: Fixed bug that could cause an access violation
   //                when coloring the grid.
-
-  //               Bug fix: Fixed bug that could cause EVT and RCH cells to
+  //    '4.0.0.20' Bug fix: Fixed bug that could cause EVT and RCH cells to
   //                be defined in the wrong layers in MODFLOW 6 models.
   //               Enhancement: ModelMuse now warns about grid columns and
   //                rows that vary in size in MODFLOW 6 models that use
   //                MODPATH.
+  //               Change: The UZF input file has been changed so that
+  //                infiltration and unsaturated zone ET are always saved to
+  //                the cell-by-cell budget file.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.0';
+  IModelVersion = '4.0.0.20';
 //  IModelVersion = '4.0.0.19';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';

@@ -69,7 +69,8 @@ begin
   for Index := 0 to List.Count - 1 do
   begin
     ScreenObject := List[Index].ScreenObject;
-    if (ScreenObject.ViewDirection = vdTop) and (ScreenObject.Count > 1) then
+    if (ScreenObject.ViewDirection = vdTop)
+      and (ScreenObject.Count > ScreenObject.SectionCount) then
     begin
       ListOfScreenObjects.Add(ScreenObject);
     end;
