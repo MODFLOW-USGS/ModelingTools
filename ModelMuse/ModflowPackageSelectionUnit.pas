@@ -20524,7 +20524,6 @@ constructor TMt3dCtsPackageSelection.Create(Model: TBaseModel);
 begin
   inherited;
   InitializeVariables;
-
 end;
 
 procedure TMt3dCtsPackageSelection.InitializeVariables;

@@ -39,7 +39,8 @@ uses System.UITypes,
   ModflowFmpFarmUnit, LinkedRastersUnit, FootprintGridUnit,
   FootprintPropertiesUnit, ModflowSwiObsUnit, ModflowRipPlantGroupsUnit,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
-  ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit;
+  ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
+  Mt3dCtsSystemUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2167,6 +2168,7 @@ that affects the model output should also have a comment. }
     FTopContoursUpToDate: Boolean;
     FSideContoursUpToDate: Boolean;
     FFrontContoursUpToDate: Boolean;
+//    FCtsSystems: TCtsSystemCollection;
 //    FGeoRefFileName: string;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
@@ -2405,6 +2407,8 @@ that affects the model output should also have a comment. }
     function GetContourLegend: TLegend; virtual; abstract;
     function GetUseGsflowFormat: boolean; virtual; abstract;
     procedure SetUseGsflowFormat(const Value: boolean); virtual; abstract;
+    procedure SetCtsSystems(const Value: TCtsSystemCollection); virtual; abstract;
+    function GetCtsSystems: TCtsSystemCollection; virtual; abstract;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3379,6 +3383,12 @@ that affects the model output should also have a comment. }
       write SetFootPrintGrid;
     property FootprintProperties: TFootprintProperties
       read GetFootprintProperties write SetFootprintProperties;
+
+    property CtsSystems: TCtsSystemCollection read GetCtsSystems write SetCtsSystems
+      {$IFNDEF Mt3dUSGS}
+      stored False
+      {$ENDIF}
+      ;
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
   end;
 
@@ -3623,6 +3633,7 @@ that affects the model output should also have a comment. }
     FGeoRef: TGeoRef;
     FFixingModel: boolean;
     FUseGsflowFormat: Boolean;
+    FCtsSystems: TCtsSystemCollection;
     // See @link(Exaggeration).
     function GetExaggeration: double;
 //     See @link(OwnsScreenObjects).
@@ -3929,6 +3940,8 @@ that affects the model output should also have a comment. }
     function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; override;
     function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; override;
     function SftUsed(Sender: TObject): boolean; override;
+    procedure SetCtsSystems(const Value: TCtsSystemCollection); override;
+    function GetCtsSystems: TCtsSystemCollection; override;
   public
     procedure RefreshGlobalVariables(CompilerList: TList);
     procedure CreateGlobalVariables;
@@ -4839,6 +4852,8 @@ that affects the model output should also have a comment. }
     function GetContourLegend: TLegend; override;
     function GetUseGsflowFormat: boolean; override;
     procedure SetUseGsflowFormat(const Value: boolean); override;
+    procedure SetCtsSystems(const Value: TCtsSystemCollection); override;
+    function GetCtsSystems: TCtsSystemCollection; override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -9957,6 +9972,7 @@ begin
     FootprintProperties := SourceModel.FootprintProperties;
     RipPlantGroups := SourceModel.RipPlantGroups;
     GeoRef := SourceModel.GeoRef;
+    CtsSystems := SourceModel.CtsSystems;
   end;
   inherited;
 
@@ -10193,6 +10209,8 @@ begin
   FRipPlantGroups := TRipPlantGroups.Create(self);
 
   FGeoRef := TGeoref.Create(self);
+
+  FCtsSystems := TCtsSystemCollection.Create(self);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -10584,6 +10602,7 @@ begin
       FClearing := False;
     end;
 
+    FCtsSystems.Free;
     FGeoRef.Free;
     FRipPlantGroups.Free;
     FVelocityVectors.Free;
@@ -10747,6 +10766,7 @@ begin
     FSutraTimeOptions.Free;
     FColorSchemes.Free;
     FFishnetMeshGenerator.Free;
+
   finally
     FreeAndNil(frmFileProgress);
   end;
@@ -14920,6 +14940,11 @@ end;
 function TPhastModel.GetContourLegend: TLegend;
 begin
   result := FContourLegend;
+end;
+
+function TPhastModel.GetCtsSystems: TCtsSystemCollection;
+begin
+  result := FCtsSystems;
 end;
 
 function TPhastModel.GetCurrentScreenObject(VD: TViewDirection): TScreenObject;
@@ -25053,6 +25078,11 @@ begin
   end;
 end;
 
+procedure TPhastModel.SetCtsSystems(const Value: TCtsSystemCollection);
+begin
+  FCtsSystems.Assign(Value);
+end;
+
 procedure TPhastModel.SetUnits(const Value: TUnits);
 begin
   FUnits.Assign(Value);
@@ -30250,6 +30280,11 @@ begin
     Assert(False);
   end;
 end;
+
+//function TCustomModel.GetCtsSystems: TCtsSystemCollection;
+//begin
+//
+//end;
 
 function TCustomModel.ParserCount: integer;
 begin
@@ -41447,6 +41482,11 @@ begin
   result := ParentModel.GetContourLegend;
 end;
 
+function TChildModel.GetCtsSystems: TCtsSystemCollection;
+begin
+  result := ParentModel.CtsSystems;
+end;
+
 function TChildModel.GetDisplayName: string;
 begin
   result := ModelName;
@@ -41945,6 +41985,11 @@ begin
     FCouplingMethod := Value;
     Invalidate(self);
   end;
+end;
+
+procedure TChildModel.SetCtsSystems(const Value: TCtsSystemCollection);
+begin
+  ParentModel.CtsSystems := Value;
 end;
 
 procedure TChildModel.SetDiscretization(

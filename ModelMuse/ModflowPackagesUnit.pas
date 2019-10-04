@@ -263,7 +263,12 @@ type
     property MvrPackage: TMvrPackage read FMvrPackage write SetMvrPackage;
     property UzfMf6Package: TUzfMf6PackageSelection read FUzfMf6Package
       write SetUzfMf6Package;
-    property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
+    property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts
+    {$IFNDEF Mt3dUSGS}
+      stored False
+    {$ENDIF}
+      ;
+
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
     // SelectedModflowPackageCount must be updated if the new package is a

@@ -4206,7 +4206,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 362
             inherited lblNumExportPeriods: TLabel
-              Top = 176
+              Top = 171
               Width = 176
               Height = 18
               ExplicitTop = 326
@@ -4214,15 +4214,15 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
-              Top = 172
+              Top = 167
               ExplicitTop = 322
             end
             inherited sbInsert: TSpeedButton
-              Top = 172
+              Top = 167
               ExplicitTop = 322
             end
             inherited sbDelete: TSpeedButton
-              Top = 172
+              Top = 167
               ExplicitTop = 322
             end
             inherited cbMultiPrintSave: TCheckBox
@@ -4230,13 +4230,13 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitWidth = 209
             end
             inherited rdgOutput: TRbwDataGrid4
-              Height = 129
-              ExplicitHeight = 129
+              Height = 124
+              ExplicitHeight = 124
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 173
+              Top = 168
               Height = 26
-              ExplicitTop = 173
+              ExplicitTop = 168
               ExplicitHeight = 26
             end
             inherited comboMultiFomat: TJvImageComboBox
@@ -4513,19 +4513,19 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 370
             inherited sbAdd: TSpeedButton
-              Top = 180
+              Top = 175
               ExplicitTop = 330
             end
             inherited sbInsert: TSpeedButton
-              Top = 180
+              Top = 175
               ExplicitTop = 330
             end
             inherited sbDelete: TSpeedButton
-              Top = 180
+              Top = 175
               ExplicitTop = 330
             end
             inherited lblNumExportPeriods: TLabel
-              Top = 183
+              Top = 178
               Width = 176
               Height = 18
               ExplicitTop = 333
@@ -5202,9 +5202,9 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 0
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 180
+              Top = 175
               Height = 26
-              ExplicitTop = 180
+              ExplicitTop = 175
               ExplicitHeight = 26
             end
             inherited comboMultiFomat: TJvImageComboBox
@@ -10734,9 +10734,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 514
       Caption = 'jvspMt3dCts'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      inline frameMt3dCtsPkg1: TframeMt3dCtsPkg
+      inline frameMt3dCtsPkg: TframeMt3dCtsPkg
         Left = 0
         Top = 0
         Width = 595
@@ -10744,8 +10742,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 104
-        ExplicitTop = 128
+        ExplicitWidth = 595
+        ExplicitHeight = 514
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10772,6 +10770,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited comboForce: TComboBox
           Width = 565
@@ -10788,16 +10787,16 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited rcSelectionController: TRbwController
           ControlList = <
             item
-              Control = frameMt3dCtsPkg1.lblComments
+              Control = frameMt3dCtsPkg.lblComments
             end
             item
-              Control = frameMt3dCtsPkg1.memoComments
+              Control = frameMt3dCtsPkg.memoComments
             end
             item
-              Control = frameMt3dCtsPkg1.comboForce
+              Control = frameMt3dCtsPkg.comboForce
             end
             item
-              Control = frameMt3dCtsPkg1.comboWellPackageChoice
+              Control = frameMt3dCtsPkg.comboWellPackageChoice
             end>
         end
       end
@@ -10917,7 +10916,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Left = 136
     Top = 96
     Bitmap = {
-      494C010108000D000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000D00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

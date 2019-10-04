@@ -4,38 +4,13 @@ interface
 
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
-  System.Generics.Collections, Mt3dmsChemUnit;
+  System.Generics.Collections, Mt3dmsChemUnit, FormulaManagerUnit;
 
 type
   // ITRTINJ
   TTreatmentDistribution = (tlNone, tlUniform, tlIndividual);
   // IOPTINJ
   TTreatmentOption = (toPercentage, toConcentrationChange, toMass, toConcentration);
-
-{
-  TStringConcValueItem = class(TFormulaOrderedItem)
-  private
-    FValue: TFormulaObject;
-    FObserver: TObserver;
-    FName: string;
-    procedure SetValue(const Value: string);
-    function StringCollection: TStringConcCollection;
-    function GetValue: string;
-    procedure RemoveSubscription(Sender: TObject; const AName: string);
-    procedure RestoreSubscription(Sender: TObject; const AName: string);
-  protected
-    function IsSame(AnotherItem: TOrderedItem): boolean; override;
-    function GetObserver(Index: Integer): TObserver; override;
-    function GetScreenObject: TObject; override;
-  public
-    procedure Assign(Source: TPersistent); override;
-    constructor Create(Collection: TCollection); override;
-    destructor Destroy; override;
-  published
-    property Value: string read GetValue write SetValue;
-    property Name: string read FName write FName;
-  end;
-}
 
   TListOfObjects = TList<TObject>;
 
@@ -77,8 +52,6 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-//    constructor Create(Boundary: TModflowScreenObjectProperty;
-//      Model: TBaseModel; ScreenObject: TObject); override;
     function Add: TCtsObjectItem;
     property Items[Index: Integer]: TCtsObjectItem read GetItem write SetItem; default;
   end;
@@ -126,12 +99,14 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property InjectionObject: TObject read FInjectionObject write SetInjectionObject;
+    procedure Loaded(Model: TBaseModel);
   published
     property InjectionOptions: TInjectionOptionCollection read FInjectionOptions
       write SetInjectionOptions;
     // @name is used only if @link(TTreatmentDistribution) is tlIndividual
     property InjectionWellObjectName: string read GetInjectionWellObjectName
       write SetInjectionWellObjectName;
+    // @name is used only if @link(TTreatmentDistribution) is tlIndividual
     property UseDefaultInjectionOptions: boolean
       read FUseDefaultInjectionOptions write SetUseDefaultInjectionOptions;
   end;
@@ -140,13 +115,13 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-//    constructor Create(Boundary: TModflowScreenObjectProperty;
-//      Model: TBaseModel; ScreenObject: TObject); override;
   end;
 
   TCtsExternalFlowsItem = class(TCustomModflowBoundaryItem)
   private
     FInflowConcentrations: TStringConcCollection;
+    FInflowFormula: TFormulaObject;
+    FOutflowFormula: TFormulaObject;
     function GetInflow: string;
     function GetOutflow: string;
     procedure SetInflow(const Value: string);
@@ -154,7 +129,19 @@ type
     procedure SetOutflow(const Value: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure CreateFormulaObjects; override;
+    function BoundaryFormulaCount: integer; override;
+
+    procedure AssignObserverEvents(Collection: TCollection); override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure RemoveFormulaObjects; override;
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
   public
+    const InflowPosition = 0;
+    const OutflowPosition = 1;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
@@ -169,24 +156,32 @@ type
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
-    constructor Create(Boundary: TModflowScreenObjectProperty;
-      Model: TBaseModel; ScreenObject: TObject); override;
   end;
 
-  TCtsSystem = class(TGoPhastPersistent)
+  TCtsSystem = class(TModflowScreenObjectProperty)
   private
     FTreatmentDistribution: TTreatmentDistribution;
     FDefaultInjectionOptions: TInjectionOptionCollection;
     FCtsObjects: TCtsObjectCollection;
     FExternalFlows: TCtsExternalFlowsCollection;
+    FInjections: TCtsInjectionTimeCollection;
+    FName: string;
     procedure SetCtsObjects(const Value: TCtsObjectCollection);
     procedure SetDefaultInjectionOptions(
       const Value: TInjectionOptionCollection);
     procedure SetExternalFlows(const Value: TCtsExternalFlowsCollection);
     procedure SetTreatmentDistribution(const Value: TTreatmentDistribution);
+    function IsSame(AnotherCtsSystem: TCtsSystem): boolean;
+    procedure SetInjections(const Value: TCtsInjectionTimeCollection);
+    procedure SetName(const Value: string);
+  protected
+    function BoundaryObserverPrefix: string; override;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    procedure Loaded(Model: TBaseModel);
+    procedure Loaded;
+    function Used: boolean; override;
   published
     property TreatmentDistribution: TTreatmentDistribution
       read FTreatmentDistribution write SetTreatmentDistribution;
@@ -196,12 +191,39 @@ type
       write SetCtsObjects;
     property ExternalFlows: TCtsExternalFlowsCollection read FExternalFlows
       write SetExternalFlows;
+    property Injections: TCtsInjectionTimeCollection read FInjections write SetInjections;
+    property Name: string read FName write SetName;
+  end;
+
+  TCtsSystemItem = class(TOrderedItem)
+  private
+    FCtsSystem: TCtsSystem;
+    procedure SetCtsSystem(const Value: TCtsSystem);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure Loaded;
+  published
+    property CtsSystem: TCtsSystem read FCtsSystem write SetCtsSystem;
+  end;
+
+  TCtsSystemCollection = class(TEnhancedOrderedCollection)
+  private
+    function GetItem(Index: Integer): TCtsSystemItem;
+    procedure SetItem(Index: Integer; const Value: TCtsSystemItem);
+  public
+    constructor Create(Model: TBaseModel);
+    function Add: TCtsSystemItem;
+    property Items[Index: Integer]: TCtsSystemItem read GetItem write SetItem; default;
   end;
 
 implementation
 
 uses
-  ScreenObjectUnit, PhastModelUnit;
+  ScreenObjectUnit, PhastModelUnit, frmGoPhastUnit;
 
 { TCtsObjectItem }
 
@@ -417,15 +439,9 @@ begin
   begin
     InjSource :=  TInjectionOptionItem(Source);
     TreatmentOption := InjSource.TreatmentOption;
-//    TreatmentValue := InjSource.TreatmentValue;
   end;
   inherited;
 end;
-
-//function TInjectionOptionItem.GetTreatmentValue: string;
-//begin
-//
-//end;
 
 function TInjectionOptionItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
@@ -508,6 +524,14 @@ begin
   end;
 end;
 
+procedure TCtsInjectionTimeItem.Loaded(Model: TBaseModel);
+var
+  LocalModel: TPhastModel;
+begin
+  LocalModel := Model as TPhastModel;
+  FInjectionObject := LocalModel.GetScreenObjectByName(FInjectionObjectName);
+end;
+
 procedure TCtsInjectionTimeItem.SetInjectionObject(const Value: TObject);
 begin
   if Value <> nil then
@@ -546,9 +570,28 @@ end;
 { TCtsExternalFlowsItem }
 
 procedure TCtsExternalFlowsItem.Assign(Source: TPersistent);
+var
+  ExternalFlowsItem: TCtsExternalFlowsItem;
+begin
+  if Source is TCtsExternalFlowsItem then
+  begin
+    ExternalFlowsItem := TCtsExternalFlowsItem(Source);
+    Outflow := ExternalFlowsItem.Outflow;
+    Inflow := ExternalFlowsItem.Inflow;
+    InflowConcentrations := ExternalFlowsItem.InflowConcentrations;
+  end;
+  inherited;
+end;
+
+procedure TCtsExternalFlowsItem.AssignObserverEvents(Collection: TCollection);
 begin
   inherited;
 
+end;
+
+function TCtsExternalFlowsItem.BoundaryFormulaCount: integer;
+begin
+  result := 2;
 end;
 
 constructor TCtsExternalFlowsItem.Create(Collection: TCollection);
@@ -558,20 +601,64 @@ begin
     Collection);
 end;
 
+procedure TCtsExternalFlowsItem.CreateFormulaObjects;
+begin
+  inherited;
+  FInflowFormula := CreateFormulaObject(dso3D);
+  FOutflowFormula := CreateFormulaObject(dso3D);
+end;
+
 destructor TCtsExternalFlowsItem.Destroy;
 begin
   FInflowConcentrations.Free;
+  Inflow := '0';
+  Outflow := '0';
   inherited;
+end;
+
+function TCtsExternalFlowsItem.GetBoundaryFormula(Index: integer): string;
+begin
+  case Index of
+    InflowPosition:
+      begin
+        result := Inflow
+      end;
+    OutflowPosition:
+      begin
+        result := Outflow
+      end;
+    else
+      Assert(False);
+  end;
 end;
 
 function TCtsExternalFlowsItem.GetInflow: string;
 begin
-
+  Result := FInflowFormula.Formula;
+  ResetItemObserver(InflowPosition);
 end;
 
 function TCtsExternalFlowsItem.GetOutflow: string;
 begin
+  Result := FOutflowFormula.Formula;
+  ResetItemObserver(OutflowPosition);
+end;
 
+procedure TCtsExternalFlowsItem.GetPropertyObserver(Sender: TObject;
+  List: TList);
+begin
+  if (Sender = FInflowFormula) then
+  begin
+    List.Add(FObserverList[InflowPosition]);
+  end
+  else if (Sender = FOutflowFormula) then
+  begin
+    List.Add(FObserverList[OutflowPosition]);
+  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 function TCtsExternalFlowsItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -588,19 +675,47 @@ begin
   end;
 end;
 
+procedure TCtsExternalFlowsItem.RemoveFormulaObjects;
+begin
+  frmGoPhast.PhastModel.FormulaManager.Remove(FInflowFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FOutflowFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+
+end;
+
+procedure TCtsExternalFlowsItem.SetBoundaryFormula(Index: integer;
+  const Value: string);
+begin
+  case Index of
+    InflowPosition:
+      begin
+        Inflow := Value;
+      end;
+    OutflowPosition:
+      begin
+        Outflow := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 procedure TCtsExternalFlowsItem.SetInflow(const Value: string);
 begin
-
+  UpdateFormula(Value, InflowPosition, FInflowFormula);
 end;
 
 procedure TCtsExternalFlowsItem.SetInflowConcentrations(const Value: TStringConcCollection);
 begin
-
+  FInflowConcentrations.Assign(Value);
 end;
 
 procedure TCtsExternalFlowsItem.SetOutflow(const Value: string);
 begin
-
+  UpdateFormula(Value, OutflowPosition, FOutflowFormula);
 end;
 
 { TCtsObjectCollection }
@@ -609,13 +724,6 @@ function TCtsObjectCollection.Add: TCtsObjectItem;
 begin
   result := inherited Add as TCtsObjectItem;
 end;
-
-//constructor TCtsObjectCollection.Create(Boundary: TModflowScreenObjectProperty;
-//  Model: TBaseModel; ScreenObject: TObject);
-//begin
-//  inherited;
-//
-//end;
 
 function TCtsObjectCollection.GetItem(Index: Integer): TCtsObjectItem;
 begin
@@ -643,22 +751,7 @@ begin
   inherited SetItem(Index, Value);
 end;
 
-{ TInjectionOptionCollection }
-
-//constructor TInjectionOptionCollection.Create(Model: TBaseModel);
-//begin
-//  inherited Create(TInjectionOptionItem, Model);
-//end;
-
 { TCtsInjectionTimeCollection }
-
-//constructor TCtsInjectionTimeCollection.Create(
-//  Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
-//  ScreenObject: TObject);
-//begin
-//  inherited;
-//
-//end;
 
 class function TCtsInjectionTimeCollection.ItemClass: TBoundaryItemClass;
 begin
@@ -666,14 +759,6 @@ begin
 end;
 
 { TCtsExternalFlowsCollection }
-
-constructor TCtsExternalFlowsCollection.Create(
-  Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
-  ScreenObject: TObject);
-begin
-  inherited;
-
-end;
 
 class function TCtsExternalFlowsCollection.ItemClass: TBoundaryItemClass;
 begin
@@ -683,14 +768,55 @@ end;
 { TCtsSystem }
 
 procedure TCtsSystem.Assign(Source: TPersistent);
+var
+  CtsSystem: TCtsSystem;
 begin
+  if Source is TCtsSystem then
+  begin
+    CtsSystem := TCtsSystem(Source);
+    TreatmentDistribution := CtsSystem.TreatmentDistribution;
+    DefaultInjectionOptions := CtsSystem.DefaultInjectionOptions;
+    CtsObjects := CtsSystem.CtsObjects;
+    ExternalFlows := CtsSystem.ExternalFlows;
+    Injections := CtsSystem.Injections;
+    Name := CtsSystem.Name;
+  end;
   inherited;
-
 end;
 
-procedure TCtsSystem.Loaded(Model: TBaseModel);
+function TCtsSystem.BoundaryObserverPrefix: string;
 begin
-  FCtsObjects.Loaded(Model);
+  result := 'CTS_';
+end;
+
+constructor TCtsSystem.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  FDefaultInjectionOptions := TInjectionOptionCollection.Create(Model, nil, nil);
+  FCtsObjects := TCtsObjectCollection.Create(Self, Model, ScreenObject);
+  FExternalFlows := TCtsExternalFlowsCollection.Create(Self, Model, ScreenObject);
+  FInjections := TCtsInjectionTimeCollection.Create(Self, Model, ScreenObject);
+end;
+
+destructor TCtsSystem.Destroy;
+begin
+  FInjections.Free;
+  FExternalFlows.Free;
+  FCtsObjects.Free;
+  FDefaultInjectionOptions.Free;
+  inherited;
+end;
+
+function TCtsSystem.IsSame(AnotherCtsSystem: TCtsSystem): boolean;
+begin
+  Result := (TreatmentDistribution = AnotherCtsSystem.TreatmentDistribution)
+    and DefaultInjectionOptions.IsSame(AnotherCtsSystem.DefaultInjectionOptions)
+    and CtsObjects.IsSame(AnotherCtsSystem.CtsObjects)
+    and ExternalFlows.IsSame(AnotherCtsSystem.ExternalFlows);
+end;
+
+procedure TCtsSystem.Loaded;
+begin
+  FCtsObjects.Loaded(ParentModel);
 end;
 
 procedure TCtsSystem.SetCtsObjects(const Value: TCtsObjectCollection);
@@ -709,10 +835,29 @@ begin
   FExternalFlows := Value;
 end;
 
+procedure TCtsSystem.SetInjections(const Value: TCtsInjectionTimeCollection);
+begin
+  FInjections.Assign(Value);
+end;
+
+procedure TCtsSystem.SetName(const Value: string);
+begin
+  if FName <> Value then
+  begin
+    FName := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TCtsSystem.SetTreatmentDistribution(
   const Value: TTreatmentDistribution);
 begin
   FTreatmentDistribution := Value;
+end;
+
+function TCtsSystem.Used: boolean;
+begin
+  result := True;
 end;
 
 { TInjectionOptionCollection }
@@ -721,6 +866,72 @@ constructor TInjectionOptionCollection.Create(Model: TBaseModel;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   inherited Create(TInjectionOptionItem, Model, ScreenObject, Mt3dmsConcCollection);
+end;
+
+{ TCtsSystemItem }
+
+procedure TCtsSystemItem.Assign(Source: TPersistent);
+begin
+  if Source is TCtsSystemItem then
+  begin
+    CtsSystem := TCtsSystemItem(Source).CtsSystem;
+  end;
+  inherited;
+
+end;
+
+constructor TCtsSystemItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FCtsSystem := TCtsSystem.Create(Model, nil);
+end;
+
+destructor TCtsSystemItem.Destroy;
+begin
+  FCtsSystem.Free;
+  inherited;
+end;
+
+function TCtsSystemItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TCtsSystemItem);
+  if result then
+  begin
+    Result := CtsSystem.IsSame(TCtsSystemItem(AnotherItem).CtsSystem)
+  end;
+end;
+
+procedure TCtsSystemItem.Loaded;
+begin
+  FCtsSystem.Loaded;
+end;
+
+procedure TCtsSystemItem.SetCtsSystem(const Value: TCtsSystem);
+begin
+  FCtsSystem.Assign(Value);
+end;
+
+{ TCtsSystemCollection }
+
+function TCtsSystemCollection.Add: TCtsSystemItem;
+begin
+  result := inherited Add as TCtsSystemItem
+end;
+
+constructor TCtsSystemCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(TCtsSystemItem, Model);
+end;
+
+function TCtsSystemCollection.GetItem(Index: Integer): TCtsSystemItem;
+begin
+  result := inherited Items[index] as TCtsSystemItem
+end;
+
+procedure TCtsSystemCollection.SetItem(Index: Integer;
+  const Value: TCtsSystemItem);
+begin
+  inherited Items[index] := Value;
 end;
 
 end.

@@ -43,6 +43,8 @@ type
     lblGenFlowFrequency: TLabel;
     seGenTransportFrequency: TJvSpinEdit;
     lblGenTransportFrequency: TLabel;
+    seLakeOutputCycle: TJvSpinEdit;
+    lblLakeOutputCycle: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure jvpltvNavigatorCustomDrawItem(Sender: TCustomTreeView;
@@ -137,9 +139,11 @@ begin
   seNbcupr.AsInteger := SutraOutputControl.SpecifiedConcTempPrintFrequency;
   seGenFlowFrequency.AsInteger := SutraOutputControl.GeneralizedFlowPrintFrequency;
   seGenTransportFrequency.AsInteger := SutraOutputControl.GeneralizedTransportPrintFrequency;
+  seLakeOutputCycle.AsInteger := SutraOutputControl.LakePrintFrequency;
 
   seGenFlowFrequency.Enabled := frmGoPhast.ModelSelection <> msSutra22;
   seGenTransportFrequency.Enabled := frmGoPhast.ModelSelection <> msSutra22;
+  seLakeOutputCycle.Enabled := frmGoPhast.ModelSelection <> msSutra22;
 
   cbCinact.Checked := SutraOutputControl.ListAll;
 end;
@@ -197,6 +201,7 @@ begin
     SutraOutputControl.SpecifiedConcTempPrintFrequency := seNbcupr.AsInteger;
     SutraOutputControl.GeneralizedFlowPrintFrequency := seGenFlowFrequency.AsInteger;
     SutraOutputControl.GeneralizedTransportPrintFrequency := seGenTransportFrequency.AsInteger;
+    SutraOutputControl.LakePrintFrequency := seLakeOutputCycle.AsInteger;
 
     SutraOutputControl.ListAll := cbCinact.Checked;
 
