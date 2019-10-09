@@ -2,36 +2,38 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
   HelpType = htKeyword
   HelpKeyword = 'SUTRA_Output_Control_Dialog_Bo'
   Caption = 'SUTRA Output Control'
-  ClientHeight = 394
+  ClientHeight = 438
   ClientWidth = 722
   ExplicitWidth = 738
-  ExplicitHeight = 432
+  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 18
   object spl1: TSplitter
     Left = 136
     Top = 0
     Width = 5
-    Height = 344
+    Height = 388
     ExplicitLeft = 0
+    ExplicitHeight = 344
   end
   object jvplMain: TJvPageList
     Left = 141
     Top = 0
     Width = 581
-    Height = 344
+    Height = 388
     ActivePage = jvspObsBound
     PropagateEnable = False
     Align = alClient
+    ExplicitHeight = 344
     object jvspListing: TJvStandardPage
       Left = 0
       Top = 0
       Width = 581
-      Height = 344
+      Height = 388
       Caption = 'jvspListing'
       DesignSize = (
         581
-        344)
+        388)
       object lblNprint: TLabel
         Left = 133
         Top = 19
@@ -74,11 +76,11 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Left = 0
       Top = 0
       Width = 581
-      Height = 344
+      Height = 388
       Caption = 'jvspNodEle'
       DesignSize = (
         581
-        344)
+        388)
       object lblNE_PrintFrequency: TLabel
         Left = 133
         Top = 11
@@ -129,9 +131,8 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
       Left = 0
       Top = 0
       Width = 581
-      Height = 344
-      ExplicitLeft = 1
-      ExplicitTop = 1
+      Height = 388
+      ExplicitHeight = 344
       object lblNoblin: TLabel
         Left = 133
         Top = 6
@@ -195,6 +196,13 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
           'oundaries'
         WordWrap = True
       end
+      object lblLakeOutputCycle: TLabel
+        Left = 133
+        Top = 300
+        Width = 402
+        Height = 18
+        Caption = 'Print values every NLAKPR time steps for lake boundaries'
+      end
       object seNoblin: TJvSpinEdit
         Left = 6
         Top = 11
@@ -236,8 +244,8 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
         TabOrder = 4
       end
       object cbCinact: TCheckBox
-        Left = 14
-        Top = 298
+        Left = 6
+        Top = 346
         Width = 467
         Height = 17
         Caption = 'List all sources and boundary conditions (CINACT)'
@@ -259,13 +267,23 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
         MaxValue = 2147483647.000000000000000000
         TabOrder = 6
       end
+      object seLakeOutputCycle: TJvSpinEdit
+        Left = 6
+        Top = 297
+        Width = 121
+        Height = 26
+        MaxValue = 2147483647.000000000000000000
+        MinValue = 1.000000000000000000
+        Value = 1.000000000000000000
+        TabOrder = 8
+      end
     end
   end
   object jvpltvNavigator: TJvPageListTreeView
     Left = 0
     Top = 0
     Width = 136
-    Height = 344
+    Height = 388
     PageDefault = 0
     PageList = jvplMain
     Align = alLeft
@@ -273,15 +291,17 @@ inherited frmSutraOutputControl: TfrmSutraOutputControl
     TabOrder = 0
     OnCustomDrawItem = jvpltvNavigatorCustomDrawItem
     Items.Links = {00000000}
+    ExplicitHeight = 344
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 344
+    Top = 388
     Width = 722
     Height = 50
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 344
     DesignSize = (
       722
       50)

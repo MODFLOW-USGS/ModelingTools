@@ -683,7 +683,10 @@ uses
   Mt3dSftWriterUnit in 'Mt3dSftWriterUnit.pas',
   frmSimplifyObjectsCriteriaUnit in 'frmSimplifyObjectsCriteriaUnit.pas' {frmSimplifyObjectsCriteria},
   frameMt3dCtsPkgUnit in 'frameMt3dCtsPkgUnit.pas' {frameMt3dCtsPkg: TFrame},
-  Mt3dCtsSystemUnit in 'Mt3dCtsSystemUnit.pas';
+  Mt3dCtsSystemUnit in 'Mt3dCtsSystemUnit.pas',
+  frmContaminantTreatmentSystemsUnit in 'frmContaminantTreatmentSystemsUnit.pas' {frmContaminantTreatmentSystems},
+  frameAvailableObjectsUnit in 'frameAvailableObjectsUnit.pas' {frameAvailableObjects: TFrame},
+  frmEditSelectedWellsUnit in 'frmEditSelectedWellsUnit.pas' {frmEditSelectedWells};
 
 {$R *.res}
 {#BACKUP ModelMuse.cfg}
@@ -699,6 +702,8 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
+  Application.CreateForm(TfrmContaminantTreatmentSystems, frmContaminantTreatmentSystems);
+  Application.CreateForm(TfrmEditSelectedWells, frmEditSelectedWells);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
   if frmErrorsAndWarnings.HasMessages then

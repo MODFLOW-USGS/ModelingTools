@@ -1,7 +1,7 @@
-# UZF: Unsaturated-Zone Flow package file created on 2/8/2017 by ModelMuse version 3.8.1.29.
+# UZF: Unsaturated-Zone Flow package file created on 10/4/2019 by ModelMuse version 4.0.0.20.
 OPTIONS
 END
-     1     1     0     1     0     9    15    20     0  1.000000000000E+000  # Data Set 1b: NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NTRAIL2 NSETS2 NUZGAG SURFDEP
+     1     1     0     1     0    -9    15    20     0  1.000000000000E+000  # Data Set 1b: NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NTRAIL2 NSETS2 NUZGAG SURFDEP
 CONSTANT        1 # Data Set 2: IUZFBND
 CONSTANT     1.000000000000E+000  # Data Set 4: VKS
 CONSTANT     3.500000000000E+000  # Data Set 5: EPS

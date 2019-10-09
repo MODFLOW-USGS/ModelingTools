@@ -12,9 +12,9 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
   Position = poScreenCenter
   OnActivate = ListClick
   OnResize = FormResize
-  ExplicitWidth = 810
-  ExplicitHeight = 436
-  PixelsPerInch = 120
+  ExplicitWidth = 808
+  ExplicitHeight = 430
+  PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -26,9 +26,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     Maximized = False
     Minimized = False
     ButtonCursor = crDefault
-    ExplicitLeft = 136
-    ExplicitTop = 72
-    ExplicitHeight = 100
+    ExplicitLeft = 119
+    ExplicitTop = 1
   end
   object pnlBottom: TPanel
     Left = 0
@@ -42,7 +41,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       41)
     object btnHelp: TBitBtn
       Left = 511
-      Top = 7
+      Top = 6
       Width = 87
       Height = 27
       Anchors = [akRight, akBottom]
@@ -52,8 +51,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       OnClick = btnHelpClick
     end
     object CancelBtn: TBitBtn
-      Left = 701
-      Top = 7
+      Left = 697
+      Top = 6
       Width = 87
       Height = 27
       Anchors = [akRight, akBottom]
@@ -62,8 +61,8 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       TabOrder = 4
     end
     object OkBtn: TBitBtn
-      Left = 606
-      Top = 7
+      Left = 604
+      Top = 6
       Width = 87
       Height = 27
       Anchors = [akRight, akBottom]
@@ -74,7 +73,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     end
     object btnDeleteObservation: TButton
       Left = 88
-      Top = 7
+      Top = 6
       Width = 77
       Height = 27
       Anchors = [akLeft, akBottom]
@@ -85,7 +84,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     end
     object btnAddObservation: TButton
       Left = 5
-      Top = 7
+      Top = 6
       Width = 77
       Height = 27
       Anchors = [akLeft, akBottom]
@@ -107,15 +106,11 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       Top = 0
       Width = 661
       Height = 350
-      ActivePage = tabObservationGroupNames
+      ActivePage = tabObservationProperties
       Align = alClient
       TabOrder = 0
       object tabObservationProperties: TTabSheet
         Caption = 'Observation Properties'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnlTop: TPanel
           Left = 0
           Top = 0
@@ -169,16 +164,12 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Top = 65
           Width = 653
           Height = 252
-          ActivePage = tabObservationsTimes
+          ActivePage = tabObjects
           Align = alClient
           TabOrder = 1
           object tabObservationsTimes: TTabSheet
             Caption = 'Observation times and values'
             OnResize = tabObservationsTimesResize
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -464,10 +455,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             Caption = 'Mass flux observation times and values'
             ImageIndex = 2
             TabVisible = False
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -772,10 +759,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           object tabObjects: TTabSheet
             Caption = 'Objects'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -950,10 +933,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0

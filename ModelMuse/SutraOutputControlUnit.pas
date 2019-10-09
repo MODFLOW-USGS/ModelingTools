@@ -28,6 +28,7 @@ type
     FMaxObsPerLine: integer;
     FGeneralizedTransportPrintFrequency: integer;
     FGeneralizedFlowPrintFrequency: integer;
+    FLakePrintFrequency: Integer;
     procedure SetElementOptions(const Value: TSutraNodeEleOptions);
     procedure SetFluidSourcePrintFrequency(const Value: integer);
     procedure SetListAll(const Value: Boolean);
@@ -40,6 +41,7 @@ type
     procedure SetSpecifiedPressurePrintFrequency(const Value: integer);
     procedure SetGeneralizedFlowPrintFrequency(const Value: integer);
     procedure SetGeneralizedTransportPrintFrequency(const Value: integer);
+    procedure SetLakePrintFrequency(const Value: Integer);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -81,6 +83,8 @@ type
     property GeneralizedTransportPrintFrequency: integer
       read FGeneralizedTransportPrintFrequency
       write SetGeneralizedTransportPrintFrequency stored True;
+    // Lake output cycle (NLAKPR)
+    property LakePrintFrequency: Integer read FLakePrintFrequency write SetLakePrintFrequency;
     // CINACT
     property ListAll: Boolean read FListAll write SetListAll stored True;
   end;
@@ -116,6 +120,7 @@ begin
       OutputControlSource.GeneralizedFlowPrintFrequency;
     GeneralizedTransportPrintFrequency :=
       OutputControlSource.GeneralizedTransportPrintFrequency;
+    LakePrintFrequency := OutputControlSource.LakePrintFrequency;
     ListAll := OutputControlSource.ListAll;
   end
   else
@@ -155,6 +160,7 @@ begin
   FSpecifiedConcTempPrintFrequency := 9999;
   FGeneralizedFlowPrintFrequency := 9999;
   FGeneralizedTransportPrintFrequency := 9999;
+  FLakePrintFrequency := 9999;
   FListAll := True;
 end;
 
@@ -184,6 +190,11 @@ procedure TSutraOutputControl.SetGeneralizedTransportPrintFrequency(
   const Value: integer);
 begin
   SetIntegerProperty(FGeneralizedTransportPrintFrequency, Value);
+end;
+
+procedure TSutraOutputControl.SetLakePrintFrequency(const Value: Integer);
+begin
+  SetIntegerProperty(FLakePrintFrequency, Value);
 end;
 
 procedure TSutraOutputControl.SetListAll(const Value: Boolean);

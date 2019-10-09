@@ -251,7 +251,7 @@ type
     jvspMt3dSft: TJvStandardPage;
     frameMt3dSftPkg: TframeMt3dSftPkg;
     jvspMt3dCts: TJvStandardPage;
-    frameMt3dCtsPkg1: TframeMt3dCtsPkg;
+    frameMt3dCtsPkg: TframeMt3dCtsPkg;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -392,6 +392,7 @@ type
     procedure EnableUnsatTransport;
     procedure EnableLakeTransport;
     procedure EnableStreamTransport;
+    procedure EnableContaminantTreatmentSystem;
 
     { Private declarations }
   public
@@ -1315,6 +1316,7 @@ begin
   EnableUnsatTransport;
   EnableLakeTransport;
   EnableStreamTransport;
+  EnableContaminantTreatmentSystem;
 end;
 
 procedure TfrmModflowPackages.framePkgNwtpcNWTChange(Sender: TObject);
@@ -2616,6 +2618,29 @@ begin
     and framePkgRCH.rcSelectionController.Enabled;
 end;
 
+procedure TfrmModflowPackages.EnableContaminantTreatmentSystem;
+var
+  CanSelect: Boolean;
+begin
+  CanSelect := framePkgMt3dBasic.rcSelectionController.Enabled
+    and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
+  if frmGoPhast.ModelSelection <> msModflowNWT then
+  begin
+    // SFT is not currently supported with MODFLOW 6
+//    CanSelect := CanSelect and framePackageSfrMF6.rcSelectionController.Enabled;
+    CanSelect := False;
+//  end
+//  else
+//  begin
+//    CanSelect := CanSelect and framePkgSFR.rcSelectionController.Enabled;
+  end;
+  frameMt3dCtsPkg.CanSelect := CanSelect;
+  if not frameMt3dCtsPkg.CanSelect then
+  begin
+    frameMt3dCtsPkg.Selected := False;
+  end;
+end;
+
 procedure TfrmModflowPackages.EnableEvtModpathOption;
 begin
   frameModpath.comboEvtSink.Enabled :=
@@ -2807,7 +2832,8 @@ begin
 
   EnableUnsatTransport;
   EnableLakeTransport;
-  EnableStreamTransport
+  EnableStreamTransport;
+  EnableContaminantTreatmentSystem;
 end;
 
 function TfrmModflowPackages.NewParameterName: string;
@@ -3692,10 +3718,14 @@ begin
 
     Packages.Mt3dUnsatTransport.Frame := framePkgMt3dUzt;
     FPackageList.Add(Packages.Mt3dUnsatTransport);
+
+    Packages.Mt3dCts.Frame := frameMt3dCtsPkg;
+    FPackageList.Add(Packages.Mt3dCts);
   {$ELSE}
     framePkgMt3dUzt.NilNode;
     frameMt3dLktPkg.NilNode;
     frameMt3dSftPkg.NilNode;
+    frameMt3dCtsPkg.NilNode;
   {$ENDIF}
   end
   else
@@ -3703,6 +3733,7 @@ begin
     framePkgMt3dUzt.NilNode;
     frameMt3dLktPkg.NilNode;
     frameMt3dSftPkg.NilNode;
+    frameMt3dCtsPkg.NilNode;
   end;
 
 
