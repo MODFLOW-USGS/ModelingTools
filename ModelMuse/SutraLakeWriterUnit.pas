@@ -580,11 +580,11 @@ begin
         WriteString('''');
         if LakeInteraction = lbiUseDefaults then
         begin
-          ILKF := Ord(LakeInteraction) -1;
+          ILKF := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
         end
         else
         begin
-          ILKF := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+          ILKF := Ord(LakeInteraction) -1;
         end;
         WriteInteger(ILKF);
         NewLine;
@@ -617,11 +617,11 @@ begin
         WriteString('''');
         if LakeInteraction = lbiUseDefaults then
         begin
-          ILKS := Ord(LakeInteraction) -1;
+          ILKS := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
         end
         else
         begin
-          ILKS := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+          ILKS := Ord(LakeInteraction) -1;
         end;
         WriteInteger(ILKS);
         NewLine;
@@ -654,11 +654,11 @@ begin
         WriteString('''');
         if LakeInteraction = lbiUseDefaults then
         begin
-          ILKP := Ord(LakeInteraction) -1;
+          ILKP := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
         end
         else
         begin
-          ILKP := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+          ILKP := Ord(LakeInteraction) -1;
         end;
         WriteInteger(ILKP);
         NewLine;
@@ -691,11 +691,11 @@ begin
         WriteString('''');
         if LakeInteraction = lbiUseDefaults then
         begin
-          ILKU := Ord(LakeInteraction) -1;
+          ILKU := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
         end
         else
         begin
-          ILKU := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+          ILKU := Ord(LakeInteraction) -1;
         end;
         WriteInteger(ILKU);
         NewLine;
@@ -739,11 +739,11 @@ begin
           WriteString('''');
           if LakeInteraction = lbiUseDefaults then
           begin
-            ILKPG := Ord(LakeInteraction) -1;
+            ILKPG := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
           end
           else
           begin
-            ILKPG := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+            ILKPG := Ord(LakeInteraction) -1;
           end;
           WriteInteger(ILKPG);
           case GenLakeInteractionType of
@@ -804,13 +804,13 @@ begin
           WriteString('''');
           if LakeInteraction = lbiUseDefaults then
           begin
-            ILKUG := Ord(LakeInteraction) -1;
+            ILKUG := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
           end
           else
           begin
-            ILKUG := Ord(FLakeOptions.FluidSourceSinkLakePresent)-1;
+            ILKUG := Ord(LakeInteraction) -1;
           end;
-          ILKUG := Ord(LakeInteraction) -1;
+//          ILKUG := Ord(LakeInteraction) -1;
           WriteInteger(ILKUG);
           case GenLakeTransInteractionType of
             gtitSoluteSource: WriteString(' ''S''');

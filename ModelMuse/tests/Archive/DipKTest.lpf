@@ -1,0 +1,58 @@
+# LPF: Layer Property Flow package file created on 10/9/2019 by ModelMuse version 4.0.0.20.
+     9 -1.000000000000E+020      4 # ILPFCB, HDRY, NPLPF
+     0     0     0     0     0     0     0 # LAYTYP
+     0     0     0     0     0     0     0 # LAYAVG
+    -1    -1    -1    -1    -1    -1    -1 # CHANI
+     0     0     0     0     0     0     0 # LAYVKA
+     0     0     0     0     0     0     0 # LAYWET
+HK_Rock HK  1.200000000000E-006      7 # PARNAM, PARTYP, PARVAL, NCLU
+     1 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     2 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     3 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     4 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     5 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     6 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     7 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+Hni_Rock HANI  1.000000000000E+000      7 # PARNAM, PARTYP, PARVAL, NCLU
+     1 NONE  Hni_Roc_Z1      1 # Layer, MLTARR, ZONARR IZ
+     2 NONE  Hni_Roc_Z2      1 # Layer, MLTARR, ZONARR IZ
+     3 NONE  Hni_Roc_Z3      1 # Layer, MLTARR, ZONARR IZ
+     4 NONE  Hni_Roc_Z4      1 # Layer, MLTARR, ZONARR IZ
+     5 NONE  Hni_Roc_Z5      1 # Layer, MLTARR, ZONARR IZ
+     6 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     7 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+VK_Rock VK  1.200000000000E-006      7 # PARNAM, PARTYP, PARVAL, NCLU
+     1 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     2 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     3 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     4 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     5 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     6 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+     7 NONE  ALL      1 # Layer, MLTARR, ZONARR IZ
+HK_high HK  1.200000000000E-004      5 # PARNAM, PARTYP, PARVAL, NCLU
+     1 NONE  HK_high_Z1      1 # Layer, MLTARR, ZONARR IZ
+     2 NONE  HK_high_Z2      1 # Layer, MLTARR, ZONARR IZ
+     3 NONE  HK_high_Z3      1 # Layer, MLTARR, ZONARR IZ
+     4 NONE  HK_high_Z4      1 # Layer, MLTARR, ZONARR IZ
+     5 NONE  HK_high_Z5      1 # Layer, MLTARR, ZONARR IZ
+    -1 # HK Lay1 Layer 1
+    -1 # HANI Lay1 Layer 1
+    -1 # VKA Lay1 Layer 1
+    -1 # HK Lay2 Layer 2
+    -1 # HANI Lay2 Layer 2
+    -1 # VKA Lay2 Layer 2
+    -1 # HK Lay3 Layer 3
+    -1 # HANI Lay3 Layer 3
+    -1 # VKA Lay3 Layer 3
+    -1 # HK Lay4 Layer 4
+    -1 # HANI Lay4 Layer 4
+    -1 # VKA Lay4 Layer 4
+    -1 # HK Lay5 Layer 5
+    -1 # HANI Lay5 Layer 5
+    -1 # VKA Lay5 Layer 5
+    -1 # HK Lay6 Layer 6
+    -1 # HANI Lay6 Layer 6
+    -1 # VKA Lay6 Layer 6
+    -1 # HK Lay7 Layer 7
+    -1 # HANI Lay7 Layer 7
+    -1 # VKA Lay7 Layer 7

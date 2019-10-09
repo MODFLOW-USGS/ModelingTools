@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DipKTest" FileType="bin">
+    <FileName Model_Name="DipKTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005dbl.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DipKTest" FileType="ancillary">
+    <FileName Model_Name="DipKTest" FileType="ancillary">DipKTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DipKTest" FileType="Model Input">
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.bas</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.dis</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.gsf</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.jtf</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.lpf</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.nam.archive</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.oc</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.pcgn</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.pval</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">DipKTest.zon</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Input">usgs.DipKTest.reference</FileName>
+  </model>
+  <output Model_Name="DipKTest" FileType="Model Output">
+    <FileName Model_Name="DipKTest" FileType="Model Output">DipKTest.bhd</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Output">DipKTest.cbc</FileName>
+    <FileName Model_Name="DipKTest" FileType="Model Output">DipKTest.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -176,9 +176,9 @@ begin
           CtsObject.StartTime;
         frameWells.Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1] :=
           CtsObject.EndTime;
-        frameWells.Grid.RealValue[Ord(cwcExtractionWells), ExtractionIndex+1] :=
+        frameWells.Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1] :=
           CtsObject.ExtractionWellObjects.DelimitedText;
-        frameWells.Grid.RealValue[Ord(cwcInjectionWells), ExtractionIndex+1] :=
+        frameWells.Grid.Cells[Ord(cwcInjectionWells), ExtractionIndex+1] :=
           CtsObject.InjectionWellObjects.DelimitedText;
       end;
 

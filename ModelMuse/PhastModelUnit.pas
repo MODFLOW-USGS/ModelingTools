@@ -8789,9 +8789,14 @@ const
   //               Change: The UZF input file has been changed so that
   //                infiltration and unsaturated zone ET are always saved to
   //                the cell-by-cell budget file.
+  //    '4.0.0.21' Bug fix; Fixed bug that could cause some cells that are
+  //                intersected by an object to not be recognized as being
+  //                intersected by that object.
+  //               Bug fix: Fixed bug that could cause an access violation
+  //                when converting a structured grid to a DISV grid.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.20';
+  IModelVersion = '4.0.0.21';
 //  IModelVersion = '4.0.0.19';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';

@@ -4967,25 +4967,25 @@ end;
 
 procedure TUndoSimplifyObjects.DoCommand;
 var
-  Index, VertexIndex: integer;
+  Index: integer;
   AScreenObject: TScreenObject;
   DataSetIndex: integer;
-  TempScreenObject: TScreenObject;
-  PointCount: integer;
-  SectionIndex: Integer;
-  NextPart: Boolean;
-  NextEnd: Integer;
-  ClosedSection: boolean;
-  LastPoint: TPoint2D;
-  TempSectionIndex: integer;
-  TempVertextIndex: integer;
-  NewSection: boolean;
-  NeedToCloseSection: boolean;
-  CurrentStart: integer;
-  CurrentEnd: integer;
-  TempIndex: integer;
-  InnerVertexIndex: Integer;
-  NextStart: Integer;
+//  TempScreenObject: TScreenObject;
+//  PointCount: integer;
+//  SectionIndex: Integer;
+//  NextPart: Boolean;
+//  NextEnd: Integer;
+//  ClosedSection: boolean;
+//  LastPoint: TPoint2D;
+//  TempSectionIndex: integer;
+//  TempVertextIndex: integer;
+//  NewSection: boolean;
+//  NeedToCloseSection: boolean;
+//  CurrentStart: integer;
+//  CurrentEnd: integer;
+//  TempIndex: integer;
+//  InnerVertexIndex: Integer;
+//  NextStart: Integer;
 
 begin
   frmGoPhast.CanDraw := False;

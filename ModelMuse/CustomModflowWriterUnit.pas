@@ -7059,9 +7059,9 @@ procedure TMt3dmsNameWriter.InitilizeNameFile(const FileName: string;
   out OutputListFileName: string);
 var
   FtlFileName: string;
-  CbcFileName: string;
-  BhdFileName: string;
-  DisGrbFileName: string;
+//  CbcFileName: string;
+//  BhdFileName: string;
+//  DisGrbFileName: string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMissingFtlFile);
   ClearNameFile;

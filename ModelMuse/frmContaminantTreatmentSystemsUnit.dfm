@@ -123,6 +123,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       TabOrder = 0
       object tabWells: TTabSheet
         Caption = 'Wells'
+        ExplicitLeft = 0
+        ExplicitTop = 0
         ExplicitWidth = 718
         ExplicitHeight = 53
         inline frameWells: TframeGrid
@@ -269,6 +271,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       object tabExternalFlows: TTabSheet
         Caption = 'External Flows'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         inline frameExternalFlows: TframeGrid
           Left = 0
           Top = 0
@@ -437,6 +443,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           ExplicitHeight = 280
           object tabDefaultOptions: TTabSheet
             Caption = 'Default Options'
+            ExplicitLeft = 0
+            ExplicitTop = 0
             ExplicitWidth = 710
             ExplicitHeight = 39
             inline frameDefaultOptions: TframeGrid

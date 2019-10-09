@@ -190,8 +190,8 @@ var
 //  ScheduleName: AnsiString;
   Same: Boolean;
   FirstBoundary: TSutraBoundary;
-  ABoundColl: TCustomSutraBoundaryCollection;
-  BoundColl: TCustomSutraBoundaryCollection;
+//  ABoundColl: TCustomSutraBoundaryCollection;
+//  BoundColl: TCustomSutraBoundaryCollection;
   Index: Integer;
   ABoundary: TSutraBoundary;
   LakeInteraction: TLakeBoundaryInteraction;

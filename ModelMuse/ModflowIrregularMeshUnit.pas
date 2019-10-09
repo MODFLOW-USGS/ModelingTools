@@ -2622,6 +2622,10 @@ begin
     ApplyLimittoMinMax(ColorDataArray, MinMax, ColorDataArray.Limits);
   end;
   IDomainDataArray := (Model as TCustomModel).DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  if GridLineDrawingChoice in [gldcActive, gldcActiveEdge] then
+  begin
+    IDomainDataArray.Initialize;
+  end;
   for CellIndex := 0 to Cells.Count - 1 do
   begin
     ACell := Cells[CellIndex];
@@ -6971,6 +6975,7 @@ begin
           ACellEdge := AnArray[ItemIndex];
           ASegment[1] := TwoDGrid.CellCorners[ACellEdge.Node1].Location;
           ASegment[2] := TwoDGrid.CellCorners[ACellEdge.Node2].Location;
+          Assert(Distance(ASegment[1], ASegment[2]) >0);
           AllEdges[EIndex] := ASegment;
           SegmentEdges.AddPoint(ASegment[1].X, ASegment[1].Y, Addr(AllEdges[EIndex]));
           SegmentEdges.AddPoint(ASegment[2].X, ASegment[2].Y, Addr(AllEdges[EIndex]));
@@ -6984,7 +6989,7 @@ begin
       begin
         Inc(OutlineIndex);
         SetLength(Outline, OutlineIndex);
-        SetLength(APolygon, SegmentEdges.Count);
+        SetLength(APolygon, SegmentEdges.Count+1);
         FirstLocation := SegmentEdges.Points[0];
         Assert(Length(FirstLocation.Data) > 0);
         SegPointer := TSegment2DPtr(FirstLocation.Data[0]);

@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4037
+4051
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4037,3 +4037,17 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.uzf
 	Archive\MF6_TestSfrMawLakMvrUzf.wel
 	Archive\usgs.MF6_TestSfrMawLakMvrUzf.reference
+DipKTest.gpt
+	Archive\DipKTest.axml
+	Archive\DipKTest.bas
+	Archive\DipKTest.dis
+	Archive\DipKTest.gsf
+	Archive\DipKTest.jtf
+	Archive\DipKTest.lpf
+	Archive\DipKTest.nam
+	Archive\DipKTest.nam.archive
+	Archive\DipKTest.oc
+	Archive\DipKTest.pcgn
+	Archive\DipKTest.pval
+	Archive\DipKTest.zon
+	Archive\usgs.DipKTest.reference

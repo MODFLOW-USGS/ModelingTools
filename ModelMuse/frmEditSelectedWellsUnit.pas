@@ -14,8 +14,8 @@ type
     btnHelp: TBitBtn;
     btnCancelBtn: TBitBtn;
     btnOkBtn: TBitBtn;
-    procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject); override;
+    procedure FormDestroy(Sender: TObject); override;
   private
     FAvailableWells: TStringList;
     FSelectedWells: TStringList;

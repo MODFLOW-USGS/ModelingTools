@@ -1636,7 +1636,7 @@ end;
 procedure TMt3dSftInitConcCollection.InvalidateSftInitConc(Sender: TObject);
 var
   PhastModel: TPhastModel;
-  Link: TMt3dSftInitConcTimeListLink;
+//  Link: TMt3dSftInitConcTimeListLink;
   ChildIndex: Integer;
   ChildModel: TChildModel;
   NCOMP: Integer;
@@ -1698,7 +1698,7 @@ procedure TMt3dSftDispItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TMt3dSftDispCollection;
   DispObserver: TObserver;
-  InitConcObserver: TObserver;
+//  InitConcObserver: TObserver;
   ComponentIndex: Integer;
   DataSetName: string;
   DataArray: TDataArray;

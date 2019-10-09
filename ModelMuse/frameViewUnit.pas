@@ -1519,10 +1519,9 @@ begin
       end;
 
 
-      if  {(frmGoPhast.PhastModel.ModelSelection in SutraSelection) and}
-        ({frmGoPhast.PhastModel.}Mesh <> nil) then
+      if (Mesh <> nil) then
       begin
-        {frmGoPhast.PhastModel.}Mesh.Draw(FBitMap32, ViewDirection);
+        Mesh.Draw(FBitMap32, ViewDirection);
       end;
 
       // Do not call Application.ProcessMessages.

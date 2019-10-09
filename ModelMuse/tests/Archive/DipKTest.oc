@@ -1,0 +1,7 @@
+# Output Control file created on 10/9/2019 by ModelMuse version 4.0.0.20.
+HEAD SAVE UNIT     37
+COMPACT BUDGET AUXILIARY
+PERIOD     1 STEP     1
+     SAVE HEAD
+     SAVE BUDGET
+     PRINT BUDGET

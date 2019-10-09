@@ -6407,9 +6407,9 @@ var
   BoundarArray: TDataArray;
   AChildModel: TChildModel;
   ABaseModel: TBaseModel;
-  NCOMP: Integer;
-  DataSetName: string;
-  CIndex: Integer;
+//  NCOMP: Integer;
+//  DataSetName: string;
+//  CIndex: Integer;
 begin
   if Source is TScreenObject then
   begin
@@ -15989,9 +15989,9 @@ var
   Point1: TPoint2D;
   Point2: TPoint2D;
   Point3: TPoint2D;
-  Angle1: Extended;
-  Angle2: Extended;
-  DeltaAngle: Integer;
+//  Angle1: Extended;
+//  Angle2: Extended;
+//  DeltaAngle: Integer;
   ShouldDelete: Boolean;
   PointsRemoved: Boolean;
 begin
@@ -30132,7 +30132,7 @@ begin
             // Look at each segment defined by a pair of points in TempPoints2.
             // Skip segments that occur before FirstPointInCell.
             // Start checking the midpoints of the remainder of the segments.
-            // If the midepont is in the cell, include that segment.
+            // If the midpont is in the cell, include that segment.
             // Continue until you either reach the end
             // of the array or have reached a segment that isn't in the cell.
             MinDistance := Distance(PreviousPoint, FirstPointInCell);
@@ -30206,7 +30206,10 @@ begin
                 FoundEdgePoint := True;
                 HorizontalIndex := NextHorizontalIndex[PointIndex];
                 LayerIndex := NextLayer[PointIndex];
-                break;
+                if (HorizontalIndex >= 0) and (LayerIndex >= 0) then
+                begin
+                  break;
+                end;
               end;
             end;
             Assert(FoundEdgePoint);
