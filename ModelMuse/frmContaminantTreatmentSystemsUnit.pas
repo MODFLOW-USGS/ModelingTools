@@ -10,6 +10,7 @@ uses
 
 type
   TCstWellColumns = (cwcStartTime, cwcEndTime, cwcExtractionWells, cwcInjectionWells);
+  TCstExternalFlowColumns = (cefcStartTime, cefcEndTime, cstOutflow, cstInflow, cstInflowConc);
 
   TfrmContaminantTreatmentSystems = class(TfrmCustomGoPhast)
     tvTreatmentSystems: TTreeView;
@@ -20,7 +21,7 @@ type
     btnOkBtn: TBitBtn;
     btnDeleteObservation: TButton;
     btnAddObservation: TButton;
-    pnl3: TPanel;
+    pnlMain: TPanel;
     pgcMain: TPageControl;
     tabWells: TTabSheet;
     tabExternalFlows: TTabSheet;
@@ -34,12 +35,12 @@ type
     frameDefaultOptions: TframeGrid;
     tabIndividualWellOptions: TTabSheet;
     splttr2: TJvNetscapeSplitter;
-    tv1: TTreeView;
+    tvIndividualObjectOptions: TTreeView;
     pnl1: TPanel;
     pnl2: TPanel;
     cbUseDefaultOptions: TCheckBox;
     frameIndividualWellOptions: TframeGrid;
-    pnl4: TPanel;
+    pnlTop: TPanel;
     edSystemName: TLabeledEdit;
     frameWells: TframeGrid;
     procedure FormCreate(Sender: TObject); override;
@@ -49,6 +50,7 @@ type
     FCtsSystemw: TCtsSystemCollection;
     FWellObjects: TStringList;
     FSelectedSystem: TCtsSystem;
+    NCOMP: Integer;
     procedure GetData;
     { Private declarations }
   public
@@ -94,6 +96,10 @@ var
   StressPeriods: TModflowStressPeriods;
 begin
   LocalModel := frmGoPhast.PhastModel;
+
+  NCOMP := LocalModel.NumberOfMt3dChemComponents;
+  frameExternalFlows.Grid.ColCount := NCOMP + 4;
+
   WellPackageChoice := LocalModel.ModflowPackages.Mt3dCts.WellPackageChoice;
 
   StressPeriods := LocalModel.ModflowStressPeriods;
@@ -147,11 +153,54 @@ end;
 procedure TfrmContaminantTreatmentSystems.tvTreatmentSystemsChange(
   Sender: TObject; Node: TTreeNode);
 var
-  AvailableObjects: TStringList;
   ExtractionIndex: Integer;
   CtsObject: TCtsObjectItem;
+  ExternalFlowIndex: Integer;
+  ExternalFlowsItem: TCtsExternalFlowsItem;
+  CompIndex: Integer;
 begin
   inherited;
+  if FSelectedSystem <> nil then
+  begin
+    FSelectedSystem.Name := edSystemName.Text;
+
+    FSelectedSystem.CtsObjects.Count := frameWells.seNumber.AsInteger;
+    for ExtractionIndex := 0 to FSelectedSystem.CtsObjects.Count - 1 do
+    begin
+      FSelectedSystem.CtsObjects[ExtractionIndex] := CtsObject;
+      CtsObject.StartTime :=
+        frameWells.Grid.RealValue[Ord(cwcStartTime), ExtractionIndex+1];
+      CtsObject.EndTime :=
+        frameWells.Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1];
+      CtsObject.ExtractionWellObjects.DelimitedText :=
+        frameWells.Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1];
+      CtsObject.InjectionWellObjects.DelimitedText :=
+        frameWells.Grid.Cells[Ord(cwcInjectionWells), ExtractionIndex+1];
+    end;
+
+    FSelectedSystem.ExternalFlows.Count := frameExternalFlows.seNumber.AsInteger;
+    for ExternalFlowIndex := 0 to FSelectedSystem.ExternalFlows.Count - 1 do
+    begin
+      ExternalFlowsItem := FSelectedSystem.ExternalFlows[ExternalFlowIndex];
+      ExternalFlowsItem.StartTime :=
+        frameWells.Grid.RealValue[Ord(cefcStartTime), ExtractionIndex+1];
+      ExternalFlowsItem.EndTime :=
+        frameWells.Grid.RealValue[Ord(cefcEndTime), ExtractionIndex+1];
+      ExternalFlowsItem.Outflow :=
+        frameWells.Grid.Cells[Ord(cstOutflow), ExtractionIndex+1];
+      ExternalFlowsItem.Inflow :=
+        frameWells.Grid.Cells[Ord(cstInflow), ExtractionIndex+1];
+      While ExternalFlowsItem.InflowConcentrations.Count < NCOMP do
+      begin
+        ExternalFlowsItem.InflowConcentrations.Add.Value := '0';
+      end;
+      for CompIndex := 0 to NCOMP - 1 do
+      begin
+        ExternalFlowsItem.InflowConcentrations[CompIndex].Value :=
+          frameWells.Grid.Cells[Ord(cstInflow) + CompIndex, ExtractionIndex+1];
+      end;
+    end;
+  end;
   if Node <> nil then
   begin
     FSelectedSystem := Node.Data;
@@ -164,26 +213,41 @@ begin
   begin
     edSystemName.Text := FSelectedSystem.Name;
 
-    AvailableObjects := TStringList.Create;
-    try
-      AvailableObjects.Assign(FWellObjects);
+    frameWells.seNumber.AsInteger := FSelectedSystem.CtsObjects.Count;
+    for ExtractionIndex := 0 to FSelectedSystem.CtsObjects.Count - 1 do
+    begin
+      CtsObject := FSelectedSystem.CtsObjects[ExtractionIndex];
+      frameWells.Grid.RealValue[Ord(cwcStartTime), ExtractionIndex+1] :=
+        CtsObject.StartTime;
+      frameWells.Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1] :=
+        CtsObject.EndTime;
+      frameWells.Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1] :=
+        CtsObject.ExtractionWellObjects.DelimitedText;
+      frameWells.Grid.Cells[Ord(cwcInjectionWells), ExtractionIndex+1] :=
+        CtsObject.InjectionWellObjects.DelimitedText;
+    end;
 
-      frameWells.seNumber.AsInteger := FSelectedSystem.CtsObjects.Count;
-      for ExtractionIndex := 0 to FSelectedSystem.CtsObjects.Count - 1 do
+    frameExternalFlows.seNumber.AsInteger := FSelectedSystem.ExternalFlows.Count;
+    for ExternalFlowIndex := 0 to FSelectedSystem.ExternalFlows.Count - 1 do
+    begin
+      ExternalFlowsItem := FSelectedSystem.ExternalFlows[ExternalFlowIndex];
+      frameWells.Grid.RealValue[Ord(cefcStartTime), ExtractionIndex+1] :=
+        ExternalFlowsItem.StartTime;
+      frameWells.Grid.RealValue[Ord(cefcEndTime), ExtractionIndex+1] :=
+        ExternalFlowsItem.EndTime;
+      frameWells.Grid.Cells[Ord(cstOutflow), ExtractionIndex+1] :=
+        ExternalFlowsItem.Outflow;
+      frameWells.Grid.Cells[Ord(cstInflow), ExtractionIndex+1] :=
+        ExternalFlowsItem.Inflow;
+      While ExternalFlowsItem.InflowConcentrations.Count < NCOMP do
       begin
-        CtsObject := FSelectedSystem.CtsObjects[ExtractionIndex];
-        frameWells.Grid.RealValue[Ord(cwcStartTime), ExtractionIndex+1] :=
-          CtsObject.StartTime;
-        frameWells.Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1] :=
-          CtsObject.EndTime;
-        frameWells.Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1] :=
-          CtsObject.ExtractionWellObjects.DelimitedText;
-        frameWells.Grid.Cells[Ord(cwcInjectionWells), ExtractionIndex+1] :=
-          CtsObject.InjectionWellObjects.DelimitedText;
+        ExternalFlowsItem.InflowConcentrations.Add.Value := '0';
       end;
-
-    finally
-      AvailableObjects.Free;
+      for CompIndex := 0 to NCOMP - 1 do
+      begin
+        frameWells.Grid.Cells[Ord(cstInflow) + CompIndex, ExtractionIndex+1] :=
+          ExternalFlowsItem.InflowConcentrations[CompIndex].Value;
+      end;
     end;
   end;
 end;

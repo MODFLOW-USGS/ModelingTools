@@ -153,9 +153,13 @@ type
   end;
 
   TCtsExternalFlowsCollection = class(TCustomNonSpatialBoundColl)
+  private
+    function GetItem(Index: Integer): TCtsExternalFlowsItem;
+    procedure SetItem(Index: Integer; const Value: TCtsExternalFlowsItem);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
+    property Items[Index: Integer]: TCtsExternalFlowsItem read GetItem write SetItem; default;
   end;
 
   TCtsSystem = class(TModflowScreenObjectProperty)
@@ -760,9 +764,21 @@ end;
 
 { TCtsExternalFlowsCollection }
 
+function TCtsExternalFlowsCollection.GetItem(
+  Index: Integer): TCtsExternalFlowsItem;
+begin
+  result := inherited Items[index] as TCtsExternalFlowsItem;
+end;
+
 class function TCtsExternalFlowsCollection.ItemClass: TBoundaryItemClass;
 begin
   Result := TCtsExternalFlowsItem
+end;
+
+procedure TCtsExternalFlowsCollection.SetItem(Index: Integer;
+  const Value: TCtsExternalFlowsItem);
+begin
+  inherited Items[index] := Value;
 end;
 
 { TCtsSystem }

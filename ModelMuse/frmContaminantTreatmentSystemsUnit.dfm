@@ -27,9 +27,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Indent = 19
     TabOrder = 0
     OnChange = tvTreatmentSystemsChange
-    ExplicitLeft = 88
-    ExplicitTop = 96
-    ExplicitHeight = 97
+    ExplicitLeft = 4
   end
   object pnlBottom: TPanel
     Left = 0
@@ -38,9 +36,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitLeft = -64
-    ExplicitTop = 350
-    ExplicitWidth = 792
     DesignSize = (
       728
       41)
@@ -53,7 +48,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 511
     end
     object btnCancelBtn: TBitBtn
       Left = 633
@@ -64,7 +58,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 4
-      ExplicitLeft = 697
     end
     object btnOkBtn: TBitBtn
       Left = 540
@@ -75,7 +68,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 604
     end
     object btnDeleteObservation: TButton
       Left = 88
@@ -97,18 +89,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       TabOrder = 0
     end
   end
-  object pnl3: TPanel
+  object pnlMain: TPanel
     Left = 131
     Top = 0
     Width = 597
     Height = 354
     Align = alClient
-    Caption = 'pnl3'
+    Caption = 'pnlMain'
     TabOrder = 2
-    ExplicitLeft = 0
-    ExplicitTop = -6
-    ExplicitWidth = 728
-    ExplicitHeight = 148
     object pgcMain: TPageControl
       Left = 1
       Top = 42
@@ -118,15 +106,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabWells
+      ActivePage = tabExternalFlows
       Align = alClient
       TabOrder = 0
       object tabWells: TTabSheet
         Caption = 'Wells'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 718
-        ExplicitHeight = 53
         inline frameWells: TframeGrid
           Left = 0
           Top = 0
@@ -262,7 +246,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
-            ExplicitLeft = 1
             ExplicitWidth = 587
             ExplicitHeight = 237
           end
@@ -271,10 +254,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       object tabExternalFlows: TTabSheet
         Caption = 'External Flows'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         inline frameExternalFlows: TframeGrid
           Left = 0
           Top = 0
@@ -387,7 +366,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
-            ExplicitLeft = 1
             ExplicitWidth = 587
             ExplicitHeight = 237
           end
@@ -396,10 +374,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       object tabTreatments: TTabSheet
         Caption = 'Treatments'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 321
         object pnlTreatmentOptions: TPanel
           Left = 0
           Top = 0
@@ -407,8 +381,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Height = 41
           Align = alTop
           TabOrder = 0
-          ExplicitLeft = 3
-          ExplicitWidth = 589
           object lblTreatmentOption: TLabel
             Left = 256
             Top = 11
@@ -436,17 +408,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Top = 41
           Width = 587
           Height = 237
-          ActivePage = tabIndividualWellOptions
+          ActivePage = tabDefaultOptions
           Align = alClient
           TabOrder = 1
-          ExplicitWidth = 589
-          ExplicitHeight = 280
           object tabDefaultOptions: TTabSheet
             Caption = 'Default Options'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 710
-            ExplicitHeight = 39
             inline frameDefaultOptions: TframeGrid
               Left = 0
               Top = 0
@@ -454,13 +420,13 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               Height = 204
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 710
-              ExplicitHeight = 39
+              ExplicitWidth = 579
+              ExplicitHeight = 204
               inherited Panel: TPanel
                 Top = 163
                 Width = 579
-                ExplicitTop = -2
-                ExplicitWidth = 710
+                ExplicitTop = 163
+                ExplicitWidth = 579
                 inherited lbNumber: TLabel
                   Width = 114
                   Height = 18
@@ -587,18 +553,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                     CheckStyle = csCheck
                     AutoAdjustColWidths = False
                   end>
-                ExplicitWidth = 710
-                ExplicitHeight = 6
+                ExplicitWidth = 579
+                ExplicitHeight = 163
               end
             end
           end
           object tabIndividualWellOptions: TTabSheet
             Caption = 'Individual Well Options'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 247
             object splttr2: TJvNetscapeSplitter
               Left = 121
               Top = 0
@@ -611,7 +573,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               ExplicitLeft = 129
               ExplicitHeight = 247
             end
-            object tv1: TTreeView
+            object tvIndividualObjectOptions: TTreeView
               Left = 0
               Top = 0
               Width = 121
@@ -619,8 +581,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               Align = alLeft
               Indent = 19
               TabOrder = 0
-              ExplicitLeft = 8
-              ExplicitHeight = 247
             end
             object pnl1: TPanel
               Left = 131
@@ -630,8 +590,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               Align = alClient
               Caption = 'pnl1'
               TabOrder = 1
-              ExplicitWidth = 579
-              ExplicitHeight = 39
               object pnl2: TPanel
                 Left = 1
                 Top = 1
@@ -639,7 +597,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 Height = 41
                 Align = alTop
                 TabOrder = 0
-                ExplicitWidth = 577
                 object cbUseDefaultOptions: TCheckBox
                   Left = 8
                   Top = 8
@@ -658,13 +615,13 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 TabOrder = 1
                 ExplicitLeft = 1
                 ExplicitTop = 42
-                ExplicitWidth = 577
-                ExplicitHeight = 4
+                ExplicitWidth = 446
+                ExplicitHeight = 161
                 inherited Panel: TPanel
                   Top = 120
                   Width = 446
-                  ExplicitTop = -37
-                  ExplicitWidth = 577
+                  ExplicitTop = 120
+                  ExplicitWidth = 446
                   inherited lbNumber: TLabel
                     Width = 114
                     Height = 18
@@ -791,8 +748,8 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                       CheckStyle = csCheck
                       AutoAdjustColWidths = False
                     end>
-                  ExplicitWidth = 577
-                  ExplicitHeight = 6
+                  ExplicitWidth = 446
+                  ExplicitHeight = 120
                 end
               end
             end
@@ -800,16 +757,13 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
         end
       end
     end
-    object pnl4: TPanel
+    object pnlTop: TPanel
       Left = 1
       Top = 1
       Width = 595
       Height = 41
       Align = alTop
       TabOrder = 1
-      ExplicitLeft = 336
-      ExplicitTop = 32
-      ExplicitWidth = 185
       object edSystemName: TLabeledEdit
         Left = 5
         Top = 8
