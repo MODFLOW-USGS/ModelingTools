@@ -105,7 +105,7 @@
         <config-value name="user3">User defined 3</config-value>
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
-      <config-value name="make3include">HTML,OPT_ATOC,OPT_BREADTRAIL,OPT_FB,OPT_POPUPS,OPT_PRINT,OPT_SORTABLE,OPT_SUBTITLE,OPT_TOGGLE,OPT_TOGTOC,OPT_URL</config-value>
+      <config-value name="make3include">HTML</config-value>
       <config-value name="make3status">*</config-value>
       <config-value name="make0include">CHM</config-value>
       <config-value name="make0status">*</config-value>
@@ -213,12 +213,12 @@ document.write('</frameset>');
   </frameset>
 </noscript>
 </html>]]></config-value>
-      <config-value name="skin">..\sky_blue_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
     </config-group>
     <config-group name="chm">
       <config-value name="outputfile">Release.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
     </config-group>
     <variables/>
     <helpcontext-numbers/>

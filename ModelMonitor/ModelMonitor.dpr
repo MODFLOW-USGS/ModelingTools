@@ -11,7 +11,6 @@ uses
   DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
 
 {$R *.res}
-{#BACKUP ModelMonitor.cfg}
 
 begin
   Application.Initialize;

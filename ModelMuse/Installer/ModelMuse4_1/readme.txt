@@ -86,7 +86,7 @@ The Acrobat Reader is freely available from the following World Wide Web
 site:
       http://www.adobe.com/
 
-The zip files contains the same files in the same directory structure. 
+The zip files contain the same files in the same directory structure. 
 To install it, unzip the file retaining the directory structure of the zip
 file. Unlike the installer, unzipping the files from a zip file will not 
 associate ModelMuse project files with extensions .gpt, .gpb, or .mmZLib 

@@ -116,9 +116,9 @@
         <config-value name="MODFLOW6">MODFLOW6</config-value>
       </config-group>
       <config-value name="imageshortcuts_includebaggage">1</config-value>
-      <config-value name="make0include">CHM,ALLMODELS,OPT_ATOC,OPT_BREADTRAIL,OPT_COMMENTS,OPT_FB,OPT_POPUPS,OPT_PRINT,OPT_SORTABLE,OPT_TOGGLE,OPT_TOGTOC,SUTRA30</config-value>
+      <config-value name="make0include">CHM,ALLMODELS,SUTRA30</config-value>
       <config-value name="make0status">(Complete)</config-value>
-      <config-value name="make3include">HTML,ALLMODELS,OPT_ATOC,OPT_BREADTRAIL,OPT_COMMENTS,OPT_FB,OPT_POPUPS,OPT_PRINT,OPT_SORTABLE,OPT_SUBTITLE,OPT_TOGGLE,OPT_TOGTOC,OPT_URL</config-value>
+      <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
     </config-group>
     <config-group name="hlp">
@@ -140,7 +140,7 @@
       <config-value name="usesecondarywindows">1</config-value>
       <config-value name="outputfile">ModelMuse.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
     </config-group>
     <config-group name="hxs">
       <config-value name="namespace"></config-value>
@@ -496,7 +496,7 @@ document.write('</frameset>');
       <config-value name="jpgquality">90</config-value>
       <config-value name="imagehint">1</config-value>
       <config-value name="outputfile">.\HTML\index.html</config-value>
-      <config-value name="skin">forest_green_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
       <config-value name="layoutthreeframe">0</config-value>
     </config-group>
     <config-group name="pdf">
@@ -596,7 +596,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
     </config-group>

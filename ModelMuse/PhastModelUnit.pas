@@ -8794,9 +8794,10 @@ const
   //                intersected by that object.
   //               Bug fix: Fixed bug that could cause an access violation
   //                when converting a structured grid to a DISV grid.
+  //    '4.1.0.0'  No additional changes.
 
   // version number of ModelMuse.
-  IModelVersion = '4.0.0.21';
+  IModelVersion = '4.1.0.0';
 //  IModelVersion = '4.0.0.19';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';

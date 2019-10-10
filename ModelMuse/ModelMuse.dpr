@@ -689,7 +689,6 @@ uses
   frmEditSelectedWellsUnit in 'frmEditSelectedWellsUnit.pas' {frmEditSelectedWells};
 
 {$R *.res}
-{#BACKUP ModelMuse.cfg}
 
 begin
   // This line is to help ensure consistent results on different machines.
