@@ -21,7 +21,7 @@ type
     FSelectedWells: TStringList;
     { Private declarations }
   public
-    procedure GetData(AvailableWells, SelectedWells: TStringList);
+    procedure GetData(AllWells, SelectedWells: TStringList);
     procedure SetData(SelectedWells: TStringList);
     { Public declarations }
   end;
@@ -49,13 +49,13 @@ begin
   FSelectedWells.Free;
 end;
 
-procedure TfrmEditSelectedWells.GetData(AvailableWells,
+procedure TfrmEditSelectedWells.GetData(AllWells,
   SelectedWells: TStringList);
 var
   WellIndex: Integer;
   WellPosition: Integer;
 begin
-  FAvailableWells.Assign(AvailableWells);
+  FAvailableWells.Assign(AllWells);
   FSelectedWells.Assign(SelectedWells);
   for WellIndex := FSelectedWells.Count - 1 downto 0 do
   begin

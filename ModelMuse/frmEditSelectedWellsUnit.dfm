@@ -9,10 +9,8 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
     Height = 185
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = -163
-    ExplicitTop = -52
-    ExplicitWidth = 587
-    ExplicitHeight = 278
+    ExplicitWidth = 424
+    ExplicitHeight = 185
     inherited lblSrcObjects: TLabel
       Width = 148
       Height = 18
@@ -43,8 +41,6 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitLeft = -304
-    ExplicitWidth = 728
     DesignSize = (
       424
       41)
@@ -57,7 +53,6 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 447
     end
     object btnCancelBtn: TBitBtn
       Left = 329
@@ -68,7 +63,6 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 633
     end
     object btnOkBtn: TBitBtn
       Left = 236
@@ -79,7 +73,6 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 540
     end
   end
 end

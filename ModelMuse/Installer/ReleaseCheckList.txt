@@ -26,7 +26,7 @@
 19. Transfer html help to web.
 19a. Check that html help works with new pages
 19b. Transfer videos and video web page to web.
-20. Transfer release web page to web. 
+20. Transfer release web page or ModelMuse-release-history.txt to web. 
 21. Transfer installers and zip files to web.
 22. Transfer readme and ModelMuse.txt files to web.
 23. Transfer main web page to web.
@@ -34,5 +34,5 @@
 24. Transfer ModelMuseInternetUpdate.txt to web.
 25. Send out email to OGW.
 26. Turn on check for resource leaks in MadExcept.
-27. Be sure the preliminary software version of disclaimer is used.
+27. Be sure the preliminary software version of disclaimer is used. See DisclaimerTextUnit.pas.
 

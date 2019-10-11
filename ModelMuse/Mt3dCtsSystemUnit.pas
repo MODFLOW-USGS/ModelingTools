@@ -38,8 +38,10 @@ type
     destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   published
+    // data set 4
     property ExtractionWellObjects: TStrings read GetExtractionWellObjects
       write SetExtractionWellObjects;
+    // data set 8
     property InjectionWellObjects: TStrings read GetInjectionWellObjects
       write SetInjectionWellObjects;
   end;
@@ -56,8 +58,8 @@ type
     property Items[Index: Integer]: TCtsObjectItem read GetItem write SetItem; default;
   end;
 
-  // One @name is used for each injection well object for each chemical component.
-  // The formula for the treatment value is specified in the
+  // One @name is used for each injection well object for each chemical
+  // component. The formula for the treatment value is specified in the
   // inherited @link(Value) property.
   TInjectionOptionItem = class(TStringConcValueItem)
   private
@@ -68,53 +70,97 @@ type
   public
     procedure Assign(Source: TPersistent); override;
   published
-    property TreatmentOption: TTreatmentOption read FTreatmentOption write SetTreatmentOption;
+    // Data set 6 IOPTINJ
+    property TreatmentOption: TTreatmentOption read FTreatmentOption
+      write SetTreatmentOption;
   end;
 
   // @name is a collection of @link(TInjectionOptionItem)s.
   // There is one @link(TInjectionOptionItem) for each chemical species.
   TInjectionOptionCollection = class(TStringConcCollection)
+  private
+    function GetItem(Index: Integer): TInjectionOptionItem;
+    procedure SetItem(Index: Integer; const Value: TInjectionOptionItem);
   protected
+
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject;
       Mt3dmsConcCollection: TCollection);
+    function Add: TInjectionOptionItem;
+    property Items[Index: Integer]: TInjectionOptionItem read GetItem write SetItem; default;
   end;
 
   // @name allows the treatment to change over time.
   TCtsInjectionTimeItem = class(TCustomModflowBoundaryItem)
   private
-    FUseDefaultInjectionOptions: boolean;
     FInjectionOptions: TInjectionOptionCollection;
-    FInjectionObject: TObject;
-    FInjectionObjectName: string;
-    function GetInjectionWellObjectName: string;
     procedure SetInjectionOptions(const Value: TInjectionOptionCollection);
-    procedure SetInjectionWellObjectName(const Value: string);
-    procedure SetUseDefaultInjectionOptions(const Value: boolean);
-    procedure SetInjectionObject(const Value: TObject);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    property InjectionObject: TObject read FInjectionObject write SetInjectionObject;
-    procedure Loaded(Model: TBaseModel);
+//    procedure Loaded(Model: TBaseModel);
   published
+    // Data set 6 if time variable
     property InjectionOptions: TInjectionOptionCollection read FInjectionOptions
       write SetInjectionOptions;
-    // @name is used only if @link(TTreatmentDistribution) is tlIndividual
-    property InjectionWellObjectName: string read GetInjectionWellObjectName
-      write SetInjectionWellObjectName;
-    // @name is used only if @link(TTreatmentDistribution) is tlIndividual
-    property UseDefaultInjectionOptions: boolean
-      read FUseDefaultInjectionOptions write SetUseDefaultInjectionOptions;
   end;
 
   TCtsInjectionTimeCollection = class(TCustomNonSpatialBoundColl)
+  private
+//    FUseDefaultInjectionOptions: boolean;
+//    FInjectionObject: TObject;
+//    FInjectionObjectName: string;
+    function GetItem(Index: Integer): TCtsInjectionTimeItem;
+    procedure SetItem(Index: Integer; const Value: TCtsInjectionTimeItem);
   protected
     class function ItemClass: TBoundaryItemClass; override;
   public
+    property Items[Index: Integer]: TCtsInjectionTimeItem read GetItem
+      write SetItem; default;
+  published
+  end;
+
+  // @name is used only if @link(TTreatmentDistribution) is tlIndividual
+  TIndividualWellInjectionItem = class(TOrderedItem)
+  private
+    FUseDefaultInjectionOptions: boolean;
+    FInjectionObject: TObject;
+    FInjectionObjectName: string;
+    FInjections: TCtsInjectionTimeCollection;
+    function GetInjectionWellObjectName: string;
+    procedure SetInjectionObject(const Value: TObject);
+    procedure SetInjectionWellObjectName(const Value: string);
+    procedure SetUseDefaultInjectionOptions(const Value: boolean);
+    procedure Loaded(Model: TBaseModel);
+    procedure SetInjections(const Value: TCtsInjectionTimeCollection);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    property InjectionObject: TObject read FInjectionObject
+      write SetInjectionObject;
+  published
+    property InjectionWellObjectName: string read GetInjectionWellObjectName
+      write SetInjectionWellObjectName;
+    property UseDefaultInjectionOptions: boolean
+      read FUseDefaultInjectionOptions write SetUseDefaultInjectionOptions;
+    property Injections: TCtsInjectionTimeCollection read FInjections write SetInjections;
+  end;
+
+  TIndividualWellInjectionCollection = class(TOrderedCollection)
+  private
+    procedure Loaded(Model: TBaseModel);
+    function GetItem(Index: Integer): TIndividualWellInjectionItem;
+    procedure SetItem(Index: Integer;
+      const Value: TIndividualWellInjectionItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Items[Index: Integer]: TIndividualWellInjectionItem read GetItem
+      write SetItem; default;
   end;
 
   TCtsExternalFlowsItem = class(TCustomModflowBoundaryItem)
@@ -146,8 +192,11 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
+    // Data set 9 QOUTCTS
     property Outflow: string read GetOutflow write SetOutflow;
+    // Data set 5 QINCTS
     property Inflow: string read GetInflow write SetInflow;
+    // Data set 5 CINCTS
     property InflowConcentrations: TStringConcCollection read FInflowConcentrations
       write SetInflowConcentrations;
   end;
@@ -165,18 +214,18 @@ type
   TCtsSystem = class(TModflowScreenObjectProperty)
   private
     FTreatmentDistribution: TTreatmentDistribution;
-    FDefaultInjectionOptions: TInjectionOptionCollection;
+    FDefaultInjectionOptions: TCtsInjectionTimeCollection;
     FCtsObjects: TCtsObjectCollection;
     FExternalFlows: TCtsExternalFlowsCollection;
-    FInjections: TCtsInjectionTimeCollection;
+    FInjections: TIndividualWellInjectionCollection;
     FName: string;
     procedure SetCtsObjects(const Value: TCtsObjectCollection);
     procedure SetDefaultInjectionOptions(
-      const Value: TInjectionOptionCollection);
+      const Value: TCtsInjectionTimeCollection);
     procedure SetExternalFlows(const Value: TCtsExternalFlowsCollection);
     procedure SetTreatmentDistribution(const Value: TTreatmentDistribution);
     function IsSame(AnotherCtsSystem: TCtsSystem): boolean;
-    procedure SetInjections(const Value: TCtsInjectionTimeCollection);
+    procedure SetInjections(const Value: TIndividualWellInjectionCollection);
     procedure SetName(const Value: string);
   protected
     function BoundaryObserverPrefix: string; override;
@@ -187,15 +236,19 @@ type
     procedure Loaded;
     function Used: boolean; override;
   published
+    // data set 3 ITRTINJ
     property TreatmentDistribution: TTreatmentDistribution
       read FTreatmentDistribution write SetTreatmentDistribution;
-    property DefaultInjectionOptions: TInjectionOptionCollection
+    // data set 6
+    property DefaultInjectionOptions: TCtsInjectionTimeCollection
       read FDefaultInjectionOptions write SetDefaultInjectionOptions;
+    // data sets 4 and 8
     property CtsObjects: TCtsObjectCollection read FCtsObjects
       write SetCtsObjects;
+    // data sets 5 and 9
     property ExternalFlows: TCtsExternalFlowsCollection read FExternalFlows
       write SetExternalFlows;
-    property Injections: TCtsInjectionTimeCollection read FInjections write SetInjections;
+    property Injections: TIndividualWellInjectionCollection read FInjections write SetInjections;
     property Name: string read FName write SetName;
   end;
 
@@ -476,18 +529,8 @@ begin
   begin
     InjTimeItem := TCtsInjectionTimeItem(Source);
     InjectionOptions := InjTimeItem.InjectionOptions;
-    UseDefaultInjectionOptions := InjTimeItem.UseDefaultInjectionOptions;
-    if InjTimeItem.InjectionObject <> nil then
-    begin
-      InjectionObject := InjTimeItem.InjectionObject;
-    end
-    else
-    begin
-      InjectionWellObjectName := InjTimeItem.InjectionWellObjectName
-    end;
   end;
   inherited;
-
 end;
 
 constructor TCtsInjectionTimeItem.Create(Collection: TCollection);
@@ -502,18 +545,6 @@ begin
   inherited;
 end;
 
-function TCtsInjectionTimeItem.GetInjectionWellObjectName: string;
-begin
-  if FInjectionObject <> nil then
-  begin
-    result := (FInjectionObject as TScreenObject).Name;
-  end
-  else
-  begin
-    result := FInjectionObjectName;
-  end;
-end;
-
 function TCtsInjectionTimeItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   OtherItem: TCtsInjectionTimeItem;
@@ -522,53 +553,14 @@ begin
   if result then
   begin
     OtherItem := TCtsInjectionTimeItem(AnotherItem);
-    result := InjectionOptions.IsSame(OtherItem.InjectionOptions)
-      and (InjectionWellObjectName = OtherItem.InjectionWellObjectName)
-      and (UseDefaultInjectionOptions = OtherItem.UseDefaultInjectionOptions)
+    result := InjectionOptions.IsSame(OtherItem.InjectionOptions);
   end;
-end;
-
-procedure TCtsInjectionTimeItem.Loaded(Model: TBaseModel);
-var
-  LocalModel: TPhastModel;
-begin
-  LocalModel := Model as TPhastModel;
-  FInjectionObject := LocalModel.GetScreenObjectByName(FInjectionObjectName);
-end;
-
-procedure TCtsInjectionTimeItem.SetInjectionObject(const Value: TObject);
-begin
-  if Value <> nil then
-  begin
-    Assert(Value is TScreenObject);
-    FInjectionObjectName := TScreenObject(Value).Name;
-  end;
-  FInjectionObject := Value;
 end;
 
 procedure TCtsInjectionTimeItem.SetInjectionOptions(
   const Value: TInjectionOptionCollection);
 begin
   FInjectionOptions.Assign(Value);
-end;
-
-procedure TCtsInjectionTimeItem.SetInjectionWellObjectName(const Value: string);
-begin
-  if FInjectionObjectName <> Value then
-  begin
-    FInjectionObjectName := Value;
-    if (FInjectionObjectName <> '') and (Model <> nil) then
-    begin
-      InjectionObject := (Model as TCustomModel).
-        GetScreenObjectByName(FInjectionObjectName)
-    end;
-  end;
-end;
-
-procedure TCtsInjectionTimeItem.SetUseDefaultInjectionOptions(
-  const Value: boolean);
-begin
-  SetBooleanProperty(FUseDefaultInjectionOptions, Value);
 end;
 
 { TCtsExternalFlowsItem }
@@ -757,9 +749,21 @@ end;
 
 { TCtsInjectionTimeCollection }
 
+function TCtsInjectionTimeCollection.GetItem(
+  Index: Integer): TCtsInjectionTimeItem;
+begin
+  result := inherited Items[Index] as TCtsInjectionTimeItem;
+end;
+
 class function TCtsInjectionTimeCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCtsInjectionTimeItem;
+end;
+
+procedure TCtsInjectionTimeCollection.SetItem(Index: Integer;
+  const Value: TCtsInjectionTimeItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 { TCtsExternalFlowsCollection }
@@ -807,10 +811,10 @@ end;
 
 constructor TCtsSystem.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
-  FDefaultInjectionOptions := TInjectionOptionCollection.Create(Model, nil, nil);
+  FDefaultInjectionOptions := TCtsInjectionTimeCollection.Create(Self, Model, ScreenObject);
   FCtsObjects := TCtsObjectCollection.Create(Self, Model, ScreenObject);
   FExternalFlows := TCtsExternalFlowsCollection.Create(Self, Model, ScreenObject);
-  FInjections := TCtsInjectionTimeCollection.Create(Self, Model, ScreenObject);
+  FInjections := TIndividualWellInjectionCollection.Create(Model);
 end;
 
 destructor TCtsSystem.Destroy;
@@ -833,25 +837,26 @@ end;
 procedure TCtsSystem.Loaded;
 begin
   FCtsObjects.Loaded(ParentModel);
+  FInjections.Loaded(ParentModel);
 end;
 
 procedure TCtsSystem.SetCtsObjects(const Value: TCtsObjectCollection);
 begin
-  FCtsObjects := Value;
+  FCtsObjects.Assign(Value);
 end;
 
 procedure TCtsSystem.SetDefaultInjectionOptions(
-  const Value: TInjectionOptionCollection);
+  const Value: TCtsInjectionTimeCollection);
 begin
-  FDefaultInjectionOptions := Value;
+  FDefaultInjectionOptions.Assign(Value);
 end;
 
 procedure TCtsSystem.SetExternalFlows(const Value: TCtsExternalFlowsCollection);
 begin
-  FExternalFlows := Value;
+  FExternalFlows.Assign(Value);
 end;
 
-procedure TCtsSystem.SetInjections(const Value: TCtsInjectionTimeCollection);
+procedure TCtsSystem.SetInjections(const Value: TIndividualWellInjectionCollection);
 begin
   FInjections.Assign(Value);
 end;
@@ -878,10 +883,27 @@ end;
 
 { TInjectionOptionCollection }
 
+function TInjectionOptionCollection.Add: TInjectionOptionItem;
+begin
+  Result := inherited Add as TInjectionOptionItem;
+end;
+
 constructor TInjectionOptionCollection.Create(Model: TBaseModel;
   ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
   inherited Create(TInjectionOptionItem, Model, ScreenObject, Mt3dmsConcCollection);
+end;
+
+function TInjectionOptionCollection.GetItem(
+  Index: Integer): TInjectionOptionItem;
+begin
+  result := inherited Items[Index] as TInjectionOptionItem;
+end;
+
+procedure TInjectionOptionCollection.SetItem(Index: Integer;
+  const Value: TInjectionOptionItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 { TCtsSystemItem }
@@ -946,6 +968,137 @@ end;
 
 procedure TCtsSystemCollection.SetItem(Index: Integer;
   const Value: TCtsSystemItem);
+begin
+  inherited Items[index] := Value;
+end;
+
+{ TIndividualWellInjectionItem }
+
+procedure TIndividualWellInjectionItem.Assign(Source: TPersistent);
+var
+  IndWellItem: TIndividualWellInjectionItem;
+begin
+  if Source is TIndividualWellInjectionItem then
+  begin
+    IndWellItem := TIndividualWellInjectionItem(Source);
+    InjectionWellObjectName := IndWellItem.InjectionWellObjectName;
+    UseDefaultInjectionOptions := IndWellItem.UseDefaultInjectionOptions;
+    Injections := IndWellItem.Injections;
+  end;
+  inherited;
+
+end;
+
+constructor TIndividualWellInjectionItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FInjections := TCtsInjectionTimeCollection.Create(nil, Model, nil);
+end;
+
+destructor TIndividualWellInjectionItem.Destroy;
+begin
+  FInjections.Free;
+  inherited;
+end;
+
+function TIndividualWellInjectionItem.GetInjectionWellObjectName: string;
+begin
+  if FInjectionObject <> nil then
+  begin
+    result := (FInjectionObject as TScreenObject).Name;
+  end
+  else
+  begin
+    result := FInjectionObjectName;
+  end;
+end;
+
+function TIndividualWellInjectionItem.IsSame(
+  AnotherItem: TOrderedItem): boolean;
+var
+  InjWellItem: TIndividualWellInjectionItem;
+begin
+  result := (AnotherItem is TIndividualWellInjectionItem)
+    and inherited IsSame(AnotherItem);
+  if result then
+  begin
+    InjWellItem := TIndividualWellInjectionItem(AnotherItem);
+    result :=
+      (InjectionWellObjectName = InjWellItem.InjectionWellObjectName)
+      and (UseDefaultInjectionOptions = InjWellItem.UseDefaultInjectionOptions)
+      and (Injections.IsSame(InjWellItem.Injections));
+  end;
+end;
+
+procedure TIndividualWellInjectionItem.Loaded(Model: TBaseModel);
+var
+  LocalModel: TPhastModel;
+begin
+  LocalModel := Model as TPhastModel;
+  InjectionObject := LocalModel.GetScreenObjectByName(InjectionWellObjectName);
+end;
+
+procedure TIndividualWellInjectionItem.SetInjectionObject(const Value: TObject);
+begin
+  if Value <> nil then
+  begin
+    Assert(Value is TScreenObject);
+    FInjectionObjectName := TScreenObject(Value).Name;
+  end;
+  FInjectionObject := Value;
+end;
+
+procedure TIndividualWellInjectionItem.SetInjections(
+  const Value: TCtsInjectionTimeCollection);
+begin
+  FInjections.Assign(Value);
+end;
+
+procedure TIndividualWellInjectionItem.SetInjectionWellObjectName(
+  const Value: string);
+begin
+  if FInjectionObjectName <> Value then
+  begin
+    FInjectionObjectName := Value;
+    if (FInjectionObjectName <> '') and (Model <> nil) then
+    begin
+      InjectionObject := (Model as TCustomModel).
+        GetScreenObjectByName(FInjectionObjectName)
+    end;
+  end;
+end;
+
+procedure TIndividualWellInjectionItem.SetUseDefaultInjectionOptions(
+  const Value: boolean);
+begin
+  SetBooleanProperty(FUseDefaultInjectionOptions, Value);
+end;
+
+{ TIndividualWellInjectionCollection }
+
+constructor TIndividualWellInjectionCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(TIndividualWellInjectionItem, Model);
+end;
+
+function TIndividualWellInjectionCollection.GetItem(
+  Index: Integer): TIndividualWellInjectionItem;
+begin
+  result := inherited Items[index] as TIndividualWellInjectionItem
+end;
+
+procedure TIndividualWellInjectionCollection.Loaded(Model: TBaseModel);
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[Index].Loaded(Model);
+  end;
+end;
+
+procedure TIndividualWellInjectionCollection.SetItem(Index: Integer;
+  const Value: TIndividualWellInjectionItem);
 begin
   inherited Items[index] := Value;
 end;

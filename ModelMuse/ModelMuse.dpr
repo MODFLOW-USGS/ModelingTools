@@ -701,8 +701,6 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
-  Application.CreateForm(TfrmContaminantTreatmentSystems, frmContaminantTreatmentSystems);
-  Application.CreateForm(TfrmEditSelectedWells, frmEditSelectedWells);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
   if frmErrorsAndWarnings.HasMessages then

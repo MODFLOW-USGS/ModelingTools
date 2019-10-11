@@ -21936,9 +21936,6 @@ begin
 end;
 
 class function TScreenObject.ValidName(const OriginalName: string): string;
-//var
-//  Index: integer;
-//  AChar: Char;
 begin
   result :=  GoPhastTypes.ValidName(OriginalName);
 end;

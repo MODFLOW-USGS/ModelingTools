@@ -21,7 +21,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabModflowBoundaryConditions
+    ActivePage = tabProperties
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -812,13 +812,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               AlignWithMargins = True
               Left = 4
               Top = 4
-              Width = 256
-              Height = 57
+              Width = 277
+              Height = 65
               Align = alClient
               Caption = 
                 'Layer elevations can only be specified using objects with Zero Z' +
                 ' formulas.'
               WordWrap = True
+              ExplicitWidth = 256
+              ExplicitHeight = 57
             end
           end
         end
@@ -3809,9 +3811,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               object tabDrtNone: TTabSheet
                 Caption = 'tabDrtNone'
                 TabVisible = False
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
               end
               object tabDrtObject: TTabSheet
                 Caption = 'tabDrtObject'
@@ -6930,7 +6929,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabGage: TTabSheet
-                ExplicitLeft = 0
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 442
@@ -6941,11 +6939,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited gbObservationTypes: TGroupBox
                   Left = 2
                   Top = 104
-                  Width = 827
+                  Width = 847
                   Height = 329
                   ExplicitLeft = 2
                   ExplicitTop = 104
-                  ExplicitWidth = 827
+                  ExplicitWidth = 847
                   ExplicitHeight = 329
                   inherited cbGag2: TCheckBox
                     Width = 553
@@ -12817,8 +12815,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tsHeadWaters: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 573
+                ExplicitWidth = 474
                 ExplicitHeight = 159
               end
               inherited tsPrecipitation: TTabSheet
@@ -12829,7 +12828,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited pnlBottomPrecip: TPanel
                   Top = 113
                   ExplicitTop = 113
-                  ExplicitWidth = 573
                   inherited lblNumberOfTimesPrecip: TLabel
                     Width = 119
                     Height = 19
@@ -12914,7 +12912,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited pnlBottomConstConc: TPanel
                   Top = 113
                   ExplicitTop = 113
-                  ExplicitWidth = 573
                   inherited lblNumberOfTimesConstConc: TLabel
                     Width = 119
                     Height = 19
@@ -13585,7 +13582,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited ilLakeButton: TImageList
               Bitmap = {
-                494C010104000900140018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+                494C010104000900180018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
                 0000000000003600000028000000600000003000000001002000000000000048
                 0000000000000000000000000000000000000000000000000000000000000000
                 0000000000000000000000000000000000000000000000000000000000000000
@@ -14474,10 +14471,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpKeyword = 'Footprint_Well_Tab'
       Caption = 'Footprint Well'
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameScreenObjectFootprintWell: TframeScreenObjectFootprintWell
         Left = 0
         Top = 0
@@ -14519,10 +14512,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpKeyword = 'Vertices_Tab'
       Caption = 'Vertices'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object dgVerticies: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -14694,10 +14683,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       ImageIndex = 8
       ParentShowHint = False
       ShowHint = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgVertexValues: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -15299,7 +15284,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Left = 648
     Top = 296
     Bitmap = {
-      494C010104000900100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000900140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

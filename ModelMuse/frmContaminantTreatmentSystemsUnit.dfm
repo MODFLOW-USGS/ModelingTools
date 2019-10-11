@@ -68,8 +68,9 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 3
+      OnClick = btnOkBtnClick
     end
-    object btnDeleteObservation: TButton
+    object btnDeleteSystem: TButton
       Left = 88
       Top = 6
       Width = 77
@@ -78,8 +79,9 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Caption = 'Delete'
       Enabled = False
       TabOrder = 1
+      OnClick = btnDeleteSystemClick
     end
-    object btnAddObservation: TButton
+    object btnAddSystem: TButton
       Left = 5
       Top = 6
       Width = 77
@@ -87,6 +89,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Anchors = [akLeft, akBottom]
       Caption = 'Add'
       TabOrder = 0
+      OnClick = btnAddSystemClick
     end
   end
   object pnlMain: TPanel
@@ -106,7 +109,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabExternalFlows
+      ActivePage = tabWells
       Align = alClient
       TabOrder = 0
       object tabWells: TTabSheet
@@ -153,6 +156,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Width = 587
             Height = 237
             ColCount = 4
+            OnButtonClick = frameWellsGridButtonClick
             Columns = <
               item
                 AutoAdjustRowHeights = False
@@ -246,6 +250,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
+            ExplicitLeft = 1
             ExplicitWidth = 587
             ExplicitHeight = 237
           end
@@ -394,9 +399,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Width = 239
             Height = 26
             Style = csDropDownList
-            ItemIndex = 2
+            ItemIndex = 1
             TabOrder = 0
-            Text = 'Each wells treated individually'
+            Text = 'All wells treated alike'
+            OnChange = comboTreatmentOptionChange
             Items.Strings = (
               'No treatment'
               'All wells treated alike'
@@ -408,7 +414,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Top = 41
           Width = 587
           Height = 237
-          ActivePage = tabDefaultOptions
+          ActivePage = tabIndividualWellOptions
           Align = alClient
           TabOrder = 1
           object tabDefaultOptions: TTabSheet
@@ -581,6 +587,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               Align = alLeft
               Indent = 19
               TabOrder = 0
+              OnChange = tvIndividualObjectOptionsChange
             end
             object pnl1: TPanel
               Left = 131
