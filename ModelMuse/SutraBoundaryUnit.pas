@@ -79,7 +79,9 @@ type
   TSutraBoundary = class(TModflowBoundary)
   private
     FLakeInteraction: TLakeBoundaryInteraction;
+    FUseBCTime: Boolean;
     procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
+    procedure SetUseBCTime(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -89,6 +91,7 @@ type
   published
     property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction
       write SetLakeInteraction default lbiUseDefaults;
+    property UseBCTime: Boolean read FUseBCTime write SetUseBCTime stored True;
   end;
 
   TSutraBoundaryList = TList<TSutraBoundary>;
@@ -1637,10 +1640,15 @@ end;
 { TSutraBoundary }
 
 procedure TSutraBoundary.Assign(Source: TPersistent);
+
+var
+  SutraSource: TSutraBoundary;
 begin
   if Source is TSutraBoundary then
   begin
-    LakeInteraction := TSutraBoundary(Source).LakeInteraction;
+    SutraSource := TSutraBoundary(Source);
+    LakeInteraction := SutraSource.LakeInteraction;
+    UseBCTime := SutraSource.UseBCTime;
   end;
   inherited;
 end;
@@ -1669,6 +1677,7 @@ constructor TSutraBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
   FLakeInteraction := lbiUseDefaults;
+  FUseBCTime := False;
 end;
 
 procedure TSutraBoundary.Loaded;
@@ -1694,6 +1703,15 @@ begin
   if FLakeInteraction <> Value then
   begin
     FLakeInteraction := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSutraBoundary.SetUseBCTime(const Value: Boolean);
+begin
+  if FUseBCTime <> Value then
+  begin
+    FUseBCTime := Value;
     InvalidateModel;
   end;
 end;

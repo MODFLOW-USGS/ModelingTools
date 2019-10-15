@@ -914,7 +914,14 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      WriteInteger(ANode.NodeNumber);
+      if ANode.UseBCTime then
+      begin
+        WriteInteger(-ANode.NodeNumber);
+      end
+      else
+      begin
+        WriteInteger(ANode.NodeNumber);
+      end;
       WriteFloat(ANode.PressureOrFlow);
       WriteFloat(ANode.TempOrConc);
       NewLine;
@@ -951,7 +958,14 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      WriteInteger(ANode.NodeNumber);
+      if ANode.UseBCTime then
+      begin
+        WriteInteger(-ANode.NodeNumber);
+      end
+      else
+      begin
+        WriteInteger(ANode.NodeNumber);
+      end;
 //      WriteFloat(ANode.PressureOrFlow);
       WriteFloat(ANode.TempOrConc);
       NewLine;
@@ -988,7 +1002,14 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      WriteInteger(ANode.NodeNumber);
+      if ANode.UseBCTime then
+      begin
+        WriteInteger(-ANode.NodeNumber);
+      end
+      else
+      begin
+        WriteInteger(ANode.NodeNumber);
+      end;
       WriteFloat(ANode.PressureOrFlow);
       WriteFloat(ANode.TempOrConc);
       NewLine;
@@ -1085,7 +1106,14 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      WriteInteger(ANode.NodeNumber);
+      if ANode.UseBCTime then
+      begin
+        WriteInteger(-ANode.NodeNumber);
+      end
+      else
+      begin
+        WriteInteger(ANode.NodeNumber);
+      end;
       WriteFloat(ANode.TempOrConc);
       NewLine;
     end;
@@ -1128,7 +1156,14 @@ begin
           ANode := NodeArray[NodeIndex];
           if ANode.Active and (FlowNodes.TimeIndex <= 1) then
           begin
-            WriteInteger(ANode.NodeNumber+1);
+            if ANode.FUseBCTime then
+            begin
+              WriteInteger(-ANode.NodeNumber-1);
+            end
+            else
+            begin
+              WriteInteger(ANode.NodeNumber+1);
+            end;
             WriteFloat(ANode.P1.Value);
             WriteFloat(ANode.Q1.Value);
             WriteFloat(ANode.P2.Value);
@@ -1223,7 +1258,14 @@ begin
           ANode := NodeArray[NodeIndex];
           if ANode.Active and (TransportNodes.TimeIndex <= 1) then
           begin
-            WriteInteger(ANode.NodeNumber+1);
+            if ANode.FUseBCTime then
+            begin
+              WriteInteger(-ANode.NodeNumber-1);
+            end
+            else
+            begin
+              WriteInteger(ANode.NodeNumber+1);
+            end;
             WriteFloat(ANode.FUValue1.Value);
             WriteFloat(ANode.FSoluteEnergyInflow.Value);
             WriteFloat(ANode.FUValue2.Value);

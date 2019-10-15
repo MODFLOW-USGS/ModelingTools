@@ -316,8 +316,9 @@ type
     NodeNumber: Integer;
     PressureOrFlow: double;
     TempOrConc: double;
+    UseBCTime: Boolean;
     class function Create(NodeNumber: Integer; PressureOrFlow,
-      TempOrConc: Double): TBoundaryNode; static;
+      TempOrConc: Double; UseBCTime: Boolean): TBoundaryNode; static;
   end;
 
   IBoundaryNodes = interface(IUnknown) ['{8DAD8491-1A06-4C52-99B6-C204C17CCF9A}']
@@ -1831,11 +1832,12 @@ end;
 { TBoundaryNode }
 
 class function TBoundaryNode.Create(NodeNumber: Integer; PressureOrFlow,
-  TempOrConc: Double): TBoundaryNode;
+  TempOrConc: Double; UseBCTime: Boolean): TBoundaryNode;
 begin
   Result.NodeNumber := NodeNumber;
   Result.PressureOrFlow := PressureOrFlow;
   Result.TempOrConc := TempOrConc;
+  Result.UseBCTime := UseBCTime;
 end;
 
 function IsNetworkDrive(const FileName: string): Boolean;

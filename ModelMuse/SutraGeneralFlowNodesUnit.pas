@@ -35,11 +35,12 @@ type
     ExitSpecification: TSutraExitSpecificationMethod;
     FLayer: Integer;
     FCol: Integer;
+    FUseBCTime: boolean;
     class function Create(NN: Integer; Pressure1, Pressure2,
       Flow1, Flow2, TempOrConc1, TempOrConc2: TValueAndAnnotation;
       Lim1, Lim2: TSutraLimitType;
       ExitSpec: TSutraExitSpecificationMethod;
-      Layer, Col: integer): TGeneralFlowNode; static;
+      Layer, Col: integer; UseBCTime: boolean): TGeneralFlowNode; static;
     class function CreateInactive(NN: Integer;
       Layer, Col: integer): TGeneralFlowNode; static;
   end;
@@ -68,9 +69,10 @@ type
     FSoluteEnergyOutflow: TValueAndAnnotation;
     FLayer: Integer;
     FCol: Integer;
+    FUseBCTime: boolean;
     class function Create(NN: Integer; UValue1, SoluteEnergyInflow,
       UValue2, SoluteEnergyOutflow: TValueAndAnnotation;
-      Layer, Col: integer): TGeneralTransportNode; static;
+      Layer, Col: integer; UseBCTime: boolean): TGeneralTransportNode; static;
     class function CreateInactive(NN: Integer;
       Layer, Col: integer): TGeneralTransportNode; static;
   end;
@@ -94,7 +96,7 @@ class function TGeneralFlowNode.Create(NN: Integer; Pressure1,
   Pressure2, Flow1, Flow2, TempOrConc1, TempOrConc2: TValueAndAnnotation; Lim1,
   Lim2: TSutraLimitType;
   ExitSpec: TSutraExitSpecificationMethod;
-  Layer, Col: integer): TGeneralFlowNode;
+  Layer, Col: integer; UseBCTime: boolean): TGeneralFlowNode;
 begin
   Result.NodeNumber := NN;
   Result.Active := True;
@@ -109,6 +111,7 @@ begin
   Result.ExitSpecification := ExitSpec;
   Result.FLayer := Layer;
   Result.FCol := Col;
+  Result.FUseBCTime := UseBCTime;
 end;
 
 class function TGeneralFlowNode.CreateInactive(NN: Integer;
@@ -124,7 +127,7 @@ end;
 
 class function TGeneralTransportNode.Create(NN: Integer; UValue1,
   SoluteEnergyInflow, UValue2,
-  SoluteEnergyOutflow: TValueAndAnnotation; Layer, Col: integer): TGeneralTransportNode;
+  SoluteEnergyOutflow: TValueAndAnnotation; Layer, Col: integer; UseBCTime: boolean): TGeneralTransportNode;
 begin
   Result.NodeNumber := NN;
   Result.Active := True;
@@ -134,6 +137,7 @@ begin
   Result.FSoluteEnergyOutflow := SoluteEnergyOutflow;
   Result.FLayer := Layer;
   Result.FCol := Col;
+  Result.FUseBCTime := UseBCTime;
 end;
 
 class function TGeneralTransportNode.CreateInactive(

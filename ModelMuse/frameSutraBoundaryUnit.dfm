@@ -1,16 +1,19 @@
 inherited frameSutraBoundary: TframeSutraBoundary
-  Height = 322
-  ExplicitHeight = 322
+  Height = 352
+  ExplicitHeight = 352
   inherited pnlBottom: TPanel
-    Top = 227
-    Height = 95
-    ExplicitTop = 227
-    ExplicitHeight = 95
+    Top = 224
+    Height = 128
+    ExplicitTop = 229
+    ExplicitHeight = 128
+    DesignSize = (
+      320
+      128)
     inherited lblNumTimes: TLabel
       Left = 65
-      Top = 62
+      Top = 94
       ExplicitLeft = 65
-      ExplicitTop = 62
+      ExplicitTop = 94
     end
     object lblFluidSourceInLakesPresent: TLabel [1]
       Left = 10
@@ -21,26 +24,24 @@ inherited frameSutraBoundary: TframeSutraBoundary
     end
     inherited seNumberOfTimes: TJvSpinEdit
       Left = 10
-      Top = 56
-      Height = 21
+      Top = 88
       TabOrder = 2
       ExplicitLeft = 10
-      ExplicitTop = 56
-      ExplicitHeight = 21
+      ExplicitTop = 88
     end
     inherited btnDelete: TBitBtn
       Left = 237
-      Top = 56
+      Top = 88
       TabOrder = 1
       ExplicitLeft = 237
-      ExplicitTop = 56
+      ExplicitTop = 88
     end
     inherited btnInsert: TBitBtn
       Left = 149
-      Top = 56
+      Top = 88
       TabOrder = 0
       ExplicitLeft = 149
-      ExplicitTop = 56
+      ExplicitTop = 88
     end
     object comboFluidSourceInLakesPresent: TComboBox
       Left = 10
@@ -57,15 +58,25 @@ inherited frameSutraBoundary: TframeSutraBoundary
         'Apply if lake water present (1)'
         'Use defaults')
     end
+    object cbBCTime: TCheckBox
+      Left = 10
+      Top = 65
+      Width = 177
+      Height = 17
+      AllowGrayed = True
+      Caption = 'Use BCTime'
+      TabOrder = 4
+      OnClick = cbBCTimeClick
+    end
   end
   inherited pnlGrid: TPanel
     Top = 81
-    Height = 146
+    Height = 143
     ExplicitTop = 81
     ExplicitHeight = 146
     inherited rdgSutraFeature: TRbwDataGrid4
       Top = 51
-      Height = 94
+      Height = 91
       TabOrder = 1
       OnMouseUp = rdgSutraFeatureMouseUp
       OnSetEditText = rdgSutraFeatureSetEditText

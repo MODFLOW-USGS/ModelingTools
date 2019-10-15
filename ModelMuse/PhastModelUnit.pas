@@ -8795,10 +8795,13 @@ const
   //               Bug fix: Fixed bug that could cause an access violation
   //                when converting a structured grid to a DISV grid.
   //    '4.1.0.0'  No additional changes.
+  //    '4.1.0.1'  Enhancement: The user can now specify that BCTime has
+  //                been programmed in SUTRA.
+  //               Bug fix: Fixed bug that could cause an error if a data set
+  //                type is changed after some data has been assigned.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.0';
-//  IModelVersion = '4.0.0.19';
+  IModelVersion = '4.1.0.1';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

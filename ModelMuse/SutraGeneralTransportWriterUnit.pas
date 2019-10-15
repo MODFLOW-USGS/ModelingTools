@@ -7,7 +7,7 @@ uses
   System.Generics.Collections, SutraGeneralFlowNodesUnit,
   System.Generics.Defaults, SutraBoundaryUnit, PhastModelUnit,
   SutraGenTransBoundUnit, RealListUnit, IntListUnit, GoPhastTypes, Vcl.Dialogs,
-  System.Classes, SutraBoundaryWriterUnit, SutraOptionsUnit;
+  System.Classes, SutraBoundaryWriterUnit, SutraOptionsUnit, SparseDataSets;
 
 type
   TGeneralTransportNodes = class(TList<TGeneralTransportNode>, IGeneralTransportNodes)
@@ -47,6 +47,7 @@ type
     FGeneralBoundaries: TList<IGeneralTransportNodes>;
     FTimes: TRealList;
     FBcsFileNames: TGenTransportInteractionStringList;
+    FUseBctime: T3DSparseBooleanArray;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -146,10 +147,13 @@ begin
   FOutflowUTimeLists := TObjectList<TSutraTimeList>.Create;
 
   FTimes := TRealList.Create;
+  FUseBctime := T3DSparseBooleanArray.Create(GetQuantum(Model.LayerCount+1),
+    GetQuantum(Model.RowCount+1), GetQuantum(Model.ColumnCount+1));
 end;
 
 destructor TSutraGeneralTransportWriter.Destroy;
 begin
+  FUseBctime.Free;
   FTimes.Free;
 
   FOutflowUTimeLists.Free;
@@ -203,6 +207,10 @@ var
   NodeList: IGeneralTransportNodes;
   InnerIndex: integer;
   TransNodes: TGeneralTransportNodes;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  UseBCTime: Boolean;
   procedure InitializeTimeList(ListOfTimeLists: TObjectList<TSutraTimeList>;
     FormulaIndex: Integer; Descripion: string);
   var
@@ -321,6 +329,18 @@ begin
       InitializeTimeList(FU2TimeLists, HigherUPosition, 'Higher_U');
       InitializeTimeList(FInflowUTimeLists, LowerFlowUPosition, 'U_Inflow_Rate');
       InitializeTimeList(FOutflowUTimeLists, HigherFlowUPosition, 'U_Outflow_Rate');
+
+      CellList := TCellAssignmentList.Create;
+      try
+        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        for CellIndex := 0 to CellList.Count -1 do
+        begin
+          ACell := CellList[CellIndex];
+          FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
+        end;
+      finally
+        CellList.Free;
+      end;
     end;
   end;
 
@@ -460,10 +480,19 @@ begin
                 QU2.Value := QU2Data.RealData[LayerIndex,0,ColIndex];
                 QU2.Annotation := QU2Data.Annotation[LayerIndex,0,ColIndex];
 
+                if FUseBCTime.IsValue[LayerIndex, 0,ColIndex] then
+                begin
+                  UseBCTime := FUseBCTime.Items[LayerIndex, 0,ColIndex];
+                end
+                else
+                begin
+                  UseBCTime := False;
+                end;
+
                 if NodeNumber >= 0 then
                 begin
                   NodeList.Add(TGeneralTransportNode.Create(
-                    NodeNumber, U1, QU1, U2, QU2, LayerIndex, ColIndex));
+                    NodeNumber, U1, QU1, U2, QU2, LayerIndex, ColIndex, UseBCTime));
                 end;
               end;
             end;

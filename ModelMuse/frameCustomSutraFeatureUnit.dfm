@@ -13,15 +13,15 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
     object lblNumTimes: TLabel
       Left = 64
       Top = 15
-      Width = 95
-      Height = 16
+      Width = 78
+      Height = 13
       Caption = 'Number of times'
     end
     object seNumberOfTimes: TJvSpinEdit
       Left = 8
       Top = 6
       Width = 49
-      Height = 24
+      Height = 21
       ButtonKind = bkClassic
       MaxValue = 2147483647.000000000000000000
       TabOrder = 0
@@ -221,8 +221,8 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
     object lblSchedule: TLabel
       Left = 5
       Top = 82
-      Width = 113
-      Height = 16
+      Width = 93
+      Height = 13
       Caption = 'Schedule (BCSSCH)'
     end
     object pnlCaption: TPanel
@@ -238,7 +238,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
       Left = 5
       Top = 104
       Width = 306
-      Height = 24
+      Height = 21
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1

@@ -18,6 +18,7 @@ type
     rdeFormula: TRbwDataEntry;
     lblFluidSourceInLakesPresent: TLabel;
     comboFluidSourceInLakesPresent: TComboBox;
+    cbBCTime: TCheckBox;
     procedure edNameChange(Sender: TObject);
     procedure seNumberOfTimesChange(Sender: TObject);
     procedure comboScheduleChange(Sender: TObject);
@@ -35,6 +36,7 @@ type
     procedure rdgSutraFeatureEndUpdate(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
+    procedure cbBCTimeClick(Sender: TObject);
   private
     FInitialTime: Double;
     FBoundaryType: TSutraBoundaryType;
@@ -112,6 +114,8 @@ begin
   try
     inherited;
     ClearData;
+    cbBCTime.Checked := False;
+
 
     FInitialTime := frmGoPhast.PhastModel.SutraTimeOptions.InitialTime;
     FGettingData := True;
@@ -147,6 +151,7 @@ begin
         end;
       end;
 
+      cbBCTime.AllowGrayed := BoundaryList.Count > 1;
       if BoundaryList.Count = 0 then
       begin
         FCheckState := cbUnchecked;
@@ -318,6 +323,12 @@ begin
       end;
 
       SetBoundaryValues(BoundValues);
+
+      if cbBCTime.State <> cbGrayed then
+      begin
+        ABoundary.UseBCTime := cbBCTime.Checked;
+      end;
+
     end;
 
   finally
@@ -483,8 +494,10 @@ var
   Index: Integer;
   ABoundary: TSutraBoundary;
   ASchedule: TSutraTimeSchedule;
+  BoundaryIndex: Integer;
 begin
   FirstBoundary := BoundaryList[0];
+  cbBCTime.Checked := FirstBoundary.UseBCTime;
   BoundColl := FirstBoundary.Values as TCustomSutraBoundaryCollection;
   Same := True;
   for Index := 1 to BoundaryList.Count - 1 do
@@ -513,6 +526,16 @@ begin
   begin
     ClearBoundaries;
   end;
+
+  for BoundaryIndex := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    if cbBCTime.Checked <> FirstBoundary.UseBCTime then
+    begin
+      cbBCTime.State := cbGrayed;
+      break;
+    end;
+  end;
 end;
 
 procedure TframeSutraBoundary.btnDeleteClick(Sender: TObject);
@@ -527,6 +550,12 @@ begin
 //
 end;
 
+
+procedure TframeSutraBoundary.cbBCTimeClick(Sender: TObject);
+begin
+  inherited;
+  cbBCTime.AllowGrayed := False;
+end;
 
 procedure TframeSutraBoundary.comboScheduleChange(Sender: TObject);
 var

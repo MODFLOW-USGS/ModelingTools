@@ -4,24 +4,24 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
   ExplicitWidth = 587
   ExplicitHeight = 423
   inherited pnlBottom: TPanel
-    Top = 310
+    Top = 296
     Width = 587
-    Height = 113
+    Height = 127
     TabOrder = 3
-    ExplicitTop = 310
+    ExplicitTop = 296
     ExplicitWidth = 587
-    ExplicitHeight = 113
+    ExplicitHeight = 127
     DesignSize = (
       587
-      113)
+      127)
     inherited lblNumTimes: TLabel
       Left = 61
-      Top = 79
+      Top = 101
       ExplicitLeft = 61
-      ExplicitTop = 79
+      ExplicitTop = 101
     end
     object lblGeneralizedFlowPresent: TLabel [1]
-      Left = 11
+      Left = 6
       Top = 19
       Width = 150
       Height = 13
@@ -35,30 +35,28 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       Caption = 'Interaction type'
     end
     inherited seNumberOfTimes: TJvSpinEdit
-      Left = 5
-      Top = 70
-      Height = 21
+      Left = 6
+      Top = 92
       TabOrder = 1
-      ExplicitLeft = 5
-      ExplicitTop = 70
-      ExplicitHeight = 21
+      ExplicitLeft = 6
+      ExplicitTop = 92
     end
     inherited btnDelete: TBitBtn
       Left = 500
-      Top = 70
+      Top = 92
       TabOrder = 0
       ExplicitLeft = 500
-      ExplicitTop = 70
+      ExplicitTop = 92
     end
     inherited btnInsert: TBitBtn
       Left = 412
-      Top = 70
+      Top = 92
       TabOrder = 2
       ExplicitLeft = 412
-      ExplicitTop = 70
+      ExplicitTop = 92
     end
     object comboGeneralizedFlowPresent: TComboBox
-      Left = 3
+      Left = 6
       Top = 43
       Width = 286
       Height = 21
@@ -84,18 +82,27 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
         'Like specified pressure (P)'
         'Use defaults')
     end
+    object cbBCTime: TCheckBox
+      Left = 6
+      Top = 70
+      Width = 227
+      Height = 17
+      Caption = 'Use BCTime'
+      TabOrder = 5
+      OnClick = cbBCTimeClick
+    end
   end
   inherited pnlGrid: TPanel
     Top = 136
     Width = 587
-    Height = 174
+    Height = 160
     TabOrder = 2
     ExplicitTop = 136
     ExplicitWidth = 587
     ExplicitHeight = 174
     inherited rdgSutraFeature: TRbwDataGrid4
       Width = 585
-      Height = 172
+      Height = 158
       ColCount = 11
       OnMouseUp = rdgSutraFeatureMouseUp
       OnSelectCell = rdgSutraFeatureSelectCell

@@ -367,12 +367,14 @@ type
 implementation
 
 uses Math, AbstractGridUnit, RealListUnit, TripackTypes, GIS_Functions, Types,
-  Generics.Collections, MeshRenumberingTypes;
+  Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrErrorEncoutereredI = 'Error encouterered in initializing %0:s for the ' +
   '%1:s.  Error was %2:s';
   Str0sUsing1s = '%0:s using %1:s';
+  StrErrorAssigningValu = 'Error assigning value to interpolate';
+  StrErrorMessage0 = 'Error message = "%0:s" in %1:s';
 
 type
   TSortRecord = record
@@ -1798,35 +1800,43 @@ var
   Expression: TExpression;
 begin
   InitializeVariablesAndExpression(APoint, AScreenObject, SectionIndex, Expression);
-  FScreenObjectQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy, AScreenObject);
-  case DataSet.DataType of
-    rdtDouble:
-      begin
-        FRealData[Count] := Expression.DoubleResult;
-        FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
-          Addr(FRealData[Count]));
-      end;
-    rdtInteger:
-      begin
-        FIntegerData[Count] := Expression.IntegerResult;
-        FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
-          Addr(FIntegerData[Count]));
-      end;
-    rdtBoolean:
-      begin
-        FBooleanData[Count] := Expression.BooleanResult;
-        FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
-          Addr(FBooleanData[Count]));
-      end;
-    rdtString:
-      begin
-        FStringData[Count] := Expression.StringResult;
-        FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
-          Addr(FStringData[Count]));
-      end;
-  else
-    Assert(False);
+  try
+    case DataSet.DataType of
+      rdtDouble:
+        begin
+          FRealData[Count] := Expression.DoubleResult;
+          FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
+            Addr(FRealData[Count]));
+        end;
+      rdtInteger:
+        begin
+          FIntegerData[Count] := Expression.IntegerResult;
+          FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
+            Addr(FIntegerData[Count]));
+        end;
+      rdtBoolean:
+        begin
+          FBooleanData[Count] := Expression.BooleanResult;
+          FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
+            Addr(FBooleanData[Count]));
+        end;
+      rdtString:
+        begin
+          FStringData[Count] := Expression.StringResult;
+          FQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy,
+            Addr(FStringData[Count]));
+        end;
+    else
+      Assert(False);
+    end;
+  except on E: ERbwParserError do
+    begin
+      frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+        Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
+      Exit;
+    end;
   end;
+  FScreenObjectQuadTree.AddPoint(APoint.X, APoint.Y * Anisotropy, AScreenObject);
 end;
 
 function TNearestPoint2DInterpolator.StringResult(
@@ -2349,7 +2359,16 @@ begin
   inherited;
   InitializeVariablesAndExpression(APoint, AScreenObject, SectionIndex, Expression);
   Assert(DataSet.DataType = rdtDouble);
-  FRealData[Count] := Expression.DoubleResult;
+  try
+    FRealData[Count] := Expression.DoubleResult;
+  except on E: ERbwParserError do
+    begin
+      frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+        Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
+      FRealData[Count] := 0;
+      Exit;
+    end;
+  end;
   FLocations[Count].X := APoint.X;
   FLocations[Count].Y := APoint.Y * Anisotropy;
 end;
@@ -2928,10 +2947,18 @@ begin
   begin
     InitializeVariablesAndExpression(APoint, AScreenObject, SectionIndex, Expression);
     Assert(DataSet.DataType = rdtDouble);
-    FValues[ALocation.Dimen1, ALocation.Dimen2] :=
-      FValues[ALocation.Dimen1, ALocation.Dimen2] + Expression.DoubleResult;
-    FCount[ALocation.Dimen1, ALocation.Dimen2] :=
-      FCount[ALocation.Dimen1, ALocation.Dimen2] + 1;
+    try
+      FValues[ALocation.Dimen1, ALocation.Dimen2] :=
+        FValues[ALocation.Dimen1, ALocation.Dimen2] + Expression.DoubleResult;
+      FCount[ALocation.Dimen1, ALocation.Dimen2] :=
+        FCount[ALocation.Dimen1, ALocation.Dimen2] + 1;
+    except on E: ERbwParserError do
+      begin
+        frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+          Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
+        Exit;
+      end;
+    end;
   end;
 end;
 

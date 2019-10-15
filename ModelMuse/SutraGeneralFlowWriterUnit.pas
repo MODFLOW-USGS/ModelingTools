@@ -7,7 +7,8 @@ uses System.UITypes,
   System.Generics.Collections, SutraGeneralFlowNodesUnit,
   System.Generics.Defaults, SutraBoundaryUnit, PhastModelUnit,
   SutraGeneralBoundaryUnit, RealListUnit, IntListUnit, GoPhastTypes,
-  Vcl.Dialogs, System.Classes, SutraBoundaryWriterUnit, SutraOptionsUnit;
+  Vcl.Dialogs, System.Classes, SutraBoundaryWriterUnit, SutraOptionsUnit,
+  SparseDataSets;
 
 type
   TGeneralFlowNodes = class(TList<TGeneralFlowNode>, IGeneralFlowNodes)
@@ -52,6 +53,7 @@ type
     FExitSpecificationLists: TObjectList<TSutraExitSpecificationMethodList>;
     FTimes: TRealList;
     FBcsFileNames: TGenFlowInteractionStringList;
+    FUseBctime: T3DSparseBooleanArray;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -158,11 +160,13 @@ begin
   FExitSpecificationLists := TObjectList<TSutraExitSpecificationMethodList>.Create;
 
   FTimes := TRealList.Create;
-
+  FUseBctime := T3DSparseBooleanArray.Create(GetQuantum(Model.LayerCount+1),
+    GetQuantum(Model.RowCount+1), GetQuantum(Model.ColumnCount+1));
 end;
 
 destructor TSutraGeneralFlowWriter.Destroy;
 begin
+  FUseBctime.Free;
   FTimes.Free;
 
   FExitSpecificationLists.Free;
@@ -234,6 +238,10 @@ var
   NodeList: IGeneralFlowNodes;
   InnerIndex: integer;
   FlowNodes: TGeneralFlowNodes;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  UseBCTime: Boolean;
   procedure InitializeTimeList(ListOfTimeLists: TObjectList<TSutraTimeList>;
     FormulaIndex: Integer; Descripion: string);
   var
@@ -408,6 +416,19 @@ begin
           ExitSpecList.Add(AnItem.ExitSpecMethod)
         end;
       end;
+
+      CellList := TCellAssignmentList.Create;
+      try
+        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        for CellIndex := 0 to CellList.Count -1 do
+        begin
+          ACell := CellList[CellIndex];
+          FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
+        end;
+      finally
+        CellList.Free;
+      end;
+
     end;
   end;
 
@@ -571,12 +592,21 @@ begin
                 Assert(U2Data.IsValue[LayerIndex,0,ColIndex]);
                 U2.Value := U2Data.RealData[LayerIndex,0,ColIndex];
                 U2.Annotation := U2Data.Annotation[LayerIndex,0,ColIndex];
+                
+                if FUseBCTime.IsValue[LayerIndex, 0,ColIndex] then
+                begin
+                  UseBCTime := FUseBCTime.Items[LayerIndex, 0,ColIndex];
+                end
+                else
+                begin
+                  UseBCTime := False;
+                end;
 
                 if NodeNumber >= 0 then
                 begin
                   NodeList.Add(TGeneralFlowNode.Create(NodeNumber, P1, P2, Q1, Q2,
                     U1, U2, LowerLimitType, UpperLimitType, ExitSpecMethod,
-                    LayerIndex, ColIndex));
+                    LayerIndex, ColIndex, UseBCTime));
                 end;
               end;
             end;

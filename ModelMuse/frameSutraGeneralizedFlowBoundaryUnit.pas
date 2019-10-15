@@ -23,6 +23,7 @@ type
     comboGeneralizedFlowPresent: TComboBox;
     lblLakeGeneralizedFlowType: TLabel;
     comboLakeGeneralizedFlowType: TComboBox;
+    cbBCTime: TCheckBox;
     procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgSutraFeatureBeforeDrawCell(Sender: TObject; ACol,
@@ -40,6 +41,7 @@ type
     procedure rdeFormulaChange(Sender: TObject);
     procedure rdgSutraFeatureSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
+    procedure cbBCTimeClick(Sender: TObject);
   private
     FBoundariesTheSame: Boolean;
     procedure InitializeColumns;
@@ -98,6 +100,12 @@ procedure TframeSutraGeneralizedFlowBoundary.btnInsertClick(Sender: TObject);
 begin
   inherited;
 //
+end;
+
+procedure TframeSutraGeneralizedFlowBoundary.cbBCTimeClick(Sender: TObject);
+begin
+  inherited;
+  cbBCTime.AllowGrayed := False;
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.comboExitChange(Sender: TObject);
@@ -162,6 +170,7 @@ var
   ASchedule: TSutraTimeSchedule;
 begin
   FirstBoundary := BoundaryList[0];
+  cbBCTime.Checked := FirstBoundary.UseBCTime;
   BoundColl := FirstBoundary.Values as TSutraGeneralFlowCollection;
   Same := True;
   for Index := 1 to BoundaryList.Count - 1 do
@@ -174,6 +183,15 @@ begin
     end;
   end;
   FBoundariesTheSame := Same;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    if cbBCTime.Checked <> ABoundary.UseBCTime then
+    begin
+      cbBCTime.State := cbGrayed;
+    end;
+  end;
+
   if Same then
   begin
     if comboSchedule.ItemIndex >= 1 then
@@ -247,6 +265,8 @@ begin
       begin
         Exit;
       end;
+
+      cbBCTime.AllowGrayed := BoundaryList.Count > 1;
 
       GetScheduleName(BoundaryList);
       GetLakeInteractions(BoundaryList);
@@ -667,6 +687,11 @@ begin
       end;
 
       SetBoundaryValues(BoundValues);
+
+      if cbBCTime.State <> cbGrayed then
+      begin
+        ABoundary.UseBCTime := cbBCTime.Checked;
+      end;
     end;
 
   finally

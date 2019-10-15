@@ -50,6 +50,7 @@ type
     FIBoundaryNodes: IBoundaryNodes;
     FTime1: Double;
     FBcsFileNames: TLakeInteractionStringList;
+    FUseBctime: T3DSparseBooleanArray;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -145,6 +146,8 @@ begin
   end;
   FNodeNumbers := T3DSparseIntegerArray.Create(GetQuantum(NumberOfLayers),
     GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
+  FUseBctime := T3DSparseBooleanArray.Create(GetQuantum(NumberOfLayers),
+    GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
 end;
 
 destructor TSutraBoundaryWriter.Destroy;
@@ -152,7 +155,7 @@ begin
   FNodeNumbers.Free;
   FPQTimeLists.Free;
   FUTimeLists.Free;
-
+  FUseBctime.Free;
   inherited;
 end;
 
@@ -204,6 +207,9 @@ var
   SimulationType: TSimulationType;
   BoundaryIdentifier: string;
   RootError: string;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  CellList: TCellAssignmentList;
 begin
   TransientAllowed := False;
   SimulationType := Model.SutraOptions.SimulationType;
@@ -219,7 +225,7 @@ begin
   begin
     DisplayTime := 0;
   end;
-
+  
   case FBoundaryType of
     sbtFluidSource:
     begin
@@ -279,6 +285,8 @@ begin
     end;
     if ABoundary.Used then
     begin
+      
+      
       if (FBcsFileNames <> nil) and
         (FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction) then
       begin
@@ -360,6 +368,18 @@ begin
         end;
       end;
       TimeList.Initialize(BoundaryValues);
+
+      CellList := TCellAssignmentList.Create;
+      try
+      ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      for CellIndex := 0 to CellList.Count -1 do
+      begin
+        ACell := CellList[CellIndex];
+        FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
+      end;
+      finally
+        CellList.Free;
+      end;
     end;
   end;
 end;
@@ -1142,6 +1162,7 @@ var
   PriorUDataArray: TDataArray;
   PriorPQDataArray: TDataArray;
   AnyChanged: Boolean;
+  UseBCTime: Boolean;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1211,7 +1232,15 @@ begin
               QINC1 := 0.0;
               UINC1 := 0.0;
             end;
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCP1), QINC1, UINC1));
+            if FUseBCTime.IsValue[LayerIndex, RowIndex,ColIndex] then
+            begin
+              UseBCTime := FUseBCTime.Items[LayerIndex, RowIndex,ColIndex];
+            end
+            else
+            begin
+              UseBCTime := False;
+            end;
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCP1), QINC1, UINC1, UseBCTime));
           end;
         end;
       end;
@@ -1288,6 +1317,7 @@ var
   Changed: Boolean;
   PriorUDataArray: TDataArray;
   AnyChanged: Boolean;
+  UseBCTime: Boolean;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1350,7 +1380,15 @@ begin
             begin
               QUINC1 := 0.0;
             end;
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCU1), 0, QUINC1));
+            if FUseBCTime.IsValue[LayerIndex, RowIndex,ColIndex] then
+            begin
+              UseBCTime := FUseBCTime.Items[LayerIndex, RowIndex,ColIndex];
+            end
+            else
+            begin
+              UseBCTime := False;
+            end;
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCU1), 0, QUINC1, UseBCTime));
           end;
         end;
       end;
@@ -1421,6 +1459,7 @@ var
   PriorUDataArray: TDataArray;
   PriorPQDataArray: TDataArray;
   AnyChanged: Boolean;
+  UseBCTime: Boolean;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1492,7 +1531,15 @@ begin
                 PBC1 := 0.0;
                 UBC1 := 0.0;
               end;
-              FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IPBC1), PBC1, UBC1));
+              if FUseBCTime.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                UseBCTime := FUseBCTime.Items[LayerIndex, RowIndex,ColIndex];
+              end
+              else
+              begin
+                UseBCTime := False;
+              end;
+              FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IPBC1), PBC1, UBC1, UseBCTime));
             end;
           end;
         end;
@@ -1570,6 +1617,7 @@ var
   Changed: Boolean;
   PriorUDataArray: TDataArray;
   AnyChanged: Boolean;
+  UseBCTime: Boolean;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1631,7 +1679,15 @@ begin
             begin
               UBC1 := 0.0;
             end;
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IUBC1), 0, UBC1));
+              if FUseBCTime.IsValue[LayerIndex, RowIndex,ColIndex] then
+              begin
+                UseBCTime := FUseBCTime.Items[LayerIndex, RowIndex,ColIndex];
+              end
+              else
+              begin
+                UseBCTime := False;
+              end;
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IUBC1), 0, UBC1, UseBCTime));
           end;
         end;
       end;

@@ -12,6 +12,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitTop = -6
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -21,7 +22,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabProperties
+    ActivePage = tabSutraFeatures
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -6939,11 +6940,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited gbObservationTypes: TGroupBox
                   Left = 2
                   Top = 104
-                  Width = 847
+                  Width = 867
                   Height = 329
                   ExplicitLeft = 2
                   ExplicitTop = 104
-                  ExplicitWidth = 847
+                  ExplicitWidth = 867
                   ExplicitHeight = 329
                   inherited cbGag2: TCheckBox
                     Width = 553
@@ -12973,7 +12974,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraSpecifiedPressure
+        ActivePage = jvspGeneralizedFlow
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -13099,9 +13100,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 605
             ExplicitHeight = 476
             inherited pnlBottom: TPanel
-              Top = 381
+              Top = 348
               Width = 605
-              ExplicitTop = 381
+              ExplicitTop = 348
               ExplicitWidth = 605
               inherited lblNumTimes: TLabel
                 Width = 119
@@ -13134,12 +13135,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 605
-              Height = 300
+              Height = 267
               ExplicitWidth = 605
               ExplicitHeight = 300
               inherited rdgSutraFeature: TRbwDataGrid4
                 Width = 603
-                Height = 248
+                Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
                 ExplicitWidth = 603
                 ExplicitHeight = 248
@@ -13205,7 +13206,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 605
             ExplicitHeight = 476
             inherited pnlBottom: TPanel
-              Top = 381
+              Top = 348
               Width = 605
               ExplicitTop = 381
               ExplicitWidth = 605
@@ -13240,12 +13241,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 605
-              Height = 300
+              Height = 267
               ExplicitWidth = 605
               ExplicitHeight = 300
               inherited rdgSutraFeature: TRbwDataGrid4
                 Width = 603
-                Height = 248
+                Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
                 ExplicitWidth = 603
                 ExplicitHeight = 248
@@ -13311,7 +13312,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 605
             ExplicitHeight = 476
             inherited pnlBottom: TPanel
-              Top = 381
+              Top = 348
               Width = 605
               ExplicitTop = 381
               ExplicitWidth = 605
@@ -13346,12 +13347,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 605
-              Height = 300
+              Height = 267
               ExplicitWidth = 605
               ExplicitHeight = 300
               inherited rdgSutraFeature: TRbwDataGrid4
                 Width = 603
-                Height = 248
+                Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
                 ExplicitWidth = 603
                 ExplicitHeight = 248
@@ -13415,7 +13416,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 605
             ExplicitHeight = 476
             inherited pnlBottom: TPanel
-              Top = 381
+              Top = 348
               Width = 605
               ExplicitTop = 381
               ExplicitWidth = 605
@@ -13450,12 +13451,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 605
-              Height = 300
+              Height = 267
               ExplicitWidth = 605
               ExplicitHeight = 300
               inherited rdgSutraFeature: TRbwDataGrid4
                 Width = 603
-                Height = 248
+                Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
                 ExplicitWidth = 603
                 ExplicitHeight = 248
@@ -13582,7 +13583,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited ilLakeButton: TImageList
               Bitmap = {
-                494C010104000900180018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+                494C0101040009001C0018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
                 0000000000003600000028000000600000003000000001002000000000000048
                 0000000000000000000000000000000000000000000000000000000000000000
                 0000000000000000000000000000000000000000000000000000000000000000
@@ -14203,9 +14204,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 605
             ExplicitHeight = 476
             inherited pnlBottom: TPanel
-              Top = 363
+              Top = 349
               Width = 605
-              ExplicitTop = 363
+              ExplicitTop = 325
               ExplicitWidth = 605
               inherited lblNumTimes: TLabel
                 Width = 119
@@ -14238,7 +14239,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitLeft = 433
               end
               inherited comboGeneralizedFlowPresent: TComboBox
+                Top = 44
                 Height = 27
+                ExplicitTop = 44
                 ExplicitHeight = 27
               end
               inherited comboLakeGeneralizedFlowType: TComboBox
@@ -14249,16 +14252,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pnlGrid: TPanel
               Top = 139
               Width = 605
-              Height = 224
+              Height = 210
               ExplicitTop = 139
               ExplicitWidth = 605
               ExplicitHeight = 224
               inherited rdgSutraFeature: TRbwDataGrid4
                 Width = 603
-                Height = 222
+                Height = 208
                 OnButtonClick = SutraBoundaryButtonClick
                 ExplicitWidth = 603
-                ExplicitHeight = 222
+                ExplicitHeight = 208
                 ColWidths = (
                   64
                   64
@@ -15284,7 +15287,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Left = 648
     Top = 296
     Bitmap = {
-      494C010104000900140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000900180010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

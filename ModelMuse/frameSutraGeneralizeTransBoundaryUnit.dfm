@@ -4,15 +4,21 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
   ExplicitWidth = 586
   ExplicitHeight = 489
   inherited pnlBottom: TPanel
-    Top = 392
+    Top = 368
     Width = 586
-    Height = 97
-    ExplicitTop = 392
+    Height = 121
+    ExplicitLeft = 1
+    ExplicitTop = 373
     ExplicitWidth = 586
-    ExplicitHeight = 97
+    ExplicitHeight = 121
+    DesignSize = (
+      586
+      121)
     inherited lblNumTimes: TLabel
-      Top = 71
-      ExplicitTop = 71
+      Left = 63
+      Top = 87
+      ExplicitLeft = 63
+      ExplicitTop = 87
     end
     object lblGeneralizedTransportPresent: TLabel [1]
       Left = 8
@@ -29,27 +35,23 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       Caption = 'Interaction type'
     end
     inherited seNumberOfTimes: TJvSpinEdit
-      Left = 9
-      Top = 63
-      Height = 21
-      ExplicitLeft = 9
-      ExplicitTop = 63
-      ExplicitHeight = 21
+      Top = 79
+      ExplicitTop = 79
     end
     inherited btnDelete: TBitBtn
-      Left = 498
-      Top = 62
-      ExplicitLeft = 498
-      ExplicitTop = 62
+      Left = 497
+      Top = 78
+      ExplicitLeft = 497
+      ExplicitTop = 78
     end
     inherited btnInsert: TBitBtn
-      Left = 414
-      Top = 62
-      ExplicitLeft = 414
-      ExplicitTop = 62
+      Left = 413
+      Top = 78
+      ExplicitLeft = 413
+      ExplicitTop = 78
     end
     object comboGeneralizedTransportPresent: TComboBox
-      Left = 9
+      Left = 8
       Top = 29
       Width = 286
       Height = 21
@@ -77,17 +79,26 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
         'Like spec. conc./temp. (U)'
         'Use defaults')
     end
+    object cbBCTime: TCheckBox
+      Left = 8
+      Top = 56
+      Width = 185
+      Height = 17
+      Caption = 'Use BCTime'
+      TabOrder = 5
+      OnClick = cbBCTimeClick
+    end
   end
   inherited pnlGrid: TPanel
     Top = 131
     Width = 586
-    Height = 261
+    Height = 237
     ExplicitTop = 131
     ExplicitWidth = 586
     ExplicitHeight = 261
     inherited rdgSutraFeature: TRbwDataGrid4
       Width = 584
-      Height = 259
+      Height = 235
       ColCount = 6
       OnMouseUp = rdgSutraFeatureMouseUp
       OnSelectCell = rdgSutraFeatureSelectCell

@@ -24262,5 +24262,21 @@ object TTaskHistory
       Date = 43749.440915416670000000
       Categories.Strings = (
         'MT3D-USGS CTS')
+    end
+    item
+      Date = 43750.440915416670000000
+    end
+    item
+      Date = 43751.440915416670000000
+    end
+    item
+      Date = 43752.440915416670000000
+    end
+    item
+      Date = 43753.440915416670000000
+      Categories.Strings = (
+        'Bug fix'
+        'SUTRA 3.0'
+        'Documentation')
     end>
 end

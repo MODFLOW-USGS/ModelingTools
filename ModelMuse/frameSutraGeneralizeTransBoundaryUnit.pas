@@ -20,6 +20,7 @@ type
     comboGeneralizedTransportPresent: TComboBox;
     lbl1: TLabel;
     comboLakeGeneralizedTransportType: TComboBox;
+    cbBCTime: TCheckBox;
     procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgSutraFeatureBeforeDrawCell(Sender: TObject; ACol,
@@ -35,6 +36,7 @@ type
     procedure rdeFormulaChange(Sender: TObject);
     procedure rdgSutraFeatureSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
+    procedure cbBCTimeClick(Sender: TObject);
   private
     FBoundariesTheSame: Boolean;
     procedure InitializeColumns;
@@ -88,6 +90,12 @@ begin
 end;
 
 
+procedure TframeSutraGeneralizeTransBoundary.cbBCTimeClick(Sender: TObject);
+begin
+  inherited;
+  cbBCTime.AllowGrayed := False;
+end;
+
 procedure TframeSutraGeneralizeTransBoundary.DisplayBoundaries(
   BoundColl: TSutraGeneralTransportCollection);
 var
@@ -127,6 +135,7 @@ var
 begin
   FirstBoundary := BoundaryList[0];
   BoundColl := FirstBoundary.Values as TSutraGeneralTransportCollection;
+  cbBCTime.Checked := FirstBoundary.UseBCTime;
   Same := True;
   for Index := 1 to BoundaryList.Count - 1 do
   begin
@@ -153,6 +162,15 @@ begin
   else
   begin
     ClearBoundaries;
+  end;
+  for Index := 1 to BoundaryList.Count - 1 do
+  begin
+    ABoundary := BoundaryList[Index];
+    if cbBCTime.Checked <> ABoundary.UseBCTime then
+    begin
+      cbBCTime.State := cbGrayed;
+      break;
+    end;
   end;
 end;
 
@@ -206,6 +224,7 @@ begin
         OnActivate(self, FCheckState);
       end;
 
+      cbBCTime.AllowGrayed := BoundaryList.Count > 1;
       if BoundaryList.Count = 0 then
       begin
         Exit;
@@ -568,6 +587,11 @@ begin
       begin
         ABoundary.LakeInteractionType :=
           TGeneralizedTransportInteractionType(comboLakeGeneralizedTransportType.ItemIndex);
+      end;
+
+      if cbBCTime.State <> cbGrayed then
+      begin
+        ABoundary.UseBCTime := cbBCTime.Checked;
       end;
 
       SetBoundaryValues(BoundValues);

@@ -19,9 +19,9 @@ type
     FNewCts: TCtsSystemCollection;
   protected
     function Description: string; override;
+  public
     procedure DoCommand; override;
     procedure Undo; override;
-  public
     constructor Create(var NewCts: TCtsSystemCollection);
     destructor Destroy; override;
   end;
@@ -149,8 +149,6 @@ procedure TfrmContaminantTreatmentSystems.frameWellsGridButtonClick(
 var
   AvailableWells: TStringList;
   SelectedWells: TStringList;
-  index: Integer;
-  WellPosition: Integer;
 begin
   inherited;
   AvailableWells := TStringList.Create;
@@ -160,6 +158,11 @@ begin
     AvailableWells.Assign(FWellObjects);
     SelectedWells.DelimitedText := frameWells.Grid.Cells[ACol, ARow];
     frmEditSelectedWells.GetData(AvailableWells, SelectedWells);
+    if frmEditSelectedWells.ShowModal = mrOk then
+    begin
+      frmEditSelectedWells.SetData(SelectedWells);
+      frameWells.Grid.Cells[ACol, ARow] := SelectedWells.DelimitedText;
+    end;
   finally
     AvailableWells.Free;
     SelectedWells.Free;
