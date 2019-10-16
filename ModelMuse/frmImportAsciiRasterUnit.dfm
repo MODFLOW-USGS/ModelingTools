@@ -3,8 +3,8 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
   Caption = 'Import ASCII Raster File'
   ClientHeight = 336
   ClientWidth = 640
-  ExplicitWidth = 658
-  ExplicitHeight = 381
+  ExplicitWidth = 656
+  ExplicitHeight = 375
   PixelsPerInch = 96
   TextHeight = 18
   inherited lblDataSet: TLabel

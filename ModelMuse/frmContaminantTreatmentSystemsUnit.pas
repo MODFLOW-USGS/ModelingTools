@@ -74,6 +74,7 @@ type
     FWellItem: TIndividualWellInjectionItem;
     procedure GetData;
     procedure SetData;
+    procedure InitializeControls;
     { Private declarations }
   public
     { Public declarations }
@@ -86,7 +87,7 @@ implementation
 
 uses
   frmGoPhastUnit, ModflowPackageSelectionUnit, PhastModelUnit, ScreenObjectUnit,
-  ModflowTimeUnit, frmEditSelectedWellsUnit;
+  ModflowTimeUnit, frmEditSelectedWellsUnit, GoPhastTypes;
 
 {$R *.dfm}
 
@@ -149,6 +150,15 @@ procedure TfrmContaminantTreatmentSystems.frameWellsGridButtonClick(
 var
   AvailableWells: TStringList;
   SelectedWells: TStringList;
+  InjectionWells: TStringList;
+  Splitter: TStringList;
+  RowIndex: Integer;
+  WellIndex: Integer;
+  WellPosition: Integer;
+  SelectedWellName: string;
+  WellItem: TIndividualWellInjectionItem;
+  ANode: TTreeNode;
+  SelectedNode: TTreeNode;
 begin
   inherited;
   AvailableWells := TStringList.Create;
@@ -162,12 +172,143 @@ begin
     begin
       frmEditSelectedWells.SetData(SelectedWells);
       frameWells.Grid.Cells[ACol, ARow] := SelectedWells.DelimitedText;
+
+      if ACol = Ord(cwcInjectionWells) then
+      begin
+        InjectionWells := TStringList.Create;
+        Splitter := TStringList.Create;
+        try
+          InjectionWells.Sorted := True;
+          InjectionWells.Duplicates := dupIgnore;
+          for RowIndex := 1 to frameWells.Grid.RowCount - 1 do
+          begin
+            Splitter.DelimitedText :=
+              frameWells.Grid.Cells[Ord(cwcInjectionWells), RowIndex];
+            InjectionWells.AddStrings(Splitter);
+          end;
+
+//          for WellIndex := 0 to InjectionWells.Count - 1 do
+//          begin
+//            WellPosition := AvailableWells.IndexOf(InjectionWells[WellIndex]);
+//            if WellPosition >= 0 then
+//            begin
+//              InjectionWells.Objects[WellIndex] :=
+//                AvailableWells.Objects[WellPosition];
+//            end;
+//          end;
+
+          if tvIndividualObjectOptions.Selected <> nil then
+          begin
+            SelectedWellName := tvIndividualObjectOptions.Selected.Text;
+          end
+          else
+          begin
+            SelectedWellName := ''
+          end;
+          tvIndividualObjectOptions.Selected := nil;
+          tvIndividualObjectOptionsChange(tvIndividualObjectOptions, nil);
+
+          for WellIndex := 0 to InjectionWells.Count - 1 do
+          begin
+            if FSelectedSystem.Injections.GetItemByObjectName(
+              InjectionWells[WellIndex]) = nil then
+            begin
+              WellItem := FSelectedSystem.Injections.Add;
+              WellItem.InjectionWellObjectName := InjectionWells[WellIndex];
+            end;
+          end;
+
+          for WellIndex := FSelectedSystem.Injections.Count - 1 downto 0 do
+          begin
+            if InjectionWells.IndexOf(
+              FSelectedSystem.Injections[WellIndex].InjectionWellObjectName) < 0 then
+            begin
+              FSelectedSystem.Injections.Delete(WellIndex);
+            end;
+          end;
+
+          tvIndividualObjectOptions.Items.Clear;
+
+          SelectedNode := nil;
+          for WellIndex := 0 to FSelectedSystem.Injections.Count - 1 do
+          begin
+            WellItem := FSelectedSystem.Injections[WellIndex];
+            ANode := tvIndividualObjectOptions.Items.AddObject(nil,
+              WellItem.InjectionWellObjectName, WellItem);
+            if WellItem.InjectionWellObjectName = SelectedWellName then
+            begin
+              SelectedNode := ANode;
+            end;
+          end;
+
+          if SelectedNode <> nil then
+          begin
+            tvIndividualObjectOptions.Selected := SelectedNode;
+            tvIndividualObjectOptionsChange(tvIndividualObjectOptions, SelectedNode);
+          end;
+        finally
+          InjectionWells.Free;
+          Splitter.Free;
+        end;
+      end;
     end;
   finally
     AvailableWells.Free;
     SelectedWells.Free;
     FreeAndNil(frmEditSelectedWells);
   end;
+end;
+
+procedure TfrmContaminantTreatmentSystems.InitializeControls;
+var
+  LocalModel: TPhastModel;
+  StressPeriods: TModflowStressPeriods;
+  CompIndex: Integer;
+  ColIndex: Integer;
+begin
+  LocalModel := frmGoPhast.PhastModel;
+
+  NCOMP := LocalModel.NumberOfMt3dChemComponents;
+  frameExternalFlows.Grid.ColCount := NCOMP + 4;
+  frameDefaultOptions.Grid.ColCount := NCOMP*2+ 2;
+  frameIndividualWellOptions.Grid.ColCount := NCOMP*2+ 2;
+
+  frameExternalFlows.Grid.BeginUpdate;
+  try
+    StressPeriods := LocalModel.ModflowStressPeriods;
+    StressPeriods.FillPickListWithStartTimes(frameWells.Grid, 0);
+    StressPeriods.FillPickListWithEndTimes(frameWells.Grid, 1);
+    StressPeriods.FillPickListWithStartTimes(frameExternalFlows.Grid, 0);
+    StressPeriods.FillPickListWithEndTimes(frameExternalFlows.Grid, 1);
+    StressPeriods.FillPickListWithStartTimes(frameDefaultOptions.Grid, 0);
+    StressPeriods.FillPickListWithEndTimes(frameDefaultOptions.Grid, 1);
+    StressPeriods.FillPickListWithStartTimes(frameIndividualWellOptions.Grid, 0);
+    StressPeriods.FillPickListWithEndTimes(frameIndividualWellOptions.Grid, 1);
+
+    frameExternalFlows.Grid.Cells[Ord(cefcStartTime), 0] := StrStartingTime;
+    frameExternalFlows.Grid.Cells[Ord(cefcEndTime), 0] := StrEndingTime;
+    frameExternalFlows.Grid.Cells[Ord(cstOutflow), 0] := 'External Outflow (QOUTCTS)';
+    frameExternalFlows.Grid.Cells[Ord(cstInflow), 0] := 'External Inflow (QINCTS)';
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      frameExternalFlows.Grid.Cells[Ord(cstInflowConc) + CompIndex, 0] := 'External Inflow Concentration '
+        + LocalModel.Mt3dSpecesName[CompIndex] + ' (CINCTS)';
+    end;
+
+//  TInjectionOptionColumns = (iocStartTime, iocEndTime, iocTreament1, iocValue1);
+    frameDefaultOptions.Grid.Cells[Ord(cefcStartTime), 0] := StrStartingTime;
+    frameDefaultOptions.Grid.Cells[Ord(cefcEndTime), 0] := StrEndingTime;
+    ColIndex := Ord(iocTreament1);
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      frameDefaultOptions.Grid.Cells[ColIndex, 0] := 'Treatment Option ' + LocalModel.Mt3dSpecesName[CompIndex] + ' (IOPTINJ)';
+      frameDefaultOptions.Grid.Cells[ColIndex, 0] := 'Treatment Value ' + LocalModel.Mt3dSpecesName[CompIndex] + ' (CMCHGINJ)';
+
+    end;
+  finally
+    frameExternalFlows.Grid.EndUpdate;
+  end;
+
 end;
 
 procedure TfrmContaminantTreatmentSystems.GetData;
@@ -183,22 +324,9 @@ var
 begin
   LocalModel := frmGoPhast.PhastModel;
 
-  NCOMP := LocalModel.NumberOfMt3dChemComponents;
-  frameExternalFlows.Grid.ColCount := NCOMP + 4;
-  frameDefaultOptions.Grid.ColCount := NCOMP*2+ 2;
-  frameIndividualWellOptions.Grid.ColCount := NCOMP*2+ 2;
+  InitializeControls;
 
   WellPackageChoice := LocalModel.ModflowPackages.Mt3dCts.WellPackageChoice;
-
-  StressPeriods := LocalModel.ModflowStressPeriods;
-  StressPeriods.FillPickListWithStartTimes(frameWells.Grid, 0);
-  StressPeriods.FillPickListWithEndTimes(frameWells.Grid, 1);
-  StressPeriods.FillPickListWithStartTimes(frameExternalFlows.Grid, 0);
-  StressPeriods.FillPickListWithEndTimes(frameExternalFlows.Grid, 1);
-  StressPeriods.FillPickListWithStartTimes(frameDefaultOptions.Grid, 0);
-  StressPeriods.FillPickListWithEndTimes(frameDefaultOptions.Grid, 1);
-  StressPeriods.FillPickListWithStartTimes(frameIndividualWellOptions.Grid, 0);
-  StressPeriods.FillPickListWithEndTimes(frameIndividualWellOptions.Grid, 1);
 
   for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
   begin

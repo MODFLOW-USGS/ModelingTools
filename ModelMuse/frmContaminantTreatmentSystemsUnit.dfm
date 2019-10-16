@@ -27,7 +27,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Indent = 19
     TabOrder = 0
     OnChange = tvTreatmentSystemsChange
-    ExplicitLeft = 4
   end
   object pnlBottom: TPanel
     Left = 0
@@ -109,15 +108,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabWells
+      ActivePage = tabTreatments
       Align = alClient
       TabOrder = 0
       object tabWells: TTabSheet
         Caption = 'Wells'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         inline frameWells: TframeGrid
           Left = 0
           Top = 0
@@ -254,7 +249,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
-            ExplicitLeft = 1
             ExplicitWidth = 587
             ExplicitHeight = 237
           end
@@ -263,10 +257,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       object tabExternalFlows: TTabSheet
         Caption = 'External Flows'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         inline frameExternalFlows: TframeGrid
           Left = 0
           Top = 0
@@ -387,10 +377,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       object tabTreatments: TTabSheet
         Caption = 'Treatments'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnlTreatmentOptions: TPanel
           Left = 0
           Top = 0
@@ -431,10 +417,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           TabOrder = 1
           object tabDefaultOptions: TTabSheet
             Caption = 'Default Options'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline frameDefaultOptions: TframeGrid
               Left = 0
               Top = 0
@@ -583,10 +565,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           object tabIndividualWellOptions: TTabSheet
             Caption = 'Individual Well Options'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object splttr2: TJvNetscapeSplitter
               Left = 121
               Top = 0

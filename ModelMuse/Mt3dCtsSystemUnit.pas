@@ -161,6 +161,8 @@ type
     constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TIndividualWellInjectionItem read GetItem
       write SetItem; default;
+    function GetItemByObjectName(const AName: string): TIndividualWellInjectionItem;
+    function Add: TIndividualWellInjectionItem;
   end;
 
   TCtsExternalFlowsItem = class(TCustomModflowBoundaryItem)
@@ -1076,6 +1078,11 @@ end;
 
 { TIndividualWellInjectionCollection }
 
+function TIndividualWellInjectionCollection.Add: TIndividualWellInjectionItem;
+begin
+  result := inherited Add as TIndividualWellInjectionItem;
+end;
+
 constructor TIndividualWellInjectionCollection.Create(Model: TBaseModel);
 begin
   inherited Create(TIndividualWellInjectionItem, Model);
@@ -1085,6 +1092,22 @@ function TIndividualWellInjectionCollection.GetItem(
   Index: Integer): TIndividualWellInjectionItem;
 begin
   result := inherited Items[index] as TIndividualWellInjectionItem
+end;
+
+function TIndividualWellInjectionCollection.GetItemByObjectName(
+  const AName: string): TIndividualWellInjectionItem;
+var
+  ItemIndex: Integer;
+begin
+  result := nil;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    if Items[ItemIndex].InjectionWellObjectName = AName then
+    begin
+      result := Items[ItemIndex];
+      break;
+    end;
+  end;
 end;
 
 procedure TIndividualWellInjectionCollection.Loaded(Model: TBaseModel);

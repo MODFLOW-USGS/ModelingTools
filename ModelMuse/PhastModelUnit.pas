@@ -2379,6 +2379,7 @@ that affects the model output should also have a comment. }
     function SfrMf6Selected(Sender: TObject): Boolean;
     function MawSelected(Sender: TObject): Boolean;
     function LakMf6Selected(Sender: TObject): Boolean;
+    function GetMt3dSpecesName(const Index: Integer): string;
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3211,6 +3212,7 @@ that affects the model output should also have a comment. }
     function LakScreenObjects: TStringList;
     function UzfMf6ScreenObjects: TStringList;
     function NumberOfMt3dChemComponents: integer;
+    property Mt3dSpecesName[const Index: Integer]: string read GetMt3dSpecesName;
     function Mt3dIsSelected: Boolean; virtual;
   published
     // @name defines the grid used with PHAST.
@@ -8799,9 +8801,12 @@ const
   //                been programmed in SUTRA.
   //               Bug fix: Fixed bug that could cause an error if a data set
   //                type is changed after some data has been assigned.
+  //    '4.1.0.2'  Bug fix: Fixed a bug that could cause an integer overflow
+  //                when attempting to import an ascii raster that contains
+  //                a larger number of points.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.1';
+  IModelVersion = '4.1.0.2';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -36904,6 +36909,18 @@ begin
   else
   begin
     result := nil;
+  end;
+end;
+
+function TCustomModel.GetMt3dSpecesName(const Index: Integer): string;
+begin
+  if Index < MobileComponents.Count then
+  begin
+    result := MobileComponents[Index].Name;
+  end
+  else
+  begin
+    result := ImMobileComponents[Index - MobileComponents.Count].Name;
   end;
 end;
 

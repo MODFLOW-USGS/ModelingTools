@@ -81,7 +81,7 @@ resourcestring
   StrDataSet = 'Data set';
   StrTheFileSDoesN = 'The file "%s" does not exist.';
   StrTheFileSIsNot = 'The file "%s" is not an ASCII raster file.';
-  StrNoneImportAllS = 'None (import all %s points)';
+  StrNoneImportAllS = 'None (import all %d points)';
   StrMultipleFiles = ' - multiple files';
   StrImportedFromAnAS = 'Imported from an ASCII Raster file';
   StrSampledFromAnASCI = 'Sampled from an ASCII Raster file';
@@ -119,12 +119,12 @@ function TfrmImportAsciiRaster.GetData: boolean;
 var
   AsciiReader: TAsciiRasterReader;
   FileHeader: TRasterHeader;
-  NumberOfPoints: double;
+  NumberOfPoints: Int64;
   FileIndex: Integer;
   Model: TPhastModel;
   ChildIndex: Integer;
   ChildModel: TChildModel;
-  Number: string;
+//  Number: string;
   ComponentIndex: integer;
   AControl: TControl;
 begin
@@ -166,9 +166,11 @@ begin
           else if FileIndex = 0 then
           begin
             FileHeader := AsciiReader.FileHeader;
-            NumberOfPoints := FileHeader.NumberOfColumns * FileHeader.NumberOfRows;
-            Number := FloatToStrF(NumberOfPoints, ffNumber, 15, 0);
-            rgFilterMethod.Items[4] := Format(StrNoneImportAllS, [Number]);
+            // avoid integer overflow by first converting to Int64.
+            NumberOfPoints := FileHeader.NumberOfColumns;
+            NumberOfPoints := NumberOfPoints * FileHeader.NumberOfRows;
+//            Number := FloatToStrF(NumberOfPoints, ffNumber, 15, 0);
+            rgFilterMethod.Items[4] := Format(StrNoneImportAllS, [NumberOfPoints]);
           end;
         finally
           AsciiReader.Free;
