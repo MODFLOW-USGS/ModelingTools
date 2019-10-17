@@ -108,9 +108,12 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabTreatments
+      ActivePage = tabWells
       Align = alClient
+      Enabled = False
       TabOrder = 0
+      ExplicitLeft = 3
+      ExplicitTop = 46
       object tabWells: TTabSheet
         Caption = 'Wells'
         inline frameWells: TframeGrid
@@ -155,10 +158,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Width = 587
             Height = 237
             ColCount = 4
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
             OnButtonClick = frameWellsGridButtonClick
             Columns = <
               item
-                AutoAdjustRowHeights = False
+                AutoAdjustRowHeights = True
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -181,7 +185,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 AutoAdjustColWidths = True
               end
               item
-                AutoAdjustRowHeights = False
+                AutoAdjustRowHeights = True
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -197,11 +201,34 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 LimitToList = False
                 MaxLength = 0
                 ParentButtonFont = False
-                WordWrapCaptions = False
+                WordWrapCaptions = True
                 WordWrapCells = False
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
-                AutoAdjustColWidths = False
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = 'Edit'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = True
+                ButtonWidth = 35
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = False
+                WordWrapCells = True
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
               end
               item
                 AutoAdjustRowHeights = False
@@ -224,31 +251,9 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 WordWrapCells = False
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
-                AutoAdjustColWidths = False
-              end
-              item
-                AutoAdjustRowHeights = False
-                ButtonCaption = 'Edit'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = True
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4String
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = False
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = False
+                AutoAdjustColWidths = True
               end>
+            ExplicitLeft = 3
             ExplicitWidth = 587
             ExplicitHeight = 237
           end
@@ -777,9 +782,23 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
         EditLabel.Width = 95
         EditLabel.Height = 18
         EditLabel.Caption = 'System name'
+        Enabled = False
         LabelPosition = lpRight
         TabOrder = 0
+        OnChange = edSystemNameChange
       end
     end
+  end
+  object rcSystem: TRbwController
+    ControlList = <
+      item
+        Control = edSystemName
+      end
+      item
+        Control = pgcMain
+      end>
+    Enabled = False
+    Left = 588
+    Top = 25
   end
 end

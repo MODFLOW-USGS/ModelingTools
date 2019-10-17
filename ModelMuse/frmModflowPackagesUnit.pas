@@ -4005,6 +4005,7 @@ begin
   frmGoPhast.EnableMt3dmsMenuItems;
   frmGoPhast.EnableFarmMenuItems;
   frmGoPhast.EnableSwrActions;
+  frmGoPhast.EnableCTS;
   SetMt3dCaption;
   if Mt3dmsNewlySelected then
   begin

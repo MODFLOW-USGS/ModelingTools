@@ -16,18 +16,26 @@ type
 
   // @name allows the users to change the injection or extraction wells over
   // time but typically, the same wells will be used in all included times.
-  TCtsObjectItem = class(TCustomModflowBoundaryItem)
+  TCtsObjectItem = class(TOrderedItem)
   private
     FExtractionWellList: TListOfObjects;
     FInjectionWellList: TListOfObjects;
     FExtractionWellNames: TStringList;
     FInjectionWellNames: TStringList;
+    FStoredStartTime: TRealStorage;
+    FStoredEndTime: TRealStorage;
     function GetExtractionWellObjects: TStrings;
     function GetInjectionWellObjects: TStrings;
     procedure SetExtractionWellObjects(const Value: TStrings);
     procedure SetInjectionWellObjects(const Value: TStrings);
     procedure Loaded(Model: TBaseModel);
     procedure WellsAssigned(Sender: TObject);
+    procedure SetStoredEndTime(const Value: TRealStorage);
+    procedure SetStoredStartTime(const Value: TRealStorage);
+    function GetEndTime: Double;
+    function GetStartTime: Double;
+    procedure SetEndTime(const Value: Double);
+    procedure SetStartTime(const Value: Double);
   public
     procedure Assign(Source: TPersistent); override;
     procedure AddExtractionWell(AScreenObject: TObject);
@@ -37,6 +45,8 @@ type
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    property StartTime: Double read GetStartTime write SetStartTime;
+    property EndTime: Double read GetEndTime write SetEndTime;
   published
     // data set 4
     property ExtractionWellObjects: TStrings read GetExtractionWellObjects
@@ -44,16 +54,18 @@ type
     // data set 8
     property InjectionWellObjects: TStrings read GetInjectionWellObjects
       write SetInjectionWellObjects;
+    property StoredStartTime: TRealStorage read FStoredStartTime write SetStoredStartTime;
+    property StoredEndTime: TRealStorage read FStoredEndTime write SetStoredEndTime;
   end;
 
-  TCtsObjectCollection = class(TCustomNonSpatialBoundColl)
+  TCtsObjectCollection = class(TEnhancedOrderedCollection)
   private
     function GetItem(Index: Integer): TCtsObjectItem;
     procedure SetItem(Index: Integer; const Value: TCtsObjectItem);
     procedure Loaded(Model: TBaseModel);
-  protected
-    class function ItemClass: TBoundaryItemClass; override;
+//    class function ItemClass: TBoundaryItemClass; static;
   public
+    constructor Create(Model: TBaseModel);
     function Add: TCtsObjectItem;
     property Items[Index: Integer]: TCtsObjectItem read GetItem write SetItem; default;
   end;
@@ -258,13 +270,13 @@ type
   private
     FCtsSystem: TCtsSystem;
     procedure SetCtsSystem(const Value: TCtsSystem);
+    procedure Loaded;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    procedure Loaded;
   published
     property CtsSystem: TCtsSystem read FCtsSystem write SetCtsSystem;
   end;
@@ -277,6 +289,7 @@ type
     constructor Create(Model: TBaseModel);
     function Add: TCtsSystemItem;
     property Items[Index: Integer]: TCtsSystemItem read GetItem write SetItem; default;
+    procedure Loaded;
   end;
 
 implementation
@@ -303,6 +316,8 @@ begin
   if Source is TCtsObjectItem then
   begin
     CstSource := TCtsObjectItem(Source);
+    StartTime := CstSource.StartTime;
+    EndTime := CstSource.EndTime;
     ExtractionWellObjects := CstSource.ExtractionWellObjects;
     InjectionWellObjects := CstSource.InjectionWellObjects;
   end;
@@ -312,6 +327,11 @@ end;
 constructor TCtsObjectItem.Create(Collection: TCollection);
 begin
   inherited;
+  FStoredEndTime := TRealStorage.Create;
+  FStoredStartTime := TRealStorage.Create;
+  FStoredEndTime.OnChange := OnInvalidateModelEvent;
+  FStoredStartTime.OnChange := OnInvalidateModelEvent;
+
   FExtractionWellList := TListOfObjects.Create;
   FInjectionWellList := TListOfObjects.Create;
   FExtractionWellNames := TStringList.Create;
@@ -326,7 +346,14 @@ begin
   FInjectionWellList.Free;
   FExtractionWellNames.Free;
   FInjectionWellNames.Free;
+  FStoredStartTime.Free;
+  FStoredEndTime.Free;
   inherited;
+end;
+
+function TCtsObjectItem.GetEndTime: Double;
+begin
+  result := FStoredEndTime.Value;
 end;
 
 function TCtsObjectItem.GetExtractionWellObjects: TStrings;
@@ -334,13 +361,21 @@ var
   AScreenObject: TScreenObject;
   Index: Integer;
 begin
-  FExtractionWellNames.Clear;
-  for Index := 0 to FExtractionWellList.Count - 1 do
+  if FExtractionWellList.Count > 0 then
   begin
-    AScreenObject := FExtractionWellList[Index] as TScreenObject;
-    if not AScreenObject.Deleted then
-    begin
-      FExtractionWellNames.AddObject(AScreenObject.Name, AScreenObject)
+    FExtractionWellNames.OnChange := nil;
+    try
+      FExtractionWellNames.Clear;
+      for Index := 0 to FExtractionWellList.Count - 1 do
+      begin
+        AScreenObject := FExtractionWellList[Index] as TScreenObject;
+        if not AScreenObject.Deleted then
+        begin
+          FExtractionWellNames.AddObject(AScreenObject.Name, AScreenObject)
+        end;
+      end;
+    finally
+      FExtractionWellNames.OnChange := WellsAssigned;
     end;
   end;
   result := FExtractionWellNames;
@@ -351,16 +386,29 @@ var
   AScreenObject: TScreenObject;
   Index: Integer;
 begin
-  FInjectionWellNames.Clear;
-  for Index := 0 to FInjectionWellList.Count - 1 do
+  if FInjectionWellList.Count > 0 then
   begin
-    AScreenObject := FInjectionWellList[Index] as TScreenObject;
-    if not AScreenObject.Deleted then
-    begin
-      FInjectionWellNames.AddObject(AScreenObject.Name, AScreenObject)
+    FInjectionWellNames.OnChange := nil;
+    try
+      FInjectionWellNames.Clear;
+      for Index := 0 to FInjectionWellList.Count - 1 do
+      begin
+        AScreenObject := FInjectionWellList[Index] as TScreenObject;
+        if not AScreenObject.Deleted then
+        begin
+          FInjectionWellNames.AddObject(AScreenObject.Name, AScreenObject)
+        end;
+      end;
+    finally
+      FInjectionWellNames.OnChange := WellsAssigned;
     end;
   end;
   result := FInjectionWellNames;
+end;
+
+function TCtsObjectItem.GetStartTime: Double;
+begin
+  result := FStoredStartTime.Value;
 end;
 
 function TCtsObjectItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -370,25 +418,16 @@ var
   OtherObjects: TStrings;
   Index: integer;
 begin
-  Result := (AnotherItem is TCtsObjectItem) and inherited IsSame(AnotherItem);
+  Result := (AnotherItem is TCtsObjectItem);
   if Result then
   begin
     OtherItem := TCtsObjectItem(AnotherItem);
-    LocalObjects := ExtractionWellObjects;
-    OtherObjects := OtherItem.ExtractionWellObjects;
-    Result := LocalObjects.Count = OtherObjects.Count;
-    if result then
+    Result := (StartTime = OtherItem.StartTime)
+      and (EndTime = OtherItem.EndTime);
+    if Result then
     begin
-      for Index := 0 to LocalObjects.Count - 1 do
-      begin
-        result := LocalObjects[Index] = OtherObjects[Index];
-        if not Result then
-        begin
-          Exit;
-        end;
-      end;
-      LocalObjects := InjectionWellObjects;
-      OtherObjects := OtherItem.InjectionWellObjects;
+      LocalObjects := ExtractionWellObjects;
+      OtherObjects := OtherItem.ExtractionWellObjects;
       Result := LocalObjects.Count = OtherObjects.Count;
       if result then
       begin
@@ -398,6 +437,20 @@ begin
           if not Result then
           begin
             Exit;
+          end;
+        end;
+        LocalObjects := InjectionWellObjects;
+        OtherObjects := OtherItem.InjectionWellObjects;
+        Result := LocalObjects.Count = OtherObjects.Count;
+        if result then
+        begin
+          for Index := 0 to LocalObjects.Count - 1 do
+          begin
+            result := LocalObjects[Index] = OtherObjects[Index];
+            if not Result then
+            begin
+              Exit;
+            end;
           end;
         end;
       end;
@@ -411,25 +464,34 @@ var
   AScreenObject: TScreenObject;
   Index: Integer;
 begin
-  LocalModel := Model as TPhastModel;
-  FExtractionWellNames.OnChange := nil;
-  FInjectionWellNames.OnChange := nil;
-  try
-    FExtractionWellList.Clear;
-    for Index := 0 to FExtractionWellNames.Count - 1 do
-    begin
-      AScreenObject := LocalModel.GetScreenObjectByName(FExtractionWellNames[Index]);
-      AddExtractionWell(AScreenObject);
+  if Model <> nil then
+  begin
+    LocalModel := Model as TPhastModel;
+    FExtractionWellNames.OnChange := nil;
+    FInjectionWellNames.OnChange := nil;
+    try
+      FExtractionWellList.Clear;
+      for Index := 0 to FExtractionWellNames.Count - 1 do
+      begin
+        AScreenObject := LocalModel.GetScreenObjectByName(FExtractionWellNames[Index]);
+        if AScreenObject <> nil then
+        begin
+          AddExtractionWell(AScreenObject);
+        end;
+      end;
+      FInjectionWellList.Clear;
+      for Index := 0 to FInjectionWellNames.Count - 1 do
+      begin
+        AScreenObject := LocalModel.GetScreenObjectByName(FInjectionWellNames[Index]);
+        if AScreenObject <> nil then
+        begin
+          AddInjectionWell(AScreenObject);
+        end;
+      end;
+    finally
+      FExtractionWellNames.OnChange := WellsAssigned;
+      FInjectionWellNames.OnChange := WellsAssigned;
     end;
-    FInjectionWellList.Clear;
-    for Index := 0 to FInjectionWellNames.Count - 1 do
-    begin
-      AScreenObject := LocalModel.GetScreenObjectByName(FInjectionWellNames[Index]);
-      AddInjectionWell(AScreenObject);
-    end;
-  finally
-    FExtractionWellNames.OnChange := WellsAssigned;
-    FInjectionWellNames.OnChange := WellsAssigned;
   end;
 end;
 
@@ -443,6 +505,11 @@ begin
   FInjectionWellList.Remove(AScreenObject);
 end;
 
+procedure TCtsObjectItem.SetEndTime(const Value: Double);
+begin
+  FStoredEndTime.Value := Value;
+end;
+
 procedure TCtsObjectItem.SetExtractionWellObjects(const Value: TStrings);
 begin
   FExtractionWellNames.Assign(Value);
@@ -451,6 +518,21 @@ end;
 procedure TCtsObjectItem.SetInjectionWellObjects(const Value: TStrings);
 begin
   FInjectionWellNames.Assign(Value);
+end;
+
+procedure TCtsObjectItem.SetStartTime(const Value: Double);
+begin
+  FStoredStartTime.Value := Value;
+end;
+
+procedure TCtsObjectItem.SetStoredEndTime(const Value: TRealStorage);
+begin
+  FStoredEndTime.Assign(Value);
+end;
+
+procedure TCtsObjectItem.SetStoredStartTime(const Value: TRealStorage);
+begin
+  FStoredStartTime.Assign(Value);
 end;
 
 procedure TCtsObjectItem.WellsAssigned(Sender: TObject);
@@ -723,15 +805,20 @@ begin
   result := inherited Add as TCtsObjectItem;
 end;
 
+constructor TCtsObjectCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(TCtsObjectItem, Model);
+end;
+
 function TCtsObjectCollection.GetItem(Index: Integer): TCtsObjectItem;
 begin
   result := inherited GetItem(Index) as TCtsObjectItem;
 end;
 
-class function TCtsObjectCollection.ItemClass: TBoundaryItemClass;
-begin
-  result := TCtsObjectItem;
-end;
+//class function TCtsObjectCollection.ItemClass: TBoundaryItemClass;
+//begin
+//  result := TCtsObjectItem;
+//end;
 
 procedure TCtsObjectCollection.Loaded(Model: TBaseModel);
 var
@@ -802,8 +889,11 @@ begin
     ExternalFlows := CtsSystem.ExternalFlows;
     Injections := CtsSystem.Injections;
     Name := CtsSystem.Name;
+  end
+  else
+  begin
+    inherited;
   end;
-  inherited;
 end;
 
 function TCtsSystem.BoundaryObserverPrefix: string;
@@ -813,8 +903,9 @@ end;
 
 constructor TCtsSystem.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
+  inherited Create(Model, ScreenObject);
   FDefaultInjectionOptions := TCtsInjectionTimeCollection.Create(Self, Model, ScreenObject);
-  FCtsObjects := TCtsObjectCollection.Create(Self, Model, ScreenObject);
+  FCtsObjects := TCtsObjectCollection.Create(Model);
   FExternalFlows := TCtsExternalFlowsCollection.Create(Self, Model, ScreenObject);
   FInjections := TIndividualWellInjectionCollection.Create(Model);
 end;
@@ -830,7 +921,8 @@ end;
 
 function TCtsSystem.IsSame(AnotherCtsSystem: TCtsSystem): boolean;
 begin
-  Result := (TreatmentDistribution = AnotherCtsSystem.TreatmentDistribution)
+  Result := (Name = AnotherCtsSystem.Name)
+    and (TreatmentDistribution = AnotherCtsSystem.TreatmentDistribution)
     and DefaultInjectionOptions.IsSame(AnotherCtsSystem.DefaultInjectionOptions)
     and CtsObjects.IsSame(AnotherCtsSystem.CtsObjects)
     and ExternalFlows.IsSame(AnotherCtsSystem.ExternalFlows);
@@ -875,7 +967,11 @@ end;
 procedure TCtsSystem.SetTreatmentDistribution(
   const Value: TTreatmentDistribution);
 begin
-  FTreatmentDistribution := Value;
+  if FTreatmentDistribution <> Value then
+  begin
+    FTreatmentDistribution := Value;
+    InvalidateModel;
+  end;
 end;
 
 function TCtsSystem.Used: boolean;
@@ -968,6 +1064,16 @@ begin
   result := inherited Items[index] as TCtsSystemItem
 end;
 
+procedure TCtsSystemCollection.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
+end;
+
 procedure TCtsSystemCollection.SetItem(Index: Integer;
   const Value: TCtsSystemItem);
 begin
@@ -1020,8 +1126,7 @@ function TIndividualWellInjectionItem.IsSame(
 var
   InjWellItem: TIndividualWellInjectionItem;
 begin
-  result := (AnotherItem is TIndividualWellInjectionItem)
-    and inherited IsSame(AnotherItem);
+  result := (AnotherItem is TIndividualWellInjectionItem);
   if result then
   begin
     InjWellItem := TIndividualWellInjectionItem(AnotherItem);

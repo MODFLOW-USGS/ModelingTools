@@ -503,6 +503,8 @@ type
     bhntMeasureRuler: TJvBalloonHint;
     SimplifySelectedObjects1: TMenuItem;
     acSimplifyScreenObjects: TAction;
+    acEditCTS: TAction;
+    EditContaminantTreatmentSystems1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -684,6 +686,7 @@ type
     procedure bhntMeasureRulerMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure acSimplifyScreenObjectsExecute(Sender: TObject);
+    procedure acEditCTSExecute(Sender: TObject);
   private
     FCreateArchive: Boolean;
     CreateArchiveSet: boolean;
@@ -1968,6 +1971,7 @@ type
     function GetFootprintInputFileName: string;
     property DisvUsed:  Boolean read GetDisvUsed;
     procedure SetMt3dCaption;
+    procedure EnableCTS;
     { Public declarations }
   end;
 
@@ -2050,7 +2054,8 @@ uses
   frmGeoRefUnit, GeoRefWriterUnit, SutraBoundaryUnit, SutraGeneralFlowNodesUnit,
   SutraGeneralFlowWriterUnit, SutraGeneralTransportWriterUnit, frmFileTypesUnit,
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
-  frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit;
+  frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
+  frmContaminantTreatmentSystemsUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -4398,6 +4403,7 @@ begin
   end;
 
   EnableModelMate;
+  EnableCTS;
 
 end;
 
@@ -5721,6 +5727,17 @@ begin
       CanEdit := True;
     end;
   end;
+end;
+
+procedure TfrmGoPhast.EnableCTS;
+begin
+{$IFDEF Mt3dUSGS}
+  acEditCTS.Visible := (ModelSelection in ModflowSelection);
+  acEditCTS.Enabled := (ModelSelection = msModflowNWT)
+    and PhastModel.ModflowPackages.Mt3dCts.IsSelected;
+{$ELSE}
+  acEditCTS.Visible := False;
+{$ENDIF}
 end;
 
 procedure TfrmGoPhast.EnableDeleteImage;
@@ -8996,6 +9013,12 @@ begin
   end;
 end;
 
+procedure TfrmGoPhast.acEditCTSExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmContaminantTreatmentSystems);
+end;
+
 procedure TfrmGoPhast.acEditDataSetsExecute(Sender: TObject);
 begin
   if frmGlobalVariables <> nil then
@@ -10892,6 +10915,8 @@ begin
           PhastModel.SutraMesh.CheckUpdateElevations;
           PhastModel.SutraMesh.Loading := False;
           PhastModel.FishnetMeshGenerator.Loaded;
+          PhastModel.CtsSystems.Loaded;
+
 
           // These steps ensure that the vectors will update properly
           // if the data they display changes.
@@ -11120,6 +11145,7 @@ begin
     EnableDeleteImage;
     EnableFarmMenuItems;
     EnableSwrActions;
+    EnableCTS;
 
     WriteIniFile;
     acRestoreDefaultViewExecute(nil);
