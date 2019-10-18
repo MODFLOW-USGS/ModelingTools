@@ -378,7 +378,7 @@ implementation
 uses ScreenObjectUnit, ModflowTimeUnit, TempFiles,
   frmGoPhastUnit, GIS_Functions, Mt3dmsChemSpeciesUnit,
   ModflowPackageSelectionUnit, ModflowPackagesUnit, PhastModelUnit,
-  AbstractGridUnit;
+  AbstractGridUnit, Mt3dCtsSystemUnit;
 
 resourcestring
   StrConcentration = ' concentration or mass-loading';
@@ -1833,6 +1833,7 @@ var
   Mt3dmsConc: TCustomMt3dmsConcCollection;
   LocalScreenObject: TScreenObject;
   Mt3dmsArrayConc: TCustomMt3dmsArrayConcCollection;
+//  CtsCollection: TCtsExternalFlowsCollection;
 begin
   inherited;
   FObserver:= TObserver.Create(nil);
@@ -1844,11 +1845,27 @@ begin
     FObserver.OnUpToDateSet := Mt3dmsConc.InvalidateMt3dmsConcData;
     LocalScreenObject := Mt3dmsConc.ScreenObject as TScreenObject;
   end
-  else
+  else if SCollection.FMt3dmsConcCollection is TCtsExternalFlowsCollection then
   begin
-    Mt3dmsArrayConc := SCollection.FMt3dmsConcCollection as TCustomMt3dmsArrayConcCollection;
+//    CtsCollection := TCtsExternalFlowsCollection(SCollection.FMt3dmsConcCollection);
+    FObserver.OnUpToDateSet := nil;
+    LocalScreenObject := nil;
+  end
+  else if SCollection.FMt3dmsConcCollection is TCustomMt3dmsArrayConcCollection then
+  begin
+    Mt3dmsArrayConc := TCustomMt3dmsArrayConcCollection(SCollection.FMt3dmsConcCollection);
     FObserver.OnUpToDateSet := Mt3dmsArrayConc.InvalidateMt3dmsConcData;
     LocalScreenObject := Mt3dmsArrayConc.ScreenObject as TScreenObject;
+  end
+  else if SCollection.FMt3dmsConcCollection is TCustomNonSpatialBoundColl then
+  begin
+//    CtsCollection := TCtsExternalFlowsCollection(SCollection.FMt3dmsConcCollection);
+    FObserver.OnUpToDateSet := nil;
+    LocalScreenObject := nil;
+  end
+  else
+  begin
+    Assert(False);
   end;
   //
 
@@ -1874,8 +1891,15 @@ var
 begin
   Value := '0';
   SCollection := StringCollection;
-  ConcColl := SCollection.FMt3dmsConcCollection as TCustomMF_BoundColl;
-  LocalScreenObject := ConcColl.ScreenObject as TScreenObject;
+  if SCollection.FMt3dmsConcCollection is TCustomMF_BoundColl then
+  begin
+    ConcColl := TCustomMF_BoundColl(SCollection.FMt3dmsConcCollection);
+    LocalScreenObject := ConcColl.ScreenObject as TScreenObject;
+  end
+  else
+  begin
+    LocalScreenObject := nil;
+  end;
 
   if (LocalScreenObject <> nil) and LocalScreenObject.CanInvalidateModel then
   begin

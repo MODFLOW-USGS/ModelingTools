@@ -2506,6 +2506,7 @@ resourcestring
   'at define lakes';
   StrYouCanOnlyDefineSft = 'You can only define Stream transport using objec' +
   'ts that define SFR streams';
+  StrReservoirPackage = 'Reservoir package';
 //  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
@@ -20512,7 +20513,7 @@ begin
           begin
             Beep;
             MessageDlg(Format(StrErrorIn0sRow,
-              ['Reservoir package',
+              [StrReservoirPackage,
               ARow + 1, ACol+1, E.Message]), mtError,[mbOK], 0);
             Exit;
           end;

@@ -24,6 +24,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Width = 121
     Height = 354
     Align = alLeft
+    HideSelection = False
     Indent = 19
     TabOrder = 0
     OnChange = tvTreatmentSystemsChange
@@ -99,7 +100,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Align = alClient
     Caption = 'pnlMain'
     TabOrder = 2
-    object pgcMain: TPageControl
+    object pcMain: TPageControl
       Left = 1
       Top = 42
       Width = 595
@@ -108,12 +109,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabWells
+      ActivePage = tabTreatments
       Align = alClient
       Enabled = False
       TabOrder = 0
-      ExplicitLeft = 3
-      ExplicitTop = 46
       object tabWells: TTabSheet
         Caption = 'Wells'
         inline frameWells: TframeGrid
@@ -159,6 +158,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Height = 237
             ColCount = 4
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
+            OnSetEditText = frameWellsGridSetEditText
             OnButtonClick = frameWellsGridButtonClick
             Columns = <
               item
@@ -248,12 +248,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 MaxLength = 0
                 ParentButtonFont = False
                 WordWrapCaptions = False
-                WordWrapCells = False
+                WordWrapCells = True
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitLeft = 3
             ExplicitWidth = 587
             ExplicitHeight = 237
           end
@@ -303,10 +302,12 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           inherited Grid: TRbwDataGrid4
             Width = 587
             Height = 237
-            ColCount = 3
+            ColCount = 5
+            OnSetEditText = frameExternalFlowsGridSetEditText
+            OnButtonClick = frameExternalFlowsGridButtonClick
             Columns = <
               item
-                AutoAdjustRowHeights = False
+                AutoAdjustRowHeights = True
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -329,7 +330,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 AutoAdjustColWidths = True
               end
               item
-                AutoAdjustRowHeights = False
+                AutoAdjustRowHeights = True
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -345,14 +346,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 LimitToList = False
                 MaxLength = 0
                 ParentButtonFont = False
-                WordWrapCaptions = False
+                WordWrapCaptions = True
                 WordWrapCells = False
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
-                AutoAdjustColWidths = False
+                AutoAdjustColWidths = True
               end
               item
-                AutoAdjustRowHeights = False
+                AutoAdjustRowHeights = True
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -368,11 +369,57 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 LimitToList = False
                 MaxLength = 0
                 ParentButtonFont = False
-                WordWrapCaptions = False
+                WordWrapCaptions = True
                 WordWrapCells = False
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
-                AutoAdjustColWidths = False
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = 'F()'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = True
+                ButtonWidth = 35
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = 'F()'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = True
+                ButtonWidth = 35
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
               end>
             ExplicitWidth = 587
             ExplicitHeight = 237
@@ -412,7 +459,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               'Each wells treated individually')
           end
         end
-        object pgcTreatments: TPageControl
+        object pcTreatments: TPageControl
           Left = 0
           Top = 41
           Width = 587
@@ -420,6 +467,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           ActivePage = tabIndividualWellOptions
           Align = alClient
           TabOrder = 1
+          OnChange = pcTreatmentsChange
           object tabDefaultOptions: TTabSheet
             Caption = 'Default Options'
             inline frameDefaultOptions: TframeGrid
@@ -464,9 +512,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 Width = 579
                 Height = 163
                 ColCount = 4
+                OnSetEditText = frameDefaultOptionsGridSetEditText
+                OnButtonClick = frameExternalFlowsGridButtonClick
                 Columns = <
                   item
-                    AutoAdjustRowHeights = False
+                    AutoAdjustRowHeights = True
                     ButtonCaption = '...'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -489,7 +539,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                     AutoAdjustColWidths = True
                   end
                   item
-                    AutoAdjustRowHeights = False
+                    AutoAdjustRowHeights = True
                     ButtonCaption = '...'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -505,14 +555,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                     LimitToList = False
                     MaxLength = 0
                     ParentButtonFont = False
-                    WordWrapCaptions = False
+                    WordWrapCaptions = True
                     WordWrapCells = False
                     CaseSensitivePicklist = False
                     CheckStyle = csCheck
-                    AutoAdjustColWidths = False
+                    AutoAdjustColWidths = True
                   end
                   item
-                    AutoAdjustRowHeights = False
+                    AutoAdjustRowHeights = True
                     ButtonCaption = '...'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -533,14 +583,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                       'concentration change'
                       'mass change'
                       'specified concentration')
-                    WordWrapCaptions = False
+                    WordWrapCaptions = True
                     WordWrapCells = False
                     CaseSensitivePicklist = False
                     CheckStyle = csCheck
-                    AutoAdjustColWidths = False
+                    AutoAdjustColWidths = True
                   end
                   item
-                    AutoAdjustRowHeights = False
+                    AutoAdjustRowHeights = True
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -556,14 +606,19 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                     LimitToList = False
                     MaxLength = 0
                     ParentButtonFont = False
-                    WordWrapCaptions = False
+                    WordWrapCaptions = True
                     WordWrapCells = False
                     CaseSensitivePicklist = False
                     CheckStyle = csCheck
-                    AutoAdjustColWidths = False
+                    AutoAdjustColWidths = True
                   end>
                 ExplicitWidth = 579
                 ExplicitHeight = 163
+                ColWidths = (
+                  64
+                  64
+                  183
+                  64)
               end
             end
           end
@@ -588,17 +643,19 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               Width = 121
               Height = 204
               Align = alLeft
+              HideSelection = False
               Indent = 19
               TabOrder = 0
               OnChange = tvIndividualObjectOptionsChange
             end
-            object pnl1: TPanel
+            object pnlInidividualWellOptions: TPanel
               Left = 131
               Top = 0
               Width = 448
               Height = 204
               Align = alClient
-              Caption = 'pnl1'
+              Caption = 'pnlInidividualWellOptions'
+              Enabled = False
               TabOrder = 1
               object pnl2: TPanel
                 Left = 1
@@ -614,6 +671,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                   Height = 17
                   Caption = 'Use default options'
                   TabOrder = 0
+                  OnClick = cbUseDefaultOptionsClick
                 end
               end
               inline frameIndividualWellOptions: TframeGrid
@@ -660,9 +718,11 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                   Width = 446
                   Height = 120
                   ColCount = 4
+                  OnSetEditText = frameIndividualWellOptionsGridSetEditText
+                  OnButtonClick = frameExternalFlowsGridButtonClick
                   Columns = <
                     item
-                      AutoAdjustRowHeights = False
+                      AutoAdjustRowHeights = True
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -685,7 +745,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                       AutoAdjustColWidths = True
                     end
                     item
-                      AutoAdjustRowHeights = False
+                      AutoAdjustRowHeights = True
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -701,14 +761,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                       LimitToList = False
                       MaxLength = 0
                       ParentButtonFont = False
-                      WordWrapCaptions = False
+                      WordWrapCaptions = True
                       WordWrapCells = False
                       CaseSensitivePicklist = False
                       CheckStyle = csCheck
-                      AutoAdjustColWidths = False
+                      AutoAdjustColWidths = True
                     end
                     item
-                      AutoAdjustRowHeights = False
+                      AutoAdjustRowHeights = True
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -729,14 +789,14 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                         'concentration change'
                         'mass change'
                         'specified concentration')
-                      WordWrapCaptions = False
+                      WordWrapCaptions = True
                       WordWrapCells = False
                       CaseSensitivePicklist = False
                       CheckStyle = csCheck
-                      AutoAdjustColWidths = False
+                      AutoAdjustColWidths = True
                     end
                     item
-                      AutoAdjustRowHeights = False
+                      AutoAdjustRowHeights = True
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -752,14 +812,19 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                       LimitToList = False
                       MaxLength = 0
                       ParentButtonFont = False
-                      WordWrapCaptions = False
+                      WordWrapCaptions = True
                       WordWrapCells = False
                       CaseSensitivePicklist = False
                       CheckStyle = csCheck
-                      AutoAdjustColWidths = False
+                      AutoAdjustColWidths = True
                     end>
                   ExplicitWidth = 446
                   ExplicitHeight = 120
+                  ColWidths = (
+                    64
+                    64
+                    183
+                    64)
                 end
               end
             end
@@ -795,10 +860,17 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
         Control = edSystemName
       end
       item
-        Control = pgcMain
+        Control = pcMain
+      end
+      item
+        Control = btnDeleteSystem
       end>
     Enabled = False
     Left = 588
     Top = 25
+  end
+  object rparserThreeDFormulaElements: TRbwParser
+    Left = 576
+    Top = 280
   end
 end

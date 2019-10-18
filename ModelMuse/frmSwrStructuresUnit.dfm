@@ -6,7 +6,7 @@ inherited frmSwrStructures: TfrmSwrStructures
   ClientWidth = 782
   OnResize = FormResize
   ExplicitWidth = 798
-  ExplicitHeight = 593
+  ExplicitHeight = 594
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -1062,7 +1062,7 @@ inherited frmSwrStructures: TfrmSwrStructures
         Height = 272
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 774
+        ExplicitWidth = 296
         ExplicitHeight = 272
         inherited lblType: TLabel
           Width = 48
@@ -1156,10 +1156,6 @@ inherited frmSwrStructures: TfrmSwrStructures
     object tabTiming: TTabSheet
       Caption = 'Timing'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameTiming: TframeFormulaGrid
         Left = 0
         Top = 0

@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
-  System.Generics.Collections, Mt3dmsChemUnit, FormulaManagerUnit;
+  System.Generics.Collections, Mt3dmsChemUnit, FormulaManagerUnit,
+  ScreenObjectUnit;
 
 type
   // ITRTINJ
@@ -12,7 +13,7 @@ type
   // IOPTINJ
   TTreatmentOption = (toPercentage, toConcentrationChange, toMass, toConcentration);
 
-  TListOfObjects = TList<TObject>;
+  TListOfObjects = TList<TScreenObject>;
 
   // @name allows the users to change the injection or extraction wells over
   // time but typically, the same wells will be used in all included times.
@@ -36,17 +37,23 @@ type
     function GetStartTime: Double;
     procedure SetEndTime(const Value: Double);
     procedure SetStartTime(const Value: Double);
+    function GetExtractionWell(Index: Integer): TScreenObject;
+    function GetInjectionWell(Index: Integer): TScreenObject;
   public
     procedure Assign(Source: TPersistent); override;
-    procedure AddExtractionWell(AScreenObject: TObject);
-    procedure RemoveExtractionWell(AScreenObject: TObject);
-    procedure AddInjectionWell(AScreenObject: TObject);
-    procedure RemoveInjectionWell(AScreenObject: TObject);
+    procedure AddExtractionWell(AScreenObject: TScreenObject);
+    procedure RemoveExtractionWell(AScreenObject: TScreenObject);
+    procedure AddInjectionWell(AScreenObject: TScreenObject);
+    procedure RemoveInjectionWell(AScreenObject: TScreenObject);
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     property StartTime: Double read GetStartTime write SetStartTime;
     property EndTime: Double read GetEndTime write SetEndTime;
+    function InjectionWellCount: integer;
+    function ExtractionWellCount: integer;
+    property InjectionWells[Index: Integer]: TScreenObject read GetInjectionWell;
+    property ExtractionWells[Index: Integer]: TScreenObject read GetExtractionWell;
   published
     // data set 4
     property ExtractionWellObjects: TStrings read GetExtractionWellObjects
@@ -68,6 +75,7 @@ type
     constructor Create(Model: TBaseModel);
     function Add: TCtsObjectItem;
     property Items[Index: Integer]: TCtsObjectItem read GetItem write SetItem; default;
+    function GetItemByStartTime(StartTime: Double): TCtsObjectItem;
   end;
 
   // One @name is used for each injection well object for each chemical
@@ -93,8 +101,6 @@ type
   private
     function GetItem(Index: Integer): TInjectionOptionItem;
     procedure SetItem(Index: Integer; const Value: TInjectionOptionItem);
-  protected
-
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject;
       Mt3dmsConcCollection: TCollection);
@@ -109,6 +115,11 @@ type
     procedure SetInjectionOptions(const Value: TInjectionOptionCollection);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure CreateFormulaObjects; override;
+    function BoundaryFormulaCount: Integer; override;
+    procedure AssignObserverEvents(Collection: TCollection); override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure RemoveFormulaObjects; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -295,16 +306,16 @@ type
 implementation
 
 uses
-  ScreenObjectUnit, PhastModelUnit, frmGoPhastUnit;
+  PhastModelUnit, frmGoPhastUnit;
 
 { TCtsObjectItem }
 
-procedure TCtsObjectItem.AddExtractionWell(AScreenObject: TObject);
+procedure TCtsObjectItem.AddExtractionWell(AScreenObject: TScreenObject);
 begin
   FExtractionWellList.Add(AScreenObject)
 end;
 
-procedure TCtsObjectItem.AddInjectionWell(AScreenObject: TObject);
+procedure TCtsObjectItem.AddInjectionWell(AScreenObject: TScreenObject);
 begin
   FInjectionWellList.Add(AScreenObject)
 end;
@@ -351,9 +362,19 @@ begin
   inherited;
 end;
 
+function TCtsObjectItem.ExtractionWellCount: integer;
+begin
+  result := FExtractionWellList.Count;
+end;
+
 function TCtsObjectItem.GetEndTime: Double;
 begin
   result := FStoredEndTime.Value;
+end;
+
+function TCtsObjectItem.GetExtractionWell(Index: Integer): TScreenObject;
+begin
+  result := FExtractionWellList[Index];
 end;
 
 function TCtsObjectItem.GetExtractionWellObjects: TStrings;
@@ -368,7 +389,7 @@ begin
       FExtractionWellNames.Clear;
       for Index := 0 to FExtractionWellList.Count - 1 do
       begin
-        AScreenObject := FExtractionWellList[Index] as TScreenObject;
+        AScreenObject := FExtractionWellList[Index];
         if not AScreenObject.Deleted then
         begin
           FExtractionWellNames.AddObject(AScreenObject.Name, AScreenObject)
@@ -379,6 +400,11 @@ begin
     end;
   end;
   result := FExtractionWellNames;
+end;
+
+function TCtsObjectItem.GetInjectionWell(Index: Integer): TScreenObject;
+begin
+  result := FInjectionWellList[index];
 end;
 
 function TCtsObjectItem.GetInjectionWellObjects: TStrings;
@@ -393,7 +419,7 @@ begin
       FInjectionWellNames.Clear;
       for Index := 0 to FInjectionWellList.Count - 1 do
       begin
-        AScreenObject := FInjectionWellList[Index] as TScreenObject;
+        AScreenObject := FInjectionWellList[Index];
         if not AScreenObject.Deleted then
         begin
           FInjectionWellNames.AddObject(AScreenObject.Name, AScreenObject)
@@ -409,6 +435,11 @@ end;
 function TCtsObjectItem.GetStartTime: Double;
 begin
   result := FStoredStartTime.Value;
+end;
+
+function TCtsObjectItem.InjectionWellCount: integer;
+begin
+  result := FInjectionWellList.Count;
 end;
 
 function TCtsObjectItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -495,12 +526,12 @@ begin
   end;
 end;
 
-procedure TCtsObjectItem.RemoveExtractionWell(AScreenObject: TObject);
+procedure TCtsObjectItem.RemoveExtractionWell(AScreenObject: TScreenObject);
 begin
   FExtractionWellList.Remove(AScreenObject);
 end;
 
-procedure TCtsObjectItem.RemoveInjectionWell(AScreenObject: TObject);
+procedure TCtsObjectItem.RemoveInjectionWell(AScreenObject: TScreenObject);
 begin
   FInjectionWellList.Remove(AScreenObject);
 end;
@@ -537,7 +568,7 @@ end;
 
 procedure TCtsObjectItem.WellsAssigned(Sender: TObject);
 var
-  AScreenObject: TObject;
+  AScreenObject: TScreenObject;
   Index: Integer;
 begin
   if Sender = FExtractionWellNames then
@@ -545,7 +576,7 @@ begin
     FExtractionWellList.Clear;
     for Index := 0 to FExtractionWellNames.Count - 1 do
     begin
-      AScreenObject := FExtractionWellNames.Objects[Index];
+      AScreenObject := FExtractionWellNames.Objects[Index] as TScreenObject;
       if AScreenObject <> nil then
       begin
         AddExtractionWell(AScreenObject);
@@ -557,7 +588,7 @@ begin
     FInjectionWellList.Clear;
     for Index := 0 to FInjectionWellNames.Count - 1 do
     begin
-      AScreenObject := FInjectionWellNames.Objects[Index];
+      AScreenObject := FInjectionWellNames.Objects[Index] as TScreenObject;
       if AScreenObject <> nil then
       begin
         AddInjectionWell(AScreenObject);
@@ -617,16 +648,40 @@ begin
   inherited;
 end;
 
+procedure TCtsInjectionTimeItem.AssignObserverEvents(Collection: TCollection);
+begin
+  inherited;
+
+end;
+
+function TCtsInjectionTimeItem.BoundaryFormulaCount: Integer;
+begin
+  result := 0;
+end;
+
 constructor TCtsInjectionTimeItem.Create(Collection: TCollection);
 begin
   inherited;
   FInjectionOptions := TInjectionOptionCollection.Create(Model, ScreenObject, Collection);
 end;
 
+procedure TCtsInjectionTimeItem.CreateFormulaObjects;
+begin
+  inherited;
+
+end;
+
 destructor TCtsInjectionTimeItem.Destroy;
 begin
   FInjectionOptions.Free;
   inherited;
+end;
+
+procedure TCtsInjectionTimeItem.GetPropertyObserver(Sender: TObject;
+  List: TList);
+begin
+  inherited;
+
 end;
 
 function TCtsInjectionTimeItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -639,6 +694,12 @@ begin
     OtherItem := TCtsInjectionTimeItem(AnotherItem);
     result := InjectionOptions.IsSame(OtherItem.InjectionOptions);
   end;
+end;
+
+procedure TCtsInjectionTimeItem.RemoveFormulaObjects;
+begin
+  inherited;
+
 end;
 
 procedure TCtsInjectionTimeItem.SetInjectionOptions(
@@ -815,6 +876,24 @@ begin
   result := inherited GetItem(Index) as TCtsObjectItem;
 end;
 
+function TCtsObjectCollection.GetItemByStartTime(
+  StartTime: Double): TCtsObjectItem;
+var
+  index: Integer;
+  TimeItem: TCtsObjectItem;
+begin
+  result := nil;
+  for index := 0 to Count - 1 do
+  begin
+    TimeItem := Items[index];
+    if (TimeItem.StartTime <= StartTime) and (StartTime < TimeItem.EndTime) then
+    begin
+      result := TimeItem;
+      break;
+    end;
+  end;
+end;
+
 //class function TCtsObjectCollection.ItemClass: TBoundaryItemClass;
 //begin
 //  result := TCtsObjectItem;
@@ -925,7 +1004,8 @@ begin
     and (TreatmentDistribution = AnotherCtsSystem.TreatmentDistribution)
     and DefaultInjectionOptions.IsSame(AnotherCtsSystem.DefaultInjectionOptions)
     and CtsObjects.IsSame(AnotherCtsSystem.CtsObjects)
-    and ExternalFlows.IsSame(AnotherCtsSystem.ExternalFlows);
+    and ExternalFlows.IsSame(AnotherCtsSystem.ExternalFlows)
+    and Injections.IsSame(AnotherCtsSystem.Injections);
 end;
 
 procedure TCtsSystem.Loaded;

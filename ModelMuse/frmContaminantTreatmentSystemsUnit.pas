@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.ExtCtrls,
   JvExExtCtrls, JvNetscapeSplitter, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Buttons,
   JvExStdCtrls, JvListBox, frameGridUnit, Mt3dCtsSystemUnit, UndoItems,
-  RbwController;
+  RbwController, RbwDataGrid4, GoPhastTypes, RbwParser, System.UITypes;
 
 type
   TCstWellColumns = (cwcStartTime, cwcEndTime, cwcExtractionWells, cwcInjectionWells);
@@ -37,7 +37,7 @@ type
     btnDeleteSystem: TButton;
     btnAddSystem: TButton;
     pnlMain: TPanel;
-    pgcMain: TPageControl;
+    pcMain: TPageControl;
     tabWells: TTabSheet;
     tabExternalFlows: TTabSheet;
     frameExternalFlows: TframeGrid;
@@ -45,13 +45,13 @@ type
     pnlTreatmentOptions: TPanel;
     lblTreatmentOption: TLabel;
     comboTreatmentOption: TComboBox;
-    pgcTreatments: TPageControl;
+    pcTreatments: TPageControl;
     tabDefaultOptions: TTabSheet;
     frameDefaultOptions: TframeGrid;
     tabIndividualWellOptions: TTabSheet;
     splttr2: TJvNetscapeSplitter;
     tvIndividualObjectOptions: TTreeView;
-    pnl1: TPanel;
+    pnlInidividualWellOptions: TPanel;
     pnl2: TPanel;
     cbUseDefaultOptions: TCheckBox;
     frameIndividualWellOptions: TframeGrid;
@@ -59,6 +59,7 @@ type
     edSystemName: TLabeledEdit;
     frameWells: TframeGrid;
     rcSystem: TRbwController;
+    rparserThreeDFormulaElements: TRbwParser;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure tvTreatmentSystemsChange(Sender: TObject; Node: TTreeNode);
@@ -69,15 +70,33 @@ type
     procedure btnOkBtnClick(Sender: TObject);
     procedure frameWellsGridButtonClick(Sender: TObject; ACol, ARow: Integer);
     procedure edSystemNameChange(Sender: TObject);
+    procedure UpdateNextTimeCell(AGrid: TRbwDataGrid4; ACol, ARow: Integer);
+    procedure frameWellsGridSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
+    procedure frameExternalFlowsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameDefaultOptionsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameIndividualWellOptionsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameExternalFlowsGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure pcTreatmentsChange(Sender: TObject);
+    procedure cbUseDefaultOptionsClick(Sender: TObject);
   private
     FCtsSystems: TCtsSystemCollection;
     FWellObjects: TStringList;
     FSelectedSystem: TCtsSystem;
     NCOMP: Integer;
     FWellItem: TIndividualWellInjectionItem;
+    FGettingData: Boolean;
     procedure GetData;
     procedure SetData;
     procedure InitializeControls;
+    procedure UpdateInjectionWells;
+    procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
+      const ACol, ARow: integer; Formula: string;
+      const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
     { Private declarations }
   public
     { Public declarations }
@@ -90,7 +109,8 @@ implementation
 
 uses
   frmGoPhastUnit, ModflowPackageSelectionUnit, PhastModelUnit, ScreenObjectUnit,
-  ModflowTimeUnit, frmEditSelectedWellsUnit, GoPhastTypes, RbwDataGrid4;
+  ModflowTimeUnit, frmEditSelectedWellsUnit,
+  Mt3dmsChemUnit, frmFormulaUnit, frmConvertChoiceUnit, GIS_Functions;
 
 resourcestring
   StrPercentage = 'Percentage';
@@ -104,6 +124,9 @@ resourcestring
   StrExternalInflowConc = 'External Inflow Concentration %s (CINCTS)';
   StrTreatmentOptionS = 'Treatment Option %s (IOPTINJ)';
   StrTreatmentValueS = 'Treatment Value %s (CMCHGINJ)';
+  StrChangeMT3DUSGSCon = 'change MT3D-USGS Contaminant Treatment System';
+  StrErrorInFormulaS = 'Error in formula: %s';
+  StrErrorIn0sRow = 'Error in %0:s Row: %1:d Column: %2:d. %3:s';
 
 {$R *.dfm}
 
@@ -128,16 +151,27 @@ var
 begin
   inherited;
   ASystemItem := tvTreatmentSystems.Selected.Data;
+
+  tvIndividualObjectOptionsChange(tvIndividualObjectOptions, nil);
+  tvTreatmentSystemsChange(tvTreatmentSystems, nil);
+
   ASystemItem.Free;
   tvTreatmentSystems.Selected.Free;
-  tvTreatmentSystemsChange(nil, nil);
 end;
 
 procedure TfrmContaminantTreatmentSystems.btnOkBtnClick(Sender: TObject);
 begin
   inherited;
+  tvIndividualObjectOptionsChange(tvIndividualObjectOptions, nil);
   tvTreatmentSystemsChange(tvTreatmentSystems, nil);
   SetData;
+end;
+
+procedure TfrmContaminantTreatmentSystems.cbUseDefaultOptionsClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameIndividualWellOptions.Enabled := not cbUseDefaultOptions.Checked;
 end;
 
 procedure TfrmContaminantTreatmentSystems.comboTreatmentOptionChange(
@@ -146,6 +180,56 @@ begin
   inherited;
   tabIndividualWellOptions.TabVisible :=
     TTreatmentDistribution(comboTreatmentOption.ItemIndex) = tlIndividual;
+end;
+
+procedure TfrmContaminantTreatmentSystems.CreateBoundaryFormula(
+  const DataGrid: TRbwDataGrid4; const ACol, ARow: integer; Formula: string;
+  const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
+var
+  TempCompiler: TRbwParser;
+  CompiledFormula: TExpression;
+  ResultType: TRbwDataType;
+begin
+  if Formula = '' then
+  begin
+    Formula := '0';
+  end;
+  // CreateBoundaryFormula creates an Expression for a boundary condition
+  // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
+  // are used to chose the TRbwParser.
+  TempCompiler := rparserThreeDFormulaElements;
+  try
+    TempCompiler.Compile(Formula);
+
+  except on E: ERbwParserError do
+    begin
+      Beep;
+      raise ERbwParserError.Create(Format(StrErrorInFormulaS,
+        [E.Message]));
+      Exit;
+    end
+  end;
+  CompiledFormula := TempCompiler.CurrentExpression;
+
+  ResultType := rdtDouble;
+
+  if (ResultType = CompiledFormula.ResultType) or
+    ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
+      then
+  begin
+    DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+  end
+  else
+  begin
+    Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
+    TempCompiler.Compile(Formula);
+    CompiledFormula := TempCompiler.CurrentExpression;
+    DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+  end;
+  if Assigned(DataGrid.OnSetEditText) then
+  begin
+    DataGrid.OnSetEditText(DataGrid, ACol, ARow, DataGrid.Cells[ACol, ARow]);
+  end;
 end;
 
 procedure TfrmContaminantTreatmentSystems.edSystemNameChange(Sender: TObject);
@@ -172,19 +256,110 @@ begin
   FWellObjects.Free;
 end;
 
+procedure TfrmContaminantTreatmentSystems.frameDefaultOptionsGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(Sender as TRBWDataGrid4, ACol, ARow);
+end;
+
+procedure TfrmContaminantTreatmentSystems.frameExternalFlowsGridButtonClick(
+  Sender: TObject; ACol, ARow: Integer);
+var
+  DataGrid: TRbwDataGrid4;
+  Orientation: TDataSetOrientation;
+  EvaluatedAt: TEvaluatedAt;
+  NewValue: string;
+  ProblemGrid: string;
+begin
+  inherited;
+  DataGrid := Sender as TRbwDataGrid4;
+  Orientation := dso3D;
+  EvaluatedAt := eaBlocks;
+
+  NewValue := DataGrid.Cells[ACol, ARow];
+  if (NewValue = '') then
+  begin
+    NewValue := '0';
+  end;
+
+//  with TfrmFormula.Create(self) do
+  with frmFormula do
+  begin
+    try
+      Initialize;
+      // GIS functions are not included and
+      // Data sets are not included
+      // because the variables will be evaluated for screen objects and
+      // not at specific locations.
+
+      PopupParent := self;
+
+      // Show the functions and global variables.
+      UpdateTreeList;
+
+      // put the formula in the TfrmFormula.
+      Formula := NewValue;
+      // The user edits the formula.
+      ShowModal;
+      if ResultSet then
+      begin
+        try
+          CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
+            EvaluatedAt);
+        except on E: Exception do
+          begin
+            Beep;
+            if DataGrid = frameExternalFlows.Grid then
+            begin
+              ProblemGrid := tabExternalFlows.Caption;
+            end
+            else if DataGrid = frameDefaultOptions.Grid then
+            begin
+              ProblemGrid := 'Default treatment options';
+            end
+            else if DataGrid = frameIndividualWellOptions.Grid then
+            begin
+              ProblemGrid := 'Individual well treatment options';
+            end
+            else
+            begin
+              Assert(False);
+            end;
+            MessageDlg(Format(StrErrorIn0sRow,
+              [ProblemGrid,
+              ARow + 1, ACol+1, E.Message]), mtError,[mbOK], 0);
+            Exit;
+          end;
+        end;
+      end;
+    finally
+      Initialize;
+//      Free;
+    end;
+  end;
+
+end;
+
+procedure TfrmContaminantTreatmentSystems.frameExternalFlowsGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(Sender as TRBWDataGrid4, ACol, ARow);
+end;
+
+procedure TfrmContaminantTreatmentSystems.frameIndividualWellOptionsGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(Sender as TRBWDataGrid4, ACol, ARow);
+end;
+
 procedure TfrmContaminantTreatmentSystems.frameWellsGridButtonClick(
   Sender: TObject; ACol, ARow: Integer);
 var
   AvailableWells: TStringList;
   SelectedWells: TStringList;
-  InjectionWells: TStringList;
-  Splitter: TStringList;
-  RowIndex: Integer;
-  WellIndex: Integer;
-  SelectedWellName: string;
-  WellItem: TIndividualWellInjectionItem;
-  ANode: TTreeNode;
-  SelectedNode: TTreeNode;
 begin
   inherited;
   AvailableWells := TStringList.Create;
@@ -199,81 +374,26 @@ begin
       frmEditSelectedWells.SetData(SelectedWells);
       frameWells.Grid.Cells[ACol, ARow] := StringReplace(
         SelectedWells.DelimitedText, ',', ', ', [rfReplaceAll, rfIgnoreCase]);
-
       if ACol = Ord(cwcInjectionWells) then
       begin
-        InjectionWells := TStringList.Create;
-        Splitter := TStringList.Create;
-        try
-          InjectionWells.Sorted := True;
-          InjectionWells.Duplicates := dupIgnore;
-          for RowIndex := 1 to frameWells.Grid.RowCount - 1 do
-          begin
-            Splitter.DelimitedText :=
-              frameWells.Grid.Cells[Ord(cwcInjectionWells), RowIndex];
-            InjectionWells.AddStrings(Splitter);
-          end;
-
-          if tvIndividualObjectOptions.Selected <> nil then
-          begin
-            SelectedWellName := tvIndividualObjectOptions.Selected.Text;
-          end
-          else
-          begin
-            SelectedWellName := ''
-          end;
-          tvIndividualObjectOptions.Selected := nil;
-          tvIndividualObjectOptionsChange(tvIndividualObjectOptions, nil);
-
-          for WellIndex := 0 to InjectionWells.Count - 1 do
-          begin
-            if FSelectedSystem.Injections.GetItemByObjectName(
-              InjectionWells[WellIndex]) = nil then
-            begin
-              WellItem := FSelectedSystem.Injections.Add;
-              WellItem.InjectionWellObjectName := InjectionWells[WellIndex];
-              WellItem.UseDefaultInjectionOptions := True;
-            end;
-          end;
-
-          for WellIndex := FSelectedSystem.Injections.Count - 1 downto 0 do
-          begin
-            if InjectionWells.IndexOf(
-              FSelectedSystem.Injections[WellIndex].InjectionWellObjectName) < 0 then
-            begin
-              FSelectedSystem.Injections.Delete(WellIndex);
-            end;
-          end;
-
-          tvIndividualObjectOptions.Items.Clear;
-
-          SelectedNode := nil;
-          for WellIndex := 0 to FSelectedSystem.Injections.Count - 1 do
-          begin
-            WellItem := FSelectedSystem.Injections[WellIndex];
-            ANode := tvIndividualObjectOptions.Items.AddObject(nil,
-              WellItem.InjectionWellObjectName, WellItem);
-            if WellItem.InjectionWellObjectName = SelectedWellName then
-            begin
-              SelectedNode := ANode;
-            end;
-          end;
-
-          if SelectedNode <> nil then
-          begin
-            tvIndividualObjectOptions.Selected := SelectedNode;
-            tvIndividualObjectOptionsChange(tvIndividualObjectOptions, SelectedNode);
-          end;
-        finally
-          InjectionWells.Free;
-          Splitter.Free;
-        end;
+        UpdateInjectionWells;
       end;
     end;
   finally
     AvailableWells.Free;
     SelectedWells.Free;
     FreeAndNil(frmEditSelectedWells);
+  end;
+end;
+
+procedure TfrmContaminantTreatmentSystems.frameWellsGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(Sender as TRBWDataGrid4, ACol, ARow);
+  if (not FGettingData) and (ACol = Ord(cwcInjectionWells)) then
+  begin
+    UpdateInjectionWells;
   end;
 end;
 
@@ -299,6 +419,9 @@ var
       AColumn := Grid.Columns[ColIndex];
       AColumn.ComboUsed := True;
       AColumn.PickList := TreatmentOptions;
+      AColumn.AutoAdjustColWidths := True;
+      AColumn.AutoAdjustRowHeights := True;
+      AColumn.WordWrapCaptions := True;
       Inc(ColIndex);
 
       Grid.Cells[ColIndex, 0] := Format(StrTreatmentValueS, [LocalModel.Mt3dSpecesName[CompIndex]]);
@@ -306,11 +429,17 @@ var
       AColumn.ButtonUsed := True;
       AColumn.ButtonCaption := 'F()';
       AColumn.ButtonWidth := 35;
+      AColumn.AutoAdjustColWidths := True;
+      AColumn.AutoAdjustRowHeights := True;
+      AColumn.WordWrapCaptions := True;
       Inc(ColIndex);
     end;
   end;
 begin
   LocalModel := frmGoPhast.PhastModel;
+
+  pcMain.ActivePageIndex := 0;
+  pcTreatments.ActivePageIndex := 0;
 
   NCOMP := LocalModel.NumberOfMt3dChemComponents;
   frameExternalFlows.Grid.ColCount := NCOMP + 4;
@@ -359,6 +488,9 @@ begin
         AColumn.ButtonUsed := True;
         AColumn.ButtonCaption := 'F()';
         AColumn.ButtonWidth := 35;
+        AColumn.AutoAdjustColWidths := True;
+        AColumn.AutoAdjustRowHeights := True;
+        AColumn.WordWrapCaptions := True;
       end;
 
       Grid := frameDefaultOptions.Grid;
@@ -379,6 +511,86 @@ begin
 
 end;
 
+procedure TfrmContaminantTreatmentSystems.pcTreatmentsChange(Sender: TObject);
+begin
+  inherited;
+  if (pcTreatments.ActivePage = tabIndividualWellOptions)
+    and (tvIndividualObjectOptions.Selected = nil)
+    and (tvIndividualObjectOptions.Items.Count > 0) then
+  begin
+    tvIndividualObjectOptions.Selected := tvIndividualObjectOptions.Items.GetFirstNode;
+  end;
+end;
+
+procedure TfrmContaminantTreatmentSystems.UpdateInjectionWells;
+var
+  InjectionWells: TStringList;
+  Splitter: TStringList;
+  RowIndex: Integer;
+  SelectedWellName: string;
+  WellIndex: Integer;
+  WellItem: TIndividualWellInjectionItem;
+  SelectedNode: TTreeNode;
+  ANode: TTreeNode;
+begin
+  InjectionWells := TStringList.Create;
+  Splitter := TStringList.Create;
+  try
+    InjectionWells.Sorted := True;
+    InjectionWells.Duplicates := dupIgnore;
+    for RowIndex := 1 to frameWells.Grid.RowCount - 1 do
+    begin
+      Splitter.DelimitedText := frameWells.Grid.Cells[Ord(cwcInjectionWells), RowIndex];
+      InjectionWells.AddStrings(Splitter);
+    end;
+    if tvIndividualObjectOptions.Selected <> nil then
+    begin
+      SelectedWellName := tvIndividualObjectOptions.Selected.Text;
+    end
+    else
+    begin
+      SelectedWellName := '';
+    end;
+    tvIndividualObjectOptions.Selected := nil;
+    tvIndividualObjectOptionsChange(tvIndividualObjectOptions, nil);
+    for WellIndex := 0 to InjectionWells.Count - 1 do
+    begin
+      if FSelectedSystem.Injections.GetItemByObjectName(InjectionWells[WellIndex]) = nil then
+      begin
+        WellItem := FSelectedSystem.Injections.Add;
+        WellItem.InjectionWellObjectName := InjectionWells[WellIndex];
+        WellItem.UseDefaultInjectionOptions := True;
+      end;
+    end;
+    for WellIndex := FSelectedSystem.Injections.Count - 1 downto 0 do
+    begin
+      if InjectionWells.IndexOf(FSelectedSystem.Injections[WellIndex].InjectionWellObjectName) < 0 then
+      begin
+        FSelectedSystem.Injections.Delete(WellIndex);
+      end;
+    end;
+    tvIndividualObjectOptions.Items.Clear;
+    SelectedNode := nil;
+    for WellIndex := 0 to FSelectedSystem.Injections.Count - 1 do
+    begin
+      WellItem := FSelectedSystem.Injections[WellIndex];
+      ANode := tvIndividualObjectOptions.Items.AddObject(nil, WellItem.InjectionWellObjectName, WellItem);
+      if WellItem.InjectionWellObjectName = SelectedWellName then
+      begin
+        SelectedNode := ANode;
+      end;
+    end;
+    if SelectedNode <> nil then
+    begin
+      tvIndividualObjectOptions.Selected := SelectedNode;
+      tvIndividualObjectOptionsChange(tvIndividualObjectOptions, SelectedNode);
+    end;
+  finally
+    InjectionWells.Free;
+    Splitter.Free;
+  end;
+end;
+
 procedure TfrmContaminantTreatmentSystems.GetData;
 var
   WellPackageChoice: TCtsWellPackageChoice;
@@ -389,49 +601,66 @@ var
   ASystem: TCtsSystem;
 //  StressPeriods: TModflowStressPeriods;
   SystemItem: TCtsSystemItem;
+  CompilerList: TList;
 begin
-  LocalModel := frmGoPhast.PhastModel;
+  FGettingData := True;
+  try
 
-  InitializeControls;
+    AddGIS_Functions(rparserThreeDFormulaElements, frmGoPhast.ModelSelection,
+      eaBlocks);
+    CompilerList := TList.Create;
+    try
+      CompilerList.Add(rparserThreeDFormulaElements);
+      frmGoPhast.PhastModel.RefreshGlobalVariables(CompilerList);
+    finally
+      CompilerList.Free;
+    end;
 
-  WellPackageChoice := LocalModel.ModflowPackages.Mt3dCts.WellPackageChoice;
+    LocalModel := frmGoPhast.PhastModel;
 
-  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
-  begin
-    AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
-    if AScreenObject.Deleted then
+    InitializeControls;
+
+    WellPackageChoice := LocalModel.ModflowPackages.Mt3dCts.WellPackageChoice;
+
+    for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
     begin
-      Continue;
-    end;
-    case WellPackageChoice of
-      cwpcMnw2:
-        begin
-          if (AScreenObject.ModflowMnw2Boundary <> nil)
-            and AScreenObject.ModflowMnw2Boundary.Used then
+      AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      case WellPackageChoice of
+        cwpcMnw2:
           begin
-            FWellObjects.AddObject(AScreenObject.Name, AScreenObject);
+            if (AScreenObject.ModflowMnw2Boundary <> nil)
+              and AScreenObject.ModflowMnw2Boundary.Used then
+            begin
+              FWellObjects.AddObject(AScreenObject.Name, AScreenObject);
+            end;
           end;
-        end;
-      cwpcWel:
-        begin
-          if (AScreenObject.ModflowWellBoundary <> nil)
-            and AScreenObject.ModflowWellBoundary.Used then
+        cwpcWel:
           begin
-            FWellObjects.AddObject(AScreenObject.Name, AScreenObject);
+            if (AScreenObject.ModflowWellBoundary <> nil)
+              and AScreenObject.ModflowWellBoundary.Used then
+            begin
+              FWellObjects.AddObject(AScreenObject.Name, AScreenObject);
+            end;
           end;
-        end;
-      else
-        Assert(False);
+        else
+          Assert(False);
+      end;
     end;
-  end;
-  FWellObjects.Sorted := True;
+    FWellObjects.Sorted := True;
 
-  FCtsSystems.Assign(LocalModel.CtsSystems);
-  for SystemIndex := 0 to FCtsSystems.Count - 1 do
-  begin
-    SystemItem := FCtsSystems[SystemIndex];
-    ASystem := SystemItem.CtsSystem;
-    tvTreatmentSystems.Items.AddObject(nil, ASystem.Name, SystemItem);
+    FCtsSystems.Assign(LocalModel.CtsSystems);
+    for SystemIndex := 0 to FCtsSystems.Count - 1 do
+    begin
+      SystemItem := FCtsSystems[SystemIndex];
+      ASystem := SystemItem.CtsSystem;
+      tvTreatmentSystems.Items.AddObject(nil, ASystem.Name, SystemItem);
+    end;
+  finally
+    FGettingData := False;
   end;
 end;
 
@@ -448,6 +677,9 @@ var
   Treatment: TInjectionOptionItem;
   ColIndex: Integer;
   CompIndex: Integer;
+  Grid: TRbwDataGrid4;
+  TreatmentOptionIndex: Integer;
+  Value: string;
 begin
   inherited;
   if FWellItem <> nil then
@@ -459,9 +691,9 @@ begin
     begin
       InjItem := FWellItem.Injections[InjIndex];
       InjItem.StartTime :=
-        frameIndividualWellOptions.Grid.RealValue[Ord(iocStartTime), InjIndex+1];
+        frameIndividualWellOptions.Grid.RealValueDefault[Ord(iocStartTime), InjIndex+1, -1];
       InjItem.EndTime :=
-        frameIndividualWellOptions.Grid.RealValue[Ord(iocEndTime), InjIndex+1];
+        frameIndividualWellOptions.Grid.RealValueDefault[Ord(iocEndTime), InjIndex+1, 0];
       While InjItem.InjectionOptions.Count < NCOMP do
       begin
         Treatment := InjItem.InjectionOptions.Add;
@@ -472,12 +704,18 @@ begin
       for CompIndex := 0 to NCOMP - 1 do
       begin
         Treatment := InjItem.InjectionOptions[CompIndex];
-        Treatment.TreatmentOption :=
-          TTreatmentOption(frameIndividualWellOptions.Grid.ItemIndex
-          [ColIndex, InjIndex+1]);
+        TreatmentOptionIndex := frameIndividualWellOptions.Grid.ItemIndex
+          [ColIndex, InjIndex+1];
+        if TreatmentOptionIndex >= 0 then
+        begin
+          Treatment.TreatmentOption := TTreatmentOption(TreatmentOptionIndex);
+        end;
         Inc(ColIndex);
-        Treatment.Value :=
-          frameIndividualWellOptions.Grid.Cells[ColIndex, InjIndex+1];
+        Value := frameIndividualWellOptions.Grid.Cells[ColIndex, InjIndex+1];
+        if Value <> '' then
+        begin
+          Treatment.Value := Value;
+        end;
         Inc(ColIndex);
       end;
     end;
@@ -490,18 +728,19 @@ begin
   begin
     FWellItem := nil;
   end;
+  pnlInidividualWellOptions.Enabled := FWellItem <> nil;
   if FWellItem <> nil then
   begin
     cbUseDefaultOptions.Checked := FWellItem.UseDefaultInjectionOptions;
+    Grid := frameIndividualWellOptions.Grid;
+    ClearGrid(Grid);
     frameIndividualWellOptions.seNumber.AsInteger := FWellItem.Injections.Count;
 
     for InjIndex := 0 to FWellItem.Injections.Count - 1 do
     begin
       InjItem := FWellItem.Injections[InjIndex];
-      frameIndividualWellOptions.Grid.RealValue[Ord(iocStartTime), InjIndex+1] :=
-        InjItem.StartTime;
-      frameIndividualWellOptions.Grid.RealValue[Ord(iocEndTime), InjIndex+1] :=
-        InjItem.EndTime;
+      Grid.RealValue[Ord(iocStartTime), InjIndex+1] := InjItem.StartTime;
+      Grid.RealValue[Ord(iocEndTime), InjIndex+1] := InjItem.EndTime;
       While InjItem.InjectionOptions.Count < NCOMP do
       begin
         Treatment := InjItem.InjectionOptions.Add;
@@ -512,15 +751,12 @@ begin
       for CompIndex := 0 to NCOMP - 1 do
       begin
         Treatment := InjItem.InjectionOptions[CompIndex];
-        frameIndividualWellOptions.Grid.ItemIndex[ColIndex, InjIndex+1] :=
-          Ord(Treatment.TreatmentOption);
+        Grid.ItemIndex[ColIndex, InjIndex+1] := Ord(Treatment.TreatmentOption);
         Inc(ColIndex);
-        frameIndividualWellOptions.Grid.Cells[ColIndex, InjIndex+1] :=
-          Treatment.Value;
+        Grid.Cells[ColIndex, InjIndex+1] := Treatment.Value;
         Inc(ColIndex);
       end;
     end;
-
   end;
 end;
 
@@ -539,8 +775,15 @@ var
   WellIndex: Integer;
   WellItem: TIndividualWellInjectionItem;
   SystemItem: TCtsSystemItem;
+  SpeciesIndex: Integer;
+  SpeciesItem: TStringConcValueItem;
+  LocalModel: TPhastModel;
+  Grid: TRbwDataGrid4;
+  Value: string;
+  TreatmentOptionIndex: Integer;
 begin
   inherited;
+  LocalModel := frmGoPhast.PhastModel;
   if FSelectedSystem <> nil then
   begin
     tvIndividualObjectOptionsChange(nil, nil);
@@ -552,9 +795,9 @@ begin
     begin
       CtsObject := FSelectedSystem.CtsObjects[ExtractionIndex];
       CtsObject.StartTime :=
-        frameWells.Grid.RealValue[Ord(cwcStartTime), ExtractionIndex+1];
+        frameWells.Grid.RealValueDefault[Ord(cwcStartTime), ExtractionIndex+1, -1];
       CtsObject.EndTime :=
-        frameWells.Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1];
+        frameWells.Grid.RealValueDefault[Ord(cwcEndTime), ExtractionIndex+1, 0];
       CtsObject.ExtractionWellObjects.DelimitedText :=
         frameWells.Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1];
       CtsObject.InjectionWellObjects.DelimitedText :=
@@ -566,21 +809,36 @@ begin
     begin
       ExternalFlowsItem := FSelectedSystem.ExternalFlows[ExternalFlowIndex];
       ExternalFlowsItem.StartTime :=
-        frameWells.Grid.RealValue[Ord(cefcStartTime), ExternalFlowIndex+1];
+        frameExternalFlows.Grid.RealValueDefault[Ord(cefcStartTime), ExternalFlowIndex+1, -1];
       ExternalFlowsItem.EndTime :=
-        frameWells.Grid.RealValue[Ord(cefcEndTime), ExternalFlowIndex+1];
-      ExternalFlowsItem.Outflow :=
-        frameWells.Grid.Cells[Ord(cstOutflow), ExternalFlowIndex+1];
-      ExternalFlowsItem.Inflow :=
-        frameWells.Grid.Cells[Ord(cstInflow), ExternalFlowIndex+1];
+        frameExternalFlows.Grid.RealValueDefault[Ord(cefcEndTime), ExternalFlowIndex+1, 0];
+      Value := frameExternalFlows.Grid.Cells[Ord(cstOutflow), ExternalFlowIndex+1];
+      if Value <> '' then
+      begin
+        ExternalFlowsItem.Outflow := Value;
+      end;
+
+      Value := frameExternalFlows.Grid.Cells[Ord(cstInflow), ExternalFlowIndex+1];
+      if Value <> '' then
+      begin
+        ExternalFlowsItem.Inflow := Value;
+      end;
       While ExternalFlowsItem.InflowConcentrations.Count < NCOMP do
       begin
-        ExternalFlowsItem.InflowConcentrations.Add.Value := '0';
+        SpeciesIndex := ExternalFlowsItem.InflowConcentrations.Count;
+        SpeciesItem := ExternalFlowsItem.InflowConcentrations.Add;
+        SpeciesItem.Value := '0';
+        SpeciesItem.Name := LocalModel.Mt3dSpecesName[SpeciesIndex];
       end;
       for CompIndex := 0 to NCOMP - 1 do
       begin
-        ExternalFlowsItem.InflowConcentrations[CompIndex].Value :=
-          frameWells.Grid.Cells[Ord(cstInflow) + CompIndex, ExternalFlowIndex+1];
+        SpeciesItem := ExternalFlowsItem.InflowConcentrations[CompIndex];
+        Value := frameExternalFlows.Grid.Cells[Ord(cstInflowConc) + CompIndex, ExternalFlowIndex+1];
+        if Value <> '' then
+        begin
+          SpeciesItem.Value := Value;
+        end;
+        SpeciesItem.Name := LocalModel.Mt3dSpecesName[CompIndex];
       end;
     end;
 
@@ -593,9 +851,9 @@ begin
     begin
       InjItem := FSelectedSystem.DefaultInjectionOptions[DefaultInjIndex];
       InjItem.StartTime :=
-        frameDefaultOptions.Grid.RealValue[Ord(iocStartTime), DefaultInjIndex+1];
+        frameDefaultOptions.Grid.RealValueDefault[Ord(iocStartTime), DefaultInjIndex+1, -1];
       InjItem.EndTime :=
-        frameDefaultOptions.Grid.RealValue[Ord(iocEndTime), DefaultInjIndex+1];
+        frameDefaultOptions.Grid.RealValueDefault[Ord(iocEndTime), DefaultInjIndex+1, 0];
       While InjItem.InjectionOptions.Count < NCOMP do
       begin
         Treatment := InjItem.InjectionOptions.Add;
@@ -607,13 +865,20 @@ begin
       begin
         Treatment := InjItem.InjectionOptions[CompIndex];
 
-        Treatment.TreatmentOption :=
-          TTreatmentOption(frameDefaultOptions.Grid.ItemIndex[
-          ColIndex, DefaultInjIndex+1]);
+        TreatmentOptionIndex := frameDefaultOptions.Grid.ItemIndex[
+          ColIndex, DefaultInjIndex+1];
+        if TreatmentOptionIndex >= 0 then
+        begin
+          Treatment.TreatmentOption := TTreatmentOption(TreatmentOptionIndex);
+        end;
         Inc(ColIndex);
 
-        Treatment.Value := frameDefaultOptions.Grid.Cells[
+        Value := frameDefaultOptions.Grid.Cells[
           ColIndex, DefaultInjIndex+1];
+        if Value <> '' then
+        begin
+          Treatment.Value := Value;
+        end;
         Inc(ColIndex);
       end;
     end;
@@ -640,54 +905,62 @@ begin
   begin
     edSystemName.Text := FSelectedSystem.Name;
 
+    Grid := frameWells.Grid;
+    ClearGrid(Grid);
     frameWells.seNumber.AsInteger := FSelectedSystem.CtsObjects.Count;
     for ExtractionIndex := 0 to FSelectedSystem.CtsObjects.Count - 1 do
     begin
       CtsObject := FSelectedSystem.CtsObjects[ExtractionIndex];
-      frameWells.Grid.RealValue[Ord(cwcStartTime), ExtractionIndex+1] :=
+      Grid.RealValue[Ord(cwcStartTime), ExtractionIndex+1] :=
         CtsObject.StartTime;
-      frameWells.Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1] :=
+      Grid.RealValue[Ord(cwcEndTime), ExtractionIndex+1] :=
         CtsObject.EndTime;
-      frameWells.Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1] :=
+      Grid.Cells[Ord(cwcExtractionWells), ExtractionIndex+1] :=
         CtsObject.ExtractionWellObjects.DelimitedText;
-      frameWells.Grid.Cells[Ord(cwcInjectionWells), ExtractionIndex+1] :=
+      Grid.Cells[Ord(cwcInjectionWells), ExtractionIndex+1] :=
         CtsObject.InjectionWellObjects.DelimitedText;
     end;
 
+    Grid := frameExternalFlows.Grid;
+    ClearGrid(Grid);
     frameExternalFlows.seNumber.AsInteger := FSelectedSystem.ExternalFlows.Count;
     for ExternalFlowIndex := 0 to FSelectedSystem.ExternalFlows.Count - 1 do
     begin
       ExternalFlowsItem := FSelectedSystem.ExternalFlows[ExternalFlowIndex];
-      frameExternalFlows.Grid.RealValue[Ord(cefcStartTime), ExternalFlowIndex+1] :=
+      Grid.RealValue[Ord(cefcStartTime), ExternalFlowIndex+1] :=
         ExternalFlowsItem.StartTime;
-      frameExternalFlows.Grid.RealValue[Ord(cefcEndTime), ExternalFlowIndex+1] :=
+      Grid.RealValue[Ord(cefcEndTime), ExternalFlowIndex+1] :=
         ExternalFlowsItem.EndTime;
-      frameExternalFlows.Grid.Cells[Ord(cstOutflow), ExternalFlowIndex+1] :=
+      Grid.Cells[Ord(cstOutflow), ExternalFlowIndex+1] :=
         ExternalFlowsItem.Outflow;
-      frameExternalFlows.Grid.Cells[Ord(cstInflow), ExternalFlowIndex+1] :=
+      Grid.Cells[Ord(cstInflow), ExternalFlowIndex+1] :=
         ExternalFlowsItem.Inflow;
       While ExternalFlowsItem.InflowConcentrations.Count < NCOMP do
       begin
-        ExternalFlowsItem.InflowConcentrations.Add.Value := '0';
+        SpeciesIndex := ExternalFlowsItem.InflowConcentrations.Count;
+        SpeciesItem := ExternalFlowsItem.InflowConcentrations.Add;
+        SpeciesItem.Value := '0';
+        SpeciesItem.Name := LocalModel.Mt3dSpecesName[SpeciesIndex];
       end;
       for CompIndex := 0 to NCOMP - 1 do
       begin
-        frameExternalFlows.Grid.Cells[Ord(cstInflow) + CompIndex, ExternalFlowIndex+1] :=
+        Grid.Cells[Ord(cstInflowConc) + CompIndex, ExternalFlowIndex+1] :=
           ExternalFlowsItem.InflowConcentrations[CompIndex].Value;
       end;
     end;
 
     comboTreatmentOption.ItemIndex := Ord(FSelectedSystem.TreatmentDistribution);
 
+    Grid := frameDefaultOptions.Grid;
+    ClearGrid(Grid);
     frameDefaultOptions.seNumber.AsInteger :=
       FSelectedSystem.DefaultInjectionOptions.Count;
-
     for DefaultInjIndex := 0 to FSelectedSystem.DefaultInjectionOptions.Count - 1 do
     begin
       InjItem := FSelectedSystem.DefaultInjectionOptions[DefaultInjIndex];
-      frameDefaultOptions.Grid.RealValue[Ord(iocStartTime), DefaultInjIndex+1] :=
+      Grid.RealValue[Ord(iocStartTime), DefaultInjIndex+1] :=
         InjItem.StartTime;
-      frameDefaultOptions.Grid.RealValue[Ord(iocEndTime), DefaultInjIndex+1] :=
+      Grid.RealValue[Ord(iocEndTime), DefaultInjIndex+1] :=
         InjItem.EndTime;
       While InjItem.InjectionOptions.Count < NCOMP do
       begin
@@ -699,10 +972,10 @@ begin
       for CompIndex := 0 to NCOMP - 1 do
       begin
         Treatment := InjItem.InjectionOptions[CompIndex];
-        frameDefaultOptions.Grid.ItemIndex[ColIndex, DefaultInjIndex+1] :=
+        Grid.ItemIndex[ColIndex, DefaultInjIndex+1] :=
           Ord(Treatment.TreatmentOption);
         Inc(ColIndex);
-        frameDefaultOptions.Grid.Cells[ColIndex, DefaultInjIndex+1] :=
+        Grid.Cells[ColIndex, DefaultInjIndex+1] :=
           Treatment.Value;
         Inc(ColIndex);
       end;
@@ -719,6 +992,15 @@ begin
   end;
 end;
 
+procedure TfrmContaminantTreatmentSystems.UpdateNextTimeCell(
+  AGrid: TRbwDataGrid4; ACol, ARow: Integer);
+begin
+  if not FGettingData then
+  begin
+    frmCustomGoPhastUnit.UpdateNextTimeCell(AGrid, ACol, ARow);
+  end;
+end;
+
 { TUndoEditCTS }
 
 constructor TUndoEditCTS.Create(var NewCts: TCtsSystemCollection);
@@ -731,7 +1013,7 @@ end;
 
 function TUndoEditCTS.Description: string;
 begin
-  result := 'change MT3D-USGS Contaminant Treatment System';
+  result := StrChangeMT3DUSGSCon;
 end;
 
 destructor TUndoEditCTS.Destroy;

@@ -686,7 +686,8 @@ uses
   Mt3dCtsSystemUnit in 'Mt3dCtsSystemUnit.pas',
   frmContaminantTreatmentSystemsUnit in 'frmContaminantTreatmentSystemsUnit.pas' {frmContaminantTreatmentSystems},
   frameAvailableObjectsUnit in 'frameAvailableObjectsUnit.pas' {frameAvailableObjects: TFrame},
-  frmEditSelectedWellsUnit in 'frmEditSelectedWellsUnit.pas' {frmEditSelectedWells};
+  frmEditSelectedWellsUnit in 'frmEditSelectedWellsUnit.pas' {frmEditSelectedWells},
+  Mt3dCtsWriterUnit in 'Mt3dCtsWriterUnit.pas';
 
 {$R *.res}
 

@@ -198,6 +198,8 @@ function ShowHelp(const Keyword: string; HelpFormat: THelpFormat): boolean;
 
 procedure ClearGrid(Grid: TRbwDataGrid4);
 
+procedure UpdateNextTimeCell(Grid: TRbwDataGrid4; ACol, ARow: Integer);
+
 var
   GlobalFont: TFont = nil;
   GlobalColor: TColor = clBtnFace;
@@ -1721,6 +1723,37 @@ end;
 procedure TEdgeDisplayEdit.SetDisplayTime(const Value: Double);
 begin
   Edge.DisplayTime := Value;
+end;
+
+procedure UpdateNextTimeCell(Grid: TRbwDataGrid4; ACol, ARow: Integer);
+var
+  SelectIndex: Integer;
+begin
+  if (ARow >= Grid.FixedRows) and (ACol in [0, 1])then
+  begin
+    SelectIndex := Grid.ItemIndex[ACol, ARow];
+    if SelectIndex >= 0 then
+    begin
+      if (ACol = 0) then
+      begin
+        if Grid.Cells[1, ARow] = '' then
+        begin
+          Grid.ItemIndex[1, ARow] := SelectIndex;
+        end;
+      end
+      else if (ACol = 1) then
+      begin
+        if (ARow + 1 < Grid.RowCount) and
+          (Grid.Cells[0, ARow + 1] = '') then
+        begin
+          if SelectIndex + 1 < Grid.Columns[0].PickList.Count then
+          begin
+            Grid.ItemIndex[0, ARow + 1] := SelectIndex + 1;
+          end;
+        end;
+      end;
+    end;
+  end;
 end;
 
 initialization

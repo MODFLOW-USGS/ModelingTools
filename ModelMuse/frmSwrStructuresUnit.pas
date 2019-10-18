@@ -1965,32 +1965,36 @@ procedure TfrmSwrStructures.UpdateNextTimeCell(ACol, ARow: Integer);
 var
   SelectIndex: Integer;
 begin
-  if not FGettingData and (ARow >= frameTiming.Grid.FixedRows)
-    and (ACol in [0, 1])then
+  if not FGettingData then
   begin
-    SelectIndex := frameTiming.Grid.ItemIndex[ACol, ARow];
-    if SelectIndex >= 0 then
-    begin
-      if (ACol = 0) then
-      begin
-        if frameTiming.Grid.Cells[1, ARow] = '' then
-        begin
-          frameTiming.Grid.ItemIndex[1, ARow] := SelectIndex;
-        end;
-      end
-      else if (ACol = 1) then
-      begin
-        if (ARow + 1 < frameTiming.Grid.RowCount) and
-          (frameTiming.Grid.Cells[0, ARow + 1] = '') then
-        begin
-          if SelectIndex + 1 < frameTiming.Grid.Columns[0].PickList.Count then
-          begin
-            frameTiming.Grid.ItemIndex[0, ARow + 1] := SelectIndex + 1;
-          end;
-        end;
-      end;
-    end;
+    frmCustomGoPhastUnit.UpdateNextTimeCell(frameTiming.Grid, ACol, ARow);
   end;
+//  if not FGettingData and (ARow >= frameTiming.Grid.FixedRows)
+//    and (ACol in [0, 1])then
+//  begin
+//    SelectIndex := frameTiming.Grid.ItemIndex[ACol, ARow];
+//    if SelectIndex >= 0 then
+//    begin
+//      if (ACol = 0) then
+//      begin
+//        if frameTiming.Grid.Cells[1, ARow] = '' then
+//        begin
+//          frameTiming.Grid.ItemIndex[1, ARow] := SelectIndex;
+//        end;
+//      end
+//      else if (ACol = 1) then
+//      begin
+//        if (ARow + 1 < frameTiming.Grid.RowCount) and
+//          (frameTiming.Grid.Cells[0, ARow + 1] = '') then
+//        begin
+//          if SelectIndex + 1 < frameTiming.Grid.Columns[0].PickList.Count then
+//          begin
+//            frameTiming.Grid.ItemIndex[0, ARow + 1] := SelectIndex + 1;
+//          end;
+//        end;
+//      end;
+//    end;
+//  end;
 end;
 
 { TUndoSwrStructures }

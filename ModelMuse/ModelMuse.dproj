@@ -1656,6 +1656,7 @@
             <Form>frmEditSelectedWells</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Mt3dCtsWriterUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

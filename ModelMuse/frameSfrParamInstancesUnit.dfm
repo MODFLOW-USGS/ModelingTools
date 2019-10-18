@@ -1,31 +1,29 @@
 object frameSfrParamInstances: TframeSfrParamInstances
   Left = 0
   Top = 0
-  Width = 562
-  Height = 378
+  Width = 451
+  Height = 305
   Align = alClient
   TabOrder = 0
   TabStop = True
-  ExplicitWidth = 451
   ExplicitHeight = 304
   object pnlSfrInstancesBottom: TPanel
     Left = 0
-    Top = 314
-    Width = 562
+    Top = 241
+    Width = 451
     Height = 64
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
     ExplicitTop = 240
-    ExplicitWidth = 451
     DesignSize = (
-      562
+      451
       64)
     object lblInstanceCount: TLabel
       Left = 71
       Top = 6
-      Width = 167
-      Height = 48
+      Width = 141
+      Height = 39
       Caption = 
         'Number of instances'#13#10'Specify at least one instance '#13#10'for each SF' +
         'R parameter.'
@@ -103,8 +101,8 @@ object frameSfrParamInstances: TframeSfrParamInstances
   object rdgSfrParamInstances: TRbwDataGrid4
     Left = 0
     Top = 25
-    Width = 562
-    Height = 289
+    Width = 451
+    Height = 216
     Align = alClient
     ColCount = 3
     FixedCols = 0
@@ -194,18 +192,16 @@ object frameSfrParamInstances: TframeSfrParamInstances
       end>
     OnEndUpdate = rdgSfrParamInstancesEndUpdate
     WordWrapRowCaptions = False
-    ExplicitWidth = 451
     ExplicitHeight = 215
   end
   object pnlLabel: TPanel
     Left = 0
     Top = 0
-    Width = 562
+    Width = 451
     Height = 25
     Align = alTop
     BevelOuter = bvNone
     Caption = 'pnlLabel'
     TabOrder = 0
-    ExplicitWidth = 451
   end
 end
