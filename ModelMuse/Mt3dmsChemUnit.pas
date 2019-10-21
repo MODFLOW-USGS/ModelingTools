@@ -1863,6 +1863,12 @@ begin
     FObserver.OnUpToDateSet := nil;
     LocalScreenObject := nil;
   end
+  else if SCollection.FMt3dmsConcCollection = nil then
+  begin
+//    CtsCollection := TCtsExternalFlowsCollection(SCollection.FMt3dmsConcCollection);
+    FObserver.OnUpToDateSet := nil;
+    LocalScreenObject := nil;
+  end
   else
   begin
     Assert(False);

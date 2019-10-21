@@ -143,7 +143,7 @@ type
   public
     property Items[Index: Integer]: TCtsInjectionTimeItem read GetItem
       write SetItem; default;
-  published
+    function GetItemByStartTime(StartTime: Double): TCtsInjectionTimeItem;
   end;
 
   // @name is used only if @link(TTreatmentDistribution) is tlIndividual
@@ -234,6 +234,7 @@ type
     class function ItemClass: TBoundaryItemClass; override;
   public
     property Items[Index: Integer]: TCtsExternalFlowsItem read GetItem write SetItem; default;
+    function GetItemByStartTime(StartTime: Double): TCtsExternalFlowsItem;
   end;
 
   TCtsSystem = class(TModflowScreenObjectProperty)
@@ -244,6 +245,7 @@ type
     FExternalFlows: TCtsExternalFlowsCollection;
     FInjections: TIndividualWellInjectionCollection;
     FName: string;
+    FMaxAllowedConcentrations: TStringConcCollection;
     procedure SetCtsObjects(const Value: TCtsObjectCollection);
     procedure SetDefaultInjectionOptions(
       const Value: TCtsInjectionTimeCollection);
@@ -252,6 +254,7 @@ type
     function IsSame(AnotherCtsSystem: TCtsSystem): boolean;
     procedure SetInjections(const Value: TIndividualWellInjectionCollection);
     procedure SetName(const Value: string);
+    procedure SetMaxAllowedConcentrations(const Value: TStringConcCollection);
   protected
     function BoundaryObserverPrefix: string; override;
   public
@@ -273,7 +276,13 @@ type
     // data sets 5 and 9
     property ExternalFlows: TCtsExternalFlowsCollection read FExternalFlows
       write SetExternalFlows;
-    property Injections: TIndividualWellInjectionCollection read FInjections write SetInjections;
+    // data set 8
+    property Injections: TIndividualWellInjectionCollection read FInjections
+      write SetInjections;
+    // Data set 6;
+    property MaxAllowedConcentrations: TStringConcCollection read FMaxAllowedConcentrations
+      write SetMaxAllowedConcentrations;
+
     property Name: string read FName write SetName;
   end;
 
@@ -923,6 +932,24 @@ begin
   result := inherited Items[Index] as TCtsInjectionTimeItem;
 end;
 
+function TCtsInjectionTimeCollection.GetItemByStartTime(
+  StartTime: Double): TCtsInjectionTimeItem;
+var
+  ItemIndex: Integer;
+  AnItem: TCtsInjectionTimeItem;
+begin
+  result := nil;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    AnItem := Items[ItemIndex];
+    if (AnItem.StartTime <= StartTime) and (StartTime < AnItem.EndTime) then
+    begin
+      result := AnItem;
+      Break;
+    end;
+  end;
+end;
+
 class function TCtsInjectionTimeCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCtsInjectionTimeItem;
@@ -940,6 +967,24 @@ function TCtsExternalFlowsCollection.GetItem(
   Index: Integer): TCtsExternalFlowsItem;
 begin
   result := inherited Items[index] as TCtsExternalFlowsItem;
+end;
+
+function TCtsExternalFlowsCollection.GetItemByStartTime(
+  StartTime: Double): TCtsExternalFlowsItem;
+var
+  ItemIndex: Integer;
+  AnItem: TCtsExternalFlowsItem;
+begin
+  result := nil;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    AnItem := Items[ItemIndex];
+    if (AnItem.StartTime <= StartTime) and (StartTime < AnItem.EndTime) then
+    begin
+      result := AnItem;
+      Break;
+    end;
+  end;
 end;
 
 class function TCtsExternalFlowsCollection.ItemClass: TBoundaryItemClass;
@@ -967,6 +1012,7 @@ begin
     CtsObjects := CtsSystem.CtsObjects;
     ExternalFlows := CtsSystem.ExternalFlows;
     Injections := CtsSystem.Injections;
+    MaxAllowedConcentrations := CtsSystem.MaxAllowedConcentrations;
     Name := CtsSystem.Name;
   end
   else
@@ -987,10 +1033,12 @@ begin
   FCtsObjects := TCtsObjectCollection.Create(Model);
   FExternalFlows := TCtsExternalFlowsCollection.Create(Self, Model, ScreenObject);
   FInjections := TIndividualWellInjectionCollection.Create(Model);
+  FMaxAllowedConcentrations := TStringConcCollection.Create(Model, nil, nil);
 end;
 
 destructor TCtsSystem.Destroy;
 begin
+  FMaxAllowedConcentrations.Free;
   FInjections.Free;
   FExternalFlows.Free;
   FCtsObjects.Free;
@@ -1005,7 +1053,8 @@ begin
     and DefaultInjectionOptions.IsSame(AnotherCtsSystem.DefaultInjectionOptions)
     and CtsObjects.IsSame(AnotherCtsSystem.CtsObjects)
     and ExternalFlows.IsSame(AnotherCtsSystem.ExternalFlows)
-    and Injections.IsSame(AnotherCtsSystem.Injections);
+    and Injections.IsSame(AnotherCtsSystem.Injections)
+    and MaxAllowedConcentrations.IsSame(AnotherCtsSystem.MaxAllowedConcentrations);
 end;
 
 procedure TCtsSystem.Loaded;
@@ -1033,6 +1082,12 @@ end;
 procedure TCtsSystem.SetInjections(const Value: TIndividualWellInjectionCollection);
 begin
   FInjections.Assign(Value);
+end;
+
+procedure TCtsSystem.SetMaxAllowedConcentrations(
+  const Value: TStringConcCollection);
+begin
+  FMaxAllowedConcentrations.Assign(Value);
 end;
 
 procedure TCtsSystem.SetName(const Value: string);

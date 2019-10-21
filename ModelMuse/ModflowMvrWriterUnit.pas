@@ -272,7 +272,7 @@ begin
           EndStressPeriod := Model.ModflowFullStressPeriods.FindEndStressPeriod(MvrItem.EndTime);
           for StressPeriodIndex := StartStressPeriod to EndStressPeriod do
           begin
-            MvrSourceDictionary := FSourceCellDictionaries[StressPeriodIndex];
+//            MvrSourceDictionary := FSourceCellDictionaries[StressPeriodIndex];
             AList := Values[StressPeriodIndex];
             if AList.Count > 0 then
             begin

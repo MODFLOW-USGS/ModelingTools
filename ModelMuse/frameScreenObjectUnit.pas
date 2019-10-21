@@ -74,8 +74,8 @@ end;
 
 procedure TframeScreenObject.UpdateNextTimeCell(DataGrid: TRbwDataGrid4;
   ACol, ARow: Integer);
-var
-  SelectIndex: Integer;
+//var
+//  SelectIndex: Integer;
 begin
   if FrameLoaded and (FLastTimeColumn = 1) then
   begin

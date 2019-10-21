@@ -530,7 +530,7 @@ begin
   for BoundaryIndex := 1 to BoundaryList.Count - 1 do
   begin
     ABoundary := BoundaryList[Index];
-    if cbBCTime.Checked <> FirstBoundary.UseBCTime then
+    if cbBCTime.Checked <> ABoundary.UseBCTime then
     begin
       cbBCTime.State := cbGrayed;
       break;

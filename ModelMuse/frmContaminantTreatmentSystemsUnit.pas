@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.ExtCtrls,
   JvExExtCtrls, JvNetscapeSplitter, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Buttons,
   JvExStdCtrls, JvListBox, frameGridUnit, Mt3dCtsSystemUnit, UndoItems,
-  RbwController, RbwDataGrid4, GoPhastTypes, RbwParser, System.UITypes;
+  RbwController, RbwDataGrid4, GoPhastTypes, RbwParser, System.UITypes,
+  Vcl.Grids;
 
 type
   TCstWellColumns = (cwcStartTime, cwcEndTime, cwcExtractionWells, cwcInjectionWells);
@@ -60,6 +61,8 @@ type
     frameWells: TframeGrid;
     rcSystem: TRbwController;
     rparserThreeDFormulaElements: TRbwParser;
+    tabMaximumAllowedConc: TTabSheet;
+    rdgMaxAllowedConc: TRbwDataGrid4;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure tvTreatmentSystemsChange(Sender: TObject; Node: TTreeNode);
@@ -406,6 +409,7 @@ var
   Grid: TRbwDataGrid4;
   TreatmentOptions: TStringList;
   AColumn: TRbwColumn4;
+  RowIndex: Integer;
   procedure InitializeOptionsGrid;
   var
     CompIndex: Integer;
@@ -457,6 +461,7 @@ begin
     frameDefaultOptions.Grid.BeginUpdate;
     frameWells.Grid.BeginUpdate;
     frameIndividualWellOptions.Grid.BeginUpdate;
+    rdgMaxAllowedConc.BeginUpdate;
     try
       StressPeriods := LocalModel.ModflowStressPeriods;
       StressPeriods.FillPickListWithStartTimes(frameWells.Grid, 0);
@@ -493,6 +498,14 @@ begin
         AColumn.WordWrapCaptions := True;
       end;
 
+      rdgMaxAllowedConc.RowCount := NCOMP + 1;
+      rdgMaxAllowedConc.Cells[1,0] := 'Concentration';
+      for RowIndex := 1 to NCOMP do
+      begin
+        rdgMaxAllowedConc.Cells[0, RowIndex] :=
+          LocalModel.Mt3dSpecesName[RowIndex-1];
+      end;
+
       Grid := frameDefaultOptions.Grid;
       InitializeOptionsGrid;
 
@@ -500,6 +513,7 @@ begin
       InitializeOptionsGrid;
 
     finally
+      rdgMaxAllowedConc.EndUpdate;
       frameExternalFlows.Grid.EndUpdate;
       frameDefaultOptions.Grid.EndUpdate;
       frameWells.Grid.EndUpdate;
@@ -781,6 +795,7 @@ var
   Grid: TRbwDataGrid4;
   Value: string;
   TreatmentOptionIndex: Integer;
+  CompItem: TStringConcValueItem;
 begin
   inherited;
   LocalModel := frmGoPhast.PhastModel;
@@ -881,6 +896,21 @@ begin
         end;
         Inc(ColIndex);
       end;
+
+      while FSelectedSystem.MaxAllowedConcentrations.Count < NCOMP do
+      begin
+        SpeciesIndex := FSelectedSystem.MaxAllowedConcentrations.Count;
+        CompItem := FSelectedSystem.MaxAllowedConcentrations.Add;
+        CompItem.Value := '0';
+        CompItem.Name := LocalModel.Mt3dSpecesName[SpeciesIndex];
+      end;
+
+      for SpeciesIndex := 0 to NCOMP - 1 do
+      begin
+        CompItem := FSelectedSystem.MaxAllowedConcentrations[SpeciesIndex];
+        CompItem.Value := rdgMaxAllowedConc.Cells[1, SpeciesIndex+1];
+      end;
+
     end;
 
   end;
@@ -987,6 +1017,20 @@ begin
       WellItem := FSelectedSystem.Injections[WellIndex];
       tvIndividualObjectOptions.Items.AddObject(nil,
         WellItem.InjectionWellObjectName, WellItem);
+    end;
+
+    while FSelectedSystem.MaxAllowedConcentrations.Count < NCOMP do
+    begin
+      SpeciesIndex := FSelectedSystem.MaxAllowedConcentrations.Count;
+      CompItem := FSelectedSystem.MaxAllowedConcentrations.Add;
+      CompItem.Value := '0';
+      CompItem.Name := LocalModel.Mt3dSpecesName[SpeciesIndex];
+    end;
+
+    for SpeciesIndex := 0 to NCOMP - 1 do
+    begin
+      CompItem := FSelectedSystem.MaxAllowedConcentrations[SpeciesIndex];
+      rdgMaxAllowedConc.Cells[1, SpeciesIndex+1] := CompItem.Value;
     end;
 
   end;

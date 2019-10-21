@@ -28,6 +28,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Indent = 19
     TabOrder = 0
     OnChange = tvTreatmentSystemsChange
+    ExplicitLeft = 5
   end
   object pnlBottom: TPanel
     Left = 0
@@ -109,7 +110,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabTreatments
+      ActivePage = tabMaximumAllowedConc
       Align = alClient
       Enabled = False
       TabOrder = 0
@@ -829,6 +830,81 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
             end
           end
+        end
+      end
+      object tabMaximumAllowedConc: TTabSheet
+        Caption = 'Max Allowed Concentration'
+        ImageIndex = 3
+        object rdgMaxAllowedConc: TRbwDataGrid4
+          Left = 0
+          Top = 0
+          Width = 587
+          Height = 278
+          Align = alClient
+          ColCount = 2
+          FixedCols = 1
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+          TabOrder = 0
+          ExtendedAutoDistributeText = False
+          AutoMultiEdit = False
+          AutoDistributeText = False
+          AutoIncreaseColCount = False
+          AutoIncreaseRowCount = False
+          SelectedRowOrColumnColor = clAqua
+          UnselectableColor = clBtnFace
+          ColorRangeSelection = False
+          Columns = <
+            item
+              AutoAdjustRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = False
+            end
+            item
+              AutoAdjustRowHeights = False
+              ButtonCaption = 'F()'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = True
+              ButtonWidth = 35
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+          WordWrapRowCaptions = False
+          ExplicitLeft = 256
+          ExplicitTop = 104
+          ExplicitWidth = 320
+          ExplicitHeight = 120
         end
       end
     end

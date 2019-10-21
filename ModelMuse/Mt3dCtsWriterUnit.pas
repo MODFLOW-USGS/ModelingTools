@@ -4,7 +4,8 @@ interface
 
 uses
   CustomModflowWriterUnit, PhastModelUnit, Mt3dCtsSystemUnit, System.Classes,
-  ModflowPackageSelectionUnit, System.Generics.Collections, ScreenObjectUnit;
+  ModflowPackageSelectionUnit, System.Generics.Collections, ScreenObjectUnit,
+  RbwParser;
 
 type
   TCstSystemList = TList<TCtsSystem>;
@@ -20,10 +21,16 @@ type
     FMt3dCts: TMt3dCtsPackageSelection;
     FWellCountDictionary: TDictionary<TScreenObject, Integer>;
     FUsedWellCountDictionary: TDictionary<TScreenObject, Integer>;
+    FUsedWelStartsDictionary: TDictionary<TScreenObject, Integer>;
+    FParser: TRbwParser;
     procedure WriteDataSet1;
     procedure WriteStressPeriods;
     procedure WriteASystem(ACstSystem: TCtsSystem; StartTime: Double;
-      SystemIndex: integer);
+      SystemIndex, StressPeriodIndex: integer);
+    procedure WriteDataSet4(CtsObjects: TCtsObjectItem);
+    procedure WriteDataSet5(ACstSystem: TCtsSystem; StartTime: Double;
+      StressPeriodIndex: Integer);
+    procedure WriteDataSet6(InjectionTimeOption: TCtsInjectionTimeItem);
 
     procedure GetUsedWells;
     procedure Evaluate;
@@ -40,7 +47,14 @@ implementation
 
 uses
   ModflowUnitNumbers, GoPhastTypes, ModflowTimeUnit, ModflowMnw2Unit,
-  ModflowWellUnit, ModflowBoundaryUnit;
+  ModflowWellUnit, ModflowBoundaryUnit, GIS_Functions, frmFormulaErrorsUnit,
+  System.SysUtils;
+
+resourcestring
+  StrErrorEvaluatingInf = 'Error evaluating Inflow in Contaminanent treatmen' +
+  't system %0:s in stress period %1:d at time %2:g';
+  StrErrorEvaluatingInfConc = 'Error evaluating Inflow Concentration %0:d in' +
+  ' Contaminanent treatment system %1:s in stress period %2:d at time %3:g';
 
 { TMt3dCtsWriter }
 
@@ -58,10 +72,14 @@ begin
   FWellCountDictionary := TDictionary<TScreenObject, Integer>.Create;
   FUsedWellCounts := TList<Integer>.Create;
   FUsedWellCountDictionary := TDictionary<TScreenObject, Integer>.Create;
+  FUsedWelStartsDictionary := TDictionary<TScreenObject, Integer>.Create;
+
+  FParser := Model.rpThreeDFormulaCompiler;
 end;
 
 destructor TMt3dCtsWriter.Destroy;
 begin
+  FUsedWelStartsDictionary.Free;
   FUsedWellCountDictionary.Free;
   FUsedWellCounts.Free;
   FWellCountDictionary.Free;
@@ -83,7 +101,7 @@ begin
 end;
 
 procedure TMt3dCtsWriter.WriteASystem(ACstSystem: TCtsSystem;
-  StartTime: Double; SystemIndex: integer);
+  StartTime: Double; SystemIndex, StressPeriodIndex: integer);
 var
   CstObjects: TCtsObjectItem;
   ICTS: Integer;
@@ -93,7 +111,19 @@ var
   WellIndex: Integer;
   AWell: TScreenObject;
   ACount: Integer;
+  WellItem: TIndividualWellInjectionItem;
+  InjectionOptions: TCtsInjectionTimeCollection;
+  InjectionTimeOption: TCtsInjectionTimeItem;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  NCOMP: Integer;
+  CompIndex: Integer;
+  ValueFormula: string;
+  ExtractionWells: TCellAssignmentList;
+  ExternalFlowsItem: TCtsExternalFlowsItem;
 begin
+  NCOMP := Model.NumberOfMt3dChemComponents;
   CstObjects  := ACstSystem.CtsObjects.GetItemByStartTime(StartTime);
   ICTS := SystemIndex+1;
   NEXT := 0;
@@ -115,7 +145,49 @@ begin
     AWell := CstObjects.InjectionWells[WellIndex];
     if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
     begin
-      Inc(NINJ, ACount);
+      if ACstSystem.TreatmentDistribution = tlIndividual then
+      begin
+        WellItem := ACstSystem.Injections.GetItemByObjectName(AWell.Name);
+        if WellItem.UseDefaultInjectionOptions then
+        begin
+          InjectionOptions := ACstSystem.DefaultInjectionOptions;
+        end
+        else
+        begin
+          InjectionOptions := WellItem.Injections;
+        end;
+      end
+      else
+      begin
+        InjectionOptions := ACstSystem.DefaultInjectionOptions;
+      end;
+      InjectionTimeOption := InjectionOptions.GetItemByStartTime(StartTime);
+
+      if InjectionTimeOption <> nil then
+      begin
+        Inc(NINJ, ACount);
+
+        CellList := TCellAssignmentList.Create;
+        try
+          AWell.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+          if ACstSystem.TreatmentDistribution = tlIndividual then
+          begin
+            for CellIndex := 0 to CellList.Count - 1 do
+            begin
+              ACell := CellList[CellIndex];
+              for CompIndex := 0 to NCOMP - 1 do
+              begin
+                ValueFormula := InjectionTimeOption.InjectionOptions[CompIndex].Value;
+                // Get values for data set 8 here
+              end;
+            end;
+          end;
+
+
+        finally
+          CellList.Free;
+        end;
+      end;
     end
     else
     begin
@@ -130,6 +202,24 @@ begin
   WriteInteger(NINJ);
   WriteInteger(ITRTINJ);
   NewLine;
+
+  WriteDataSet4(CstObjects);
+
+  WriteDataSet5(ACstSystem, StartTime, StressPeriodIndex);
+
+  if ITRTINJ = 1 then
+  begin
+    InjectionOptions := ACstSystem.DefaultInjectionOptions;
+    InjectionTimeOption := InjectionOptions.GetItemByStartTime(StartTime);
+    WriteDataSet6(InjectionTimeOption);
+  end;
+
+  if FMt3dCts.ForceOption = ctsDontForce then
+  begin
+
+  end;
+  // Write data sets 4, 5, and 6.
+
 end;
 
 procedure TMt3dCtsWriter.WriteDataSet1;
@@ -184,6 +274,175 @@ begin
   NewLine;
 end;
 
+procedure TMt3dCtsWriter.WriteDataSet4(CtsObjects: TCtsObjectItem);
+var
+  WellIndex: Integer;
+  AWell: TScreenObject;
+  ACount: Integer;
+  CellList: TCellAssignmentList;
+  index: Integer;
+  KEXT: Integer;
+  IEXT: Integer;
+  JEXT: Integer;
+  IWEXT: Integer;
+  ACell: TCellAssignment;
+  StartIndex: Integer;
+begin
+  for WellIndex := 0 to CtsObjects.ExtractionWellCount - 1 do
+  begin
+    AWell := CtsObjects.ExtractionWells[WellIndex];
+    if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
+    begin
+      Assert(FUsedWelStartsDictionary.TryGetValue(AWell, StartIndex));
+      CellList := TCellAssignmentList.Create;
+      try
+        AWell.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        for index := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[index];
+
+          KEXT := ACell.Layer + 1;
+          IEXT := ACell.Row + 1;
+          JEXT := ACell.Column + 1;
+          IWEXT := StartIndex + index + 1;
+
+          WriteInteger(KEXT);
+          WriteInteger(IEXT);
+          WriteInteger(JEXT);
+          WriteInteger(IWEXT);
+        end;
+      finally
+        CellList.Free;
+      end;
+    end;
+  end;
+end;
+
+procedure TMt3dCtsWriter.WriteDataSet5(ACstSystem: TCtsSystem;StartTime: Double; StressPeriodIndex: Integer);
+var
+  NCOMP: Integer;
+  CompIndex: Integer;
+  InflowFormula: string;
+  ExternalFlowsItem: TCtsExternalFlowsItem;
+  Expression: TExpression;
+  QINCTS: Double;
+  CINCTS: Array Of Double;
+  ConcentrationFormula: string;
+begin
+  ExternalFlowsItem  := ACstSystem.ExternalFlows.GetItemByStartTime(StartTime);
+
+  NCOMP := Model.NumberOfMt3dChemComponents;
+  if ExternalFlowsItem = nil then
+  begin
+    WriteFloat(0);
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      WriteFloat(0);
+    end;
+  end
+  else
+  begin
+    UpdateCurrentScreenObject(nil);
+    UpdateGlobalLocations(-1, -1, -1, eaBlocks, Model);
+
+    InflowFormula := ExternalFlowsItem.Inflow;
+    try
+      FParser.Compile(InflowFormula);
+    Except on E: ERbwParserError do
+      begin
+        frmFormulaErrors.AddFormulaError('', Format(StrErrorEvaluatingInf,
+          [ACstSystem.Name, StressPeriodIndex, StartTime]),
+          ExternalFlowsItem.Inflow, E.Message);
+        InflowFormula := '0';
+        FParser.Compile(InflowFormula);
+      end;
+    end;
+
+    Expression := FParser.CurrentExpression;
+    Expression.Evaluate;
+    QINCTS := Expression.doubleResult;
+
+    SetLength(CINCTS, NCOMP);
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      ConcentrationFormula := ExternalFlowsItem.InflowConcentrations[CompIndex].Value;
+
+      try
+        FParser.Compile(ConcentrationFormula);
+      Except on E: ERbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError('', Format(StrErrorEvaluatingInfConc,
+            [CompIndex+1, ACstSystem.Name, StressPeriodIndex, StartTime]),
+            ExternalFlowsItem.Inflow, E.Message);
+          ConcentrationFormula := '0';
+          FParser.Compile(ConcentrationFormula);
+        end;
+      end;
+
+      Expression := FParser.CurrentExpression;
+      Expression.Evaluate;
+      CINCTS[CompIndex] := Expression.doubleResult;
+    end;
+
+    WriteFloat(QINCTS);
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      WriteFloat(CINCTS[CompIndex]);
+    end;
+    NewLine;
+  end;
+end;
+
+procedure TMt3dCtsWriter.WriteDataSet6(
+  InjectionTimeOption: TCtsInjectionTimeItem);
+var
+  NCOMP: Integer;
+  CompIndex: Integer;
+  InjectItem: TInjectionOptionItem;
+  TreatmentFormula: string;
+  IOPTINJ: Integer;
+  Expression: TExpression;
+  CMCHGINJ: Double;
+begin
+  NCOMP := Model.NumberOfMt3dChemComponents;
+  if InjectionTimeOption = nil then
+  begin
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      WriteInteger(1);
+      WriteFloat(0);
+    end;
+  end
+  else
+  begin
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      InjectItem := InjectionTimeOption.InjectionOptions[CompIndex];
+      IOPTINJ := Ord(InjectItem.TreatmentOption)+1;
+      TreatmentFormula := InjectItem.Value;
+
+      try
+        FParser.Compile(TreatmentFormula);
+      Except on E: ERbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError('', '',
+            TreatmentFormula, E.Message);
+          TreatmentFormula := '0';
+          FParser.Compile(TreatmentFormula);
+        end;
+      end;
+
+      Expression := FParser.CurrentExpression;
+      Expression.Evaluate;
+      CMCHGINJ := Expression.doubleResult;
+
+      WriteInteger(IOPTINJ);
+      WriteFloat(CMCHGINJ);
+    end;
+  end;
+  NewLine;
+end;
+
 procedure TMt3dCtsWriter.WriteFile(const AFileName: string);
 begin
 
@@ -203,6 +462,7 @@ var
   MNW2_Well: TMnw2Boundary;
   Well: TMfWellBoundary;
   TimeItem: TCustomModflowBoundaryItem;
+  StartIndex: Integer;
 begin
   UsedSystems := TCstSystemList.Create;
   try
@@ -227,6 +487,8 @@ begin
 
       FUsedWellCounts.Clear;
       FUsedWellCountDictionary.Clear;
+      FUsedWelStartsDictionary.Clear;
+      StartIndex := 0;
       for WellIndex := 0 to FAllWells.Count - 1 do
       begin
         AScreenObject := FAllWells[WellIndex];
@@ -255,12 +517,14 @@ begin
           FUsedWellCounts.Add(FWellCellCounts[WellIndex]);
           FUsedWellCountDictionary.Add(AScreenObject, FWellCellCounts[WellIndex]);
         end;
+        FUsedWelStartsDictionary.Add(AScreenObject, StartIndex);
+        StartIndex := StartIndex + FWellCellCounts[WellIndex];
       end;
 
       for SystemIndex := 0 to UsedSystems.Count - 1 do
       begin
         ACstSystem := UsedSystems[SystemIndex];
-        WriteASystem(ACstSystem, StartTime, SystemIndex);
+        WriteASystem(ACstSystem, StartTime, SystemIndex, StressPeriodIndex);
       end;
     end;
   finally

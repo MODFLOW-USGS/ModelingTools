@@ -71,8 +71,28 @@ resourcestring
   StrDefaultIFaceValueMu = 'DefaultIFaceValue must be in the range 0 to 6 in' +
   ' this version of MODPATH.';
   StrMOSPATH7RequiresA = 'MODPATH 7 requires a uniform grid (except for quad' +
-  'grid refinement). In your model the largest and smallest %0:s widths are' +
+  'tree refinement). In your model the largest and smallest %0:s widths are' +
   ' %1:g and %2:g.';
+  StrColumn = 'column';
+  StrRow = 'row';
+  StrDataSet1HNOFL = ' # Data Set 1: HNOFLO  HDRY';
+  StrDataSet2Defau = ' # Data Set 2: DefaultIFaceCount';
+  StrDataSet6IBOUND = 'Data Set 6: IBOUND';
+  StrDataSet7Porosity = 'Data Set 7: Porosity Layer ';
+  StrPorosity = 'Porosity';
+  StrDataSet8Porosity = 'Data Set 8: PorosityCB Layer ';
+  StrPorosityCB = 'PorosityCB';
+  StrDataSet1MAXSI = ' # Data Set 1: MAXSIZ HNOFLO  HDRY  NPART  IRCHTP  IEV' +
+  'TTP';
+  StrDataSet2OPTIO = ' # Data Set 2: OPTION';
+  StrDataSet6ATBEG = ' # Data Set 6A: TBEGIN';
+  StrDataSet6BBegi = ' # Data set 6B: BeginPeriod, BeginStep, EndPeriod, End' +
+  'Step';
+  StrDataSet5PORLaye = 'Data Set 5: POR Layer ';
+  StrPOR = 'POR';
+  StrDataSet5PorCBLa = 'Data Set 5: PorCB Layer ';
+  StrPorCB = 'PorCB';
+  StrDataSet4IBOUND = 'Data Set 4: IBOUND';
 
 const
   ETS_ID = '     ET SEGMENTS';
@@ -149,7 +169,7 @@ begin
   FirstTime := Model.ModflowFullStressPeriods.Items[0].StartTime;
   TBEGIN := FirstTime { - ReferenceTime};
   WriteFloat(TBEGIN);
-  WriteString(' # Data Set 6A: TBEGIN');
+  WriteString(StrDataSet6ATBEG);
   NewLine;
 end;
 
@@ -181,7 +201,7 @@ begin
     WriteInteger(BeginStep);
     WriteInteger(EndPeriod);
     WriteInteger(EndStep);
-    WriteString(' # Data set 6B: BeginPeriod, BeginStep, EndPeriod, EndStep');
+    WriteString(StrDataSet6BBegi);
     NewLine;
 end;
 
@@ -206,17 +226,17 @@ begin
       begin
         Inc(LayerCount);
         Inc(Layer);
-        WriteArray(PorosityArray, Layer, 'Data Set 5: POR' + ' Layer '
+        WriteArray(PorosityArray, Layer, StrDataSet5PORLaye
           + IntToStr(LayerCount) + ': '
-          + LayerGroup.AquiferName, StrNoValueAssigned, 'POR');
+          + LayerGroup.AquiferName, StrNoValueAssigned, StrPOR);
       end;
     end
     else
     begin
       Inc(Layer);
-      WriteArray(PorosityArray, Layer, 'Data Set 5: PorCB' + ' Layer '
+      WriteArray(PorosityArray, Layer, StrDataSet5PorCBLa
         + IntToStr(LayerCount) + ': '
-        + LayerGroup.AquiferName, StrNoValueAssigned, 'PorCB');
+        + LayerGroup.AquiferName, StrNoValueAssigned, StrPorCB);
     end;
   end;
 end;
@@ -226,7 +246,7 @@ var
   ZoneDataArray: TDataArray;
 begin
   ZoneDataArray := Model.DataArrayManager.GetDataSetByName(StrModpathZone);
-  WriteDataSet('Data Set 4: IBOUND', ZoneDataArray);
+  WriteDataSet(StrDataSet4IBOUND, ZoneDataArray);
 end;
 
 // copied from TModflowBasicWriter
@@ -331,7 +351,7 @@ begin
   else
     Assert(False);
   end;
-  Option := Trim(Option + ' # Data Set 2: OPTION');
+  Option := Trim(Option + StrDataSet2OPTIO);
   WriteString(Option);
   NewLine;
 end;
@@ -357,7 +377,7 @@ begin
   WriteInteger(NPART);
   WriteInteger(IRCHTP);
   WriteInteger(IEVTTP);
-  WriteString(' # Data Set 1: MAXSIZ HNOFLO  HDRY  NPART  IRCHTP  IEVTTP');
+  WriteString(StrDataSet1MAXSI);
   NewLine;
 end;
 
@@ -381,6 +401,8 @@ begin
 end;
 
 procedure TModpathBasicFileWriter.Evaluate;
+const
+  Tolerance = 0.0001;
 var
   Packages: TModflowPackages;
   IFaceIndex: integer;
@@ -399,14 +421,20 @@ begin
     UniformGrid := ModflowGrid.UniformColumns(MaxWidth, MinWidth);
     if not UniformGrid then
     begin
-      frmErrorsAndWarnings.AddError(Model, StrInvalidGridStructu,
-        Format(StrMOSPATH7RequiresA, ['column', MaxWidth, MinWidth]));
+      if Abs(MinWidth/MaxWidth -1) > Tolerance then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrInvalidGridStructu,
+          Format(StrMOSPATH7RequiresA, [StrColumn, MaxWidth, MinWidth]));
+      end;
     end;
     UniformGrid := ModflowGrid.UniformRows(MaxWidth, MinWidth);
     if not UniformGrid then
     begin
-      frmErrorsAndWarnings.AddError(Model, StrInvalidGridStructu,
-        Format(StrMOSPATH7RequiresA, ['row', MaxWidth, MinWidth]));
+      if Abs(MinWidth/MaxWidth -1) > Tolerance then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrInvalidGridStructu,
+          Format(StrMOSPATH7RequiresA, [StrRow, MaxWidth, MinWidth]));
+      end;
     end;
   end;
 
@@ -578,7 +606,7 @@ begin
   HDRY := Model.ModflowOptions.HDry;
   WriteFloat(HNOFLO);
   WriteFloat(HDRY);
-  WriteString(' # Data Set 1: HNOFLO  HDRY');
+  WriteString(StrDataSet1HNOFL);
   NewLine;
 end;
 
@@ -587,7 +615,7 @@ begin
   frmProgressMM.AddMessage(StrWritingDataSet2);
   Assert(FFlowTerms.Count = FIfaceTerms.Count);
   WriteInteger(FFlowTerms.Count);
-  WriteString(' # Data Set 2: DefaultIFaceCount');
+  WriteString(StrDataSet2Defau);
   NewLine;
 end;
 
@@ -635,7 +663,7 @@ begin
   end;
   frmProgressMM.AddMessage(StrWritingDataSet6);
   ZoneDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
-  WriteDataSet('Data Set 6: IBOUND', ZoneDataArray);
+  WriteDataSet(StrDataSet6IBOUND, ZoneDataArray);
 end;
 
 procedure TModpathBasicFileWriter.WriteDataSets3and4;
@@ -678,16 +706,16 @@ begin
     begin
       Inc(LayerCount);
       Inc(Layer);
-      WriteArray(PorosityArray, Layer, 'Data Set 7: Porosity' + ' Layer '
+      WriteArray(PorosityArray, Layer, StrDataSet7Porosity
         + IntToStr(LayerCount) + ': '
-        + LayerGroup.AquiferName, StrNoValueAssigned, 'Porosity');
+        + LayerGroup.AquiferName, StrNoValueAssigned, StrPorosity);
     end
     else
     begin
       Inc(Layer);
-      WriteArray(PorosityArray, Layer, 'Data Set 8: PorosityCB' + ' Layer '
+      WriteArray(PorosityArray, Layer, StrDataSet8Porosity
         + IntToStr(LayerCount) + ': '
-        + LayerGroup.AquiferName, StrNoValueAssigned, 'PorosityCB');
+        + LayerGroup.AquiferName, StrNoValueAssigned, StrPorosityCB);
 
       if FMpathVersion <> mp6 then
       begin
