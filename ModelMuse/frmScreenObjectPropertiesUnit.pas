@@ -2507,6 +2507,10 @@ resourcestring
   StrYouCanOnlyDefineSft = 'You can only define Stream transport using objec' +
   'ts that define SFR streams';
   StrReservoirPackage = 'Reservoir package';
+  StrRechargeConcIn = 'Recharge conc in ';
+  StrSatETConcIn = 'Sat ET conc in ';
+  StrUnsatETConcIn = 'Unsat ET conc in ';
+  StrUZFSinkConcIn = 'UZF sink conc in ';
 //  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
@@ -12240,7 +12244,7 @@ begin
   end;
   if Used then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Rech conc in ' +
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, StrRechargeConcIn +
       frmGoPhast.PhastModel.ModflowPackages.Mt3dUnsatTransport.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspMT3D_UZT_Rech.PageIndex;
@@ -12259,7 +12263,7 @@ begin
   if frmGoPhast.PhastModel.UzfSeepageUsed
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'UZF sink conc in ' +
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, StrUZFSinkConcIn +
       frmGoPhast.PhastModel.ModflowPackages.Mt3dmsSourceSink.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspMT3D_Uzf_Ssm_Conc.PageIndex;
@@ -12280,7 +12284,7 @@ begin
   if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Sat ET conc in ' +
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, StrSatETConcIn +
       frmGoPhast.PhastModel.ModflowPackages.Mt3dUnsatTransport.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspMT3D_UZT_Sat.PageIndex;
@@ -12299,7 +12303,7 @@ begin
   if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected
     and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 'Unsat ET conc in ' +
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, StrUnsatETConcIn +
       frmGoPhast.PhastModel.ModflowPackages.Mt3dUnsatTransport.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspMT3D_UZT_Unsat.PageIndex;
@@ -16965,6 +16969,8 @@ begin
     end;
 
     FoundFirst := False;
+    frameMT3DMS_SSM.cbSpecifiedConcentration.Checked := False;
+    frameMT3DMS_SSM.cbMassLoading.Checked := False;
     for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
     begin
       AScreenObject := ScreenObjectList[ScreenObjectIndex];

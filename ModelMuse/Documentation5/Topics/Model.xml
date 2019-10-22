@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The items under </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model</text><text styleclass="Normal" translate="true"> are used to select the model that is being edited (MODFLOW-2005, MODFLOW-LGR, MODFLOW-NWT, PHAST, or SUTRA) and to set options specific to a particular model (Table 13). </text></para>
     <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 13. Model Menu</text></para>
-    <para styleclass="Normal" style="text-align:center;"><table rowcount="46" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="47" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Menu Item</text></para>
@@ -237,6 +237,14 @@
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Observations_Dialog_Box" styleclass="Strong" translate="true">SWR Observations</link><text styleclass="Table Cell" translate="true"> dialog box which is used to define observations in the SWR package. This dialog box can only be displayed if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Print_Flags" anchor="SaveObservations" styleclass="Table Cell" translate="true">Save observations</link><text styleclass="Table Cell" translate="true"> in the SWR package has been set to SAVE_SWROBSERVATIONS or SAVE_SWROBSERVATIONS_ALL</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Contaminant Treatment Systems</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Contaminant_Treatment_Systems_" styleclass="Strong" translate="true">Contaminant Treatment Systems</link><text styleclass="Table Cell" translate="true"> dialog box &#160;to edit the CTS package in MT3D-USGS.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

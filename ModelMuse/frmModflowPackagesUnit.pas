@@ -3710,6 +3710,9 @@ begin
   if frmGoPhast.ModelSelection <> msModflow2015 then
   begin
   {$IFDEF Mt3dUSGS}
+    Packages.Mt3dCts.Frame := frameMt3dCtsPkg;
+    FPackageList.Add(Packages.Mt3dCts);
+
     Packages.Mt3dLkt.Frame := frameMt3dLktPkg;
     FPackageList.Add(Packages.Mt3dLkt);
 
@@ -3718,9 +3721,6 @@ begin
 
     Packages.Mt3dUnsatTransport.Frame := framePkgMt3dUzt;
     FPackageList.Add(Packages.Mt3dUnsatTransport);
-
-    Packages.Mt3dCts.Frame := frameMt3dCtsPkg;
-    FPackageList.Add(Packages.Mt3dCts);
   {$ELSE}
     framePkgMt3dUzt.NilNode;
     frameMt3dLktPkg.NilNode;

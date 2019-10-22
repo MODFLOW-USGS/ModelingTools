@@ -112,6 +112,8 @@ const
   StrPHIRAMPOut = 'PHIRAMP_Out';
   StrLKT                    = 'LKT';
   StrSFT                    = 'SFT';
+  StrCTS                    = 'CTS';
+//  SrtCTO                    = 'CTO';
 
   StrSTR_OUT = 'STR_OUT';
   StrSTOB = 'STOB';
@@ -301,6 +303,7 @@ const
   Mt3dFl6Bhd = 26;
   Mt3dDisGrb = 27;
   Mt3dCtsOut = 28;
+  mt3dCTS    = 0;
 
 
 const

@@ -6,7 +6,7 @@ inherited frmModflowTime: TfrmModflowTime
   ClientWidth = 754
   OnResize = FormResize
   ExplicitWidth = 770
-  ExplicitHeight = 365
+  ExplicitHeight = 366
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -66,7 +66,7 @@ inherited frmModflowTime: TfrmModflowTime
     Top = 0
     Width = 754
     Height = 292
-    ActivePage = tabModflow
+    ActivePage = tabMt3dms
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange

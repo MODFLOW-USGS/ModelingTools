@@ -1060,7 +1060,7 @@ begin
     if TryStrToFloat(Grid.Cells[Ord(mtcStepSize), ARow], StepSize) and
       TryStrToFloat(Grid.Cells[Ord(mtcMaxStepSize), ARow], MaxStepSize) then
     begin
-      if StepSize > MaxStepSize then
+      if (StepSize > MaxStepSize) and (MaxStepSize <> 0) then
       begin
         Grid.Canvas.Brush.Color := clRed;
       end;

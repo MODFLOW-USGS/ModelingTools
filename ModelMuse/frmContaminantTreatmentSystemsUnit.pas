@@ -14,6 +14,8 @@ type
   TCstWellColumns = (cwcStartTime, cwcEndTime, cwcExtractionWells, cwcInjectionWells);
   TCstExternalFlowColumns = (cefcStartTime, cefcEndTime, cstOutflow, cstInflow, cstInflowConc);
   TInjectionOptionColumns = (iocStartTime, iocEndTime, iocTreament1, iocValue1);
+  TMaxConcColumns = (mccStartTime, mccEndTime, mccConc1);
+
 
   TUndoEditCTS = class(TCustomUndo)
   private
@@ -62,7 +64,7 @@ type
     rcSystem: TRbwController;
     rparserThreeDFormulaElements: TRbwParser;
     tabMaximumAllowedConc: TTabSheet;
-    rdgMaxAllowedConc: TRbwDataGrid4;
+    frameMaxConc: TframeGrid;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure tvTreatmentSystemsChange(Sender: TObject; Node: TTreeNode);
@@ -86,6 +88,8 @@ type
       ARow: Integer);
     procedure pcTreatmentsChange(Sender: TObject);
     procedure cbUseDefaultOptionsClick(Sender: TObject);
+    procedure frameMaxConcGridSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
   private
     FCtsSystems: TCtsSystemCollection;
     FWellObjects: TStringList;
@@ -130,6 +134,7 @@ resourcestring
   StrChangeMT3DUSGSCon = 'change MT3D-USGS Contaminant Treatment System';
   StrErrorInFormulaS = 'Error in formula: %s';
   StrErrorIn0sRow = 'Error in %0:s Row: %1:d Column: %2:d. %3:s';
+  StrMaximumAllowedConc = 'Maximum Allowed Concentration %s (CNTE)';
 
 {$R *.dfm}
 
@@ -183,6 +188,8 @@ begin
   inherited;
   tabIndividualWellOptions.TabVisible :=
     TTreatmentDistribution(comboTreatmentOption.ItemIndex) = tlIndividual;
+  frameDefaultOptions.Enabled :=
+    TTreatmentDistribution(comboTreatmentOption.ItemIndex) in [tlUniform, tlIndividual];
 end;
 
 procedure TfrmContaminantTreatmentSystems.CreateBoundaryFormula(
@@ -358,6 +365,13 @@ begin
   UpdateNextTimeCell(Sender as TRBWDataGrid4, ACol, ARow);
 end;
 
+procedure TfrmContaminantTreatmentSystems.frameMaxConcGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(Sender as TRBWDataGrid4, ACol, ARow);
+end;
+
 procedure TfrmContaminantTreatmentSystems.frameWellsGridButtonClick(
   Sender: TObject; ACol, ARow: Integer);
 var
@@ -441,6 +455,8 @@ var
   end;
 begin
   LocalModel := frmGoPhast.PhastModel;
+  tabMaximumAllowedConc.TabVisible :=
+    LocalModel.ModflowPackages.Mt3dCts.ForceOption = ctsDontForce;
 
   pcMain.ActivePageIndex := 0;
   pcTreatments.ActivePageIndex := 0;
@@ -449,6 +465,7 @@ begin
   frameExternalFlows.Grid.ColCount := NCOMP + 4;
   frameDefaultOptions.Grid.ColCount := NCOMP*2+ 2;
   frameIndividualWellOptions.Grid.ColCount := NCOMP*2+ 2;
+  frameMaxConc.Grid.ColCount := NCOMP + 2;
 
   TreatmentOptions := TStringList.Create;
   try
@@ -461,7 +478,7 @@ begin
     frameDefaultOptions.Grid.BeginUpdate;
     frameWells.Grid.BeginUpdate;
     frameIndividualWellOptions.Grid.BeginUpdate;
-    rdgMaxAllowedConc.BeginUpdate;
+    frameMaxConc.Grid.BeginUpdate;
     try
       StressPeriods := LocalModel.ModflowStressPeriods;
       StressPeriods.FillPickListWithStartTimes(frameWells.Grid, 0);
@@ -472,6 +489,8 @@ begin
       StressPeriods.FillPickListWithEndTimes(frameDefaultOptions.Grid, 1);
       StressPeriods.FillPickListWithStartTimes(frameIndividualWellOptions.Grid, 0);
       StressPeriods.FillPickListWithEndTimes(frameIndividualWellOptions.Grid, 1);
+      StressPeriods.FillPickListWithStartTimes(frameMaxConc.Grid, 0);
+      StressPeriods.FillPickListWithEndTimes(frameMaxConc.Grid, 1);
 
       Grid := frameWells.Grid;
       Grid.Cells[Ord(cwcStartTime), 0] := StrStartingTime;
@@ -498,13 +517,32 @@ begin
         AColumn.WordWrapCaptions := True;
       end;
 
-      rdgMaxAllowedConc.RowCount := NCOMP + 1;
-      rdgMaxAllowedConc.Cells[1,0] := 'Concentration';
-      for RowIndex := 1 to NCOMP do
+      // mccStartTime, mccEndTime, mccConc1
+      Grid := frameMaxConc.Grid;
+      Grid.Cells[Ord(mccStartTime), 0] := StrStartingTime;
+      Grid.Cells[Ord(mccEndTime), 0] := StrEndingTime;
+      for CompIndex := 0 to NCOMP - 1 do
       begin
-        rdgMaxAllowedConc.Cells[0, RowIndex] :=
-          LocalModel.Mt3dSpecesName[RowIndex-1];
+        ColIndex := Ord(mccConc1) + CompIndex;
+        Grid.Cells[ColIndex, 0] := Format(StrMaximumAllowedConc,
+          [LocalModel.Mt3dSpecesName[CompIndex]]);
+        AColumn := Grid.Columns[ColIndex];
+        AColumn.ButtonUsed := True;
+        AColumn.ButtonCaption := 'F()';
+        AColumn.ButtonWidth := 35;
+        AColumn.AutoAdjustColWidths := True;
+        AColumn.AutoAdjustRowHeights := True;
+        AColumn.WordWrapCaptions := True;
       end;
+
+
+//      rdgMaxAllowedConc.RowCount := NCOMP + 1;
+//      rdgMaxAllowedConc.Cells[1,0] := 'Concentration';
+//      for RowIndex := 1 to NCOMP do
+//      begin
+//        rdgMaxAllowedConc.Cells[0, RowIndex] :=
+//          LocalModel.Mt3dSpecesName[RowIndex-1];
+//      end;
 
       Grid := frameDefaultOptions.Grid;
       InitializeOptionsGrid;
@@ -513,7 +551,7 @@ begin
       InitializeOptionsGrid;
 
     finally
-      rdgMaxAllowedConc.EndUpdate;
+      frameMaxConc.Grid.EndUpdate;
       frameExternalFlows.Grid.EndUpdate;
       frameDefaultOptions.Grid.EndUpdate;
       frameWells.Grid.EndUpdate;
@@ -796,6 +834,9 @@ var
   Value: string;
   TreatmentOptionIndex: Integer;
   CompItem: TStringConcValueItem;
+  MaxAllowedIndex: Integer;
+  MaxConcItem: TCtsMaxConcItem;
+  AMaxItem: TStringConcValueItem;
 begin
   inherited;
   LocalModel := frmGoPhast.PhastModel;
@@ -861,7 +902,6 @@ begin
       TTreatmentDistribution(comboTreatmentOption.ItemIndex);
 
     FSelectedSystem.DefaultInjectionOptions.Count := frameDefaultOptions.seNumber.AsInteger;
-
     for DefaultInjIndex := 0 to FSelectedSystem.DefaultInjectionOptions.Count - 1 do
     begin
       InjItem := FSelectedSystem.DefaultInjectionOptions[DefaultInjIndex];
@@ -897,20 +937,33 @@ begin
         Inc(ColIndex);
       end;
 
-      while FSelectedSystem.MaxAllowedConcentrations.Count < NCOMP do
+      FSelectedSystem.MaximumAllowedConc.Count := frameMaxConc.seNumber.AsInteger;
+      for MaxAllowedIndex := 0 to FSelectedSystem.MaximumAllowedConc.Count - 1 do
       begin
-        SpeciesIndex := FSelectedSystem.MaxAllowedConcentrations.Count;
-        CompItem := FSelectedSystem.MaxAllowedConcentrations.Add;
-        CompItem.Value := '0';
-        CompItem.Name := LocalModel.Mt3dSpecesName[SpeciesIndex];
-      end;
+        MaxConcItem := FSelectedSystem.MaximumAllowedConc[MaxAllowedIndex];
+        MaxConcItem.StartTime :=
+          frameMaxConc.Grid.RealValueDefault[Ord(mccStartTime), MaxAllowedIndex+1, -1];
+        MaxConcItem.EndTime :=
+          frameMaxConc.Grid.RealValueDefault[Ord(mccEndTime), MaxAllowedIndex+1, 0];
+        While MaxConcItem.MaxConcentrations.Count < NCOMP do
+        begin
+          AMaxItem := MaxConcItem.MaxConcentrations.Add;
+          AMaxItem.Value := '0';
+        end;
+        ColIndex := Ord(mccConc1);
+        for CompIndex := 0 to NCOMP - 1 do
+        begin
+          AMaxItem := MaxConcItem.MaxConcentrations[CompIndex];
 
-      for SpeciesIndex := 0 to NCOMP - 1 do
-      begin
-        CompItem := FSelectedSystem.MaxAllowedConcentrations[SpeciesIndex];
-        CompItem.Value := rdgMaxAllowedConc.Cells[1, SpeciesIndex+1];
+          Value := frameMaxConc.Grid.Cells[
+            ColIndex, MaxAllowedIndex+1];
+          if Value <> '' then
+          begin
+            AMaxItem.Value := Value;
+          end;
+          Inc(ColIndex);
+        end;
       end;
-
     end;
 
   end;
@@ -980,6 +1033,7 @@ begin
     end;
 
     comboTreatmentOption.ItemIndex := Ord(FSelectedSystem.TreatmentDistribution);
+    comboTreatmentOptionChange(nil);
 
     Grid := frameDefaultOptions.Grid;
     ClearGrid(Grid);
@@ -1019,20 +1073,31 @@ begin
         WellItem.InjectionWellObjectName, WellItem);
     end;
 
-    while FSelectedSystem.MaxAllowedConcentrations.Count < NCOMP do
+    Grid := frameMaxConc.Grid;
+    ClearGrid(Grid);
+    frameMaxConc.seNumber.AsInteger :=
+      FSelectedSystem.MaximumAllowedConc.Count;
+    for MaxAllowedIndex := 0 to FSelectedSystem.MaximumAllowedConc.Count - 1 do
     begin
-      SpeciesIndex := FSelectedSystem.MaxAllowedConcentrations.Count;
-      CompItem := FSelectedSystem.MaxAllowedConcentrations.Add;
-      CompItem.Value := '0';
-      CompItem.Name := LocalModel.Mt3dSpecesName[SpeciesIndex];
+      MaxConcItem := FSelectedSystem.MaximumAllowedConc[MaxAllowedIndex];
+      Grid.RealValue[Ord(mccStartTime), MaxAllowedIndex+1] :=
+        MaxConcItem.StartTime;
+      Grid.RealValue[Ord(mccEndTime), MaxAllowedIndex+1] :=
+        MaxConcItem.EndTime;
+      While MaxConcItem.MaxConcentrations.Count < NCOMP do
+      begin
+        AMaxItem := MaxConcItem.MaxConcentrations.Add;
+        AMaxItem.Value := '0';
+      end;
+      ColIndex := Ord(mccConc1);
+      for CompIndex := 0 to NCOMP - 1 do
+      begin
+        AMaxItem := MaxConcItem.MaxConcentrations[CompIndex];
+        Grid.Cells[ColIndex, MaxAllowedIndex+1] :=
+          AMaxItem.Value;
+        Inc(ColIndex);
+      end;
     end;
-
-    for SpeciesIndex := 0 to NCOMP - 1 do
-    begin
-      CompItem := FSelectedSystem.MaxAllowedConcentrations[SpeciesIndex];
-      rdgMaxAllowedConc.Cells[1, SpeciesIndex+1] := CompItem.Value;
-    end;
-
   end;
 end;
 

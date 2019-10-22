@@ -8938,7 +8938,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMawWriterUnit, ModflowGncWriterUnit, Modflow6ObsWriterUnit,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
-  Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit;
+  Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
+  Mt3dCtsWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -39678,6 +39679,7 @@ var
   UztWriter: TMt3dUztWriter;
   LktWriter: TMt3dLktWriter;
   SftWriter: TMt3dmsSftWriter;
+  CtsWriter: TMt3dCtsWriter;
   {$ENDIF}
 begin
   // Note: MT3DMS can not read Unicode text files.
@@ -39729,6 +39731,13 @@ begin
           LktWriter.WriteFile(FileName);
         finally
           LktWriter.Free;
+        end;
+
+        CtsWriter := TMt3dCtsWriter.Create(self, etExport);
+        try
+          CtsWriter.WriteFile(FileName);
+        finally
+          CtsWriter.Free;
         end;
 
         SftWriter := TMt3dmsSftWriter.Create(self, etExport);

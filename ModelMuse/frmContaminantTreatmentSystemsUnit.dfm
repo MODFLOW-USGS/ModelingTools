@@ -28,7 +28,6 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
     Indent = 19
     TabOrder = 0
     OnChange = tvTreatmentSystemsChange
-    ExplicitLeft = 5
   end
   object pnlBottom: TPanel
     Left = 0
@@ -49,6 +48,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 2
+      OnClick = btnHelpClick
     end
     object btnCancelBtn: TBitBtn
       Left = 633
@@ -110,7 +110,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabMaximumAllowedConc
+      ActivePage = tabTreatments
       Align = alClient
       Enabled = False
       TabOrder = 0
@@ -438,26 +438,24 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Align = alTop
           TabOrder = 0
           object lblTreatmentOption: TLabel
-            Left = 256
-            Top = 11
+            Left = 263
+            Top = 14
             Width = 187
             Height = 18
             Caption = 'Treatment Option (ITRTINJ)'
           end
           object comboTreatmentOption: TComboBox
-            Left = 2
-            Top = 8
-            Width = 239
+            Left = 1
+            Top = 9
+            Width = 256
             Height = 26
             Style = csDropDownList
-            ItemIndex = 1
             TabOrder = 0
-            Text = 'All wells treated alike'
             OnChange = comboTreatmentOptionChange
             Items.Strings = (
-              'No treatment'
-              'All wells treated alike'
-              'Each wells treated individually')
+              'No treatment (0)'
+              'All wells treated alike (1)'
+              'Each wells treated individually (2)')
           end
         end
         object pcTreatments: TPageControl
@@ -465,7 +463,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
           Top = 41
           Width = 587
           Height = 237
-          ActivePage = tabIndividualWellOptions
+          ActivePage = tabDefaultOptions
           Align = alClient
           TabOrder = 1
           OnChange = pcTreatmentsChange
@@ -835,76 +833,122 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       object tabMaximumAllowedConc: TTabSheet
         Caption = 'Max Allowed Concentration'
         ImageIndex = 3
-        object rdgMaxAllowedConc: TRbwDataGrid4
+        inline frameMaxConc: TframeGrid
           Left = 0
           Top = 0
           Width = 587
           Height = 278
           Align = alClient
-          ColCount = 2
-          FixedCols = 1
-          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
           TabOrder = 0
-          ExtendedAutoDistributeText = False
-          AutoMultiEdit = False
-          AutoDistributeText = False
-          AutoIncreaseColCount = False
-          AutoIncreaseRowCount = False
-          SelectedRowOrColumnColor = clAqua
-          UnselectableColor = clBtnFace
-          ColorRangeSelection = False
-          Columns = <
-            item
-              AutoAdjustRowHeights = False
-              ButtonCaption = '...'
-              ButtonFont.Charset = DEFAULT_CHARSET
-              ButtonFont.Color = clWindowText
-              ButtonFont.Height = -11
-              ButtonFont.Name = 'Tahoma'
-              ButtonFont.Style = []
-              ButtonUsed = False
-              ButtonWidth = 20
-              CheckMax = False
-              CheckMin = False
-              ComboUsed = False
-              Format = rcf4String
-              LimitToList = False
-              MaxLength = 0
-              ParentButtonFont = False
-              WordWrapCaptions = False
-              WordWrapCells = False
-              CaseSensitivePicklist = False
-              CheckStyle = csCheck
-              AutoAdjustColWidths = False
+          ExplicitWidth = 587
+          ExplicitHeight = 278
+          inherited Panel: TPanel
+            Top = 237
+            Width = 587
+            ExplicitTop = 237
+            ExplicitWidth = 587
+            inherited lbNumber: TLabel
+              Width = 55
+              Height = 18
+              ExplicitWidth = 55
+              ExplicitHeight = 18
             end
-            item
-              AutoAdjustRowHeights = False
-              ButtonCaption = 'F()'
-              ButtonFont.Charset = DEFAULT_CHARSET
-              ButtonFont.Color = clWindowText
-              ButtonFont.Height = -11
-              ButtonFont.Name = 'Tahoma'
-              ButtonFont.Style = []
-              ButtonUsed = True
-              ButtonWidth = 35
-              CheckMax = False
-              CheckMin = False
-              ComboUsed = False
-              Format = rcf4String
-              LimitToList = False
-              MaxLength = 0
-              ParentButtonFont = False
-              WordWrapCaptions = False
-              WordWrapCells = False
-              CaseSensitivePicklist = False
-              CheckStyle = csCheck
-              AutoAdjustColWidths = True
-            end>
-          WordWrapRowCaptions = False
-          ExplicitLeft = 256
-          ExplicitTop = 104
-          ExplicitWidth = 320
-          ExplicitHeight = 120
+            inherited sbAdd: TSpeedButton
+              Left = 307
+              ExplicitLeft = 307
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 363
+              ExplicitLeft = 363
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 420
+              ExplicitLeft = 420
+            end
+            inherited seNumber: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 587
+            Height = 237
+            ColCount = 3
+            OnSetEditText = frameMaxConcGridSetEditText
+            OnButtonClick = frameExternalFlowsGridButtonClick
+            Columns = <
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = True
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end>
+            ExplicitWidth = 587
+            ExplicitHeight = 237
+          end
         end
       end
     end

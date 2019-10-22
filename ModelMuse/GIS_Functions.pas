@@ -908,23 +908,34 @@ begin
     case EvaluatedAt of
       eaBlocks:
         begin
-          CC2D := LocalModel.TwoDElementCenter(Col, Row);
-          GlobalX := CC2D.X;
-          GlobalY := CC2D.Y;
-
-          if LocalModel.DisvUsed then
+          if (Col >= 0) and (Row >= 0) and (Layer >= 0) then
           begin
-            ACell := LocalModel.DisvGrid.Layers[Layer].Layer[Col];
-            GlobalZ := (ACell.Top + ACell.Bottom)/2;
-            GlobalXPrime := GlobalX;
-            GlobalYPrime := GlobalY;
+            CC2D := LocalModel.TwoDElementCenter(Col, Row);
+            GlobalX := CC2D.X;
+            GlobalY := CC2D.Y;
+
+            if LocalModel.DisvUsed then
+            begin
+              ACell := LocalModel.DisvGrid.Layers[Layer].Layer[Col];
+              GlobalZ := (ACell.Top + ACell.Bottom)/2;
+              GlobalXPrime := GlobalX;
+              GlobalYPrime := GlobalY;
+            end
+            else
+            begin
+              CC3D := LocalModel.Grid.ThreeDElementCenter(Col, Row, Layer);
+              GlobalZ := CC3D.Z;
+              GlobalXPrime := CC3D.X;
+              GlobalYPrime := CC3D.Y;
+            end;
           end
           else
           begin
-            CC3D := LocalModel.Grid.ThreeDElementCenter(Col, Row, Layer);
-            GlobalZ := CC3D.Z;
-            GlobalXPrime := CC3D.X;
-            GlobalYPrime := CC3D.Y;
+            GlobalX := 0;
+            GlobalY := 0;
+            GlobalZ := 0;
+            GlobalXPrime := 0;
+            GlobalYPrime := 0;
           end;
         end;
       eaNodes:

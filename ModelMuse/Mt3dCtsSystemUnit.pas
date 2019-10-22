@@ -90,7 +90,7 @@ type
   public
     procedure Assign(Source: TPersistent); override;
   published
-    // Data set 6 IOPTINJ
+    // Data sets 6 and 8 IOPTINJ
     property TreatmentOption: TTreatmentOption read FTreatmentOption
       write SetTreatmentOption;
   end;
@@ -237,6 +237,39 @@ type
     function GetItemByStartTime(StartTime: Double): TCtsExternalFlowsItem;
   end;
 
+  TCtsMaxConcItem = class(TCustomModflowBoundaryItem)
+  private
+    FMaxConcentrations: TStringConcCollection;
+    procedure SetMaxConcentrations(const Value: TStringConcCollection);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    procedure CreateFormulaObjects; override;
+    function BoundaryFormulaCount: integer; override;
+
+    procedure AssignObserverEvents(Collection: TCollection); override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure RemoveFormulaObjects;override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    // Data set 7 CNTE
+    property MaxConcentrations: TStringConcCollection read FMaxConcentrations
+      write SetMaxConcentrations;
+  end;
+
+  TCtsMaxConcCollection = class(TCustomNonSpatialBoundColl)
+  private
+    function GetItem(Index: Integer): TCtsMaxConcItem;
+    procedure SetItem(Index: Integer; const Value: TCtsMaxConcItem);
+  protected
+    class function ItemClass: TBoundaryItemClass; override;
+  public
+    property Items[Index: Integer]: TCtsMaxConcItem read GetItem write SetItem; default;
+    function GetItemByStartTime(StartTime: Double): TCtsMaxConcItem;
+  end;
+
   TCtsSystem = class(TModflowScreenObjectProperty)
   private
     FTreatmentDistribution: TTreatmentDistribution;
@@ -245,7 +278,7 @@ type
     FExternalFlows: TCtsExternalFlowsCollection;
     FInjections: TIndividualWellInjectionCollection;
     FName: string;
-    FMaxAllowedConcentrations: TStringConcCollection;
+    FMaximumAllowedConc: TCtsMaxConcCollection;
     procedure SetCtsObjects(const Value: TCtsObjectCollection);
     procedure SetDefaultInjectionOptions(
       const Value: TCtsInjectionTimeCollection);
@@ -254,7 +287,7 @@ type
     function IsSame(AnotherCtsSystem: TCtsSystem): boolean;
     procedure SetInjections(const Value: TIndividualWellInjectionCollection);
     procedure SetName(const Value: string);
-    procedure SetMaxAllowedConcentrations(const Value: TStringConcCollection);
+    procedure SetMaximumAllowedConc(const Value: TCtsMaxConcCollection);
   protected
     function BoundaryObserverPrefix: string; override;
   public
@@ -279,10 +312,8 @@ type
     // data set 8
     property Injections: TIndividualWellInjectionCollection read FInjections
       write SetInjections;
-    // Data set 6;
-    property MaxAllowedConcentrations: TStringConcCollection read FMaxAllowedConcentrations
-      write SetMaxAllowedConcentrations;
-
+    // Data Set 7: Maximum allowed concentrations.
+    property MaximumAllowedConc: TCtsMaxConcCollection read FMaximumAllowedConc write SetMaximumAllowedConc;
     property Name: string read FName write SetName;
   end;
 
@@ -903,11 +934,6 @@ begin
   end;
 end;
 
-//class function TCtsObjectCollection.ItemClass: TBoundaryItemClass;
-//begin
-//  result := TCtsObjectItem;
-//end;
-
 procedure TCtsObjectCollection.Loaded(Model: TBaseModel);
 var
   index: Integer;
@@ -1012,7 +1038,7 @@ begin
     CtsObjects := CtsSystem.CtsObjects;
     ExternalFlows := CtsSystem.ExternalFlows;
     Injections := CtsSystem.Injections;
-    MaxAllowedConcentrations := CtsSystem.MaxAllowedConcentrations;
+    MaximumAllowedConc := CtsSystem.MaximumAllowedConc;
     Name := CtsSystem.Name;
   end
   else
@@ -1033,12 +1059,12 @@ begin
   FCtsObjects := TCtsObjectCollection.Create(Model);
   FExternalFlows := TCtsExternalFlowsCollection.Create(Self, Model, ScreenObject);
   FInjections := TIndividualWellInjectionCollection.Create(Model);
-  FMaxAllowedConcentrations := TStringConcCollection.Create(Model, nil, nil);
+  FMaximumAllowedConc := TCtsMaxConcCollection.Create(self, Model, ScreenObject);
 end;
 
 destructor TCtsSystem.Destroy;
 begin
-  FMaxAllowedConcentrations.Free;
+  FMaximumAllowedConc.Free;
   FInjections.Free;
   FExternalFlows.Free;
   FCtsObjects.Free;
@@ -1054,7 +1080,7 @@ begin
     and CtsObjects.IsSame(AnotherCtsSystem.CtsObjects)
     and ExternalFlows.IsSame(AnotherCtsSystem.ExternalFlows)
     and Injections.IsSame(AnotherCtsSystem.Injections)
-    and MaxAllowedConcentrations.IsSame(AnotherCtsSystem.MaxAllowedConcentrations);
+    and MaximumAllowedConc.IsSame(AnotherCtsSystem.MaximumAllowedConc);
 end;
 
 procedure TCtsSystem.Loaded;
@@ -1084,10 +1110,9 @@ begin
   FInjections.Assign(Value);
 end;
 
-procedure TCtsSystem.SetMaxAllowedConcentrations(
-  const Value: TStringConcCollection);
+procedure TCtsSystem.SetMaximumAllowedConc(const Value: TCtsMaxConcCollection);
 begin
-  FMaxAllowedConcentrations.Assign(Value);
+  FMaximumAllowedConc.Assign(Value);
 end;
 
 procedure TCtsSystem.SetName(const Value: string);
@@ -1362,6 +1387,111 @@ end;
 
 procedure TIndividualWellInjectionCollection.SetItem(Index: Integer;
   const Value: TIndividualWellInjectionItem);
+begin
+  inherited Items[index] := Value;
+end;
+
+{ TCtsMaxConcItem }
+
+procedure TCtsMaxConcItem.Assign(Source: TPersistent);
+begin
+  if Source is TCtsMaxConcItem then
+  begin
+    MaxConcentrations := TCtsMaxConcItem(Source).MaxConcentrations;
+  end;
+  inherited;
+end;
+
+procedure TCtsMaxConcItem.AssignObserverEvents(Collection: TCollection);
+begin
+  inherited;
+
+end;
+
+function TCtsMaxConcItem.BoundaryFormulaCount: integer;
+begin
+  result := 0;
+end;
+
+constructor TCtsMaxConcItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FMaxConcentrations := TStringConcCollection.Create(Model, ScreenObject,
+    Collection);
+end;
+
+procedure TCtsMaxConcItem.CreateFormulaObjects;
+begin
+  inherited;
+
+end;
+
+destructor TCtsMaxConcItem.Destroy;
+begin
+  FMaxConcentrations.Free;
+  inherited;
+end;
+
+procedure TCtsMaxConcItem.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  inherited;
+
+end;
+
+function TCtsMaxConcItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TCtsMaxConcItem) and inherited IsSame(AnotherItem);
+  if result then
+  begin
+    result := MaxConcentrations.IsSame(
+      TCtsMaxConcItem(AnotherItem).MaxConcentrations);
+  end;
+end;
+
+procedure TCtsMaxConcItem.RemoveFormulaObjects;
+begin
+  inherited;
+
+end;
+
+procedure TCtsMaxConcItem.SetMaxConcentrations(
+  const Value: TStringConcCollection);
+begin
+  FMaxConcentrations.Assign(Value);
+end;
+
+{ TCtsMaxConcCollection }
+
+function TCtsMaxConcCollection.GetItem(Index: Integer): TCtsMaxConcItem;
+begin
+  result := inherited Items[index] as TCtsMaxConcItem;
+end;
+
+function TCtsMaxConcCollection.GetItemByStartTime(
+  StartTime: Double): TCtsMaxConcItem;
+var
+  index: Integer;
+  TimeItem: TCtsMaxConcItem;
+begin
+  result := nil;
+  for index := 0 to Count - 1 do
+  begin
+    TimeItem := Items[index];
+    if (TimeItem.StartTime <= StartTime) and (StartTime < TimeItem.EndTime) then
+    begin
+      result := TimeItem;
+      break;
+    end;
+  end;
+end;
+
+class function TCtsMaxConcCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TCtsMaxConcItem;
+end;
+
+procedure TCtsMaxConcCollection.SetItem(Index: Integer;
+  const Value: TCtsMaxConcItem);
 begin
   inherited Items[index] := Value;
 end;

@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, PhastModelUnit, Mt3dCtsSystemUnit, System.Classes,
   ModflowPackageSelectionUnit, System.Generics.Collections, ScreenObjectUnit,
-  RbwParser;
+  RbwParser, Vcl.Forms;
 
 type
   TCstSystemList = TList<TCtsSystem>;
@@ -23,6 +23,7 @@ type
     FUsedWellCountDictionary: TDictionary<TScreenObject, Integer>;
     FUsedWelStartsDictionary: TDictionary<TScreenObject, Integer>;
     FParser: TRbwParser;
+    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteStressPeriods;
     procedure WriteASystem(ACstSystem: TCtsSystem; StartTime: Double;
@@ -31,6 +32,12 @@ type
     procedure WriteDataSet5(ACstSystem: TCtsSystem; StartTime: Double;
       StressPeriodIndex: Integer);
     procedure WriteDataSet6(InjectionTimeOption: TCtsInjectionTimeItem);
+    procedure WriteDataSet7(ACstSystem: TCtsSystem; StartTime: Double;
+      StressPeriodIndex: Integer);
+    procedure WriteDataSet8(ACstSystem: TCtsSystem; StartTime: Double;
+      StressPeriodIndex: Integer);
+    procedure WriteDataSet9(ACstSystem: TCtsSystem; StartTime: Double;
+      StressPeriodIndex: Integer);
 
     procedure GetUsedWells;
     procedure Evaluate;
@@ -48,13 +55,19 @@ implementation
 uses
   ModflowUnitNumbers, GoPhastTypes, ModflowTimeUnit, ModflowMnw2Unit,
   ModflowWellUnit, ModflowBoundaryUnit, GIS_Functions, frmFormulaErrorsUnit,
-  System.SysUtils;
+  System.SysUtils, frmProgressUnit;
 
 resourcestring
   StrErrorEvaluatingInf = 'Error evaluating Inflow in Contaminanent treatmen' +
   't system %0:s in stress period %1:d at time %2:g';
   StrErrorEvaluatingInfConc = 'Error evaluating Inflow Concentration %0:d in' +
   ' Contaminanent treatment system %1:s in stress period %2:d at time %3:g';
+  StrErrorEvaluatingMax = 'Error evaluating Maximum Allowed Concentration %0' +
+  ':d in Contaminanent treatment system %1:s in stress period %2:d at time %' +
+  '3:g';
+  StrErrorEvaluatingOut = 'Error evaluating Outflow in Contaminanent treatme' +
+  'nt system %0:s in stress period %1:d at time %2:g';
+  StrWritingMT3DUSGSCT = 'Writing MT3D-USGS CTS Package input.';
 
 { TMt3dCtsWriter }
 
@@ -114,16 +127,7 @@ var
   WellItem: TIndividualWellInjectionItem;
   InjectionOptions: TCtsInjectionTimeCollection;
   InjectionTimeOption: TCtsInjectionTimeItem;
-  CellList: TCellAssignmentList;
-  CellIndex: Integer;
-  ACell: TCellAssignment;
-  NCOMP: Integer;
-  CompIndex: Integer;
-  ValueFormula: string;
-  ExtractionWells: TCellAssignmentList;
-  ExternalFlowsItem: TCtsExternalFlowsItem;
 begin
-  NCOMP := Model.NumberOfMt3dChemComponents;
   CstObjects  := ACstSystem.CtsObjects.GetItemByStartTime(StartTime);
   ICTS := SystemIndex+1;
   NEXT := 0;
@@ -166,27 +170,6 @@ begin
       if InjectionTimeOption <> nil then
       begin
         Inc(NINJ, ACount);
-
-        CellList := TCellAssignmentList.Create;
-        try
-          AWell.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-          if ACstSystem.TreatmentDistribution = tlIndividual then
-          begin
-            for CellIndex := 0 to CellList.Count - 1 do
-            begin
-              ACell := CellList[CellIndex];
-              for CompIndex := 0 to NCOMP - 1 do
-              begin
-                ValueFormula := InjectionTimeOption.InjectionOptions[CompIndex].Value;
-                // Get values for data set 8 here
-              end;
-            end;
-          end;
-
-
-        finally
-          CellList.Free;
-        end;
       end;
     end
     else
@@ -201,6 +184,9 @@ begin
   WriteInteger(NEXT);
   WriteInteger(NINJ);
   WriteInteger(ITRTINJ);
+  WriteString(' # Data Set 3 for ');
+  WriteString(ACstSystem.Name);
+  WriteString(', ICTS, NEXT, NINJ, ITRTINJ');
   NewLine;
 
   WriteDataSet4(CstObjects);
@@ -216,9 +202,11 @@ begin
 
   if FMt3dCts.ForceOption = ctsDontForce then
   begin
-
+    WriteDataSet7(ACstSystem, StartTime, StressPeriodIndex);
   end;
-  // Write data sets 4, 5, and 6.
+
+  WriteDataSet8(ACstSystem, StartTime, StressPeriodIndex);
+  WriteDataSet9(ACstSystem, StartTime, StressPeriodIndex);
 
 end;
 
@@ -271,7 +259,12 @@ begin
   WriteInteger(MXWEL);
   WriteInteger(IFORCE);
   WriteInteger(ICTSPKG);
+  WriteString(' # Data Set 1, MXCTS, ICTSOUT, MXEXT, MXINJ, MXWEL, IFORCE, ICTSPKG');
   NewLine;
+
+  WriteToMt3dMsNameFile(StrData, Mt3dCtsOut,
+    ChangeFileExt(FNameOfFile, '.cto'), foOutput, Model);
+
 end;
 
 procedure TMt3dCtsWriter.WriteDataSet4(CtsObjects: TCtsObjectItem);
@@ -310,6 +303,8 @@ begin
           WriteInteger(IEXT);
           WriteInteger(JEXT);
           WriteInteger(IWEXT);
+          WriteString(' # Data Set 4, KEXT, IEXT, JEXT, IWEXT');
+          NewLine;
         end;
       finally
         CellList.Free;
@@ -373,7 +368,7 @@ begin
         begin
           frmFormulaErrors.AddFormulaError('', Format(StrErrorEvaluatingInfConc,
             [CompIndex+1, ACstSystem.Name, StressPeriodIndex, StartTime]),
-            ExternalFlowsItem.Inflow, E.Message);
+            ExternalFlowsItem.InflowConcentrations[CompIndex].Value, E.Message);
           ConcentrationFormula := '0';
           FParser.Compile(ConcentrationFormula);
         end;
@@ -389,8 +384,9 @@ begin
     begin
       WriteFloat(CINCTS[CompIndex]);
     end;
-    NewLine;
   end;
+  WriteString(' # Data Set 5, QINCTS, (CINCTS(n), n=1,NCOMP)');
+  NewLine;
 end;
 
 procedure TMt3dCtsWriter.WriteDataSet6(
@@ -440,11 +436,271 @@ begin
       WriteFloat(CMCHGINJ);
     end;
   end;
+  WriteString(' # Data Set 6, IOPTINJ(n), CMCHGINJ(n), n=1,NCOMP');
+  NewLine;
+end;
+
+procedure TMt3dCtsWriter.WriteDataSet7(ACstSystem: TCtsSystem;
+  StartTime: Double; StressPeriodIndex: Integer);
+var
+  NCOMP: Integer;
+  CompIndex: Integer;
+//  InflowFormula: string;
+  MaxConcItem: TCtsMaxConcItem;
+  Expression: TExpression;
+//  QINCTS: Double;
+  CNTE: Array Of Double;
+  ConcentrationFormula: string;
+begin
+  MaxConcItem  := ACstSystem.MaximumAllowedConc.GetItemByStartTime(StartTime);
+
+  NCOMP := Model.NumberOfMt3dChemComponents;
+  if MaxConcItem = nil then
+  begin
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      WriteFloat(0);
+    end;
+  end
+  else
+  begin
+    UpdateCurrentScreenObject(nil);
+    UpdateGlobalLocations(-1, -1, -1, eaBlocks, Model);
+
+    SetLength(CNTE, NCOMP);
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      ConcentrationFormula := MaxConcItem.MaxConcentrations[CompIndex].Value;
+
+      try
+        FParser.Compile(ConcentrationFormula);
+      Except on E: ERbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError('', Format(StrErrorEvaluatingMax,
+            [CompIndex+1, ACstSystem.Name, StressPeriodIndex, StartTime]),
+            MaxConcItem.MaxConcentrations[CompIndex].Value, E.Message);
+          ConcentrationFormula := '0';
+          FParser.Compile(ConcentrationFormula);
+        end;
+      end;
+
+      Expression := FParser.CurrentExpression;
+      Expression.Evaluate;
+      CNTE[CompIndex] := Expression.doubleResult;
+    end;
+
+    for CompIndex := 0 to NCOMP - 1 do
+    begin
+      WriteFloat(CNTE[CompIndex]);
+    end;
+  end;
+  WriteString(' # Data Set 7, CNTE(n), n=1,NCOMP');
+  NewLine;
+end;
+
+procedure TMt3dCtsWriter.WriteDataSet8(ACstSystem: TCtsSystem;
+  StartTime: Double; StressPeriodIndex: Integer);
+var
+  CstObjects: TCtsObjectItem;
+  WellIndex: Integer;
+  AWell: TScreenObject;
+  ACount: Integer;
+  WellItem: TIndividualWellInjectionItem;
+  InjectionOptions: TCtsInjectionTimeCollection;
+  InjectionTimeOption: TCtsInjectionTimeItem;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  CompIndex: Integer;
+  NCOMP: Integer;
+  ValueFormula: string;
+  KINJ: Integer;
+  IINJ: Integer;
+  JINJ: Integer;
+  IWINJ: Integer;
+  StartIndex: Integer;
+  Expression: TExpression;
+  OptionItem: TInjectionOptionItem;
+  IOPTINJ: Integer;
+  CMCHGINJ: double;
+begin
+  NCOMP := Model.NumberOfMt3dChemComponents;
+  CstObjects  := ACstSystem.CtsObjects.GetItemByStartTime(StartTime);
+  for WellIndex := 0 to CstObjects.InjectionWellCount - 1 do
+  begin
+    AWell := CstObjects.InjectionWells[WellIndex];
+    if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
+    begin
+      Assert(FUsedWelStartsDictionary.TryGetValue(AWell, StartIndex));
+      if ACstSystem.TreatmentDistribution = tlIndividual then
+      begin
+        WellItem := ACstSystem.Injections.GetItemByObjectName(AWell.Name);
+        if WellItem.UseDefaultInjectionOptions then
+        begin
+          InjectionOptions := ACstSystem.DefaultInjectionOptions;
+        end
+        else
+        begin
+          InjectionOptions := WellItem.Injections;
+        end;
+      end
+      else
+      begin
+        InjectionOptions := ACstSystem.DefaultInjectionOptions;
+      end;
+      InjectionTimeOption := InjectionOptions.GetItemByStartTime(StartTime);
+
+      if InjectionTimeOption <> nil then
+      begin
+        CellList := TCellAssignmentList.Create;
+        try
+          AWell.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            KINJ := ACell.Layer + 1;
+            IINJ := ACell.Row + 1;
+            JINJ := ACell.Column + 1;
+            IWINJ := StartIndex + CellIndex + 1;
+            WriteInteger(KINJ);
+            WriteInteger(IINJ);
+            WriteInteger(JINJ);
+            WriteInteger(IWINJ);
+            if ACstSystem.TreatmentDistribution = tlIndividual then
+            begin
+              for CompIndex := 0 to NCOMP - 1 do
+              begin                        ;
+                OptionItem := InjectionTimeOption.InjectionOptions[CompIndex];
+                IOPTINJ := Ord(OptionItem.TreatmentOption)+1;
+
+                ValueFormula := OptionItem.Value;
+                // Get values for data set 8 here
+                try
+                  FParser.Compile(ValueFormula);
+                Except on E: ERbwParserError do
+                  begin
+                    frmFormulaErrors.AddFormulaError('', Format(StrErrorEvaluatingMax,
+                      [CompIndex+1, ACstSystem.Name, StressPeriodIndex, StartTime]),
+                      InjectionTimeOption.InjectionOptions[CompIndex].Value, E.Message);
+                    ValueFormula := '0';
+                    FParser.Compile(ValueFormula);
+                  end;
+                end;
+
+                Expression := FParser.CurrentExpression;
+                Expression.Evaluate;
+                CMCHGINJ := Expression.doubleResult;
+
+                WriteInteger(IOPTINJ);
+                WriteFloat(CMCHGINJ);
+              end;
+            end;
+            WriteString(' # Data Set 8 KINJ, IINJ, JINJ, IWINJ');
+            if ACstSystem.TreatmentDistribution = tlIndividual then
+            begin
+              WriteString(', IOPTINJ(n),CMCHGINJ(n), n=1,NCOMP');
+            end;
+
+            NewLine;
+          end;
+        finally
+          CellList.Free;
+        end;
+      end;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TMt3dCtsWriter.WriteDataSet9(ACstSystem: TCtsSystem;
+  StartTime: Double; StressPeriodIndex: Integer);
+var
+  OutflowFormula: string;
+  ExternalFlowsItem: TCtsExternalFlowsItem;
+  Expression: TExpression;
+  QOUTCTS: Double;
+begin
+  ExternalFlowsItem  := ACstSystem.ExternalFlows.GetItemByStartTime(StartTime);
+
+  if ExternalFlowsItem = nil then
+  begin
+    WriteFloat(0);
+  end
+  else
+  begin
+    UpdateCurrentScreenObject(nil);
+    UpdateGlobalLocations(-1, -1, -1, eaBlocks, Model);
+
+    OutflowFormula := ExternalFlowsItem.Outflow;
+    try
+      FParser.Compile(OutflowFormula);
+    Except on E: ERbwParserError do
+      begin
+        frmFormulaErrors.AddFormulaError('', Format(StrErrorEvaluatingOut,
+          [ACstSystem.Name, StressPeriodIndex, StartTime]),
+          ExternalFlowsItem.Inflow, E.Message);
+        OutflowFormula := '0';
+        FParser.Compile(OutflowFormula);
+      end;
+    end;
+
+    Expression := FParser.CurrentExpression;
+    Expression.Evaluate;
+    QOUTCTS := Expression.doubleResult;
+    WriteFloat(QOUTCTS);
+  end;
+  WriteString(' # Data Set 9, QOUTCTS');
   NewLine;
 end;
 
 procedure TMt3dCtsWriter.WriteFile(const AFileName: string);
 begin
+  if not Model.ModflowPackages.Mt3dCts.IsSelected then
+  begin
+    Exit;
+  end;
+
+  FNameOfFile := FileName(AFileName);
+  // PackageGeneratedExternally needs to be updated for MT3DMS
+  if Model.PackageGeneratedExternally(StrCTS) then
+  begin
+    Exit;
+  end;
+
+  Evaluate;
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+
+  WriteToMt3dMsNameFile(StrCTS, mt3dCTS,
+    FNameOfFile, foInput, Model);
+
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingMT3DUSGSCT);
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
+
 
 end;
 
@@ -483,6 +739,8 @@ begin
       // Data Set 2;
       NCTS := UsedSystems.Count;
       WriteInteger(NCTS);
+      WriteString(' # Data Set 2, NCTS, Stress Period');
+      WriteFreeInteger(StressPeriodIndex+1);
       NewLine;
 
       FUsedWellCounts.Clear;
@@ -566,7 +824,7 @@ begin
           begin
             Continue;
           end;
-          if AWell.UsedModels.UsesModel(Model) then
+          if not AWell.UsedModels.UsesModel(Model) then
           begin
             Continue;
           end;
@@ -579,7 +837,7 @@ begin
           begin
             Continue;
           end;
-          if AWell.UsedModels.UsesModel(Model) then
+          if not AWell.UsedModels.UsesModel(Model) then
           begin
             Continue;
           end;
@@ -606,7 +864,7 @@ begin
     begin
       Continue;
     end;
-    if AScreenObject.UsedModels.UsesModel(Model) then
+    if not AScreenObject.UsedModels.UsesModel(Model) then
     begin
       Continue;
     end;
