@@ -1,4 +1,6 @@
 inherited frmEditSelectedWells: TfrmEditSelectedWells
+  HelpType = htKeyword
+  HelpKeyword = 'Edit_Selected_Wells_Dialog_Box'
   Caption = 'Edit Selected Wells'
   PixelsPerInch = 96
   TextHeight = 18
@@ -40,6 +42,7 @@ inherited frmEditSelectedWells: TfrmEditSelectedWells
     Width = 424
     Height = 41
     Align = alBottom
+    BevelOuter = bvNone
     TabOrder = 1
     DesignSize = (
       424

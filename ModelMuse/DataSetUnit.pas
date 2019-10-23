@@ -1699,6 +1699,7 @@ destructor TDataArray.Destroy;
 var
   LocalModel: TCustomModel;
 begin
+  LocalModel := nil;
   if (FModel <> nil)
     and (not (csDestroying in FModel.ComponentState))
     and not (FModel as TCustomModel).Clearing
@@ -1847,6 +1848,20 @@ begin
     begin
       frmGoPhast.PhastModel.ThreeDGridObserver.StopsTalkingTo(self);
       StopsTalkingTo(frmGoPhast.PhastModel.ThreeDGridObserver);
+    end;
+  end;
+
+  if LocalModel <> nil then
+  begin
+    if LocalModel.TopGridObserver <> nil then
+    begin
+      LocalModel.TopGridObserver.StopsTalkingTo(self);
+      StopsTalkingTo(LocalModel.TopGridObserver);
+    end;
+    if LocalModel.ThreeDGridObserver <> nil then
+    begin
+      LocalModel.ThreeDGridObserver.StopsTalkingTo(self);
+      StopsTalkingTo(LocalModel.ThreeDGridObserver);
     end;
   end;
   FContours.Free;

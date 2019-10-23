@@ -6,8 +6,8 @@ object frameAvailableObjects: TframeAvailableObjects
   TabOrder = 0
   OnResize = FrameResize
   object lblSrcObjects: TLabel
-    Left = 14
-    Top = 3
+    Left = 8
+    Top = 4
     Width = 81
     Height = 13
     Caption = 'Available objects'
@@ -20,7 +20,7 @@ object frameAvailableObjects: TframeAvailableObjects
     Caption = 'Used objects'
   end
   object lbSrcObjects: TJvListBox
-    Left = 14
+    Left = 8
     Top = 23
     Width = 164
     Height = 160
@@ -33,10 +33,11 @@ object frameAvailableObjects: TframeAvailableObjects
     ShowHint = True
     Sorted = True
     TabOrder = 0
+    OnClick = lbSrcObjectsClick
   end
   object lbDstObjects: TJvListBox
     Left = 216
-    Top = 23
+    Top = 22
     Width = 164
     Height = 160
     DragMode = dmAutomatic
@@ -48,6 +49,7 @@ object frameAvailableObjects: TframeAvailableObjects
     ShowHint = True
     Sorted = True
     TabOrder = 1
+    OnClick = lbDstObjectsClick
   end
   object btnIncObjects: TButton
     Left = 184

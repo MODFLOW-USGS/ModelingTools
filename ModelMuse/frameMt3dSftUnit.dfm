@@ -141,7 +141,8 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
     Top = 162
     Width = 391
     Height = 17
-    Caption = 'Simulate solute transport though stream'
+    Caption = 'Simulate solute transport though stream (NSFINIT)'
+    Enabled = False
     TabOrder = 7
   end
   inherited rcSelectionController: TRbwController
@@ -169,6 +170,9 @@ inherited frameMt3dSftPkg: TframeMt3dSftPkg
       end
       item
         Control = comboPrintChoice
+      end
+      item
+        Control = cbSimulateStreamTransport
       end>
   end
 end

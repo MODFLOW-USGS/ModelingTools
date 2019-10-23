@@ -735,6 +735,7 @@ resourcestring
   StrWritingPackageData = 'Writing Package Data';
   StrWritingStressPerio = 'Writing Stress Periods';
   StrStreamTransport = 'SFT Stream Transport';
+  StrWritingStressP = '    Writing Stress Period %d';
 
 
   {@name is used as the default name for a new data set.

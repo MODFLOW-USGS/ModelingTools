@@ -1,9 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>SFT: Stream Flow Transport Package Pane</title>
+  <title translate="true">SFT: Stream Flow Transport Package Pane</title>
   <body>
-    <header><para styleclass="Heading1">SFT: Stream Flow Transport Package Pane</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SFT: Stream Flow Transport Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The SFT: Stream Flow Transport Package pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS or MT3D-USGS</link><text styleclass="Normal" translate="true">. It is used to specify some of the data for the SFT package in MT3D-USGS. The SFT package is not included with MT3DMS. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Besides comments, several other variables are specified on the SFT: Stream Flow Transport Package pane.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Simulate solute transport though stream (NSFINIT):</text><text styleclass="Normal" translate="true"> If this checkbox is checked then surface-water transport is solved in the stream network while taking into account groundwater exchange and precipitation and evaporation sources and sinks. Otherwise, the surface-water network as represented by the SFR2 flow package merely acts as a boundary condition to the groundwater transport problem; transport in the surface-water network is not simulated.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Lose solute mass through evaporation (IETSFR):</text><text styleclass="Normal" translate="true"> signifies whether or not mass will exit the surface-water network with simulated evaporation. If the checkbox is checked, mass is allowed to exit the simulation with the simulated evaporation. Otherwise, mass does not leave via stream evaporation. </text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Stream solver time weighting factor (WIMP):</text><text styleclass="Normal" translate="true"> WIMP is a real number that ranges between 0.0 and 1.0 and is the stream solver time weighting factor. Values of 0.0, 0.5, or 1.0 correspond to explicit, Crank-Nicolson, and fully implicit schemes, respectively.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Stream solver space weighting factor (WUPS):</text><text styleclass="Normal" translate="true"> WUPS is a real number that ranges between 0.0 and 1.0 and is the space weighting factor employed in the stream network solver. Values of 0.0 and 1.0 correspond to a central-in-space and upstream weighting factors, respectively.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Closure criterion (CCLOSESF):</text><text styleclass="Normal" translate="true"> CCLOSESF is a real number and is the closure criterion for the SFT solver.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Maximum number of iterations (MXITERSF):</text><text styleclass="Normal" translate="true"> MXITERSF is an integer value limiting the maximum number of iterations the SFT solver can use to find a solution of the stream transport problem.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Solution information (IPRTXMD):</text><text styleclass="Normal" translate="true"> IPRTXMD is a flag to print SFT solution information to the standard output file. </text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Strong"><text styleclass="Normal" translate="true">IPRTXMD = 0 means no SFT solution information is printed; </text></li>
+      <li styleclass="Strong"><text styleclass="Normal" translate="true">IPRTXMD = 1 means SFT solution summary information is printed at the end of every MT3D-USGS outer iteration; and </text></li>
+      <li styleclass="Strong"><text styleclass="Normal" translate="true">IPRTXMD = 2 means SFT solution details are written for each SFT outer iteration that calls the xMD solver that solved SFT equations.</text></li>
+    </list>
   </body>
 </topic>

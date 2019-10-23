@@ -22,6 +22,8 @@ type
     procedure btnIncAllObjectsClick(Sender: TObject);
     procedure btnExclObjectsClick(Sender: TObject);
     procedure btnExclAllObjectsClick(Sender: TObject);
+    procedure lbDstObjectsClick(Sender: TObject);
+    procedure lbSrcObjectsClick(Sender: TObject);
   private
     procedure SetButtons;
     { Private declarations }
@@ -65,19 +67,35 @@ begin
 end;
 
 procedure TframeAvailableObjects.FrameResize(Sender: TObject);
+const
+  Margin = 8;
 begin
-  btnIncObjects.Left := 4 + (Width - btnIncObjects.Width) div 2;
+  lbSrcObjects.Left := Margin;
+  lblSrcObjects.Left := lbSrcObjects.Left;
+
+  btnIncObjects.Left := (Width - btnIncObjects.Width) div 2;
   btnIncAllObjects.Left := btnIncObjects.Left;
   btnExclObjects.Left := btnIncObjects.Left;
   btnExclAllObjects.Left := btnIncObjects.Left;
-  lbSrcObjects.Width := (Width - (8 + 7 + btnIncObjects.Width + 7 + 8)) div 2;
-  lblSrcObjects.Left := lbSrcObjects.Left;
+
+  lbSrcObjects.Width := (Width - btnIncObjects.Width - Margin*4) div 2;
   lbDstObjects.Width := lbSrcObjects.Width;
-  lbDstObjects.Left := btnIncObjects.Left + btnIncObjects.Width + 7;
+
+  lbDstObjects.Left := btnIncObjects.Left + btnIncObjects.Width + Margin;
   lblDstObjects.Left := lbDstObjects.Left;
 
-  lbSrcObjects.Height := Height - lbSrcObjects.Top -8;
+  lbSrcObjects.Height := Height - lbSrcObjects.Top - Margin;
   lbDstObjects.Height := lbSrcObjects.Height;
+end;
+
+procedure TframeAvailableObjects.lbDstObjectsClick(Sender: TObject);
+begin
+  SetButtons;
+end;
+
+procedure TframeAvailableObjects.lbSrcObjectsClick(Sender: TObject);
+begin
+  SetButtons;
 end;
 
 procedure TframeAvailableObjects.SetButtons;

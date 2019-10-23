@@ -18,7 +18,9 @@ inherited frameMt3dLktPkg: TframeMt3dLktPkg
     Top = 184
     Width = 391
     Height = 17
-    Caption = 'Print transport information for each lake to .lktobs file'
+    Caption = 
+      'Print transport information for each lake to .lktobs file (ICBCL' +
+      'K)'
     Enabled = False
     TabOrder = 2
   end

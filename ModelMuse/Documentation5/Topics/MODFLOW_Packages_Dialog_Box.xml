@@ -70,7 +70,7 @@
     <para><link displaytype="text" defaultstyle="true" type="topiclink" href="Post_Processors" styleclass="Normal" translate="true">Post Processors</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH" styleclass="Normal" translate="true">MODPATH</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="ZONEBUDGET" styleclass="Normal" translate="true">ZONEBUDGET</link></para>
-    <para><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS</link></para>
+    <para><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS or MT3D-USGS</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="BTN_Basic_Transport_Package" styleclass="Normal" translate="true">BTN: Basic Transport package</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="ADV_Advection_Package_Pane" styleclass="Normal" translate="true">ADV: Advection package</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="DSP_Dispersion_Package_Pane" styleclass="Normal" translate="true">DSP: Dispersion package</link></para>
@@ -78,6 +78,10 @@
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" styleclass="Normal" translate="true">RCT: Chemical Reactions package</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="GCG_Generalized_Conjugate_Grad" styleclass="Normal" translate="true">GCG: Generalized Conjugate Gradient package</link></para>
     <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="TOB_Transport_Observation_Pack" styleclass="Normal" translate="true">TOB: Transport Observation package</link></para>
+    <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="CTS_Contaminant_Treatment_Syst" styleclass="Normal" translate="true">CTS: Contaminant Treatment Systems package</link></para>
+    <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="LKT_Lake_Transport_Package_Pan" styleclass="Normal" translate="true">LKT: Lake Transport package</link></para>
+    <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFT_Stream_Flow_Transport_Pack" styleclass="Normal" translate="true">SFT: Stream Flow Transport Package</link></para>
+    <para style="margin-left:24px;"><link displaytype="text" defaultstyle="true" type="topiclink" href="UZT_Unsaturated-Zone_Transport" styleclass="Normal" translate="true">UZT: Unsaturated-Zone Transport package</link></para>
     <para></para>
     <para></para>
   </body>

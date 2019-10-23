@@ -16,6 +16,7 @@ type
     btnOkBtn: TBitBtn;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
+    procedure FormShow(Sender: TObject);
   private
     FAvailableWells: TStringList;
     FSelectedWells: TStringList;
@@ -47,6 +48,12 @@ begin
   inherited;
   FAvailableWells.Free;
   FSelectedWells.Free;
+end;
+
+procedure TfrmEditSelectedWells.FormShow(Sender: TObject);
+begin
+  inherited;
+  frameWells.FrameResize(nil);
 end;
 
 procedure TfrmEditSelectedWells.GetData(AllWells,

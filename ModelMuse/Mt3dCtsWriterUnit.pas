@@ -128,11 +128,21 @@ var
   InjectionOptions: TCtsInjectionTimeCollection;
   InjectionTimeOption: TCtsInjectionTimeItem;
 begin
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
   CstObjects  := ACstSystem.CtsObjects.GetItemByStartTime(StartTime);
   ICTS := SystemIndex+1;
   NEXT := 0;
   for WellIndex := 0 to CstObjects.ExtractionWellCount - 1 do
   begin
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     AWell := CstObjects.ExtractionWells[WellIndex];
     if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
     begin
@@ -146,6 +156,11 @@ begin
   NINJ := 0;
   for WellIndex := 0 to CstObjects.InjectionWellCount - 1 do
   begin
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     AWell := CstObjects.InjectionWells[WellIndex];
     if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
     begin
@@ -179,6 +194,7 @@ begin
   end;
   ITRTINJ := Ord(ACstSystem.TreatmentDistribution);
 
+  frmProgressMM.AddMessage(StrWritingDataSet3);
   // Data Set 3
   WriteInteger(ICTS);
   WriteInteger(NEXT);
@@ -281,8 +297,14 @@ var
   ACell: TCellAssignment;
   StartIndex: Integer;
 begin
+  frmProgressMM.AddMessage(StrWritingDataSet4);
   for WellIndex := 0 to CtsObjects.ExtractionWellCount - 1 do
   begin
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     AWell := CtsObjects.ExtractionWells[WellIndex];
     if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
     begin
@@ -292,6 +314,11 @@ begin
         AWell.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
         for index := 0 to CellList.Count - 1 do
         begin
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
           ACell := CellList[index];
 
           KEXT := ACell.Layer + 1;
@@ -324,6 +351,12 @@ var
   CINCTS: Array Of Double;
   ConcentrationFormula: string;
 begin
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+  frmProgressMM.AddMessage(StrWritingDataSet5);
   ExternalFlowsItem  := ACstSystem.ExternalFlows.GetItemByStartTime(StartTime);
 
   NCOMP := Model.NumberOfMt3dChemComponents;
@@ -356,10 +389,20 @@ begin
     Expression := FParser.CurrentExpression;
     Expression.Evaluate;
     QINCTS := Expression.doubleResult;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
 
     SetLength(CINCTS, NCOMP);
     for CompIndex := 0 to NCOMP - 1 do
     begin
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
       ConcentrationFormula := ExternalFlowsItem.InflowConcentrations[CompIndex].Value;
 
       try
@@ -400,6 +443,12 @@ var
   Expression: TExpression;
   CMCHGINJ: Double;
 begin
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+  frmProgressMM.AddMessage(StrWritingDataSet6);
   NCOMP := Model.NumberOfMt3dChemComponents;
   if InjectionTimeOption = nil then
   begin
@@ -413,6 +462,11 @@ begin
   begin
     for CompIndex := 0 to NCOMP - 1 do
     begin
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
       InjectItem := InjectionTimeOption.InjectionOptions[CompIndex];
       IOPTINJ := Ord(InjectItem.TreatmentOption)+1;
       TreatmentFormula := InjectItem.Value;
@@ -452,6 +506,12 @@ var
   CNTE: Array Of Double;
   ConcentrationFormula: string;
 begin
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+  frmProgressMM.AddMessage(StrWritingDataSet7);
   MaxConcItem  := ACstSystem.MaximumAllowedConc.GetItemByStartTime(StartTime);
 
   NCOMP := Model.NumberOfMt3dChemComponents;
@@ -470,6 +530,11 @@ begin
     SetLength(CNTE, NCOMP);
     for CompIndex := 0 to NCOMP - 1 do
     begin
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
       ConcentrationFormula := MaxConcItem.MaxConcentrations[CompIndex].Value;
 
       try
@@ -524,10 +589,21 @@ var
   IOPTINJ: Integer;
   CMCHGINJ: double;
 begin
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+  frmProgressMM.AddMessage(StrWritingDataSet8);
   NCOMP := Model.NumberOfMt3dChemComponents;
   CstObjects  := ACstSystem.CtsObjects.GetItemByStartTime(StartTime);
   for WellIndex := 0 to CstObjects.InjectionWellCount - 1 do
   begin
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     AWell := CstObjects.InjectionWells[WellIndex];
     if FUsedWellCountDictionary.TryGetValue(AWell, ACount) then
     begin
@@ -557,6 +633,11 @@ begin
           AWell.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
           for CellIndex := 0 to CellList.Count - 1 do
           begin
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
             ACell := CellList[CellIndex];
             KINJ := ACell.Layer + 1;
             IINJ := ACell.Row + 1;
@@ -570,6 +651,11 @@ begin
             begin
               for CompIndex := 0 to NCOMP - 1 do
               begin                        ;
+                Application.ProcessMessages;
+                if not frmProgressMM.ShouldContinue then
+                begin
+                  Exit;
+                end;
                 OptionItem := InjectionTimeOption.InjectionOptions[CompIndex];
                 IOPTINJ := Ord(OptionItem.TreatmentOption)+1;
 
@@ -623,6 +709,12 @@ var
   Expression: TExpression;
   QOUTCTS: Double;
 begin
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+  frmProgressMM.AddMessage(StrWritingDataSet9);
   ExternalFlowsItem  := ACstSystem.ExternalFlows.GetItemByStartTime(StartTime);
 
   if ExternalFlowsItem = nil then
@@ -725,6 +817,14 @@ begin
     StressPeriods := Model.ModflowFullStressPeriods;
     for StressPeriodIndex := 0 to StressPeriods.Count - 1 do
     begin
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      frmProgressMM.AddMessage(Format(StrWritingStressP, [StressPeriodIndex+1]));
+
+
       StartTime := StressPeriods[StressPeriodIndex].StartTime;
       UsedSystems.Clear;
       for SystemIndex := 0 to FCtsSystems.Count - 1 do
@@ -749,6 +849,12 @@ begin
       StartIndex := 0;
       for WellIndex := 0 to FAllWells.Count - 1 do
       begin
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
         AScreenObject := FAllWells[WellIndex];
         TimeItem := nil;
         case FMt3dCts.WellPackageChoice of
@@ -781,7 +887,13 @@ begin
 
       for SystemIndex := 0 to UsedSystems.Count - 1 do
       begin
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
         ACstSystem := UsedSystems[SystemIndex];
+        frmProgressMM.AddMessage(Format('Writing System %s', [ACstSystem.Name]));
         WriteASystem(ACstSystem, StartTime, SystemIndex, StressPeriodIndex);
       end;
     end;

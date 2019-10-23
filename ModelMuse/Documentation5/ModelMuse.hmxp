@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4072</config-value>
+      <config-value name="autohelpstart">4073</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -723,6 +723,8 @@ document.write('</frameset>');
       <helpcontext-number href="Consumptive_Use_Factors_Pane" value="3812"/>
       <helpcontext-number href="Consumptive_Use_Flux_or_Crop_C" value="3815"/>
       <helpcontext-number href="Contaminant_Treatment_Systems_" value="4063"/>
+      <helpcontext-number href="Contaminant_Treatment_Systems_#MaxAllowedConcentration" value="4075"/>
+      <helpcontext-number href="Contaminant_Treatment_Systems_#NoTreatment" value="4074"/>
       <helpcontext-number href="Contour_Data_Dialog_Box" value="3489"/>
       <helpcontext-number href="ConvertUnits" value="4023"/>
       <helpcontext-number href="Copy" value="1170"/>
@@ -834,6 +836,7 @@ document.write('</frameset>');
       <helpcontext-number href="Duplicate_Names_Dialog_Box" value="4003"/>
       <helpcontext-number href="Edit" value="1630"/>
       <helpcontext-number href="Edit_Feature_Formula_Dialog_Bo" value="3942"/>
+      <helpcontext-number href="Edit_Selected_Wells_Dialog_Box" value="4073"/>
       <helpcontext-number href="Editing_a_Mesh" value="3690"/>
       <helpcontext-number href="Editing_Objects" value="1530"/>
       <helpcontext-number href="Editing_Objects#Add_Section" value="4018"/>

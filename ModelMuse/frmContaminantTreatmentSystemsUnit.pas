@@ -46,10 +46,8 @@ type
     frameExternalFlows: TframeGrid;
     tabTreatments: TTabSheet;
     pnlTreatmentOptions: TPanel;
-    lblTreatmentOption: TLabel;
-    comboTreatmentOption: TComboBox;
-    pcTreatments: TPageControl;
-    tabDefaultOptions: TTabSheet;
+    lblTreatmentLevel: TLabel;
+    comboTreatmentLevel: TComboBox;
     frameDefaultOptions: TframeGrid;
     tabIndividualWellOptions: TTabSheet;
     splttr2: TJvNetscapeSplitter;
@@ -68,7 +66,7 @@ type
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure tvTreatmentSystemsChange(Sender: TObject; Node: TTreeNode);
-    procedure comboTreatmentOptionChange(Sender: TObject);
+    procedure comboTreatmentLevelChange(Sender: TObject);
     procedure tvIndividualObjectOptionsChange(Sender: TObject; Node: TTreeNode);
     procedure btnAddSystemClick(Sender: TObject);
     procedure btnDeleteSystemClick(Sender: TObject);
@@ -120,10 +118,10 @@ uses
   Mt3dmsChemUnit, frmFormulaUnit, frmConvertChoiceUnit, GIS_Functions;
 
 resourcestring
-  StrPercentage = 'Percentage';
-  StrConcentrationChange = 'Concentration change';
-  StrMass = 'Mass';
-  StrConcentration = 'Concentration';
+  StrPercentage = 'Percentage (1)';
+  StrConcentrationChange = 'Concentration change (2)';
+  StrMass = 'Mass (3)';
+  StrConcentration = 'Specified concentration (4)';
   StrExtractionWellsIW = 'Extraction Wells (IWEXT)';
   StrInjectionWellsIWI = 'Injection Wells (IWINJ)';
   StrExternalOutflowQO = 'External Outflow (QOUTCTS)';
@@ -131,10 +129,12 @@ resourcestring
   StrExternalInflowConc = 'External Inflow Concentration %s (CINCTS)';
   StrTreatmentOptionS = 'Treatment Option %s (IOPTINJ)';
   StrTreatmentValueS = 'Treatment Value %s (CMCHGINJ)';
-  StrChangeMT3DUSGSCon = 'change MT3D-USGS Contaminant Treatment System';
+  StrChangeMT3DUSGSCon = 'changes MT3D-USGS Contaminant Treatment Systems';
   StrErrorInFormulaS = 'Error in formula: %s';
   StrErrorIn0sRow = 'Error in %0:s Row: %1:d Column: %2:d. %3:s';
   StrMaximumAllowedConc = 'Maximum Allowed Concentration %s (CNTE)';
+  StrDefaultTreatmentOp = 'Default treatment options';
+  StrIndividualWellTrea = 'Individual well treatment options';
 
 {$R *.dfm}
 
@@ -182,14 +182,14 @@ begin
   frameIndividualWellOptions.Enabled := not cbUseDefaultOptions.Checked;
 end;
 
-procedure TfrmContaminantTreatmentSystems.comboTreatmentOptionChange(
+procedure TfrmContaminantTreatmentSystems.comboTreatmentLevelChange(
   Sender: TObject);
 begin
   inherited;
   tabIndividualWellOptions.TabVisible :=
-    TTreatmentDistribution(comboTreatmentOption.ItemIndex) = tlIndividual;
+    TTreatmentDistribution(comboTreatmentLevel.ItemIndex) = tlIndividual;
   frameDefaultOptions.Enabled :=
-    TTreatmentDistribution(comboTreatmentOption.ItemIndex) in [tlUniform, tlIndividual];
+    TTreatmentDistribution(comboTreatmentLevel.ItemIndex) in [tlUniform, tlIndividual];
 end;
 
 procedure TfrmContaminantTreatmentSystems.CreateBoundaryFormula(
@@ -326,11 +326,11 @@ begin
             end
             else if DataGrid = frameDefaultOptions.Grid then
             begin
-              ProblemGrid := 'Default treatment options';
+              ProblemGrid := StrDefaultTreatmentOp;
             end
             else if DataGrid = frameIndividualWellOptions.Grid then
             begin
-              ProblemGrid := 'Individual well treatment options';
+              ProblemGrid := StrIndividualWellTrea;
             end
             else
             begin
@@ -423,7 +423,6 @@ var
   Grid: TRbwDataGrid4;
   TreatmentOptions: TStringList;
   AColumn: TRbwColumn4;
-  RowIndex: Integer;
   procedure InitializeOptionsGrid;
   var
     CompIndex: Integer;
@@ -453,13 +452,27 @@ var
       Inc(ColIndex);
     end;
   end;
+  procedure TurnOffAdjustColWidth(AGrid: TRbwDataGrid4);
+  var
+    ColIndex: Integer;
+  begin
+    AGrid.BeginUpdate;
+    try
+      for ColIndex := 2 to AGrid.ColCount - 1 do
+      begin
+        AColumn := AGrid.Columns[ColIndex];
+        AColumn.AutoAdjustColWidths := False;
+      end;
+    finally
+      AGrid.EndUpdate;
+    end;
+  end;
 begin
   LocalModel := frmGoPhast.PhastModel;
   tabMaximumAllowedConc.TabVisible :=
     LocalModel.ModflowPackages.Mt3dCts.ForceOption = ctsDontForce;
 
   pcMain.ActivePageIndex := 0;
-  pcTreatments.ActivePageIndex := 0;
 
   NCOMP := LocalModel.NumberOfMt3dChemComponents;
   frameExternalFlows.Grid.ColCount := NCOMP + 4;
@@ -535,15 +548,6 @@ begin
         AColumn.WordWrapCaptions := True;
       end;
 
-
-//      rdgMaxAllowedConc.RowCount := NCOMP + 1;
-//      rdgMaxAllowedConc.Cells[1,0] := 'Concentration';
-//      for RowIndex := 1 to NCOMP do
-//      begin
-//        rdgMaxAllowedConc.Cells[0, RowIndex] :=
-//          LocalModel.Mt3dSpecesName[RowIndex-1];
-//      end;
-
       Grid := frameDefaultOptions.Grid;
       InitializeOptionsGrid;
 
@@ -561,12 +565,18 @@ begin
     TreatmentOptions.Free;
   end;
 
+  TurnOffAdjustColWidth(frameMaxConc.Grid);
+  TurnOffAdjustColWidth(frameExternalFlows.Grid);
+  TurnOffAdjustColWidth(frameDefaultOptions.Grid);
+  TurnOffAdjustColWidth(frameWells.Grid);
+  TurnOffAdjustColWidth(frameIndividualWellOptions.Grid);
+
 end;
 
 procedure TfrmContaminantTreatmentSystems.pcTreatmentsChange(Sender: TObject);
 begin
   inherited;
-  if (pcTreatments.ActivePage = tabIndividualWellOptions)
+  if (pcMain.ActivePage = tabIndividualWellOptions)
     and (tvIndividualObjectOptions.Selected = nil)
     and (tvIndividualObjectOptions.Items.Count > 0) then
   begin
@@ -833,7 +843,6 @@ var
   Grid: TRbwDataGrid4;
   Value: string;
   TreatmentOptionIndex: Integer;
-  CompItem: TStringConcValueItem;
   MaxAllowedIndex: Integer;
   MaxConcItem: TCtsMaxConcItem;
   AMaxItem: TStringConcValueItem;
@@ -899,7 +908,7 @@ begin
     end;
 
     FSelectedSystem.TreatmentDistribution :=
-      TTreatmentDistribution(comboTreatmentOption.ItemIndex);
+      TTreatmentDistribution(comboTreatmentLevel.ItemIndex);
 
     FSelectedSystem.DefaultInjectionOptions.Count := frameDefaultOptions.seNumber.AsInteger;
     for DefaultInjIndex := 0 to FSelectedSystem.DefaultInjectionOptions.Count - 1 do
@@ -1032,8 +1041,8 @@ begin
       end;
     end;
 
-    comboTreatmentOption.ItemIndex := Ord(FSelectedSystem.TreatmentDistribution);
-    comboTreatmentOptionChange(nil);
+    comboTreatmentLevel.ItemIndex := Ord(FSelectedSystem.TreatmentDistribution);
+    comboTreatmentLevelChange(nil);
 
     Grid := frameDefaultOptions.Grid;
     ClearGrid(Grid);

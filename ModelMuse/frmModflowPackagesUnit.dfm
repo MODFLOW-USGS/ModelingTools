@@ -6,6 +6,7 @@ inherited frmModflowPackages: TfrmModflowPackages
   ClientWidth = 782
   OnClose = FormClose
   OnResize = FormResize
+  ExplicitLeft = -88
   ExplicitWidth = 798
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -10613,6 +10614,10 @@ inherited frmModflowPackages: TfrmModflowPackages
           Width = 564
           ExplicitWidth = 564
         end
+        inherited cbPrintLakeBudget: TCheckBox
+          Width = 553
+          ExplicitWidth = 553
+        end
         inherited rcSelectionController: TRbwController
           ControlList = <
             item
@@ -10679,8 +10684,10 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited lblMaxIterations: TLabel
+          Top = 298
           Width = 301
           Height = 18
+          ExplicitTop = 298
           ExplicitWidth = 301
           ExplicitHeight = 18
         end
@@ -10728,6 +10735,9 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = frameMt3dSftPkg.comboPrintChoice
+            end
+            item
+              Control = frameMt3dSftPkg.cbSimulateStreamTransport
             end>
         end
       end

@@ -2124,6 +2124,7 @@ inherited frmGoPhast: TfrmGoPhast
       object miSWR: TMenuItem
         Caption = '&SWR Dialog Boxes'
         GroupIndex = 1
+        Hint = 'SWR package dialog boxes'
         object miSWR_ReachGeometry: TMenuItem
           Action = acSWR_ReachGeometry
           GroupIndex = 1
@@ -3242,6 +3243,7 @@ inherited frmGoPhast: TfrmGoPhast
     object acImportSutraModelResults: TAction
       Category = 'File'
       Caption = 'SUTRA Model Results...'
+      Hint = 'Import model results from SUTRA'
     end
     object acShowTopMesh: TAction
       Category = 'View'
@@ -3423,6 +3425,7 @@ inherited frmGoPhast: TfrmGoPhast
     object acNewFootprintModel: TAction
       Category = 'File'
       Caption = 'New &WellFootprint Project'
+      Hint = 'Create a new footprint model'
       OnExecute = acFileNewModflowModelExecute
     end
     object acRunFootprint: TAction
@@ -3459,6 +3462,7 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Model'
       Caption = 'Riparean ET Plant Groups'
       Enabled = False
+      Hint = 'Display the Riparian ET Plant Groups dialog box'
       OnExecute = acRipPlantGroupsExecute
     end
     object acOutlineToShapefile: TAction
@@ -3538,6 +3542,7 @@ inherited frmGoPhast: TfrmGoPhast
     object acEditCTS: TAction
       Category = 'Model'
       Caption = 'Contaminant Treatment Systems'
+      Hint = 'Display the Contaminant Treatment Systems dialog box'
       OnExecute = acEditCTSExecute
     end
   end

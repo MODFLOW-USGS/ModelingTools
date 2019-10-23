@@ -244,7 +244,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Contaminant Treatment Systems</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Contaminant_Treatment_Systems_" styleclass="Strong" translate="true">Contaminant Treatment Systems</link><text styleclass="Table Cell" translate="true"> dialog box &#160;to edit the CTS package in MT3D-USGS.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Contaminant_Treatment_Systems_" styleclass="Strong" translate="true">Contaminant Treatment Systems</link><text styleclass="Table Cell" translate="true"> dialog box &#160;to edit the input for the CTS package in MT3D-USGS.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

@@ -1276,7 +1276,7 @@ begin
     AScreenObject := ScreenObjects[ScreenObjectIndex];
     if Length(SelectedVertices[ScreenObjectIndex]) > 0 then
     begin
-      for VertexIndex := 0 to AScreenObject.Count - 1 do
+      for VertexIndex := 0 to Min(AScreenObject.Count, Length(SelectedVertices[ScreenObjectIndex])) - 1 do
       begin
         AScreenObject.SelectedVertices[VertexIndex] := SelectedVertices[ScreenObjectIndex, VertexIndex];
       end;

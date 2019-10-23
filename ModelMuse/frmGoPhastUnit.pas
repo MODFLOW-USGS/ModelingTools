@@ -2267,6 +2267,12 @@ resourcestring
   StrMODPATH7RequiresA = 'MODPATH 7 requires a binary head output file. You ' +
   'need to change the head output file type under "Model|MODFLOW Output Cont' +
   'rol" and run MODFLOW again before running MODPATH 7.';
+  StrMT3DUSGSInputFile = 'MT3D-USGS Input Files';
+  StrRunMT3DUSGS = 'Run MT3D-USGS';
+  StrExportMT3DUSGSInp = 'Export MT3D-USGS Input Files';
+  StrMT3DMSInputFiles = 'MT3DMS Input Files';
+  StrRunMT3DMS = 'Run MT3DMS';
+  StrExportMT3DMSInput = 'Export MT3DMS Input Files';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -8814,16 +8820,16 @@ procedure TfrmGoPhast.SetMt3dCaption;
 begin
   if PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
   begin
-    acRunMt3dms.Caption := 'MT3D-USGS Input Files';
-    acRunMt3dms.Hint := 'Run MT3D-USGS';
-    miRunMt3dmsPopup.Caption := 'Export MT3D-USGS Input Files';
+    acRunMt3dms.Caption := StrMT3DUSGSInputFile;
+    acRunMt3dms.Hint := StrRunMT3DUSGS;
+    miRunMt3dmsPopup.Caption := StrExportMT3DUSGSInp;
   end
   else
   begin
     Assert(PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS);
-    acRunMt3dms.Caption := 'MT3DMS Input Files';
-    acRunMt3dms.Hint := 'Run MT3DMS';
-    miRunMt3dmsPopup.Caption := 'Export MT3DMS Input Files';
+    acRunMt3dms.Caption := StrMT3DMSInputFiles;
+    acRunMt3dms.Hint := StrRunMT3DMS;
+    miRunMt3dmsPopup.Caption := StrExportMT3DMSInput;
   end;
 end;
 

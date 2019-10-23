@@ -447,6 +447,10 @@ begin
   finally
     CellList.Free;
   end;
+  if not FSftPackage.SimulateTransportInStream then
+  begin
+    NSFINIT := -NSFINIT;
+  end;
 end;
 
 procedure TMt3dmsSftWriter.WriteDataSet1;

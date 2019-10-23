@@ -2168,8 +2168,6 @@ that affects the model output should also have a comment. }
     FTopContoursUpToDate: Boolean;
     FSideContoursUpToDate: Boolean;
     FFrontContoursUpToDate: Boolean;
-//    FCtsSystems: TCtsSystemCollection;
-//    FGeoRefFileName: string;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -8804,6 +8802,10 @@ const
   //    '4.1.0.2'  Bug fix: Fixed a bug that could cause an integer overflow
   //                when attempting to import an ascii raster that contains
   //                a larger number of points.
+  
+  //               Bug fix: Fixed a bug that could cause a range check error
+  //                when undoing or redoing the addition of new vertices to
+  //                the object.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.2';
@@ -11346,6 +11348,8 @@ var
   DataArray: TDataArray;
 begin
   SelectedModel := Self;
+
+  FCtsSystems.Clear;
 
   FColorLegend.ValueAssignmentMethod := vamAutomatic;
   FContourLegend.ValueAssignmentMethod := vamAutomatic;
