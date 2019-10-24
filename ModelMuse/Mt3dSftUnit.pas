@@ -831,6 +831,10 @@ begin
         Length(LocalBoundaryStorage.Mt3dmsConcArray) - 1 do
       begin
         BoundaryValues := LocalBoundaryStorage.Mt3dmsConcArray[BoundaryIndex];
+        if (FCurrentBoundaryType = sbtHeadWater) and (BoundaryIndex > 0) then
+        begin
+          Continue;
+        end;
         Cell := TMt3dmsSftConc_Cell.Create;
         Cells.Add(Cell);
 
@@ -1489,8 +1493,8 @@ begin
     or Precipitation.Used
     or RunOff.Used
     or ConstConc.Used
-//    or (InitialConcentration <> '0')
-//    or (DispersionCoefficient <> '0')
+    or (InitialConcentration.Count > 0)
+    or (DispersionCoefficient.Count > 0)
     or (ObsLocation <> solNone)
 end;
 

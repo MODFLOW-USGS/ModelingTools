@@ -813,7 +813,7 @@ begin
     NewLineNeeded := True;
   end;
 
-  if not (muoAltSorbedWeight in FMt3dBasic.Mt3dUsgsOptions)
+  if (muoAltSorbedWeight in FMt3dBasic.Mt3dUsgsOptions)
     and (FMt3dBasic.Mt3dVersion = mvUSGS) then
   begin
     WriteString('ALTWTSORB ');

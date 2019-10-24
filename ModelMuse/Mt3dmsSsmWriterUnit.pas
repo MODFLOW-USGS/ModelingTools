@@ -959,6 +959,7 @@ var
   ComponentCount: Integer;
   ISSTYPE: integer;
 begin
+  if Model.ModelSelection = msModflow2015 then
   begin
     // In MODFLOW 6, evapotranspiration is treated as a point source
     Exit;

@@ -8806,6 +8806,8 @@ const
   //               Bug fix: Fixed a bug that could cause a range check error
   //                when undoing or redoing the addition of new vertices to
   //                the object.
+  //               Bug fix: Fixed a bug that could cause the BTN package input
+  //                to include an incorrect option with MT3D-USGS
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.2';
@@ -9233,7 +9235,7 @@ resourcestring
   StrUZFIUZFBNDViaTh = 'UZF: IUZFBND (via the formula for ' + StrUzfLayer + ')'
     + '; FMP2: GSURF';
   StrBASIBOUND = 'BAS: IBOUND';
-  StrUZFIUZFBND = 'UZF: IUZFBND';
+  StrUZFIUZFBND = 'UZF: IUZFBND' + sLineBreak + 'MT3D-USGS UZT: IUZFBND';
   StrUZFIRUNBND = 'UZF: IRUNBND';
   StrUZFVKS = 'UZF: VKS';
   StrUZFEPS = 'UZF: EPS';
@@ -15313,12 +15315,14 @@ end;
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
 const
   SetToFalse = 'Set to false because the cell is inactive in MODFLOW';
+//  SetToTrue = 'Set to true because the cell is a Lake cell in MODFLOW and LKT is active';
 var
   Mt3dmsActive: TDataArray;
   ActiveDataArray: TDataArray;
   ColIndex: Integer;
   RowIndex: Integer;
   LayerIndex: Integer;
+//  LakeID: TDataArray;
 begin
   Mt3dmsActive := DataArrayManager.GetDataSetByName(StrMT3DMSActive);
   if Mt3dmsActive <> nil then
@@ -15340,7 +15344,26 @@ begin
         end;
       end;
     end;
-
+//    if ModflowPackages.Mt3dLkt.IsSelected and ModflowPackages.LakPackage.IsSelected then
+//    begin
+//      LakeID := DataArrayManager.GetDataSetByName(rsLakeID);
+//      LakeID.Initialize;
+//      for ColIndex := 0 to ModflowGrid.ColumnCount - 1 do
+//      begin
+//        for RowIndex := 0 to ModflowGrid.RowCount - 1 do
+//        begin
+//          for LayerIndex := 0 to ModflowGrid.LayerCount -1 do
+//          begin
+//            if not Mt3dmsActive.BooleanData[LayerIndex, RowIndex, ColIndex]
+//              and (LakeID.IntegerData[LayerIndex, RowIndex, ColIndex] <> 0) then
+//            begin
+//              Mt3dmsActive.BooleanData[LayerIndex, RowIndex, ColIndex] := True;
+//              Mt3dmsActive.Annotation[LayerIndex, RowIndex, ColIndex] := SetToTrue;
+//            end;
+//          end;
+//        end;
+//      end;
+//    end;
   end;
 end;
 

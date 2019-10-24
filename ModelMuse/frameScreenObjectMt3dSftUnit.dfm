@@ -45,6 +45,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       Width = 480
       Height = 83
       ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitWidth = 480
       ExplicitHeight = 83
     end
@@ -54,7 +55,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
     Top = 160
     Width = 482
     Height = 193
-    ActivePage = tsRunoff
+    ActivePage = tsSteady
     Align = alBottom
     TabOrder = 3
     object tsSteady: TTabSheet
@@ -62,9 +63,9 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object lblObsLocation: TLabel
         Left = 176
         Top = 6
-        Width = 99
+        Width = 265
         Height = 13
-        Caption = 'Observation location'
+        Caption = 'Observation location (ISFNOBS)'
       end
       object rdgSftInitConcAndDisp: TRbwDataGrid4
         AlignWithMargins = True

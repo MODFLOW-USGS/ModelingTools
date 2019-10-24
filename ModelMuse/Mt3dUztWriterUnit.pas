@@ -301,6 +301,8 @@ procedure TMt3dUztWriter.WriteDataSet4;
 //  WC: TDataArray;
 //  LayerIndex: Integer;
 begin
+  // WC is no longer included in the input
+  // See lines 236-241 of btn1.f
   Exit;
 //  WC := Model.DataArrayManager.GetDataSetByName(KInitialWaterContent);
 //  Assert(WC <> nil);
@@ -318,6 +320,8 @@ procedure TMt3dUztWriter.WriteDataSet5;
 //  SDH: TDataArray;
 //  LayerIndex: Integer;
 begin
+  // SDH is no longer included in the input
+  // See lines 236-241 of btn1.f
   Exit;
 //  SDH := Model.DataArrayManager.GetDataSetByName(KSaturatedThickness);
 //  Assert(SDH <> nil);

@@ -1,9 +1,27 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>SFT: Stream Flow Transport Package Pane</title>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SFT: Stream Flow Transport Package Pane</title>
   <body>
-    <header><para styleclass="Heading1">SFT: Stream Flow Transport Package Pane</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SFT: Stream Flow Transport Package Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">SFT: Stream Flow Transport Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">It is used for specifying stream concentration observation locations, the initial concentration and dispersion of the stream and the concentrations of various sources of solute to the stream</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pane has five tabs</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Steady</text><text styleclass="Normal" translate="true"> tab</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Strong" translate="true">Observation Location (ISFNOBS)</text><text styleclass="Normal" translate="true"> is used to specify the location along the stream at which observations of concentration will be specified. (See also the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Gage_Tab" styleclass="Strong" translate="true">Gage</link><text styleclass="Normal" translate="true"> tab for the SFR package.)</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Strong" translate="true">CINITSF</text><text styleclass="Normal" translate="true"> represents the initial concentrations in each stream reach.</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Strong" translate="true">DISPSF</text><text styleclass="Normal" translate="true"> is the dispersion coefficient [L</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">2</text><text styleclass="Normal" translate="true"> T</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-1</text><text styleclass="Normal" translate="true">] for each stream reach for each simulated component.</text></para>
+    <para styleclass="Strong" style="margin-left:0px;"><text styleclass="Normal" translate="true">The remaining tabs all allow the user to specify the starting and ending times along with concentrations of solute sources. </text></para>
+    <para styleclass="Normal" style="margin-left:0px;"><text styleclass="Normal" style="font-weight:bold;" translate="true">Starting time</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Ending time</text><text styleclass="Normal" style="font-weight:normal;" translate="true"> are explained in the help for the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" anchor="Times" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Head Water Conc.</text><text styleclass="Normal" translate="true"> tab.</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Normal" translate="true">The headwater concentration is the concentration of the first reach in a segment. typically, this would be used for streams that originates outside the modeled area and has a non-zero concentration at the point it enters the modeled area.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Precipitation Conc.</text><text styleclass="Normal" translate="true"> tab</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Normal" translate="true">This is used for precipitation directly to channel with a non-zero concentration. Precipitation concentration applies to the entire stream segment.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Runoff Conc.</text><text styleclass="Normal" translate="true"> tab</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Normal" translate="true">This is used for the concentration of runoff specified in the SFR package not runoff routed to the stream in the UZF package. (See the SFR </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Flows_Tab" styleclass="Normal" translate="true">Flows Tab</link><text styleclass="Normal" translate="true">.) Runoff concentration applies to the entire stream segment.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Constant Conc.</text><text styleclass="Normal" translate="true"> tab</text></para>
+    <para styleclass="Strong" style="margin-left:24px;"><text styleclass="Normal" translate="true">This is used to make the entire stream segment a constant concentration boundary condition.</text></para>
   </body>
 </topic>

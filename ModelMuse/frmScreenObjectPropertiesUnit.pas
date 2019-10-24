@@ -15223,6 +15223,7 @@ var
   EtsColCount: integer;
   StoredUpToDate: boolean;
   PriorCanInvalidateModel: Boolean;
+  ColIndex: Integer;
 begin
   StoredUpToDate := frmGoPhast.PhastModel.UpToDate;
   PriorCanInvalidateModel := AScreenObject.CanInvalidateModel;
@@ -15414,6 +15415,11 @@ begin
     frameMt3d_UZT_Rech.rdgModflowBoundary.ColCount := 2
       + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMt3d_UZT_Rech.InitializeNoParamFrame(AScreenObject.Mt3dUzfRechConc);
+    for ColIndex := 2 to frameMt3d_UZT_Rech.rdgModflowBoundary.ColCount - 1 do
+    begin
+      frameMt3d_UZT_Rech.rdgModflowBoundary.Cells[ColIndex, 0] :=
+        frameMt3d_UZT_Rech.rdgModflowBoundary.Cells[ColIndex, 0] + ' CUZINF';
+    end;
     if (AScreenObject.Mt3dUzfRechConc <> nil)
       and not AScreenObject.Mt3dUzfRechConc.Used then
     begin
@@ -15424,6 +15430,11 @@ begin
     frameMt3d_UZT_Sat.rdgModflowBoundary.ColCount := 2
       + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMt3d_UZT_Sat.InitializeNoParamFrame(AScreenObject.Mt3dUztSatEtConcBoundary);
+    for ColIndex := 2 to frameMt3d_UZT_Sat.rdgModflowBoundary.ColCount - 1 do
+    begin
+      frameMt3d_UZT_Sat.rdgModflowBoundary.Cells[ColIndex, 0] :=
+        frameMt3d_UZT_Sat.rdgModflowBoundary.Cells[ColIndex, 0] + ' CGWET';
+    end;
     if (AScreenObject.Mt3dUztSatEtConcBoundary <> nil)
       and not AScreenObject.Mt3dUztSatEtConcBoundary.Used then
     begin
@@ -15434,6 +15445,11 @@ begin
     frameMt3d_UZT_Unsat.rdgModflowBoundary.ColCount := 2
       + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMt3d_UZT_Unsat.InitializeNoParamFrame(AScreenObject.Mt3dUztUnsatEtConcBoundary);
+    for ColIndex := 2 to frameMt3d_UZT_Unsat.rdgModflowBoundary.ColCount - 1 do
+    begin
+      frameMt3d_UZT_Unsat.rdgModflowBoundary.Cells[ColIndex, 0] :=
+        frameMt3d_UZT_Unsat.rdgModflowBoundary.Cells[ColIndex, 0] + ' CUZET';
+    end;
     if (AScreenObject.Mt3dUztUnsatEtConcBoundary <> nil)
       and not AScreenObject.Mt3dUztUnsatEtConcBoundary.Used then
     begin
@@ -15444,6 +15460,11 @@ begin
     frameMT3D_Uzf_Ssm_Conc.rdgModflowBoundary.ColCount := 2
       + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
     frameMT3D_Uzf_Ssm_Conc.InitializeNoParamFrame(AScreenObject.Mt3dUzSsmSinkConcBoundary);
+    for ColIndex := 2 to frameMT3D_Uzf_Ssm_Conc.rdgModflowBoundary.ColCount - 1 do
+    begin
+      frameMT3D_Uzf_Ssm_Conc.rdgModflowBoundary.Cells[ColIndex, 0] :=
+        frameMT3D_Uzf_Ssm_Conc.rdgModflowBoundary.Cells[ColIndex, 0] + ' CGWET';
+    end;
     if (AScreenObject.Mt3dUzSsmSinkConcBoundary <> nil)
       and not AScreenObject.Mt3dUzSsmSinkConcBoundary.Used then
     begin

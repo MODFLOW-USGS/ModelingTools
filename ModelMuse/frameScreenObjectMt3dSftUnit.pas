@@ -135,8 +135,8 @@ uses
 
 resourcestring
   StrChemicalSpecies = 'Chemical species';
-  StrInitialConcentratio = 'Initial Conc.';
-  StrDispersion = 'Dispersion';
+  StrInitialConcentratio = 'Initial Conc. (CINITSF)';
+  StrDispersion = 'Dispersion (DISPSF)';
 
 type
   TSftInitDispColumns = (sidcSpecies, sidcInitialConc, sidcDispersion);

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Gage Tab</title>
   <body>
     <header>
@@ -11,5 +11,6 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If any of the checkboxes is checked, one or more gages will be defined for the stream. Unlike other packages, the Gage package is not activated through the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box. Instead, if any gages are defined, the Gage package is activated.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">For the unsaturated water content profiles, two profiles are printed. The first is the volume average water content of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" anchor="ISUZN" styleclass="Normal" style="font-weight:bold;" translate="true">Maximum number of cells to define unsaturated zone</link><text styleclass="Normal" translate="true"> unsaturated cells beneath a stream reach. The second profile is the volume averaged water content beneath the low flow channel only. If </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR_Stream_Flow_Routing_Package" anchor="ISUZN" styleclass="Normal" style="font-weight:bold;" translate="true">Maximum number of cells to define unsaturated zone</link><text styleclass="Normal" translate="true"> =1 then both water content profiles will be the same.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Gages for individual reaches along streams can be defined on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GAGE_for_SFR" styleclass="Normal" translate="true">GAGE: for SFR Stream-Flow Routing Package Pane</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFT_Stream_Flow_Transport_Pac2" styleclass="Normal" translate="true">SFT: Stream Flow Transport Package Pane</link></para>
   </body>
 </topic>
