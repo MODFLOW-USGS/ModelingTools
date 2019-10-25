@@ -24335,6 +24335,9 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'Dialog boxes'
-        'MT3D-USGS SFT')
+        'MT3D-USGS SFT'
+        'MT3D-USGS CTS'
+        'MT3D-USGS LKT'
+        'MT3D-USGS UZT')
     end>
 end
