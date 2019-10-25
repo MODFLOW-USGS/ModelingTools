@@ -861,7 +861,7 @@ begin
           cwpcMnw2:
             begin
               MNW2_Well := AScreenObject.ModflowMnw2Boundary;
-              TimeItem := MNW2_Well.Values.GetItemByStartTime(StartTime);
+              TimeItem := MNW2_Well.Values.GetItemContainingTime(StartTime);
             end;
           cwpcWel:
             begin

@@ -2624,15 +2624,9 @@ var
 begin
   CanSelect := framePkgMt3dBasic.rcSelectionController.Enabled
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-  if frmGoPhast.ModelSelection <> msModflowNWT then
+  if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-    // SFT is not currently supported with MODFLOW 6
-//    CanSelect := CanSelect and framePackageSfrMF6.rcSelectionController.Enabled;
     CanSelect := False;
-//  end
-//  else
-//  begin
-//    CanSelect := CanSelect and framePkgSFR.rcSelectionController.Enabled;
   end;
   frameMt3dCtsPkg.CanSelect := CanSelect;
   if not frameMt3dCtsPkg.CanSelect then

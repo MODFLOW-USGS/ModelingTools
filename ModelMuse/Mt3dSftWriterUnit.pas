@@ -3,6 +3,7 @@ unit Mt3dSftWriterUnit;
 interface
 
 uses
+  Winapi.Windows, System.UITypes,
   CustomModflowWriterUnit, PhastModelUnit, ScreenObjectUnit, System.Classes,
   System.SysUtils, ModflowPackageSelectionUnit, ModflowCellUnit,
   System.Generics.Collections, Mt3dSftUnit, GoPhastTypes, Vcl.Forms,
@@ -67,6 +68,7 @@ resourcestring
   'ch SFT is not defined.';
   StrInitialConcentratio = 'Data Set 3, Initial Concentration Component %d';
   StrDispersionComponent = 'Data Set 4, Dispersion Component %d';
+  StrWritingSFTPackage = 'Writing SFT Package input.';
 
 function CompareBySegmentNumber(Item1, Item2: Pointer): Integer;
 var
@@ -89,6 +91,7 @@ constructor TMt3dmsSftWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
+  FArrayWritingFormat := awfMt3dms;
   FStreamObjects := TList.Create;
   FSftPackage := AModel.ModflowPackages.Mt3dSft;
   FSftSteadyList := TSftSteadyObjectList.Create;
@@ -301,7 +304,6 @@ var
   DataArray: TModflowBoundaryDisplayDataArray;
   ReachIndex: Integer;
   AReach: TSftSteady;
-  Index: Integer;
   StressPeriod: TCollectionItem;
 begin
   if not frmProgressMM.ShouldContinue then
@@ -620,33 +622,20 @@ procedure TMt3dmsSftWriter.WriteDataSet6;
 var
   ReachIndex: Integer;
   AReach: TSftSteady;
-  NewLineNeeded: Boolean;
-  ObCount: Integer;
+//  NewLineNeeded: Boolean;
+//  ObCount: Integer;
 begin
   if NOBSSF > 0 then
   begin
-//    WriteU2DINTHeader('Observation Reaches', matStructured, '');
-
-    ObCount := 0;
-    NewLineNeeded := True;
     for ReachIndex := 0 to FSftSteadyList.Count - 1 do
     begin
-      NewLineNeeded := True;
       AReach := FSftSteadyList[ReachIndex];
       if AReach.IsObservation then
       begin
         WriteInteger(ReachIndex+1);
-        Inc(ObCount);
-        if (ObCount mod 10) = 0 then
-        begin
-          NewLine;
-          NewLineNeeded := False;
-        end;
+        WriteString(' Data Set 6, ISFNOBS');
+        NewLine;
       end;
-    end;
-    if NewLineNeeded then
-    begin
-      NewLine;
     end;
   end;
 end;
@@ -700,6 +689,10 @@ end;
 
 procedure TMt3dmsSftWriter.WriteFile(const AFileName: string);
 begin
+  if Model.ModelSelection <> msModflowNWT then
+  begin
+    Exit;
+  end;
   if not Package.IsSelected then
   begin
     Exit
@@ -719,14 +712,7 @@ begin
 
     OpenFile(FNameOfFile);
     try
-      frmProgressMM.AddMessage('Writing SFT Package input.');
-      frmProgressMM.AddMessage(StrWritingDataSet0);
-      WriteDataSet0;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
+      frmProgressMM.AddMessage(StrWritingSFTPackage);
 
       frmProgressMM.AddMessage(StrWritingDataSet1);
       WriteDataSet1;

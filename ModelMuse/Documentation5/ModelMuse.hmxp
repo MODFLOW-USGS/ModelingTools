@@ -140,7 +140,7 @@
       <config-value name="usesecondarywindows">1</config-value>
       <config-value name="outputfile">ModelMuse.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
     </config-group>
     <config-group name="hxs">
       <config-value name="namespace"></config-value>
@@ -596,7 +596,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">3</config-value>
+          <config-value name="lastexport">0</config-value>
         </config-group>
       </config-group>
     </config-group>
@@ -1580,7 +1580,7 @@ document.write('</frameset>');
       <helpcontext-number href="UZF_Unsaturated_Zone_Flow_Package#SPECIFYTHTR" value="3710"/>
       <helpcontext-number href="UZF6_Unsaturated_Zone_Flow_Pa2" value="4029"/>
       <helpcontext-number href="UZF6_Unsaturated_Zone_Flow_Pac" value="4028"/>
-      <helpcontext-number href="UZT_Unsaturated-Zone_Transport" value="4010"/>
+      <helpcontext-number href="UZT_Unsaturated_Zone_Transport" value="4010"/>
       <helpcontext-number href="Variations" value="3240"/>
       <helpcontext-number href="Vectors_Pane" value="3699"/>
       <helpcontext-number href="Vertex_Values_Dialog_Box" value="3570"/>

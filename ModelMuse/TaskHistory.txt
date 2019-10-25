@@ -24329,5 +24329,12 @@ object TTaskHistory
         'Documentation'
         'MT3D-USGS CTS'
         'Bug fix')
+    end
+    item
+      Date = 43763.440915416670000000
+      Categories.Strings = (
+        'Documentation'
+        'Dialog boxes'
+        'MT3D-USGS SFT')
     end>
 end

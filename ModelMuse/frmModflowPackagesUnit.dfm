@@ -6,7 +6,6 @@ inherited frmModflowPackages: TfrmModflowPackages
   ClientWidth = 782
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitLeft = -88
   ExplicitWidth = 798
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -4207,7 +4206,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 362
             inherited lblNumExportPeriods: TLabel
-              Top = 171
+              Top = 166
               Width = 176
               Height = 18
               ExplicitTop = 326
@@ -4215,15 +4214,15 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
-              Top = 167
+              Top = 162
               ExplicitTop = 322
             end
             inherited sbInsert: TSpeedButton
-              Top = 167
+              Top = 162
               ExplicitTop = 322
             end
             inherited sbDelete: TSpeedButton
-              Top = 167
+              Top = 162
               ExplicitTop = 322
             end
             inherited cbMultiPrintSave: TCheckBox
@@ -4231,13 +4230,13 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitWidth = 209
             end
             inherited rdgOutput: TRbwDataGrid4
-              Height = 124
-              ExplicitHeight = 124
+              Height = 119
+              ExplicitHeight = 119
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 168
+              Top = 163
               Height = 26
-              ExplicitTop = 168
+              ExplicitTop = 163
               ExplicitHeight = 26
             end
             inherited comboMultiFomat: TJvImageComboBox
@@ -4514,19 +4513,19 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 370
             inherited sbAdd: TSpeedButton
-              Top = 175
+              Top = 170
               ExplicitTop = 330
             end
             inherited sbInsert: TSpeedButton
-              Top = 175
+              Top = 170
               ExplicitTop = 330
             end
             inherited sbDelete: TSpeedButton
-              Top = 175
+              Top = 170
               ExplicitTop = 330
             end
             inherited lblNumExportPeriods: TLabel
-              Top = 178
+              Top = 173
               Width = 176
               Height = 18
               ExplicitTop = 333
@@ -5203,9 +5202,9 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 0
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 175
+              Top = 170
               Height = 26
-              ExplicitTop = 175
+              ExplicitTop = 170
               ExplicitHeight = 26
             end
             inherited comboMultiFomat: TJvImageComboBox
@@ -10015,7 +10014,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 514
       HelpType = htKeyword
-      HelpKeyword = 'UZT_Unsaturated-Zone_Transport'
+      HelpKeyword = 'UZT_Unsaturated_Zone_Transport'
       Caption = 'jvspMt3dUZT'
       inline framePkgMt3dUZT: TframePackage
         Left = 0
@@ -10932,7 +10931,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Left = 136
     Top = 96
     Bitmap = {
-      494C010108000D00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000D00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

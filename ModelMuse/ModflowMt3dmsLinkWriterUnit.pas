@@ -17,7 +17,8 @@ type
 implementation
 
 uses
-  ModflowUnitNumbers, frmProgressUnit, SysUtils, GoPhastTypes;
+  ModflowUnitNumbers, frmProgressUnit, SysUtils, GoPhastTypes,
+  ModflowPackagesUnit;
 
 resourcestring
   StrWritingLMT6Package = 'Writing LMT6 Package input.';
@@ -39,6 +40,7 @@ procedure TModflowMt3dmsLinkWriter.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
   FtlFileName: string;
+  Packages: TModflowPackages;
 begin
   if not Package.IsSelected then
   begin
@@ -117,9 +119,24 @@ begin
     NewLine;
 
     {$IFDEF Mt3dUSGS}
-    if Model.ModflowPackages.Mt3dUnsatTransport.IsSelected then
+    Packages := Model.ModflowPackages;
+    if Packages.Mt3dUnsatTransport.IsSelected
+      or Packages.Mt3dLkt.IsSelected
+      or Packages.Mt3dSft.IsSelected then
     begin
-      WriteString('PACKAGE_FLOWS UZF');
+      WriteString('PACKAGE_FLOWS');
+      if Packages.Mt3dUnsatTransport.IsSelected then
+      begin
+        WriteString(' UZF');
+      end;
+      if Packages.Mt3dLkt.IsSelected then
+      begin
+        WriteString(' LAK');
+      end;
+      if Packages.Mt3dSft.IsSelected then
+      begin
+        WriteString(' SFR');
+      end;
       NewLine;
     end;
     {$ENDIF}

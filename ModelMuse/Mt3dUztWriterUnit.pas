@@ -336,6 +336,10 @@ end;
 
 procedure TMt3dUztWriter.WriteFile(const AFileName: string);
 begin
+  if Model.ModelSelection <> msModflowNWT then
+  begin
+    Exit;
+  end;
   if not Package.IsSelected then
   begin
     Exit

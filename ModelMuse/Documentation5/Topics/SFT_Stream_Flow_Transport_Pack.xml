@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SFT: Stream Flow Transport Package Pane</title>
   <body>
     <header>
@@ -15,7 +15,7 @@
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Closure criterion (CCLOSESF):</text><text styleclass="Normal" translate="true"> CCLOSESF is a real number and is the closure criterion for the SFT solver.</text></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Maximum number of iterations (MXITERSF):</text><text styleclass="Normal" translate="true"> MXITERSF is an integer value limiting the maximum number of iterations the SFT solver can use to find a solution of the stream transport problem.</text></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Solution information (IPRTXMD):</text><text styleclass="Normal" translate="true"> IPRTXMD is a flag to print SFT solution information to the standard output file. </text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Strong" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Strong"><text styleclass="Normal" translate="true">IPRTXMD = 0 means no SFT solution information is printed; </text></li>
       <li styleclass="Strong"><text styleclass="Normal" translate="true">IPRTXMD = 1 means SFT solution summary information is printed at the end of every MT3D-USGS outer iteration; and </text></li>
       <li styleclass="Strong"><text styleclass="Normal" translate="true">IPRTXMD = 2 means SFT solution details are written for each SFT outer iteration that calls the xMD solver that solved SFT equations.</text></li>

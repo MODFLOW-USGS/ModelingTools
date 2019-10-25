@@ -5739,7 +5739,7 @@ procedure TfrmGoPhast.EnableCTS;
 begin
 {$IFDEF Mt3dUSGS}
   acEditCTS.Visible := (ModelSelection in ModflowSelection);
-  acEditCTS.Enabled := (ModelSelection = msModflowNWT)
+  acEditCTS.Enabled := (ModelSelection <> msModflow2015)
     and PhastModel.ModflowPackages.Mt3dCts.IsSelected;
 {$ELSE}
   acEditCTS.Visible := False;

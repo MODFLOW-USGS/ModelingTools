@@ -323,6 +323,11 @@ end;
 
 procedure TMt3dLktWriter.WriteFile(const AFileName: string);
 begin
+  if Model.ModelSelection <> msModflowNWT then
+  begin
+    Exit;
+  end;
+
   if not Model.ModflowPackages.Mt3dLkt.IsSelected then
   begin
     Exit;
