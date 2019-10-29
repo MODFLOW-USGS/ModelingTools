@@ -4,7 +4,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   HelpType = htKeyword
   HelpKeyword = 'Object_Properties_Dialog_Box'
   ActiveControl = pageMain
-  Caption = '.'
+  Caption = 'Object Properties'
   ClientHeight = 555
   ClientWidth = 784
   Font.Height = 19

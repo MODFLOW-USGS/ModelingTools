@@ -615,7 +615,6 @@ begin
     ErrorValues.Add('is not permitted');
     ErrorValues.Add('is not the upstream connected reach for reach');
     ErrorValues.Add('is invalid or has not been defined');
-    ErrorValues.Add('is not possible.');
     ErrorValues.Add('ERROR: upstream fractions for reach ');
     ErrorValues.Add('ERROR. UNKNOWN STORAGE DATA TAG');
     ErrorValues.Add('ERROR. UNKNOWN STO OPTION');
@@ -969,6 +968,7 @@ begin
     WarningValues.Add('USED TO CALCULATE OBSERVATION VALUES. IPHDRY');
     WarningValues.Add('SHOULD BE SET TO ZERO IF OBSERVATION PACKAGES');
     WarningValues.Add('ARE ACTIVE.');
+    WarningValues.Add('is not possible.');
 
 //    FMP
     WarningValues.Add('CORRECTION FOR');
