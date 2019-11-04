@@ -10735,6 +10735,7 @@ begin
   try
     UpdateVerticalExaggeration(1);
     FreeAndNil(frmModflowPackages);
+    FreeAndNil(frmDataSets);
     frmErrorsAndWarnings.Clear;
     Extension := LowerCase(ExtractFileExt(FileName));
     if Extension = '.gpt' then

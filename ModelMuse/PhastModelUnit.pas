@@ -8802,15 +8802,26 @@ const
   //    '4.1.0.2'  Bug fix: Fixed a bug that could cause an integer overflow
   //                when attempting to import an ascii raster that contains
   //                a larger number of points.
-  
-  //               Bug fix: Fixed a bug that could cause a range check error
+  //    '4.1.0.3'  Bug fix: Fixed a bug that could cause a range check error
   //                when undoing or redoing the addition of new vertices to
   //                the object.
   //               Bug fix: Fixed a bug that could cause the BTN package input
-  //                to include an incorrect option with MT3D-USGS
+  //                to include an incorrect option with MT3D-USGS.
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                if the user attempts to open a ModelMuse file while the
+  //                Edit Data Sets dialog box is open.
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                in the "Show Grid or Mesh Values" dialog box when the
+  //                selected objecte is changled.
+  //               Bug fix: Fixed a bug that could cause MXSS to be calculated
+  //                incorrectly in the MT3D SSM package when the MNW2 package
+  //                is used.
+  //    '4.1.0.4'  Bug fix: Fixed bug that could cause ModelMuse to fail to
+  //                create the MVR file correctly when the UZF package was used
+  //                as a source.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.2';
+  IModelVersion = '4.1.0.4';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -9469,12 +9480,22 @@ var
   GlobalVariable: TGlobalVariable;
   Compiler: TRbwParser;
 begin
+
   Root := Trim(Root);
   if Root = '' then
   begin
     Root := StrNewDataSet;
   end;
   Root := GenerateNewRoot(Root);
+  result := Root;
+  if frmGoPhast = nil then
+  begin
+    Exit;
+  end;
+  if csDestroying in frmGoPhast.ComponentState then
+  begin
+    Exit;
+  end;
 
   // This function generates a name for a data set that is valid
   // and does not conflict with the names of any existing data sets.

@@ -1213,6 +1213,11 @@ begin
     begin
       UpdatedSelectedObject;
     end;
+    if FSelectedScreenObject = nil then
+    begin
+      lblSelectedObject.Caption := StrSelectedObject;
+      Exit;
+    end;
     lblSelectedObject.Caption := StrSelectedObject
       + ': ' + FSelectedScreenObject.Name;
 

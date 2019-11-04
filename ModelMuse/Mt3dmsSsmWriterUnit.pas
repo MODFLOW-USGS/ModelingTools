@@ -145,6 +145,7 @@ begin
       begin
         Continue;
       end;
+
       if (ScreenObject.ModflowChdBoundary <> nil)
         and ScreenObject.ModflowChdBoundary.Used then
       begin
@@ -152,6 +153,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (ScreenObject.ModflowGhbBoundary <> nil)
         and ScreenObject.ModflowGhbBoundary.Used then
       begin
@@ -159,6 +161,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (ScreenObject.ModflowWellBoundary <> nil)
         and ScreenObject.ModflowWellBoundary.Used then
       begin
@@ -166,6 +169,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (ScreenObject.ModflowRivBoundary <> nil)
         and ScreenObject.ModflowRivBoundary.Used then
       begin
@@ -173,6 +177,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (ScreenObject.ModflowDrnBoundary <> nil)
         and ScreenObject.ModflowDrnBoundary.Used then
       begin
@@ -180,6 +185,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowDrtBoundary <> nil)
         and ScreenObject.ModflowDrtBoundary.Used then
@@ -188,6 +194,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowResBoundary <> nil)
         and ScreenObject.ModflowResBoundary.Used then
@@ -196,6 +203,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowStrBoundary <> nil)
         and ScreenObject.ModflowStrBoundary.Used then
@@ -204,6 +212,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowFhbHeadBoundary <> nil)
         and ScreenObject.ModflowFhbHeadBoundary.Used then
@@ -212,6 +221,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowFhbFlowBoundary <> nil)
         and ScreenObject.ModflowFhbFlowBoundary.Used then
@@ -220,6 +230,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowLakBoundary <> nil)
         and ScreenObject.ModflowLakBoundary.Used then
@@ -228,6 +239,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count*5);
       end;
+
       if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowSfrBoundary <> nil)
         and ScreenObject.ModflowSfrBoundary.Used then
@@ -236,6 +248,7 @@ begin
         ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection = msModflow2015) and
         (ScreenObject.ModflowRchBoundary <> nil)
         and ScreenObject.ModflowRchBoundary.Used then
@@ -244,9 +257,19 @@ begin
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
+
       if (Model.ModelSelection = msModflow2015) and
         (ScreenObject.ModflowETSBoundary <> nil)
         and ScreenObject.ModflowETSBoundary.Used then
+      begin
+        CellList.Clear;
+        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        Inc(MaximumNumberOfCells, CellList.Count);
+      end;
+
+      if (Model.ModelSelection = msModflow2015) and
+        (ScreenObject.ModflowMnw2Boundary <> nil)
+        and ScreenObject.ModflowMnw2Boundary.Used then
       begin
         CellList.Clear;
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);

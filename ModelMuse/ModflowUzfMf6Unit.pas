@@ -1458,8 +1458,11 @@ var
   LocalModel: TCustomModel;
   MvrUsed: Boolean;
   LocalScreenObject: TScreenObject;
+  IDOMAINDataArray: TDataArray;
+  BIndex: Integer;
 begin
   LocalModel := AModel as TCustomModel;
+  IDOMAINDataArray := LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   LocalBoundaryStorage := BoundaryStorage as TUzfMf6Storage;
   LocalScreenObject := ScreenObject as TScreenObject;
   MvrUsed := (LocalScreenObject.ModflowMvr <> nil)
@@ -1490,18 +1493,25 @@ begin
         Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.UzfMf6Array)
       end;
 //      Cells.CheckRestore;
+      BIndex := 0;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.UzfMf6Array) - 1 do
       begin
 //        Cells.Cached := False;
         BoundaryValues := LocalBoundaryStorage.UzfMf6Array[BoundaryIndex];
-        BoundaryValues.MvrUsed := MvrUsed;
-        BoundaryValues.MvrIndex := BoundaryIndex;
-        Cell := TUzfMf6_Cell.Create;
-        Cells.Add(Cell);
-        Cell.FStressPeriod := TimeIndex;
-        Cell.FValues := BoundaryValues;
-        Cell.ScreenObject := ScreenObject;
-        LocalModel.AdjustCellPosition(Cell);
+        if (IDOMAINDataArray.IntegerData[
+          BoundaryValues.Cell.Layer, BoundaryValues.Cell.Row,
+          BoundaryValues.Cell.Column] > 0) then
+        begin
+          BoundaryValues.MvrUsed := MvrUsed;
+          BoundaryValues.MvrIndex := BIndex;
+          Cell := TUzfMf6_Cell.Create;
+          Cells.Add(Cell);
+          Cell.FStressPeriod := TimeIndex;
+          Cell.FValues := BoundaryValues;
+          Cell.ScreenObject := ScreenObject;
+          LocalModel.AdjustCellPosition(Cell);
+          Inc(BIndex);
+        end;
       end;
       Cells.Cache;
     end;

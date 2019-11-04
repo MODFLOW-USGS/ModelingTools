@@ -895,6 +895,7 @@ begin
         if IDOMAINDataArray.IntegerData[UzfCell.Layer, UzfCell.Row, UzfCell.Column] > 0 then
         begin
           Assert(FUzfCellNumbers[UzfCell.Layer, UzfCell.Row, UzfCell.Column] > 0);
+          Assert(UsedUzfCells[UzfCell.Layer, UzfCell.Row, UzfCell.Column] = nil);
           UsedUzfCells[UzfCell.Layer, UzfCell.Row, UzfCell.Column] := UzfCell;
         end;
       end;
