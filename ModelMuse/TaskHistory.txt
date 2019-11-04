@@ -58,7 +58,7 @@ object TTaskHistory
     end
     item
       Name = 'parameters'
-      Display = True
+      Display = False
     end
     item
       Name = 'Undo'
@@ -122,7 +122,7 @@ object TTaskHistory
     end
     item
       Name = 'LAK'
-      Display = True
+      Display = False
     end
     item
       Name = 'OC'
@@ -130,7 +130,7 @@ object TTaskHistory
     end
     item
       Name = 'SFR'
-      Display = True
+      Display = False
     end
     item
       Name = 'Import'
@@ -138,7 +138,7 @@ object TTaskHistory
     end
     item
       Name = 'UZF'
-      Display = True
+      Display = False
     end
     item
       Name = 'Solvers'
@@ -146,7 +146,7 @@ object TTaskHistory
     end
     item
       Name = 'Archiving'
-      Display = True
+      Display = False
     end
     item
       Name = 'Gage'
@@ -162,7 +162,7 @@ object TTaskHistory
     end
     item
       Name = 'Running MODFLOW ModelMonitor'
-      Display = True
+      Display = False
     end
     item
       Name = 'HFB'
@@ -170,7 +170,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Shapefile'
-      Display = True
+      Display = False
     end
     item
       Name = 'MODPATH'
@@ -226,7 +226,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Image'
-      Display = True
+      Display = False
     end
     item
       Name = 'SWT'
@@ -262,7 +262,7 @@ object TTaskHistory
     end
     item
       Name = 'Mesh Generation'
-      Display = True
+      Display = False
     end
     item
       Name = 'PHAST'
@@ -274,7 +274,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA Model'
-      Display = True
+      Display = False
     end
     item
       Name = '64 bit'
@@ -342,7 +342,7 @@ object TTaskHistory
     end
     item
       Name = 'NPF'
-      Display = True
+      Display = False
     end
     item
       Name = 'STO'
@@ -362,7 +362,7 @@ object TTaskHistory
     end
     item
       Name = 'Stream Network Generation'
-      Display = True
+      Display = False
     end
     item
       Name = 'PEST'
@@ -370,7 +370,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA 3.0'
-      Display = True
+      Display = False
     end
     item
       Name = 'Metadata Editor'
@@ -378,15 +378,15 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS UZT'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS SSM'
-      Display = True
+      Display = False
     end
     item
       Name = 'SFR MODFLOW-6'
-      Display = True
+      Display = False
     end
     item
       Name = 'MAW'
@@ -394,7 +394,7 @@ object TTaskHistory
     end
     item
       Name = 'DISV'
-      Display = True
+      Display = False
     end
     item
       Name = 'Quadtree Grid Refinement and GNC'
@@ -402,27 +402,27 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Observation Utility'
-      Display = True
+      Display = False
     end
     item
       Name = 'MVR'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS LKT'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS SFT'
-      Display = True
+      Display = False
     end
     item
       Name = 'Simplify Objects'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS CTS'
-      Display = True
+      Display = False
     end>
   History = <
     item
@@ -24373,6 +24373,7 @@ object TTaskHistory
       Date = 43773.440915416670000000
       Categories.Strings = (
         'Bug fix'
-        'Error checking')
+        'Error checking'
+        'PEST')
     end>
 end
