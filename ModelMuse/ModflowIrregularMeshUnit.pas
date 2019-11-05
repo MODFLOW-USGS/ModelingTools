@@ -81,6 +81,7 @@ type
     function GetMaxZ: Double;
     function GetMinZ: Double;
     function GetActive: Boolean;
+    function GetCell(Index: Integer): TModflowIrregularCell2D;
   protected
     function GetCountTri: Integer;
     function GetItemTri(Index: Integer): ITriangulatable;
@@ -111,6 +112,7 @@ type
     property Active: Boolean read GetActive;
     property MaxZ: Double read GetMaxZ;
     property MinZ: Double read GetMinZ;
+    property Cells[Index: Integer]: TModflowIrregularCell2D read GetCell;
   published
 
     // @name starts at zero.
@@ -945,6 +947,11 @@ end;
 function TModflowNode.GetActiveElementCount: integer;
 begin
   result := FCells.Count;
+end;
+
+function TModflowNode.GetCell(Index: Integer): TModflowIrregularCell2D;
+begin
+  result := FCells[Index];
 end;
 
 function TModflowNode.GetCountTri: Integer;

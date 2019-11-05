@@ -45,7 +45,7 @@ type
       const AScreenObject: TScreenObject; SectionIndex: integer; var Expression: TExpression);
     property NodeOrElementQuadTree: TRbwQuadTree read GetNodeOrElementQuadTree;
   public
-    // @name copies the Anisotropy of Source to the item that call
+    // @name copies the Anisotropy of Source to the item that calls
     // @name.
     procedure Assign(Source: TPersistent); override;
     // @name creates an instance of @classname.
@@ -364,10 +364,31 @@ type
     function RealResult(const Location: TPoint2D): real; override;
   end;
 
+  TCustomPlProcInterpolator = class(TCustomAnisotropicInterpolator)
+  private
+    FValues: TPoint3DArray;
+  protected
+    procedure StoreDataValue(Count: Integer; const DataSet: TDataArray;
+      APoint: TPoint2D; AScreenObject: TScreenObject; SectionIndex: integer); override;
+    procedure StoreData(Sender: TObject; const DataSet: TDataArray); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    class function InterpolatorName: string; override;
+    class function ValidReturnTypes: TRbwDataTypes; override;
+    // @name returns the value at location determined by inverse
+    // distance squared interpolation.
+    function RealResult(const Location: TPoint2D): real; override;
+    procedure Finalize(const DataSet: TDataArray); override;
+
+  end;
+
+
 implementation
 
 uses Math, AbstractGridUnit, RealListUnit, TripackTypes, GIS_Functions, Types,
-  Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit;
+  Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit,
+  PlProcUnit;
 
 resourcestring
   StrErrorEncoutereredI = 'Error encouterered in initializing %0:s for the ' +
@@ -2965,6 +2986,196 @@ end;
 class function TPointAverageInterpolator.ValidReturnTypes: TRbwDataTypes;
 begin
   result := [rdtDouble];
+end;
+
+{ TCustomPlProcInterpolator }
+
+constructor TCustomPlProcInterpolator.Create(AOwner: TComponent);
+begin
+  inherited;
+
+end;
+
+destructor TCustomPlProcInterpolator.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TCustomPlProcInterpolator.Finalize(const DataSet: TDataArray);
+begin
+  inherited;
+
+end;
+
+class function TCustomPlProcInterpolator.InterpolatorName: string;
+begin
+
+end;
+
+function TCustomPlProcInterpolator.RealResult(const Location: TPoint2D): real;
+begin
+
+end;
+
+procedure TCustomPlProcInterpolator.StoreData(Sender: TObject;
+  const DataSet: TDataArray);
+var
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  PointCount: integer;
+  PointIndex: integer;
+  APoint: TPoint2D;
+  ListOfScreenObjects: TList;
+  SectionIndex: integer;
+  Count: integer;
+  StoredLocations: TRbwQuadTree;
+  MaxX: Real;
+  MaxY: Real;
+  MinX: Real;
+  MinY: Real;
+  X: double;
+  Y: double;
+  Data: TPointerArray;
+  InterpWriter: TInterpolationDataWriter;
+begin
+  ListOfScreenObjects := TList.Create;
+  try
+    FillScreenObjectList(ListOfScreenObjects);
+
+    // Check objects in reverse order because later objects should
+    // override earlier ones, so if there is a tie, the later one
+    // should win.
+
+    Count := 0;
+
+    MaxX := 0;
+    MaxY := 0;
+    MinX := 0;
+    MinY := 0;
+    for ScreenObjectIndex := ListOfScreenObjects.Count - 1 downto 0 do
+    begin
+      AScreenObject := ListOfScreenObjects[ScreenObjectIndex];
+      if ScreenObjectIndex = 0 then
+      begin
+        MaxX := AScreenObject.MaxX;
+        MaxY := AScreenObject.MaxY;
+        MinX := AScreenObject.MinX;
+        MinY := AScreenObject.MinY;
+      end
+      else
+      begin
+        MaxX := Max(MaxX, AScreenObject.MaxX);
+        MaxY := Max(MaxY, AScreenObject.MaxY);
+        MinX := Min(MinX, AScreenObject.MinX);
+        MinY := Min(MinY, AScreenObject.MinY);
+      end;
+
+      PointCount := AScreenObject.Count;
+      for SectionIndex := 0 to AScreenObject.SectionCount - 1 do
+      begin
+        if AScreenObject.SectionClosed[SectionIndex] then
+        begin
+          Dec(PointCount);
+        end;
+      end;
+
+      Inc(Count, PointCount);
+
+    end;
+    SetLength(FValues, Count);
+
+    StoredLocations := TRbwQuadTree.Create(nil);
+    try
+      StoredLocations.XMax := MaxX;
+      StoredLocations.YMax := MaxY;
+      StoredLocations.XMin := MinX;
+      StoredLocations.YMin := MinY;
+
+      Count := 0;
+      for ScreenObjectIndex := ListOfScreenObjects.Count - 1 downto 0 do
+      begin
+        AScreenObject := ListOfScreenObjects[ScreenObjectIndex];
+
+        PointCount := AScreenObject.Count;
+        SectionIndex := 0;
+        for PointIndex := 0 to PointCount - 1 do
+        begin
+          if AScreenObject.SectionEnd[SectionIndex] = PointIndex then
+          begin
+            Inc(SectionIndex);
+            if AScreenObject.SectionClosed[SectionIndex-1] then
+            begin
+              Continue;
+            end;
+          end;
+          APoint := AScreenObject.Points[PointIndex];
+          if AScreenObject.ViewDirection = vdSide then
+          begin
+            APoint := InvertPoint(APoint);
+          end;
+
+          if StoredLocations.Count > 0 then
+          begin
+            X := APoint.X;
+            Y := APoint.Y;
+            StoredLocations.FindClosestPointsData(X, Y, Data);
+            if (X = APoint.X) and (Y = APoint.Y) then
+            begin
+              Continue;
+            end
+            else
+            begin
+              StoredLocations.AddPoint(APoint.X, APoint.Y, nil);
+            end;
+          end;
+
+          StoreDataValue(Count, DataSet, APoint, AScreenObject, SectionIndex-1);
+          Inc(Count);
+
+        end;
+        AScreenObject.CacheSegments;
+      end;
+      SetLength(FValues, Count);
+      InterpWriter := TInterpolationDataWriter.Create(DataSet.Model, etExport);
+      try
+
+      finally
+        InterpWriter.Free;
+      end;
+    finally
+      StoredLocations.Free;
+    end;
+  finally
+    ListOfScreenObjects.Free;
+  end;
+end;
+
+procedure TCustomPlProcInterpolator.StoreDataValue(Count: Integer;
+  const DataSet: TDataArray; APoint: TPoint2D; AScreenObject: TScreenObject;
+  SectionIndex: integer);
+var
+  Expression: TExpression;
+begin
+  inherited;
+  InitializeVariablesAndExpression(APoint, AScreenObject, SectionIndex, Expression);
+  Assert(DataSet.DataType = rdtDouble);
+  try
+    FValues[Count].x := APoint.x;
+    FValues[Count].y := APoint.y;
+    FValues[Count].z := Expression.DoubleResult;
+  except on E: ERbwParserError do
+    begin
+      frmErrorsAndWarnings.AddError(DataSet.Model, StrErrorAssigningValu,
+        Format(StrErrorMessage0, [E.Message, AScreenObject.Name]), AScreenObject);
+      Exit;
+    end;
+  end;
+end;
+
+class function TCustomPlProcInterpolator.ValidReturnTypes: TRbwDataTypes;
+begin
+
 end;
 
 initialization
