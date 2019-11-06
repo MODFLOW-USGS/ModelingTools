@@ -138,6 +138,10 @@ inherited frmDataSets: TfrmDataSets
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         312
         361)
@@ -369,6 +373,7 @@ inherited frmDataSets: TfrmDataSets
     object tabPHAST: TTabSheet
       Caption = 'PHAST-Interpolation'
       ImageIndex = 1
+      ExplicitHeight = 99
       inline framePhastInterpolation: TframePhastInterpolation
         Left = -2
         Top = 3

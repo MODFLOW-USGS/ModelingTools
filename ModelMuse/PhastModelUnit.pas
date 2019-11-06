@@ -8819,9 +8819,12 @@ const
   //    '4.1.0.4'  Bug fix: Fixed bug that could cause ModelMuse to fail to
   //                create the MVR file correctly when the UZF package was used
   //                as a source.
+  //    '4.1.0.5'  Change: If ModelMuse attempts to copy an image to the
+  //                clipboard and fails because the clipboard is locked. it
+  //                will now try three times before giving up.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.4';
+  IModelVersion = '4.1.0.5';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

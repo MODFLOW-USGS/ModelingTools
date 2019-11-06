@@ -453,6 +453,9 @@ begin
   AddNewInterpolator(List, TInvDistSqPoint2DInterpolator);
   AddNewInterpolator(List, TInvDistSq2DInterpolator);
 
+{$IFDEF PEST}
+  AddNewInterpolator(List, TCustomPlProcInterpolator);
+{$ENDIF}
 end;
 
 procedure TfrmDataSets.FormActivate(Sender: TObject);

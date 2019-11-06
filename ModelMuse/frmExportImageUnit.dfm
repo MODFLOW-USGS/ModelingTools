@@ -7,7 +7,7 @@ inherited frmExportImage: TfrmExportImage
   ShowHint = True
   OnClose = FormClose
   ExplicitWidth = 737
-  ExplicitHeight = 593
+  ExplicitHeight = 594
   PixelsPerInch = 96
   TextHeight = 18
   object JvNetscapeSplitter2: TJvNetscapeSplitter

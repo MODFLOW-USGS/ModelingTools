@@ -6,7 +6,7 @@ interface
 
 uses System.UITypes,
   Windows, SysUtils, Classes, Graphics, OpenGL, GoPhastTypes, ColorSchemes,
-  System.ConvUtils, System.StdConvs, FastGEO, System.Character;
+  System.ConvUtils, System.StdConvs, FastGEO, System.Character, JvCreateProcess;
 
 type
   TSupportedLengthConv = (slcCm, slcMeter, slcKilometer, slcFeet, slcMile);
@@ -80,7 +80,7 @@ function ArchiveQuoteFileName(AName: string): string;
 
 function FixShapeFileFieldName(FieldName: AnsiString; Fields: TStringList): AnsiString;
 
-procedure RunAProgram(const CommandLine: string);
+procedure RunAProgram(const CommandLine: string; OnTerminate: TJvCPSTerminateEvent = nil);
 
 function FileLength(fileName : string) : Int64;
 
@@ -103,7 +103,7 @@ procedure MM_ObjectBinaryToText(const Input, Output: TStream);
 
 implementation
 
-uses JvCreateProcess, AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
+uses AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
   IdGlobal, IOUtils, System.RTLConsts, System.TypInfo, System.ZLib, TempFiles;
 
 resourcestring
@@ -128,13 +128,15 @@ function FileLength(fileName : string) : Int64;
    FindClose(sr) ;
  end;
 
-procedure RunAProgram(const CommandLine: string);
+procedure RunAProgram(const CommandLine: string;
+  OnTerminate: TJvCPSTerminateEvent = nil);
 var
   Runner: TJvCreateProcess;
 begin
 
   Runner := TJvCreateProcess.Create(nil);
   try
+    Runner.OnTerminate := OnTerminate;
     Runner.CommandLine := CommandLine;
     try
       Runner.Run;

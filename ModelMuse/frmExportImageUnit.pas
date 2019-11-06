@@ -3388,12 +3388,31 @@ end;
 procedure TfrmExportImage.JvBitBtn1Click(Sender: TObject);
 var
   ABitMap: TBitmap;
+  RetryCount: Integer;
 begin
   inherited;
   ABitMap := TBitMap.Create;
   try
-    ABitMap.Assign(imagePreview.Picture);
-    Clipboard.Assign(ABitMap);
+    RetryCount := 0;
+    repeat
+      ABitMap.Assign(imagePreview.Picture);
+      try
+        Clipboard.Assign(ABitMap);
+      except on E: EClipboardException do
+        begin
+          Inc(RetryCount);
+          if RetryCount < 3 then
+          begin
+            Sleep(RetryCount * 100)
+          end
+          else
+          begin
+            Beep;
+            MessageDlg(E.Message, mtError, [mbOK], 0);
+          end;
+        end;
+      end;
+    until RetryCount >= 3;
   finally
     ABitMap.Free;
   end;

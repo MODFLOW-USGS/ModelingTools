@@ -267,7 +267,7 @@ begin
         Inc(MaximumNumberOfCells, CellList.Count);
       end;
 
-      if (Model.ModelSelection = msModflow2015) and
+      if (Model.ModelSelection <> msModflow2015) and
         (ScreenObject.ModflowMnw2Boundary <> nil)
         and ScreenObject.ModflowMnw2Boundary.Used then
       begin

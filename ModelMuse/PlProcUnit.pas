@@ -7,7 +7,8 @@ unit PlProcUnit;
 interface
 
 uses
-  ModflowIrregularMeshUnit, CustomModflowWriterUnit, System.SysUtils, FastGEO;
+  ModflowIrregularMeshUnit, CustomModflowWriterUnit, System.SysUtils, FastGEO,
+  AbstractGridUnit, GoPhastTypes, MeshRenumberingTypes;
 
 type
   // @name is used to write a file that can be read by read_mf_usg_grid_specs().
@@ -25,12 +26,18 @@ type
 
   TInterpolationDataWriter = class(TCustomFileWriter)
   public
+    class function Extension: string; override;
     procedure WriteFile(Points: TPoint3DArray; var FileName: string);
   end;
 
   TResultLocationWriter = class(TCustomFileWriter)
   public
-    procedure WriteFile(Points: TPoint2DArray; var FileName: string);
+    class function Extension: string; override;
+    procedure WriteFile(Points: TPoint2DArray; var FileName: string); overload;
+    procedure WriteFile(Grid: TCustomModelGrid; EvaluatedAt: TEvaluatedAt;
+      Orientation: TDataSetOrientation; var FileName: string); overload;
+    procedure WriteFile(Mesh: IMesh2D; EvaluatedAt: TEvaluatedAt;
+      var FileName: string); overload;
   end;
 
 implementation
@@ -137,6 +144,7 @@ begin
     WriteLine2;
     WriteLine3;
     WriteVertices;
+    WriteNodes;
   finally
     CloseFile;
   end;
@@ -206,13 +214,18 @@ end;
 
 { TInterpolationDataWriter }
 
+class function TInterpolationDataWriter.Extension: string;
+begin
+  result := '.ip_data';
+end;
+
 procedure TInterpolationDataWriter.WriteFile(Points: TPoint3DArray;
   var FileName: string);
 var
   VertexIndex: Integer;
   APoint: TPoint3D;
 begin
-  FileName := ChangeFileExt(FileName, '.ip_data');
+  FileName := ChangeFileExt(FileName, Extension);
 
   OpenFile(FileName);
   try
@@ -241,7 +254,7 @@ var
   VertexIndex: Integer;
   APoint: TPoint2D;
 begin
-  FileName := ChangeFileExt(FileName, '.result_locations');
+  FileName := ChangeFileExt(FileName, Extension);
   OpenFile(FileName);
   try
     WriteString('        ID           X               Y');
@@ -258,6 +271,158 @@ begin
   finally
     CloseFile;
   end;
+end;
+
+class function TResultLocationWriter.Extension: string;
+begin
+  Result := '.result_locations';
+end;
+
+procedure TResultLocationWriter.WriteFile(Mesh: IMesh2D;
+  EvaluatedAt: TEvaluatedAt; var FileName: string);
+var
+  ElementIndex: Integer;
+  Element: IElement2D;
+  Points: TPoint2DArray;
+  NodeIndex: Integer;
+  Node: INode2D;
+begin
+  if EvaluatedAt = eaBlocks then
+  begin
+    SetLength(Points, Mesh.ElementCount);
+    for ElementIndex := 0 to Mesh.ElementCount - 1 do
+    begin
+      Element := Mesh.ElementsI2D[ElementIndex];
+      Points[ElementIndex] := Element.Center;
+    end;
+  end
+  else
+  begin
+    Assert(EvaluatedAt = eaNodes);
+    SetLength(Points, Mesh.NodeCount);
+    for NodeIndex := 0 to Mesh.NodeCount - 1 do
+    begin
+      Node := Mesh.NodesI2D[NodeIndex];
+      Points[NodeIndex] := Node.Location;
+    end;
+  end;
+  WriteFile(Points, FileName);
+end;
+
+procedure TResultLocationWriter.WriteFile(Grid: TCustomModelGrid;
+  EvaluatedAt: TEvaluatedAt; Orientation: TDataSetOrientation;
+  var FileName: string);
+var
+  Points: TPoint2DArray;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  PointIndex: Integer;
+  LayerIndex: Integer;
+  APoint3D: TPoint3D;
+begin
+  Assert(Orientation <> dso3D);
+  PointIndex := 0;
+  case EvaluatedAt of
+    eaBlocks:
+      begin
+        case Orientation of
+          dsoTop:
+            begin
+              SetLength(Points, Grid.ColumnCount * Grid.RowCount);
+              for RowIndex := 0 to Grid.RowCount - 1 do
+              begin
+                for ColIndex := 0 to Grid.ColumnCount - 1 do
+                begin
+                  Points[PointIndex] :=
+                    Grid.TwoDElementCenter(ColIndex,RowIndex);
+                  Inc(PointIndex);
+                end;
+              end;
+            end;
+          dsoFront:
+            begin
+              SetLength(Points, Grid.ColumnCount * Grid.LayerCount);
+              for LayerIndex := 0 to Grid.LayerCount - 1 do
+              begin
+                for ColIndex := 0 to Grid.ColumnCount - 1 do
+                begin
+                  APoint3D := Grid.ThreeDElementCenter(ColIndex, 0, LayerIndex);
+                  Points[PointIndex].x := APoint3D.x;
+                  Points[PointIndex].y := APoint3D.z;
+                  Inc(PointIndex);
+                end;
+              end;
+            end;
+          dsoSide:
+            begin
+              SetLength(Points, Grid.RowCount * Grid.LayerCount);
+              for LayerIndex := 0 to Grid.LayerCount - 1 do
+              begin
+                for RowIndex := 0 to Grid.RowCount - 1 do
+                begin
+                  APoint3D := Grid.ThreeDElementCenter(0, RowIndex, LayerIndex);
+                  Points[PointIndex].x := APoint3D.y;
+                  Points[PointIndex].y := APoint3D.z;
+                  Inc(PointIndex);
+                end;
+              end;
+            end;
+          else
+            Assert(False);
+        end;
+      end;
+    eaNodes:
+      begin
+        case Orientation of
+          dsoTop:
+            begin
+              SetLength(Points, (Grid.ColumnCount + 1) * (Grid.RowCount + 1));
+              for RowIndex := 0 to Grid.RowCount do
+              begin
+                for ColIndex := 0 to Grid.ColumnCount do
+                begin
+                  Points[PointIndex] :=
+                    Grid.TwoDCellCorner(ColIndex,RowIndex);
+                  Inc(PointIndex);
+                end;
+              end;
+            end;
+          dsoFront:
+            begin
+              SetLength(Points, (Grid.ColumnCount + 1) * (Grid.LayerCount + 1));
+              for LayerIndex := 0 to Grid.LayerCount do
+              begin
+                for ColIndex := 0 to Grid.ColumnCount do
+                begin
+                  APoint3D := Grid.ThreeDElementCorner(ColIndex, 0, LayerIndex);
+                  Points[PointIndex].x := APoint3D.x;
+                  Points[PointIndex].y := APoint3D.z;
+                  Inc(PointIndex);
+                end;
+              end;
+            end;
+          dsoSide:
+            begin
+              SetLength(Points, (Grid.RowCount + 1) * (Grid.LayerCount + 1));
+              for LayerIndex := 0 to Grid.LayerCount do
+              begin
+                for RowIndex := 0 to Grid.RowCount do
+                begin
+                  APoint3D := Grid.ThreeDElementCorner(0, RowIndex, LayerIndex);
+                  Points[PointIndex].x := APoint3D.y;
+                  Points[PointIndex].y := APoint3D.z;
+                  Inc(PointIndex);
+                end;
+              end;
+            end;
+          else
+            Assert(False);
+        end;
+      end
+    else
+      Assert(False);
+  end;
+  WriteFile(Points, FileName);
 end;
 
 end.

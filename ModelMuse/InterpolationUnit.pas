@@ -364,12 +364,24 @@ type
     function RealResult(const Location: TPoint2D): real; override;
   end;
 
+  EPlProcException = class(Exception);
+
   TCustomPlProcInterpolator = class(TCustomAnisotropicInterpolator)
   private
     FValues: TPoint3DArray;
+    ResultValues: array of double;
+    FInputFileName: string;
+    FResultLocationFileName: string;
+    FScriptFileName: string;
+    FFilesToDelete: TStringList;
+    FKrigingOutputFileName: string;
+    FKrigedResults: TRbwQuadTree;
+    procedure WriteScript(const DataSet: TDataArray);
+    procedure OnPlProcDone(Sender: TObject; ExitCode: DWORD);
+    procedure ReadResults;
   protected
     procedure StoreDataValue(Count: Integer; const DataSet: TDataArray;
-      APoint: TPoint2D; AScreenObject: TScreenObject; SectionIndex: integer); override;
+      APoint: TPoint2D; AScreenObject: TScreenObject; SectionIndex: integer);
     procedure StoreData(Sender: TObject; const DataSet: TDataArray); virtual;
   public
     constructor Create(AOwner: TComponent); override;
@@ -380,7 +392,6 @@ type
     // distance squared interpolation.
     function RealResult(const Location: TPoint2D): real; override;
     procedure Finalize(const DataSet: TDataArray); override;
-
   end;
 
 
@@ -388,7 +399,7 @@ implementation
 
 uses Math, AbstractGridUnit, RealListUnit, TripackTypes, GIS_Functions, Types,
   Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit,
-  PlProcUnit;
+  PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils, ModelMuseUtilities;
 
 resourcestring
   StrErrorEncoutereredI = 'Error encouterered in initializing %0:s for the ' +
@@ -2993,29 +3004,126 @@ end;
 constructor TCustomPlProcInterpolator.Create(AOwner: TComponent);
 begin
   inherited;
-
+  FFilesToDelete := TStringList.Create;
+  FKrigedResults := TRbwQuadTree.Create(nil);
+  OnInitialize := StoreData;
 end;
 
 destructor TCustomPlProcInterpolator.Destroy;
 begin
-
+  FKrigedResults.Free;
+  FFilesToDelete.Free;
   inherited;
 end;
 
 procedure TCustomPlProcInterpolator.Finalize(const DataSet: TDataArray);
 begin
+  FKrigedResults.Clear;
+  SetLength(FValues, 0);
   inherited;
+end;
 
+procedure TCustomPlProcInterpolator.ReadResults;
+var
+  Locations: TStringList;
+  Values: TStringList;
+  LineIndex: Integer;
+  SplitLocations: TArray;
+  X: Double;
+  Y: Double;
+  Value: Double;
+begin
+  FKrigedResults.Clear;
+  Locations := TStringList.Create;
+  Values := TStringList.Create;
+  try
+    Locations.LoadFromFile(FResultLocationFileName);
+    Values.LoadFromFile(FKrigingOutputFileName);
+    Locations.Delete(0);
+    Assert(Locations.Count = Values.Count);
+    SetLength(ResultValues, Values.Count);
+    for LineIndex := 0 to Locations.Count - 1 do
+    begin
+      SplitLocations := Locations[LineIndex].Split([' ']);
+      Assert(Length(SplitLocations) = 2);
+      X := FortranStrToFloat(SplitLocations[0]);
+      Y := FortranStrToFloat(SplitLocations[1]);
+      Value := FortranStrToFloat(Values[LineIndex]);
+      ResultValues[LineIndex] := Value;
+      FKrigedResults.AddPoint(X, Y, Addr(ResultValues[LineIndex]));
+    end;
+  finally
+    Values.Free;
+    Locations.Free;
+  end;
+end;
+
+procedure TCustomPlProcInterpolator.WriteScript(const DataSet: TDataArray);
+var
+  KrigingFactorsFileName: string;
+  Script: TStringList;
+  LocalModel: TCustomModel;
+begin
+  LocalModel := DataSet.Model as TCustomModel;
+  KrigingFactorsFileName := ChangeFileExt(FInputFileName, '.KrigFactors');
+  FFilesToDelete.Add(KrigingFactorsFileName);
+
+  FKrigingOutputFileName := ChangeFileExt(FInputFileName, '.KrigOutput');
+  FFilesToDelete.Add(FKrigingOutputFileName);
+  Script := TStringList.Create;
+  try
+    Script.Add(Format('# read input data for data set %0:s in %1:s', [DataSet.Name, LocalModel.DisplayName]));
+    Script.Add('cl_input = read_list_file(skiplines=1,dimensions=2, &');
+    Script.Add('  plist=''p_1'';column=4, &');
+    Script.Add(Format('  id_type=''indexed'',file=''%s'')', [ExtractFileName(FInputFileName)]));
+    Script.Add('');
+    Script.Add('# read output data locations');
+    Script.Add('cl_loc = read_list_file(skiplines=1,dimensions=2, &');
+    Script.Add(Format('  id_type=''indexed'',file=''%s'')', [ExtractFileName(FResultLocationFileName)]));
+    Script.Add('');
+    Script.Add('# calculate kriging factors');
+    Script.Add(Format('calc_kriging_factors_auto_2d(file=''%s'', &', [ExtractFileName(KrigingFactorsFileName)]));
+    Script.Add('  source_clist=cl_input, &');
+    Script.Add('  target_clist=cl_loc)');
+    Script.Add('');
+    Script.Add('#create new result list  ');
+    Script.Add('resultValues = new_plist(reference_clist=cl_loc, value=0)');
+    Script.Add('');
+    Script.Add('# perform kriging.');
+    Script.Add(Format('resultValues = p_1.krige_using_file(file=''%s'', transform=''none'')', [ExtractFileName(KrigingFactorsFileName)]));
+    Script.Add('');
+    Script.Add('#Write output');
+    Script.Add(Format('write_column_data_file(file=''KrigResults.txt'', plist=resultValues)', [ExtractFileName(FKrigingOutputFileName)]));
+    Script.Add('');
+    Script.Add('');
+    Script.Add(Format('', []));
+    Script.SaveToFile(FScriptFileName);
+  finally
+    Script.Free;
+  end;
 end;
 
 class function TCustomPlProcInterpolator.InterpolatorName: string;
 begin
+  result := 'PLPROC Kriging';
+end;
 
+procedure TCustomPlProcInterpolator.OnPlProcDone(Sender: TObject;
+  ExitCode: DWORD);
+begin
+  if ExitCode <> 0 then
+  begin
+    raise EPlProcException.Create('Something went wrong with PLPROC');
+  end;
+  ReadResults;
 end;
 
 function TCustomPlProcInterpolator.RealResult(const Location: TPoint2D): real;
+var
+  ResultPointer: PDouble;
 begin
-
+  ResultPointer := FKrigedResults.NearestPointsFirstData(Location.x, Location.y);
+  result := ResultPointer^;
 end;
 
 procedure TCustomPlProcInterpolator.StoreData(Sender: TObject;
@@ -3038,6 +3146,12 @@ var
   Y: double;
   Data: TPointerArray;
   InterpWriter: TInterpolationDataWriter;
+  ResultLocations: TResultLocationWriter;
+  LocalModel: TCustomModel;
+  Limits: TGridLimit;
+  PlProcName: string;
+  ViewDirection: TViewDirection;
+  CurrentDir: string;
 begin
   ListOfScreenObjects := TList.Create;
   try
@@ -3136,16 +3250,106 @@ begin
         end;
         AScreenObject.CacheSegments;
       end;
-      SetLength(FValues, Count);
-      InterpWriter := TInterpolationDataWriter.Create(DataSet.Model, etExport);
-      try
 
+      SetLength(FValues, Count);
+      LocalModel := DataSet.Model as TCustomModel;
+      InterpWriter := TInterpolationDataWriter.Create(LocalModel, etExport);
+      try
+        FInputFileName := GetAppSpecificTempDir + LocalModel.DisplayName
+          + '.' + DataSet.Name + InterpWriter.Extension;
+        InterpWriter.WriteFile(FValues, FInputFileName);
+        FFilesToDelete.Add(FInputFileName);
       finally
         InterpWriter.Free;
+      end;
+
+      ResultLocations := TResultLocationWriter.Create(LocalModel, etExport);
+      try
+        FResultLocationFileName := ChangeFileExt(FInputFileName, ResultLocations.Extension);
+        if LocalModel.Grid <> nil then
+        begin
+          ResultLocations.WriteFile(LocalModel.Grid, DataSet.EvaluatedAt,
+            DataSet.Orientation, FResultLocationFileName);
+        end
+        else
+        begin
+          ResultLocations.WriteFile(LocalModel.Mesh3D.Mesh2DI,
+            DataSet.EvaluatedAt, FResultLocationFileName);
+        end;
+        FFilesToDelete.Add(FResultLocationFileName);
+      finally
+        ResultLocations.Free;
       end;
     finally
       StoredLocations.Free;
     end;
+
+    FScriptFileName := ChangeFileExt(FInputFileName, '.plproc_script');
+    WriteScript(DataSet);
+    FFilesToDelete.Add(FScriptFileName);
+
+    case DataSet.Orientation of
+      dsoTop: ViewDirection := vdTop;
+      dsoFront: ViewDirection := vdFront;
+      dsoSide: ViewDirection := vdSide;
+      dso3D: Assert(False);
+    end;
+
+    if LocalModel.Grid <> nil then
+    begin
+      Limits := LocalModel.Grid.GridLimits(ViewDirection);
+    end
+    else
+    begin
+      Limits := LocalModel.Mesh3D.MeshLimits(ViewDirection, 0);
+    end;
+
+    case DataSet.Orientation of
+      dsoTop:
+        begin
+          FKrigedResults.XMax := Limits.MaxX;
+          FKrigedResults.XMin := Limits.MinX;
+          FKrigedResults.YMax := Limits.MaxY;
+          FKrigedResults.YMin := Limits.MinY;
+        end;
+      dsoFront:
+        begin
+          FKrigedResults.XMax := Limits.MaxX;
+          FKrigedResults.XMin := Limits.MinX;
+          FKrigedResults.YMax := Limits.MaxZ;
+          FKrigedResults.YMin := Limits.Minz;
+        end;
+      dsoSide:
+        begin
+          FKrigedResults.XMax := Limits.MaxY;
+          FKrigedResults.XMin := Limits.MinY;
+          FKrigedResults.YMax := Limits.MaxZ;
+          FKrigedResults.YMin := Limits.Minz;
+        end;
+      dso3D:
+        Assert(False);
+    end;
+
+    PlProcName  := ExtractFileDir(Application.ExeName)
+      + '\' + 'plproc64.exe';
+    if not TFile.Exists(PlProcName) then
+    begin
+      PlProcName  := ExtractFileDir(Application.ExeName)
+        + '\' + 'plproc32.exe';
+      if not TFile.Exists(PlProcName) then
+      begin
+        raise EPlProcException.Create('Neither plproc64.exe nor plproc32.exe are in the ModelMuse directory.');
+      end;
+    end;
+
+    CurrentDir := GetCurrentDir;
+    try
+      SetCurrentDir(GetAppSpecificTempDir);
+      RunAProgram(PlProcName + ' ' + ExtractFileName(FScriptFileName), OnPlProcDone);
+    finally
+      SetCurrentDir(CurrentDir)
+    end;
+
   finally
     ListOfScreenObjects.Free;
   end;
@@ -3175,7 +3379,7 @@ end;
 
 class function TCustomPlProcInterpolator.ValidReturnTypes: TRbwDataTypes;
 begin
-
+  Result := [rdtDouble];
 end;
 
 initialization
@@ -3187,5 +3391,8 @@ initialization
   RegisterClass(TInvDistSqPoint2DInterpolator);
   RegisterClass(TNaturalNeighborInterp);
   RegisterClass(TPointAverageInterpolator);
+
+  RegisterClass(TCustomPlProcInterpolator);
+
 
 end.

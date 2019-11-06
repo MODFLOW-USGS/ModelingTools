@@ -132,43 +132,14 @@ begin
   end;
 end;
 
-//procedure ReclaimMemory;
-//begin
-////  Exit;
-//  if PriorTempItems <> nil then
-//  begin
-//    PriorTempItems.CanStore := PriorTempItems.CanStore
-//      or (PriorTempItems.Count > 0);
-//    PriorTempItems.StoreStreams;
-//  end;
-//  if CurrentTempItems <> nil then
-//  begin
-//    CurrentTempItems.CanStore := CurrentTempItems.CanStore
-//      or (CurrentTempItems.Count > 0);
-//    CurrentTempItems.StoreStreams;
-//  end;
-//  if LastCreatedTempItems <> nil then
-//  begin
-//    LastCreatedTempItems.CanStore := LastCreatedTempItems.CanStore
-//      or (LastCreatedTempItems.Count > 0);
-//    LastCreatedTempItems.StoreStreams;
-//  end;
-//end;
 
 function CreateZipFile(const DirName: string): string;
 var
-//  Count: Integer;
   ADirectory: string;
   Position: Integer;
   TempItems: TTempItems;
   Buffer: array[0..MAX_PATH] of Char;
 begin
-//  if (TemporaryFiles.Count > 0) and ((TemporaryFiles.Count mod MaxItems) = 0) then
-//  begin
-//    UpdateCurrentDir;
-//  end;
-
-//  CurrentTempDir := GetAppSpecificTempDir;
   GetTempFileName(PChar(DirName), PChar('MM_' + IntToStr(TemporaryFiles.Count)),
     0, Buffer);
   result := Buffer;
@@ -179,17 +150,7 @@ begin
       0, Buffer);
     result := Buffer;
   end;
-//  result := TempFileName;
-//  result := IncludeTrailingPathDelimiter(DirName) + 'MM.tmp';
-//  if FileExists(result) then
-//  begin
-//    Count := 0;
-//    repeat
-//      Inc(Count);
-//      result := IncludeTrailingPathDelimiter(DirName) + 'MM'
-//        + IntToStr(Count) + '.tmp';
-//    until (not FileExists(result));
-//  end;
+
   ZipFiles.Add(result);
   TemporaryFiles.Add(result);
   ADirectory := IncludeTrailingPathDelimiter(ExtractFileDir(result));
@@ -711,41 +672,11 @@ begin
   end;
 end;
 
-//procedure TTempItems.ReadHeader(var Positions: TInt64Array; TempFileNames: TStringList; FileStream: TFileStream);
-//var
-//  FileName: string;
-//  FileNameSize: Integer;
-//  Index: Integer;
-//  Count: Integer;
-//begin
-//  FileStream.Read(Count, SizeOf(Count));
-//  TempFileNames.Capacity := Count;
-//  SetLength(Positions, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    FileStream.Read(Positions[Index], SizeOf(Int64));
-//    FileStream.Read(FileNameSize, SizeOf(FileNameSize));
-//    SetString(FileName, nil, FileNameSize);
-//    FileStream.Read(Pointer(FileName)^, FileNameSize * SizeOf(Char));
-//    TempFileNames.Add(FileName);
-//  end;
-//  for Index := 0 to Count - 1 do
-//  begin
-//    Positions[Index] := Positions[Index] + FileStream.Position;
-//  end;
-//end;
-
 procedure TTempItems.RestoreStreams;
 var
-//  Positions: TInt64Array;
   Count: Integer;
-//  FileStreamSize: Int64;
-//  FileStream: TFileStream;
-//  TempFileNames: TStringList;
-//  ByteArray: TInt64Array;
   StreamSize: Int64;
   InStream: TMemoryStream;
-//  Position: Int64;
   StreamIndex: Integer;
 begin
   if FFileStream <> nil then
@@ -844,9 +775,5 @@ finalization
   ZipFiles.Free;
   TemporaryFiles.Free;
   Directories.Free;
-//  if ShouldReleaseMutex then
-//  begin
-//    ReleaseMutex(MutexHandle);
-//  end;
 
 end.
