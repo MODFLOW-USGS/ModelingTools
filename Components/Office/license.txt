@@ -1,0 +1,17 @@
+This notice may not be removed from or altered in any source distribution.
+
+"Author" herein refers to Evgeny A. Kryukov (the creator of the the OfficeVCL library). "Software" refers to all files included with OfficeVCL distribution package. 
+
+OfficeVCL is distributed as a freeware. You are free to use OfficeVCL as part of your application for any purpose including freeware, commercial and shareware applications, provided some credit is given to the author.
+
+The origin of this software must not be misrepresented; you must not claim your authorship. All redistributions must retain the original copyright notice and web site addresses. 
+
+Commercial redistribution of the library source is allowed only with a written permisson from the author.
+
+This software is provided 'as-is', without warranty of any kind, either expressed or implied. In no event shall the author be held liable for any damages arising from the use of this software.
+
+Evgeny A. Kryukov
+
+http://www.eksoftware.org
+evgeny@eksoftware.org
+
