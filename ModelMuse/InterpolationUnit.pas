@@ -376,9 +376,12 @@ type
     FFilesToDelete: TStringList;
     FKrigingOutputFileName: string;
     FKrigedResults: TRbwQuadTree;
+    FFinishedFileName: string;
+//    FIsTerminated: Boolean;
     procedure WriteScript(const DataSet: TDataArray);
-    procedure OnPlProcDone(Sender: TObject; ExitCode: DWORD);
     procedure ReadResults;
+    procedure RunPlProc;
+    procedure PlProcTerminated(Sender: TObject; ExitCode: DWORD);
   protected
     procedure StoreDataValue(Count: Integer; const DataSet: TDataArray;
       APoint: TPoint2D; AScreenObject: TScreenObject; SectionIndex: integer);
@@ -399,7 +402,8 @@ implementation
 
 uses Math, AbstractGridUnit, RealListUnit, TripackTypes, GIS_Functions, Types,
   Generics.Collections, MeshRenumberingTypes, frmErrorsAndWarningsUnit,
-  PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils, ModelMuseUtilities;
+  PlProcUnit, TempFiles, Vcl.Forms, System.IOUtils, ModelMuseUtilities,
+  JvCreateProcess;
 
 resourcestring
   StrErrorEncoutereredI = 'Error encouterered in initializing %0:s for the ' +
@@ -3007,6 +3011,7 @@ begin
   FFilesToDelete := TStringList.Create;
   FKrigedResults := TRbwQuadTree.Create(nil);
   OnInitialize := StoreData;
+  FReady := False;
 end;
 
 destructor TCustomPlProcInterpolator.Destroy;
@@ -3028,14 +3033,16 @@ var
   Locations: TStringList;
   Values: TStringList;
   LineIndex: Integer;
-  SplitLocations: TArray;
   X: Double;
   Y: Double;
   Value: Double;
+  Splitter: TStringList;
+  Index: Integer;
 begin
   FKrigedResults.Clear;
   Locations := TStringList.Create;
   Values := TStringList.Create;
+  Splitter := TStringList.Create;
   try
     Locations.LoadFromFile(FResultLocationFileName);
     Values.LoadFromFile(FKrigingOutputFileName);
@@ -3044,18 +3051,27 @@ begin
     SetLength(ResultValues, Values.Count);
     for LineIndex := 0 to Locations.Count - 1 do
     begin
-      SplitLocations := Locations[LineIndex].Split([' ']);
-      Assert(Length(SplitLocations) = 2);
-      X := FortranStrToFloat(SplitLocations[0]);
-      Y := FortranStrToFloat(SplitLocations[1]);
+      Splitter.DelimitedText := Locations[LineIndex];
+      Assert(Splitter.Count = 3);
+      X := FortranStrToFloat(Splitter[1]);
+      Y := FortranStrToFloat(Splitter[2]);
       Value := FortranStrToFloat(Values[LineIndex]);
       ResultValues[LineIndex] := Value;
       FKrigedResults.AddPoint(X, Y, Addr(ResultValues[LineIndex]));
     end;
   finally
+    Splitter.Free;
     Values.Free;
     Locations.Free;
   end;
+
+  for Index := 0 to FFilesToDelete.Count - 1 do
+  begin
+    TFile.Delete(FFilesToDelete[Index]);
+  end;
+  FFilesToDelete.Clear;
+
+  FReady := True;
 end;
 
 procedure TCustomPlProcInterpolator.WriteScript(const DataSet: TDataArray);
@@ -3070,6 +3086,10 @@ begin
 
   FKrigingOutputFileName := ChangeFileExt(FInputFileName, '.KrigOutput');
   FFilesToDelete.Add(FKrigingOutputFileName);
+
+  FFinishedFileName := ChangeFileExt(FInputFileName, '.done');
+  FFilesToDelete.Add(FFinishedFileName);
+
   Script := TStringList.Create;
   try
     Script.Add(Format('# read input data for data set %0:s in %1:s', [DataSet.Name, LocalModel.DisplayName]));
@@ -3093,10 +3113,10 @@ begin
     Script.Add(Format('resultValues = p_1.krige_using_file(file=''%s'', transform=''none'')', [ExtractFileName(KrigingFactorsFileName)]));
     Script.Add('');
     Script.Add('#Write output');
-    Script.Add(Format('write_column_data_file(file=''KrigResults.txt'', plist=resultValues)', [ExtractFileName(FKrigingOutputFileName)]));
+    Script.Add(Format('write_column_data_file(file=''%s'', plist=resultValues)', [ExtractFileName(FKrigingOutputFileName)]));
     Script.Add('');
-    Script.Add('');
-    Script.Add(Format('', []));
+    Script.Add(Format('report_all_entities(file=''%s'')', [ExtractFileName(FFinishedFileName)]));
+
     Script.SaveToFile(FScriptFileName);
   finally
     Script.Free;
@@ -3108,14 +3128,11 @@ begin
   result := 'PLPROC Kriging';
 end;
 
-procedure TCustomPlProcInterpolator.OnPlProcDone(Sender: TObject;
+procedure TCustomPlProcInterpolator.PlProcTerminated(Sender: TObject;
   ExitCode: DWORD);
 begin
-  if ExitCode <> 0 then
-  begin
-    raise EPlProcException.Create('Something went wrong with PLPROC');
-  end;
-  ReadResults;
+//  ReadResults;
+//  FIsTerminated := True;
 end;
 
 function TCustomPlProcInterpolator.RealResult(const Location: TPoint2D): real;
@@ -3123,11 +3140,63 @@ var
   ResultPointer: PDouble;
 begin
   ResultPointer := FKrigedResults.NearestPointsFirstData(Location.x, Location.y);
-  result := ResultPointer^;
+  if ResultPointer <> nil then
+  begin
+    result := ResultPointer^;
+  end
+  else
+  begin
+    result := 0;
+  end;
+end;
+
+procedure TCustomPlProcInterpolator.RunPlProc;
+var
+  Runner: TJvCreateProcess;
+  PlProcName: string;
+  P: TProcessInformation;
+begin
+    PlProcName  := ExtractFileDir(Application.ExeName)
+      + '\' + 'plproc64.exe';
+    if not TFile.Exists(PlProcName) then
+    begin
+      PlProcName  := ExtractFileDir(Application.ExeName)
+        + '\' + 'plproc32.exe';
+      if not TFile.Exists(PlProcName) then
+      begin
+        raise EPlProcException.Create('Neither plproc64.exe nor plproc32.exe are in the ModelMuse directory.');
+      end;
+    end;
+
+  Runner := TJvCreateProcess.Create(nil);
+  try
+    Runner.CurrentDirectory := GetAppSpecificTempDir;
+    Runner.CommandLine := PlProcName + ' ' + ExtractFileName(FScriptFileName);
+//    Runner.OnTerminate := PlProcTerminated;
+//    Runner.WaitForTerminate := True;
+    try
+//      FIsTerminated := False;
+      Runner.Run;
+      while not TFile.Exists(FFinishedFileName) do
+      begin
+        Sleep(10);
+      end;
+
+    except on E: EOSError do
+      begin
+        Beep;
+        MessageDlg(E.message, mtError, [mbOK], 0);
+      end;
+    end;
+  finally
+    Runner.Free;
+  end;
 end;
 
 procedure TCustomPlProcInterpolator.StoreData(Sender: TObject;
   const DataSet: TDataArray);
+const
+  MaxAllowedPoints = 1800;
 var
   ScreenObjectIndex: integer;
   AScreenObject: TScreenObject;
@@ -3152,7 +3221,10 @@ var
   PlProcName: string;
   ViewDirection: TViewDirection;
   CurrentDir: string;
+  ErrorMessage: string;
 begin
+  FReady := False;
+  FKrigedResults.Clear;
   ListOfScreenObjects := TList.Create;
   try
     FillScreenObjectList(ListOfScreenObjects);
@@ -3195,8 +3267,19 @@ begin
       end;
 
       Inc(Count, PointCount);
-
     end;
+
+    ErrorMessage := Format('Krigging could not be performed in %s', [DataSet.Name]);
+    frmErrorsAndWarnings.RemoveErrorGroup(DataSet.Model, ErrorMessage);
+    if Count > MaxAllowedPoints then
+    begin
+//    PlProc can handle at most 1800 points.
+      FReady := True;
+      frmErrorsAndWarnings.AddError(DataSet.Model, ErrorMessage,
+        Format('Krigging could not be performed in %0:s because the maximum allowed number of points for krigging is %1:d and the actual number of points was %2:d', [DataSet.Name, MaxAllowedPoints, Count]));
+      Exit;
+    end;
+
     SetLength(FValues, Count);
 
     StoredLocations := TRbwQuadTree.Create(nil);
@@ -3330,25 +3413,9 @@ begin
         Assert(False);
     end;
 
-    PlProcName  := ExtractFileDir(Application.ExeName)
-      + '\' + 'plproc64.exe';
-    if not TFile.Exists(PlProcName) then
-    begin
-      PlProcName  := ExtractFileDir(Application.ExeName)
-        + '\' + 'plproc32.exe';
-      if not TFile.Exists(PlProcName) then
-      begin
-        raise EPlProcException.Create('Neither plproc64.exe nor plproc32.exe are in the ModelMuse directory.');
-      end;
-    end;
+    RunPlProc;
 
-    CurrentDir := GetCurrentDir;
-    try
-      SetCurrentDir(GetAppSpecificTempDir);
-      RunAProgram(PlProcName + ' ' + ExtractFileName(FScriptFileName), OnPlProcDone);
-    finally
-      SetCurrentDir(CurrentDir)
-    end;
+    ReadResults;
 
   finally
     ListOfScreenObjects.Free;

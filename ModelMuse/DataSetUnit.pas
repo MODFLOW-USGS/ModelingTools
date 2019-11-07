@@ -468,6 +468,7 @@ type
     FOnInitialize: TNotifyEvent;
     FOnShouldUseOnInitialize: TCheckUsageEvent;
     FRefreshingOldUseList: boolean;
+//    FWaitingOnInterpolator: Boolean;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -1013,6 +1014,7 @@ type
     FEpsilonX: Double;
     FEpsilonY: Double;
   protected
+    FReady: Boolean;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     FModel: TBaseModel;
@@ -1078,6 +1080,7 @@ type
     function LastAnnotation: string; virtual;
     property EpsilonX: Double read FEpsilonX write SetEpsilonX;
     property EpsilonY: Double read FEpsilonY write SetEpsilonY;
+    property Ready: Boolean read FReady;
   published
     // @name can be used to respond to a change in the interpolator.
     property OnEdit: TNotifyEvent read FOnEdit write FOnEdit;
@@ -2265,6 +2268,10 @@ begin
   begin
     Exit;
   end;
+//  if FWaitingOnInterpolator then
+//  begin
+//    Exit
+//  end;
 
 //  OutputDebugString('SAMPLING ON');
   if UpToDate and not DimensionsChanged then
@@ -2358,7 +2365,13 @@ begin
             DiscretizationLimits(OrientationToViewDirection(Orientation));
           TwoDInterpolator.EpsilonX := (DisLimits.MaxX - DisLimits.MinX)/1E8;
           TwoDInterpolator.EpsilonY := (DisLimits.MaxY - DisLimits.MinY)/1E8;
+//          FWaitingOnInterpolator := True;
           TwoDInterpolator.Initialize(self);
+          while not TwoDInterpolator.Ready do
+          begin
+
+          end;
+
           if InterpAnnString = '' then
           begin
             InterpAnnString := Format(DataSetInterpolatorExplanation,
@@ -2449,12 +2462,12 @@ begin
                           case Datatype of
                             rdtDouble:
                               begin
-//                              try
+  //                              try
                                 AValue := TwoDInterpolator.RealResult(CellCorner);
-//                              except
-//                                Beep;
-//                                raise;
-//                              end;
+  //                              except
+  //                                Beep;
+  //                                raise;
+  //                              end;
                                 UpdateInterpAnnString;
                                 if IsInfinite(AValue) or IsNan(AValue) then
                                 begin
@@ -3084,7 +3097,7 @@ begin
       FreeAndNil(Stack);
       DataArrayManager.DontCache(self);
       DataArrayManager.CacheDataArrays;
-//      OutputDebugString('SAMPLING OFF');
+  //      OutputDebugString('SAMPLING OFF');
     end;
     if HideProgressForm then
     begin
@@ -3095,6 +3108,7 @@ begin
 
   FCleared := False;
   UpToDate := True;
+//  FWaitingOnInterpolator := False;
   if FreeStack then
   begin
     if (frmDisplayData <> nil) and frmDisplayData.ShouldUpdate then
@@ -5593,6 +5607,7 @@ begin
     raise EInterpolationException.Create(Format(
       StrErrorThisInterpolDataArray, [DataSet.Name]));
   end;
+  FReady := True;
 end;
 
 procedure TCustom2DInterpolater.Edit;
