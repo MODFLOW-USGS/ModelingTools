@@ -4381,6 +4381,7 @@ that affects the model output should also have a comment. }
     function MODPATHIsSelected: Boolean;
     function Modpath5IsSelected: boolean;
     function Modpath6IsSelected: boolean;
+    function Modpath7IsSelected: boolean;
     procedure ModpathHeadWarning;
     function Mt3dmsIsSelected: Boolean;
     function Mt3dmsSsmIsSelected: Boolean;
@@ -8822,9 +8823,15 @@ const
   //    '4.1.0.5'  Change: If ModelMuse attempts to copy an image to the
   //                clipboard and fails because the clipboard is locked. it
   //                will now try three times before giving up.
+  //    '4.1.0.6'  Bug Fix: Fixed bug that could cause access violations when
+  //                exporting MODFLOW boundary conditions.
+  //    '4.1.0.7'  Bug fix: Fixed bugs in archiving MODFLOW 6 and
+  //                MODPATH 7 files.
+  //               Bug fix: If HDRY and HNOFLO are set to zero, those values
+  //                are saved to the file when a ModelMuse file is saved.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.5';
+  IModelVersion = '4.1.0.7';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -14222,82 +14229,55 @@ begin
   else
     Assert(False);
   end;
-//  InputIndex := FModelInputFiles.IndexOf(ModelFile);
-//  if InputIndex >= 0 then
-//  begin
-//    FModelInputFiles.Delete(InputIndex);
-//  end;
+
   GetOldFileVersion;
-//  for Index := FModelInputFiles.Count - 1 downto 0 do
-//  begin
-//    if ExtractFileName(FModelInputFiles[Index]) = ExtractFileName(ModelFile) then
-//    begin
-//      ModelFile := FModelInputFiles[Index];
-////      FModelInputFiles.Delete(Index);
-//    end;
-//  end;
-//  if LgrUsed then
-//  begin
-//    for ChildIndex := 0 to ChildModels.Count - 1 do
-//    begin
-//      AChildModel := ChildModels[ChildIndex].ChildModel;
-//      InputIndex := AChildModel.FModelInputFiles.IndexOf(ModelFile);
-//      if InputIndex >= 0 then
-//      begin
-//        AChildModel.FModelInputFiles.Delete(InputIndex);
-//      end;
-//    end;
-//  end;
-//  if TFile.Exists(ModelFile) then
-//  begin
-    FileNames.Add(ModelFile);
-//  end;
+
+  FileNames.Add(ModelFile);
+
   if ModelSelection in ModflowSelection then
   begin
     if Modpath5IsSelected then
     begin
       ModelFile := ProgramLocations.ModPathLocation;
       GetOldFileVersion;
-//      if TFile.Exists(ModelFile) then
-//      begin
-        FileNames.Add(ModelFile);
-//      end;
+      FileNames.Add(ModelFile);
     end;
     if Modpath6IsSelected then
     begin
       ModelFile := ProgramLocations.ModPathLocationVersion6;
       GetOldFileVersion;
-//      if TFile.Exists(ModelFile) then
-//      begin
-        FileNames.Add(ModelFile);
-//      end;
+      FileNames.Add(ModelFile);
+    end;
+    if Modpath7IsSelected then
+    begin
+      ModelFile := ProgramLocations.ModPathLocationVersion7;
+      GetOldFileVersion;
+      FileNames.Add(ModelFile);
     end;
     if ModflowPackages.Mt3dBasic.IsSelected and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvMs) then
     begin
       ModelFile := ProgramLocations.Mt3dmsLocation;
       GetOldFileVersion;
-//      if TFile.Exists(ModelFile) then
-//      begin
-        FileNames.Add(ModelFile);
-//      end;
+      FileNames.Add(ModelFile);
     end;
     if ModflowPackages.Mt3dBasic.IsSelected and (ModflowPackages.Mt3dBasic.Mt3dVersion = mvUsgs) then
     begin
       ModelFile := ProgramLocations.Mt3dUsgsLocation;
       GetOldFileVersion;
-//      if TFile.Exists(ModelFile) then
-//      begin
-        FileNames.Add(ModelFile);
-//      end;
+      FileNames.Add(ModelFile);
     end;
     if ZoneBudgetSelected(nil) then
     begin
-      ModelFile := ProgramLocations.ZoneBudgetLocation;
+      if ModelSelection = msModflow2015 then
+      begin
+        ModelFile := ProgramLocations.ZoneBudgetLocationMf6;
+      end
+      else
+      begin
+        ModelFile := ProgramLocations.ZoneBudgetLocation;
+      end;
       GetOldFileVersion;
-//      if TFile.Exists(ModelFile) then
-//      begin
-        FileNames.Add(ModelFile);
-//      end;
+      FileNames.Add(ModelFile);
     end;
   end;
   if ModelSelection in SutraSelection then
@@ -14306,10 +14286,7 @@ begin
     begin
       ModelFile := ProgramLocations.GmshLocation;
       GetOldFileVersion;
-//      if TFile.Exists(ModelFile) then
-//      begin
-        FileNames.Add(ModelFile);
-//      end;
+      FileNames.Add(ModelFile);
     end;
   end;
 end;
@@ -18043,6 +18020,27 @@ var
 begin
   result := ModflowPackages.Modpath.IsSelected
     and (ModflowPackages.Modpath.MpathVersion = mp6);
+  if not result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        result := result or ChildModel.ModflowPackages.Modpath.IsSelected
+          and (ChildModel.ModflowPackages.Modpath.MpathVersion = mp5);
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.Modpath7IsSelected: boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := ModflowPackages.Modpath.IsSelected
+    and (ModflowPackages.Modpath.MpathVersion = mp7);
   if not result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -38397,6 +38395,7 @@ begin
           ModelData.SolutionGroup := 'Groundwater';
           ModelData.MaxIterations := ModflowPackages.SmsPackage.SolutionGroupMaxIteration;
           ModelData.ImsFile := TImsWriter.FileName(FileName);
+          AddModelInputFile(ModelData.ImsFile);
           ModelData.ModelNameFile := TNameFileWriter.FileName(FileName);
 
           SimNameWriter.AddModel(ModelData);

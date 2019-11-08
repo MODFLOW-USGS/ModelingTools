@@ -16,8 +16,6 @@ Type
     FComputeFluxesBetweenConstantHeadCells: boolean;
     FTimeUnit: integer;
     FDescription: TStrings;
-    FHNoFlow: real;
-    FHDry: real;
     FOpenInTextEditor: boolean;
     FInitialHeadFileName: string;
     FStoredStopErrorCriterion: TRealStorage;
@@ -25,6 +23,8 @@ Type
     FUnderRelaxationMF6: Boolean;
     FNewtonMF6: Boolean;
     FWriteBinaryGridFile: Boolean;
+    FStoredHDry: TRealStorage;
+    FStoredHNoFlow: TRealStorage;
     procedure InvalidateModel;
     procedure SetComputeFluxesBetweenConstantHeadCells(const Value: boolean);
     procedure SetDescription(const Value: TStrings);
@@ -46,6 +46,10 @@ Type
     procedure SetUnderRelaxationMF6(const Value: Boolean);
     function StoreMf6Properties: Boolean;
     procedure SetWriteBinaryGridFile(const Value: Boolean);
+    procedure SetStoredHDry(const Value: TRealStorage);
+    procedure SetStoredHNoFlow(const Value: TRealStorage);
+    function GetHDry: real;
+    function GetHNoFlow: real;
   protected
     // @name stores a value for @link(HNoFlow) when @link(HNoFlow) is zero.
     procedure DefineProperties(Filer: TFiler); override;
@@ -65,8 +69,10 @@ Type
       read FComputeFluxesBetweenConstantHeadCells
       write SetComputeFluxesBetweenConstantHeadCells default True;
     property Description: TStrings read FDescription write SetDescription;
-    property HDry: real read FHDry write SetHDry;
-    property HNoFlow: real read FHNoFlow write SetHNoFlow;
+    property HDry: real read GetHDry write SetHDry;
+    property HNoFlow: real read GetHNoFlow write SetHNoFlow;
+    property StoredHDry: TRealStorage read FStoredHDry write SetStoredHDry;
+    property StoredHNoFlow: TRealStorage read FStoredHNoFlow write SetStoredHNoFlow;
     {
       0 - undefined
       1 - feet
@@ -177,8 +183,13 @@ begin
   inherited Create;
   FDescription := TStringList.Create;
   FStoredStopErrorCriterion := TRealStorage.Create;
+  FStoredHDry := TRealStorage.Create;
+  FStoredHNoFlow := TRealStorage.Create;
   Clear;
   FOnInvalidateModel := InvalidateModelEvent;
+  FStoredStopErrorCriterion.OnChange := FOnInvalidateModel;
+  FStoredHDry.OnChange := FOnInvalidateModel;
+  FStoredHNoFlow.OnChange := FOnInvalidateModel;
   FProjectDate := DateTimeToStr(Trunc(Now));
 end;
 
@@ -194,9 +205,21 @@ end;
 
 destructor TModflowOptions.Destroy;
 begin
+  FStoredHDry.Free;
+  FStoredHNoFlow.Free;
   FStoredStopErrorCriterion.Free;
   FDescription.Free;
   inherited;
+end;
+
+function TModflowOptions.GetHDry: real;
+begin
+  result := StoredHDry.Value;
+end;
+
+function TModflowOptions.GetHNoFlow: real;
+begin
+  result := StoredHNoFlow.Value;
 end;
 
 function TModflowOptions.GetStopErrorCriterion: double;
@@ -207,8 +230,8 @@ end;
 procedure TModflowOptions.Clear;
 begin
   FDescription.Clear;
-  FHDry := DefaultHDry;
-  FHNoFlow := DefaultHNoFlow;
+  HDry := DefaultHDry;
+  HNoFlow := DefaultHNoFlow;
   FTimeUnit := 1;
   FLengthUnit := 2;
   FPrintTime := True;
@@ -260,20 +283,12 @@ end;
 
 procedure TModflowOptions.SetHDry(const Value: real);
 begin
-  if FHDry <> Value then
-  begin
-    FHDry := Value;
-    InvalidateModel;
-  end;
+  StoredHDry.Value := Value;
 end;
 
 procedure TModflowOptions.SetHNoFlow(const Value: real);
 begin
-  if FHNoFlow <> Value then
-  begin
-    FHNoFlow := Value;
-    InvalidateModel;
-  end;
+  StoredHNoFlow.Value := Value;
 end;
 
 procedure TModflowOptions.SetInitialHeadFileName(const Value: string);
@@ -360,6 +375,16 @@ end;
 procedure TModflowOptions.SetStopErrorCriterion(const Value: double);
 begin
   FStoredStopErrorCriterion.Value := Value;
+end;
+
+procedure TModflowOptions.SetStoredHDry(const Value: TRealStorage);
+begin
+  FStoredHDry.Assign(Value);
+end;
+
+procedure TModflowOptions.SetStoredHNoFlow(const Value: TRealStorage);
+begin
+  FStoredHNoFlow.Assign(Value);
 end;
 
 procedure TModflowOptions.SetStoredStopErrorCriterion(

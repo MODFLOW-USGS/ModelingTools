@@ -3715,15 +3715,6 @@ begin
           AnItem.BoundaryFormula[BoundaryFunctionIndex] := Formula;
           Expression := Compiler.CurrentExpression;
         end;
-        CellList.Clear;
-        AScreenObject.GetCellsToAssign({Grid,} Formula, nil, nil, CellList,
-          alAll, LocalModel);
-        for Index := 0 to EliminateIndicies.Count - 1  do
-        begin
-          CellList.Delete(EliminateIndicies[Index]);
-        end;
-
-
 
         Variables := TList.Create;
         DataSets := TList.Create;
@@ -3752,6 +3743,13 @@ begin
           end;
 
           UpdateCurrentScreenObject(AScreenObject);
+          CellList.Clear;
+          AScreenObject.GetCellsToAssign({Grid,} Formula, nil, nil, CellList,
+            alAll, LocalModel);
+          for Index := 0 to EliminateIndicies.Count - 1  do
+          begin
+            CellList.Delete(EliminateIndicies[Index]);
+          end;
 
           AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
             BoundaryFunctionIndex, Variables, DataSets, LocalModel, AScreenObject);

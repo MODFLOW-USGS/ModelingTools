@@ -1320,7 +1320,7 @@ begin
       AFileName := '..\..\bin\'+ ExtractFileName(ModflowLocation);
       if (Model.ModelSelection = msModflow2015) then
       begin
-        ArchiveBatchFile.Add(AFileName + ' ' + ArchiveQuoteFileName(ExtractFileName(FileName)) {+ ' /wait'});
+        ArchiveBatchFile.Add(AFileName);
       end
       else
       begin

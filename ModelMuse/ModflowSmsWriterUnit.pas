@@ -66,7 +66,7 @@ begin
   // write to simulation name file
   OpenFile(FNameOfFile);
   try
-    frmProgressMM.AddMessage('Writing SMS Package input');
+    frmProgressMM.AddMessage('Writing IMS Package input');
     WriteDataSet0;
     FImsPackage := Model.ModflowPackages.SmsPackage;
     WriteOptions;

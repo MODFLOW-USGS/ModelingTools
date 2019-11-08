@@ -3398,6 +3398,7 @@ begin
       ABitMap.Assign(imagePreview.Picture);
       try
         Clipboard.Assign(ABitMap);
+        break;
       except on E: EClipboardException do
         begin
           Inc(RetryCount);
