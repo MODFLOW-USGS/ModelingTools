@@ -285,13 +285,13 @@ type
   TRchBoundary = class(TModflowParamBoundary)
   private
     FRechargeLayers: TRchLayerCollection;
-    FInterp: TMf6InterpolationMethods;
+//    FInterp: TMf6InterpolationMethods;
     FCurrentParameter: TModflowTransientListParameter;
     procedure SetRechargeLayers(const Value: TRchLayerCollection);
     function GetTimeVaryingRechargeLayers: boolean;
     procedure AssignRechargeLayerCells(BoundaryStorage: TRchLayerStorage;
       ValueTimeList: TList);
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
+//    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -334,8 +334,7 @@ type
   published
     property RechargeLayers: TRchLayerCollection read FRechargeLayers
       write SetRechargeLayers;
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 implementation
@@ -777,7 +776,6 @@ begin
   begin
     SourceBoundary := TRchBoundary(Source);
     RechargeLayers := SourceBoundary.RechargeLayers;
-    Interp := SourceBoundary.Interp;
   end;
   inherited;
 end;
@@ -1144,14 +1142,14 @@ begin
   result := ptRCH;
 end;
 
-procedure TRchBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
-end;
+//procedure TRchBoundary.SetInterp(const Value: TMf6InterpolationMethods);
+//begin
+//  if FInterp <> Value then
+//  begin
+//    InvalidateModel;
+//    FInterp := Value;
+//  end;
+//end;
 
 procedure TRchBoundary.SetRechargeLayers(const Value: TRchLayerCollection);
 begin

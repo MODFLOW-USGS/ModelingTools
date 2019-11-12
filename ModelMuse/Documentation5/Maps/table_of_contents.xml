@@ -971,6 +971,9 @@
           <topicref type="topic" id="420471785108" build="ALL" modified="2015-06-18T10:41:08.110Z" icon="0" href="Time_Units_Converter">
             <caption translate="true">Time Units Converter Dialog Box</caption>
           </topicref>
+          <topicref type="topic" id="437817823080960" modified="2019-11-12T15:11:48.842Z" icon="0" href="Time_series_interpolation">
+            <caption translate="true">Time-series interpolation</caption>
+          </topicref>
           <topicref type="topic" id="39400304351326" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-11-13T16:14:03.618Z" icon="0" href="CHD_Object_Pane">
             <caption translate="true">CHD: Time-Variant Specified Head Package Pane</caption>
           </topicref>

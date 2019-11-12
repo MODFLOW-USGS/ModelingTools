@@ -69,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspLake
+    ActivePage = jvspSolidAdsorption
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -855,9 +855,9 @@ inherited frmSutraOptions: TfrmSutraOptions
         object lblSolidGrainDiffusivity: TLabel
           Left = 108
           Top = 87
-          Width = 217
+          Width = 289
           Height = 18
-          Caption = 'Solid grain diffusivity (SIGMAS)'
+          Caption = 'Solid grain thermal conductivity (SIGMAS)'
         end
         object lblSolidGrainDensity: TLabel
           Left = 108
@@ -1079,25 +1079,24 @@ inherited frmSutraOptions: TfrmSutraOptions
         Align = alClient
         Caption = 'Lake dataset 2'
         TabOrder = 0
-        ExplicitLeft = 3
         object lblDefaultRechargeFrac: TLabel
           Left = 6
           Top = 24
-          Width = 376
+          Width = 304
           Height = 18
           Caption = 'Default runoff fraction for recharge (FRROD)'
         end
         object lblDefaultDischargeFrac: TLabel
           Left = 6
           Top = 80
-          Width = 411
+          Width = 312
           Height = 18
           Caption = 'Default runoff fraction for discharge (FDROD)'
         end
         object lblLakeOutput: TLabel
           Left = 6
           Top = 132
-          Width = 483
+          Width = 420
           Height = 18
           Caption = 'Output value for stage at non-submerged lake node (RNOLK)'
         end

@@ -978,6 +978,9 @@ type
 
   protected
     FCurrentParameter: TModflowTransientListParameter;
+
+  var
+    FInterp: TMf6InterpolationMethods;
     // @name is used in @link(Create) when creating @link(FParameters).
     // @name is passed to the constructor of @link(FParameters).
     class function ModflowParamItemClass: TModflowParamItemClass;
@@ -986,6 +989,7 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure ClearBoundaries(AModel: TBaseModel); override;
+    procedure SetInterp(const Value: TMf6InterpolationMethods);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -1022,6 +1026,8 @@ type
     //
     function DataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean; override;
     procedure Clear; override;
+    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
+      Stored True;
   published
     // @name stores the MODFLOW boundaries that ARE
     // associated with parameters.
@@ -2040,6 +2046,7 @@ begin
     Boundary := TModflowParamBoundary(Source);
 //    Values := Boundary.Values;
     Parameters := Boundary.Parameters;
+    Interp := Boundary.Interp;
   end;
   inherited;
 end;
@@ -4435,6 +4442,16 @@ begin
         RemoveScreenObjectPropertySubscription,
         RestoreScreenObjectPropertySubscription, self);
     end;
+  end;
+end;
+
+procedure TModflowParamBoundary.SetInterp(const Value
+  : TMf6InterpolationMethods);
+begin
+  if FInterp <> Value then
+  begin
+    InvalidateModel;
+    FInterp := Value;
   end;
 end;
 

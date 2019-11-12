@@ -201,8 +201,8 @@ type
   TChdBoundary = class(TModflowParamBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
-    FInterp: TMf6InterpolationMethods;
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
+//    FInterp: TMf6InterpolationMethods;
+//    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -220,8 +220,7 @@ type
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
   published
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 implementation
@@ -532,14 +531,14 @@ end;
 { TChdBoundary }
 
 procedure TChdBoundary.Assign(Source: TPersistent);
-var
-  SourceChd: TChdBoundary;
+//var
+//  SourceChd: TChdBoundary;
 begin
-  if Source is TChdBoundary then
-  begin
-    SourceChd := TChdBoundary(Source);
-    Interp := SourceChd.Interp;
-  end;
+//  if Source is TChdBoundary then
+//  begin
+//    SourceChd := TChdBoundary(Source);
+//    Interp := SourceChd.Interp;
+//  end;
   inherited;
 end;
 
@@ -676,7 +675,7 @@ end;
 constructor TChdBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FInterp := mimLinearEnd;
+  Interp := mimLinearEnd;
 end;
 
 procedure TChdBoundary.GetCellValues(ValueTimeList: TList;
@@ -856,14 +855,14 @@ begin
   result := ptCHD;
 end;
 
-procedure TChdBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
-end;
+//procedure TChdBoundary.SetInterp(const Value: TMf6InterpolationMethods);
+//begin
+//  if FInterp <> Value then
+//  begin
+//    InvalidateModel;
+//    FInterp := Value;
+//  end;
+//end;
 
 { TCHD_Cell }
 

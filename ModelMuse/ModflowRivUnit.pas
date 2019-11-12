@@ -201,11 +201,11 @@ type
   TRivBoundary = class(TSpecificModflowBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
-    FInterp: TMf6InterpolationMethods;
+//    FInterp: TMf6InterpolationMethods;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
+//    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -236,8 +236,7 @@ type
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
   published
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 implementation
@@ -822,11 +821,11 @@ procedure TRivBoundary.Assign(Source: TPersistent);
 var
   SourceRiv: TRivBoundary;
 begin
-  if Source is TRivBoundary then
-  begin
-    SourceRiv := TRivBoundary(Source);
-    Interp := SourceRiv.Interp;
-  end;
+//  if Source is TRivBoundary then
+//  begin
+//    SourceRiv := TRivBoundary(Source);
+//    Interp := SourceRiv.Interp;
+//  end;
   inherited;
 end;
 
@@ -1150,14 +1149,14 @@ begin
   result := ptRIV;
 end;
 
-procedure TRivBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
-end;
+//procedure TRivBoundary.SetInterp(const Value: TMf6InterpolationMethods);
+//begin
+//  if FInterp <> Value then
+//  begin
+//    InvalidateModel;
+//    FInterp := Value;
+//  end;
+//end;
 
 procedure TRivBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,
   StartOfFirstStressPeriod: Double; var ObservationsPresent: Boolean);

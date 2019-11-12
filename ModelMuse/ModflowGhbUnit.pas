@@ -202,11 +202,11 @@ type
   // @seealso(TGhbCollection)
   TGhbBoundary = class(TSpecificModflowBoundary)
   private
-    FInterp: TMf6InterpolationMethods;
+//    FInterp: TMf6InterpolationMethods;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
+//    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -239,8 +239,7 @@ type
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
   published
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 implementation
@@ -785,14 +784,14 @@ end;
 { TGhbBoundary }
 
 procedure TGhbBoundary.Assign(Source: TPersistent);
-var
-  SourceGhb: TGhbBoundary;
+//var
+//  SourceGhb: TGhbBoundary;
 begin
-  if Source is TGhbBoundary then
-  begin
-    SourceGhb := TGhbBoundary(Source);
-    Interp := SourceGhb.Interp;
-  end;
+//  if Source is TGhbBoundary then
+//  begin
+//    SourceGhb := TGhbBoundary(Source);
+//    Interp := SourceGhb.Interp;
+//  end;
   inherited;
 end;
 
@@ -1116,14 +1115,14 @@ begin
   result := ptGHB;
 end;
 
-procedure TGhbBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
-end;
+//procedure TGhbBoundary.SetInterp(const Value: TMf6InterpolationMethods);
+//begin
+//  if FInterp <> Value then
+//  begin
+//    InvalidateModel;
+//    FInterp := Value;
+//  end;
+//end;
 
 procedure TGhbBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,
   StartOfFirstStressPeriod: Double; var ObservationsPresent: Boolean);

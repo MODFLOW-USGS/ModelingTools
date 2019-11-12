@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Time-series interpolation</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Time-series interpolation</text></para>
+    </header>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Time-series interpolation</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW 6, time series files can specify the times and values to use for a boundary condition.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When MODFLOW 6 needs data from a time series or time-array series for a time interval representing a time step or subtime step, the series is queried to provide a time-averaged value or array of values for the requested time interval. For each series, the user specifies an interpolation method that determines how the value is assumed to behave between listed times. The interpolation method thus determines how the time averaging is performed. When a time-array series is used, interpolation is performed on an element-by-element basis to generate a 2-D array of interpolated values as needed.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The supported interpolation methods are STEPWISE, LINEAR, and LINEAREND. When the STEPWISE interpolation method is used, the value is assumed to remain constant at the value specified in one time-series record until the time listed in the subsequent record, when the value changes abruptly to the new value. In the LINEAR interpolation method, the value is assumed to change linearly between times listed in sequential records. LINEAREND is like LINEAR, except that instead of using the average value over a time step, the value at the end of a time step is used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse uses time-series interpolation when parameters are used. The parameter value becomes the SFAC (scale factor) in the time-series file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse sets the interpolation method to STEPWISE for all boundary conditions in which it is used except for the CHD package in which it is set to LINEAREND.</text></para>
+  </body>
+</topic>

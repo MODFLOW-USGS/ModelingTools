@@ -184,12 +184,11 @@ type
   TDrnBoundary = class(TSpecificModflowBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
-    FInterp: TMf6InterpolationMethods;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
+
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
     // @link(TDrn_Cell)s for that stress period.
@@ -219,8 +218,7 @@ type
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
   published
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 implementation
@@ -733,14 +731,14 @@ end;
 
 { TDrnBoundary }
 procedure TDrnBoundary.Assign(Source: TPersistent);
-var
-  SourceDrn: TDrnBoundary;
+//var
+//  SourceDrn: TDrnBoundary;
 begin
-  if Source is TDrnBoundary then
-  begin
-    SourceDrn := TDrnBoundary(Source);
-    Interp := SourceDrn.Interp;
-  end;
+//  if Source is TDrnBoundary then
+//  begin
+//    SourceDrn := TDrnBoundary(Source);
+//    Interp := SourceDrn.Interp;
+//  end;
   inherited;
 end;
 
@@ -914,7 +912,7 @@ begin
     begin
       Times := ParamList.Objects[Position] as TList;
     end;
-	
+
 
     if FCurrentParameter <> nil then
     begin
@@ -1000,7 +998,7 @@ begin
       end;
     end;
 
-	
+
 
     PriorTime := StartOfFirstStressPeriod;
     ValueCount := 0;
@@ -1063,15 +1061,6 @@ end;
 function TDrnBoundary.ParameterType: TParameterType;
 begin
   result := ptDRN;
-end;
-
-procedure TDrnBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
 end;
 
 procedure TDrnBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,

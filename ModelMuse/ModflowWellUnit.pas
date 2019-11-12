@@ -185,12 +185,12 @@ type
     FTabFileName: string;
     FRelativeTabFileName: string;
     FTabFileLines: Integer;
-    FInterp: TMf6InterpolationMethods;
+//    FInterp: TMf6InterpolationMethods;
     procedure SetTabFileName(const Value: string);
     function GetRelativeTabFileName: string;
     procedure SetRelativeTabFileName(const Value: string);
     procedure SetTabFileLines(const Value: Integer);
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
+//    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -228,8 +228,7 @@ type
   published
     property RelativeTabFileName: string read GetRelativeTabFileName
       write SetRelativeTabFileName;
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 resourcestring
@@ -762,7 +761,7 @@ begin
   begin
     SourceWell := TMfWellBoundary(Source);
     RelativeTabFileName := SourceWell.RelativeTabFileName;
-    Interp := SourceWell.Interp;
+//    Interp := SourceWell.Interp;
   end;
   inherited;
 end;
@@ -1046,14 +1045,14 @@ begin
   result := ptQ;
 end;
 
-procedure TMfWellBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
-end;
+//procedure TMfWellBoundary.SetInterp(const Value: TMf6InterpolationMethods);
+//begin
+//  if FInterp <> Value then
+//  begin
+//    InvalidateModel;
+//    FInterp := Value;
+//  end;
+//end;
 
 procedure TMfWellBoundary.SetRelativeTabFileName(const Value: string);
 begin

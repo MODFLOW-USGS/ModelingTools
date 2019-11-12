@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Solid Matrix, Adsorption Pane</title>
   <body>
     <header>
@@ -10,7 +10,7 @@
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Solid matrix properties:</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">COMPMA</text><text styleclass="Normal" translate="true"> is the solid matrix compressibility which is related to the storativity.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">CS</text><text styleclass="Normal" translate="true"> is the solid grain specific heat. It is not used for solute transport.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">SIGMAS</text><text styleclass="Normal" translate="true"> is the solid grain diffusivity. It represents thermal conductivity of a solid grain. It is not used for solute transport.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">SIGMAS</text><text styleclass="Normal" translate="true"> is the solid grain thermal conductivity. It is not used for solute transport.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">RHOS</text><text styleclass="Normal" translate="true"> is the density of a solid grain. It is not used for solute transport.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">Adsorption parameters:</text></para>
     <para styleclass="Normal"><text styleclass="Normal" style="font-weight:bold;" translate="true">ADSMOD</text><text styleclass="Normal" translate="true"> is the sorption model. It is only used for solute transport.</text></para>

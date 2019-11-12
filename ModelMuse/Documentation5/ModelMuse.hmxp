@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4073</config-value>
+      <config-value name="autohelpstart">4076</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1548,6 +1548,7 @@ document.write('</frameset>');
       <helpcontext-number href="Three-Dimensional_View" value="170"/>
       <helpcontext-number href="Time_Control_Dialog_Box" value="2870"/>
       <helpcontext-number href="Time_Control_Dialog_Box#Start_time" value="3420"/>
+      <helpcontext-number href="Time_series_interpolation" value="4076"/>
       <helpcontext-number href="Time_Step_Length_Calculator" value="3509"/>
       <helpcontext-number href="Time_Tab" value="2090"/>
       <helpcontext-number href="Time_Tab#ICALC" value="2100"/>
@@ -2055,6 +2056,7 @@ document.write('</frameset>');
       <file-mod href="Lake.xml" build="SUTRA30"/>
       <file-mod href="Import_Filter_Methods.xml"/>
       <file-mod href="ConvertUnits.xml"/>
+      <file-mod href="Time_series_interpolation.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>

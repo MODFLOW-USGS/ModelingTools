@@ -250,7 +250,7 @@ type
     FEvapotranspirationLayers: TEtsLayerCollection;
     FEvtSurfDepthCollection: TEtsSurfDepthCollection;
     FNonParameterColumns: integer;
-    FInterp: TMf6InterpolationMethods;
+//    FInterp: TMf6InterpolationMethods;
     FCurrentParameter: TModflowTransientListParameter;
     procedure SetEvapotranspirationLayers(const Value: TEtsLayerCollection);
     procedure SetEvtSurfDepthCollection(const Value: TEtsSurfDepthCollection);
@@ -259,7 +259,7 @@ type
       ValueTimeList: TList);
     procedure AssignSurfaceDepthCells(AModel: TBaseModel;
       BoundaryStorage: TEtsSurfDepthStorage; ValueTimeList: TList);
-    procedure SetInterp(const Value: TMf6InterpolationMethods);
+//    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -305,8 +305,7 @@ type
       read FEvapotranspirationLayers write SetEvapotranspirationLayers;
     property EtsSurfDepthCollection: TEtsSurfDepthCollection
       read FEvtSurfDepthCollection write SetEvtSurfDepthCollection;
-    property Interp: TMf6InterpolationMethods read FInterp write SetInterp
-      Stored True;
+    property Interp;
   end;
 
 procedure StringValueRemoveSubscription(Sender: TObject; Subject: TObject;
@@ -346,7 +345,6 @@ begin
 //    TimeVaryingEvapotranspirationLayers := SourceBoundary.TimeVaryingEvapotranspirationLayers;
     EtsSurfDepthCollection := SourceBoundary.EtsSurfDepthCollection;
     FNonParameterColumns := SourceBoundary.NonParameterColumns;
-    Interp := SourceBoundary.Interp;
   end;
   if Source is TEvtBoundary then
   begin
@@ -819,14 +817,14 @@ begin
 end;
 
 
-procedure TEtsBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-begin
-  if FInterp <> Value then
-  begin
-    InvalidateModel;
-    FInterp := Value;
-  end;
-end;
+//procedure TEtsBoundary.SetInterp(const Value: TMf6InterpolationMethods);
+//begin
+//  if FInterp <> Value then
+//  begin
+//    InvalidateModel;
+//    FInterp := Value;
+//  end;
+//end;
 
 function TEtsBoundary.Used: boolean;
 var

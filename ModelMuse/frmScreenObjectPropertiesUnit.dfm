@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMT3D_SFT
+        ActivePage = jvspWell
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -2462,13 +2462,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 430
+              Top = 400
               Width = 581
-              ExplicitTop = 430
+              Height = 76
+              ExplicitTop = 400
               ExplicitWidth = 581
+              ExplicitHeight = 76
               DesignSize = (
                 581
-                46)
+                76)
               inherited lblNumTimes: TLabel
                 Left = 63
                 Top = 9
@@ -2479,10 +2481,25 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 119
                 ExplicitHeight = 19
               end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 9
+                Top = 42
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 9
+                ExplicitTop = 42
+                ExplicitWidth = 177
+                ExplicitHeight = 19
+              end
               inherited seNumberOfTimes: TJvSpinEdit
+                Left = 8
+                Top = 6
                 Height = 27
                 TabOrder = 2
                 OnChange = frameChdParamseNumberOfTimesChange
+                ExplicitLeft = 8
+                ExplicitTop = 6
                 ExplicitHeight = 27
               end
               inherited btnDelete: TBitBtn
@@ -2498,6 +2515,18 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 TabOrder = 0
                 ExplicitLeft = 394
                 ExplicitTop = 3
+              end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 200
+                Top = 39
+                Height = 27
+                ItemIndex = 2
+                Text = 'LINEAR-END'
+                Visible = True
+                OnChange = frameChdParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 200
+                ExplicitTop = 39
+                ExplicitHeight = 27
               end
             end
             inherited pnlTop: TPanel
@@ -2516,7 +2545,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 338
+              Height = 308
               ExplicitWidth = 581
               ExplicitHeight = 338
               inherited pnlEditGrid: TPanel
@@ -2531,7 +2560,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 286
+                Height = 256
                 ColCount = 4
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameChdParamdgModflowBoundarySetEditText
@@ -2673,26 +2702,45 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 395
+              Top = 355
               Width = 581
-              ExplicitTop = 395
+              Height = 121
+              ExplicitTop = 336
               ExplicitWidth = 581
+              ExplicitHeight = 121
               inherited lblNumTimes: TLabel
+                Top = 8
                 Width = 119
                 Height = 19
+                ExplicitTop = 8
                 ExplicitWidth = 119
                 ExplicitHeight = 19
               end
               inherited lblConductanceInterpretation: TLabel
+                Left = 9
                 Width = 197
                 Height = 19
+                ExplicitLeft = 9
                 ExplicitWidth = 197
                 ExplicitHeight = 19
               end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 9
+                Top = 84
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 9
+                ExplicitTop = 84
+                ExplicitWidth = 177
+                ExplicitHeight = 19
+              end
               inherited seNumberOfTimes: TJvSpinEdit
+                Top = 6
                 Height = 27
                 Value = 1.000000000000000000
                 OnChange = frameGhbParamseNumberOfTimesChange
+                ExplicitTop = 6
                 ExplicitHeight = 27
               end
               inherited btnDelete: TBitBtn
@@ -2714,6 +2762,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitLeft = 217
                 ExplicitHeight = 27
               end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 217
+                Top = 81
+                Height = 27
+                Visible = True
+                OnChange = frameGhbParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 217
+                ExplicitTop = 81
+                ExplicitHeight = 27
+              end
             end
             inherited pnlTop: TPanel
               Width = 581
@@ -2731,7 +2789,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 303
+              Height = 263
               ExplicitWidth = 581
               ExplicitHeight = 303
               inherited pnlEditGrid: TPanel
@@ -2746,7 +2804,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 251
+                Height = 211
                 ColCount = 4
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameGhbParamdgModflowBoundarySetEditText
@@ -2888,30 +2946,49 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 370
+              Top = 328
               Width = 581
-              ExplicitTop = 370
+              Height = 148
+              ExplicitTop = 328
               ExplicitWidth = 581
+              ExplicitHeight = 148
               inherited lblNumTimes: TLabel
+                Top = 8
                 Width = 119
                 Height = 19
+                ExplicitTop = 8
                 ExplicitWidth = 119
                 ExplicitHeight = 19
               end
               inherited lblConductanceInterpretation: TLabel
+                Left = 9
                 Width = 197
                 Height = 19
                 Caption = 'Pumping rate interpretation'
+                ExplicitLeft = 9
                 ExplicitWidth = 197
                 ExplicitHeight = 19
               end
               inherited lblTabfile: TLabel
-                Left = 503
+                Left = 504
+                Top = 122
                 Width = 46
                 Height = 19
                 Enabled = False
-                ExplicitLeft = 503
+                ExplicitLeft = 504
+                ExplicitTop = 122
                 ExplicitWidth = 46
+                ExplicitHeight = 19
+              end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 9
+                Top = 84
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 9
+                ExplicitTop = 84
+                ExplicitWidth = 177
                 ExplicitHeight = 19
               end
               inherited seNumberOfTimes: TJvSpinEdit
@@ -2940,12 +3017,26 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitHeight = 27
               end
               inherited fedTabfile: TJvFilenameEdit
+                Left = 9
+                Top = 119
                 Width = 489
                 Height = 27
                 ReadOnly = True
                 ShowButton = False
                 OnChange = frameWellParamfedTabfileChange
+                ExplicitLeft = 9
+                ExplicitTop = 119
                 ExplicitWidth = 489
+                ExplicitHeight = 27
+              end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 217
+                Top = 81
+                Height = 27
+                Visible = True
+                OnChange = frameWellParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 217
+                ExplicitTop = 81
                 ExplicitHeight = 27
               end
             end
@@ -2965,7 +3056,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 278
+              Height = 236
               ExplicitWidth = 581
               ExplicitHeight = 278
               inherited pnlEditGrid: TPanel
@@ -2980,7 +3071,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 226
+                Height = 184
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameWellParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
@@ -3096,20 +3187,38 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 395
+              Top = 363
               Width = 581
-              ExplicitTop = 395
+              Height = 113
+              ExplicitLeft = 6
+              ExplicitTop = 361
               ExplicitWidth = 581
+              ExplicitHeight = 113
               inherited lblNumTimes: TLabel
+                Top = 8
                 Width = 119
                 Height = 19
+                ExplicitTop = 8
                 ExplicitWidth = 119
                 ExplicitHeight = 19
               end
               inherited lblConductanceInterpretation: TLabel
+                Left = 6
                 Width = 197
                 Height = 19
+                ExplicitLeft = 6
                 ExplicitWidth = 197
+                ExplicitHeight = 19
+              end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 7
+                Top = 84
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 7
+                ExplicitTop = 84
+                ExplicitWidth = 177
                 ExplicitHeight = 19
               end
               inherited seNumberOfTimes: TJvSpinEdit
@@ -3137,6 +3246,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitLeft = 212
                 ExplicitHeight = 27
               end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 212
+                Top = 81
+                Height = 27
+                Visible = True
+                OnChange = frameRivParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 212
+                ExplicitTop = 81
+                ExplicitHeight = 27
+              end
             end
             inherited pnlTop: TPanel
               Width = 581
@@ -3149,12 +3268,14 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 579
                 ItemHeight = 19
                 OnStateChange = frameRivParamclbParametersStateChange
+                ExplicitLeft = 6
+                ExplicitTop = 24
                 ExplicitWidth = 579
               end
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 303
+              Height = 271
               ExplicitWidth = 581
               ExplicitHeight = 303
               inherited pnlEditGrid: TPanel
@@ -3169,7 +3290,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 251
+                Height = 219
                 ColCount = 5
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameRivParamdgModflowBoundarySetEditText
@@ -3336,22 +3457,39 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 395
+              Top = 352
               Width = 581
-              ExplicitTop = 395
+              Height = 124
+              ExplicitTop = 352
               ExplicitWidth = 581
+              ExplicitHeight = 124
               inherited lblNumTimes: TLabel
+                Top = 8
                 Width = 119
                 Height = 19
+                ExplicitTop = 8
                 ExplicitWidth = 119
                 ExplicitHeight = 19
               end
               inherited lblConductanceInterpretation: TLabel
+                Left = 9
                 Top = 55
                 Width = 197
                 Height = 19
+                ExplicitLeft = 9
                 ExplicitTop = 55
                 ExplicitWidth = 197
+                ExplicitHeight = 19
+              end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 9
+                Top = 88
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 9
+                ExplicitTop = 88
+                ExplicitWidth = 177
                 ExplicitHeight = 19
               end
               inherited seNumberOfTimes: TJvSpinEdit
@@ -3381,6 +3519,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitTop = 52
                 ExplicitHeight = 27
               end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 212
+                Top = 85
+                Height = 27
+                Visible = True
+                OnChange = frameDrnParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 212
+                ExplicitTop = 85
+                ExplicitHeight = 27
+              end
             end
             inherited pnlTop: TPanel
               Width = 581
@@ -3398,7 +3546,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 303
+              Height = 260
               ExplicitWidth = 581
               ExplicitHeight = 303
               inherited pnlEditGrid: TPanel
@@ -3413,7 +3561,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 251
+                Height = 208
                 ColCount = 4
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameDrnParamdgModflowBoundarySetEditText
@@ -3573,6 +3721,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 197
                 ExplicitHeight = 19
               end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Width = 177
+                Height = 19
+                ExplicitWidth = 177
+                ExplicitHeight = 19
+              end
               inherited seNumberOfTimes: TJvSpinEdit
                 Height = 27
                 Value = 1.000000000000000000
@@ -3598,6 +3752,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnChange = frameDrtParamcomboFormulaInterpChange
                 ExplicitLeft = 212
                 ExplicitTop = 49
+                ExplicitHeight = 27
+              end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Height = 27
                 ExplicitHeight = 27
               end
             end
@@ -4013,14 +4171,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 430
+              Top = 403
               Width = 581
-              ExplicitTop = 430
+              Height = 73
+              ExplicitTop = 384
               ExplicitWidth = 581
+              ExplicitHeight = 73
               inherited lblNumTimes: TLabel
+                Top = 8
                 Width = 119
                 Height = 19
+                ExplicitTop = 8
                 ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 9
+                Top = 42
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 9
+                ExplicitTop = 42
+                ExplicitWidth = 177
                 ExplicitHeight = 19
               end
               inherited seNumberOfTimes: TJvSpinEdit
@@ -4041,6 +4214,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitLeft = 401
                 ExplicitTop = 9
               end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 200
+                Top = 39
+                Height = 27
+                Visible = True
+                OnChange = frameRchParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 200
+                ExplicitTop = 39
+                ExplicitHeight = 27
+              end
             end
             inherited pnlTop: TPanel
               Width = 581
@@ -4058,7 +4241,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 338
+              Height = 311
               ExplicitWidth = 581
               ExplicitHeight = 338
               inherited pnlEditGrid: TPanel
@@ -4073,7 +4256,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 286
+                Height = 259
                 ColCount = 4
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameRchParamdgModflowBoundarySetEditText
@@ -4232,6 +4415,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 119
                 ExplicitHeight = 19
               end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Width = 177
+                Height = 19
+                ExplicitWidth = 177
+                ExplicitHeight = 19
+              end
               inherited seNumberOfTimes: TJvSpinEdit
                 Height = 27
                 Value = 1.000000000000000000
@@ -4249,6 +4438,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Top = 9
                 ExplicitLeft = 401
                 ExplicitTop = 9
+              end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Height = 27
+                ExplicitHeight = 27
               end
             end
             inherited pnlTop: TPanel
@@ -4398,14 +4591,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 585
             end
             inherited pnlBottom: TPanel
-              Top = 430
+              Top = 400
               Width = 581
-              ExplicitTop = 430
+              Height = 76
+              ExplicitTop = 400
               ExplicitWidth = 581
+              ExplicitHeight = 76
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
                 ExplicitWidth = 119
+                ExplicitHeight = 19
+              end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Left = 9
+                Top = 43
+                Width = 177
+                Height = 19
+                Visible = True
+                ExplicitLeft = 9
+                ExplicitTop = 43
+                ExplicitWidth = 177
                 ExplicitHeight = 19
               end
               inherited seNumberOfTimes: TJvSpinEdit
@@ -4431,6 +4637,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitLeft = 401
                 ExplicitTop = 7
               end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Left = 200
+                Top = 40
+                Height = 27
+                Visible = True
+                OnChange = frameEtsParamcomboTimeSeriesInterpolationChange
+                ExplicitLeft = 200
+                ExplicitTop = 40
+                ExplicitHeight = 27
+              end
             end
             inherited pnlTop: TPanel
               Width = 581
@@ -4448,7 +4664,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlGrid: TPanel
               Width = 581
-              Height = 338
+              Height = 308
               ExplicitWidth = 581
               ExplicitHeight = 338
               inherited pnlEditGrid: TPanel
@@ -4463,7 +4679,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
-                Height = 286
+                Height = 256
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                 OnSetEditText = frameEtsParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
@@ -6724,6 +6940,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitWidth = 573
                   inherited zbFlowDepthTable: TQRbwZoomBox2
                     Width = 279
+                    Image32.Top = 0
                     Image32.Width = 279
                     Image32.ExplicitWidth = 279
                     ExplicitWidth = 279
@@ -6731,6 +6948,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited zbFlowWidthTable: TQRbwZoomBox2
                     Left = 289
                     Width = 280
+                    Image32.Top = 0
                     Image32.Width = 280
                     Image32.ExplicitWidth = 280
                     ExplicitLeft = 289
@@ -6948,11 +7166,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited gbObservationTypes: TGroupBox
                   Left = 2
                   Top = 104
-                  Width = 927
+                  Width = 947
                   Height = 329
                   ExplicitLeft = 2
                   ExplicitTop = 104
-                  ExplicitWidth = 927
+                  ExplicitWidth = 947
                   ExplicitHeight = 329
                   inherited cbGag2: TCheckBox
                     Width = 553
@@ -8818,6 +9036,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 197
                 ExplicitHeight = 19
               end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Width = 177
+                Height = 19
+                ExplicitWidth = 177
+                ExplicitHeight = 19
+              end
               inherited seNumberOfTimes: TJvSpinEdit
                 Height = 27
                 ExplicitHeight = 27
@@ -8831,6 +9055,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitLeft = 409
               end
               inherited comboFormulaInterp: TComboBox
+                Height = 27
+                ExplicitHeight = 27
+              end
+              inherited comboTimeSeriesInterpolation: TComboBox
                 Height = 27
                 ExplicitHeight = 27
               end
@@ -9161,6 +9389,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 192
                 ExplicitHeight = 19
               end
+              inherited lblTimeSeriesInterpolation: TLabel
+                Width = 177
+                Height = 19
+                ExplicitWidth = 177
+                ExplicitHeight = 19
+              end
               inherited seNumberOfTimes: TJvSpinEdit
                 Height = 27
                 OnChange = frameFarmWellseNumberOfTimesChange
@@ -9179,6 +9413,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 27
                 OnChange = frameFarmWellcomboFormulaInterpChange
                 ExplicitLeft = 211
+                ExplicitHeight = 27
+              end
+              inherited comboTimeSeriesInterpolation: TComboBox
+                Height = 27
                 ExplicitHeight = 27
               end
             end
@@ -12840,7 +13078,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitTop = 237
               ExplicitWidth = 581
               inherited tsSteady: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 573
                 ExplicitHeight = 159
                 inherited lblObsLocation: TLabel
                   Width = 235
@@ -12863,11 +13103,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tsHeadWaters: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 474
                 ExplicitHeight = 159
               end
               inherited tsPrecipitation: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 474
                 ExplicitHeight = 159
                 inherited pnlBottomPrecip: TPanel
                   Top = 113
@@ -12903,14 +13147,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tsRunoff: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 573
+                ExplicitWidth = 474
                 ExplicitHeight = 159
                 inherited pnlBottomRunoff: TPanel
                   Top = 113
-                  Width = 573
                   ExplicitTop = 113
-                  ExplicitWidth = 573
                   inherited lblNumberOfTimesRunoff: TLabel
                     Width = 119
                     Height = 19
@@ -12923,13 +13166,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                 end
                 inherited pnlRunoff: TPanel
-                  Width = 573
                   Height = 113
-                  ExplicitWidth = 573
                   ExplicitHeight = 113
                   inherited pnlFormulaRunoff: TPanel
-                    Width = 571
-                    ExplicitWidth = 571
                     inherited lblFormulaRunoff: TLabel
                       Width = 59
                       Height = 19
@@ -12938,17 +13177,17 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                   end
                   inherited rdgRunoff: TRbwDataGrid4
-                    Width = 571
                     Height = 61
                     OnSetEditText = frameMT3D_SFTrdgRunoffSetEditText
                     OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                    ExplicitWidth = 571
                     ExplicitHeight = 61
                   end
                 end
               end
               inherited tsConstantConcentration: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 474
                 ExplicitHeight = 159
                 inherited pnlBottomConstConc: TPanel
                   Top = 113
@@ -13623,7 +13862,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited ilLakeButton: TImageList
               Bitmap = {
-                494C0101040009000C0018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+                494C010104000900100018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
                 0000000000003600000028000000600000003000000001002000000000000048
                 0000000000000000000000000000000000000000000000000000000000000000
                 0000000000000000000000000000000000000000000000000000000000000000
@@ -15328,7 +15567,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Left = 648
     Top = 296
     Bitmap = {
-      494C010104000900080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101040009000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

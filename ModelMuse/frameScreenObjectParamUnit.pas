@@ -44,6 +44,8 @@ type
   TframeScreenObjectParam = class(TframeScreenObjectNoParam)
     splitHorizontal: TSplitter;
     clbParameters: TJvxCheckListBox;
+    comboTimeSeriesInterpolation: TComboBox;
+    lblTimeSeriesInterpolation: TLabel;
     procedure clbParametersStateChange(Sender: TObject; Index: Integer);
     procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -80,7 +82,7 @@ type
 implementation
 
 uses OrderedCollectionUnit, frmGoPhastUnit, ModflowTimeUnit,
-  frmCustomGoPhastUnit;
+  frmCustomGoPhastUnit, GoPhastTypes;
 
 {$R *.dfm}
 
@@ -103,9 +105,27 @@ begin
 end;
 
 procedure TframeScreenObjectParam.clbParametersClickCheck(Sender: TObject);
+var
+  ShouldEnable: Boolean;
+  ParamIndex: Integer;
 begin
   inherited;
   rdgModflowBoundary.Invalidate;
+  ShouldEnable := frmGoPhast.ModelSelection = msModflow2015;
+  if ShouldEnable then
+  begin
+    ShouldEnable := False;
+    for ParamIndex := 1 to clbParameters.Items.Count - 1 do
+    begin
+      if clbParameters.State[ParamIndex] <> cbUnchecked then
+      begin
+        ShouldEnable := True;
+        break;
+      end;
+    end;
+  end;
+  comboTimeSeriesInterpolation.Enabled := ShouldEnable;
+  lblTimeSeriesInterpolation .Enabled := ShouldEnable;
 end;
 
 procedure TframeScreenObjectParam.clbParametersStateChange(Sender: TObject;

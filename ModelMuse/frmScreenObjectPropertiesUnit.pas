@@ -674,6 +674,13 @@ type
     procedure frameMVRrdgModflowBoundaryButtonClick(Sender: TObject; ACol,
       ARow: Integer);
     procedure frameMVRseNumberOfTimesChange(Sender: TObject);
+    procedure frameChdParamcomboTimeSeriesInterpolationChange(Sender: TObject);
+    procedure frameDrnParamcomboTimeSeriesInterpolationChange(Sender: TObject);
+    procedure frameEtsParamcomboTimeSeriesInterpolationChange(Sender: TObject);
+    procedure frameGhbParamcomboTimeSeriesInterpolationChange(Sender: TObject);
+    procedure frameRchParamcomboTimeSeriesInterpolationChange(Sender: TObject);
+    procedure frameRivParamcomboTimeSeriesInterpolationChange(Sender: TObject);
+    procedure frameWellParamcomboTimeSeriesInterpolationChange(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -2147,6 +2154,11 @@ type
     procedure StoreModflowBoundary(Frame: TframeScreenObjectParam;
       ParamType: TParameterType; Node: TJvPageIndexNode);
     procedure GetModflowBoundary(Frame: TframeScreenObjectParam;
+      Parameter: TParameterType; ScreenObjectList: TList;
+      Node: TJvPageIndexNode);
+    procedure StoreModflowTimeInterpolation(Frame: TframeScreenObjectParam;
+      ParamType: TParameterType; Node: TJvPageIndexNode);
+    procedure GetModflowTimeInterpolation(Frame: TframeScreenObjectParam;
       Parameter: TParameterType; ScreenObjectList: TList;
       Node: TJvPageIndexNode);
     procedure StoreFormulaInterpretation(Frame: TframeScreenObjectCondParam;
@@ -4043,6 +4055,7 @@ begin
   Frame := frameChdParam;
   Parameter := ptCHD;
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FCHD_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FCHD_Node);
 end;
 
 procedure TfrmScreenObjectProperties.btnOKClick(Sender: TObject);
@@ -14509,6 +14522,56 @@ begin
     ScreenObjectList, Parameter, TimeList);
 end;
 
+procedure TfrmScreenObjectProperties.GetModflowTimeInterpolation(
+  Frame: TframeScreenObjectParam; Parameter: TParameterType;
+  ScreenObjectList: TList; Node: TJvPageIndexNode);
+var
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  Boundary: TModflowParamBoundary;
+  FoundFirst: Boolean;
+  ShouldEnable: Boolean;
+  ParamIndex: Integer;
+begin
+  ShouldEnable := frmGoPhast.ModelSelection = msModflow2015;
+  if ShouldEnable then
+  begin
+    ShouldEnable := False;
+    for ParamIndex := 1 to Frame.clbParameters.Items.Count - 1 do
+    begin
+      if Frame.clbParameters.State[ParamIndex] <> cbUnchecked then
+      begin
+        ShouldEnable := True;
+        break;
+      end;
+    end;
+  end;
+  Frame.comboTimeSeriesInterpolation.Enabled := ShouldEnable;
+  Frame.lblTimeSeriesInterpolation .Enabled := ShouldEnable;
+
+  FoundFirst := False;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.GetMfBoundary(Parameter);
+    if Boundary <> nil then
+    begin
+      if FoundFirst then
+      begin
+        if Frame.comboTimeSeriesInterpolation.ItemIndex <> Ord(Boundary.Interp) then
+        begin
+          Frame.comboTimeSeriesInterpolation.ItemIndex := -1;
+        end;
+      end
+      else
+      begin
+        FoundFirst := True;
+        Frame.comboTimeSeriesInterpolation.ItemIndex := Ord(Boundary.Interp);
+      end;
+    end;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.GetModflowBoundaryParameters(
   Parameter: TParameterType; ScreenObjectList: TList;
   Frame: TframeScreenObjectParam; TimeList: TParameterTimeList);
@@ -14824,6 +14887,32 @@ begin
   ColumnOffset := 2;
   BoundaryValues := Boundary.Values;
   StoreMF_BoundColl(ColumnOffset, BoundaryValues, Times, Frame);
+end;
+
+procedure TfrmScreenObjectProperties.StoreModflowTimeInterpolation(
+  Frame: TframeScreenObjectParam; ParamType: TParameterType;
+  Node: TJvPageIndexNode);
+var
+  Index: Integer;
+  Item: TScreenObjectEditItem;
+  Boundary: TModflowParamBoundary;
+begin
+  if IsLoaded then
+  begin
+    for Index := 0 to FNewProperties.Count - 1 do
+    begin
+      Item := FNewProperties[Index];
+      Boundary := Item.ScreenObject.GetMfBoundary(ParamType);
+      Assert(Boundary <> nil);
+      if ShouldStoreBoundary(Node, Boundary) then
+      begin
+        if Frame.comboTimeSeriesInterpolation.ItemIndex >= 0 then
+        begin
+          Boundary.Interp := TMf6InterpolationMethods(Frame.comboTimeSeriesInterpolation.ItemIndex);
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.StoreModflowBoundaryParameters(
@@ -16181,6 +16270,7 @@ begin
   Parameter := ptGHB;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FGHB_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FGHB_Node);
 end;
 
 procedure TfrmScreenObjectProperties.GetWellBoundary(ScreenObjectList: TList);
@@ -16200,6 +16290,7 @@ begin
   Parameter := ptQ;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FWEL_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FWEL_Node);
   First := True;
   for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
   begin
@@ -16248,6 +16339,7 @@ begin
   Parameter := ptRIV;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FRIV_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FRIV_Node);
 end;
 
 function TfrmScreenObjectProperties.GetSfrParser(Sender: TObject): TRbwParser;
@@ -16666,6 +16758,7 @@ begin
   Parameter := ptDRN;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FDRN_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FDRN_Node);
 end;
 
 function TfrmScreenObjectProperties.GetRechargeLayers(
@@ -16713,6 +16806,7 @@ begin
   Frame := frameRchParam;
   Parameter := ptRch;
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FRCH_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FRCH_Node);
 
   if frmGoPhast.PhastModel.RchTimeVaryingLayers then
   begin
@@ -16790,6 +16884,7 @@ begin
   Frame := frameEtsParam;
   Parameter := ptETS;
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FETS_Node);
+  GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FETS_Node);
 
   if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
@@ -20452,6 +20547,13 @@ begin
   StoreRchBoundary;
 end;
 
+procedure TfrmScreenObjectProperties.frameRchParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
+  StoreRchBoundary;
+end;
+
 procedure TfrmScreenObjectProperties.frameRchParamdgModflowBoundaryEndUpdate(
   Sender: TObject);
 begin
@@ -20599,6 +20701,13 @@ begin
   StoreRivBoundary;
   Item := FNewProperties[0];
   AssignConductanceCaptions(frameRivParam, Item.ScreenObject.ModflowRivBoundary);
+end;
+
+procedure TfrmScreenObjectProperties.frameRivParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
+  StoreRivBoundary;
 end;
 
 procedure TfrmScreenObjectProperties.frameRivParamdgModflowBoundaryEndUpdate(
@@ -21365,6 +21474,13 @@ begin
   AssignConductanceCaptions(frameWellParam, Item.ScreenObject.ModflowWellBoundary);
 end;
 
+procedure TfrmScreenObjectProperties.frameWellParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
+  StoreWellBoundary;
+end;
+
 procedure TfrmScreenObjectProperties.frameWellParamdgModflowBoundaryEndUpdate(
   Sender: TObject);
 begin
@@ -22054,6 +22170,7 @@ begin
     end;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FGHB_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FGHB_Node);
   end;
 end;
 
@@ -22472,6 +22589,7 @@ begin
     end;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FDRN_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FDRN_Node);
   end;
 end;
 
@@ -22492,6 +22610,7 @@ begin
     Frame := frameRchParam;
     ParamType := ptRCH;
     StoreModflowBoundary(Frame, ParamType, FRCH_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FRCH_Node);
 
     if frmGoPhast.PhastModel.ModflowTransientParameters.
       CountParam(ptRCH) > 0 then
@@ -22614,6 +22733,7 @@ begin
     Frame := frameEtsParam;
     ParamType := ptETS;
     StoreModflowBoundary(Frame, ParamType, FETS_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FETS_Node);
 
     if frmGoPhast.PhastModel.ModflowTransientParameters.
       CountParam(ptETS) > 0 then
@@ -22774,6 +22894,7 @@ begin
     FWellTabFileChanged := False;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FWEL_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FWEL_Node);
   end;
 end;
 
@@ -22818,6 +22939,7 @@ begin
     end;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FRIV_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FRIV_Node);
   end;
 end;
 
@@ -23084,6 +23206,7 @@ begin
       Item.ScreenObject.CreateChdBoundary;
     end;
     StoreModflowBoundary(Frame, ParamType, FCHD_Node);
+    StoreModflowTimeInterpolation(Frame, ParamType, FCHD_Node);
   end;
 end;
 
@@ -23122,6 +23245,13 @@ begin
   inherited;
   UpdateNodeState(FCHD_Node);
   frameChdParam.clbParametersStateChange(Sender, Index);
+  StoreChdBoundary;
+end;
+
+procedure TfrmScreenObjectProperties.frameChdParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
   StoreChdBoundary;
 end;
 
@@ -23344,6 +23474,13 @@ begin
   AssignConductanceCaptions(frameDrnParam, Item.ScreenObject.ModflowDrnBoundary);
 end;
 
+procedure TfrmScreenObjectProperties.frameDrnParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
+  StoreDrnBoundary;
+end;
+
 procedure TfrmScreenObjectProperties.frameDrnParamdgModflowBoundaryEndUpdate(
   Sender: TObject);
 begin
@@ -23481,6 +23618,13 @@ begin
   StoreEtsBoundary;
 end;
 
+procedure TfrmScreenObjectProperties.frameEtsParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
+  StoreEtsBoundary;
+end;
+
 procedure TfrmScreenObjectProperties.frameEtsParamdgModflowBoundaryEndUpdate(
   Sender: TObject);
 begin
@@ -23615,6 +23759,13 @@ begin
   StoreGhbBoundary;
   Item := FNewProperties[0];
   AssignConductanceCaptions(frameGhbParam, Item.ScreenObject.ModflowGhbBoundary);
+end;
+
+procedure TfrmScreenObjectProperties.frameGhbParamcomboTimeSeriesInterpolationChange(
+  Sender: TObject);
+begin
+  inherited;
+  StoreGhbBoundary;
 end;
 
 procedure TfrmScreenObjectProperties.frameGhbParamdgModflowBoundaryEndUpdate(
