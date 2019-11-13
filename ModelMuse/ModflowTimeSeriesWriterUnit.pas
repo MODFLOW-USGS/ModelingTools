@@ -3,22 +3,38 @@ unit ModflowTimeSeriesWriterUnit;
 interface
 
 uses
-  CustomModflowWriterUnit, ModflowTimeSeriesUnit, PhastModelUnit;
+  CustomModflowWriterUnit, ModflowTimeSeriesUnit, PhastModelUnit, System.Math;
 
 type
   TTimeSeriesWriter = class(TCustomModflowWriter)
   private
     FTimeSeries: TTimeSeries;
+    FSeriesStart: Integer;
+    FMaxExportesSeries: Integer;
+    FShouldWriteTemplate: boolean;
+    FWritingTemplate: Boolean;
+    FParameterDelimiter: AnsiChar;
     procedure WriteAttributes;
     procedure WriteTimeSeries;
   protected
     class function Extension: string; override;
   public
+    property ShouldWriteTemplate: boolean read FShouldWriteTemplate
+      write FShouldWriteTemplate;
+    property ParameterDelimiter: AnsiChar read FParameterDelimiter write FParameterDelimiter;
     procedure WriteFile(FileName: string);
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType;
-	  TimeSeries: TTimeSeries); reintroduce;
+	    TimeSeries: TTimeSeries; SeriesStart: Integer); reintroduce;
   end;
 
+Const
+  // @name is the maximum number of series values printed per line.
+  // The purpose of limiting the number of values per line is to keep the line
+  // length less than 2000 characters which is the maximum length allowed by
+  // PEST in pest templates.
+  // Each value takes up 22 characters on the line. Each line also contains
+  // a time value.
+  MaxSeries = 80;
 
 implementation
 
@@ -28,10 +44,14 @@ uses
 { TTimeSeriesWriter }
 
 constructor TTimeSeriesWriter.Create(AModel: TCustomModel;
-  EvaluationType: TEvaluationType; TimeSeries: TTimeSeries);
+  EvaluationType: TEvaluationType; TimeSeries: TTimeSeries; SeriesStart: Integer);
 begin
   inherited Create(AModel, EvaluationType);
   FTimeSeries := TimeSeries;
+  FSeriesStart := SeriesStart;
+  FMaxExportesSeries := Min(SeriesStart + MaxSeries, TimeSeries.SeriesCount);
+  FShouldWriteTemplate := False;
+  FParameterDelimiter := ' ';
 end;
 
 class function TTimeSeriesWriter.Extension: string;
@@ -43,7 +63,15 @@ end;
 procedure TTimeSeriesWriter.WriteAttributes;
 var
   SeriesIndex: Integer;
+  ParamID: String;
 begin
+  if FWritingTemplate then
+  begin
+    WriteString('ptf ');
+    WriteString(ParameterDelimiter);
+    NewLine;
+  end;
+
   WriteString('BEGIN ATTRIBUTES');
   NewLine;
 
@@ -56,7 +84,7 @@ begin
     WriteString('  NAMES');
   end;
 
-  for SeriesIndex := 0 to FTimeSeries.SeriesCount - 1 do
+  for SeriesIndex := FSeriesStart to FMaxExportesSeries - 1 do
   begin
     WriteString(' ');
     WriteString(FTimeSeries.SeriesNames[SeriesIndex]);
@@ -86,7 +114,7 @@ begin
   else
   begin
     WriteString('  METHODS');
-    for SeriesIndex := 0 to FTimeSeries.SeriesCount -1 do
+    for SeriesIndex := FSeriesStart to FMaxExportesSeries - 1 do
     begin
       case FTimeSeries.InterpolationMethods[SeriesIndex] of
         mimStepwise:
@@ -108,18 +136,34 @@ begin
   end;
   NewLine;
 
-  if FTimeSeries.UniformScaleFactor then
+  if not FWritingTemplate then
   begin
-    WriteString('  SFAC');
-    WriteFloat(FTimeSeries.ScaleFactors[0]);
+    if FTimeSeries.UniformScaleFactor then
+    begin
+      WriteString('  SFAC');
+      WriteFloat(FTimeSeries.ScaleFactors[0]);
+    end
+    else
+    begin
+      Assert(False);
+      WriteString('  SFACS');
+      for SeriesIndex := FSeriesStart to FMaxExportesSeries - 1 do
+      begin
+        WriteFloat(FTimeSeries.ScaleFactors[SeriesIndex]);
+      end;
+    end;
   end
   else
   begin
-    WriteString('  SFACS');
-    for SeriesIndex := 0 to FTimeSeries.SeriesCount -1 do
+    Assert( FTimeSeries.UniformScaleFactor);
+    WriteString('  SFAC');
+    ParamID := ' ' + ParameterDelimiter + FTimeSeries.ParameterName;
+    while Length(ParamID) < 23 do
     begin
-      WriteFloat(FTimeSeries.ScaleFactors[SeriesIndex]);
+      ParamID := ParamID + ' ';
     end;
+    ParamID := ParamID + ParameterDelimiter;
+    WriteString(ParamID)
   end;
   NewLine;
 
@@ -138,6 +182,19 @@ begin
   finally
     CloseFile;
   end;
+  if ShouldWriteTemplate then
+  begin
+    FileName := FileName + '.tpl';
+    FWritingTemplate := True;
+
+    OpenFile(FileName);
+    try
+      WriteAttributes;
+      WriteTimeSeries;
+    finally
+      CloseFile;
+    end;
+  end;
 end;
 
 procedure TTimeSeriesWriter.WriteTimeSeries;
@@ -150,7 +207,7 @@ begin
   for TimeIndex := 0 to FTimeSeries.TimeCount - 1 do
   begin
     WriteFloat(FTimeSeries.Times[TimeIndex]);
-    for SeriesIndex := 0 to FTimeSeries.SeriesCount - 1 do
+    for SeriesIndex := FSeriesStart to FMaxExportesSeries - 1 do
     begin
       WriteFloat(FTimeSeries.Values[SeriesIndex, TimeIndex]);
     end;

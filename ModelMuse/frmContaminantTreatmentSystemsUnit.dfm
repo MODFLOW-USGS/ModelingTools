@@ -116,7 +116,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
       Margins.Top = 60
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = tabIndividualWellOptions
+      ActivePage = tabTreatments
       Align = alClient
       Enabled = False
       ParentShowHint = False
@@ -428,10 +428,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 MaxLength = 0
                 ParentButtonFont = False
                 PickList.Strings = (
-                  'percentage change'
-                  'concentration change'
-                  'mass change'
-                  'specified concentration')
+                  'fractional change (1)'
+                  'concentration change (2)'
+                  'mass change (3)'
+                  'specified concentration (4)')
                 WordWrapCaptions = True
                 WordWrapCells = False
                 CaseSensitivePicklist = False
@@ -461,6 +461,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
+            ExplicitLeft = 1
             ExplicitWidth = 612
             ExplicitHeight = 196
             ColWidths = (
@@ -642,10 +643,10 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                   MaxLength = 0
                   ParentButtonFont = False
                   PickList.Strings = (
-                    'percentage change'
-                    'concentration change'
-                    'mass change'
-                    'specified concentration')
+                    'fractional change (1)'
+                    'concentration change (2)'
+                    'mass change (3)'
+                    'specified concentration (4)')
                   WordWrapCaptions = True
                   WordWrapCells = False
                   CaseSensitivePicklist = False
@@ -675,6 +676,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                   CheckStyle = csCheck
                   AutoAdjustColWidths = True
                 end>
+              ExplicitLeft = 5
               ExplicitWidth = 479
               ExplicitHeight = 194
               ColWidths = (

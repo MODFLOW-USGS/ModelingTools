@@ -8829,10 +8829,13 @@ const
   //                MODPATH 7 files.
   //               Bug fix: If HDRY and HNOFLO are set to zero, those values
   //                are saved to the file when a ModelMuse file is saved.
+
   //               Enhancement: Time-series file interpolation methods in
   //                MODFLOW 6 are now supported.
   //               Change: The description of SIGMAS in SUTRA has been changed
   //                in the SUTRA Options dialog box.
+  //               Change: When writing time-series files for MODFLOW 6, lines
+  //                are now kept less than 2000 characters wide.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.7';

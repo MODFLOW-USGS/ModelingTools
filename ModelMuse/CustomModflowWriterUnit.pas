@@ -7965,6 +7965,22 @@ var
   TimeSeries: TTimeSeries;
   TimeSeriesWriter: TTimeSeriesWriter;
   FileNameTS: string;
+  SeriesStart: Integer;
+  SIndex: Integer;
+  procedure WriteTimeSeries;
+  begin
+    TimeSeriesWriter := TTimeSeriesWriter.Create(Model, etExport,
+      TimeSeries, SeriesStart);
+    try
+      TimeSeriesWriter.WriteFile(FileNameTS)
+    finally
+      TimeSeriesWriter.Free;
+    end;
+    FileNameTS := ExtractFileName(FileNameTS);
+    WriteString('    TS6 FILEIN ');
+    WriteString(FileNameTS);
+    NewLine;
+  end;
 begin
   for ParameterIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
   begin
@@ -7974,20 +7990,28 @@ begin
       for SeriesIndex := 0 to AParam.TimeSeriesList.Count - 1 do
       begin
         TimeSeries := AParam.TimeSeriesList[SeriesIndex];
-        FileNameTS := ChangeFileExt(NameOfFile, '') + '.' +
-          TimeSeries.ParameterName + '.' + TimeSeries.ObjectName +
-          '.time_series';
-        TimeSeriesWriter := TTimeSeriesWriter.Create(Model, etExport,
-          TimeSeries);
-        try
-          TimeSeriesWriter.WriteFile(FileNameTS)
-        finally
-          TimeSeriesWriter.Free;
+        SeriesStart := 0;
+        SIndex := 1;
+        if TimeSeries.SeriesCount < MaxSeries then
+        begin
+          FileNameTS := ChangeFileExt(NameOfFile, '') + '.' +
+            TimeSeries.ParameterName + '.' + TimeSeries.ObjectName +
+            '.time_series';
+          WriteTimeSeries;
+        end
+        else
+        begin
+          while SeriesStart < TimeSeries.SeriesCount do
+          begin
+            FileNameTS := ChangeFileExt(NameOfFile, '') + '.' +
+              TimeSeries.ParameterName + '.' + TimeSeries.ObjectName
+              + '__' + SIndex.ToString +
+              '.time_series';
+            WriteTimeSeries;
+            Inc(SIndex);
+            Inc(SeriesStart, MaxSeries);
+          end;
         end;
-        FileNameTS := ExtractFileName(FileNameTS);
-        WriteString('    TS6 FILEIN ');
-        WriteString(FileNameTS);
-        NewLine;
       end;
     end;
   end;
