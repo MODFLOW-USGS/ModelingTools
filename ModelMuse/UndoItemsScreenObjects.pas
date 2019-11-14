@@ -4721,6 +4721,7 @@ begin
     NewName := StringReplace(NewName, '-', '', [rfReplaceAll]);
     NewName := StringReplace(NewName, '+', '', [rfReplaceAll]);
     NewName := StringReplace(NewName, ':', '', [rfReplaceAll]);
+    NewName := ValidName(NewName);
     AScreenObject.Name := NewName;
   end;
   
@@ -4831,7 +4832,7 @@ var
 	    and not AScreenObject.Modflow6Obs.RivFlowObs
 		then
 	  begin
-        AScreenObject.Modflow6Obs := nil;
+      AScreenObject.Modflow6Obs := nil;
 	  end;
 	end;
   end;
