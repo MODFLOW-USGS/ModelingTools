@@ -119,6 +119,10 @@ resourcestring
   StrSourceObject0s = 'Source object: %0:s.';
   StrTheFormulaDoesNot = 'The formula does not result in a real number.';
   StrMVRValue = 'MVR Value';
+  StrErrorInMVRSource = 'Error in MVR source. Check to make sure that the ob' +
+  'ject defines both the MVR boundary and the type of boundary specified in ' +
+  'the source package for the MVR boundary.';
+  StrThereWasAnErrorS = 'There was an error specifying the MVR source in %s.';
 
 
 
@@ -154,7 +158,15 @@ begin
   MvrSource.Receivers := ScreenObject.ModflowMvr.Receivers;
   Assert(RegisterKey.StressPeriod >= 0);
   Assert(RegisterKey.StressPeriod < FSourceCellDictionaries.Count);
-  MvrSourceCell := FSourceCellDictionaries[RegisterKey.StressPeriod][RegisterKey.SourceKey];
+  try
+    MvrSourceCell := FSourceCellDictionaries[RegisterKey.StressPeriod][RegisterKey.SourceKey];
+  except on E: EListError do
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrErrorInMVRSource,
+        Format(StrThereWasAnErrorS, [ScreenObject.Name]), ScreenObject);
+      Exit;
+    end;
+  end;
   MvrSource.MvrTypes := MvrSourceCell.Values.MvrTypes;
   MvrSource.MvrRates := MvrSourceCell.Values.Values   ;
   MvrSource.Cell := MvrSourceCell.Values.Cell;
@@ -178,6 +190,9 @@ var
   SourceComparer: IEqualityComparer<TMvrSourceKey>;
 begin
   inherited;
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorInMVRSource);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrReceiverNotFound);
+
   ReceiverComparer := TMvrReceiverKeyComparer.Create;
   SourceComparer := TMvrSourceKeyComparer.Create;
 

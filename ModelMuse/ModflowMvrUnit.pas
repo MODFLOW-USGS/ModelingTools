@@ -638,6 +638,9 @@ var
   BoundaryStorage: TMvrSourceStorage;
   ValueCount: Integer;
 begin
+  (Values as TCustomListArrayBoundColl).SectionDuplicatesAllowed :=
+    SourcePackageChoice = spcSfr;
+
   EvaluateListBoundaries(AModel);
 
   ValueCount := 0;

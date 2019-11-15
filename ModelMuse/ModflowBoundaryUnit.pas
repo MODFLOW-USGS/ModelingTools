@@ -505,12 +505,6 @@ type
     // cell are added together.
     property ListDuplicatesAllowed: boolean read FListDuplicatesAllowed
       write FListDuplicatesAllowed;
-    // @name is set to @True in @link(TSwrReachCollection),
-    // @link(TStrCollection) and @link(TSfrMf6Collection).
-    // When @name is set to @True, separate boundaries can be set by the same
-    // section of the same object in the same cell.
-    property SectionDuplicatesAllowed: Boolean read FSectionDuplicatesAllowed
-      write FSectionDuplicatesAllowed;
     function OkListDataTypes(BoundaryIndex: Integer): TRbwDataTypes; virtual;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name should be called just before a formula is about
@@ -534,6 +528,13 @@ type
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       virtual; abstract;
   public
+    // @name is set to @True in @link(TSwrReachCollection),
+    // @link(TStrCollection), @link(TSfrMf6Collection),
+    // and in @link(TMvrBoundary) when the source is SFR.
+    // When @name is set to @True, separate boundaries can be set by the same
+    // section of the same object in the same cell.
+    property SectionDuplicatesAllowed: Boolean read FSectionDuplicatesAllowed
+      write FSectionDuplicatesAllowed;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     constructor Create(Boundary: TModflowScreenObjectProperty;

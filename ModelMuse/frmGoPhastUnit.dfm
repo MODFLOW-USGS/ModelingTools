@@ -322,7 +322,6 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitTop = -6
     object tbarEdit: TToolBar
       Left = 152
       Top = 34
@@ -1950,61 +1949,6 @@ inherited frmGoPhast: TfrmGoPhast
     object miModel: TMenuItem
       Caption = '&Model'
       HelpContext = 2390
-      object miModflow6Active: TMenuItem
-        Action = acModflow6Active
-        GroupIndex = 1
-      end
-      object miModflow: TMenuItem
-        Action = acModflowActive
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object miModflowLgr: TMenuItem
-        Action = acModflowLgrActive
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object MODFLOWLGRV21: TMenuItem
-        Action = acModflowLgr2Active
-        GroupIndex = 1
-      end
-      object miModflowNwt: TMenuItem
-        Action = acModflowNwtActive
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object miModflowCfpActive: TMenuItem
-        Action = acModflowCfpActive
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object miModflowFmpActive: TMenuItem
-        Action = acModflowFmpActive
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object miPhast: TMenuItem
-        Action = acPhastActive
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object miSUTRA: TMenuItem
-        Action = acSutra22Active
-        GroupIndex = 1
-        RadioItem = True
-      end
-      object mniSutra30Active: TMenuItem
-        Action = acSutra30Active
-        GroupIndex = 1
-      end
-      object miFootPrintActive: TMenuItem
-        Action = acFootPrintActive
-        GroupIndex = 1
-      end
-      object N7: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
       object miEditGeoRef: TMenuItem
         Caption = 'Edit &Geo Reference'
         GroupIndex = 1
@@ -2281,6 +2225,60 @@ inherited frmGoPhast: TfrmGoPhast
       end
       object miFootprintProgramLocation: TMenuItem
         Action = acFootprintProgramLocation
+        GroupIndex = 1
+      end
+    end
+    object ModelSelection1: TMenuItem
+      Caption = 'Model Selection'
+      object miModflow6Active: TMenuItem
+        Action = acModflow6Active
+        GroupIndex = 1
+      end
+      object miModflow: TMenuItem
+        Action = acModflowActive
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object miModflowLgr: TMenuItem
+        Action = acModflowLgrActive
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object MODFLOWLGRV21: TMenuItem
+        Action = acModflowLgr2Active
+        GroupIndex = 1
+      end
+      object miModflowNwt: TMenuItem
+        Action = acModflowNwtActive
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object miModflowCfpActive: TMenuItem
+        Action = acModflowCfpActive
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object miModflowFmpActive: TMenuItem
+        Action = acModflowFmpActive
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object miPhast: TMenuItem
+        Action = acPhastActive
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object miSUTRA: TMenuItem
+        Action = acSutra22Active
+        GroupIndex = 1
+        RadioItem = True
+      end
+      object mniSutra30Active: TMenuItem
+        Action = acSutra30Active
+        GroupIndex = 1
+      end
+      object miFootPrintActive: TMenuItem
+        Action = acFootPrintActive
         GroupIndex = 1
       end
     end
@@ -3551,7 +3549,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 104
     Top = 128
     Bitmap = {
-      494C010148004D00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010148004D00140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003001000001002000000000000030
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6195,7 +6193,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 616
     Top = 8
     Bitmap = {
-      494C010161006500100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010161006500140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000009001000001002000000000000090
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

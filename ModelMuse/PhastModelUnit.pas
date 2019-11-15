@@ -8837,9 +8837,16 @@ const
   //                are now kept less than 2000 characters wide.
   //               Bug fix: Fixed a bug that could cause an error when
   //                converting an existing model to MODFLOW 6.
+  //    '4.1.0.9'  Bug fix: Fixed a bug that could prevent SFR boundaries from
+  //                being accepted as MVR sources.
+
+  //               Change: The menu items used to select the type of model
+  //                have been moved out of "Model" and into "Model Selection".
+  //               Enhancement: Support for the SFT, LKT, UZT and CTS packages
+  //                in MT3D-USGS has been added.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.8';
+  IModelVersion = '4.1.0.9';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

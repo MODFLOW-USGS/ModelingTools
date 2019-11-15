@@ -197,7 +197,6 @@ type
     miShowGridValues: TMenuItem;
     miPackages: TMenuItem;
     miProgramLocations: TMenuItem;
-    N7: TMenuItem;
     miEditGlobalVariables: TMenuItem;
     AddPartstoObject1: TMenuItem;
     tbAddPartsToObject: TToolButton;
@@ -505,6 +504,7 @@ type
     acSimplifyScreenObjects: TAction;
     acEditCTS: TAction;
     EditContaminantTreatmentSystems1: TMenuItem;
+    ModelSelection1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);

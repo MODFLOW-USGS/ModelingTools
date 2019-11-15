@@ -23245,8 +23245,8 @@ begin
   FRow := ReadCompInt(Stream);
   Stream.Read(FStartPosition, SizeOf(FStartPosition));
   Stream.Read(FSegment, SizeOf(FSegment));
-  LgrEdge := ReadCompBoolean(Stream);
   FSectionIndex := ReadCompInt(Stream);
+  LgrEdge := ReadCompBoolean(Stream);
   FPositionInSegmentList := ReadCompInt(Stream);
 
   SubSegLength := ReadCompInt(Stream);

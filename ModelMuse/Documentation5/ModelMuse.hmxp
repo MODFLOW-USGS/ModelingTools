@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4076</config-value>
+      <config-value name="autohelpstart">4077</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1117,12 +1117,11 @@ document.write('</frameset>');
       <helpcontext-number href="MNW2_Pumping_Rate_Tab#CapMult" value="3537"/>
       <helpcontext-number href="MNW2_Pumping_Rate_Tab#Qdes" value="3536"/>
       <helpcontext-number href="Model" value="2390"/>
-      <helpcontext-number href="Model#Footprint" value="3945"/>
-      <helpcontext-number href="Model#LGR_Selection" value="3599"/>
       <helpcontext-number href="Model#ObservationType" value="3506"/>
       <helpcontext-number href="Model_Features_in_MODFLOW" value="3480"/>
       <helpcontext-number href="Model_Features_in_PHAST" value="3479"/>
       <helpcontext-number href="Model_Features_in_SUTRA" value="3684"/>
+      <helpcontext-number href="Model_Selection" value="4077"/>
       <helpcontext-number href="ModelMuse_Files" value="3440"/>
       <helpcontext-number href="ModelMuse_Frequently_Asked_Que" value="3993"/>
       <helpcontext-number href="ModelMuse_Introduction" value="10"/>
