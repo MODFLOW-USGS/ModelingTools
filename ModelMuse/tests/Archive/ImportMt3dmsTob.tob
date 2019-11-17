@@ -1,6 +1,6 @@
-# TOB: Transport Observation package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# TOB: Transport Observation package file created on 11/16/2019 by ModelMuse version 4.1.0.9.
      5     7   121 # Data Set 1: MaxConcObs, MaxFluxObs, MaxFluxCells
-ImportMt3dmsTob    21    22    23 # Data Set 2: OUTNAM, inConcObs, inFluxObs, inSaveObs
+ImportMt3dmsTob    29    30    31 # Data Set 2: OUTNAM, inConcObs, inFluxObs, inSaveObs
      5  1.000000000000E+000      1     0     1 # Data Set 3: nConcObs, CScale, iOutCobs, iConcLOG, iConcINTP
 ow1    -3     8     3     1  1.050000000000E+001   2.500000000000E-001   2.500000000000E-001   1.000000000000E+000   5.000000000000E-001  # Data Set 4: COBSNAM, Layer, Row, Column, iComp, TimeObs, Roff, Coff, weight, COBS
      5  3.000000000000E-001      6  3.000000000000E-001      7  4.000000000000E-001  # Data Set 5: mLayer(1), prLayer(1), mLayer(2), prLayer(2), ..., mLayer(|Layer|), prLayer(|Layer|)

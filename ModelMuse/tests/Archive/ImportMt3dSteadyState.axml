@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="ImportMt3dSteadyState" FileType="bin">
-    <FileName Model_Name="ImportMt3dSteadyState" FileType="bin">..\..\..\..\..\mt3dms5\bin\mt3dms5b.exe</FileName>
-    <FileName Model_Name="ImportMt3dSteadyState" FileType="bin">..\..\..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="bin">..\..\..\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportMt3dSteadyState" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
   </bin>
   <ancillary Model_Name="ImportMt3dSteadyState" FileType="ancillary">
     <FileName Model_Name="ImportMt3dSteadyState" FileType="ancillary">ImportMt3dSteadyState.gpt</FileName>

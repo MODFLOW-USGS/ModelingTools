@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="DipKTest" FileType="bin">
-    <FileName Model_Name="DipKTest" FileType="bin">..\..\..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="DipKTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
   </bin>
   <ancillary Model_Name="DipKTest" FileType="ancillary">
     <FileName Model_Name="DipKTest" FileType="ancillary">DipKTest.gpt</FileName>

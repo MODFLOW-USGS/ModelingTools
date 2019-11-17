@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="MP6 Test2" FileType="bin">
-    <FileName Model_Name="MP6 Test2" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
-    <FileName Model_Name="MP6 Test2" FileType="bin">C:\WRDAPP\modpath.6_0\bin\mp6.exe</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="bin">..\..\..\WRDAPP\modpath.6_0\bin\mp6.exe</FileName>
   </bin>
   <ancillary Model_Name="MP6 Test2" FileType="ancillary">
     <FileName Model_Name="MP6 Test2" FileType="ancillary">MP6 Test2.gpt</FileName>
@@ -40,5 +40,6 @@
     <FileName Model_Name="MP6 Test2" FileType="Modpath Output">MP6_Test2.end</FileName>
     <FileName Model_Name="MP6 Test2" FileType="Modpath Output">MP6_Test2.mplst</FileName>
     <FileName Model_Name="MP6 Test2" FileType="Modpath Output">MPATH6.LOG</FileName>
+    <FileName Model_Name="MP6 Test2" FileType="Modpath Output">mpath7.log</FileName>
   </Modpath_Output_Files>
 </Model_Archive_List>

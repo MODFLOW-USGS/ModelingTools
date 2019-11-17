@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="importedSWR" FileType="bin">
-    <FileName Model_Name="importedSWR" FileType="bin">..\..\..\..\..\WRDAPP\MODFLOW-NWT_1.1.4\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="importedSWR" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.1.4\bin\MODFLOW-NWT.exe</FileName>
   </bin>
   <ancillary Model_Name="importedSWR" FileType="ancillary">
     <FileName Model_Name="importedSWR" FileType="ancillary">importedSWR.gpt</FileName>
@@ -19,7 +19,7 @@
     <FileName Model_Name="importedSWR" FileType="Model Input">importedSWR.uzf</FileName>
     <FileName Model_Name="importedSWR" FileType="Model Input">RunModflow.Bat.archive</FileName>
     <FileName Model_Name="importedSWR" FileType="Model Input">usgs.importedSWR.reference</FileName>
-    <FileName Model_Name="importedSWR" FileType="Model Input">..\..\..\..\..\WRDAPP\MODFLOW-NWT_1.0.9\data\SWR_data_files\SWRSample05\ref\ConstantStage.dat</FileName>
+    <FileName Model_Name="importedSWR" FileType="Model Input">..\..\..\WRDAPP\MODFLOW-NWT_1.0.9\data\SWR_data_files\SWRSample05\ref\ConstantStage.dat</FileName>
   </model>
   <output Model_Name="importedSWR" FileType="Model Output">
     <FileName Model_Name="importedSWR" FileType="Model Output">importedSWR.cbc</FileName>

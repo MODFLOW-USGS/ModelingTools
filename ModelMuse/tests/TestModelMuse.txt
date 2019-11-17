@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4051
+4050
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -3935,7 +3935,6 @@ LakeMf6.gpt
 	Archive\LakeMf6.ic
 	Archive\LakeMf6.ims
 	Archive\LakeMf6.lak6
-	Archive\LakeMf6.lkt
 	Archive\LakeMf6.mt_nam
 	Archive\LakeMf6.mt_nam.archive
 	Archive\LakeMf6.nam

@@ -1,11 +1,9 @@
-# Name File for MT3DMS created on 7/31/2019 by ModelMuse
+# Name File for MT3DMS created on 11/16/2019 by ModelMuse
 LIST             16 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6.mls
 FT6              25 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.cbc
 FT6              26 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.bhd
 FT6              27 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.dis.grb
 DATA             17 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6.cnf
-LKT              18 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.lkt
-DATA             81 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6.lktobs
 BTN               1 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.btn
 DATA(BINARY)    201 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6_Conc.ucn
 DATA            601 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6_Conc._mas

@@ -13,6 +13,7 @@
     <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.chd</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.dis</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.ic</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.ims</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.nam.archive</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.npf</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Input">Sf6Mf6.oc</FileName>
@@ -36,7 +37,6 @@
     <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">Sf6Mf6.zb.zbnam.archive</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">Sf6Mf6.zb_zones</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">usgs.Sf6Mf6_ZoneBudget.reference</FileName>
-    <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Input">..\..\..\..\..\WRDAPP\mf6.0.4\bin\zbud6.exe</FileName>
   </Zonebudget_Input_Files>
   <Zonebudget_Output_Files Model_Name="Sf6Mf6" FileType="Zonebudget Output">
     <FileName Model_Name="Sf6Mf6" FileType="Zonebudget Output">Sf6Mf6.2.csv</FileName>

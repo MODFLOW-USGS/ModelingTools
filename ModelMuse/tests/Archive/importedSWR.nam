@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 5/18/2019 by ModelMuse Version 3.10.0.60
+# Name File for MODFLOW created on 11/16/2019 by ModelMuse Version 4.1.0.9
 LIST             11 importedSWR.lst REPLACE
 DATA(BINARY)      9 importedSWR.cbc REPLACE
 DIS              12 importedSWR.dis OLD
@@ -16,5 +16,5 @@ DATA(BINARY)    174 importedSWR.Swr_ReachExchange_B REPLACE
 DATA            181 importedSWR.Swr_Convergence REPLACE
 DATA            178 importedSWR.Swr_RIV REPLACE
 DATA            179 importedSWR.Swr_Obs_A REPLACE
-DATA          20205 ..\..\..\..\WRDAPP\MODFLOW-NWT_1.0.9\data\SWR_data_files\SWRSample05\ref\ConstantStage.dat OLD
+DATA          20205 ..\..\..\WRDAPP\MODFLOW-NWT_1.0.9\data\SWR_data_files\SWRSample05\ref\ConstantStage.dat OLD
 UZF              31 importedSWR.uzf OLD
