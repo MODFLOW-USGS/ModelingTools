@@ -4284,6 +4284,7 @@ var
 //        end;
         if CellFormat = rcf4Boolean then
         begin
+          NewString := Trim(NewString);
           if UpperCase(NewString) = 'TRUE' then
           begin
             Checked[NewCol, NewRow] := True;

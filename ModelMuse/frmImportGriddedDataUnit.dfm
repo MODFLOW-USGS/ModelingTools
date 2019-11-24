@@ -9,6 +9,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   KeyPreview = True
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitTop = -133
   ExplicitWidth = 452
   ExplicitHeight = 487
   PixelsPerInch = 96
@@ -142,6 +143,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
           end>
         OnEndUpdate = rdgListEndUpdate
         WordWrapRowCaptions = False
+        ExplicitTop = 2
       end
       object pnlListControls: TPanel
         Left = 0
@@ -165,13 +167,13 @@ inherited frmImportGriddedData: TfrmImportGriddedData
           BevelOuter = bvNone
           ColumnCollection = <
             item
-              Value = 33.333333333333340000
+              Value = 33.333333333333330000
             end
             item
-              Value = 33.333333333333340000
+              Value = 33.333333333333330000
             end
             item
-              Value = 33.333333333333340000
+              Value = 33.333333333333330000
             end>
           ControlCollection = <
             item
@@ -198,7 +200,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             135
             32)
           object sbAddRow: TSpeedButton
-            Left = 11
+            Left = 10
             Top = 5
             Width = 23
             Height = 22
@@ -216,10 +218,11 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             ParentShowHint = False
             ShowHint = True
             OnClick = sbAddRowClick
+            ExplicitLeft = 11
             ExplicitTop = 6
           end
           object sbInsertRow: TSpeedButton
-            Left = 56
+            Left = 54
             Top = 5
             Width = 23
             Height = 22
@@ -237,11 +240,10 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             ParentShowHint = False
             ShowHint = True
             OnClick = sbInsertRowClick
-            ExplicitLeft = 54
             ExplicitTop = 6
           end
           object sbDeleteRow: TSpeedButton
-            Left = 101
+            Left = 100
             Top = 5
             Width = 23
             Height = 22
@@ -451,7 +453,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
     end
     object combotreeDataSets: TRbwStringTreeCombo
       Left = 8
-      Top = 121
+      Top = 122
       Width = 289
       Height = 26
       Tree.Left = 0
@@ -531,7 +533,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       436
       47)
     object btnHelp: TBitBtn
-      Left = 144
+      Left = 143
       Top = 6
       Width = 91
       Height = 33
@@ -581,6 +583,16 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+    end
+    object btnPasteData: TButton
+      Left = 46
+      Top = 6
+      Width = 91
+      Height = 33
+      Anchors = [akTop, akRight]
+      Caption = 'Paste Data'
+      TabOrder = 3
+      OnClick = btnPasteDataClick
     end
   end
 end

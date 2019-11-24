@@ -1617,7 +1617,7 @@ object Model: TPhastModel
     end>
   Version = '4.1.0.9'
   GuiSettings.FrontHeight = 208
-  GuiSettings.Height = 876
+  GuiSettings.Height = 740
   GuiSettings.FrontX = -0.608860759493671500
   GuiSettings.FrontY = -214.626582278480900000
   GuiSettings.Left = 0
@@ -1628,11 +1628,11 @@ object Model: TPhastModel
   GuiSettings.SideX = -253.023206751054700000
   GuiSettings.SideY = -1.133544303797468000
   GuiSettings.Top = 0
-  GuiSettings.TopViewHeight = 503
-  GuiSettings.TopViewWidth = 1201
+  GuiSettings.TopViewHeight = 367
+  GuiSettings.TopViewWidth = 1045
   GuiSettings.TopX = -0.608860759493671500
   GuiSettings.TopY = -1.133544303797468000
-  GuiSettings.Width = 1456
+  GuiSettings.Width = 1300
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0
   GuiSettings.TopHorizontalPrecision = 5

@@ -12137,6 +12137,7 @@ var
 //  ModelIndex: Integer;
   ModelOptions: TModelOptions;
   DisvGrid: TModflowDisvGrid;
+  ZoneBudgetLocation: string;
 begin
   inherited;
   if PhastModel.DisvUsed then
@@ -12268,9 +12269,17 @@ begin
       begin
         Exit;
       end;
-      if FileExists(PhastModel.ProgramLocations.ZoneBudgetLocation) then
+      if ModelSelection = msModflow2015 then
       begin
-        PhastModel.AddBinaryFile(PhastModel.ProgramLocations.ZoneBudgetLocation);
+        ZoneBudgetLocation := PhastModel.ProgramLocations.ZoneBudgetLocationMf6;
+      end
+      else
+      begin
+        ZoneBudgetLocation := PhastModel.ProgramLocations.ZoneBudgetLocation;
+      end;
+      if FileExists(ZoneBudgetLocation) then
+      begin
+        PhastModel.AddBinaryFile(ZoneBudgetLocation);
       end;
     end;
     if FileExists(PhastModel.ModflowLocation) then

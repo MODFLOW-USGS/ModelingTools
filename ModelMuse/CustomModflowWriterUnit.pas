@@ -1820,7 +1820,7 @@ begin
   begin
     ZoneBudgetLocation := ProgramLocations.ZoneBudgetLocation;
   end;
-  Model.AddBinaryFile(ProgramLocations.ZoneBudgetLocation);
+  Model.AddBinaryFile(ZoneBudgetLocation);
 //  Model.AddZoneBudgetInputFile(ZoneBudgetLocation);
   ZoneBudgetLocation := QuoteFileName(ZoneBudgetLocation);
 

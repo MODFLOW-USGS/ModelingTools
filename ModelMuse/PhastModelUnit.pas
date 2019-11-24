@@ -8844,6 +8844,10 @@ const
   //                have been moved out of "Model" and into "Model Selection".
   //               Enhancement: Support for the SFT, LKT, UZT and CTS packages
   //                in MT3D-USGS has been added.
+  //               Bug fix: Fixed writing the status of the first MAW well in
+  //                a stress period.
+  //               Enhancement: A "Paste Data" button was added to the "Import
+  //                Gridded Data dialog box.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.9';

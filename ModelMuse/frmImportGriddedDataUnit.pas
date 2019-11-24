@@ -41,6 +41,7 @@ type
     cbMultipleDataRows: TCheckBox;
     lblModel: TLabel;
     comboModel: TComboBox;
+    btnPasteData: TButton;
     procedure comboMethodChange(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
@@ -70,6 +71,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure comboModelChange(Sender: TObject);
+    procedure btnPasteDataClick(Sender: TObject);
   private
     FGrids: TList;
     FRealIgnoreValues: array of double;
@@ -176,6 +178,9 @@ resourcestring
   StrLayer = 'Layer';
   StrValuesToIgnore = 'Values to ignore';
   StrImportMeshData = 'Import Mesh Data';
+  StrYouMustSelectADa = 'You must select a data set before attempting to pas' +
+  'te data.';
+  StrThereIsNoTextOn = 'There is no text on the clipboard.';
 
 {$R *.dfm}
 
@@ -2147,6 +2152,47 @@ begin
   SetData;
 end;
 
+
+procedure TfrmImportGriddedData.btnPasteDataClick(Sender: TObject);
+var
+  AnObject: TObject;
+  Grid: TRbwDataGrid4;
+  ClipText: string;
+begin
+  inherited;
+  RetrieveSelectedObject(AnObject);
+  if AnObject = nil then
+  begin
+    Beep;
+    MessageDlg(StrYouMustSelectADa, mtInformation, [mbOK], 0);
+    Exit;
+  end;
+
+  ClipText := Clipboard.AsText;
+  if ClipText = '' then
+  begin
+    Beep;
+    MessageDlg(StrThereIsNoTextOn, mtInformation, [mbOK], 0);
+    Exit;
+  end;
+
+  Grid := nil;
+  if jvplCellGrid.ActivePage = jvspCellList then
+  begin
+    Grid := rdgList;
+  end
+  else
+  begin
+    Assert(jvplCellGrid.ActivePage = jvspGrid);
+    Grid := FGrids[pcGriddedData.ActivePageIndex];
+    Grid.Invalidate;
+  end;
+
+  if Grid <> nil then
+  begin
+    Grid.DistributeText(Grid.FixedCols, Grid.FixedRows, ClipText);
+  end;
+end;
 
 { TUndoImportGriddedData }
 

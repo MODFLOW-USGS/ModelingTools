@@ -69,6 +69,11 @@ resourcestring
 //  StrWritingDataSet2 = '  Writing Data Set 2.';
 //  StrWritingDataSet3 = '  Writing Data Set 3.';
   StrWritingDataSets4to9 = '  Writing Data Sets 4 to 9.';
+  StrNoCellsAssociated = 'No cells associated with lake. If the objects only ' +
+  'set values of enclosed cells, try having them set values of intersected ' +
+  'cells.';
+  StrThereAreNoCellsAObj = 'There are no cells associated with the lake defi' +
+  'ned by %s.';
 
 { TModflowLAK_Writer }
 
@@ -101,6 +106,7 @@ var
   ScreenObject, OtherObject: TScreenObject;
   TempList: TList;
   SubLakeIndex: Integer;
+  CellList: TCellAssignmentList;
 begin
   frmErrorsAndWarnings.BeginUpdate;
   try
@@ -108,6 +114,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, InvalidCenterLake);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheLakeBathymetry);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeBathymetryFile);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoCellsAssociated);
 
     frmProgressMM.AddMessage(StrEvaluatingLAKPacka);
     TempList := TList.Create;
@@ -127,6 +134,19 @@ begin
           and ScreenObject.ModflowLakBoundary.Used
           and (ScreenObject.ModflowLakBoundary.LakeID > 0) then
         begin
+          CellList := TCellAssignmentList.Create;
+          try
+            ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+            if CellList.Count = 0 then
+            begin
+              frmErrorsAndWarnings.AddError(Model, StrNoCellsAssociated,
+                Format(StrThereAreNoCellsAObj, [ScreenObject.Name]),
+                ScreenObject);
+            end;
+          finally
+            CellList.Free
+          end;
+
           While (FLakeList.Count <= ScreenObject.ModflowLakBoundary.LakeID) do
           begin
             FLakeList.Add(nil);

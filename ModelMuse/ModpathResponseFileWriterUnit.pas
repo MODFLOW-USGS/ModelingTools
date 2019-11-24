@@ -2309,7 +2309,7 @@ begin
   ADirectory := IncludeTrailingPathDelimiter(ExtractFileDir(NameOfFile));
   if FMpathVersion = mp6 then
   begin
-    Model.AddModpathOutputFile(ADirectory + 'mpath6.log');
+    Model.AddModpathOutputFile(ADirectory + 'MPATH6.LOG');
   end
   else if FMpathVersion = mp7 then
   begin

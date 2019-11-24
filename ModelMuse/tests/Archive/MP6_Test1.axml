@@ -40,6 +40,5 @@
     <FileName Model_Name="MP6 Test1" FileType="Modpath Output">MP6_Test1.end</FileName>
     <FileName Model_Name="MP6 Test1" FileType="Modpath Output">MP6_Test1.mplst</FileName>
     <FileName Model_Name="MP6 Test1" FileType="Modpath Output">MPATH6.LOG</FileName>
-    <FileName Model_Name="MP6 Test1" FileType="Modpath Output">mpath7.log</FileName>
   </Modpath_Output_Files>
 </Model_Archive_List>

@@ -958,6 +958,7 @@ begin
 
     WriteBeginPeriod(StressPeriodIndex);
     WriteString('# <wellno> <mawsetting>');
+    NewLine;
     MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
 
     Cells := Values[StressPeriodIndex];

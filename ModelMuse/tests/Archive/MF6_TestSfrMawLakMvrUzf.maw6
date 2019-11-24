@@ -1,4 +1,4 @@
-# MAW: Multi-Aquifer Well package file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+# MAW: Multi-Aquifer Well package file created on 11/17/2019 by ModelMuse version 4.1.0.9.
 BEGIN OPTIONS
     BOUNDNAMES
     PRINT_INPUT
@@ -28,7 +28,8 @@ BEGIN CONNECTIONDATA
 END CONNECTIONDATA
 
 BEGIN PERIOD      1
-# <wellno> <mawsetting>     1 STATUS ACTIVE
+# <wellno> <mawsetting>
+     1 STATUS ACTIVE
      1 FLOWING_WELL  0.000000000000E+000   0.000000000000E+000 
      1 RATE -1.000000000000E-004 
 END PERIOD 
