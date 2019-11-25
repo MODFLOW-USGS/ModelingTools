@@ -939,7 +939,15 @@ var
   RowCount: Integer;
   ColumnCount: Integer;
 begin
-  ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(rsActive);
+  if FResultFormat = mfMt3dConc then
+  begin
+    ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(StrMT3DMSActive);
+  end
+  else
+  begin
+    ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(rsActive);
+  end;
+//  ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(rsActive);
   ActiveDataSet.Initialize;
 
   if AModel.DisvUsed then
@@ -1829,7 +1837,14 @@ var
   RowCount: Integer;
   ColumnCount: Integer;
 begin
-  ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(rsActive);
+  if FResultFormat = mfMt3dConc then
+  begin
+    ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(StrMT3DMSActive);
+  end
+  else
+  begin
+    ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(rsActive);
+  end;
   ActiveDataSet.Initialize;
 
   if AModel.DisvUsed then
@@ -2278,10 +2293,15 @@ begin
     end;
   end;
 
-  SetData;
-  
-  DisplayChoice := TDisplayChoice(rgDisplayChoice.ItemIndex);
-  Inc(DisplayChoices[DisplayChoice]);
+  Screen.Cursor := crHourGlass;
+  try
+    SetData;
+
+    DisplayChoice := TDisplayChoice(rgDisplayChoice.ItemIndex);
+    Inc(DisplayChoices[DisplayChoice]);
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 procedure TfrmSelectResultToImport.btnSelectAllClick(Sender: TObject);

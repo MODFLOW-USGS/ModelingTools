@@ -8839,8 +8839,7 @@ const
   //                converting an existing model to MODFLOW 6.
   //    '4.1.0.9'  Bug fix: Fixed a bug that could prevent SFR boundaries from
   //                being accepted as MVR sources.
-
-  //               Change: The menu items used to select the type of model
+  //    '4.1.0.10' Change: The menu items used to select the type of model
   //                have been moved out of "Model" and into "Model Selection".
   //               Enhancement: Support for the SFT, LKT, UZT and CTS packages
   //                in MT3D-USGS has been added.
@@ -8848,9 +8847,13 @@ const
   //                a stress period.
   //               Enhancement: A "Paste Data" button was added to the "Import
   //                Gridded Data dialog box.
+  //               Bug fix: The MT3D_Active data setcorresponding to MT3D input
+  //                data set ICBUND set is no longer set to False if the
+  //                Active data set is set to false.
+
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.9';
+  IModelVersion = '4.1.0.10';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -15342,8 +15345,10 @@ var
   ColIndex: Integer;
   RowIndex: Integer;
   LayerIndex: Integer;
-//  LakeID: TDataArray;
 begin
+  Exit;
+
+
   Mt3dmsActive := DataArrayManager.GetDataSetByName(StrMT3DMSActive);
   if Mt3dmsActive <> nil then
   begin
@@ -15364,26 +15369,6 @@ begin
         end;
       end;
     end;
-//    if ModflowPackages.Mt3dLkt.IsSelected and ModflowPackages.LakPackage.IsSelected then
-//    begin
-//      LakeID := DataArrayManager.GetDataSetByName(rsLakeID);
-//      LakeID.Initialize;
-//      for ColIndex := 0 to ModflowGrid.ColumnCount - 1 do
-//      begin
-//        for RowIndex := 0 to ModflowGrid.RowCount - 1 do
-//        begin
-//          for LayerIndex := 0 to ModflowGrid.LayerCount -1 do
-//          begin
-//            if not Mt3dmsActive.BooleanData[LayerIndex, RowIndex, ColIndex]
-//              and (LakeID.IntegerData[LayerIndex, RowIndex, ColIndex] <> 0) then
-//            begin
-//              Mt3dmsActive.BooleanData[LayerIndex, RowIndex, ColIndex] := True;
-//              Mt3dmsActive.Annotation[LayerIndex, RowIndex, ColIndex] := SetToTrue;
-//            end;
-//          end;
-//        end;
-//      end;
-//    end;
   end;
 end;
 
