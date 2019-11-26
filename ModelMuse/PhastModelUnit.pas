@@ -8850,10 +8850,10 @@ const
   //               Bug fix: The MT3D_Active data setcorresponding to MT3D input
   //                data set ICBUND set is no longer set to False if the
   //                Active data set is set to false.
-
+  //    '4.1.0.11' Bug fix: Fixed saving Lake outlet width in MODFLOW 6.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.10';
+  IModelVersion = '4.1.0.11';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

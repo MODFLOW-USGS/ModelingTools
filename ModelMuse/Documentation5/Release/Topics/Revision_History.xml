@@ -17,6 +17,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Support for the SFT, LKT, UZT and CTS packages in MT3D-USGS has been added.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The user can now specify that BCTime has been programmed in SUTRA.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Time-series file interpolation methods in MODFLOW 6 are now supported.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">A &quot;Paste Data&quot; button was added to the &quot;Import Gridded Data dialog box.</text></para>
               </td>
             </tr>
           </table></para>
@@ -48,6 +49,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">If HDRY and HNOFLO are set to zero, those values are saved to the file when a ModelMuse file is saved.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an error when converting an existing model to MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could prevent SFR boundaries from being accepted as MVR sources.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed writing the status of the first MAW well in a stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The MT3D_Active data setcorresponding to MT3D input data set ICBUND set is no longer set to False if the Active data set is set to false.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed saving Lake outlet width in MODFLOW 6.</text></para>
               </td>
             </tr>
           </table></para>

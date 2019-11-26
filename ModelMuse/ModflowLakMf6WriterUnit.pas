@@ -193,6 +193,26 @@ resourcestring
   'tion than the top of the model at Row %1:d, Column %2:d';
   StrTheLakeDefinedByDisv = 'The lake defined by %0:s has a higher top eleva' +
   'tion than the top of the model at Cell %1:d';
+  StrDistanceBetweenCelRowCol = 'Distance between cells (%0:d, %1:d) and (%2' +
+  ':d, %3:d) [Row, Column]';
+  StrDistanceBetweenCelNum = 'Distance between cells %0:d and %1:d [Cell Num' +
+  'ber]';
+  StrConnectionWidthIs = 'Connection width is only specified for horizontal ' +
+  'lake connections';
+  StrWidthOfColumnD = 'Width of column %d';
+  StrWidthOfRowD = 'Width of row %d';
+  StrWidthOfCellFaceB = 'Width of cell face between cells %0:d, and %1:d';
+  StrLakeOutletRateIn = 'Lake Outlet Rate in Outlet %0:d at %1:g';
+  StrLakeOutletInvertI = 'Lake Outlet Invert in Outlet %0:d at %1:g';
+  StrLakeOutletWidthIn = 'Lake Outlet Width in Outlet %0:d at %1:g';
+  StrLakeOutletSlopeIn = 'Lake Outlet Slope in Outlet %0:d at %1:g';
+  StrLakeOutletRoughnes = 'Lake Outlet Roughness in Outlet %0:d at %1:g';
+  StrLakeStageAt0g = 'Lake Stage at %0:g';
+  StrLakeRainfallAt0 = 'Lake Rainfall at %0:g';
+  StrLakeEvaporationAt = 'Lake Evaporation at %0:g';
+  StrLakeRunoffAt0g = 'Lake Runoff at %0:g';
+  StrLakeWithdrawalAt = 'Lake Withdrawal at %0:g';
+  StrLakeStartingStage = 'Lake Starting Stage';
 
 { TModflowLAKMf6Writer }
 
@@ -662,14 +682,14 @@ begin
             begin
               LakeConnectionCenter := Grid.TwoDElementCenter(LakeCell.Cell.Column, LakeCell.Cell.Row);
               LakeCenter := Grid.TwoDElementCenter(LakeCell.LakeCell.Column, LakeCell.LakeCell.Row);
-              LakeDistanceAnnotation := Format('Distance between cells (%0:d, %1:d) and (%2:d, %3:d) [Row, Column]',
+              LakeDistanceAnnotation := Format(StrDistanceBetweenCelRowCol,
                 [LakeCell.Cell.Row+1, LakeCell.Cell.Column+1, LakeCell.LakeCell.Row+1, LakeCell.LakeCell.Column+1]);
             end
             else
             begin
               LakeConnectionCenter := Disv.TwoDGrid.Cells[LakeCell.Cell.Column].Location;
               LakeCenter := Disv.TwoDGrid.Cells[LakeCell.LakeCell.Column].Location;
-              LakeDistanceAnnotation := Format('Distance between cells %0:d and %1:d [Cell Number]',
+              LakeDistanceAnnotation := Format(StrDistanceBetweenCelNum,
                 [LakeCell.Cell.Column+1, LakeCell.LakeCell.Column+1]);
             end;
             ALake.FLakeCellList[CellIndex].ConnLength := Distance(LakeConnectionCenter,LakeCenter);
@@ -686,7 +706,7 @@ begin
 //        ScreenObject.AssignValuesWithCellList(ConnectionWidth, Model, CellList,
 //          Results, StrLakeConnectionWidt);
 //        Assert(ALake.FLakeCellList.Count = Results.Count);
-        NonHorizConnWidth := 'Connection width is only specified for horizontal lake connections';
+        NonHorizConnWidth := StrConnectionWidthIs;
         for CellIndex := 0 to ALake.FLakeCellList.Count - 1 do
         begin
           LakeCell := ALake.FLakeCellList[CellIndex];
@@ -697,12 +717,12 @@ begin
               if LakeCell.Cell.Column = LakeCell.LakeCell.Column then
               begin
                 ALake.FLakeCellList[CellIndex].ConnWidth := Grid.ColumnWidth[LakeCell.Cell.Column];
-                ConnectionWidthAnnotation := Format('Width of column %d', [LakeCell.Cell.Column+1]);
+                ConnectionWidthAnnotation := Format(StrWidthOfColumnD, [LakeCell.Cell.Column+1]);
               end
               else
               begin
                 ALake.FLakeCellList[CellIndex].ConnWidth := Grid.RowWidth[LakeCell.Cell.Row];
-                ConnectionWidthAnnotation := Format('Width of row %d', [LakeCell.Cell.Row+1]);
+                ConnectionWidthAnnotation := Format(StrWidthOfRowD, [LakeCell.Cell.Row+1]);
               end;
             end
             else
@@ -710,7 +730,7 @@ begin
               DisvConnectionCell := Disv.TwoDGrid.Cells[LakeCell.Cell.Column];
               DisvLakeCell := Disv.TwoDGrid.Cells[LakeCell.LakeCell.Column];
               ALake.FLakeCellList[CellIndex].ConnWidth := DisvLakeCell.SharedWidth(DisvConnectionCell);
-              ConnectionWidthAnnotation := Format('Width of cell face between cells %0:d, and %1:d', [LakeCell.Cell.Column+1, LakeCell.LakeCell.Column+1]);
+              ConnectionWidthAnnotation := Format(StrWidthOfCellFaceB, [LakeCell.Cell.Column+1, LakeCell.LakeCell.Column+1]);
             end;
             ALake.FLakeCellList[CellIndex].ConnWidthAnnotation := ConnectionWidthAnnotation;
           end
@@ -784,23 +804,23 @@ begin
           OutletSetting.StartTime := OutletTimeItem.StartTime;
           OutletSetting.EndTime := OutletTimeItem.EndTime;
           OutletSetting.Rate := EvaluateFormula(OutletTimeItem.Rate,
-            Format('Lake Outlet Rate in Outlet %0:d at %1:g',
+            Format(StrLakeOutletRateIn,
             [OutletIndex +1, OutletSetting.StartTime]),
             ALake.FScreenObject.Name);
           OutletSetting.Invert := EvaluateFormula(OutletTimeItem.Invert,
-            Format('Lake Outlet Invert in Outlet %0:d at %1:g',
+            Format(StrLakeOutletInvertI,
             [OutletIndex +1, OutletSetting.StartTime]),
             ALake.FScreenObject.Name);
           OutletSetting.Width := EvaluateFormula(OutletTimeItem.Width,
-            Format('Lake Outlet Width in Outlet %0:d at %1:g',
+            Format(StrLakeOutletWidthIn,
             [OutletIndex +1, OutletSetting.StartTime]),
             ALake.FScreenObject.Name);
           OutletSetting.Slope := EvaluateFormula(OutletTimeItem.Slope,
-            Format('Lake Outlet Slope in Outlet %0:d at %1:g',
+            Format(StrLakeOutletSlopeIn,
             [OutletIndex +1, OutletSetting.StartTime]),
             ALake.FScreenObject.Name);
           OutletSetting.Rough := EvaluateFormula(OutletTimeItem.Roughness,
-            Format('Lake Outlet Roughness in Outlet %0:d at %1:g',
+            Format(StrLakeOutletRoughnes,
             [OutletIndex +1, OutletSetting.StartTime]),
             ALake.FScreenObject.Name);
         end;
@@ -958,27 +978,27 @@ begin
       LakeSetting.Status := LakeItem.Status;
 
       LakeSetting.Stage := EvaluateFormula(LakeItem.Stage,
-        Format('Lake Stage at %0:g',
+        Format(StrLakeStageAt0g,
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
 
       LakeSetting.Rainfall := EvaluateFormula(LakeItem.Rainfall,
-        Format('Lake Rainfall at %0:g',
+        Format(StrLakeRainfallAt0,
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
 
       LakeSetting.Evaporation := EvaluateFormula(LakeItem.Evaporation,
-        Format('Lake Evaporation at %0:g',
+        Format(StrLakeEvaporationAt,
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
 
       LakeSetting.Runoff := EvaluateFormula(LakeItem.Runoff,
-        Format('Lake Runoff at %0:g',
+        Format(StrLakeRunoffAt0g,
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
 
       LakeSetting.Withdrawal := EvaluateFormula(LakeItem.Withdrawal,
-        Format('Lake Withdrawal at %0:g',
+        Format(StrLakeWithdrawalAt,
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
     end;
@@ -1195,7 +1215,7 @@ begin
         ALake.FScreenObject := ScreenObject;
 
         ALake.FStartingStage := EvaluateFormula(LakeBoundary.StartingStage,
-          'Lake Starting Stage', ALake.FScreenObject.Name);
+          StrLakeStartingStage, ALake.FScreenObject.Name);
 
         ScreenObject.GetCellsToAssign('0', nil, nil, ALake.FCellList, alAll, Model);
         if LakeBoundary.Embedded and (ALake.FCellList.Count <> 1) then

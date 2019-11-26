@@ -78,8 +78,7 @@ type
     property Rate: string read GetRate write SetRate;
     property Invert: string read GetInvert write SetInvert;
     property Roughness: string read GetRoughness write SetRoughness;
-    // for backwards compatibility
-    property Width: string read GetWidth write SetWidth stored False;
+    property Width: string read GetWidth write SetWidth;
     property Slope: string read GetSlope write SetSlope;
   end;
 
