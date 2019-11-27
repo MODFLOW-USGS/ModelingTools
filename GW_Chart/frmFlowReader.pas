@@ -303,26 +303,31 @@ var
 begin
   if OpenDialog1.Execute then
   begin
-    lblCounts.Caption := 'Columns: 0, Rows: 0, Layers: 0';
-    chartFlow.Title.Text.Clear;
-    chartFlow.Title.Text.Add('Flow Rates: '
-      + ExtractFileName(OpenDialog1.FileName));
-    ClearList;
-    dgCells.Enabled := ReadDataSetNames(OpenDialog1.FileName,
-      clbDataSets.Items, NCOL, NROW, NLAY);
+    Screen.Cursor := crHourGlass;
+    try
+      lblCounts.Caption := 'Columns: 0, Rows: 0, Layers: 0';
+      chartFlow.Title.Text.Clear;
+      chartFlow.Title.Text.Add('Flow Rates: '
+        + ExtractFileName(OpenDialog1.FileName));
+      ClearList;
+      dgCells.Enabled := ReadDataSetNames(OpenDialog1.FileName,
+        clbDataSets.Items, NCOL, NROW, NLAY);
 
-    if dgCells.Enabled then
-    begin
-      lblCounts.Caption := Format('Columns: %d, Rows: %d, Layers: %d',
-        [NCOL, NROW, Abs(NLAY)]);
-      dgCells.Columns[0].Max := NCOL;
-      dgCells.Columns[1].Max := NROW;
-      dgCells.Columns[2].Max := Abs(NLAY);
+      if dgCells.Enabled then
+      begin
+        lblCounts.Caption := Format('Columns: %d, Rows: %d, Layers: %d',
+          [NCOL, NROW, Abs(NLAY)]);
+        dgCells.Columns[0].Max := NCOL;
+        dgCells.Columns[1].Max := NROW;
+        dgCells.Columns[2].Max := Abs(NLAY);
+      end;
+      seCells.Enabled := dgCells.Enabled;
+      btnUpdatePlot.Enabled := dgCells.Enabled;
+      sbFormat.Enabled := dgCells.Enabled;
+      btnUpdatePlotClick(nil);
+    finally
+      Screen.Cursor := crDefault;
     end;
-    seCells.Enabled := dgCells.Enabled;
-    btnUpdatePlot.Enabled := dgCells.Enabled;
-    sbFormat.Enabled := dgCells.Enabled;
-    btnUpdatePlotClick(nil);
   end;
 end;
 

@@ -31,7 +31,7 @@ object frmCellFlows: TfrmCellFlows
   end
   object Panel1: TPanel
     Left = 0
-    Top = 380
+    Top = 379
     Width = 630
     Height = 106
     Align = alBottom
@@ -158,7 +158,7 @@ object frmCellFlows: TfrmCellFlows
     Left = 0
     Top = 164
     Width = 630
-    Height = 216
+    Height = 215
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Title.Font.Charset = ANSI_CHARSET
@@ -213,6 +213,8 @@ object frmCellFlows: TfrmCellFlows
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
       TabOrder = 1
+      ExtendedAutoDistributeText = False
+      AutoMultiEdit = False
       AutoDistributeText = True
       AutoIncreaseColCount = False
       AutoIncreaseRowCount = True
@@ -220,7 +222,6 @@ object frmCellFlows: TfrmCellFlows
       UnselectableColor = clBtnFace
       OnStateChange = dgCellsStateChange
       ColorRangeSelection = False
-      ColorSelectedRow = True
       Columns = <
         item
           AutoAdjustRowHeights = False
@@ -243,6 +244,8 @@ object frmCellFlows: TfrmCellFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = True
         end
         item
@@ -266,6 +269,8 @@ object frmCellFlows: TfrmCellFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = True
         end
         item
@@ -289,6 +294,8 @@ object frmCellFlows: TfrmCellFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = True
         end
         item
@@ -310,9 +317,12 @@ object frmCellFlows: TfrmCellFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
       OnEndUpdate = dgCellsEndUpdate
+      WordWrapRowCaptions = False
     end
   end
   object OpenDialog1: TOpenDialog

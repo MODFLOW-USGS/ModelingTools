@@ -282,7 +282,8 @@ const
   Mt3dAdv = 2;
   Mt3dDsp = 3;
   Mt3dSSM = 4;
-  mt3dCTS = 6;
+  // The MT3D-USGS says the unit number for CTS is 6 but it is actually 20.
+  mt3dCTS = 20;
   Mt3dUzt = 7;
   Mt3dRct = 8;
   Mt3dGcg = 9;

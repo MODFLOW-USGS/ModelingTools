@@ -79,7 +79,7 @@ type
     function MaxValue: Double;
     function MinValue: Double;
   protected
-    procedure AddSampleValues(NumValues: Integer); override;
+    procedure AddSampleValues(NumValues: Integer; Sequential:Boolean=False); override;
     procedure DrawValue(ValueIndex: Integer); override;
   public
     Procedure Assign(Source:TPersistent); override;
@@ -318,7 +318,7 @@ begin
   ShowConfidenceIntervals := False;
 end;
 
-procedure TRangeSeries.AddSampleValues(NumValues: Integer);
+procedure TRangeSeries.AddSampleValues(NumValues: Integer; Sequential:Boolean=False);
 var
   Mean: Double;
   HighRange: Double;
