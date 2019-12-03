@@ -8851,9 +8851,12 @@ const
   //                data set ICBUND set is no longer set to False if the
   //                Active data set is set to false.
   //    '4.1.0.11' Bug fix: Fixed saving Lake outlet width in MODFLOW 6.
+  //    '4.1.0.12' Bug fix: Fixed specifying recharge and evapotranspiration
+  //                layer with MODFLOW 6 models when the top layer option is
+  //                selected.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.11';
+  IModelVersion = '4.1.0.12';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

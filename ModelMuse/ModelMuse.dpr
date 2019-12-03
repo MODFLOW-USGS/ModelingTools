@@ -688,7 +688,8 @@ uses
   frameAvailableObjectsUnit in 'frameAvailableObjectsUnit.pas' {frameAvailableObjects: TFrame},
   frmEditSelectedWellsUnit in 'frmEditSelectedWellsUnit.pas' {frmEditSelectedWells},
   Mt3dCtsWriterUnit in 'Mt3dCtsWriterUnit.pas',
-  PlProcUnit in 'PlProcUnit.pas';
+  PlProcUnit in 'PlProcUnit.pas',
+  PestArrayWriter in 'PestArrayWriter.pas';
 
 {$R *.res}
 

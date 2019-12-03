@@ -771,6 +771,10 @@ begin
     for CellIndex := EtRateList.Count - 1 downto 0 do
     begin
       EvtCell := EtRateList[CellIndex] as TEvt_Cell;
+      if (FEtsPackage.LayerOption = loTop) and (EvtCell.Layer <> 0) then
+      begin
+        EvtCell.Layer := 0;
+      end;
       if OkLocationMF6(IDomain, UsedLocations, EvtCell.Layer, EvtCell.Row,
         EvtCell.Column, FEtsPackage.LayerOption) then
 //      if (IDomain.IntegerData[EvtCell.Layer, EvtCell.Row, EvtCell.Column] > 0)

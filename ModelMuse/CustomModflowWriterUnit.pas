@@ -8106,6 +8106,10 @@ begin
     for CellIndex := RateList.Count - 1 downto 0 do
     begin
       ValueCell := RateList[CellIndex];
+      if (Option = loTop) and (ValueCell.Layer <> 0) then
+      begin
+        ValueCell.Layer := 0;
+      end;
       if OkLocationMF6(IDomain, UsedLocations, ValueCell.Layer, ValueCell.Row,
         ValueCell.Column, Option) then
       begin

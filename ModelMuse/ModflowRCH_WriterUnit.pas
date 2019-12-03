@@ -599,6 +599,10 @@ begin
     for CellIndex := RchRateList.Count - 1 downto 0 do
     begin
       RchCell := RchRateList[CellIndex] as TRch_Cell;
+      if (FRchPackage.LayerOption = loTop) and (RchCell.Layer <> 0) then
+      begin
+        RchCell.Layer := 0;
+      end;
       if OkLocationMF6(IDomain, UsedLocations, RchCell.Layer, RchCell.Row,
         RchCell.Column, FRchPackage.LayerOption) then
       begin
