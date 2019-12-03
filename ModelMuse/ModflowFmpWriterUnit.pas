@@ -3812,9 +3812,6 @@ end;
 
 procedure TModflowFmpWriter.FillFarmList;
 var
-//  AFarm: TFarm;
-//  AScreenObject: TScreenObject;
-//  ScreenObjectIndex: Integer;
   LocalModel: TCustomModel;
   FarmIndex: Integer;
 begin
@@ -3823,23 +3820,6 @@ begin
   begin
     FFarms.Add(LocalModel.Farms[FarmIndex]);
   end;
-//  for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-//  begin
-//    AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-//    if AScreenObject.Deleted then
-//    begin
-//      Continue;
-//    end;
-//    if not AScreenObject.UsedModels.UsesModel(Model) then
-//    begin
-//      Continue;
-//    end;
-//    AFarm := AScreenObject.ModflowFmpFarm;
-//    if (AFarm <> nil) and AFarm.Used then
-//    begin
-//      FFarms.Add(AFarm);
-//    end;
-//  end;
   if FFarms.Count = 0 then
   begin
     frmErrorsAndWarnings.AddError(Model, StrNoFarmsHaveBeenD, StrNoFarmsHaveBeenD);

@@ -2624,10 +2624,10 @@ var
 begin
   CanSelect := framePkgMt3dBasic.rcSelectionController.Enabled
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-  if frmGoPhast.ModelSelection = msModflow2015 then
-  begin
-    CanSelect := False;
-  end;
+//  if frmGoPhast.ModelSelection = msModflow2015 then
+//  begin
+//    CanSelect := False;
+//  end;
   frameMt3dCtsPkg.CanSelect := CanSelect;
   if not frameMt3dCtsPkg.CanSelect then
   begin
@@ -3701,7 +3701,7 @@ begin
   {$ENDIF}
   end;
 
-  if frmGoPhast.ModelSelection <> msModflow2015 then
+//  if frmGoPhast.ModelSelection <> msModflow2015 then
   begin
   {$IFDEF Mt3dUSGS}
     Packages.Mt3dCts.Frame := frameMt3dCtsPkg;
@@ -3721,13 +3721,13 @@ begin
     frameMt3dSftPkg.NilNode;
     frameMt3dCtsPkg.NilNode;
   {$ENDIF}
-  end
-  else
-  begin
-    framePkgMt3dUzt.NilNode;
-    frameMt3dLktPkg.NilNode;
-    frameMt3dSftPkg.NilNode;
-    frameMt3dCtsPkg.NilNode;
+//  end
+//  else
+//  begin
+//    framePkgMt3dUzt.NilNode;
+//    frameMt3dLktPkg.NilNode;
+//    frameMt3dSftPkg.NilNode;
+//    frameMt3dCtsPkg.NilNode;
   end;
 
 

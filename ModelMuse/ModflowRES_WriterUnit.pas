@@ -43,7 +43,7 @@ implementation
 
 uses RbwParser, ModflowUnitNumbers, DataSetUnit, PhastModelUnit,
   ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms, GoPhastTypes,
-  frmErrorsAndWarningsUnit, AbstractGridUnit;
+  frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom;
 
 resourcestring
   StrNoReservoirsDefine = 'No reservoirs defined';
@@ -454,6 +454,8 @@ begin
 end;
 
 procedure TModflowRES_Writer.WriteDataSet7;
+const
+  Epsilon = 1E-10;
 var
   Index: integer;
   Item: TModflowStressPeriod;
@@ -480,6 +482,15 @@ begin
         Exit;
       end;
       AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      if not AScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+
       if (AScreenObject.ModflowResBoundary <> nil)
         and AScreenObject.ModflowResBoundary.Used then
       begin
@@ -548,7 +559,7 @@ begin
         end
         else
         begin
-          if ResItem.StartTime = Item.StartTime then
+          if NearlyTheSame(ResItem.StartTime, Item.StartTime, Epsilon) then
           begin
             ExportedStartHead := StartHead
           end
@@ -559,7 +570,7 @@ begin
               / (ResItem.EndTime-ResItem.StartTime)*(EndHead-StartHead);
           end;
 
-          if ResItem.EndTime = Item.EndTime then
+          if NearlyTheSame(ResItem.EndTime, Item.EndTime, Epsilon) then
           begin
             ExportedEndHead := EndHead;
           end

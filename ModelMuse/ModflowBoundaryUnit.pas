@@ -1502,6 +1502,8 @@ end;
 
 function TCustomMF_BoundColl.GetItemContainingTime(
   Time: Double): TCustomModflowBoundaryItem;
+const
+  Epsilon = 1e-10;
 var
   ItemIndex: Integer;
   AnItem: TCustomModflowBoundaryItem;
@@ -1510,7 +1512,8 @@ begin
   for ItemIndex := 0 to Count - 1 do
   begin
     AnItem := Items[ItemIndex] as TCustomModflowBoundaryItem;
-    if (AnItem.StartTime <= Time) and (AnItem.EndTime >= Time) then
+    if ((AnItem.StartTime <= Time) or NearlyTheSame(AnItem.StartTime, Time, Epsilon))
+    and (AnItem.EndTime >= Time) then
     begin
       result := AnItem;
     end;

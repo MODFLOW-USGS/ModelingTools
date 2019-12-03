@@ -4206,7 +4206,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 362
             inherited lblNumExportPeriods: TLabel
-              Top = 166
+              Top = 161
               Width = 176
               Height = 18
               ExplicitTop = 326
@@ -4214,15 +4214,15 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
-              Top = 162
+              Top = 157
               ExplicitTop = 322
             end
             inherited sbInsert: TSpeedButton
-              Top = 162
+              Top = 157
               ExplicitTop = 322
             end
             inherited sbDelete: TSpeedButton
-              Top = 162
+              Top = 157
               ExplicitTop = 322
             end
             inherited cbMultiPrintSave: TCheckBox
@@ -4230,11 +4230,11 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitWidth = 209
             end
             inherited rdgOutput: TRbwDataGrid4
-              Height = 119
-              ExplicitHeight = 119
+              Height = 114
+              ExplicitHeight = 114
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 163
+              Top = 158
               Height = 26
               ExplicitTop = 163
               ExplicitHeight = 26
@@ -4513,19 +4513,19 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 370
             inherited sbAdd: TSpeedButton
-              Top = 170
+              Top = 165
               ExplicitTop = 330
             end
             inherited sbInsert: TSpeedButton
-              Top = 170
+              Top = 165
               ExplicitTop = 330
             end
             inherited sbDelete: TSpeedButton
-              Top = 170
+              Top = 165
               ExplicitTop = 330
             end
             inherited lblNumExportPeriods: TLabel
-              Top = 173
+              Top = 168
               Width = 176
               Height = 18
               ExplicitTop = 333
@@ -4540,7 +4540,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 64)
             end
             inherited rdgOutput: TRbwDataGrid4
-              Height = 0
+              Height = -5
               Columns = <
                 item
                   AutoAdjustRowHeights = False
@@ -5202,7 +5202,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 0
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 170
+              Top = 165
               Height = 26
               ExplicitTop = 170
               ExplicitHeight = 26
@@ -10931,7 +10931,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Left = 136
     Top = 96
     Bitmap = {
-      494C010108000D00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000D000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

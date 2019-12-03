@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="SutraTest2" FileType="bin">
-    <FileName Model_Name="SutraTest2" FileType="bin">..\..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+    <FileName Model_Name="SutraTest2" FileType="bin">..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
   </bin>
   <ancillary Model_Name="SutraTest2" FileType="ancillary">
     <FileName Model_Name="SutraTest2" FileType="ancillary">SutraTest2.gpt</FileName>

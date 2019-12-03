@@ -1461,29 +1461,8 @@ begin
 end;
 
 procedure TSfrDiversionObject.Loaded;
-//var
-//  index: Integer;
-//  LocalModel: TCustomModel;
-//  AScreenObject: TScreenObject;
 begin
   GetScreenObject;
-//  if (Model <> nil) and (FObjectName <> '') and (FScreenObject = nil) then
-//  begin
-//    LocalModel := Model as TCustomModel;
-//    for index := 0 to LocalModel.ScreenObjectCount - 1 do
-//    begin
-//      AScreenObject := LocalModel.ScreenObjects[index];
-//      if AScreenObject.Deleted then
-//      begin
-//        Continue;
-//      end;
-//      if FObjectName = AScreenObject.Name then
-//      begin
-//        FScreenObject := AScreenObject;
-//        break;
-//      end;
-//    end;
-//  end;
 end;
 
 procedure TSfrDiversionObject.SetDiversionPosition(

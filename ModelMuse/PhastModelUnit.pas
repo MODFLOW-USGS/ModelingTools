@@ -8854,9 +8854,11 @@ const
   //    '4.1.0.12' Bug fix: Fixed specifying recharge and evapotranspiration
   //                layer with MODFLOW 6 models when the top layer option is
   //                selected.
+  //    '4.1.0.13' Bug fix: Fixed bug that could cause and assertion failure
+  //                while generating the input for the Reservoir package.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.12';
+  IModelVersion = '4.1.0.13';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

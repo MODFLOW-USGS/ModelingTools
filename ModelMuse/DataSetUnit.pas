@@ -5881,7 +5881,8 @@ begin
           frmGoPhast.PhastModel.ScreenObjectCount - 1 do
         begin
           AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
-          if not AScreenObject.Deleted then
+          if not AScreenObject.Deleted
+            and AScreenObject.UsedModels.UsesModel(Model) then
           begin
             AScreenObject.AssignValuesToDataSet(self, FModel,
               UseLgrEdgeCells);
@@ -7772,7 +7773,8 @@ begin
     for ScreenObjectIndex := 0 to TCustomModel(FModel).ScreenObjectCount - 1 do
     begin
       AScreenObject := TCustomModel(FModel).ScreenObjects[ScreenObjectIndex];
-      if not AScreenObject.Deleted then
+      if not AScreenObject.Deleted
+        and AScreenObject.UsedModels.UsesModel(Model) then
       begin
         AScreenObject.AssignValuesToDataSet(self, FModel, UseLgrEdgeCells);
       end;

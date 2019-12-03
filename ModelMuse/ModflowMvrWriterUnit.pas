@@ -374,6 +374,10 @@ begin
     begin
       Continue;
     end;
+    if not AScreenObject.UsedModels.UsesModel(Model) then
+    begin
+      Continue;
+    end;
 
     MvrBound := AScreenObject.ModflowMvr;
     if (MvrBound = nil) or not MvrBound.Used then

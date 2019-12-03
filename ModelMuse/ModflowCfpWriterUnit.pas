@@ -290,7 +290,6 @@ begin
       Assert(PipeElevation <> nil);
       TRealSparseDataSetCrack(PipeConducOrPerm).Clear;
       TRealSparseDataSetCrack(PipeElevation).Clear;
-  //    TRealSparseDataSetCrack(FixedHeadsArray).Clear;
       for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
       begin
         AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
