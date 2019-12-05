@@ -122,7 +122,7 @@ object frameStreamLink: TframeStreamLink
     Left = 3
     Top = 279
     Width = 103
-    Height = 24
+    Height = 21
     MaxValue = 2147483647.000000000000000000
     MinValue = 1.000000000000000000
     Value = 6.000000000000000000

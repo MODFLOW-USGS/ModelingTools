@@ -1,36 +1,44 @@
-unit PestArrayWriter;
+unit PestArrayWriterUnit;
 
 interface
 
 uses
   DataSetUnit, System.SysUtils, RbwParser, GoPhastTypes,
-  CustomModflowWriterUnit, OrderedCollectionUnit, System.Classes;
+  CustomModflowWriterUnit, OrderedCollectionUnit, System.Classes,
+  System.Generics.Collections;
 
 type
   TPestDataArrayWriter = class(TCustomFileWriter)
   private
+    FDataSetList: TList<TDataArray>;
     function ListName(DataArray: TDataArray; Layer: Integer): string;
-  public
-    procedure WriteCoordinateList(Directory: string;
+    procedure WriteCoordinateList(FileName: string;
       EvalAt: TEvaluatedAt; out CListName, CListFileName: string);
-    procedure WritePestSelectionArray(DataArray: TDataArray; Directory: string;
+    procedure WritePestSelectionArray(DataArray: TDataArray; FileName: string;
       out SListFileName: string);
-    procedure WritePestMultiplierArray(DataArray: TDataArray; Directory: string;
+    procedure WritePestMultiplierArray(DataArray: TDataArray; FileName: string;
       out PListFileName: string);
+  protected
+    class function Extension: string; override;
+  public
     procedure WriteParamTypeArrays(ParameterTypes: TParameterTypes;
-      Directory: string);
+      FileName: string);
   end;
 
 implementation
 
 uses
   PhastModelUnit, AbstractGridUnit, MeshRenumberingTypes, FastGEO,
-  System.Generics.Collections, ModflowParameterUnit;
+  ModflowParameterUnit, System.IOUtils;
+
+const
+  StrArrays = 'arrays';
 
 procedure TPestDataArrayWriter.WriteParamTypeArrays(
-  ParameterTypes: TParameterTypes; Directory: string);
+  ParameterTypes: TParameterTypes; FileName: string);
 const
   CoordListName = 'cl1';
+  TemplateChar = '@';
 var
   ParamList: TList<TModflowSteadyParameter>;
   ParamTypeIndex: Integer;
@@ -49,30 +57,63 @@ var
   PListFileNames: TStringList;
   LayerIndex: Integer;
   DataName: string;
-  EvalAt: TEvaluatedAt;
   ZoneDataSets: TList<TDataArray>;
   MultiplierDataSets: TList<TDataArray>;
   LayerCount: Integer;
   Equation: string;
   PIndex: Integer;
+  Directory: string;
+  ExportDataSets: TStringList;
+  DataToExportName: string;
+  BaseName: string;
+  FinalScript: TStringList;
+  ScriptFileName: string;
+  ArrayDir: string;
+  CreateList: string;
+  ScalarFileName: string;
+  ScalarLine: string;
+  ScalarFileTemplate: TStringList;
+  function ReplacementString(AParmName: string): string;
+  begin
+    Result := TemplateChar + AParmName;
+    while Length(Result) < 14 do
+    begin
+      Result := Result + ' ';
+    end;
+    result := Result + TemplateChar;
+  end;
   procedure ReadCoordinates;
   begin
+    Script.Add('# Read coordinates of grid or mesh.');
     Script.Add(CoordListName + ' = read_list_file(skiplines=1,dimensions=2,  &');
-    Script.Add('  id_type=''indexed''  &');
-    Script.Add('  file=' + CListFileName + ')');
+    Script.Add('  id_type=''indexed'',  &');
+    Script.Add('  file=''' + CListFileName + ''')');
   end;
 begin
+  Directory := ExtractFileDir(FileName);
+  Assert(TDirectory.Exists(Directory));
+  ArrayDir := IncludeTrailingPathDelimiter(Directory) + StrArrays;
+  if not TDirectory.Exists(ArrayDir) then
+  begin
+    TDirectory.CreateDirectory(ArrayDir);
+  end;
+
+  BaseName := ChangeFileExt(ExtractFileName(FileName), '');
   CListName := '';
   CListFileName := '';
   Script := TStringList.Create;
   ScalarFile := TStringList.Create;
+  ScalarFileTemplate := TStringList.Create;
   Equations := TStringList.Create;
   SListFileNames := TStringList.Create;
   PListFileNames := TStringList.Create;
   ZoneDataSets := TList<TDataArray>.Create;
   MultiplierDataSets := TList<TDataArray>.Create;
   ParamList := TList<TModflowSteadyParameter>.Create;
+  ExportDataSets := TStringList.Create;
+  FDataSetList := TList<TDataArray>.Create;
   try
+    ScalarFileTemplate.Add('ptf '+ TemplateChar);
     LayerCount := 0;
     for AParamType in ParameterTypes do
     begin
@@ -91,29 +132,34 @@ begin
       begin
         AParam := ParamList[ParamTypeIndex];
         ScalarFile.Add(AParam.ParameterName + ' ' + AParam.Value.ToString);
+        ScalarFileTemplate.Add(AParam.ParameterName + ' '
+          + ReplacementString(AParam.ParameterName));
 
         if AParam.UseZone then
         begin
           ZoneDataArray := Model.DataArrayManager.
             GetDataSetByName(AParam.ZoneName);
+          FDataSetList.Add(ZoneDataArray);
           if CListName = '' then
           begin
             LayerCount := ZoneDataArray.LayerCount;
-            WriteCoordinateList(Directory, ZoneDataArray.EvaluatedAt,
+            WriteCoordinateList(FileName, ZoneDataArray.EvaluatedAt,
               CListName, CListFileName);
             ReadCoordinates;
           end;
-          WritePestSelectionArray(ZoneDataArray, Directory, SListFileName);
+          WritePestSelectionArray(ZoneDataArray, FileName, SListFileName);
 
+          Script.Add('');
+          Script.Add('# Read Zone arrays for ' + AParam.ParameterName);
           Script.Add('read_list_file('
             + 'reference_clist=' + CoordListName + ',skiplines=1,dimensions=2,  &');
           for LayerIndex := 0 to ZoneDataArray.LayerCount - 1 do
           begin
             Script.Add('  slist=' + ListName(ZoneDataArray, LayerIndex)
-              + ';column=' + (7+1).ToString + ',  &');
+              + ';column=' + (LayerIndex+2).ToString + ',  &');
           end;
-          Script.Add('  id_type=''indexed''  &');
-          Script.Add('  file=' + SListFileName + ')');
+          Script.Add('  id_type=''indexed'',  &');
+          Script.Add('  file=''' + SListFileName + ''')');
         end
         else
         begin
@@ -127,24 +173,27 @@ begin
         begin
           MultDataArray := Model.DataArrayManager.
             GetDataSetByName(AParam.MultiplierName);
+          FDataSetList.Add(MultDataArray);
           if CListName = '' then
           begin
             LayerCount := MultDataArray.LayerCount;
-            WriteCoordinateList(Directory, MultDataArray.EvaluatedAt,
+            WriteCoordinateList(FileName, MultDataArray.EvaluatedAt,
               CListName, CListFileName);
             ReadCoordinates;
           end;
-          WritePestMultiplierArray(MultDataArray, Directory, PListFileName);
+          WritePestMultiplierArray(MultDataArray, FileName, PListFileName);
 
+          Script.Add('');
+          Script.Add('# Read Multiplier arrays for ' + AParam.ParameterName);
           Script.Add('read_list_file('
             + 'reference_clist=' + CoordListName + ',skiplines=1,dimensions=2,  &');
           for LayerIndex := 0 to MultDataArray.LayerCount - 1 do
           begin
             Script.Add('  plist=' + ListName(MultDataArray, LayerIndex)
-              + ';column=' + (7+1).ToString + ',  &');
+              + ';column=' + (LayerIndex+2).ToString + ',  &');
           end;
-          Script.Add('  id_type=''indexed''  &');
-          Script.Add('  file=' + PListFileName + ')');
+          Script.Add('  id_type=''indexed'',  &');
+          Script.Add('  file=''' + PListFileName + ''')');
         end
         else
         begin
@@ -158,12 +207,12 @@ begin
       case AParamType of
         ptUndefined: ;
         ptLPF_HK: DataName := 'HK';
-        ptLPF_HANI: ;
-        ptLPF_VK: ;
-        ptLPF_VANI: ;
-        ptLPF_SS: ;
-        ptLPF_SY: ;
-        ptLPF_VKCB: ;
+        ptLPF_HANI: DataName := 'HANI';
+        ptLPF_VK: DataName := 'VK';
+        ptLPF_VANI: DataName := 'VANI';
+        ptLPF_SS: DataName := 'SS';
+        ptLPF_SY: DataName := 'SY';
+        ptLPF_VKCB: DataName := 'VKCB';
         ptRCH: ;
         ptEVT: ;
         ptETS: ;
@@ -188,35 +237,73 @@ begin
         ptQMAX: ;
       end;
 
-      PIndex := 0;
       for LayerIndex := 0 to LayerCount - 1 do
       begin
-        Equation := DataName+ '_' + (LayerIndex+1).ToString + ' =';
-        for ParamTypeIndex := 0 to ParamList.Count - 1 do
+        if ParamList.Count > 0 then
         begin
-          AParam := ParamList[ParamTypeIndex];
-          Equation := Equation + ' ' + AParam.ParameterName;
-          if AParam.UseMultiplier then
+          DataToExportName := DataName+ '_' + (LayerIndex+1).ToString;
+          CreateList := DataToExportName + ' = new_plist(reference_clist=' + CoordListName +  ',value=0)';
+
+          ExportDataSets.Add(Format('write_column_data_file(file=''%0:s.%1:s'', plist=%2:s)',
+            [BaseName, DataToExportName, DataToExportName]));
+
+          Equation := DataToExportName + ' =';
+          PIndex := 0;
+          for ParamTypeIndex := 0 to ParamList.Count - 1 do
           begin
-            MultDataArray := MultiplierDataSets[PIndex];
-            Assert(MultDataArray <> nil);
-            Equation := Equation + '*' + ListName(MultDataArray,LayerIndex);
+            AParam := ParamList[ParamTypeIndex];
+            if ParamTypeIndex > 0 then
+            begin
+              Equation := Equation + ' + ';
+            end;
+            Equation := Equation + ' ' + AParam.ParameterName;
+            if AParam.UseMultiplier then
+            begin
+              MultDataArray := MultiplierDataSets[PIndex];
+              Assert(MultDataArray <> nil);
+              Equation := Equation + '*' + ListName(MultDataArray,LayerIndex);
+            end;
+            if AParam.UseZone then
+            begin
+              ZoneDataArray := ZoneDataSets[PIndex];
+              Assert(ZoneDataArray <> nil);
+              Equation := Equation + '*' + ListName(ZoneDataArray,LayerIndex);
+            end;
+            Inc(PIndex);
           end;
-          if AParam.UseZone then
-          begin
-            ZoneDataArray := ZoneDataSets[PIndex];
-            Assert(ZoneDataArray <> nil);
-            Equation := Equation + '*' + ListName(ZoneDataArray,LayerIndex);
-          end;
+
+          Equations.Add(CreateList);
+          Equations.Add(Equation);
         end;
-        Equations.Add(Equation);
       end;
     end;
+
+    ScalarFileName := IncludeTrailingPathDelimiter(ArrayDir) + BaseName + '.ParamValues';
+    ScalarFile.SaveToFile(ScalarFileName);
+    ScalarFileTemplate.SaveToFile(ScalarFileName + '.tpl');
+    ScalarLine := Format('read_scalar_file(file="%s", valuecolumn=2, namecolumn=1)', [ScalarFileName]);
+
+    FinalScript := TStringList.Create;
+    try
+      FinalScript.Add(ScalarLine);
+      FinalScript.AddStrings(Script);
+      FinalScript.AddStrings(Equations);
+      FinalScript.AddStrings(ExportDataSets);
+
+      ScriptFileName := IncludeTrailingPathDelimiter(ArrayDir)
+        + BaseName + '.script';
+      FinalScript.SaveToFile(ScriptFileName);
+    finally
+      FinalScript.Free;
+    end;
   finally
+    FDataSetList.Free;
+    ExportDataSets.Free;
     ParamList.Free;
     Script.Free;
     Equations.Free;
     ScalarFile.Free;
+    ScalarFileTemplate.Free;
     SListFileNames.Free;
     PListFileNames.Free;
     ZoneDataSets.Free;
@@ -225,17 +312,22 @@ begin
 end;
 
 procedure TPestDataArrayWriter.WritePestMultiplierArray(DataArray: TDataArray;
-  Directory: string; out PListFileName: string);
+  FileName: string; out PListFileName: string);
 var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
   ListIndex: Integer;
+  Directory: string;
+  BaseName: string;
 begin
+  Directory := ExtractFileDir(FileName);
+  BaseName := ExtractFileName(FileName);
+  BaseName := ChangeFileExt(BaseName, '');
   Assert(DataArray.DataType = rdtDouble);
-  PListFileName := IncludeTrailingPathDelimiter(Directory) + 'arrays';
+  PListFileName := IncludeTrailingPathDelimiter(Directory) + StrArrays;
   PListFileName := IncludeTrailingPathDelimiter(PListFileName)
-    + DataArray.Name + '.plist';
+    + BaseName + '.' + DataArray.Name + '.plist';
   OpenFile(PListFileName);
   try
     WriteString('pp');
@@ -266,17 +358,22 @@ begin
 end;
 
 procedure TPestDataArrayWriter.WritePestSelectionArray(DataArray: TDataArray;
-  Directory: string; out SListFileName: string);
+  FileName: string; out SListFileName: string);
 var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
   ListIndex: Integer;
+  Directory: string;
+  BaseName: string;
 begin
+  Directory := ExtractFileDir(FileName);
+  BaseName := ExtractFileName(FileName);
+  BaseName := ChangeFileExt(BaseName, '');
   Assert(DataArray.DataType = rdtBoolean);
-  SListFileName := IncludeTrailingPathDelimiter(Directory) + 'arrays';
+  SListFileName := IncludeTrailingPathDelimiter(Directory) + StrArrays;
   SListFileName := IncludeTrailingPathDelimiter(SListFileName)
-    + DataArray.Name + '.slist';
+    + BaseName + '.' + DataArray.Name + '.slist';
   OpenFile(SListFileName);
   try
     WriteString('pp');
@@ -306,14 +403,30 @@ begin
   end;
 end;
 
+class function TPestDataArrayWriter.Extension: string;
+begin
+  result := '.tpl';
+end;
+
 function TPestDataArrayWriter.ListName(DataArray: TDataArray;
   Layer: Integer): string;
+var
+  ListIndex: Integer;
 begin
-  result := DataArray.Name + '_L_' + IntToStr(Layer+1)
+  ListIndex := FDataSetList.IndexOf(DataArray);
+  Assert(ListIndex >=0);
+  if DataArray.LayerCount > 1 then
+  begin
+    result := Format('List%0:d_L_%1:d', [ListIndex+1, Layer+1]);
+  end
+  else
+  begin
+    result := Format('List%0:d', [ListIndex+1]);
+  end;
 end;
 
 procedure TPestDataArrayWriter.WriteCoordinateList(
-  Directory: string; EvalAt: TEvaluatedAt; out CListName, CListFileName: string);
+  FileName: string; EvalAt: TEvaluatedAt; out CListName, CListFileName: string);
 var
   LocalModel: TCustomModel;
   Grid: TCustomModelGrid;
@@ -324,6 +437,8 @@ var
   ListIndex: Integer;
   ElementIndex: Integer;
   NodeIndex: Integer;
+  Directory: String;
+  BaseName: string;
   procedure WriteAPoint;
   begin
     WriteInteger(ListIndex);
@@ -333,14 +448,17 @@ var
     Inc(ListIndex);
   end;
 begin
-  CListName := Model.DisplayName;
+  Directory := ExtractFileDir(FileName);
+  BaseName := ExtractFileName(FileName);
+  BaseName := ChangeFileExt(BaseName, '');
+  CListName := BaseName;
   case EvalAt of
-    eaBlocks: CListName := CListName + '_Blocks';
-    eaNodes: CListName := CListName + '_Nodes';
+    eaBlocks: CListName := CListName + '.Blocks';
+    eaNodes: CListName := CListName + '_.Nodes';
     else Assert(False);
   end;
 
-  CListFileName := IncludeTrailingPathDelimiter(Directory) + 'arrays';
+  CListFileName := IncludeTrailingPathDelimiter(Directory) + StrArrays;
   CListFileName := IncludeTrailingPathDelimiter(CListFileName) + CListName + '.clist';
 
   OpenFile(CListFileName);

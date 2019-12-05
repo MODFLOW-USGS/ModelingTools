@@ -8856,6 +8856,9 @@ const
   //                selected.
   //    '4.1.0.13' Bug fix: Fixed bug that could cause and assertion failure
   //                while generating the input for the Reservoir package.
+  
+  //               Bug fix: Fixed bug that could cause an error when displaying
+  //                the Data Visualization dialog box.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.13';
@@ -38625,6 +38628,9 @@ begin
         LPF_Writer := TModflowLPF_Writer.Create(self, etExport);
         try
           LPF_Writer.WriteFile(FileName);
+        {$IFDEF PEST}
+          LPF_Writer.WritePestFile(FileName);
+        {$ENDIF}
         finally
           LPF_Writer.Free;
         end;

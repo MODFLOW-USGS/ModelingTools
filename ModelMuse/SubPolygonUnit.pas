@@ -84,7 +84,8 @@ type
     // If @name is created for a part of a @link(TScreenObject),
     // @name indicates which part of the @link(TScreenObject) it represents.
     property SectionIndex: integer read FSectionIndex;
-    function IsPointInside(const X, Y: real): boolean;
+    function IsPointInside(const X, Y: real): boolean; overload;
+    function IsPointInside(const APoint: TPoint2D): boolean; overload;
     function Intersect(ASubPolygon: TSubPolygon): Boolean;
     property Count: Integer read FCount;
     property Start: Integer read FStart;
@@ -355,6 +356,12 @@ begin
   EvaluateSubPolygon(X, Y, Result);
 end;
 
+function TSubPolygon.IsPointInside(const APoint: TPoint2D): boolean; 
+begin
+  result := IsPointInside(APoint.x, APoint.y);
+ end;
+
+
 procedure TSubPolygon.SetMaxAndMinFromSubPolygons;
 begin
   // Determine the Maximum Y value, Minimum Y value and
@@ -436,8 +443,8 @@ end;
 
 function TOutline.PointInside(X, Y: Real): boolean;
 var
-  index: Integer;
   SubPolygon: TSubPolygon;
+  index: Integer;
 begin
   result := False;
   for index := 0 to FPolygons.Count - 1 do

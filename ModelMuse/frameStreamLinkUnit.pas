@@ -70,7 +70,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit;
+  frmGoPhastUnit, ModflowTimeUnit;
 
 resourcestring
   StrDisplayStreamLinks = 'display SFR stream links';
@@ -131,16 +131,19 @@ end;
 procedure TframeStreamLink.GetData(StreamType: TStreamType);
 var
   EndTime: double;
+  StressPeriods: TModflowStressPeriods;
 begin
   Handle;
   FStreamType := StreamType;
   FSfrStreamLinkPlot.Free;
   FSfrStreamLinkPlot:= TSfrStreamLinkPlot.Create(nil);
-  frmGoPhast.PhastModel.ModflowStressPeriods.
-    FillStringsWithStartTimes(comboTimeToPlot.Items);
-  EndTime := frmGoPhast.PhastModel.ModflowStressPeriods[
-    frmGoPhast.PhastModel.ModflowStressPeriods.Count-1].EndTime;
-  comboTimeToPlot.Items.Add(FloatToStr(EndTime));
+  StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
+  StressPeriods.FillStringsWithStartTimes(comboTimeToPlot.Items);
+  if StressPeriods.Count > 0 then
+  begin
+    EndTime := StressPeriods.Last.EndTime;
+    comboTimeToPlot.Items.Add(FloatToStr(EndTime));
+  end;
 
   case FStreamType of
     stSFR: FSfrStreamLinkPlot.Assign(frmGoPhast.PhastModel.SfrStreamLinkPlot);

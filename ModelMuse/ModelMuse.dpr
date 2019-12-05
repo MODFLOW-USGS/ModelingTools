@@ -689,7 +689,8 @@ uses
   frmEditSelectedWellsUnit in 'frmEditSelectedWellsUnit.pas' {frmEditSelectedWells},
   Mt3dCtsWriterUnit in 'Mt3dCtsWriterUnit.pas',
   PlProcUnit in 'PlProcUnit.pas',
-  PestArrayWriter in 'PestArrayWriter.pas';
+  PestArrayWriterUnit in 'PestArrayWriterUnit.pas',
+  PestHeadObsWeightsUnit in 'PestHeadObsWeightsUnit.pas';
 
 {$R *.res}
 

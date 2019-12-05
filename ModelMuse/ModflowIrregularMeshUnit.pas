@@ -193,9 +193,14 @@ type
     property NodesI[Index: integer]: INode2D read GetNodeI;
     function IsNeighbor(OtherCell: TModflowIrregularCell2D): Boolean; overload;
     procedure GetNeighbors(CellList: TMFIrregularCell2D_List);
+    // Get the neighbors of the current cell in order around the edge
+    // of the cell.
+    procedure GetNeighborsInOrder(CellList: TMFIrregularCell2D_List);
     procedure GetNeighborsI(ElementList: TIElement2DList);
     function SharedWidth(OtherCell: TModflowIrregularCell2D): double;
     function ReferenceLength: Double;
+    function PointInside(APoint: TPoint2D): Boolean;
+    function ShareANode(ACell: TModflowIrregularCell2D): Boolean;
   published
     // @name starts at zero.
     property ElementNumber: integer read GetElementNumber
@@ -1496,6 +1501,62 @@ begin
   end;
 end;
 
+procedure TModflowIrregularCell2D.GetNeighborsInOrder(
+  CellList: TMFIrregularCell2D_List);
+//var
+//  UnOrderedCellList: TMFIrregularCell2D_List;
+//  NodeIndex: Integer;
+//  Node1: TModflowNode;
+//  Node2: TModflowNode;
+//  CellIndex: Integer;
+//  ACell: TModflowIrregularCell2D;
+begin
+//  CellList.Clear;
+//  UnOrderedCellList := TMFIrregularCell2D_List.Create;
+//  try
+//    GetNeighbors(UnOrderedCellList);
+//    for NodeIndex := 0 to ElementCorners.Count - 1 do
+//    begin
+//      Node1 := ElementCorners[NodeIndex];
+//      if NodeIndex = ElementCorners.Count - 1 then
+//      begin
+//        Node2 := ElementCorners[0];
+//      end
+//      else
+//      begin
+//        Node2 := ElementCorners[NodeIndex+1];
+//      end;
+//
+//      for CellIndex := 0 to UnOrderedCellList.Count - 1 do
+//      begin
+//        ACell := UnOrderedCellList[CellIndex];
+//        if (ACell.ElementCorners.IndexOf(Node1) >= 0)
+//          and (ACell.ElementCorners.IndexOf(Node2) >= 0) then
+//        begin
+//          CellList.Add(ACell);
+//          UnOrderedCellList.Delete(CellIndex);
+//          break;
+//        end;
+//      end;
+//    end;
+//  finally
+//    UnOrderedCellList.Free;
+//  end;
+
+  GetNeighbors(CellList);
+  CellList.Sort(TComparer<TModflowIrregularCell2D>.Construct(
+    function (const L, R: TModflowIrregularCell2D): integer
+    var
+      AngleL: double;
+      AngleR: double;
+    begin
+      AngleL := ArcTan2(L.Center.y - Center.y, L.Center.x - Center.x);
+      AngleR := ArcTan2(R.Center.y - Center.y, R.Center.x - Center.x);
+      Result := Sign(AngleL - AngleR);
+    end
+  )) ;
+end;
+
 function TModflowIrregularCell2D.GetNodeI(Index: Integer): INode2D;
 begin
   result := FElementCorners[Index];
@@ -1639,6 +1700,28 @@ begin
   end;
 end;
 
+function TModflowIrregularCell2D.PointInside(APoint: TPoint2D): Boolean;
+var
+  Points: TRealPointArray;
+  PointIndex: Integer;
+  Polygon: TSubPolygon;
+begin
+  SetLength(Points, NodeCount+1);
+  for PointIndex := 0 to NodeCount - 1 do
+  begin
+    Points[PointIndex] := FElementCorners[PointIndex].Location;
+  end;
+  Points[NodeCount] := Points[0];
+
+  Polygon := TSubPolygon.Create(Points, NodeCount+1, 0, 0);
+  try
+    result := Polygon.IsPointInside(APoint);
+  finally
+    Polygon.Free;
+  end;
+
+end;
+
 function TModflowIrregularCell2D.ReferenceLength: Double;
 var
   OuterNodeIndex: Integer;
@@ -1683,6 +1766,24 @@ end;
 procedure TModflowIrregularCell2D.SetTriangNumber(const Value: Integer);
 begin
   FTriangNumber := Value;
+end;
+
+function TModflowIrregularCell2D.ShareANode(
+  ACell: TModflowIrregularCell2D): Boolean;
+var
+  NodeIndex: Integer;
+  ANode: TModflowNode;
+begin
+  result := False;
+  for NodeIndex := 0 to ElementCorners.Count - 1 do
+  begin
+    ANode := ElementCorners[NodeIndex];
+    result := ACell.ElementCorners.IndexOf(ANode) >= 0;
+    if result then
+    begin
+      Exit;
+    end;
+  end;
 end;
 
 function TModflowIrregularCell2D.SharedWidth(
