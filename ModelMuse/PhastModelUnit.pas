@@ -8856,12 +8856,11 @@ const
   //                selected.
   //    '4.1.0.13' Bug fix: Fixed bug that could cause and assertion failure
   //                while generating the input for the Reservoir package.
-  
-  //               Bug fix: Fixed bug that could cause an error when displaying
+  //    '4.1.0.14' Bug fix: Fixed bug that could cause an error when displaying
   //                the Data Visualization dialog box.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.13';
+  IModelVersion = '4.1.0.14';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -12442,20 +12441,20 @@ begin
     if FModelSelection = msModflow2015 then
     begin
       ModflowPackages.NpfPackage.IsSelected := True;
-      ModflowPackages.UpwPackage.IsSelected := False;
-      ModflowPackages.LpfPackage.IsSelected := False;
-      ModflowPackages.NwtPackage.IsSelected := False;
-      ModflowPackages.PcgPackage.IsSelected := False;
-      ModflowPackages.BcfPackage.IsSelected := False;
-      ModflowPackages.HufPackage.IsSelected := False;
+//      ModflowPackages.UpwPackage.IsSelected := False;
+//      ModflowPackages.LpfPackage.IsSelected := False;
+//      ModflowPackages.NwtPackage.IsSelected := False;
+//      ModflowPackages.PcgPackage.IsSelected := False;
+//      ModflowPackages.BcfPackage.IsSelected := False;
+//      ModflowPackages.HufPackage.IsSelected := False;
+//      ModflowPackages.PcgnPackage.IsSelected := False;
+//      ModflowPackages.SipPackage.IsSelected := False;
+//      ModflowPackages.GmgPackage.IsSelected := False;
+//      ModflowPackages.De4Package.IsSelected := False;
 
       ModflowPackages.SmsPackage.IsSelected := True;
-      ModflowPackages.NwtPackage.IsSelected := False;
-      ModflowPackages.PcgPackage.IsSelected := False;
-      ModflowPackages.PcgnPackage.IsSelected := False;
-      ModflowPackages.SipPackage.IsSelected := False;
-      ModflowPackages.GmgPackage.IsSelected := False;
-      ModflowPackages.De4Package.IsSelected := False;
+//      ModflowPackages.NwtPackage.IsSelected := False;
+//      ModflowPackages.PcgPackage.IsSelected := False;
 
       if ModflowPackages.EvtPackage.IsSelected
         and not ModflowPackages.EtsPackage.IsSelected then

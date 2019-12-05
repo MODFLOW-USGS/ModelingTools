@@ -22,7 +22,7 @@ Type
 
 implementation
 
-uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit;
+uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit, GoPhastTypes;
 
 resourcestring
   StrWritingPCGNPackage = 'Writing PCGN Package input.';
@@ -142,6 +142,11 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
+
   FNameOfFile := FileName(AFileName);
   WriteToNameFile('PCGN', Model.UnitNumbers.UnitNumber(StrPCGN),
     FNameOfFile, foInput, Model);

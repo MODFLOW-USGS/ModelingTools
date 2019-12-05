@@ -19,7 +19,7 @@ Type
 implementation
 
 uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, GoPhastTypes;
 
 resourcestring
   StrWritingPCGPackage = 'Writing PCG Package input.';
@@ -100,6 +100,10 @@ begin
     Exit
   end;
   if SolverFileGeneratedExternally then
+  begin
+    Exit;
+  end;
+  if Model.ModelSelection = msModflow2015 then
   begin
     Exit;
   end;

@@ -231,6 +231,11 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
+
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrLargeContrastInTr);

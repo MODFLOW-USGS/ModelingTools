@@ -21,7 +21,7 @@ Type
 
 implementation
 
-uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit;
+uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit, GoPhastTypes;
 
 resourcestring
   StrWritingGMGPackage = 'Writing GMG Package input.';
@@ -113,6 +113,11 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
+
   NameOfFile := FileName(AFileName);
   WriteToNameFile('GMG', Model.UnitNumbers.UnitNumber(StrGMG), NameOfFile, foInput, Model);
   OpenFile(NameOfFile);

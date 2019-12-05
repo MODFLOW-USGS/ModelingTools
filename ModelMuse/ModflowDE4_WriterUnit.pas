@@ -18,7 +18,7 @@ Type
 
 implementation
 
-uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit;
+uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit, GoPhastTypes;
 
 resourcestring
   StrWritingDE4Package = 'Writing DE4 Package input.';
@@ -74,6 +74,11 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
+
   NameOfFile := FileName(AFileName);
   WriteToNameFile('DE4', Model.UnitNumbers.UnitNumber(StrDE4), NameOfFile, foInput, Model);
   OpenFile(NameOfFile);

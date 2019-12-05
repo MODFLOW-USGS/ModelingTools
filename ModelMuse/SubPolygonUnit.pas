@@ -115,6 +115,15 @@ type
     property Polygons[Index: Integer]: TSubPolygon read GetPolygon;
   end;
 
+  TSimplePolygon = class(TObject)
+  private
+    FPoints: TRealPointArray;
+  public
+    constructor Create(const Points: TRealPointArray);
+    function PointInside(APoint: TPoint2D): boolean; overload;
+    function PointInside(X, Y: Real): boolean; overload;
+  end;
+
 const
   MaxPointsInSubPolygon = 4;
 
@@ -457,5 +466,41 @@ begin
   end;
 end;
 
+
+{ TSimplePolygon }
+
+constructor TSimplePolygon.Create(const Points: TRealPointArray);
+begin
+  FPoints := Points;
+  Assert(Length(FPoints) >= 4);
+  Assert((FPoints[0].x = FPoints[Length(FPoints)-1].x)
+    and (FPoints[0].y = FPoints[Length(FPoints)-1].y));
+end;
+
+function TSimplePolygon.PointInside(APoint: TPoint2D): boolean;
+begin
+  result := PointInside(APoint.x, APoint.y);
+end;
+
+function TSimplePolygon.PointInside(X, Y: Real): boolean;
+var
+  VertexIndex: Integer;
+  APoint: TPoint2D;
+  AnotherPoint: TPoint2D;
+begin
+  Result := False;
+  for VertexIndex := 0 to Length(FPoints) - 2 do
+  begin
+    APoint := FPoints[VertexIndex];
+    AnotherPoint := FPoints[VertexIndex + 1];
+    if ((Y <= APoint.Y) = (Y > AnotherPoint.Y)) and
+      (X - APoint.X - (Y - APoint.Y) *
+      (AnotherPoint.X - APoint.X) /
+      (AnotherPoint.Y - APoint.Y) < 0) then
+    begin
+      Result := not Result;
+    end;
+  end;
+end;
 
 end.

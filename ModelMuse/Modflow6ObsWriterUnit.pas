@@ -145,7 +145,7 @@ uses
   AbstractGridUnit, MeshRenumberingTypes, GoPhastTypes, FastGEO,
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowUzfWriterUnit;
+  ModflowUzfWriterUnit, PestHeadObsWeightsUnit;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +
@@ -705,6 +705,16 @@ begin
 end;
 
 procedure TModflow6Obs_Writer.WriteFile(const AFileName: string);
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  Obs: TModflow6Obs;
+  CellList: TCellAssignmentList;
+  ACell: TCellAssignment;
+  DisvCell: TModflowIrregularCell2D;
+  ObsCells: TObsWeights;
+  index: Integer;
+  AnotherDisvCell: TModflowIrregularCell2D;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   if not Package.IsSelected then
@@ -740,6 +750,65 @@ begin
     CloseFile;
   end;
 
+{$IFDEF PEST}
+  FNameOfFile := ChangeFileExt(FNameOfFile, '.pestobs');
+  OpenFile(FNameOfFile);
+  try
+    for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      AScreenObject := Model.ScreenObjects[ObjectIndex];
+      if AScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      if not AScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+      Obs := AScreenObject.Modflow6Obs;
+
+      if Obs <> nil then
+      begin
+        if Obs.HeadObs then
+        begin
+          CellList := TCellAssignmentList.Create;
+          try
+            AScreenObject.GetCellsToAssign('', nil, nil, CellList, alAll, Model);
+            if Model.DisvUsed then
+            begin
+              ACell := CellList[0];
+              DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
+              GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
+              WriteString(AScreenObject.Name);
+              WriteInteger(DisvCell.DisplayNumber);
+              WriteFloat(AScreenObject.Points[0].x);
+              WriteFloat(AScreenObject.Points[0].y);
+              NewLine;
+              for index := 0 to Length(ObsCells) - 1 do
+              begin
+                AnotherDisvCell := ObsCells[index];
+                WriteInteger(AnotherDisvCell.DisplayNumber);
+                WriteFloat(AnotherDisvCell.Location.x);
+                WriteFloat(AnotherDisvCell.Location.y);
+                NewLine;
+              end;
+              NewLine;
+            end;
+          finally
+            CellList.Free;
+          end;
+        end;
+      end;
+
+    end;
+  finally
+    CloseFile;
+  end;
+{$ENDIF}
 end;
 
 procedure TModflow6Obs_Writer.WriteFileOut;

@@ -25,7 +25,7 @@ resourcestring
 implementation
 
 uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit,
-  frmErrorsAndWarningsUnit, frmGoPhastUnit;
+  frmErrorsAndWarningsUnit, frmGoPhastUnit, GoPhastTypes;
 
 resourcestring
   StrWritingNWTPackage = 'Writing NWT Package input.';
@@ -223,6 +223,11 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
+
   NameOfFile := FileName(AFileName);
   WriteToNameFile('NWT', Model.UnitNumbers.UnitNumber(StrNWT),
     NameOfFile, foInput, Model);

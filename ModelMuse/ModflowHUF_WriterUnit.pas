@@ -823,6 +823,11 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
+
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrHUF2, Model.UnitNumbers.UnitNumber(StrHUF2),
     FNameOfFile, foInput, Model);

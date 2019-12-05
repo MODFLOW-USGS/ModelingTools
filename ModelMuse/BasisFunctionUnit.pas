@@ -24,6 +24,7 @@ type
 
 //  TTriangularNodes = (niI, niJ, niK);
   TTriangularElement = TElement;
+
 //  TTriangularElement = array[TTriangularNodes] of TPoint2D;
   TTriangularNodeValues = array of double;
 //  TTriangularNodeValues = array[TTriangularNodes] of double;
@@ -108,46 +109,16 @@ end;
 function TriangularBasisFunction(const Element: TTriangularElement;
   const NodeValues: TTriangularNodeValues; const ALocation: TPoint2D): double;
 var
-//  CrossProducts: array[0..2] of double;
-//  AreaTimes2: double;
-//  AValue: double;
   WeightFactors: TOneDRealArray;
 begin
   CalculateTriangularBasisFactors(Element, ALocation, WeightFactors);
-
-//  CrossProducts[niI] := Element[niJ].x*Element[niK].y
-//    - Element[niK].x*Element[niJ].y;
-//  CrossProducts[niJ] := Element[niK].x*Element[niI].y
-//    - Element[niI].x*Element[niK].y;
-//  CrossProducts[niK] := Element[niI].x*Element[niJ].y
-//    - Element[niJ].x*Element[niI].y;
-//
-//  AreaTimes2 := 0;
-//  for AValue in CrossProducts do
-//  begin
-//    AreaTimes2 := AreaTimes2 + AValue;
-//  end;
-//
-//  SetLength(WeightFactors, 3);
-//  WeightFactors[niI] := (CrossProducts[niI]
-//    + (Element[niJ].y-Element[niK].y) * ALocation.x
-//    + (Element[niK].x-Element[niJ].x) * ALocation.y)
-//    / AreaTimes2;
-//  WeightFactors[niJ] := (CrossProducts[niJ]
-//    + (Element[niK].y-Element[niI].y) * ALocation.x
-//    + (Element[niI].x-Element[niK].x) * ALocation.y)
-//    / AreaTimes2;
-//  WeightFactors[niK] := (CrossProducts[niK]
-//    + (Element[niI].y-Element[niJ].y) * ALocation.x
-//    + (Element[niJ].x-Element[niI].x) * ALocation.y)
-//    / AreaTimes2;
 
   result := WeightFactors[niI]*NodeValues[niI]
     + WeightFactors[niJ]*NodeValues[niJ]
     + WeightFactors[niK]*NodeValues[niK]
 end;
 
-procedure CalculateRectangularrBasisFactors(const Element: TRectangularElement;
+procedure CalculateRectangularBasisFactors(const Element: TRectangularElement;
   ALocation: TPoint2D; out WeightFactors: TOneDRealArray);
 var
   HalfXLength: double;
@@ -178,36 +149,12 @@ end;
 function RectangularBasisFunction(const Element: TRectangularElement;
   const NodeValues: TRectangularNodeValues; ALocation: TPoint2D): double;
 var
-//  HalfXLength: double;
-//  HalfYLength: double;
   WeightFactors: TOneDRealArray;
-//  Node: TRectangularNodes;
   Node: integer;
 begin
-  CalculateRectangularrBasisFactors(Element, ALocation, WeightFactors);
-//  Assert(Element[rnI].x = Element[rnL].x);
-//  Assert(Element[rnJ].x = Element[rnK].x);
-//  Assert(Element[rnI].y = Element[rnJ].y);
-//  Assert(Element[rnK].y = Element[rnL].y);
-//
-//  HalfXLength := (Element[rnJ].x - Element[rnI].x)/2;
-//  HalfYLength := (Element[rnK].y - Element[rnJ].y)/2;
-//
-//  ALocation.x := ALocation.x - (Element[rnI].x + HalfXLength);
-//  ALocation.y := ALocation.y - (Element[rnI].y + HalfYLength);
-//
-//  SetLength(WeightFactors, 4);
-//  WeightFactors[rnI] := (1 - ALocation.x/HalfXLength)
-//    * (1 - ALocation.y/HalfYLength) /4;
-//  WeightFactors[rnJ] := (1 + ALocation.x/HalfXLength)
-//    * (1 - ALocation.y/HalfYLength) /4;
-//  WeightFactors[rnK] := (1 + ALocation.x/HalfXLength)
-//    * (1 + ALocation.y/HalfYLength) /4;
-//  WeightFactors[rnL] := (1 - ALocation.x/HalfXLength)
-//    * (1 + ALocation.y/HalfYLength) /4;
+  CalculateRectangularBasisFactors(Element, ALocation, WeightFactors);
 
   result := 0;
-//  for Node := Low(TRectangularNodes) to High(TRectangularNodes) do
   for Node := 0 to 3 do
   begin
     result := result + WeightFactors[Node] * NodeValues[Node];
@@ -233,7 +180,7 @@ begin
       end;
     4:
       begin
-        CalculateRectangularrBasisFactors(Element, ALocation, Fractions);
+        CalculateRectangularBasisFactors(Element, ALocation, Fractions);
       end;
     else
       Assert(False);
