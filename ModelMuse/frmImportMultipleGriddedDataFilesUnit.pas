@@ -23,12 +23,15 @@ type
     btnOpenFiles: TButton;
     lblModel: TLabel;
     comboModel: TComboBox;
+    rgEvaluatedAt: TRadioGroup;
     procedure btnOpenFilesClick(Sender: TObject);
     procedure frameGridFilesGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
 
     procedure btnOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
+    procedure frameGridFilesGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
   private
     procedure SetData;
     { Private declarations }
@@ -44,7 +47,7 @@ implementation
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit, GoPhastTypes, RbwParser,
   ScreenObjectUnit, AbstractGridUnit, UndoItems, FastGEO, IOUtils,
-  ValueArrayStorageUnit, GIS_Functions;
+  ValueArrayStorageUnit, GIS_Functions, MeshRenumberingTypes;
 
 resourcestring
   StrThereWasAnErrorR = 'There was an error reading %s. Please check that th' +
@@ -76,19 +79,37 @@ procedure TfrmImportMultipleGriddedDataFiles.FormCreate(Sender: TObject);
 begin
   inherited;
   FillComboBoxWithModels(comboModel);
+  rgEvaluatedAt.Enabled := frmGoPhast.ModelSelection
+    in [msPhast, msSutra22, msSutra30];
   frameGridFiles.Grid.Cells[0,0] := 'Files';
 end;
 
 procedure TfrmImportMultipleGriddedDataFiles.frameGridFilesGridButtonClick(
   Sender: TObject; ACol, ARow: Integer);
+var
+  FileIndex: Integer;
 begin
   inherited;
   dlgOpenFiles.FileName := frameGridFiles.Grid.Cells[ACol, ARow];
-  dlgOpenFiles.Options := dlgOpenFiles.Options - [ofAllowMultiSelect];
+//  dlgOpenFiles.Options := dlgOpenFiles.Options - ofAllowMultiSelect];
   if dlgOpenFiles.Execute then
   begin
-    frameGridFiles.Grid.Cells[ACol, ARow] := dlgOpenFiles.FileName;
+    if dlgOpenFiles.Files.Count > 0 then
+    begin
+      frameGridFiles.seNumber.AsInteger := ARow + dlgOpenFiles.Files.Count -1;
+      for FileIndex := 0 to dlgOpenFiles.Files.Count - 1 do
+      begin
+        frameGridFiles.Grid.Cells[ACol, ARow + FileIndex] := dlgOpenFiles.Files[FileIndex];
+      end;
+    end;
   end;
+end;
+
+procedure TfrmImportMultipleGriddedDataFiles.frameGridFilesGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  frameGridFiles.seNumber.asInteger := frameGridFiles.Grid.RowCount -1;
 end;
 
 procedure TfrmImportMultipleGriddedDataFiles.SetData;
@@ -112,10 +133,18 @@ var
   ImportedItem: TValueArrayItem;
   FormulaIndex: Integer;
   AModel: TCustomModel;
+  Mesh: IMesh2D;
+  NewCapacity: Integer;
+  ElementIndex: Integer;
 begin
   AModel := comboModel.Items.Objects[comboModel.ItemIndex] as TCustomModel;
+
+  Mesh := nil;
   Grid := AModel.Grid;
-  Assert(Grid <> nil);
+  if Grid = nil then
+  begin
+    Mesh := AModel.Mesh3D.Mesh2DI;
+  end;
 
   NewDataSets := TList.Create;
   NewScreenObjectList := TList.Create;
@@ -137,6 +166,7 @@ begin
     AScreenObject.SetValuesOfIntersectedCells := True;
     AScreenObject.Visible := false;
     AScreenObject.ElevationCount := ecZero;
+    AScreenObject.EvaluatedAt := TEvaluatedAt(rgEvaluatedAt.ItemIndex);
 
     if comboModel.ItemIndex > 0 then
     begin
@@ -146,22 +176,81 @@ begin
 
     NewScreenObjectList.Add(AScreenObject);
 
-    AScreenObject.Capacity := Grid.RowCount * Grid.ColumnCount;
-    AScreenObject.BeginUpdate;
-    try
-      for RowIndex := 0 to Grid.RowCount - 1 do
+    if Grid <> nil then
+    begin
+      if rgEvaluatedAt.ItemIndex = 0 then
       begin
-        for ColIndex := 0 to Grid.ColumnCount - 1 do
-        begin
-          APoint := Grid.TwoDElementCenter(ColIndex,RowIndex);
-          AScreenObject.AddPoint(APoint, True);
+        NewCapacity := Grid.RowCount * Grid.ColumnCount;
+        AScreenObject.Capacity := NewCapacity;
+        AScreenObject.BeginUpdate;
+        try
+          for RowIndex := 0 to Grid.RowCount - 1 do
+          begin
+            for ColIndex := 0 to Grid.ColumnCount - 1 do
+            begin
+              APoint := Grid.TwoDElementCenter(ColIndex,RowIndex);
+              AScreenObject.AddPoint(APoint, True);
+            end;
+          end;
+        finally
+          AScreenObject.EndUpdate;
+        end;
+      end
+      else
+      begin
+        NewCapacity := (Grid.RowCount+1) * (Grid.ColumnCount+1);
+        AScreenObject.Capacity := NewCapacity;
+        AScreenObject.BeginUpdate;
+        try
+          for RowIndex := 0 to Grid.RowCount do
+          begin
+            for ColIndex := 0 to Grid.ColumnCount do
+            begin
+              APoint := Grid.TwoDElementCorner(ColIndex,RowIndex);
+              AScreenObject.AddPoint(APoint, True);
+            end;
+          end;
+        finally
+          AScreenObject.EndUpdate;
         end;
       end;
-    finally
-      AScreenObject.EndUpdate;
+    end
+    else
+    begin
+      if rgEvaluatedAt.ItemIndex = 0 then
+      begin
+        NewCapacity := Mesh.ElementCount;
+        AScreenObject.Capacity := NewCapacity;
+        AScreenObject.BeginUpdate;
+        try
+          for ElementIndex := 0 to Mesh.ElementCount - 1 do
+          begin
+            APoint := Mesh.ElementsI2D[ElementIndex].Center;
+            AScreenObject.AddPoint(APoint, True);
+          end;
+        finally
+          AScreenObject.EndUpdate;
+        end;
+      end
+      else
+      begin
+        NewCapacity := Mesh.NodeCount;
+        AScreenObject.Capacity := NewCapacity;
+        AScreenObject.BeginUpdate;
+        try
+          for ElementIndex := 0 to Mesh.NodeCount - 1 do
+          begin
+            APoint := Mesh.NodesI2D[ElementIndex].Location;
+            AScreenObject.AddPoint(APoint, True);
+          end;
+        finally
+          AScreenObject.EndUpdate;
+        end;
+      end;
     end;
 
-    SetLength(Values, AScreenObject.Capacity);
+
+    SetLength(Values, AScreenObject.Count);
     for FileIndex := 0 to FileNames.Count - 1 do
     begin
       NewName := FileNames[FileIndex];
@@ -170,11 +259,11 @@ begin
         AssignFile(AFile, NewName);
         try
           Reset(AFile);
-          ValueIndex := 0;
-          for RowIndex := 0 to Grid.RowCount - 1 do
+//          ValueIndex := 0;
+          for ValueIndex := 0 to AScreenObject.Count - 1 do
           begin
-            for ColIndex := 0 to Grid.ColumnCount - 1 do
-            begin
+//            for ColIndex := 0 to Grid.ColumnCount - 1 do
+//            begin
               try
                 read(AFile, Values[ValueIndex]);
               except on EInOutError do
@@ -185,8 +274,8 @@ begin
                   Exit;
                 end;
               end;
-              Inc(ValueIndex);
-            end;
+//              Inc(ValueIndex);
+//            end;
           end;
         finally
           CloseFile(AFile);
@@ -205,7 +294,7 @@ begin
 
       DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
         TDataArray, NewName, '0', NewName, [], rdtDouble,
-        eaBlocks, dsoTop,
+        AScreenObject.EvaluatedAt, dsoTop,
         strDefaultClassification + '|' + StrCreatedFromTextFi);
 
       NewDataSets.Add(DataSet);

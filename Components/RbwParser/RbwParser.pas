@@ -1671,6 +1671,9 @@ type
     procedure DefineLessThanOrEqualsOperator;
     // @name defines the ">=" operator.
     procedure DefineGreaterThanOrEqualsOperator;
+    // @name defines the "^" operator
+    procedure DefinePowerOperator;
+    procedure DefinePowerOperator2;
     { Private declarations }
   protected
     { Protected declarations }
@@ -2259,7 +2262,6 @@ type
     function DecompileDisplay: string; override;
   end;
 
-
   TIntToDoubleExpression = class(TExpression)
   private
     function DecompileByType(DecompileType: TDecompileType): string;
@@ -2326,6 +2328,8 @@ var
   IntToDoubleFunction: TFunctionClass;
 
   NotOperator: TFunctionClass;
+  PowerOperator: TFunctionClass;
+  PowerOperator2: TFunctionClass;
   TimesIOperator: TFunctionClass;
   TimesROperator: TFunctionClass;
   DivideIOperator: TFunctionClass;
@@ -3118,6 +3122,8 @@ begin
   WordOperators := TStringList.Create;
 
   DefineNotOperator;
+  DefinePowerOperator;
+  DefinePowerOperator2;
   DefinePlusSignOperator;
   DefineMinusSignOperator;
   DefineTimesOperator;
@@ -3135,6 +3141,8 @@ begin
   DefineGreaterThanOperator;
   DefineLessThanOrEqualsOperator;
   DefineGreaterThanOrEqualsOperator;
+
+
 end;
 
 destructor TRbwParser.Destroy;
@@ -4414,7 +4422,9 @@ begin
     for DefIndex := 0 to OperatorDefinition.ArgumentDefinitions.Count - 1 do
     begin
       ArgumentDef := OperatorDefinition.ArgumentDefinitions[DefIndex];
-      if AnArgument.ResultType = ArgumentDef.FirstArgumentType then
+      if (AnArgument.ResultType = ArgumentDef.FirstArgumentType)
+        or ((ArgumentDef.FirstArgumentType = rdtDouble)
+        and (AnArgument.ResultType = rdtInteger)) then
       begin
         UsedDef := ArgumentDef;
         break;
@@ -4469,6 +4479,50 @@ begin
   ArgumentDef.CreationMethod := cmNew;
   ArgumentDef.OperatorClass := TOperator;
   ArgumentDef.FunctionClass := NotOperator;
+
+  AddOperator(OpDef);
+end;
+
+procedure TRbwParser.DefinePowerOperator;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OpDef: TOperatorDefinition;
+begin
+  OpDef := TOperatorDefinition.Create;
+  OpDef.OperatorName := '^';
+  OpDef.ArgumentCount := acTwo;
+  OpDef.Precedence := p1;
+  OpDef.SignOperator := False;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator;
+
+  AddOperator(OpDef);
+end;
+
+procedure TRbwParser.DefinePowerOperator2;
+var
+  ArgumentDef: TOperatorArgumentDefinition;
+  OpDef: TOperatorDefinition;
+begin
+  OpDef := TOperatorDefinition.Create;
+  OpDef.OperatorName := '**';
+  OpDef.ArgumentCount := acTwo;
+  OpDef.Precedence := p1;
+  OpDef.SignOperator := False;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator2;
 
   AddOperator(OpDef);
 end;
@@ -4544,6 +4598,8 @@ var
   AnExpression: TExpression;
   DefIndex: Integer;
   ArgumentDef: TOperatorArgumentDefinition;
+  PriorArgOK: Boolean;
+  SubsequentArgOK: Boolean;
 begin
   if (Objects[Index] <> nil) or (Index + 1 >= Count) or (Index - 1 < 0) then
   begin
@@ -4579,8 +4635,13 @@ begin
   for DefIndex := 0 to OperatorDefinition.ArgumentDefinitions.Count - 1 do
   begin
     ArgumentDef := OperatorDefinition.ArgumentDefinitions[DefIndex];
-    if (ArgumentDef.FirstArgumentType = PriorArgument.ResultType)
-      and (ArgumentDef.SecondArgumentType = SubsequentArgument.ResultType) then
+    PriorArgOK := (ArgumentDef.FirstArgumentType = PriorArgument.ResultType)
+      or ((ArgumentDef.FirstArgumentType = rdtDouble)
+      and (PriorArgument.ResultType = rdtInteger));
+    SubsequentArgOK := (ArgumentDef.SecondArgumentType = SubsequentArgument.ResultType)
+      or ((ArgumentDef.SecondArgumentType = rdtDouble)
+      and (SubsequentArgument.ResultType = rdtInteger));
+    if PriorArgOK and SubsequentArgOK then
     begin
       UsedDef := ArgumentDef;
       break;
@@ -8700,6 +8761,26 @@ begin
   NotOperator.Prototype := StrLogical+'not';
   NotOperator.InputDataTypes[0] := rdtBoolean;
   NotOperator.OptionalArguments := 0;
+
+  PowerOperator := TFunctionClass.Create;
+  OperatorList.Add(PowerOperator);
+  PowerOperator.InputDataCount := 2;
+  PowerOperator.RFunctionAddr := _Power;
+  PowerOperator.Name := '^';
+  PowerOperator.Prototype := StrMath+'^';
+  PowerOperator.InputDataTypes[0] := rdtDouble;
+  PowerOperator.InputDataTypes[1] := rdtDouble;
+  PowerOperator.OptionalArguments := 0;
+
+  PowerOperator2 := TFunctionClass.Create;
+  OperatorList.Add(PowerOperator2);
+  PowerOperator2.InputDataCount := 2;
+  PowerOperator2.RFunctionAddr := _Power;
+  PowerOperator2.Name := '**';
+  PowerOperator2.Prototype := StrMath+'**';
+  PowerOperator2.InputDataTypes[0] := rdtDouble;
+  PowerOperator2.InputDataTypes[1] := rdtDouble;
+  PowerOperator2.OptionalArguments := 0;
 
   XorOperator := TFunctionClass.Create;
   OperatorList.Add(XorOperator);

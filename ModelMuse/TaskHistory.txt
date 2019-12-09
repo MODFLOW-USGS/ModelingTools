@@ -431,6 +431,10 @@ object TTaskHistory
     item
       Name = 'Head obs for MF6'
       Display = True
+    end
+    item
+      Name = 'MF6 Obs Extractor'
+      Display = True
     end>
   History = <
     item
@@ -24528,5 +24532,25 @@ object TTaskHistory
         'Testing'
         'Head obs for MF6'
         'PEST')
+    end
+    item
+      Date = 43805.440915416670000000
+      Categories.Strings = (
+        'MF6 Obs Extractor')
+    end
+    item
+      Date = 43806.440915416670000000
+    end
+    item
+      Date = 43807.440915416670000000
+    end
+    item
+      Date = 43808.440915416670000000
+      Categories.Strings = (
+        'Import'
+        'MF6 Obs Extractor'
+        'Components'
+        'Documentation'
+        'Dialog boxes')
     end>
 end

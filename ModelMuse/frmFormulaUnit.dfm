@@ -5,19 +5,19 @@ inherited frmFormula: TfrmFormula
   HelpKeyword = 'Formula_Editor'
   ActiveControl = btnEquals
   Caption = 'Formula Editor'
-  ClientHeight = 463
+  ClientHeight = 479
   ClientWidth = 769
   Font.Height = 16
   Position = poOwnerFormCenter
   ExplicitWidth = 785
-  ExplicitHeight = 502
+  ExplicitHeight = 518
   PixelsPerInch = 96
   TextHeight = 16
   object Splitter: TSplitter
     Left = 539
     Top = 0
     Width = 5
-    Height = 422
+    Height = 438
     OnCanResize = SplitterCanResize
     ExplicitLeft = 476
     ExplicitHeight = 361
@@ -26,10 +26,11 @@ inherited frmFormula: TfrmFormula
     Left = 0
     Top = 0
     Width = 539
-    Height = 422
+    Height = 438
     Align = alLeft
     ParentColor = True
     TabOrder = 0
+    ExplicitHeight = 422
     object JvNetscapeSplitter1: TJvNetscapeSplitter
       Left = 1
       Top = 98
@@ -47,14 +48,15 @@ inherited frmFormula: TfrmFormula
     end
     object pnlButtons: TPanel
       Left = 1
-      Top = 188
+      Top = 192
       Width = 537
-      Height = 233
+      Height = 245
       HelpType = htKeyword
       HelpKeyword = 'Number_and_Operator_Buttons'
       Align = alBottom
       ParentColor = True
       TabOrder = 2
+      ExplicitTop = 176
       object gbLogicalOperators: TGroupBox
         Left = 8
         Top = 6
@@ -373,7 +375,7 @@ inherited frmFormula: TfrmFormula
         Left = 425
         Top = 6
         Width = 104
-        Height = 195
+        Height = 235
         Caption = 'Operators'
         TabOrder = 2
         object btnOpenParen: TButton
@@ -470,6 +472,28 @@ inherited frmFormula: TfrmFormula
           TabOrder = 6
           OnClick = buttonClick
         end
+        object btnPower1: TButton
+          Left = 8
+          Top = 192
+          Width = 41
+          Height = 37
+          Hint = 'Quote'
+          Margins.Left = 8
+          Caption = '^'
+          TabOrder = 8
+          OnClick = buttonClick
+        end
+        object btnPower2: TButton
+          Left = 55
+          Top = 192
+          Width = 41
+          Height = 37
+          Hint = 'Quote'
+          Margins.Left = 8
+          Caption = '**'
+          TabOrder = 9
+          OnClick = buttonClick
+        end
       end
     end
     object tvFormulaDiagram: TTreeView
@@ -489,7 +513,7 @@ inherited frmFormula: TfrmFormula
       Left = 1
       Top = 108
       Width = 537
-      Height = 80
+      Height = 84
       Hint = 'Type formula here'
       HelpType = htKeyword
       HelpKeyword = 'Formula_Text_Box'
@@ -501,16 +525,18 @@ inherited frmFormula: TfrmFormula
       OnDblClick = jreFormulaDblClick
       OnMouseUp = jreFormulaMouseUp
       OnSelectionChange = jreFormulaSelectionChange
+      ExplicitHeight = 80
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 422
+    Top = 438
     Width = 769
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 2
+    ExplicitTop = 422
     DesignSize = (
       769
       41)
@@ -600,11 +626,12 @@ inherited frmFormula: TfrmFormula
     Left = 544
     Top = 0
     Width = 225
-    Height = 422
+    Height = 438
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitHeight = 422
     object pnlLabelItemTree: TPanel
       Left = 0
       Top = 0
@@ -631,7 +658,7 @@ inherited frmFormula: TfrmFormula
       Left = 0
       Top = 41
       Width = 225
-      Height = 381
+      Height = 397
       Hint = 'Double-click to insert selected item into formula'
       HelpType = htKeyword
       HelpKeyword = 'List_of_Data_Sets_and_Function'
@@ -643,6 +670,7 @@ inherited frmFormula: TfrmFormula
       TabOrder = 1
       OnChange = tvItemsChange
       OnDblClick = tvItemsDblClick
+      ExplicitHeight = 381
     end
   end
   object Timer: TTimer

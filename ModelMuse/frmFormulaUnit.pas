@@ -150,6 +150,8 @@ many will be displayed at one time. }
     gbOperators: TGroupBox;
     lbltems: TLabel;
     jreFormula: TJvRichEdit;
+    btnPower1: TButton;
+    btnPower2: TButton;
     // @name shows help on the function that is selected in @link(tvItems).
     // See @link(tvItemsChange).
     procedure btnFunctionHelpClick(Sender: TObject);

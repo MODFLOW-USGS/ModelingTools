@@ -944,20 +944,20 @@ begin
       end;
     ofBinary:
       begin
-        WriteString('    PRECISION ');
-        case ObsPackage.OutputPrecision of
-          opSingle:
-            begin
-              WriteString('SINGLE');
-            end;
-          opDouble:
-            begin
-              WriteString('DOUBLE');
-            end;
-          else
-            Assert(False);
-        end;
-        NewLine
+//        WriteString('    PRECISION ');
+//        case ObsPackage.OutputPrecision of
+//          opSingle:
+//            begin
+//              WriteString('SINGLE');
+//            end;
+//          opDouble:
+//            begin
+//              WriteString('DOUBLE');
+//            end;
+//          else
+//            Assert(False);
+//        end;
+//        NewLine
       end;
     else
       Assert(False);

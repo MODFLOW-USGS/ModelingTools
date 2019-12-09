@@ -4187,8 +4187,8 @@ begin
     miGriddedData.Hint := StrImportGriddedData;
   end;
 
-  acImportGriddedDataFiles.Enabled :=
-    not (PhastModel.ModelSelection  in SutraSelection);
+//  acImportGriddedDataFiles.Enabled :=
+//    not (PhastModel.ModelSelection  in SutraSelection);
   tlbMesh.Visible := PhastModel.ModelSelection  in SutraSelection;
   tlb3dViewMesh.Visible := (PhastModel.ModelSelection  in SutraSelection) or DisVUsed;
   acImportSutraMesh.Enabled := PhastModel.ModelSelection  in SutraSelection;

@@ -2,21 +2,23 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
   HelpType = htKeyword
   HelpKeyword = 'Import_Gridded_Data_Files_Dial'
   Caption = 'Import Gridded Data Files'
+  ClientHeight = 267
+  ExplicitHeight = 306
   PixelsPerInch = 96
   TextHeight = 18
   inline frameGridFiles: TframeGrid
     Left = 0
     Top = 0
     Width = 424
-    Height = 143
+    Height = 132
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 424
-    ExplicitHeight = 143
+    ExplicitHeight = 132
     inherited Panel: TPanel
-      Top = 102
+      Top = 91
       Width = 424
-      ExplicitTop = 102
+      ExplicitTop = 91
       ExplicitWidth = 424
       inherited lbNumber: TLabel
         Width = 55
@@ -43,8 +45,9 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
     end
     inherited Grid: TRbwDataGrid4
       Width = 424
-      Height = 102
+      Height = 91
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowMoving, goEditing, goAlwaysShowEditor]
+      OnSetEditText = frameGridFilesGridSetEditText
       OnButtonClick = frameGridFilesGridButtonClick
       Columns = <
         item
@@ -71,29 +74,29 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
           AutoAdjustColWidths = True
         end>
       ExplicitWidth = 424
-      ExplicitHeight = 102
+      ExplicitHeight = 91
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 143
+    Top = 132
     Width = 424
-    Height = 83
+    Height = 135
     Align = alBottom
     TabOrder = 1
     DesignSize = (
       424
-      83)
+      135)
     object lblModel: TLabel
       Left = 8
-      Top = 9
+      Top = 65
       Width = 43
       Height = 18
       Caption = 'Model'
     end
     object btnHelp: TBitBtn
       Left = 153
-      Top = 38
+      Top = 94
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -104,7 +107,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
     end
     object btnOK: TBitBtn
       Left = 242
-      Top = 38
+      Top = 94
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -115,7 +118,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
     end
     object btnCancel: TBitBtn
       Left = 331
-      Top = 38
+      Top = 94
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -125,7 +128,7 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
     end
     object btnOpenFiles: TButton
       Left = 8
-      Top = 38
+      Top = 94
       Width = 97
       Height = 33
       Caption = 'Open files'
@@ -134,11 +137,24 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
     end
     object comboModel: TComboBox
       Left = 57
-      Top = 6
+      Top = 62
       Width = 353
       Height = 26
       Style = csDropDownList
       TabOrder = 0
+    end
+    object rgEvaluatedAt: TRadioGroup
+      Left = 8
+      Top = 7
+      Width = 257
+      Height = 49
+      Caption = 'Evaluated at'
+      Columns = 2
+      ItemIndex = 0
+      Items.Strings = (
+        'Elements'
+        'Nodes')
+      TabOrder = 5
     end
   end
   object dlgOpenFiles: TOpenDialog

@@ -8858,9 +8858,15 @@ const
   //                while generating the input for the Reservoir package.
   //    '4.1.0.14' Bug fix: Fixed bug that could cause an error when displaying
   //                the Data Visualization dialog box.
+  //    '4.1.0.15' Enhancement: The "File|Import Gridded Data Files" command
+  //                now works with DISV MODFLOW 6 models and SUTRA models.
+
+  //               Enhancement: The operators "^" and "**" have been added.
+  //                Both allow one number to be raised to the power of another
+  //                number.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.14';
+  IModelVersion = '4.1.0.15';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

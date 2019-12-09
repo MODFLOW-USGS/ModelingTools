@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="10">
+      <Unit0>
+        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="39"/>
+        <CursorPos Y="60"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="outputfilereader.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="OutputFileReader"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="113"/>
+        <CursorPos Y="134"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\packages\fcl-base\src\custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="61"/>
+        <CursorPos X="14" Y="80"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\generics.collections.pas"/>
+        <UnitName Value="Generics.Collections"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="525"/>
+        <CursorPos X="18" Y="558"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionariesh.inc"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="62"/>
+        <CursorPos X="3" Y="47"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\lazarus\components\sparta\generics\sparta_generics.lpk"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+        <DefaultSyntaxHighlighter Value="XML"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="633"/>
+        <CursorPos X="15" Y="653"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\streams.inc"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="442"/>
+        <CursorPos X="56" Y="453"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\stringl.inc"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="152"/>
+        <CursorPos X="5" Y="178"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="obsdictionary.pas"/>
+        <UnitName Value="ObsDictionary"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="20"/>
+      </Unit9>
+    </Units>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="103" TopLine="71"/>
+      </Position1>
+      <Position2>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="105" TopLine="73"/>
+      </Position2>
+      <Position3>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="106" TopLine="74"/>
+      </Position3>
+      <Position4>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="107" TopLine="75"/>
+      </Position4>
+      <Position5>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="108" TopLine="76"/>
+      </Position5>
+      <Position6>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="69" TopLine="48"/>
+      </Position6>
+      <Position7>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="70" TopLine="48"/>
+      </Position7>
+      <Position8>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="188" TopLine="148"/>
+      </Position8>
+      <Position9>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="84" TopLine="65"/>
+      </Position9>
+      <Position10>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="129" TopLine="109"/>
+      </Position10>
+      <Position11>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="132" TopLine="108"/>
+      </Position11>
+      <Position12>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="146" TopLine="113"/>
+      </Position12>
+      <Position13>
+        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <Caret Line="49" TopLine="39"/>
+      </Position13>
+      <Position14>
+        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <Caret Line="50" TopLine="39"/>
+      </Position14>
+      <Position15>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="164" TopLine="144"/>
+      </Position15>
+      <Position16>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="166" TopLine="144"/>
+      </Position16>
+      <Position17>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="167" TopLine="144"/>
+      </Position17>
+      <Position18>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="163" TopLine="144"/>
+      </Position18>
+      <Position19>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="185" TopLine="148"/>
+      </Position19>
+      <Position20>
+        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <Caret Line="51" TopLine="39"/>
+      </Position20>
+      <Position21>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="163" TopLine="148"/>
+      </Position21>
+      <Position22>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="164" TopLine="148"/>
+      </Position22>
+      <Position23>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="166" TopLine="148"/>
+      </Position23>
+      <Position24>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="167" TopLine="148"/>
+      </Position24>
+      <Position25>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="163" TopLine="148"/>
+      </Position25>
+      <Position26>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="185" TopLine="148"/>
+      </Position26>
+      <Position27>
+        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <Caret Line="49" TopLine="39"/>
+      </Position27>
+      <Position28>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="133" TopLine="113"/>
+      </Position28>
+      <Position29>
+        <Filename Value="outputfilereader.pas"/>
+        <Caret Line="134" TopLine="113"/>
+      </Position29>
+      <Position30>
+        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <Caret Line="55" TopLine="39"/>
+      </Position30>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="8">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="Mf6ObsExtractor.lpr"/>
+        <Line Value="47"/>
+      </Item1>
+      <Item2>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="133"/>
+      </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="84"/>
+      </Item3>
+      <Item4>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="85"/>
+      </Item4>
+      <Item5>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="164"/>
+      </Item5>
+      <Item6>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="119"/>
+      </Item6>
+      <Item7>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="182"/>
+      </Item7>
+      <Item8>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="outputfilereader.pas"/>
+        <Line Value="101"/>
+      </Item8>
+    </BreakPoints>
+    <Watches Count="5">
+      <Item1>
+        <Expression Value="FValues"/>
+      </Item1>
+      <Item2>
+        <Expression Value="ObsTypeArray"/>
+      </Item2>
+      <Item3>
+        <Expression Value="LENOBSNAME"/>
+      </Item3>
+      <Item4>
+        <Expression Value="DummyArray"/>
+      </Item4>
+      <Item5>
+        <Expression Value="FNOBS"/>
+      </Item5>
+    </Watches>
+  </Debugging>
+</CONFIG>
