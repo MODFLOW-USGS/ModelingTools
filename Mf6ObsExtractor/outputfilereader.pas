@@ -24,20 +24,29 @@ type
 
   TOutputFile = class(TObject)
   private
+    FFirstTime: double;
+    FSecondTime: double;
     FTextFile: TextFile;
     FBinaryFile: TFileStream;
     FFileType: TFileType;
     FIdLocations: TObservationDictionary;
     FFileName: string;
     FNOBS: Integer;
-    FTime: double;
-    FValues: array of double;
+    FFirstValues: array of double;
+    FSecondValues: array of double;
+    function GetFirstValue(Index: integer): double;
+    function GetSecondValue(Index: integer): double;
     procedure ReadHeader;
   public
-    constructor Create(FileName: string; FileType: TFileType; IdLocations: TObservationDictionary);
+    constructor Create(FileName: string; FileType: TFileType;
+      IdLocations: TObservationDictionary);
     destructor Destroy; override;
     property FileName: string read FFileName;
     procedure ReadTimeAndValues;
+    property FirstTime: double read FFirstTime;
+    property SecondTime: double read FSecondTime;
+    property FirstValue[Index: integer]: double read GetFirstValue;
+    property SecondValue[Index: integer]: double read GetSecondValue;
   end;
 
   EReadOutputError = class(Exception);
@@ -87,15 +96,19 @@ begin
     FBinaryFile.read(ObsTypeArray[0], Length(ObsTypeArray)*SizeOf(AnAnsiChar));
     if string(ObsTypeArray) <> 'cont' then
     begin
-      raise EReadOutputError.Create(Format('Error reading the header of %s.', [FFileName]));
+      raise EReadOutputError.Create(Format('Error reading the header of %s.',
+        [FFileName]));
     end;
     FBinaryFile.read(AnAnsiChar, SizeOf(AnAnsiChar));
-    FBinaryFile.read(PrecisionArray[0], Length(PrecisionArray)*SizeOf(AnAnsiChar));
+    FBinaryFile.read(PrecisionArray[0],
+      Length(PrecisionArray)*SizeOf(AnAnsiChar));
     if string(PrecisionArray) <> 'double' then
     begin
-      raise EReadOutputError.Create(Format('Error reading the header of %s.', [FFileName]));
+      raise EReadOutputError.Create(Format('Error reading the header of %s.',
+        [FFileName]));
     end;
-    FBinaryFile.read(LENOBSNAME_Array, Length(LENOBSNAME_Array)*SizeOf(AnAnsiChar));
+    FBinaryFile.read(LENOBSNAME_Array,
+      Length(LENOBSNAME_Array)*SizeOf(AnAnsiChar));
     LENOBSNAME := StrToInt(Trim(string(LENOBSNAME_Array)));
     FBinaryFile.read(DummyArray[0], Length(DummyArray)*SizeOf(AnAnsiChar));
     FBinaryFile.read(FNOBS, SizeOf(FNOBS));
@@ -103,7 +116,8 @@ begin
     for ObsNameIndex := 0 to Pred(FNOBS) do
     begin
       Index := ObsNameIndex+1;
-      FBinaryFile.read(ObsNameArray[0], Length(ObsNameArray)*SizeOf(AnAnsiChar));
+      FBinaryFile.read(ObsNameArray[0],
+        Length(ObsNameArray)*SizeOf(AnAnsiChar));
       ID := UpperCase(Trim(string(ObsNameArray)));
       AddID;
     end;
@@ -125,10 +139,20 @@ begin
       Splitter.Free;
     end;
   end;
-  SetLength(FValues, FNOBS);
 end;
 
-constructor TOutputFile.Create(FileName: string; FileType: TFileType; IdLocations: TObservationDictionary);
+function TOutputFile.GetFirstValue(Index: integer): double;
+begin
+  result := FFirstValues[Index];
+end;
+
+function TOutputFile.GetSecondValue(Index: integer): double;
+begin
+  result := FSecondValues[Index];
+end;
+
+constructor TOutputFile.Create(FileName: string; FileType: TFileType;
+ IdLocations: TObservationDictionary);
 begin
   FFileName := FileName;
   FFileType := FileType;
@@ -160,7 +184,10 @@ var
   Splitter: TStringList;
   ALine: string;
   Index: Integer;
+  FTime: double;
+  FValues: array of double;
 begin
+  SetLength(FValues, FNOBS);
   if FFileType = ftBinary then
   begin
     FBinaryFile.read(FTime, SizeOf(FTime));
@@ -181,6 +208,21 @@ begin
     finally
       Splitter.Free;
     end;
+  end;
+  if FFirstValues = nil then
+  begin
+    FFirstValues := FValues;
+    FFirstTime := FTime;
+  end
+  else
+  begin
+    if FSecondValues <> nil then
+    begin
+      FFirstValues := FSecondValues;
+      FFirstTime := FSecondTime;
+    end;
+    FSecondValues := FValues;
+    FSecondTime := FTime;
   end;
 end;
 
