@@ -4722,7 +4722,8 @@ begin
     NewName := StringReplace(NewName, '+', '', [rfReplaceAll]);
     NewName := StringReplace(NewName, ':', '', [rfReplaceAll]);
     NewName := ValidName(NewName);
-    AScreenObject.Name := NewName;
+//    AScreenObject.Name := NewName;
+    AScreenObject.Modflow6Obs.Name := NewName
   end;
   
   if FChobScreenObjects.Count > 0 then
@@ -4740,7 +4741,7 @@ begin
         AScreenObject.CreateMf6Obs;
         AScreenObject.Modflow6Obs.Used := True;
         AScreenObject.Modflow6Obs.ChdFlowObs := True;
-        AScreenObject.Name := FluxGroup.ObservationName;
+        AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
   end;
@@ -4760,7 +4761,7 @@ begin
         AScreenObject.CreateMf6Obs;
         AScreenObject.Modflow6Obs.Used := True;
         AScreenObject.Modflow6Obs.DrnFlowObs := True;
-        AScreenObject.Name := FluxGroup.ObservationName;
+        AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
   end;
@@ -4780,11 +4781,11 @@ begin
         AScreenObject.CreateMf6Obs;
         AScreenObject.Modflow6Obs.Used := True;
         AScreenObject.Modflow6Obs.GhbFlowObs := True;
-        AScreenObject.Name := FluxGroup.ObservationName;
+        AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
   end;
-  
+
   if FRivobScreenObjects.Count > 0 then
   begin
     for FluxGroupIndex := 0 to frmGoPhast.PhastModel.RiverObservations.Count -1 do
@@ -4800,7 +4801,7 @@ begin
         AScreenObject.CreateMf6Obs;
         AScreenObject.Modflow6Obs.Used := True;
         AScreenObject.Modflow6Obs.RivFlowObs := True;
-        AScreenObject.Name := FluxGroup.ObservationName;
+        AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
   end;

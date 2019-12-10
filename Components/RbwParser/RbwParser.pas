@@ -19,6 +19,12 @@ interface
   {$ifend}
 {$endif}
 
+{$ifdef FPC}
+    { $DEFINE Delphi_2009_UP}
+    {$DEFINE Delphi_XE_UP}
+{$endif}
+
+
 uses
 {$IFDEF MSWINDOWS}
   // Indcluding Windows, allows AnsiCompareStr to be inlined with Delphi 2005.
@@ -1120,7 +1126,7 @@ type
     FExpression: TExpression;
   public
     property Expression: TExpression read FExpression;
-    constructor Create(Owner: TExpression); reintroduce;
+    constructor Create(AnOwner: TExpression); reintroduce;
   end;
 
   TDecompileType = (dtInternal, dtDisplay);
@@ -1718,9 +1724,9 @@ type
 
       See also:  @link(RegisterVariable).
     }
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: boolean; const NameToDisplay: string): TBooleanVariable; overload;
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: boolean; VariableClass: TBooleanVariableClass; const NameToDisplay: string):
       TBooleanVariable; overload;
     {
@@ -1730,9 +1736,9 @@ type
 
       See also:  @link(RegisterVariable).
     }
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: integer; const NameToDisplay: string): TIntegerVariable; overload;
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: integer; VariableClass: TIntegerVariableClass; const NameToDisplay: string)
       : TIntegerVariable; overload;
     {
@@ -1773,9 +1779,9 @@ type
       end;
       #)
     }
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: double; const NameToDisplay: string): TRealVariable; overload;
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: double; VariableClass: TRealVariableClass; const NameToDisplay: string):
       TRealVariable; overload;
     {
@@ -1785,9 +1791,9 @@ type
 
       See also:  @link(RegisterVariable).
     }
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: string; const NameToDisplay: string): TStringVariable; overload;
-    function CreateVariable(const Name, Classification: string;
+    function CreateVariable(const AName, Classification: string;
       const Value: string; VariableClass: TStringVariableClass; const NameToDisplay: string):
       TStringVariable; overload;
     {
@@ -2547,26 +2553,26 @@ end;
 
 { TRbwParser }
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: integer; VariableClass: TIntegerVariableClass; const NameToDisplay: string)
   : TIntegerVariable;
 var
   VarIndex: Integer;
 begin
-  VarIndex := FVariables.IndexOf(Trim(UpperCase(Name)));
+  VarIndex := FVariables.IndexOf(Trim(UpperCase(AName)));
   if VarIndex >= 0 then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
   VarIndex := FVariables.IndexOf(Trim(UpperCase(NameToDisplay)));
-  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, Name) <> 0)
+  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, AName) <> 0)
     and (VarIndex >= 0) then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
-  result := VariableClass.Create(Name, NameToDisplay);
+  result := VariableClass.Create(AName, NameToDisplay);
   result.Classification := Classification;
   result.Value := Value;
   FVariables.AddObject(result.Name, result);
@@ -2577,32 +2583,32 @@ begin
   FOwnedVariables.Add(result);
 end;
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: integer; const NameToDisplay: string): TIntegerVariable;
 begin
-  result := CreateVariable(Name, Classification, Value, TIntegerVariable, NameToDisplay);
+  result := CreateVariable(AName, Classification, Value, TIntegerVariable, NameToDisplay);
 end;
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: boolean; VariableClass: TBooleanVariableClass; const NameToDisplay: string):
   TBooleanVariable;
 var
   VarIndex: Integer;
 begin
-  VarIndex := FVariables.IndexOf(Trim(UpperCase(Name)));
+  VarIndex := FVariables.IndexOf(Trim(UpperCase(AName)));
   if VarIndex >= 0 then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
   VarIndex := FVariables.IndexOf(Trim(UpperCase(NameToDisplay)));
-  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, Name) <> 0)
+  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, AName) <> 0)
     and (VarIndex >= 0) then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
-  result := VariableClass.Create(Name, NameToDisplay);
+  result := VariableClass.Create(AName, NameToDisplay);
   result.Classification := Classification;
   result.Value := Value;
   FVariables.AddObject(result.Name, result);
@@ -2614,32 +2620,32 @@ begin
 end;
 
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: boolean; const NameToDisplay: string): TBooleanVariable;
 begin
-  result := CreateVariable(Name, Classification, Value, TBooleanVariable, NameToDisplay);
+  result := CreateVariable(AName, Classification, Value, TBooleanVariable, NameToDisplay);
 end;
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: string; VariableClass: TStringVariableClass; const NameToDisplay: string):
   TStringVariable;
 var
   VarIndex: Integer;
 begin
-  VarIndex := FVariables.IndexOf(Trim(UpperCase(Name)));
+  VarIndex := FVariables.IndexOf(Trim(UpperCase(AName)));
   if VarIndex >= 0 then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
   VarIndex := FVariables.IndexOf(Trim(UpperCase(NameToDisplay)));
-  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, Name) <> 0)
+  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, AName) <> 0)
     and (VarIndex >= 0) then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
-  result := VariableClass.Create(Name, NameToDisplay);
+  result := VariableClass.Create(AName, NameToDisplay);
   result.Classification := Classification;
   result.Value := Value;
   FVariables.AddObject(result.Name, result);
@@ -2650,38 +2656,38 @@ begin
   FOwnedVariables.Add(result);
 end;
 
-function TRbwParser.CreateVariable(const Name, Classification,
+function TRbwParser.CreateVariable(const AName, Classification,
   Value: string; const NameToDisplay: string): TStringVariable;
 begin
-  result := CreateVariable(Name, Classification, Value, TStringVariable, NameToDisplay);
+  result := CreateVariable(AName, Classification, Value, TStringVariable, NameToDisplay);
 end;
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: double; const NameToDisplay: string): TRealVariable;
 begin
-  result := CreateVariable(Name, Classification, Value, TRealVariable, NameToDisplay);
+  result := CreateVariable(AName, Classification, Value, TRealVariable, NameToDisplay);
 end;
 
-function TRbwParser.CreateVariable(const Name, Classification: string;
+function TRbwParser.CreateVariable(const AName, Classification: string;
   const Value: double; VariableClass: TRealVariableClass; const NameToDisplay: string):
   TRealVariable;
 var
   VarIndex: Integer;
 begin
-  VarIndex := FVariables.IndexOf(Trim(UpperCase(Name)));
+  VarIndex := FVariables.IndexOf(Trim(UpperCase(AName)));
   if VarIndex >= 0 then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
   VarIndex := FVariables.IndexOf(Trim(UpperCase(NameToDisplay)));
-  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, Name) <> 0)
+  if (NameToDisplay <> '') and (AnsiCompareText(NameToDisplay, AName) <> 0)
     and (VarIndex >= 0) then
   begin
     raise ErbwParserError.CreateMode(Format(StrErrorCreatingVariable,
-      [Name, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
+      [AName, NameToDisplay, Variables[VarIndex].DecompileDisplay]), 1);
   end;
-  result := VariableClass.Create(Name, NameToDisplay);
+  result := VariableClass.Create(AName, NameToDisplay);
   result.Classification := Classification;
   result.Value := Value;
   FVariables.AddObject(result.Name, result);
@@ -2718,7 +2724,7 @@ end;
 
 function TArgumentList.GetItems(Index: integer): TOperatorArgumentDefinition;
 begin
-  result := FList[Index];
+  result := TOperatorArgumentDefinition(FList[Index]);
 end;
 
 function IdenticalFormulas(const Formula1, Formula2: string): boolean;
@@ -2770,7 +2776,7 @@ var
   ALine: string;
   IsWhiteSpaceChar: boolean;
   OperatorIndex: integer;
-  Operator: string;
+  AnOperator: string;
   TestString: string;
   Skip: integer;
   Level: integer;
@@ -2927,20 +2933,20 @@ begin
 
             for OperatorIndex := 0 to WordOperators.Count - 1 do
             begin
-              Operator := WordOperators[OperatorIndex];
-              TestString := Copy(ALine, Index, Length(Operator));
-              if Operator = TestString then
+              AnOperator := WordOperators[OperatorIndex];
+              TestString := Copy(ALine, Index, Length(AnOperator));
+              if AnOperator = TestString then
               begin
                 {$IFDEF Delphi_2009_UP}
                 if ((Index = 1) or CharInSet(ALine[Index - 1], [' ', ')', ',']))
-                  and ((Index + Length(Operator) > Length(ALine))
-                  or CharInSet(ALine[Index + Length(Operator)], [' ', '(', ',']))
-                  or not CharInSet(Operator[1], ['A'..'Z', 'a'..'z']) then
+                  and ((Index + Length(AnOperator) > Length(ALine))
+                  or CharInSet(ALine[Index + Length(AnOperator)], [' ', '(', ',']))
+                  or not CharInSet(AnOperator[1], ['A'..'Z', 'a'..'z']) then
                 {$ELSE}
                 if ((Index = 1) or (ALine[Index - 1] in [' ', ')', ',']))
-                  and ((Index + Length(Operator) > Length(ALine))
-                  or (ALine[Index + Length(Operator)] in [' ', '(', ',']))
-                  or not (Operator[1] in ['A'..'Z', 'a'..'z']) then
+                  and ((Index + Length(AnOperator) > Length(ALine))
+                  or (ALine[Index + Length(AnOperator)] in [' ', '(', ',']))
+                  or not (AnOperator[1] in ['A'..'Z', 'a'..'z']) then
                 {$ENDIF}
                 begin
                   Tokens.Add(copy(ALine, LastPosition + 1, Index - LastPosition
@@ -2960,17 +2966,17 @@ begin
             end;
             for OperatorIndex := 0 to Operators.Count - 1 do
             begin
-              Operator := Operators[OperatorIndex];
-              TestString := Copy(ALine, Index, Length(Operator));
-              if Operator = TestString then
+              AnOperator := Operators[OperatorIndex];
+              TestString := Copy(ALine, Index, Length(AnOperator));
+              if AnOperator = TestString then
               begin
                 {$IFDEF Delphi_2009_UP}
                 if (Index > 1)
-                  and ((Operator = '-') or (Operator = '+'))
+                  and ((AnOperator = '-') or (AnOperator = '+'))
                   and CharInSet(ALine[Index - 1], ['e', 'E']) then
                 {$ELSE}
                 if (Index > 1)
-                  and ((Operator = '-') or (Operator = '+'))
+                  and ((AnOperator = '-') or (AnOperator = '+'))
                   and (ALine[Index - 1] in ['e', 'E']) then
                 {$ENDIF}
                 begin
@@ -2996,17 +3002,17 @@ begin
                 break;
               end;
             end;
-            Operator := ',';
-            TestString := Copy(ALine, Index, Length(Operator));
-            if Operator = TestString then
+            AnOperator := ',';
+            TestString := Copy(ALine, Index, Length(AnOperator));
+            if AnOperator = TestString then
             begin
               {$IFDEF Delphi_2009_UP}
               if (Index > 1)
-                and ((Operator = '-') or (Operator = '+'))
+                and ((AnOperator = '-') or (AnOperator = '+'))
                 and CharInSet(ALine[Index - 1], ['e', 'E']) then
               {$ELSE}
               if (Index > 1)
-                and ((Operator = '-') or (Operator = '+'))
+                and ((AnOperator = '-') or (AnOperator = '+'))
                 and (ALine[Index - 1] in ['e', 'E']) then
               {$ENDIF}
               begin
@@ -3533,7 +3539,20 @@ destructor TConstant.Destroy;
 begin
   if FResultType <> rdtString then
   begin
-    Dispose(FResult);
+    case FResultType of
+      rdtDouble:
+        begin
+          Dispose(PDouble(FResult));
+        end;
+      rdtInteger:
+        begin
+          Dispose(PInteger(FResult));
+        end;
+      rdtBoolean:
+        begin
+          Dispose(PBoolean(FResult));
+        end;
+    end;
   end;
   inherited;
 end;
@@ -3818,7 +3837,7 @@ var
             VariableList := AnObject as TList;
             for VarIndex := 0 to VariableList.Count - 1 do
             begin
-              Constant := VariableList[VarIndex];
+              Constant := TConstant(VariableList[VarIndex]);
               if not (Constant is TCustomValue) or (Constant is TExpression)
                 then
               begin
@@ -3970,7 +3989,7 @@ begin
                   begin
                     VarIndex2 := VarIndex;
                     PriorExpression.Variables[VarIndex] :=
-                      VariableList[VarIndex];
+                      TConstant(VariableList[VarIndex]);
                     VariableList[VarIndex] := nil;
                   end;
                 except on E: ERbwParserError do
@@ -4004,7 +4023,7 @@ begin
                 begin
                   for VarIndex := 0 to VariableList.Count - 1 do
                   begin
-                    Constant := VariableList[VarIndex];
+                    Constant := TConstant(VariableList[VarIndex]);
                     if not (Constant is TCustomValue) or (Constant is TExpression)
                       then
                     begin
@@ -4019,7 +4038,7 @@ begin
               end;
 
               // Assert(VariableList.Count=1);
-              Objects[Index] := VariableList[0];
+              Objects[Index] := TObject(VariableList[0]);
               VariableList.Free;
               VariableList := nil
             end;
@@ -4039,7 +4058,7 @@ begin
         begin
           for VarIndex := 0 to VariableList.Count - 1 do
           begin
-            Constant := VariableList[VarIndex];
+            Constant := TConstant(VariableList[VarIndex]);
             if not (Constant is TCustomValue) or (Constant is TExpression) then
             begin
               Constant.Free;
@@ -4050,10 +4069,10 @@ begin
           Objects[0] := nil;
           raise ErbwParserError.Create(StrParsingErrorCheck);
         end;
-        ResultConstant := VariableList[0];
+        ResultConstant := TConstant(VariableList[0]);
         if ResultConstant is TExpression then
         begin
-          result := VariableList[0];
+          result := TExpression(VariableList[0]);
           result.FillVariables;
           //result.MakeLinkedList(nil);
           Constant := result.ConvertToConstant;
@@ -4069,7 +4088,7 @@ begin
         end
         else if ResultConstant is TCustomValue then
         begin
-          resultVariable := VariableList[0];
+          resultVariable := TCustomValue(VariableList[0]);
           result := TVariableExpression.Create(resultVariable, SpecialImplementorList);
         end
         else
@@ -4234,7 +4253,7 @@ begin
         end;
         for FunctionIndex := Functions.Count - 1 downto 0 do
         begin
-          FunctionClass := Functions[FunctionIndex];
+          FunctionClass := TFunctionClass(Functions[FunctionIndex]);
           FillArgumentList;
           if FunctionClass.OptionalArguments < 0 then
           begin
@@ -4256,7 +4275,7 @@ begin
           DeleteFunction := False;
           for ArgumentIndex := 0 to Arguments.Count - 1 do
           begin
-            AnArgument := Arguments[ArgumentIndex];
+            AnArgument := TConstant(Arguments[ArgumentIndex]);
             if DataType <> AnArgument.ResultType then
             begin
               if (DataType = rdtDouble)
@@ -4281,12 +4300,12 @@ begin
         begin
           for FunctionIndex := Functions.Count - 1 downto 0 do
           begin
-            FunctionClass := Functions[FunctionIndex];
+            FunctionClass := TFunctionClass(Functions[FunctionIndex]);
             FillArgumentList;
             DeleteFunction := False;
             for ArgumentIndex := 0 to Arguments.Count - 1 do
             begin
-              AnArgument := Arguments[ArgumentIndex];
+              AnArgument := TConstant(Arguments[ArgumentIndex]);
               if DataType <> AnArgument.ResultType then
               begin
                 DeleteFunction := True;
@@ -4306,7 +4325,7 @@ begin
           Continue;
         end;
         Assert(Functions.Count = 1);
-        FunctionClass := Functions[0];
+        FunctionClass := TFunctionClass(Functions[0]);
         AnExpression := TExpression.New(FunctionClass, SpecialImplementorList);
         if FunctionClass.OptionalArguments <> 0 then
         begin
@@ -4318,7 +4337,7 @@ begin
         Objects[Index] := AnExpression;
         for ArgumentIndex := 0 to Arguments.Count - 1 do
         begin
-          AnArgument := Arguments[ArgumentIndex];
+          AnArgument := TConstant(Arguments[ArgumentIndex]);
           AnExpression.Data[ArgumentIndex].DataType := DataType;
           AnExpression.Variables[ArgumentIndex] := AnArgument;
         end;
@@ -4423,8 +4442,8 @@ begin
     begin
       ArgumentDef := OperatorDefinition.ArgumentDefinitions[DefIndex];
       if (AnArgument.ResultType = ArgumentDef.FirstArgumentType)
-        or ((ArgumentDef.FirstArgumentType = rdtDouble)
-        and (AnArgument.ResultType = rdtInteger)) then
+        {or ((ArgumentDef.FirstArgumentType = rdtDouble)
+        and (AnArgument.ResultType = rdtInteger))} then
       begin
         UsedDef := ArgumentDef;
         break;
@@ -4496,8 +4515,24 @@ begin
 
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OpDef.ArgumentDefinitions.Add(ArgumentDef);
-  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.FirstArgumentType := rdtInteger;
   ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
   ArgumentDef.CreationMethod := cmCreate;
   ArgumentDef.OperatorClass := TOperator;
   ArgumentDef.FunctionClass := PowerOperator;
@@ -4520,6 +4555,30 @@ begin
   OpDef.ArgumentDefinitions.Add(ArgumentDef);
   ArgumentDef.FirstArgumentType := rdtDouble;
   ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator2;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator2;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator2;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.SecondArgumentType := rdtInteger;
   ArgumentDef.CreationMethod := cmCreate;
   ArgumentDef.OperatorClass := TOperator;
   ArgumentDef.FunctionClass := PowerOperator2;
@@ -4636,11 +4695,11 @@ begin
   begin
     ArgumentDef := OperatorDefinition.ArgumentDefinitions[DefIndex];
     PriorArgOK := (ArgumentDef.FirstArgumentType = PriorArgument.ResultType)
-      or ((ArgumentDef.FirstArgumentType = rdtDouble)
-      and (PriorArgument.ResultType = rdtInteger));
+      {or ((ArgumentDef.FirstArgumentType = rdtDouble)
+      and (PriorArgument.ResultType = rdtInteger))};
     SubsequentArgOK := (ArgumentDef.SecondArgumentType = SubsequentArgument.ResultType)
-      or ((ArgumentDef.SecondArgumentType = rdtDouble)
-      and (SubsequentArgument.ResultType = rdtInteger));
+      {or ((ArgumentDef.SecondArgumentType = rdtDouble)
+      and (SubsequentArgument.ResultType = rdtInteger))};
     if PriorArgOK and SubsequentArgOK then
     begin
       UsedDef := ArgumentDef;
@@ -4719,7 +4778,7 @@ begin
   {$ENDIF}
   for Index := 0 to FOpereratorDefinitions.Count - 1 do
   begin
-    OpDef := FOpereratorDefinitions[Index];
+    OpDef := TOperatorDefinition(FOpereratorDefinitions[Index]);
     if OpDef.OperatorName = OperatorName then
     begin
       ClearExpressions;
@@ -5529,7 +5588,7 @@ begin
         end;
         for FunctionIndex := Functions.Count - 1 downto 0 do
         begin
-          FunctionClass := Functions[FunctionIndex];
+          FunctionClass := TFunctionClass(Functions[FunctionIndex]);
           FillArgumentList;
           if FunctionClass.OptionalArguments < 0 then
           begin
@@ -5550,7 +5609,7 @@ begin
           DeleteFunction := False;
           for ArgumentIndex := 0 to Arguments.Count - 1 do
           begin
-            AnArgument := Arguments[ArgumentIndex];
+            AnArgument := TConstant(Arguments[ArgumentIndex]);
             if DataType <> AnArgument.ResultType then
             begin
               if (DataType = rdtDouble)
@@ -5575,12 +5634,12 @@ begin
         begin
           for FunctionIndex := Functions.Count - 1 downto 0 do
           begin
-            FunctionClass := Functions[FunctionIndex];
+            FunctionClass := TFunctionClass(Functions[FunctionIndex]);
             FillArgumentList;
             DeleteFunction := False;
             for ArgumentIndex := 0 to Arguments.Count - 1 do
             begin
-              AnArgument := Arguments[ArgumentIndex];
+              AnArgument := TConstant(Arguments[ArgumentIndex]);
               if DataType <> AnArgument.ResultType then
               begin
                 DeleteFunction := True;
@@ -5600,7 +5659,7 @@ begin
           Continue;
         end;
         Assert(Functions.Count = 1);
-        FunctionClass := Functions[0];
+        FunctionClass := TFunctionClass(Functions[0]);
         AnExpression := TExpression.New(FunctionClass, SpecialImplementorList);
         if FunctionClass.OptionalArguments <> 0 then
         begin
@@ -5611,7 +5670,7 @@ begin
         Objects[Index] := AnExpression;
         for ArgumentIndex := 0 to Arguments.Count - 1 do
         begin
-          AnArgument := Arguments[ArgumentIndex];
+          AnArgument := TConstant(Arguments[ArgumentIndex]);
           AnExpression.Data[ArgumentIndex].DataType := DataType;
           AnExpression.Variables[ArgumentIndex] := AnArgument;
         end;
@@ -5665,7 +5724,7 @@ begin
       Token := Uppercase(Strings[Index]);
       for DefIndex := 0 to FOpereratorDefinitions.Count - 1 do
       begin
-        OpDef := FOpereratorDefinitions[DefIndex];
+        OpDef := TOperatorDefinition(FOpereratorDefinitions[DefIndex]);
         if OpDef.Precedence = PrecedenceIndex then
         begin
           if Token = string(OpDef.OperatorName) then
@@ -5811,7 +5870,7 @@ begin
     begin
       if Data[Index].Datum <> nil then
       begin
-        AVariable := Data[Index].Datum;
+        AVariable := TConstant(Data[Index].Datum);
         if AVariable is TExpression then
         begin
           TExpression(AVariable).Evaluate;
@@ -5821,7 +5880,7 @@ begin
     for Index := 0 to StringVariableCount - 1 do
     begin
       I := StringVariableIndicies[Index];
-      AVariable := Data[I].Datum;
+      AVariable := TConstant(Data[I].Datum);
       VariablesForFunction[I] := AVariable.FResult;
     end;
     SetResultFromFunction;
@@ -5840,7 +5899,7 @@ end;
 
 function TExpression.GetVariables(const Index: integer): TConstant;
 begin
-  result := Data[Index].Datum;
+  result := TConstant(Data[Index].Datum);
 end;
 
 procedure TExpression.SetVariables(const Index: integer;
@@ -7061,7 +7120,7 @@ begin
   begin
     if Data[Index].Datum <> nil then
     begin
-      AVariable := Data[Index].Datum;
+      AVariable := TConstant(Data[Index].Datum);
       AVariable.MakeDiagram(List, Level+1);
     end;
   end;
@@ -7138,7 +7197,7 @@ begin
       begin
         if Data[Index].Datum <> nil then
         begin
-          AVariable := Data[Index].Datum;
+          AVariable := TConstant(Data[Index].Datum);
           if AVariable is TExpression then
           begin
             result := TExpression(AVariable).UsesFunction(FunctionName);
@@ -7204,7 +7263,7 @@ begin
       NeedsParenthesis := True;
       if ArrayLength = 1 then
       begin
-        AVariable := Data[0].Datum;
+        AVariable := TConstant(Data[0].Datum);
         if AVariable is TOperator then
         begin
           if Length(TOperator(AVariable).Data) = 2 then
@@ -7235,7 +7294,7 @@ begin
           begin
             DecompileList.Add(', ');
           end;
-          AVariable := Data[Index].Datum;
+          AVariable := TConstant(Data[Index].Datum);
           if AVariable is TExpression then
           begin
             TExpression(AVariable).FTopLevel := False;
@@ -7278,14 +7337,14 @@ begin
   begin
     for Index := 0 to ArrayLength - 1 do
     begin
-      result := Data[Index].Datum = Variable;
+      result := TCustomVariable(Data[Index].Datum) = Variable;
       if result then
       begin
         Exit;
       end;
       if (Data[Index].Datum <> nil) then
       begin
-        SubVariable := Data[Index].Datum;
+        SubVariable := TConstant(Data[Index].Datum);
         if SubVariable is TExpression then
         begin
           result := TExpression(SubVariable).UsesVariable(Variable);
@@ -7316,7 +7375,7 @@ begin
     end
     else
     begin
-      AVariable := Data[Index].Datum;
+      AVariable := TConstant(Data[Index].Datum);
       VariablesForFunction[Index] := AVariable.FResult;
       if (AVariable.FResultType = rdtString)
         and (AVariable is TCustomValue) then
@@ -7350,7 +7409,7 @@ begin
     begin
       if Data[Index].Datum <> nil then
       begin
-        AVariable := Data[Index].Datum;
+        AVariable := TConstant(Data[Index].Datum);
         if AVariable is TExpression then
         begin
           TempList := TExpression(AVariable).VariablesUsed;
@@ -7645,7 +7704,7 @@ begin
   AbsFunctionI.InputDataTypes[0] := rdtInteger;
   AbsFunctionI.OptionalArguments := 0;
   AbsFunctionI.CanConvertToConstant := True;
-  AbsFunctionI.IFunctionAddr := _AbsI;
+  AbsFunctionI.IFunctionAddr := @_AbsI;
   Add(AbsFunctionI);
 
   AbsFunctionR.ResultType := rdtDouble;
@@ -7655,7 +7714,7 @@ begin
   AbsFunctionR.InputDataTypes[0] := rdtDouble;
   AbsFunctionR.OptionalArguments := 0;
   AbsFunctionR.CanConvertToConstant := True;
-  AbsFunctionR.RFunctionAddr := _AbsR;
+  AbsFunctionR.RFunctionAddr := @_AbsR;
   Add(AbsFunctionR);
 
   ArcCosFunction.ResultType := rdtDouble;
@@ -7665,7 +7724,7 @@ begin
   ArcCosFunction.InputDataTypes[0] := rdtDouble;
   ArcCosFunction.OptionalArguments := 0;
   ArcCosFunction.CanConvertToConstant := True;
-  ArcCosFunction.RFunctionAddr := _arccos;
+  ArcCosFunction.RFunctionAddr := @_arccos;
   Add(ArcCosFunction);
 
   ArcCoshFunction.ResultType := rdtDouble;
@@ -7675,7 +7734,7 @@ begin
   ArcCoshFunction.InputDataTypes[0] := rdtDouble;
   ArcCoshFunction.OptionalArguments := 0;
   ArcCoshFunction.CanConvertToConstant := True;
-  ArcCoshFunction.RFunctionAddr := _arccosh;
+  ArcCoshFunction.RFunctionAddr := @_arccosh;
   Add(ArcCoshFunction);
 
   ArcSinFunction.ResultType := rdtDouble;
@@ -7685,7 +7744,7 @@ begin
   ArcSinFunction.InputDataTypes[0] := rdtDouble;
   ArcSinFunction.OptionalArguments := 0;
   ArcSinFunction.CanConvertToConstant := True;
-  ArcSinFunction.RFunctionAddr := _arcsin;
+  ArcSinFunction.RFunctionAddr := @_arcsin;
   Add(ArcSinFunction);
 
   ArcSinhFunction.ResultType := rdtDouble;
@@ -7695,7 +7754,7 @@ begin
   ArcSinhFunction.InputDataTypes[0] := rdtDouble;
   ArcSinhFunction.OptionalArguments := 0;
   ArcSinhFunction.CanConvertToConstant := True;
-  ArcSinhFunction.RFunctionAddr := _arcsinh;
+  ArcSinhFunction.RFunctionAddr := @_arcsinh;
   Add(ArcSinhFunction);
 
   ArcTanFunction.ResultType := rdtDouble;
@@ -7705,7 +7764,7 @@ begin
   ArcTanFunction.InputDataTypes[0] := rdtDouble;
   ArcTanFunction.OptionalArguments := 0;
   ArcTanFunction.CanConvertToConstant := True;
-  ArcTanFunction.RFunctionAddr := _arctan;
+  ArcTanFunction.RFunctionAddr := @_arctan;
   Add(ArcTanFunction);
 
   ArcTan2Function.ResultType := rdtDouble;
@@ -7716,7 +7775,7 @@ begin
   ArcTan2Function.InputDataTypes[1] := rdtDouble;
   ArcTan2Function.OptionalArguments := 0;
   ArcTan2Function.CanConvertToConstant := True;
-  ArcTan2Function.RFunctionAddr := _arctan2;
+  ArcTan2Function.RFunctionAddr := @_arctan2;
   Add(ArcTan2Function);
 
   ArcTanhFunction.ResultType := rdtDouble;
@@ -7726,7 +7785,7 @@ begin
   ArcTanhFunction.InputDataTypes[0] := rdtDouble;
   ArcTanhFunction.OptionalArguments := 0;
   ArcTanhFunction.CanConvertToConstant := True;
-  ArcTanhFunction.RFunctionAddr := _arctanh;
+  ArcTanhFunction.RFunctionAddr := @_arctanh;
   Add(ArcTanhFunction);
 
   CopyFunction.ResultType := rdtString;
@@ -7738,7 +7797,7 @@ begin
   CopyFunction.InputDataTypes[2] := rdtInteger;
   CopyFunction.OptionalArguments := 0;
   CopyFunction.CanConvertToConstant := True;
-  CopyFunction.SFunctionAddr := _Copy;
+  CopyFunction.SFunctionAddr := @_Copy;
   Add(CopyFunction);
 
   CosFunction.ResultType := rdtDouble;
@@ -7748,7 +7807,7 @@ begin
   CosFunction.InputDataTypes[0] := rdtDouble;
   CosFunction.OptionalArguments := 0;
   CosFunction.CanConvertToConstant := True;
-  CosFunction.RFunctionAddr := _cos;
+  CosFunction.RFunctionAddr := @_cos;
   Add(CosFunction);
 
   CoshFunction.ResultType := rdtDouble;
@@ -7758,7 +7817,7 @@ begin
   CoshFunction.InputDataTypes[0] := rdtDouble;
   CoshFunction.OptionalArguments := 0;
   CoshFunction.CanConvertToConstant := True;
-  CoshFunction.RFunctionAddr := _cosh;
+  CoshFunction.RFunctionAddr := @_cosh;
   Add(CoshFunction);
 
   CaseBooleanFunction.ResultType := rdtBoolean;
@@ -7772,7 +7831,7 @@ begin
   CaseBooleanFunction.InputDataTypes[3] := rdtBoolean;
   CaseBooleanFunction.CanConvertToConstant := True;
   CaseBooleanFunction.OptionalArguments := -1;
-  CaseBooleanFunction.BFunctionAddr := _CaseBoolean;
+  CaseBooleanFunction.BFunctionAddr := @_CaseBoolean;
   Add(CaseBooleanFunction);
 
   CaseIntegerFunction.ResultType := rdtInteger;
@@ -7786,7 +7845,7 @@ begin
   CaseIntegerFunction.InputDataTypes[3] := rdtInteger;
   CaseIntegerFunction.OptionalArguments := -1;
   CaseIntegerFunction.CanConvertToConstant := True;
-  CaseIntegerFunction.IFunctionAddr := _CaseInteger;
+  CaseIntegerFunction.IFunctionAddr := @_CaseInteger;
   Add(CaseIntegerFunction);
 
   CaseDoubleFunction.ResultType := rdtDouble;
@@ -7800,7 +7859,7 @@ begin
   CaseDoubleFunction.InputDataTypes[3] := rdtDouble;
   CaseDoubleFunction.OptionalArguments := -1;
   CaseDoubleFunction.CanConvertToConstant := True;
-  CaseDoubleFunction.RFunctionAddr := _CaseDouble;
+  CaseDoubleFunction.RFunctionAddr := @_CaseDouble;
   Add(CaseDoubleFunction);
 
   CaseStringFunction.ResultType := rdtString;
@@ -7814,7 +7873,7 @@ begin
   CaseStringFunction.InputDataTypes[3] := rdtString;
   CaseStringFunction.OptionalArguments := -1;
   CaseStringFunction.CanConvertToConstant := True;
-  CaseStringFunction.SFunctionAddr := _CaseString;
+  CaseStringFunction.SFunctionAddr := @_CaseString;
   SetLength(CaseStringFunction.Synonyms, 1);
   CaseStringFunction.Synonyms[0] := 'CaseS';
   Add(CaseStringFunction);
@@ -7828,7 +7887,7 @@ begin
   ClosestFunction.InputDataTypes[1] := rdtDouble;
   ClosestFunction.OptionalArguments := -1;
   ClosestFunction.CanConvertToConstant := True;
-  ClosestFunction.IFunctionAddr := _Closest;
+  ClosestFunction.IFunctionAddr := @_Closest;
   Add(ClosestFunction);
 
 
@@ -7839,7 +7898,7 @@ begin
   DegToRadFunction.InputDataTypes[0] := rdtDouble;
   DegToRadFunction.OptionalArguments := 0;
   DegToRadFunction.CanConvertToConstant := True;
-  DegToRadFunction.RFunctionAddr := _DegToRad;
+  DegToRadFunction.RFunctionAddr := @_DegToRad;
   Add(DegToRadFunction);
 
   ExpFunction.ResultType := rdtDouble;
@@ -7849,7 +7908,7 @@ begin
   ExpFunction.InputDataTypes[0] := rdtDouble;
   ExpFunction.OptionalArguments := 0;
   ExpFunction.CanConvertToConstant := True;
-  ExpFunction.RFunctionAddr := _Exp;
+  ExpFunction.RFunctionAddr := @_Exp;
   Add(ExpFunction);
 
   FactorialFunction.ResultType := rdtInteger;
@@ -7859,7 +7918,7 @@ begin
   FactorialFunction.InputDataTypes[0] := rdtInteger;
   FactorialFunction.OptionalArguments := 0;
   FactorialFunction.CanConvertToConstant := True;
-  FactorialFunction.IFunctionAddr := _Factorial;
+  FactorialFunction.IFunctionAddr := @_Factorial;
   Add(FactorialFunction);
 
   FactorialFFunction.ResultType := rdtDouble;
@@ -7869,7 +7928,7 @@ begin
   FactorialFFunction.InputDataTypes[0] := rdtInteger;
   FactorialFFunction.OptionalArguments := 0;
   FactorialFFunction.CanConvertToConstant := True;
-  FactorialFFunction.RFunctionAddr := _FactorialR;
+  FactorialFFunction.RFunctionAddr := @_FactorialR;
   Add(FactorialFFunction);
 
   FracFunction.ResultType := rdtDouble;
@@ -7879,7 +7938,7 @@ begin
   FracFunction.InputDataTypes[0] := rdtDouble;
   FracFunction.OptionalArguments := 0;
   FracFunction.CanConvertToConstant := True;
-  FracFunction.RFunctionAddr := _Frac;
+  FracFunction.RFunctionAddr := @_Frac;
   Add(FracFunction);
 
   FloatToStrFunction.ResultType := rdtString;
@@ -7889,7 +7948,7 @@ begin
   FloatToStrFunction.InputDataTypes[0] := rdtDouble;
   FloatToStrFunction.OptionalArguments := 0;
   FloatToStrFunction.CanConvertToConstant := True;
-  FloatToStrFunction.SFunctionAddr := _FloatToStr;
+  FloatToStrFunction.SFunctionAddr := @_FloatToStr;
   SetLength(FloatToStrFunction.Synonyms, 1);
   FloatToStrFunction.Synonyms[0] := 'FloatToStr';
   Add(FloatToStrFunction);
@@ -7904,7 +7963,7 @@ begin
   IfBooleanFunction.InputDataTypes[2] := rdtBoolean;
   IfBooleanFunction.OptionalArguments := 0;
   IfBooleanFunction.CanConvertToConstant := True;
-  IfBooleanFunction.BFunctionAddr := _IfBoolean;
+  IfBooleanFunction.BFunctionAddr := @_IfBoolean;
   Add(IfBooleanFunction);
 
   IfIntegerFunction.ResultType := rdtInteger;
@@ -7917,7 +7976,7 @@ begin
   IfIntegerFunction.InputDataTypes[2] := rdtInteger;
   IfIntegerFunction.OptionalArguments := 0;
   IfIntegerFunction.CanConvertToConstant := True;
-  IfIntegerFunction.IFunctionAddr := _IfInteger;
+  IfIntegerFunction.IFunctionAddr := @_IfInteger;
   Add(IfIntegerFunction);
 
   IfRealFunction.ResultType := rdtDouble;
@@ -7930,7 +7989,7 @@ begin
   IfRealFunction.InputDataTypes[2] := rdtDouble;
   IfRealFunction.OptionalArguments := 0;
   IfRealFunction.CanConvertToConstant := True;
-  IfRealFunction.RFunctionAddr := _IfDouble;
+  IfRealFunction.RFunctionAddr := @_IfDouble;
   Add(IfRealFunction);
 
   IfStringFunction.ResultType := rdtString;
@@ -7943,7 +8002,7 @@ begin
   IfStringFunction.InputDataTypes[2] := rdtString;
   IfStringFunction.OptionalArguments := 0;
   IfStringFunction.CanConvertToConstant := True;
-  IfStringFunction.SFunctionAddr := _IfString;
+  IfStringFunction.SFunctionAddr := @_IfString;
   SetLength(IfStringFunction.Synonyms, 1);
   IfStringFunction.Synonyms[0] := 'IfS';
   Add(IfStringFunction);
@@ -7956,7 +8015,7 @@ begin
   IntPowerFunction.InputDataTypes[1] := rdtInteger;
   IntPowerFunction.OptionalArguments := 0;
   IntPowerFunction.CanConvertToConstant := True;
-  IntPowerFunction.RFunctionAddr := _IntPower;
+  IntPowerFunction.RFunctionAddr := @_IntPower;
   Add(IntPowerFunction);
 
   IntToStrFunction.ResultType := rdtString;
@@ -7966,7 +8025,7 @@ begin
   IntToStrFunction.InputDataTypes[0] := rdtInteger;
   IntToStrFunction.OptionalArguments := 0;
   IntToStrFunction.CanConvertToConstant := True;
-  IntToStrFunction.SFunctionAddr := _IntToStr;
+  IntToStrFunction.SFunctionAddr := @_IntToStr;
   SetLength(IntToStrFunction.Synonyms, 1);
   IntToStrFunction.Synonyms[0] := 'IntToStr';
   Add(IntToStrFunction);
@@ -7978,7 +8037,7 @@ begin
   LengthFunction.InputDataTypes[0] := rdtString;
   LengthFunction.OptionalArguments := 0;
   LengthFunction.CanConvertToConstant := True;
-  LengthFunction.IFunctionAddr := _length;
+  LengthFunction.IFunctionAddr := @_length;
   Add(LengthFunction);
 
   LnFunction.ResultType := rdtDouble;
@@ -7988,7 +8047,7 @@ begin
   LnFunction.InputDataTypes[0] := rdtDouble;
   LnFunction.OptionalArguments := 0;
   LnFunction.CanConvertToConstant := True;
-  LnFunction.RFunctionAddr := _ln;
+  LnFunction.RFunctionAddr := @_ln;
   Add(LnFunction);
 
   Log10Function.ResultType := rdtDouble;
@@ -7998,7 +8057,7 @@ begin
   Log10Function.InputDataTypes[0] := rdtDouble;
   Log10Function.OptionalArguments := 0;
   Log10Function.CanConvertToConstant := True;
-  Log10Function.RFunctionAddr := _log10;
+  Log10Function.RFunctionAddr := @_log10;
   Add(Log10Function);
 
   LogNFunction.ResultType := rdtDouble;
@@ -8009,7 +8068,7 @@ begin
   LogNFunction.InputDataTypes[1] := rdtDouble;
   LogNFunction.OptionalArguments := 0;
   LogNFunction.CanConvertToConstant := True;
-  LogNFunction.RFunctionAddr := _logN;
+  LogNFunction.RFunctionAddr := @_logN;
   Add(LogNFunction);
 
   LowerCaseFunction.ResultType := rdtString;
@@ -8019,7 +8078,7 @@ begin
   LowerCaseFunction.InputDataTypes[0] := rdtString;
   LowerCaseFunction.OptionalArguments := 0;
   LowerCaseFunction.CanConvertToConstant := True;
-  LowerCaseFunction.SFunctionAddr := _LowerCase;
+  LowerCaseFunction.SFunctionAddr := @_LowerCase;
   Add(LowerCaseFunction);
 
   MaxIFunction.ResultType := rdtInteger;
@@ -8031,7 +8090,7 @@ begin
   MaxIFunction.InputDataTypes[2] := rdtInteger;
   MaxIFunction.OptionalArguments := -1;
   MaxIFunction.CanConvertToConstant := True;
-  MaxIFunction.IFunctionAddr := _maxI;
+  MaxIFunction.IFunctionAddr := @_maxI;
   Add(MaxIFunction);
 
   MaxRFunction.ResultType := rdtDouble;
@@ -8043,7 +8102,7 @@ begin
   MaxRFunction.InputDataTypes[2] := rdtDouble;
   MaxRFunction.OptionalArguments := -1;
   MaxRFunction.CanConvertToConstant := True;
-  MaxRFunction.RFunctionAddr := _maxR;
+  MaxRFunction.RFunctionAddr := @_maxR;
   Add(MaxRFunction);
 
   MinIFunction.ResultType := rdtInteger;
@@ -8055,7 +8114,7 @@ begin
   MinIFunction.InputDataTypes[2] := rdtInteger;
   MinIFunction.OptionalArguments := -1;
   MinIFunction.CanConvertToConstant := True;
-  MinIFunction.IFunctionAddr := _minI;
+  MinIFunction.IFunctionAddr := @_minI;
   Add(MinIFunction);
 
   MinRFunction.ResultType := rdtDouble;
@@ -8067,7 +8126,7 @@ begin
   MinRFunction.InputDataTypes[2] := rdtDouble;
   MinRFunction.OptionalArguments := -1;
   MinRFunction.CanConvertToConstant := True;
-  MinRFunction.RFunctionAddr := _minR;
+  MinRFunction.RFunctionAddr := @_minR;
   Add(MinRFunction);
 
   OddFunction.ResultType := rdtBoolean;
@@ -8076,7 +8135,7 @@ begin
   SetLength(OddFunction.InputDataTypes, 1);
   OddFunction.InputDataTypes[0] := rdtInteger;
   OddFunction.CanConvertToConstant := True;
-  OddFunction.BFunctionAddr := _Odd;
+  OddFunction.BFunctionAddr := @_Odd;
   Add(OddFunction);
 
   PiFunction.ResultType := rdtDouble;
@@ -8085,7 +8144,7 @@ begin
   SetLength(PiFunction.InputDataTypes, 0);
   PiFunction.OptionalArguments := 0;
   PiFunction.CanConvertToConstant := True;
-  PiFunction.RFunctionAddr := _Pi;
+  PiFunction.RFunctionAddr := @_Pi;
   Add(PiFunction);
 
   PosFunction.ResultType := rdtInteger;
@@ -8096,7 +8155,7 @@ begin
   PosFunction.InputDataTypes[1] := rdtString;
   PosFunction.OptionalArguments := 0;
   PosFunction.CanConvertToConstant := True;
-  PosFunction.IFunctionAddr := _Pos;
+  PosFunction.IFunctionAddr := @_Pos;
   Add(PosFunction);
 
   PosExFunction.ResultType := rdtInteger;
@@ -8108,7 +8167,7 @@ begin
   PosExFunction.InputDataTypes[2] := rdtInteger;
   PosExFunction.OptionalArguments := 0;
   PosExFunction.CanConvertToConstant := True;
-  PosExFunction.IFunctionAddr := _PosEx;
+  PosExFunction.IFunctionAddr := @_PosEx;
   Add(PosExFunction);
 
 
@@ -8121,7 +8180,7 @@ begin
   PositionInList.InputDataTypes[1] := rdtString;
   PositionInList.CanConvertToConstant := True;
   PositionInList.OptionalArguments := -1;
-  PositionInList.IFunctionAddr := _PositionInList;
+  PositionInList.IFunctionAddr := @_PositionInList;
   Add(PositionInList);
 
 
@@ -8134,7 +8193,7 @@ begin
   PowerFunction.InputDataTypes[1] := rdtDouble;
   PowerFunction.OptionalArguments := 0;
   PowerFunction.CanConvertToConstant := True;
-  PowerFunction.RFunctionAddr := _Power;
+  PowerFunction.RFunctionAddr := @_Power;
   Add(PowerFunction);
 
   RadToDegFunction.ResultType := rdtDouble;
@@ -8144,7 +8203,7 @@ begin
   RadToDegFunction.InputDataTypes[0] := rdtDouble;
   RadToDegFunction.OptionalArguments := 0;
   RadToDegFunction.CanConvertToConstant := True;
-  RadToDegFunction.RFunctionAddr := _RadToDeg;
+  RadToDegFunction.RFunctionAddr := @_RadToDeg;
   Add(RadToDegFunction);
 
   RoundFunction.ResultType := rdtInteger;
@@ -8154,7 +8213,7 @@ begin
   RoundFunction.InputDataTypes[0] := rdtDouble;
   RoundFunction.OptionalArguments := 0;
   RoundFunction.CanConvertToConstant := True;
-  RoundFunction.IFunctionAddr := _Round;
+  RoundFunction.IFunctionAddr := @_Round;
   Add(RoundFunction);
 
   SinFunction.ResultType := rdtDouble;
@@ -8164,7 +8223,7 @@ begin
   SinFunction.InputDataTypes[0] := rdtDouble;
   SinFunction.OptionalArguments := 0;
   SinFunction.CanConvertToConstant := True;
-  SinFunction.RFunctionAddr := _sin;
+  SinFunction.RFunctionAddr := @_sin;
   Add(SinFunction);
 
   SinhFunction.ResultType := rdtDouble;
@@ -8174,7 +8233,7 @@ begin
   SinhFunction.InputDataTypes[0] := rdtDouble;
   SinhFunction.OptionalArguments := 0;
   SinhFunction.CanConvertToConstant := True;
-  SinhFunction.RFunctionAddr := _sinh;
+  SinhFunction.RFunctionAddr := @_sinh;
   Add(SinhFunction);
 
   SqrIFunction.ResultType := rdtInteger;
@@ -8184,7 +8243,7 @@ begin
   SqrIFunction.InputDataTypes[0] := rdtInteger;
   SqrIFunction.OptionalArguments := 0;
   SqrIFunction.CanConvertToConstant := True;
-  SqrIFunction.IFunctionAddr := _SqrI;
+  SqrIFunction.IFunctionAddr := @_SqrI;
   Add(SqrIFunction);
 
   SqrRFunction.ResultType := rdtDouble;
@@ -8194,7 +8253,7 @@ begin
   SqrRFunction.InputDataTypes[0] := rdtDouble;
   SqrRFunction.OptionalArguments := 0;
   SqrRFunction.CanConvertToConstant := True;
-  SqrRFunction.RFunctionAddr := _SqrR;
+  SqrRFunction.RFunctionAddr := @_SqrR;
   Add(SqrRFunction);
 
   SqrtFunction.ResultType := rdtDouble;
@@ -8204,7 +8263,7 @@ begin
   SqrtFunction.InputDataTypes[0] := rdtDouble;
   SqrtFunction.OptionalArguments := 0;
   SqrtFunction.CanConvertToConstant := True;
-  SqrtFunction.RFunctionAddr := _sqrt;
+  SqrtFunction.RFunctionAddr := @_sqrt;
   Add(SqrtFunction);
 
   StrToIntFunction.ResultType := rdtInteger;
@@ -8214,7 +8273,7 @@ begin
   StrToIntFunction.InputDataTypes[0] := rdtString;
   StrToIntFunction.OptionalArguments := 0;
   StrToIntFunction.CanConvertToConstant := True;
-  StrToIntFunction.IFunctionAddr := _StrToInt;
+  StrToIntFunction.IFunctionAddr := @_StrToInt;
   SetLength(StrToIntFunction.Synonyms, 1);
   StrToIntFunction.Synonyms[0] := 'StrToInt';
   Add(StrToIntFunction);
@@ -8227,7 +8286,7 @@ begin
   StrToIntDefFunction.InputDataTypes[1] := rdtInteger;
   StrToIntDefFunction.OptionalArguments := 0;
   StrToIntDefFunction.CanConvertToConstant := True;
-  StrToIntDefFunction.IFunctionAddr := _StrToIntDef;
+  StrToIntDefFunction.IFunctionAddr := @_StrToIntDef;
   SetLength(StrToIntDefFunction.Synonyms, 1);
   StrToIntDefFunction.Synonyms[0] := 'StrToIntDef';
   Add(StrToIntDefFunction);
@@ -8239,7 +8298,7 @@ begin
   StrToFloatFunction.InputDataTypes[0] := rdtString;
   StrToFloatFunction.OptionalArguments := 0;
   StrToFloatFunction.CanConvertToConstant := True;
-  StrToFloatFunction.RFunctionAddr := _StrToFloat;
+  StrToFloatFunction.RFunctionAddr := @_StrToFloat;
   SetLength(StrToFloatFunction.Synonyms, 1);
   StrToFloatFunction.Synonyms[0] := 'StrToFloat';
   Add(StrToFloatFunction);
@@ -8253,7 +8312,7 @@ begin
   StrToFloatDefFunction.InputDataTypes[1] := rdtDouble;
   StrToFloatDefFunction.OptionalArguments := 0;
   StrToFloatDefFunction.CanConvertToConstant := True;
-  StrToFloatDefFunction.RFunctionAddr := _StrToFloatDef;
+  StrToFloatDefFunction.RFunctionAddr := @_StrToFloatDef;
   SetLength(StrToFloatDefFunction.Synonyms, 1);
   StrToFloatDefFunction.Synonyms[0] := 'StrToFloatDef';
   Add(StrToFloatDefFunction);
@@ -8265,7 +8324,7 @@ begin
   TanFunction.InputDataTypes[0] := rdtDouble;
   TanFunction.OptionalArguments := 0;
   TanFunction.CanConvertToConstant := True;
-  TanFunction.RFunctionAddr := _tan;
+  TanFunction.RFunctionAddr := @_tan;
   Add(TanFunction);
 
   TanhFunction.ResultType := rdtDouble;
@@ -8275,7 +8334,7 @@ begin
   TanhFunction.InputDataTypes[0] := rdtDouble;
   TanhFunction.OptionalArguments := 0;
   TanhFunction.CanConvertToConstant := True;
-  TanhFunction.RFunctionAddr := _tanh;
+  TanhFunction.RFunctionAddr := @_tanh;
   Add(TanhFunction);
 
   TrimMunction.ResultType := rdtString;
@@ -8285,7 +8344,7 @@ begin
   TrimMunction.InputDataTypes[0] := rdtString;
   TrimMunction.OptionalArguments := 0;
   TrimMunction.CanConvertToConstant := True;
-  TrimMunction.SFunctionAddr := _Trim;
+  TrimMunction.SFunctionAddr := @_Trim;
   Add(TrimMunction);
 
   TruncFunction.ResultType := rdtInteger;
@@ -8295,7 +8354,7 @@ begin
   TruncFunction.InputDataTypes[0] := rdtDouble;
   TruncFunction.OptionalArguments := 0;
   TruncFunction.CanConvertToConstant := True;
-  TruncFunction.IFunctionAddr := _trunc;
+  TruncFunction.IFunctionAddr := @_trunc;
   Add(TruncFunction);
 
   UpperCaseFunction.ResultType := rdtString;
@@ -8305,7 +8364,7 @@ begin
   UpperCaseFunction.InputDataTypes[0] := rdtString;
   UpperCaseFunction.OptionalArguments := 0;
   UpperCaseFunction.CanConvertToConstant := True;
-  UpperCaseFunction.SFunctionAddr := _UpperCase;
+  UpperCaseFunction.SFunctionAddr := @_UpperCase;
   Add(UpperCaseFunction);
 
   InterpolateFunction.ResultType := rdtDouble;
@@ -8320,7 +8379,7 @@ begin
   InterpolateFunction.InputDataTypes[4] := rdtDouble;
   InterpolateFunction.OptionalArguments := 0;
   InterpolateFunction.CanConvertToConstant := True;
-  InterpolateFunction.RFunctionAddr := _Interpolate;
+  InterpolateFunction.RFunctionAddr := @_Interpolate;
   Add(InterpolateFunction);
 
   DistanceFunction.ResultType := rdtDouble;
@@ -8333,7 +8392,7 @@ begin
   DistanceFunction.InputDataTypes[3] := rdtDouble;
   DistanceFunction.OptionalArguments := 0;
   DistanceFunction.CanConvertToConstant := True;
-  DistanceFunction.RFunctionAddr := _Distance;
+  DistanceFunction.RFunctionAddr := @_Distance;
   Add(DistanceFunction);
 end;
 
@@ -8386,7 +8445,7 @@ begin
       end
       else
       begin
-        AVariable := Data[Index].Datum;
+        AVariable := TConstant(Data[Index].Datum);
         if AVariable is TExpression then
         begin
           TExpression(AVariable).Evaluate;
@@ -8434,7 +8493,7 @@ begin
       end
       else
       begin
-        AVariable := Data[Index].Datum;
+        AVariable := TConstant(Data[Index].Datum);
         if AVariable is TExpression then
         begin
           TExpression(AVariable).Evaluate;
@@ -8478,7 +8537,7 @@ begin
     case Data[0].DataType of
       rdtInteger, rdtBoolean:
         begin
-          AVariable := Data[0].Datum;
+          AVariable := TConstant(Data[0].Datum);
           if AVariable is TExpression then
           begin
             TExpression(AVariable).Evaluate;
@@ -8514,7 +8573,7 @@ begin
     end
     else
     begin
-      AVariable := Data[SelectIndex].Datum;
+      AVariable := TConstant(Data[SelectIndex].Datum);
       Assert(AVariable.FResultType = FResultType);
       if AVariable is TExpression then
       begin
@@ -8604,7 +8663,7 @@ begin
     Assert(ArrayLength in [1, 2]);
     if ArrayLength = 1 then
     begin
-      AVariable := Data[0].Datum;
+      AVariable := TConstant(Data[0].Datum);
       Assert(AVariable <> nil);
       case DecompileType of
         dtInternal: result := result + ' ' + AVariable.Decompile;
@@ -8614,7 +8673,7 @@ begin
     end
     else
     begin
-      AVariable := Data[0].Datum;
+      AVariable := TConstant(Data[0].Datum);
       Assert(AVariable <> nil);
       if FTopLevel then
       begin
@@ -8635,7 +8694,7 @@ begin
         else Assert(False);
       end;
 
-      AVariable := Data[1].Datum;
+      AVariable := TConstant(Data[1].Datum);
       Assert(AVariable <> nil);
       if AVariable is TExpression then
       begin
@@ -8681,7 +8740,7 @@ begin
     result := Name;
     ArrayLength := Length(Data);
     Assert(ArrayLength = 1);
-    AVariable := Data[0].Datum;
+    AVariable := TConstant(Data[0].Datum);
     Assert(AVariable <> nil);
     if AVariable is TExpression then
     begin
@@ -8719,7 +8778,7 @@ var
 begin
   ArrayLength := Length(Data);
   Assert(ArrayLength = 1);
-  AVariable := Data[0].Datum;
+  AVariable := TConstant(Data[0].Datum);
   Assert(AVariable <> nil);
   if AVariable is TExpression then
   begin
@@ -8746,7 +8805,7 @@ procedure InitializeVariables;
 begin
   IntToDoubleFunction := TFunctionClass.Create;
   IntToDoubleFunction.InputDataCount := 1;
-  IntToDoubleFunction.RFunctionAddr := _IntToDouble;
+  IntToDoubleFunction.RFunctionAddr := @_IntToDouble;
   IntToDoubleFunction.Name := 'IntToDouble';
   IntToDoubleFunction.InputDataTypes[0] := rdtInteger;
   IntToDoubleFunction.OptionalArguments := 0;
@@ -8756,7 +8815,7 @@ begin
   NotOperator := TFunctionClass.Create;
   OperatorList.Add(NotOperator);
   NotOperator.InputDataCount := 1;
-  NotOperator.BFunctionAddr := _not;
+  NotOperator.BFunctionAddr := @_not;
   NotOperator.Name := 'not';
   NotOperator.Prototype := StrLogical+'not';
   NotOperator.InputDataTypes[0] := rdtBoolean;
@@ -8765,7 +8824,7 @@ begin
   PowerOperator := TFunctionClass.Create;
   OperatorList.Add(PowerOperator);
   PowerOperator.InputDataCount := 2;
-  PowerOperator.RFunctionAddr := _Power;
+  PowerOperator.RFunctionAddr := @_Power;
   PowerOperator.Name := '^';
   PowerOperator.Prototype := StrMath+'^';
   PowerOperator.InputDataTypes[0] := rdtDouble;
@@ -8775,7 +8834,7 @@ begin
   PowerOperator2 := TFunctionClass.Create;
   OperatorList.Add(PowerOperator2);
   PowerOperator2.InputDataCount := 2;
-  PowerOperator2.RFunctionAddr := _Power;
+  PowerOperator2.RFunctionAddr := @_Power;
   PowerOperator2.Name := '**';
   PowerOperator2.Prototype := StrMath+'**';
   PowerOperator2.InputDataTypes[0] := rdtDouble;
@@ -8785,7 +8844,7 @@ begin
   XorOperator := TFunctionClass.Create;
   OperatorList.Add(XorOperator);
   XorOperator.InputDataCount := 2;
-  XorOperator.BFunctionAddr := _Xor;
+  XorOperator.BFunctionAddr := @_Xor;
   XorOperator.Name := 'xor';
   XorOperator.Prototype := StrLogical+'xor';
   XorOperator.InputDataTypes[0] := rdtBoolean;
@@ -8795,7 +8854,7 @@ begin
   TimesIOperator := TFunctionClass.Create;
   OperatorList.Add(TimesIOperator);
   TimesIOperator.InputDataCount := 2;
-  TimesIOperator.IFunctionAddr := _TimesI;
+  TimesIOperator.IFunctionAddr := @_TimesI;
   TimesIOperator.Name := '*';
   TimesIOperator.Prototype := StrMath+'*';
   TimesIOperator.InputDataTypes[0] := rdtInteger;
@@ -8805,7 +8864,7 @@ begin
   TimesROperator := TFunctionClass.Create;
   OperatorList.Add(TimesROperator);
   TimesROperator.InputDataCount := 2;
-  TimesROperator.RFunctionAddr := _TimesR;
+  TimesROperator.RFunctionAddr := @_TimesR;
   TimesROperator.Name := '*';
   TimesROperator.Prototype := StrMath+'*';
   TimesROperator.InputDataTypes[0] := rdtDouble;
@@ -8815,7 +8874,7 @@ begin
   DivideROperator := TFunctionClass.Create;
   OperatorList.Add(DivideROperator);
   DivideROperator.InputDataCount := 2;
-  DivideROperator.RFunctionAddr := _DivideR;
+  DivideROperator.RFunctionAddr := @_DivideR;
   DivideROperator.Name := '/';
   DivideROperator.Prototype := StrMath+'/';
   DivideROperator.InputDataTypes[0] := rdtDouble;
@@ -8825,7 +8884,7 @@ begin
   DivideIOperator := TFunctionClass.Create;
   OperatorList.Add(DivideIOperator);
   DivideIOperator.InputDataCount := 2;
-  DivideIOperator.RFunctionAddr := _DivideI;
+  DivideIOperator.RFunctionAddr := @_DivideI;
   DivideIOperator.Name := '/';
   DivideIOperator.Prototype := StrMath+'/';
   DivideIOperator.InputDataTypes[0] := rdtInteger;
@@ -8835,7 +8894,7 @@ begin
   DivOperator := TFunctionClass.Create;
   OperatorList.Add(DivOperator);
   DivOperator.InputDataCount := 2;
-  DivOperator.IFunctionAddr := _Div;
+  DivOperator.IFunctionAddr := @_Div;
   DivOperator.Name := 'div';
   DivOperator.Prototype := StrMath+'div';
   DivOperator.InputDataTypes[0] := rdtInteger;
@@ -8845,7 +8904,7 @@ begin
   ModOperator := TFunctionClass.Create;
   OperatorList.Add(ModOperator);
   ModOperator.InputDataCount := 2;
-  ModOperator.IFunctionAddr := _Mod;
+  ModOperator.IFunctionAddr := @_Mod;
   ModOperator.Name := 'mod';
   ModOperator.Prototype := StrMath+'mod';
   ModOperator.InputDataTypes[0] := rdtInteger;
@@ -8855,7 +8914,7 @@ begin
   AndOperator := TFunctionClass.Create;
   OperatorList.Add(AndOperator);
   AndOperator.InputDataCount := 2;
-  AndOperator.BFunctionAddr := _And;
+  AndOperator.BFunctionAddr := @_And;
   AndOperator.Name := 'and';
   AndOperator.Prototype := StrLogical+'and';
   AndOperator.InputDataTypes[0] := rdtBoolean;
@@ -8865,7 +8924,7 @@ begin
   OrOperator := TFunctionClass.Create;
   OperatorList.Add(OrOperator);
   OrOperator.InputDataCount := 2;
-  OrOperator.BFunctionAddr := _Or;
+  OrOperator.BFunctionAddr := @_Or;
   OrOperator.Name := 'or';
   OrOperator.Prototype := StrLogical+'or';
   OrOperator.InputDataTypes[0] := rdtBoolean;
@@ -8875,7 +8934,7 @@ begin
   PlusSignIOperator := TFunctionClass.Create;
   OperatorList.Add(PlusSignIOperator);
   PlusSignIOperator.InputDataCount := 1;
-  PlusSignIOperator.IFunctionAddr := _PlusSignI;
+  PlusSignIOperator.IFunctionAddr := @_PlusSignI;
   PlusSignIOperator.Name := '+';
   PlusSignIOperator.Prototype := StrMath+'+';
   PlusSignIOperator.InputDataTypes[0] := rdtInteger;
@@ -8884,7 +8943,7 @@ begin
   PlusSignROperator := TFunctionClass.Create;
   OperatorList.Add(PlusSignROperator);
   PlusSignROperator.InputDataCount := 1;
-  PlusSignROperator.RFunctionAddr := _PlusSignR;
+  PlusSignROperator.RFunctionAddr := @_PlusSignR;
   PlusSignROperator.Name := '+';
   PlusSignROperator.Prototype := StrMath+'+';
   PlusSignROperator.InputDataTypes[0] := rdtDouble;
@@ -8893,7 +8952,7 @@ begin
   MinusSignIOperator := TFunctionClass.Create;
   OperatorList.Add(MinusSignIOperator);
   MinusSignIOperator.InputDataCount := 1;
-  MinusSignIOperator.IFunctionAddr := _MinusSignI;
+  MinusSignIOperator.IFunctionAddr := @_MinusSignI;
   MinusSignIOperator.Name := '-';
   MinusSignIOperator.Prototype := StrMath+'-';
   MinusSignIOperator.InputDataTypes[0] := rdtInteger;
@@ -8902,7 +8961,7 @@ begin
   MinusSignROperator := TFunctionClass.Create;
   OperatorList.Add(MinusSignROperator);
   MinusSignROperator.InputDataCount := 1;
-  MinusSignROperator.RFunctionAddr := _MinusSignR;
+  MinusSignROperator.RFunctionAddr := @_MinusSignR;
   MinusSignROperator.Name := '-';
   MinusSignROperator.Prototype := StrMath+'-';
   MinusSignROperator.InputDataTypes[0] := rdtDouble;
@@ -8911,7 +8970,7 @@ begin
   PlusIOperator := TFunctionClass.Create;
   OperatorList.Add(PlusIOperator);
   PlusIOperator.InputDataCount := 2;
-  PlusIOperator.IFunctionAddr := _PlusI;
+  PlusIOperator.IFunctionAddr := @_PlusI;
   PlusIOperator.Name := '+';
   PlusIOperator.Prototype := StrMath+'+';
   PlusIOperator.InputDataTypes[0] := rdtInteger;
@@ -8921,7 +8980,7 @@ begin
   PlusROperator := TFunctionClass.Create;
   OperatorList.Add(PlusROperator);
   PlusROperator.InputDataCount := 2;
-  PlusROperator.RFunctionAddr := _PlusR;
+  PlusROperator.RFunctionAddr := @_PlusR;
   PlusROperator.Name := '+';
   PlusROperator.Prototype := StrMath+'+';
   PlusROperator.InputDataTypes[0] := rdtDouble;
@@ -8931,7 +8990,7 @@ begin
   PlusSOperator := TFunctionClass.Create;
   OperatorList.Add(PlusSOperator);
   PlusSOperator.InputDataCount := 2;
-  PlusSOperator.SFunctionAddr := _PlusS;
+  PlusSOperator.SFunctionAddr := @_PlusS;
   PlusSOperator.Name := '+';
   PlusSOperator.Prototype := StrText+'+';
   PlusSOperator.InputDataTypes[0] := rdtString;
@@ -8941,7 +9000,7 @@ begin
   MinusIOperator := TFunctionClass.Create;
   OperatorList.Add(MinusIOperator);
   MinusIOperator.InputDataCount := 2;
-  MinusIOperator.IFunctionAddr := _MinusI;
+  MinusIOperator.IFunctionAddr := @_MinusI;
   MinusIOperator.Name := '-';
   MinusIOperator.Prototype := StrMath+'-';
   MinusIOperator.InputDataTypes[0] := rdtInteger;
@@ -8951,7 +9010,7 @@ begin
   MinusROperator := TFunctionClass.Create;
   OperatorList.Add(MinusROperator);
   MinusROperator.InputDataCount := 2;
-  MinusROperator.RFunctionAddr := _MinusR;
+  MinusROperator.RFunctionAddr := @_MinusR;
   MinusROperator.Name := '-';
   MinusROperator.Prototype := StrMath+'-';
   MinusROperator.InputDataTypes[0] := rdtDouble;
@@ -8961,7 +9020,7 @@ begin
   EqualIOperator := TFunctionClass.Create;
   OperatorList.Add(EqualIOperator);
   EqualIOperator.InputDataCount := 2;
-  EqualIOperator.BFunctionAddr := _EqualI;
+  EqualIOperator.BFunctionAddr := @_EqualI;
   EqualIOperator.Name := '=';
   EqualIOperator.Prototype := StrLogical+'=';
   EqualIOperator.InputDataTypes[0] := rdtInteger;
@@ -8971,7 +9030,7 @@ begin
   EqualROperator := TFunctionClass.Create;
   OperatorList.Add(EqualROperator);
   EqualROperator.InputDataCount := 2;
-  EqualROperator.BFunctionAddr := _EqualR;
+  EqualROperator.BFunctionAddr := @_EqualR;
   EqualROperator.Name := '=';
   EqualROperator.Prototype := StrLogical+'=';
   EqualROperator.InputDataTypes[0] := rdtDouble;
@@ -8981,7 +9040,7 @@ begin
   EqualSOperator := TFunctionClass.Create;
   OperatorList.Add(EqualSOperator);
   EqualSOperator.InputDataCount := 2;
-  EqualSOperator.BFunctionAddr := _EqualS;
+  EqualSOperator.BFunctionAddr := @_EqualS;
   EqualSOperator.Name := '=';
   EqualSOperator.Prototype := StrLogical+'=';
   EqualSOperator.InputDataTypes[0] := rdtString;
@@ -8991,7 +9050,7 @@ begin
   EqualBOperator := TFunctionClass.Create;
   OperatorList.Add(EqualBOperator);
   EqualBOperator.InputDataCount := 2;
-  EqualBOperator.BFunctionAddr := _EqualB;
+  EqualBOperator.BFunctionAddr := @_EqualB;
   EqualBOperator.Name := '=';
   EqualBOperator.Prototype := StrLogical+'=';
   EqualBOperator.InputDataTypes[0] := rdtBoolean;
@@ -9001,7 +9060,7 @@ begin
   NotEqualIOperator := TFunctionClass.Create;
   OperatorList.Add(NotEqualIOperator);
   NotEqualIOperator.InputDataCount := 2;
-  NotEqualIOperator.BFunctionAddr := _NotEqualI;
+  NotEqualIOperator.BFunctionAddr := @_NotEqualI;
   NotEqualIOperator.Name := '<>';
   NotEqualIOperator.Prototype := StrLogical+'<>';
   NotEqualIOperator.InputDataTypes[0] := rdtInteger;
@@ -9011,7 +9070,7 @@ begin
   NotEqualROperator := TFunctionClass.Create;
   OperatorList.Add(NotEqualROperator);
   NotEqualROperator.InputDataCount := 2;
-  NotEqualROperator.BFunctionAddr := _NotEqualR;
+  NotEqualROperator.BFunctionAddr := @_NotEqualR;
   NotEqualROperator.Name := '<>';
   NotEqualROperator.Prototype := StrLogical+'<>';
   NotEqualROperator.InputDataTypes[0] := rdtDouble;
@@ -9021,7 +9080,7 @@ begin
   NotEqualSOperator := TFunctionClass.Create;
   OperatorList.Add(NotEqualSOperator);
   NotEqualSOperator.InputDataCount := 2;
-  NotEqualSOperator.BFunctionAddr := _NotEqualS;
+  NotEqualSOperator.BFunctionAddr := @_NotEqualS;
   NotEqualSOperator.Name := '<>';
   NotEqualSOperator.Prototype := StrLogical+'<>';
   NotEqualSOperator.InputDataTypes[0] := rdtString;
@@ -9031,7 +9090,7 @@ begin
   NotEqualBOperator := TFunctionClass.Create;
   OperatorList.Add(NotEqualBOperator);
   NotEqualBOperator.InputDataCount := 2;
-  NotEqualBOperator.BFunctionAddr := _NotEqualB;
+  NotEqualBOperator.BFunctionAddr := @_NotEqualB;
   NotEqualBOperator.Name := '<>';
   NotEqualBOperator.Prototype := StrLogical+'<>';
   NotEqualBOperator.InputDataTypes[0] := rdtBoolean;
@@ -9041,7 +9100,7 @@ begin
   LessThanIOperator := TFunctionClass.Create;
   OperatorList.Add(LessThanIOperator);
   LessThanIOperator.InputDataCount := 2;
-  LessThanIOperator.BFunctionAddr := _LessThanI;
+  LessThanIOperator.BFunctionAddr := @_LessThanI;
   LessThanIOperator.Name := '<';
   LessThanIOperator.Prototype := StrLogical+'<';
   LessThanIOperator.InputDataTypes[0] := rdtInteger;
@@ -9051,7 +9110,7 @@ begin
   LessThanROperator := TFunctionClass.Create;
   OperatorList.Add(LessThanROperator);
   LessThanROperator.InputDataCount := 2;
-  LessThanROperator.BFunctionAddr := _LessThanR;
+  LessThanROperator.BFunctionAddr := @_LessThanR;
   LessThanROperator.Name := '<';
   LessThanROperator.Prototype := StrLogical+'<';
   LessThanROperator.InputDataTypes[0] := rdtDouble;
@@ -9061,7 +9120,7 @@ begin
   LessThanSOperator := TFunctionClass.Create;
   OperatorList.Add(LessThanSOperator);
   LessThanSOperator.InputDataCount := 2;
-  LessThanSOperator.BFunctionAddr := _LessThanS;
+  LessThanSOperator.BFunctionAddr := @_LessThanS;
   LessThanSOperator.Name := '<';
   LessThanSOperator.Prototype := StrLogical+'<';
   LessThanSOperator.InputDataTypes[0] := rdtString;
@@ -9071,7 +9130,7 @@ begin
   LessThanBOperator := TFunctionClass.Create;
   OperatorList.Add(LessThanBOperator);
   LessThanBOperator.InputDataCount := 2;
-  LessThanBOperator.BFunctionAddr := _LessThanB;
+  LessThanBOperator.BFunctionAddr := @_LessThanB;
   LessThanBOperator.Name := '<';
   LessThanBOperator.Prototype := StrLogical+'<';
   LessThanBOperator.InputDataTypes[0] := rdtBoolean;
@@ -9081,7 +9140,7 @@ begin
   GreaterThanIOperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanIOperator);
   GreaterThanIOperator.InputDataCount := 2;
-  GreaterThanIOperator.BFunctionAddr := _GreaterThanI;
+  GreaterThanIOperator.BFunctionAddr := @_GreaterThanI;
   GreaterThanIOperator.Name := '>';
   GreaterThanIOperator.Prototype := StrLogical+'>';
   GreaterThanIOperator.InputDataTypes[0] := rdtInteger;
@@ -9091,7 +9150,7 @@ begin
   GreaterThanROperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanROperator);
   GreaterThanROperator.InputDataCount := 2;
-  GreaterThanROperator.BFunctionAddr := _GreaterThanR;
+  GreaterThanROperator.BFunctionAddr := @_GreaterThanR;
   GreaterThanROperator.Name := '>';
   GreaterThanROperator.Prototype := StrLogical+'>';
   GreaterThanROperator.InputDataTypes[0] := rdtDouble;
@@ -9101,7 +9160,7 @@ begin
   GreaterThanSOperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanSOperator);
   GreaterThanSOperator.InputDataCount := 2;
-  GreaterThanSOperator.BFunctionAddr := _GreaterThanS;
+  GreaterThanSOperator.BFunctionAddr := @_GreaterThanS;
   GreaterThanSOperator.Name := '>';
   GreaterThanSOperator.Prototype := StrLogical+'>';
   GreaterThanSOperator.InputDataTypes[0] := rdtString;
@@ -9111,7 +9170,7 @@ begin
   GreaterThanBOperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanBOperator);
   GreaterThanBOperator.InputDataCount := 2;
-  GreaterThanBOperator.BFunctionAddr := _GreaterThanB;
+  GreaterThanBOperator.BFunctionAddr := @_GreaterThanB;
   GreaterThanBOperator.Name := '>';
   GreaterThanBOperator.Prototype := StrLogical+'>';
   GreaterThanBOperator.InputDataTypes[0] := rdtBoolean;
@@ -9121,7 +9180,7 @@ begin
   LessThanOrEqualsIOperator := TFunctionClass.Create;
   OperatorList.Add(LessThanOrEqualsIOperator);
   LessThanOrEqualsIOperator.InputDataCount := 2;
-  LessThanOrEqualsIOperator.BFunctionAddr := _LessThanOrEqualsI;
+  LessThanOrEqualsIOperator.BFunctionAddr := @_LessThanOrEqualsI;
   LessThanOrEqualsIOperator.Name := '<=';
   LessThanOrEqualsIOperator.Prototype := StrLogical+'<=';
   LessThanOrEqualsIOperator.InputDataTypes[0] := rdtInteger;
@@ -9131,7 +9190,7 @@ begin
   LessThanOrEqualsROperator := TFunctionClass.Create;
   OperatorList.Add(LessThanOrEqualsROperator);
   LessThanOrEqualsROperator.InputDataCount := 2;
-  LessThanOrEqualsROperator.BFunctionAddr := _LessThanOrEqualsR;
+  LessThanOrEqualsROperator.BFunctionAddr := @_LessThanOrEqualsR;
   LessThanOrEqualsROperator.Name := '<=';
   LessThanOrEqualsROperator.Prototype := StrLogical+'<=';
   LessThanOrEqualsROperator.InputDataTypes[0] := rdtDouble;
@@ -9141,7 +9200,7 @@ begin
   LessThanOrEqualsSOperator := TFunctionClass.Create;
   OperatorList.Add(LessThanOrEqualsSOperator);
   LessThanOrEqualsSOperator.InputDataCount := 2;
-  LessThanOrEqualsSOperator.BFunctionAddr := _LessThanOrEqualsS;
+  LessThanOrEqualsSOperator.BFunctionAddr := @_LessThanOrEqualsS;
   LessThanOrEqualsSOperator.Name := '<=';
   LessThanOrEqualsSOperator.Prototype := StrLogical+'<=';
   LessThanOrEqualsSOperator.InputDataTypes[0] := rdtString;
@@ -9151,7 +9210,7 @@ begin
   LessThanOrEqualsBOperator := TFunctionClass.Create;
   OperatorList.Add(LessThanOrEqualsBOperator);
   LessThanOrEqualsBOperator.InputDataCount := 2;
-  LessThanOrEqualsBOperator.BFunctionAddr := _LessThanOrEqualsB;
+  LessThanOrEqualsBOperator.BFunctionAddr := @_LessThanOrEqualsB;
   LessThanOrEqualsBOperator.Name := '<=';
   LessThanOrEqualsBOperator.Prototype := StrLogical+'<=';
   LessThanOrEqualsBOperator.InputDataTypes[0] := rdtBoolean;
@@ -9161,7 +9220,7 @@ begin
   GreaterThanOrEqualsIOperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanOrEqualsIOperator);
   GreaterThanOrEqualsIOperator.InputDataCount := 2;
-  GreaterThanOrEqualsIOperator.BFunctionAddr := _GreaterThanOrEqualsI;
+  GreaterThanOrEqualsIOperator.BFunctionAddr := @_GreaterThanOrEqualsI;
   GreaterThanOrEqualsIOperator.Name := '>=';
   GreaterThanOrEqualsIOperator.Prototype := StrLogical+'>=';
   GreaterThanOrEqualsIOperator.InputDataTypes[0] := rdtInteger;
@@ -9171,7 +9230,7 @@ begin
   GreaterThanOrEqualsROperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanOrEqualsROperator);
   GreaterThanOrEqualsROperator.InputDataCount := 2;
-  GreaterThanOrEqualsROperator.BFunctionAddr := _GreaterThanOrEqualsR;
+  GreaterThanOrEqualsROperator.BFunctionAddr := @_GreaterThanOrEqualsR;
   GreaterThanOrEqualsROperator.Name := '>=';
   GreaterThanOrEqualsROperator.Prototype := StrLogical+'>=';
   GreaterThanOrEqualsROperator.InputDataTypes[0] := rdtDouble;
@@ -9181,7 +9240,7 @@ begin
   GreaterThanOrEqualsSOperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanOrEqualsSOperator);
   GreaterThanOrEqualsSOperator.InputDataCount := 2;
-  GreaterThanOrEqualsSOperator.BFunctionAddr := _GreaterThanOrEqualsS;
+  GreaterThanOrEqualsSOperator.BFunctionAddr := @_GreaterThanOrEqualsS;
   GreaterThanOrEqualsSOperator.Name := '>=';
   GreaterThanOrEqualsSOperator.Prototype := StrLogical+'>=';
   GreaterThanOrEqualsSOperator.InputDataTypes[0] := rdtString;
@@ -9191,7 +9250,7 @@ begin
   GreaterThanOrEqualsBOperator := TFunctionClass.Create;
   OperatorList.Add(GreaterThanOrEqualsBOperator);
   GreaterThanOrEqualsBOperator.InputDataCount := 2;
-  GreaterThanOrEqualsBOperator.BFunctionAddr := _GreaterThanOrEqualsB;
+  GreaterThanOrEqualsBOperator.BFunctionAddr := @_GreaterThanOrEqualsB;
   GreaterThanOrEqualsBOperator.Name := '>=';
   GreaterThanOrEqualsBOperator.Prototype := StrLogical+'>=';
   GreaterThanOrEqualsBOperator.InputDataTypes[0] := rdtBoolean;
@@ -9203,7 +9262,7 @@ begin
   AbsIOverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(AbsIOverloadedFunction);
   AbsIOverloadedFunction.InputDataCount := 1;
-  AbsIOverloadedFunction.IFunctionAddr := _AbsI;
+  AbsIOverloadedFunction.IFunctionAddr := @_AbsI;
   AbsIOverloadedFunction.Name := 'Abs';
   AbsIOverloadedFunction.Prototype := StrMath+'Abs(Value)';
   AbsIOverloadedFunction.InputDataTypes[0] := rdtInteger;
@@ -9212,7 +9271,7 @@ begin
   AbsROverloadedFunction := TFunctionClass.Create;
   OverloadedFunctionList.Add(AbsROverloadedFunction);
   AbsROverloadedFunction.InputDataCount := 1;
-  AbsROverloadedFunction.RFunctionAddr := _AbsR;
+  AbsROverloadedFunction.RFunctionAddr := @_AbsR;
   AbsROverloadedFunction.Name := 'Abs';
   AbsROverloadedFunction.Prototype := StrMath+'Abs(Value)';
   AbsROverloadedFunction.InputDataTypes[0] := rdtDouble;
@@ -9222,7 +9281,7 @@ begin
   OverloadedFunctionList.Add(MaxIOverloadedFunction);
   MaxIOverloadedFunction.InputDataCount := 3;
   MaxIOverloadedFunction.OptionalArguments := -1;
-  MaxIOverloadedFunction.IFunctionAddr := _MaxI;
+  MaxIOverloadedFunction.IFunctionAddr := @_MaxI;
   MaxIOverloadedFunction.Name := 'Max';
   MaxIOverloadedFunction.Prototype := StrMath+'Max(Value1, Value2, ...)';
   MaxIOverloadedFunction.InputDataTypes[0] := rdtInteger;
@@ -9233,7 +9292,7 @@ begin
   OverloadedFunctionList.Add(MaxROverloadedFunction);
   MaxROverloadedFunction.InputDataCount := 3;
   MaxROverloadedFunction.OptionalArguments := -1;
-  MaxROverloadedFunction.RFunctionAddr := _MaxR;
+  MaxROverloadedFunction.RFunctionAddr := @_MaxR;
   MaxROverloadedFunction.Name := 'Max';
   MaxROverloadedFunction.Prototype := StrMath+'Max(Value1, Value2, ...)';
   MaxROverloadedFunction.InputDataTypes[0] := rdtDouble;
@@ -9244,7 +9303,7 @@ begin
   OverloadedFunctionList.Add(MinIOverloadedFunction);
   MinIOverloadedFunction.InputDataCount := 3;
   MinIOverloadedFunction.OptionalArguments := -1;
-  MinIOverloadedFunction.IFunctionAddr := _MinI;
+  MinIOverloadedFunction.IFunctionAddr := @_MinI;
   MinIOverloadedFunction.Name := 'Min';
   MinIOverloadedFunction.Prototype := StrMath+'Min(Value1, Value2, ...)';
   MinIOverloadedFunction.InputDataTypes[0] := rdtInteger;
@@ -9255,7 +9314,7 @@ begin
   OverloadedFunctionList.Add(MinROverloadedFunction);
   MinROverloadedFunction.InputDataCount := 3;
   MinROverloadedFunction.OptionalArguments := -1;
-  MinROverloadedFunction.RFunctionAddr := _MinR;
+  MinROverloadedFunction.RFunctionAddr := @_MinR;
   MinROverloadedFunction.Name := 'Min';
   MinROverloadedFunction.Prototype := StrMath+'Min(Value1, Value2, ...)';
   MinROverloadedFunction.InputDataTypes[0] := rdtDouble;
@@ -9266,7 +9325,7 @@ begin
   OverloadedFunctionList.Add(SqrIOverloadedFunction);
   SqrIOverloadedFunction.InputDataCount := 1;
   SqrIOverloadedFunction.OptionalArguments := 0;
-  SqrIOverloadedFunction.IFunctionAddr := _SqrI;
+  SqrIOverloadedFunction.IFunctionAddr := @_SqrI;
   SqrIOverloadedFunction.Name := 'Sqr';
   SqrIOverloadedFunction.Prototype := StrMath+'Sqr(Value)';
   SqrIOverloadedFunction.InputDataTypes[0] := rdtInteger;
@@ -9275,7 +9334,7 @@ begin
   OverloadedFunctionList.Add(SqrROverloadedFunction);
   SqrROverloadedFunction.InputDataCount := 1;
   SqrROverloadedFunction.OptionalArguments := 0;
-  SqrROverloadedFunction.RFunctionAddr := _SqrR;
+  SqrROverloadedFunction.RFunctionAddr := @_SqrR;
   SqrROverloadedFunction.Name := 'Sqr';
   SqrROverloadedFunction.Prototype := StrMath+'Sqr(Value)';
   SqrROverloadedFunction.InputDataTypes[0] := rdtDouble;
@@ -9284,7 +9343,7 @@ begin
   OverloadedFunctionList.Add(CaseBOverloadedFunction);
   CaseBOverloadedFunction.InputDataCount := 4;
   CaseBOverloadedFunction.OptionalArguments := -1;
-  CaseBOverloadedFunction.BFunctionAddr := _CaseBoolean;
+  CaseBOverloadedFunction.BFunctionAddr := @_CaseBoolean;
   CaseBOverloadedFunction.Name := 'Case';
   CaseBOverloadedFunction.Prototype :=
     StrLogical+'Case(Index, Result1, Result2, ...)';
@@ -9297,7 +9356,7 @@ begin
   OverloadedFunctionList.Add(CaseIOverloadedFunction);
   CaseIOverloadedFunction.InputDataCount := 4;
   CaseIOverloadedFunction.OptionalArguments := -1;
-  CaseIOverloadedFunction.IFunctionAddr := _CaseInteger;
+  CaseIOverloadedFunction.IFunctionAddr := @_CaseInteger;
   CaseIOverloadedFunction.Name := 'Case';
   CaseIOverloadedFunction.Prototype :=
     StrLogical+'Case(Index, Result1, Result2, ...)';
@@ -9310,7 +9369,7 @@ begin
   OverloadedFunctionList.Add(CaseROverloadedFunction);
   CaseROverloadedFunction.InputDataCount := 4;
   CaseROverloadedFunction.OptionalArguments := -1;
-  CaseROverloadedFunction.RFunctionAddr := _CaseDouble;
+  CaseROverloadedFunction.RFunctionAddr := @_CaseDouble;
   CaseROverloadedFunction.Name := 'Case';
   CaseROverloadedFunction.Prototype :=
     StrLogical+'Case(Index, Result1, Result2, ...)';
@@ -9323,7 +9382,7 @@ begin
   OverloadedFunctionList.Add(CaseSOverloadedFunction);
   CaseSOverloadedFunction.InputDataCount := 4;
   CaseSOverloadedFunction.OptionalArguments := -1;
-  CaseSOverloadedFunction.SFunctionAddr := _CaseString;
+  CaseSOverloadedFunction.SFunctionAddr := @_CaseString;
   CaseSOverloadedFunction.Name := 'Case';
   CaseSOverloadedFunction.Prototype :=
     StrLogical+'Case(Index, Result1, Result2, ...)';
@@ -9336,7 +9395,7 @@ begin
   OverloadedFunctionList.Add(IfBOverloadedFunction);
   IfBOverloadedFunction.InputDataCount := 3;
   IfBOverloadedFunction.OptionalArguments := 0;
-  IfBOverloadedFunction.BFunctionAddr := _IfBoolean;
+  IfBOverloadedFunction.BFunctionAddr := @_IfBoolean;
   IfBOverloadedFunction.Name := 'If';
   IfBOverloadedFunction.Prototype :=
     StrLogical+'If(Boolean_Value, If_True_Result, If_False_Result)';
@@ -9348,7 +9407,7 @@ begin
   OverloadedFunctionList.Add(IfIOverloadedFunction);
   IfIOverloadedFunction.InputDataCount := 3;
   IfIOverloadedFunction.OptionalArguments := 0;
-  IfIOverloadedFunction.IFunctionAddr := _IfInteger;
+  IfIOverloadedFunction.IFunctionAddr := @_IfInteger;
   IfIOverloadedFunction.Name := 'If';
   IfIOverloadedFunction.Prototype :=
     StrLogical+'If(Boolean_Value, If_True_Result, If_False_Result)';
@@ -9360,7 +9419,7 @@ begin
   OverloadedFunctionList.Add(IfROverloadedFunction);
   IfROverloadedFunction.InputDataCount := 3;
   IfROverloadedFunction.OptionalArguments := 0;
-  IfROverloadedFunction.RFunctionAddr := _IfDouble;
+  IfROverloadedFunction.RFunctionAddr := @_IfDouble;
   IfROverloadedFunction.Name := 'If';
   IfROverloadedFunction.Prototype :=
     StrLogical+'If(Boolean_Value, If_True_Result, If_False_Result)';
@@ -9372,7 +9431,7 @@ begin
   OverloadedFunctionList.Add(IfSOverloadedFunction);
   IfSOverloadedFunction.InputDataCount := 3;
   IfSOverloadedFunction.OptionalArguments := 0;
-  IfSOverloadedFunction.SFunctionAddr := _IfString;
+  IfSOverloadedFunction.SFunctionAddr := @_IfString;
   IfSOverloadedFunction.Name := 'If';
   IfSOverloadedFunction.Prototype :=
     StrLogical+'If(Boolean_Value, If_True_Result, If_False_Result)';
@@ -9384,7 +9443,7 @@ begin
   OverloadedFunctionList.Add(MultiInterpolateFunction);
   MultiInterpolateFunction.InputDataCount := 4;
   MultiInterpolateFunction.OptionalArguments := -1;
-  MultiInterpolateFunction.RFunctionAddr := _MultiInterpolate;
+  MultiInterpolateFunction.RFunctionAddr := @_MultiInterpolate;
   MultiInterpolateFunction.Name := 'MultiInterpolate';
   MultiInterpolateFunction.Prototype :=
     StrMath+'MultiInterpolate(Position, Value1, Distance1, [Value2, Distance2,] ...)';
@@ -9401,7 +9460,7 @@ var
 begin
   ArrayLength := Length(Data);
   Assert(ArrayLength = 1);
-  AVariable := Data[0].Datum;
+  AVariable := TConstant(Data[0].Datum);
   Assert(AVariable <> nil);
   AVariable.MakeDiagram(List, Level);
 end;
@@ -9435,7 +9494,7 @@ var
   AVariable: TConstant;
 begin
   Assert(Length(Data) = 1);
-  AVariable := Data[0].Datum;
+  AVariable := TConstant(Data[0].Datum);
   Assert(AVariable <> nil);
   result := '';
   case DecompileType of
@@ -9496,7 +9555,7 @@ begin
 
     if ArrayLength = 3 then
     begin
-      AVariable := Data[1].Datum;
+      AVariable := TConstant(Data[1].Datum);
       if AVariable is TExpression then
       begin
         TExpression(AVariable).Evaluate;
@@ -9506,7 +9565,7 @@ begin
     end;
 
     Assert(Data[0].DataType in [rdtDouble, rdtInteger]);
-    PositionVariable := Data[0].Datum;
+    PositionVariable := TConstant(Data[0].Datum);
     if PositionVariable is TExpression then
     begin
       TExpression(PositionVariable).Evaluate;
@@ -9517,7 +9576,7 @@ begin
     for DistanceIndex := 0 to ArrayLength div 2 - 1 do
     begin
       Assert(Data[DistanceIndex * 2 + 2].DataType in [rdtDouble, rdtInteger]);
-      AVariable := Data[DistanceIndex * 2 + 2].Datum;
+      AVariable := TConstant(Data[DistanceIndex * 2 + 2].Datum);
       if AVariable is TExpression then
       begin
         TExpression(AVariable).Evaluate;
@@ -9526,7 +9585,7 @@ begin
       if Position < Distance then
       begin
         Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger]);
-        AVariable := Data[DistanceIndex * 2 + 1].Datum;
+        AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
         if AVariable is TExpression then
         begin
           TExpression(AVariable).Evaluate;
@@ -9542,7 +9601,7 @@ begin
         begin
           Assert(Data[DistanceIndex * 2 - 1].DataType in [rdtDouble,
             rdtInteger]);
-          AVariable := Data[DistanceIndex * 2 - 1].Datum;
+          AVariable := TConstant(Data[DistanceIndex * 2 - 1].Datum);
           if AVariable is TExpression then
           begin
             TExpression(AVariable).Evaluate;
@@ -9559,7 +9618,7 @@ begin
       else if Distance = Position then
       begin
         Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble, rdtInteger]);
-        AVariable := Data[DistanceIndex * 2 + 1].Datum;
+        AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
         if AVariable is TExpression then
         begin
           TExpression(AVariable).Evaluate;
@@ -9574,7 +9633,7 @@ begin
         begin
           Assert(Data[DistanceIndex * 2 + 1].DataType in [rdtDouble,
             rdtInteger]);
-          AVariable := Data[DistanceIndex * 2 + 1].Datum;
+          AVariable := TConstant(Data[DistanceIndex * 2 + 1].Datum);
           if AVariable is TExpression then
           begin
             TExpression(AVariable).Evaluate;
@@ -9639,7 +9698,7 @@ end;
 function TSpecialImplementorList.GetItems(
   const Index: integer): TSpecialImplementor;
 begin
-  result := FList[Index];
+  result := TSpecialImplementor(FList[Index]);
 end;
 
 function TSpecialImplementorList.Remove(
@@ -9684,13 +9743,11 @@ end;
 
 { TNotifierComponent }
 
-constructor TNotifierComponent.Create(Owner: TExpression);
+constructor TNotifierComponent.Create(AnOwner: TExpression);
 begin
   inherited Create(nil);
-  FExpression := Owner;
+  FExpression := AnOwner;
 end;
-
-
 
 initialization
   begin

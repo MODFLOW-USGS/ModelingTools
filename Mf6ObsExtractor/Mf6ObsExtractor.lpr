@@ -6,7 +6,7 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, CustApp, OutputFileReader;
+  Classes, SysUtils, CustApp, OutputFileReader, InputFileReader;
 
 type
 

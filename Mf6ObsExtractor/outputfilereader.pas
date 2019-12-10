@@ -28,6 +28,7 @@ type
     FSecondTime: double;
     FTextFile: TextFile;
     FBinaryFile: TFileStream;
+    FBinaryFileSize: Int64;
     FFileType: TFileType;
     FIdLocations: TObservationDictionary;
     FFileName: string;
@@ -48,6 +49,8 @@ type
     property FirstValue[Index: integer]: double read GetFirstValue;
     property SecondValue[Index: integer]: double read GetSecondValue;
   end;
+
+  TOutputFileObjectList = specialize TObjectList<TOutputFile>;
 
   EReadOutputError = class(Exception);
 
@@ -159,6 +162,7 @@ begin
   if FileType = ftBinary then
   begin
     FBinaryFile := TFileStream.Create(FileName, fmOpenRead);
+    FBinaryFileSize := FBinaryFile.Size;
   end
   else
   begin
@@ -167,6 +171,8 @@ begin
   end;
   FIdLocations:= IdLocations;
   ReadHeader;
+  ReadTimeAndValues;
+  ReadTimeAndValues;
 end;
 
 destructor TOutputFile.Destroy;
@@ -190,23 +196,37 @@ begin
   SetLength(FValues, FNOBS);
   if FFileType = ftBinary then
   begin
-    FBinaryFile.read(FTime, SizeOf(FTime));
-    FBinaryFile.read(FValues[0], Length(FValues)*SizeOf(double));
+    if FBinaryFile.Position = FBinaryFileSize then
+    begin
+      FTime := FTime - 1;
+    end
+    else
+    begin
+      FBinaryFile.read(FTime, SizeOf(FTime));
+      FBinaryFile.read(FValues[0], Length(FValues)*SizeOf(double));
+    end;
   end
   else
   begin
     Readln(FTextFile, ALine);
-    Splitter := TStringList.Create;
-    try
-      Splitter.DelimitedText := ALine;
-      Assert(FNOBS = FIdLocations.Count - 1);
-      FTime := StrToFloat(Splitter[0]);
-      for Index := 1 to Splitter.Count -1 do
-      begin
-        FValues[Index-1] := StrToFloat(Splitter[Index]);
+    if ALine = '' then
+    begin
+      FTime := FTime - 1;
+    end
+    else
+    begin
+      Splitter := TStringList.Create;
+      try
+        Splitter.DelimitedText := ALine;
+        Assert(FNOBS = FIdLocations.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FIdLocations.Count - 1, FNOBS]));
+        FTime := StrToFloat(Splitter[0]);
+        for Index := 1 to Splitter.Count -1 do
+        begin
+          FValues[Index-1] := StrToFloat(Splitter[Index]);
+        end;
+      finally
+        Splitter.Free;
       end;
-    finally
-      Splitter.Free;
     end;
   end;
   if FFirstValues = nil then
