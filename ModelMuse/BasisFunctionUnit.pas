@@ -3,7 +3,13 @@ unit BasisFunctionUnit;
 interface
 
 uses
-  FastGEO, GoPhastTypes;
+  FastGEO,
+  {$IFDEF ModelMuse}
+  GoPhastTypes
+  {$ELSE}
+  SubPolygonUnit
+  {$ENDIF}
+  ;
 
 const
   niI = 0;
@@ -16,6 +22,11 @@ const
   rnL = 3;
 
 type
+
+  {$IFNDEF ModelMuse}
+  TOneDRealArray = array of Double;
+  {$ENDIF}
+
   TLinearNodes = (liI, liJ);
   TLinearElement = array[TLinearNodes] of double;
   TLinearNodeValues = array[TLinearNodes] of double;

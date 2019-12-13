@@ -26,11 +26,12 @@ type
 procedure TMf6ObsExtractor.DoRun;
 var
   ErrorMsg: String;
-  Dict: TObservationDictionary;
-  OutputFile: TOutputFile;
+  InputHandler : TInputHandler;
+  FileName: string;
+  P: PChar;
 begin
   // quick check parameters
-  ErrorMsg:=CheckOptions('h', 'help');
+  ErrorMsg:=CheckOptions('hf', ['help', 'file']);
   if ErrorMsg<>'' then begin
     ShowException(Exception.Create(ErrorMsg));
     Terminate;
@@ -44,14 +45,35 @@ begin
     Exit;
   end;
 
-  Dict := TObservationDictionary.Create;
-  OutputFile := TOutputFile.Create('C:\ModelingTools\ModelMuse\Mf6_ObsExample\Mf6_ObsExample2.ob_gw_out_head.bin', ftBinary, Dict);
-  try
-    OutputFile.ReadTimeAndValues;
-    OutputFile.ReadTimeAndValues;
-  finally
-    OutputFile.Free;
-    Dict.Free;
+  FileName := GetOptionValue('f', 'file');
+  P := PChar(FileName);
+  FileName := AnsiExtractQuotedStr(P, '''');
+  if FileName <> '' then
+  begin
+    if not FileExists(FileName) then
+    begin
+      WriteLn(FileName, ' was not found.');
+      Terminate;
+    end;
+    WriteLn('Processing ', FileName);
+    InputHandler := TInputHandler.Create;
+    try
+      try
+      InputHandler.ReadAndProcessInputFile(FileName);
+
+      Except on E: Exception do
+        begin
+          WriteLn(E.message);
+        end;
+      end;
+    finally
+      InputHandler.Free;
+    end;
+  end
+  else begin
+    WriteHelp;
+    Terminate;
+    Exit;
   end;
 
   { add your program here }
@@ -74,7 +96,9 @@ end;
 procedure TMf6ObsExtractor.WriteHelp;
 begin
   { add your help code here }
-  writeln('Usage: ', ExeName, ' -h');
+  writeln('Usage: ', ExeName, ' -h', ' Displays this help message');
+  writeln('Usage: ', ExeName, ' -f <filename>', ' processes the filename indicated by <filename>');
+  writeln('Usage: ', ExeName, ' -file <filename>', ' processes the filename indicated by <filename>');
 end;
 
 var

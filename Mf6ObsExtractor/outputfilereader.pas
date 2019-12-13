@@ -1,6 +1,7 @@
 unit OutputFileReader;
 
 {$mode objfpc}{$H+}
+{$ASSERTIONS ON}
 
 interface
 
@@ -218,7 +219,7 @@ begin
       Splitter := TStringList.Create;
       try
         Splitter.DelimitedText := ALine;
-        Assert(FNOBS = FIdLocations.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FIdLocations.Count - 1, FNOBS]));
+        Assert(FNOBS = Splitter.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FIdLocations.Count - 1, FNOBS]));
         FTime := StrToFloat(Splitter[0]);
         for Index := 1 to Splitter.Count -1 do
         begin

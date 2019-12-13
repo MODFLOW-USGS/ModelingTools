@@ -9438,6 +9438,9 @@ resourcestring
   StrSFTDispersion = KSFTDispersion;
   StrSTRPackageDataSetDISPSF = 'STR Package data set 4 DISPSF';
   StrSUTRALakeAreaInpu = 'SUTRA Lake-Area Input File: ELVLB';
+  StrMODFLOWStressPerio = 'MODFLOW Stress periods have not been defined.';
+  StrSelectModelMODFLO = 'Select "Model|MODFLOW Time..." to define the stres' +
+  's periods.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -19572,7 +19575,7 @@ var
   TotalTime: Double;
   ElapsedTime: Double;
 begin
-  if FhbIsSelected then
+  if FhbIsSelected and (ModflowStressPeriods.Count > 0) then
   begin
     FirstTime := ModflowStressPeriods.First.StartTime;
     LastTime := ModflowStressPeriods.Last.EndTime;
@@ -36310,40 +36313,56 @@ begin
 
     if CropOutOfStartRange.Count > 0 then
     begin
-      StressPeriod := ModflowStressPeriods.First;
-      if TimeList.Count > 0 then
+      if ModflowStressPeriods.Count > 0 then
       begin
-        FirstTime := TimeList.First;
+        StressPeriod := ModflowStressPeriods.First;
+        if TimeList.Count > 0 then
+        begin
+          FirstTime := TimeList.First;
+        end
+        else
+        begin
+          FirstTime := 0;
+        end;
+        ErrorMessage := Format(StrTheBeginningOfTheCrop,
+          [StressPeriod.StartTime, FirstTime]);
+        CropOutOfStartRange.Insert(0, ErrorMessage);
+
+        frmErrorsAndWarnings.AddWarning(self,
+          StrAnyTimesBeforeThe, CropOutOfStartRange.Text);
       end
       else
       begin
-        FirstTime := 0;
+        frmErrorsAndWarnings.AddError(self, StrMODFLOWStressPerio,
+          StrSelectModelMODFLO);
       end;
-      ErrorMessage := Format(StrTheBeginningOfTheCrop,
-        [StressPeriod.StartTime, FirstTime]);
-      CropOutOfStartRange.Insert(0, ErrorMessage);
-
-      frmErrorsAndWarnings.AddWarning(self,
-        StrAnyTimesBeforeThe, CropOutOfStartRange.Text);
     end;
 
     if CropOutOfEndRange.Count > 0 then
     begin
-      StressPeriod := ModflowStressPeriods.Last;
-      if TimeList.Count > 0 then
+      if ModflowStressPeriods.Count > 0 then
       begin
-        LastTime := TimeList.Last;
+        StressPeriod := ModflowStressPeriods.Last;
+        if TimeList.Count > 0 then
+        begin
+          LastTime := TimeList.Last;
+        end
+        else
+        begin
+          LastTime := 0;
+        end;
+        ErrorMessage := Format(StrTheEndOfTheLastCrop,
+          [StressPeriod.StartTime, LastTime]);
+        CropOutOfEndRange.Insert(0, ErrorMessage);
+
+        frmErrorsAndWarnings.AddWarning(self,
+          StrAnyTimesAfterThe, CropOutOfEndRange.Text);
       end
       else
       begin
-        LastTime := 0;
+        frmErrorsAndWarnings.AddError(self, StrMODFLOWStressPerio,
+          StrSelectModelMODFLO);
       end;
-      ErrorMessage := Format(StrTheEndOfTheLastCrop,
-        [StressPeriod.StartTime, LastTime]);
-      CropOutOfEndRange.Insert(0, ErrorMessage);
-
-      frmErrorsAndWarnings.AddWarning(self,
-        StrAnyTimesAfterThe, CropOutOfEndRange.Text);
     end;
   finally
     CropOutOfStartRange.Free;

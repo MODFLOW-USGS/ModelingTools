@@ -30,7 +30,7 @@
         <PackageName Value="sparta_Generics"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="7">
       <Unit0>
         <Filename Value="Mf6ObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -49,6 +49,18 @@
         <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="..\ModelMuse\BasisFunctionUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\ModelMuse\FastGEO.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\ModelMuse\SubPolygonUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit6>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -59,7 +71,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\Components\RbwParser"/>
+      <OtherUnitFiles Value="..\Components\RbwParser;..\ModelMuse"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

@@ -2,7 +2,12 @@ unit SubPolygonUnit;
 
 interface
 
+{$IFDEF FPC}
+  {$MODE DELPHI}
+{$ENDIF}
+
 uses
+
 {$IFDEF ModelMuse}
   GoPhastTypes,
 {$ENDIF}

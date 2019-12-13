@@ -5269,7 +5269,7 @@ Type
     property OutputFormat: TOutputFormat read FOutputFormat
       write SetOutputFormat;
     property OutputPrecision: TOutputPrecision read FOutputPrecision
-      write SetOutputPrecision default opDouble;
+      write SetOutputPrecision stored False;
     property Digits: Integer read FDigits write SetDigits default 5;
   end;
 

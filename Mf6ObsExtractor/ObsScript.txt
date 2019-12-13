@@ -1,0 +1,120 @@
+BEGIN OPTIONS
+# The file name for the listing file contains white space so it must be enclosed in double quotes
+	LISTING "MyListing file.txt"
+	OUTPUT Example.der_obs
+END OPTIONS
+
+BEGIN OBSERVATION_FILES
+	FILENAME Mf6_ObsExample.ob_gw_out_head.csv TEXT
+	FILENAME Mf6_ObsExample.rvob_out_riv.csv TEXT
+END OBSERVATION_FILES
+
+ 
+BEGIN IDENTIFIERS
+# heads in layer 1
+# heads will be interpolated in time to times 3.5 and 6.5
+# locations are provide for spatial interpolation.
+	ID HEAD1
+	LOCATION 550 -550
+	OBSNAME H1_1 3.5
+	OBSNAME H1_2 6.5
+	ID HEAD2
+	LOCATION 550 -650
+	OBSNAME H2_1 3.5
+	OBSNAME H2_2 6.5
+	ID HEAD3
+	LOCATION 650 -650
+	OBSNAME H3_1 3.5
+	OBSNAME H3_2 6.5
+	ID HEAD4
+	LOCATION 550 -650
+	OBSNAME H4_1 3.5
+	OBSNAME H4_2 6.5
+
+#heads in layer 2
+	ID HEAD5
+	LOCATION 550 -550
+	OBSNAME H5_1 3.5
+	OBSNAME H5_2 6.5
+	ID HEAD6
+	LOCATION 550 -650
+	OBSNAME H6_1 3.5
+	OBSNAME H6_2 6.5
+	ID HEAD7
+	LOCATION 650 -650
+	OBSNAME H7_1 3.5
+	OBSNAME H7_2 6.5
+	ID HEAD8
+	LOCATION 550 -650
+	OBSNAME H8_1 3.5
+	OBSNAME H8_2 6.5
+
+# These heads (H9_1 and H9_2) will be printed to the Example.der_obs. The rest won’t be printed.
+# no location is required because it will not be used for spatial interpolation.
+	ID HEAD
+	OBSNAME H9_1 3.5 PRINT
+	OBSNAME H9_2 6.5 PRINT
+
+ 
+# River observations
+# Rivers will be interpolated in time to times 3.5 and 6.5
+# Only the rivers associated RIVER1 will be printed to the Example.der_obs. 
+# The rest won’t be printed.
+	ID RIVER1
+	OBSNAME RIV1_1 3.5 PRINT
+	OBSNAME RIV1_2 6.5 PRINT
+	ID RIVER2
+	OBSNAME RIV2_1 3.5
+	OBSNAME RIV2_2 6.5
+	ID RIVER3
+	OBSNAME RIV3_1 3.5
+	OBSNAME RIV3_2 6.5
+	ID RIVER4
+	OBSNAME RIV4_1 3.5
+	OBSNAME RIV4_2 6.5
+
+END IDENTIFIERS
+
+(Optional)
+BEGIN DERIVED_OBSERVATIONS
+# Spatially Interpolate the head in layer 1 at (575, -575) at time 3.5
+	OBSNAME H_Layer1_Time1
+	INTERPOLATE 575 -575 H1_1 H2_1 H3_1 H4_1  
+
+# Spatially Interpolate the head in layer 1  at (575, -575) at time 6.5
+	OBSNAME H_Layer1_Time2
+	INTERPOLATE 575 -575 H1_2 H2_2 H3_2  H4_2 
+
+# Spatially Interpolate the head in layer 2 at (575, -575) at time 3.5
+	OBSNAME H_Layer1_Time1
+	INTERPOLATE 575 -575 H5_1 H6_1 H7_1 H7_1  
+
+# Spatially Interpolate the head in layer 2 at (575, -575) at time 6.5
+	OBSNAME H_Layer1_Time2
+	INTERPOLATE 575 -575 H5_2 H6_2 H7_2  H8_2 
+
+# Calculate multilayer head observations at times 3.5 and 6.5 weighted by transmissivity
+# Transmissivity of layer 1 = 3.5
+# Transmissivity of layer 2 = 6.5
+# Print the multilayer head observations
+
+	OBSNAME H_Time1 PRINT
+	FORMULA              (H_Layer1_Time1 * 3.5 + H_Layer2_Time1 * 6.5) / 10
+
+	OBSNAME H_Time2 PRINT
+	FORMULA              (H_Layer1_Time2 * 3.5 + H_Layer2_Time2 * 6.5) / 10
+
+# Calculate a drawdown observation too.
+	OBSNAME Drawdown PRINT
+	FORMULA           H_Time2 - H_Time1
+
+# Calculate a river observation by combining several separate river observations.
+# Only half of rivers 2 and 4 will be used.
+
+	OBSNAME MyRiver_1 PRINT
+	FORMULA       RIV2_1*0.5 + RIV3_1 + RIV4_1*0.5
+
+	OBSNAME MyRiver_2 PRINT
+	FORMULA       RIV2_2*0.5 + RIV3_2 + RIV4_2*0.5
+
+END DERIVED_OBSERVATIONS

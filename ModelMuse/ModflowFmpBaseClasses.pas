@@ -198,7 +198,7 @@ procedure TCustomFarmCollection.UpdateTimes(Times: TRealList;
 var
   BoundaryIndex: Integer;
   Boundary: TCustomModflowBoundaryItem;
-  CosestIndex: Integer;
+  ClosestIndex: Integer;
   ExistingTime: Double;
   SP_Epsilon: Extended;
 begin
@@ -206,19 +206,19 @@ begin
   for BoundaryIndex := 0 to Count - 1 do
   begin
     Boundary := Items[BoundaryIndex] as TCustomModflowBoundaryItem;
-    CosestIndex := Times.IndexOfClosest(Boundary.StartTime);
-    if CosestIndex >= 0 then
+    ClosestIndex := Times.IndexOfClosest(Boundary.StartTime);
+    if ClosestIndex >= 0 then
     begin
-      ExistingTime := Times[CosestIndex];
+      ExistingTime := Times[ClosestIndex];
       if Abs(ExistingTime-Boundary.StartTime) >  SP_Epsilon then
       begin
         Times.AddUnique(Boundary.StartTime);
       end;
     end;
-    CosestIndex := Times.IndexOfClosest(Boundary.EndTime);
-    if CosestIndex >= 0 then
+    ClosestIndex := Times.IndexOfClosest(Boundary.EndTime);
+    if ClosestIndex >= 0 then
     begin
-      ExistingTime := Times[CosestIndex];
+      ExistingTime := Times[ClosestIndex];
       if Abs(ExistingTime-Boundary.EndTime) >  SP_Epsilon then
       begin
         Times.AddUnique(Boundary.EndTime);
