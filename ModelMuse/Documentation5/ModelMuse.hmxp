@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4077</config-value>
+      <config-value name="autohelpstart">4078</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1153,6 +1153,7 @@ document.write('</frameset>');
       <helpcontext-number href="MODFLOW_Grid" value="3474"/>
       <helpcontext-number href="MODFLOW_Grid#Figure3" value="3454"/>
       <helpcontext-number href="MODFLOW_Hydrogeologic_Units" value="3515"/>
+      <helpcontext-number href="MODFLOW_in_ModelMuse" value="4078"/>
       <helpcontext-number href="MODFLOW_Layer_Groups_Dialog_Box" value="2400"/>
       <helpcontext-number href="Modflow_Models" value="3457"/>
       <helpcontext-number href="MODFLOW_Name_File_Dialog_Box" value="3447"/>

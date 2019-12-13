@@ -18761,6 +18761,7 @@ var
   WT_Item: TSwtWaterTableItem;
 begin
   result := (ModelSelection in ModflowSelection)
+    and (ModelSelection <> msModflow2015)
     and ModflowPackages.SubPackage.IsSelected;
   if result then
   begin
