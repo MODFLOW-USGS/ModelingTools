@@ -337,6 +337,10 @@ begin
         begin
           FIdStatus := isTime
         end
+        else if UpperCase(FSplitter[0]) = 'ID' then
+        begin
+          FIdStatus := isID
+        end
         else if UpperCase(FSplitter[0]) = 'END' then
         begin
           FIdStatus := isNone;
@@ -976,7 +980,8 @@ begin
     for Index := 0 to Pred(FInputFileLines.Count) do
     begin
       FLineIndex := Index;
-      ALine := Trim(FInputFileLines[Index]);
+      ALine := FInputFileLines[Index];
+      ALine := Trim(ALine);
       if ALine = '' then
       begin
         Continue;

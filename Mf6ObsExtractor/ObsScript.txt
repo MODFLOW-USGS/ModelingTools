@@ -9,7 +9,7 @@ BEGIN OBSERVATION_FILES
 	FILENAME Mf6_ObsExample.rvob_out_riv.csv TEXT
 END OBSERVATION_FILES
 
- 
+
 BEGIN IDENTIFIERS
 # heads in layer 1
 # heads will be interpolated in time to times 3.5 and 6.5
@@ -55,7 +55,7 @@ BEGIN IDENTIFIERS
 	OBSNAME H9_1 3.5 PRINT
 	OBSNAME H9_2 6.5 PRINT
 
- 
+
 # River observations
 # Rivers will be interpolated in time to times 3.5 and 6.5
 # Only the rivers associated RIVER1 will be printed to the Example.der_obs. 
