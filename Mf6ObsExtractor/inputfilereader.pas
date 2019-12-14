@@ -94,6 +94,8 @@ type
       Locations: TLocationList; NewLocation: TLocationID);
     procedure PrintToOutputFile(const AnObs: TDerivedObs);
     procedure RecordObs(const AnObs: TDerivedObs);
+    procedure AddLocationToDictionary(Location: TLocationID);
+    procedure AddObsToDictionary(AnObs: TDerivedObs);
   public
     constructor Create;
     destructor Destroy; override;
@@ -209,7 +211,8 @@ begin
   AnObs.Value := InactiveValue;
   AnObs.Time := 0;
   AnObs.TimeAssigned := False;
-  FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
+  AddLocationToDictionary(NewLocation);
+  //FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
   RecordObs(AnObs);
 end;
 
@@ -378,7 +381,8 @@ begin
             raise EInputException.Create(Format('Error converting X or Y coordinate on line %0:d, "%1:s".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
           end;
         end;
-        FLocationDictionary.Add(LocationID.ID, LocationID);
+        AddLocationToDictionary(LocationID);
+        //FLocationDictionary.Add(LocationID.ID, LocationID);
       end;
     isTime:
       begin
@@ -451,7 +455,8 @@ begin
           / (SecondTime - FirstTime);
       end;
       AnObs.TimeAssigned := True;
-      FDerivedObsDictionary.Add(UpperCase(AnObs.Obsname), AnObs);
+      AddObsToDictionary(AnObs);
+      //FDerivedObsDictionary.Add(UpperCase(AnObs.Obsname), AnObs);
       FParser.CreateVariable(AnObs.ObsName, '', AnObs.Value, AnObs.ObsName);
       PrintToOutputFile(AnObs);
     end;
@@ -469,7 +474,8 @@ begin
   AnObs.Value := DerivedObs.Value;
   AnObs.Time := DerivedObs.Time;
   AnObs.TimeAssigned := DerivedObs.TimeAssigned;
-  FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
+  AddLocationToDictionary(NewLocation);
+  //FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
   RecordObs(AnObs);
 end;
 
@@ -510,7 +516,8 @@ begin
       + (DerivedObs2.Value - DerivedObs1.Value)
       * PointDistance/SegmentLength;
 
-    FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
+    AddLocationToDictionary(NewLocation);
+    //FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
     RecordObs(AnObs);
   end
   else
@@ -571,7 +578,8 @@ begin
       NodeValues[2] := DerivedObs3.Value;
       AnObs.Value := TriangularBasisFunction(Corners, NodeValues, NewLocation.APoint);
 
-      FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
+      AddLocationToDictionary(NewLocation);
+      //FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
       RecordObs(AnObs);
   end
     else
@@ -675,7 +683,8 @@ begin
       NodeValues[3] := DerivedObs4.Value;
       AnObs.Value := QuadrilateralBasisFunction(Corners, NodeValues, NewLocation.APoint);
 
-      FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
+      AddLocationToDictionary(NewLocation);
+      //FLocationDictionary.Add(UpperCase(NewLocation.ID), NewLocation);
       RecordObs(AnObs);
     end
     else
@@ -739,16 +748,44 @@ procedure TInputHandler.PrintToOutputFile(const AnObs: TDerivedObs);
 begin
   if AnObs.Print then
   begin
-    FOutputFile.Add(Format('%0:s %1:d', [AnObs.ObsName, AnObs.Value]));
+    FOutputFile.Add(Format('%0:s %1:g', [AnObs.ObsName, AnObs.Value]));
   end;
 end;
 
 procedure TInputHandler.RecordObs(const AnObs: TDerivedObs);
 begin
-  FDerivedObsDictionary.Add(UpperCase(AnObs.Obsname), AnObs);
+  AddObsToDictionary(AnObs);
+  //FDerivedObsDictionary.Add(UpperCase(AnObs.Obsname), AnObs);
   FDerivedObsList.Add(AnObs);
   FParser.CreateVariable(AnObs.ObsName, '', AnObs.Value, AnObs.ObsName);
   PrintToOutputFile(AnObs);
+end;
+
+procedure TInputHandler.AddLocationToDictionary(
+  Location: TLocationID);
+begin
+  try
+    FLocationDictionary.Add(UpperCase(Location.ID), Location);
+
+  except on EListError do
+    begin
+      Assert(False, Format('The identifier "%s" is a duplicate of an earlier identifier', [Location.ID]));
+    end;
+  end;
+
+end;
+
+procedure TInputHandler.AddObsToDictionary(AnObs: TDerivedObs);
+begin
+  try
+    FDerivedObsDictionary.Add(UpperCase(AnObs.Obsname), AnObs);
+
+  except on EListError do
+    begin
+      Assert(False, Format('The identifier "%s" is a duplicate of an earlier oservation name', [AnObs.Obsname]));
+    end;
+
+  end;
 end;
 
 procedure TInputHandler.HandleDerivedObs;
@@ -784,7 +821,7 @@ var
   var
     ADerivedObs: TDerivedObs;
   begin
-    if FDerivedObsDictionary.TryGetValue(UpperCase(FObsName), ADerivedObs) then
+    if FDerivedObsDictionary.TryGetValue(UpperCase(ObsName), ADerivedObs) then
     begin
       result := ADerivedObs;
     end
@@ -807,7 +844,7 @@ begin
         end
         else
         begin
-          Assert(False);
+          Assert(False, Format('In line %0:d, "%1:s", the line does not begin with "OBSNAME".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
         end;
       end;
       dosObsName:
@@ -823,7 +860,7 @@ begin
       end;
       dosInterpolate, dosFormula:
       begin
-        CurrentStatus := dosNone
+        CurrentStatus := dosObsName
       end;
     else Assert(False);
     end;
@@ -871,7 +908,7 @@ begin
             end
             else
             begin
-
+              // Add a warning message.
             end;
           end;
           case DerivedObsList.Count of
@@ -901,10 +938,12 @@ begin
       dosFormula:
         begin
           ALine := FInputFileLines[FLineIndex];
-          Formula := Trim(Copy(ALine, Length(rsFORMULA)+1, MAXINT));
+          ALine := Trim(ALine);
+          Formula := Copy(ALine, Length(rsFORMULA)+1, MAXINT);
+          Formula := Trim(Formula);
           try
             FParser.Compile(Formula);
-            if FParser.CurrentExpression.ResultType in [rdtDouble, rdtInteger] then
+            if not (FParser.CurrentExpression.ResultType in [rdtDouble, rdtInteger]) then
             begin
               Assert(False, Format('In line %0:d, "%1:s", The formula "%2:s" is invalid because it doesn''t evaluate to a number.', [FLineIndex+1, FInputFileLines[FLineIndex], Formula]));
             end;
@@ -913,6 +952,7 @@ begin
             AnObs.ID := '';
             AnObs.Obsname := FObsName;
             AnObs.Print := FPrint;
+            FParser.CurrentExpression.Evaluate;
             AnObs.Value := FParser.CurrentExpression.DoubleResult;
             AnObs.Time := 0;
             AnObs.TimeAssigned := False;
@@ -927,6 +967,8 @@ begin
     end;
 
   finally
+    LocationList.Free;
+    DerivedObsList.Free;
   end;
 end;
 
@@ -994,7 +1036,7 @@ begin
       case FCurrentProcessStatus of
         psNone:
         begin
-          Assert(FSplitter.Count = 2);
+          Assert(FSplitter.Count = 2, Format('In line %0:d, "%1:s", there were not exactly two items listed.', [FLineIndex+1, FInputFileLines[FLineIndex]]));
           Assert(UpperCase(FSplitter[0]) = rsBEGIN);
           case FPriorProcessStatus of
             psNone:

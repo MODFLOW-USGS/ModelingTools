@@ -46,8 +46,16 @@ begin
   end;
 
   FileName := GetOptionValue('f', 'file');
-  P := PChar(FileName);
-  FileName := AnsiExtractQuotedStr(P, '''');
+  if Pos('''', FileName) > 0 then
+  begin
+    P := PChar(FileName);
+    FileName := AnsiExtractQuotedStr(P, '''');
+  end
+  else  if Pos('"', FileName) > 0 then
+  begin
+    P := PChar(FileName);
+    FileName := AnsiExtractQuotedStr(P, '"');
+  end;
   if FileName <> '' then
   begin
     if not FileExists(FileName) then

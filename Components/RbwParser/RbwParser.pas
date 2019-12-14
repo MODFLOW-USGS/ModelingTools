@@ -10,6 +10,11 @@ unit RbwParser;
 
 interface
 
+{$IFDEF FPC}
+  {$MODE DELPHI}
+{$ENDIF}
+
+
 {$ifdef CONDITIONALEXPRESSIONS}
   {$if CompilerVersion>=20}
     {$DEFINE Delphi_2009_UP}

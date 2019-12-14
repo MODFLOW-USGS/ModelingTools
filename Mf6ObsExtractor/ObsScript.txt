@@ -27,7 +27,7 @@ BEGIN IDENTIFIERS
 	OBSNAME H3_1 3.5
 	OBSNAME H3_2 6.5
 	ID HEAD4
-	LOCATION 550 -650
+	LOCATION 650 -550
 	OBSNAME H4_1 3.5
 	OBSNAME H4_2 6.5
 
@@ -45,15 +45,15 @@ BEGIN IDENTIFIERS
 	OBSNAME H7_1 3.5
 	OBSNAME H7_2 6.5
 	ID HEAD8
-	LOCATION 550 -650
+	LOCATION 650 -550
 	OBSNAME H8_1 3.5
 	OBSNAME H8_2 6.5
 
 # These heads (H9_1 and H9_2) will be printed to the Example.der_obs. The rest won’t be printed.
 # no location is required because it will not be used for spatial interpolation.
-	ID HEAD
-	OBSNAME H9_1 3.5 PRINT
-	OBSNAME H9_2 6.5 PRINT
+#	ID HEAD
+#	OBSNAME H9_1 3.5 PRINT
+#	OBSNAME H9_2 6.5 PRINT
 
 
 # River observations
@@ -75,7 +75,7 @@ BEGIN IDENTIFIERS
 
 END IDENTIFIERS
 
-(Optional)
+#(Optional)
 BEGIN DERIVED_OBSERVATIONS
 # Spatially Interpolate the head in layer 1 at (575, -575) at time 3.5
 	OBSNAME H_Layer1_Time1
@@ -86,11 +86,11 @@ BEGIN DERIVED_OBSERVATIONS
 	INTERPOLATE 575 -575 H1_2 H2_2 H3_2  H4_2 
 
 # Spatially Interpolate the head in layer 2 at (575, -575) at time 3.5
-	OBSNAME H_Layer1_Time1
+	OBSNAME H_Layer2_Time1
 	INTERPOLATE 575 -575 H5_1 H6_1 H7_1 H7_1  
 
 # Spatially Interpolate the head in layer 2 at (575, -575) at time 6.5
-	OBSNAME H_Layer1_Time2
+	OBSNAME H_Layer2_Time2
 	INTERPOLATE 575 -575 H5_2 H6_2 H7_2  H8_2 
 
 # Calculate multilayer head observations at times 3.5 and 6.5 weighted by transmissivity
