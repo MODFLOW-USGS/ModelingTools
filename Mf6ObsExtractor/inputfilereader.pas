@@ -75,6 +75,7 @@ type
     FPriorDerivedObsStatus: TDerivedObsStatus;
     FObsName: string;
     FPrint: Boolean;
+    FIdentifiersRead: Boolean;
     procedure AssignInactiveObs(var NewLocation: TLocationID);
     procedure HandleOption;
     procedure HandleObservationFiles;
@@ -281,12 +282,15 @@ end;
 
 procedure TInputHandler.InitializeIdentifiers;
 begin
+  Assert(not FIdentifiersRead, Format('In line %0:d, "%1:s", a second IDENTIFIERS block was started without being preceeded by an OBSERVATION_FILES block.', [FLineIndex+1, FInputFileLines[FLineIndex]]));
   FCurrentProcessStatus := psIdentifiers;
   FIdStatus := isNone;
+  FIdentifiersRead := True;
 end;
 
 procedure TInputHandler.InitializeObsFiles;
 begin
+  FIdentifiersRead := False;
   FCurrentProcessStatus := psObsFiles;
   ClearAllObservations;
 end;
@@ -856,11 +860,24 @@ begin
         else if UpperCase(FSplitter[0]) = rsFORMULA then
         begin
           CurrentStatus := dosFormula;
+        end
+        else
+        begin
+          Assert(False, Format('In line %0:d, "%1:s", the line does not begin with "FORMULA" OR "INTERPOLATE".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
         end;
       end;
       dosInterpolate, dosFormula:
       begin
-        CurrentStatus := dosObsName
+        if UpperCase(FSplitter[0]) = 'END' then
+        begin
+          Assert(UpperCase(FSplitter[1]) = 'DERIVED_OBSERVATIONS', Format('In line %0:d, "%1:s", the DERIVED_OBSERVATIONS block must end with "END DERIVED_OBSERVATIONS".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
+          CurrentStatus := dosNone;
+          FCurrentProcessStatus := psNone;
+        end
+        else
+        begin
+          CurrentStatus := dosObsName
+        end;
       end;
     else Assert(False);
     end;
@@ -959,11 +976,12 @@ begin
             RecordObs(AnObs);
           except on E: ERbwParserError do
             begin
-              raise EInputException.Create(Format('In line %0:d, "%1:s", The formula "%2:s" is invalid. The error message is "%3:s".', [FLineIndex+1, FInputFileLines[FLineIndex], Formula, E.Message]));
+              raise EInputException.Create(Format('In line %0:d, "%1:s", the formula "%2:s" is invalid. The error message is "%3:s".', [FLineIndex+1, FInputFileLines[FLineIndex], Formula, E.Message]));
             end;
           end;
         end;
-    else Assert(False);
+    else
+      Assert(False, Format('In line %0:d, "%1:s", Error', [FLineIndex+1, FInputFileLines[FLineIndex], Formula]));
     end;
 
   finally
@@ -1018,83 +1036,93 @@ var
   ALine: String;
 begin
   try
-    FInputFileLines.LoadFromFile(FileName);
-    for Index := 0 to Pred(FInputFileLines.Count) do
-    begin
-      FLineIndex := Index;
-      ALine := FInputFileLines[Index];
-      ALine := Trim(ALine);
-      if ALine = '' then
+    try
+      FInputFileLines.LoadFromFile(FileName);
+      for Index := 0 to Pred(FInputFileLines.Count) do
       begin
-        Continue;
-      end;
-      if ALine[1] = '#' then
-      begin
-        Continue;
-      end;
-      FSplitter.DelimitedText := ALine;
-      case FCurrentProcessStatus of
-        psNone:
+        FLineIndex := Index;
+        ALine := FInputFileLines[Index];
+        ALine := Trim(ALine);
+        if ALine = '' then
         begin
-          Assert(FSplitter.Count = 2, Format('In line %0:d, "%1:s", there were not exactly two items listed.', [FLineIndex+1, FInputFileLines[FLineIndex]]));
-          Assert(UpperCase(FSplitter[0]) = rsBEGIN);
-          case FPriorProcessStatus of
-            psNone:
-            begin
-              Assert(UpperCase(FSplitter[1]) = rsOPTIONS);
-              FCurrentProcessStatus := psOptions;
-            end;
-            psOptions:
-            begin
-              Assert(UpperCase(FSplitter[1]) = rsOBSERVATION_Files);
-              InitializeObsFiles;
-            end;
-            psObsFiles:
-            begin
-              Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS);
-              InitializeIdentifiers;
-            end;
-            psIdentifiers, psDerivedObs:
-            begin
-              if UpperCase(FSplitter[1]) = rsDERIVED_OBSE then
+          Continue;
+        end;
+        if ALine[1] = '#' then
+        begin
+          Continue;
+        end;
+        FSplitter.DelimitedText := ALine;
+        case FCurrentProcessStatus of
+          psNone:
+          begin
+            Assert(FSplitter.Count = 2, Format('In line %0:d, "%1:s", there were not exactly two items listed.', [FLineIndex+1, FInputFileLines[FLineIndex]]));
+            Assert(UpperCase(FSplitter[0]) = rsBEGIN);
+            case FPriorProcessStatus of
+              psNone:
               begin
-                InitializeDerivedObs;
-              end
-              else if UpperCase(FSplitter[1]) = rsOBSERVATION_Files then
-              begin
-                InitializeObsFiles
-              end
-              else if UpperCase(FSplitter[1]) = rsIDENTIFIERS then
-              begin
-                InitializeIdentifiers;
-              end
-              else
-              begin
-                Assert(False);
+                Assert(UpperCase(FSplitter[1]) = rsOPTIONS);
+                FCurrentProcessStatus := psOptions;
               end;
+              psOptions:
+              begin
+                Assert(UpperCase(FSplitter[1]) = rsOBSERVATION_Files);
+                InitializeObsFiles;
+              end;
+              psObsFiles:
+              begin
+                Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS);
+                InitializeIdentifiers;
+              end;
+              psIdentifiers, psDerivedObs:
+              begin
+                if UpperCase(FSplitter[1]) = rsDERIVED_OBSE then
+                begin
+                  InitializeDerivedObs;
+                end
+                else if UpperCase(FSplitter[1]) = rsOBSERVATION_Files then
+                begin
+                  InitializeObsFiles
+                end
+                else if UpperCase(FSplitter[1]) = rsIDENTIFIERS then
+                begin
+                  InitializeIdentifiers;
+                end
+                else
+                begin
+                  Assert(False);
+                end;
+              end;
+              else
+                Assert(False);
             end;
-            else
-              Assert(False);
           end;
+          psOptions:
+          begin
+            HandleOption;
+          end;
+          psObsFiles:
+          begin
+            HandleObservationFiles;
+          end;
+          psIdentifiers:
+          begin
+            HandleIdentifiers;
+          end;
+          psDerivedObs:
+          begin
+            HandleDerivedObs
+          end;
+          else
+            Assert(False);
         end;
-        psOptions:
+      end;
+    except on E: Exception do
+      begin
+        if FListingFile <> nil then
         begin
-          HandleOption;
+          FListingFile.Add(E.Message);
         end;
-        psObsFiles:
-        begin
-          HandleObservationFiles;
-        end;
-        psIdentifiers:
-        begin
-          HandleIdentifiers;
-        end;
-        psDerivedObs:
-        begin
-          HandleDerivedObs
-        end;
-        else
-          Assert(False);
+        raise;
       end;
     end;
   finally
