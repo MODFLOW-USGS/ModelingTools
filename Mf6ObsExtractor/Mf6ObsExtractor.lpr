@@ -62,12 +62,13 @@ begin
     begin
       WriteLn(FileName, ' was not found.');
       Terminate;
+      Exit;
     end;
     WriteLn('Processing ', FileName);
     InputHandler := TInputHandler.Create;
     try
       try
-      InputHandler.ReadAndProcessInputFile(FileName);
+        InputHandler.ReadAndProcessInputFile(FileName);
 
       Except on E: Exception do
         begin

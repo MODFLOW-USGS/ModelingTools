@@ -2,6 +2,7 @@ BEGIN OPTIONS
 # The file name for the listing file contains white space so it must be enclosed in double quotes
 	LISTING "MyListing file.txt"
 	OUTPUT Example.der_obs
+	INSTRUCTION Example.ins
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

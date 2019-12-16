@@ -150,7 +150,12 @@ then look in "Environment Options|Delphi Options|Library".
 are separated into run-time and design-time packages, you build the runtime 
 package and then build and install the design-time package.
 
-Install JCL and JVCL They can be obtained from http://www.delphi-jedi.org/
+Install JCL and JVCL. They can be obtained from http://www.delphi-jedi.org/
+or from the "Tools|GetIt Package Manager".
+If installing with the GetIt Package Manager, the installer source code will 
+be downloaded and built and started. You must close Delphi before starting 
+the installation process with the installer. With JCL, you must accept the 
+MPL 1.1 Licence on the MPL 1.1 License tab before the installation starts.
 Add the following JCL directories to the Library path if they are not added
 automatically when installing the JCL.
 source\common
@@ -195,16 +200,9 @@ if n > 0 then
 to
 if (n > 0) and (hyp <> 0) then
 
-Build the runtime package first. Then install the design time package.  
-To compile the design-time package, you may need to edit the search path for 
-the design time Project (Project|Options|Delphi compiler|Search path) so that 
-it includes the dcp and/or bpl
-output directories. For example:
-C:\Users\Public\Documents\Embarcadero\Studio\19.0\DCP;C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl
-
 Installing GLScene
 http://glscene.sourceforge.net
-For compiling with Delphi 10.2, use GLScene_v1.6.
+For compiling with Delphi 10.3, use GLScene_v1.8.
 This version of GLScene comes as an installer. It copies files to the 
 hard drive but do not neccesarily install the components in the the DELPHI IDE.
 
@@ -228,6 +226,22 @@ The portions of the instructions related to C++ do not apply if GLScene
 is only being installed in Delphi. If asked whether to add the 
 Graphics 32 to the project, select yes.
 
+To compile the design-time package, you will need to edit the search path for 
+the design time Project (Project|Options|Delphi compiler|Search path) so that 
+it includes the dcp and/or bpl
+output directories. For example:
+C:\Users\Public\Documents\Embarcadero\Studio\20.0\DCP
+and 
+C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl
+Then edit the "requires" section of the GLScene Design-time package to 
+add a requirement for the Graphics32 design-time package. To add a 
+requirement, right-click on the "requires" section of the package in the 
+Projects window and select reference. Then navigate to the DCP directory
+and a the .dcp file for the Graphics32 design-time package.
+
+Build the runtime package first. Then install the design time package.  
+
+
 Get and install VirtualTreeView version 6.6 or later.
 http://www.jam-software.com/virtual-treeview/
 https://github.com/Virtual-TreeView/Virtual-TreeView-XE2
@@ -243,6 +257,10 @@ TurboPower Abbervia is also available through the GetIt Package Manager in Delph
 
 The Components directory has additional components that need to be installed. 
 They are in the following subdirectories of the Components directory.
+
+Note that the Design-time package for Graphics32 is a requirement for the ZoomBox 
+component in QZoomBox2
+
 addbtn95
 ade
 ButtonEdit

@@ -612,6 +612,8 @@ begin
                   begin
                     for RowIndex := 0 to DataArray.RowCount - 1 do
                     begin
+					  if DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+					  begin
                       case DataArray.DataType of
                         rdtDouble:
                           AGrid.Cells[ColIndex + 1, RowIndex + 1] :=
@@ -626,6 +628,7 @@ begin
                           AGrid.Cells[ColIndex + 1, RowIndex + 1] :=
                             DataArray.StringData[LayerIndex, RowIndex, ColIndex];
                       end;
+					  end;
                     end;
                   end;
                 finally
