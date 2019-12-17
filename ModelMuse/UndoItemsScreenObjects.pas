@@ -2378,6 +2378,10 @@ begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
     FNewChildModelScreenObjects.Add(ChildModel.HorizontalPositionScreenObject);
   end;
+  if frmErrorsAndWarnings.HasMessages then
+  begin
+    frmErrorsAndWarnings.ShowAfterDelay;
+  end;
 end;
 
 procedure TUndoSetScreenObjectProperties.SetObjectProperties;

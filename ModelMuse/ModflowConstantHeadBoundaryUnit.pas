@@ -226,7 +226,8 @@ type
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
-  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit;
+  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit,
+  frmErrorsAndWarningsUnit;
 
 const
   StartHeadPosition = 0;
@@ -238,6 +239,9 @@ resourcestring
     + 't = %1:f (%2:s) and the ending head of %3:f at t = %4:f (%5:s).';
   StrStartingHeadMulti = ' starting head multiplier';
   StrEndingHeadMultipl = ' ending head multiplier';
+  StrNoValidCHDBoundar = 'No valid CHD boundary times defined.';
+  StrNoValidCHDBoundar2 = 'No valid CHD boundary times are defined for the p' +
+  'arameter ';
 
 
 { TChdItem }
@@ -743,6 +747,12 @@ begin
       StartTime := StressPeriods.First.StartTime;
       EndTime := StressPeriods.Last.EndTime;
       TimeCount := BoundaryList.Count;
+      if TimeCount = 0 then
+      begin
+        frmErrorsAndWarnings.AddError(LocalModel, StrNoValidCHDBoundar,
+          Format(StrNoValidCHDBoundar2, [FCurrentParameter.ParameterName]));
+        Exit;
+      end;
       for ItemIndex := 0 to BoundaryList.Count - 1 do
       begin
         BoundaryStorage := BoundaryList[ItemIndex];

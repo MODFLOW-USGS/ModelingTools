@@ -29,60 +29,74 @@ var
   InputHandler : TInputHandler;
   FileName: string;
   P: PChar;
+  Opts: TStringList;
+  NonOpts: TStringList;
+  I: integer;
 begin
-  // quick check parameters
-  ErrorMsg:=CheckOptions('hf', ['help', 'file']);
-  if ErrorMsg<>'' then begin
-    ShowException(Exception.Create(ErrorMsg));
-    Terminate;
-    Exit;
-  end;
-
-  // parse parameters
-  if HasOption('h', 'help') then begin
-    WriteHelp;
-    Terminate;
-    Exit;
-  end;
-
-  FileName := GetOptionValue('f', 'file');
-  if Pos('''', FileName) > 0 then
-  begin
-    P := PChar(FileName);
-    FileName := AnsiExtractQuotedStr(P, '''');
-  end
-  else  if Pos('"', FileName) > 0 then
-  begin
-    P := PChar(FileName);
-    FileName := AnsiExtractQuotedStr(P, '"');
-  end;
-  if FileName <> '' then
-  begin
-    if not FileExists(FileName) then
-    begin
-      WriteLn(FileName, ' was not found.');
+  Opts := TStringList.Create;
+  NonOpts := TStringList.Create;
+  try
+    ErrorMsg:=CheckOptions('hf:', ['help', 'file:'], Opts, NonOpts);
+    if ErrorMsg<>'' then begin
+      ShowException(Exception.Create(ErrorMsg));
       Terminate;
       Exit;
     end;
-    WriteLn('Processing ', FileName);
-    InputHandler := TInputHandler.Create;
-    try
-      try
-        InputHandler.ReadAndProcessInputFile(FileName);
+    // quick check parameters
 
-      Except on E: Exception do
-        begin
-          WriteLn(E.message);
-        end;
-      end;
-    finally
-      InputHandler.Free;
+    // parse parameters
+    if HasOption('h', 'help') then begin
+      WriteHelp;
+      Terminate;
+      Exit;
     end;
-  end
-  else begin
-    WriteHelp;
-    Terminate;
-    Exit;
+
+    FileName := GetOptionValue('f', 'file');
+    if (FileName = '') and (NonOpts.Count = 1) then
+    begin
+      FileName := NonOpts[0];
+    end;
+    if Pos('''', FileName) > 0 then
+    begin
+      P := PChar(FileName);
+      FileName := AnsiExtractQuotedStr(P, '''');
+    end
+    else  if Pos('"', FileName) > 0 then
+    begin
+      P := PChar(FileName);
+      FileName := AnsiExtractQuotedStr(P, '"');
+    end;
+    if FileName <> '' then
+    begin
+      if not FileExists(FileName) then
+      begin
+        WriteLn(FileName, ' was not found.');
+        Terminate;
+        Exit;
+      end;
+      WriteLn('Processing ', FileName);
+      InputHandler := TInputHandler.Create;
+      try
+        try
+          InputHandler.ReadAndProcessInputFile(FileName);
+
+        Except on E: Exception do
+          begin
+            WriteLn(E.message);
+          end;
+        end;
+      finally
+        InputHandler.Free;
+      end;
+    end
+    else begin
+      WriteHelp;
+      Terminate;
+      Exit;
+    end;
+  finally
+    Opts.Free;
+    NonOpts.Free;
   end;
 
   { add your program here }
@@ -107,7 +121,8 @@ begin
   { add your help code here }
   writeln('Usage: ', ExeName, ' -h', ' Displays this help message');
   writeln('Usage: ', ExeName, ' -f <filename>', ' processes the filename indicated by <filename>');
-  writeln('Usage: ', ExeName, ' -file <filename>', ' processes the filename indicated by <filename>');
+  writeln('Usage: ', ExeName, ' --file=<filename>', ' processes the filename indicated by <filename>');
+  writeln('Usage: ', ExeName, ' <filename>', ' processes the filename indicated by <filename>');
 end;
 
 var

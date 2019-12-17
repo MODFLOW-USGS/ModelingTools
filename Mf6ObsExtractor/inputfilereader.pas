@@ -14,6 +14,7 @@ type
   TProcessStatus = (psNone, psOptions, psObsFiles, psIdentifiers, psDerivedObs);
   TIdStatus = (isNone, isID, isLocation, isTime);
   TDerivedObsStatus = (dosNone, dosObsName, dosInterpolate, dosFormula);
+  TInstructionFileMode = (ifmPest, ifmUCODE);
 
   TLocationID = record
     ID: string;
@@ -76,6 +77,7 @@ type
     FObsName: string;
     FPrint: Boolean;
     FIdentifiersRead: Boolean;
+    FInstructionFileMode: TInstructionFileMode;
     procedure AssignInactiveObs(var NewLocation: TLocationID);
     procedure HandleOption;
     procedure HandleObservationFiles;
@@ -155,11 +157,11 @@ resourceString
     +'OBSERVATION_FILES in line %0:d, "%1:s".';
   rsEndOfOBSERVA = 'End of OBSERVATION_FILES Block';
   rsRemovingAllO = 'Removing all observations from memory.';
-  rsBeginDERIVED = 'Begin DERIVED_OBSERVATIONS block';
+  rsBeginDERIVED = 'Begin DERIVED_OBSERVATIONS Block';
   rsSecondIdentifiers = 'In line %0:d, "%1:s", a second IDENTIFIERS block was '
     +'started without being preceeded by an OBSERVATION_FILES block.';
-  rsBeginIDENTIF = 'Begin IDENTIFIERS block';
-  rsBeginOBSERVA2 = 'Begin OBSERVATION_FILES block';
+  rsBeginIDENTIF = 'Begin IDENTIFIERS Block';
+  rsBeginOBSERVA2 = 'Begin OBSERVATION_FILES Block';
   rsID = 'ID';
   rsMustStartWithID = 'In line %0:d, "%1:s" must start with "ID".';
   rsLOCATION = 'LOCATION';
@@ -187,9 +189,11 @@ resourceString
   rsPrintTrue = '  Print = True';
   rsPrintFalse = '  Print = False';
   rsProgrammingE = 'Programming error in TInputHandler.HandleIdentifiers';
-  rsBeginOPTIONS3 = 'Begin OPTIONS Block';
+  rsBeginOPTIONS3 = 'Processing OPTIONS Block';
   rsBeginExtract =
-    '  Begin extracting observation values interpolated in time.';
+    'Begin extracting observation values interpolated in time.';
+  rsEndExtract =
+    'End of extracting observation values interpolated in time.';
   rsTheObservati2 = 'The observation %s is not found in any of the observation'
     +' output files.';
   rsObservationN2 = '  Observation Name = %s';
@@ -201,7 +205,7 @@ resourceString
   rsProgrammingE3 = 'Programming error in TInputHandler.InterpThreePoints';
   rsProgrammingE4 = 'Programming error in TInputHandler.InterpFourPoints';
   rsPrintObsValue = '%0:s %1:g';
-  rsPrintObsInstruction = 'l1 @%0:s@ !%0:s!';
+  rsPrintPestObsInstruction = 'l1 @%0:s@ !%0:s!';
   rsAssignedValu = '  assigned value = (%0:g)';
   rsTheIdentifie =
     'The identifier "%s" is a duplicate of an earlier identifier';
@@ -240,6 +244,13 @@ resourceString
     +' error message is "%3:s".';
   rsErrorInHandleDerivedObs = 'In line %0:d, "%1:s", Error in TInputHandler.'
     +'HandleDerivedObs';
+  rsPestOrUcode = 'In line %0:d, "%1:s", the third item must be either "PEST" '
+    +'or "UCODE".';
+  rsStandardFile = 'StandardFile, 0, 2, %d';
+  rsProcessingDE = 'Processing DERIVED_OBSERVATIONS Block';
+  rsProcessingID = 'Processing IDENTIFIERS Block';
+  rsProcessingOB = 'Processing OBSERVATION_FILES Block';
+  rsEndOfIDENTIF = 'End of IDENTIFIERS Block';
 
 function NearlyTheSame(A, B, Epsilon: double): boolean;
 begin
@@ -279,14 +290,26 @@ procedure TInputHandler.HandleOption;
     if (FInstructionFileName <> '') and (FListingFile <> nil) then
     begin
       FListingFile.Add(Format(rsInstructionF, [FInstructionFileName]));
+      case FInstructionFileMode of
+        ifmPest:
+          begin
+            FListingFile.Add('  Instruction file format = PEST');
+          end;
+        ifmUCODE:
+          begin
+            FListingFile.Add('  Instruction file format = UCODE');
+          end;
+      end;
     end;
   end;
 
 begin
-  Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems, [FLineIndex+1,
+  Assert(FSplitter.Count in [2, 3], Format(rsExactlyTwoOrThree, [FLineIndex+1,
     FInputFileLines[FLineIndex]]));
   if UpperCase(FSplitter[0]) = rsLISTING then
   begin
+    Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
     Assert(FListingFileName = '', Format(rsTheListingFi, [FListingFileName]));
     FListingFileName := FSplitter[1];
     FListingFile := TStringList.Create;
@@ -300,6 +323,8 @@ begin
   end
   else if UpperCase(FSplitter[0]) = rsOUTPUT then
   begin
+    Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
     Assert(FOutputFileName = '', Format(rsTheOutputFil, [FOutputFileName]));
     FOutputFileName := FSplitter[1];
     FOutputFile := TStringList.Create;
@@ -310,8 +335,37 @@ begin
     Assert(FInstructionFileName = '', Format(rsTheInstructi, [
       FInstructionFileName]));
     FInstructionFileName := FSplitter[1];
+    if FSplitter.Count = 3 then
+    begin
+      if UpperCase(FSplitter[2]) = 'UCODE' then
+      begin
+        FInstructionFileMode := ifmUCODE;
+      end
+      else if UpperCase(FSplitter[2]) = 'PEST' then
+      begin
+        FInstructionFileMode := ifmPest;
+      end
+      else
+      begin
+        Assert(False, Format(rsPestOrUcode, [FLineIndex+1,
+          FInputFileLines[FLineIndex]]));
+      end;
+    end
+    else
+    begin
+      FInstructionFileMode := ifmPest;
+    end;
     FInstructionFile := TStringList.Create;
-    FInstructionFile.Add('pif @');
+    case FInstructionFileMode of
+      ifmPest:
+        begin
+          FInstructionFile.Add('pif @');
+        end;
+      ifmUCODE:
+        begin
+          FInstructionFile.Add('jtf @');
+        end;
+    end;
     RecordInstructionFile;
   end
   else if UpperCase(FSplitter[0]) = rsEND then
@@ -442,7 +496,7 @@ begin
   begin
     FListingFile.Add(rsBeginDERIVED);
   end;
-  WriteLn(rsBeginDERIVED);
+  WriteLn(rsProcessingDE);
 end;
 
 procedure TInputHandler.InitializeIdentifiers;
@@ -457,7 +511,7 @@ begin
   begin
     FListingFile.Add(rsBeginIDENTIF);
   end;
-  WriteLn(rsBeginIDENTIF);
+  WriteLn(rsProcessingID);
 end;
 
 procedure TInputHandler.InitializeObsFiles;
@@ -470,7 +524,7 @@ begin
   begin
     FListingFile.Add(rsBeginOBSERVA2);
   end;
-  WriteLn(rsBeginOBSERVA2);
+  WriteLn(rsProcessingOB);
 end;
 
 procedure TInputHandler.HandleIdentifiers;
@@ -538,6 +592,10 @@ begin
             FInputFileLines[FLineIndex]]));
           Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS, Format(
             rsBEGINIDENTIF2, [FLineIndex+1, FInputFileLines[FLineIndex]]));
+          if FListingFile <> nil then
+          begin
+            FListingFile.Add(rsEndOfIDENTIF);
+          end;
           InterpolateInTime;
         end
         else
@@ -652,6 +710,7 @@ begin
     FListingFile.Add('');
     FListingFile.Add(rsBeginExtract);
   end;
+  WriteLn(rsBeginExtract);
   FDerivedObsList.Sort;
   for ObsIndex := 0 to Pred(FDerivedObsList.Count) do
   begin
@@ -695,6 +754,11 @@ begin
         FListingFile.Add('');
       end;
     end;
+  end;
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add('');
+    FListingFile.Add(rsEndExtract);
   end;
 end;
 
@@ -990,7 +1054,16 @@ begin
     FOutputFile.Add(Format(rsPrintObsValue, [AnObs.ObsName, AnObs.Value]));
     if FInstructionFile <> nil then
     begin
-      FInstructionFile.Add(Format(rsPrintObsInstruction, [AnObs.ObsName]));
+      case FInstructionFileMode of
+        ifmPest:
+          begin
+            FInstructionFile.Add(Format(rsPrintPestObsInstruction, [AnObs.ObsName]));
+          end;
+        ifmUCODE:
+          begin
+            FInstructionFile.Add(AnObs.ObsName);
+          end;
+      end;
     end;
   end;
 end;
@@ -1335,6 +1408,11 @@ begin
   end;
   if FInstructionFileName <> '' then
   begin
+    if FInstructionFileMode = ifmUCODE then
+    begin
+      FInstructionFile.Insert(1, Format(rsStandardFile,
+        [FInstructionFile.Count-1]));
+    end;
     FInstructionFile.SaveToFile(FInstructionFileName);
   end;
   FLocationDictionary.Free;
@@ -1376,7 +1454,7 @@ begin
           begin
             Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems,
               [FLineIndex+1, FInputFileLines[FLineIndex]]));
-            Assert(UpperCase(FSplitter[0]) = rsBEGIN);
+            Assert(UpperCase(FSplitter[0]) = rsBEGIN, Format('In line %0:d, "%1:s", the first word must be "BEGIN".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
             case FPriorProcessStatus of
               psNone:
               begin

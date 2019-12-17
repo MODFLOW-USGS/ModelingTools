@@ -8864,6 +8864,10 @@ const
   //               Enhancement: The operators "^" and "**" have been added.
   //                Both allow one number to be raised to the power of another
   //                number.
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                in the "Data|Display Data Set Values" dialog box.
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                when exporting the CHD input file.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.15';

@@ -1079,11 +1079,14 @@ implementation
 uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
-  EdgeDisplayUnit, SolidGeom;
+  EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
   StrErrorOccursInS = 'Error occurs in %s';
+  StrStartingAndEnding = 'Starting and ending times are the same.';
+  StrAnModelFeatureIn = 'An model feature in %0:s has identical starting and' +
+  ' ending times of %1:g';
 
 function SortBoundaryItems(Item1, Item2: pointer): integer;
 var
@@ -1203,6 +1206,7 @@ end;
 procedure TCustomModflowBoundaryItem.Assign(Source: TPersistent);
 var
   Item: TCustomModflowBoundaryItem;
+  ScreenObject: TScreenObject;
 begin
   // if Assign is updated, update IsSame too.
   if Source is TCustomModflowBoundaryItem then
@@ -1211,6 +1215,15 @@ begin
     EndTime := Item.EndTime;
   end;
   inherited;
+  if StartTime = EndTime then
+  begin
+    ScreenObject := (Collection as TCustomNonSpatialBoundColl).ScreenObject as TScreenObject;
+    if ScreenObject.Model <> nil then
+    begin
+      frmErrorsAndWarnings.AddWarning(ScreenObject.Model, StrStartingAndEnding,
+        Format(StrAnModelFeatureIn, [ScreenObject.Name, StartTime]), ScreenObject);
+    end;
+  end;
 end;
 
 function TCustomModflowBoundaryItem.GetConductanceIndex: Integer;

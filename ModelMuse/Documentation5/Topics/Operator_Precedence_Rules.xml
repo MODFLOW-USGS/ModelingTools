@@ -7,7 +7,7 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Operator Precedence Rules</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The operator precedence rules are shown in table 2. Operators that are part of the same group have equal precedence. Operators of equal precedence are evaluated in order from left to right.</text></para>
-    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 2. Operator precedence rules in GoPhast formulas</text></para>
+    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 2. Operator precedence rules in ModelMuse formulas</text></para>
     <para styleclass="Table Header"><table rowcount="6" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td>
