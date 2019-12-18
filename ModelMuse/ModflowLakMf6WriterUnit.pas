@@ -79,6 +79,7 @@ type
     Rainfall: double;
     Evaporation: double;
     Runoff: double;
+    Inflow: double;
     Withdrawal: double;
   end;
 
@@ -213,6 +214,7 @@ resourcestring
   StrLakeRunoffAt0g = 'Lake Runoff at %0:g';
   StrLakeWithdrawalAt = 'Lake Withdrawal at %0:g';
   StrLakeStartingStage = 'Lake Starting Stage';
+  StrLakeInflowAt0g = 'Lake Inflow at %0:g';
 
 { TModflowLAKMf6Writer }
 
@@ -997,6 +999,11 @@ begin
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
 
+      LakeSetting.Inflow := EvaluateFormula(LakeItem.Inflow,
+        Format( StrLakeInflowAt0g,
+        [LakeSetting.StartTime]),
+        ALake.FScreenObject.Name);
+
       LakeSetting.Withdrawal := EvaluateFormula(LakeItem.Withdrawal,
         Format(StrLakeWithdrawalAt,
         [LakeSetting.StartTime]),
@@ -1776,6 +1783,12 @@ begin
             WriteInteger(LakeIndex+1);
             WriteString('  RUNOFF');
             WriteFloat(ALakeSetting.Runoff);
+            NewLine;
+
+            WriteString('  ');
+            WriteInteger(LakeIndex+1);
+            WriteString('  INFLOW');
+            WriteFloat(ALakeSetting.Inflow);
             NewLine;
 
             WriteString('  ');

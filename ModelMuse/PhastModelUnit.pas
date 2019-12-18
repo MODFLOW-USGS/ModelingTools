@@ -8860,17 +8860,26 @@ const
   //                the Data Visualization dialog box.
   //    '4.1.0.15' Enhancement: The "File|Import Gridded Data Files" command
   //                now works with DISV MODFLOW 6 models and SUTRA models.
-
-  //               Enhancement: The operators "^" and "**" have been added.
+  //    '4.1.0.16' Enhancement: The operators "^" and "**" have been added.
   //                Both allow one number to be raised to the power of another
   //                number.
   //               Bug fix: Fixed a bug that could cause an access violation
   //                in the "Data|Display Data Set Values" dialog box.
   //               Bug fix: Fixed a bug that could cause an access violation
   //                when exporting the CHD input file.
+  //               Bug fix: Fixed a bug that could cause ModelMuse to enter
+  //                and infinite loop when evaluating a data set using an
+  //                object on the front view of the model.
+
+  //               Enhancement: Added support for NOCHECK, MEMORY_PRINT_OPTION,
+  //                and MAXERRORS in mfsim.nam options.
+  //               Enhancement: Added support for INFLOW, the MODFLOW 6 Lake
+  //                package.
+  //               Enhancement: Added support for NO_PTC, the MODFLOW 6 IMS
+  //                package.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.15';
+  IModelVersion = '4.1.0.16';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -9034,7 +9043,7 @@ resourcestring
 {$ENDIF}
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0\bin\WellFootprint.exe';
-  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.0.4\bin\mf6.exe';
+  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.1.0\bin\mf6.exe';
 
   StrProgramLocations = 'Program Locations';
   StrMODFLOW2005 = 'MODFLOW-2005';

@@ -122,7 +122,7 @@ object TTaskHistory
     end
     item
       Name = 'LAK'
-      Display = False
+      Display = True
     end
     item
       Name = 'OC'
@@ -350,11 +350,11 @@ object TTaskHistory
     end
     item
       Name = 'SMS'
-      Display = False
+      Display = True
     end
     item
       Name = 'SimulationNameFile'
-      Display = False
+      Display = True
     end
     item
       Name = 'SWI Observaton Interpolation'
@@ -24598,5 +24598,16 @@ object TTaskHistory
         'Bug fix'
         'MF6 Obs Extractor'
         'Documentation')
+    end
+    item
+      Date = 43817.440915416670000000
+      Categories.Strings = (
+        'Bug fix'
+        'core code'
+        'LAK'
+        'MF-2015'
+        'SMS'
+        'SimulationNameFile'
+        'Testing')
     end>
 end

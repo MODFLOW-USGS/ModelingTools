@@ -969,6 +969,7 @@ Type
   TSmsComplexityOption = (scoSimple, scoModerate, scoComplex);
   TSmsPrint = (spPrintNone, spSummary, spFull);
   TSmsSolutionPrint = (sspNone, sspAll);
+  TUsePTC = (upUse, upDontUseForFirst, upDontUseForAll);
   TSmsUnderRelaxation = (surNone, surSimple, surDbd, surCooley);
   TSmsLinearSolver = (slsDefault, slsXMD);
   TSmsRcloseOption = (sroAbsolute, sroStrict, sroL2Norm, sroRelative);
@@ -991,7 +992,10 @@ Type
     // The following are for backwards compatibility
     soLinearSolver, soXmdLinearAcceleration, soRedBlackOrder);
   TSmsOverrides = set of TSmsOverride;
+  TCheckInput = (ciCheckAll, ciDontCheck);
+  TMemoryPrint = (mpNone, mpSummary, mpAll);
 
+  // Now called IMS package instead of SMS package.
   TSmsPackageSelection = class(TModflowPackageSelection)
   private
     FNumberOfOrthoganalizations: Integer;
@@ -1025,6 +1029,10 @@ Type
     FSolutionGroupMaxIteration: Integer;
     FContinueModel: boolean;
     FCsvOutput: TSmsSolutionPrint;
+    FUsePTC: TUsePTC;
+    FMaxErrors: Integer;
+    FCheckInput: TCheckInput;
+    FMemoryPrint: TMemoryPrint;
     procedure SetBacktrackingNumber(const Value: Integer);
     procedure SetComplexity(const Value: TSmsComplexityOption);
     procedure SetInnerMaxIterations(const Value: integer);
@@ -1081,6 +1089,10 @@ Type
     procedure SetSolutionGroupMaxIteration(const Value: Integer);
     procedure SetContinueModel(const Value: boolean);
     procedure SetCsvOutput(const Value: TSmsSolutionPrint);
+    procedure SetUsePTC(const Value: TUsePTC);
+    procedure SetMaxErrors(const Value: Integer);
+    procedure SetCheckInput(const Value: TCheckInput);
+    procedure SetMemoryPrint(const Value: TMemoryPrint);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1127,6 +1139,15 @@ Type
       write SetComplexity;
     // CSV OUTPUT
     property CsvOutput: TSmsSolutionPrint read FCsvOutput write SetCsvOutput;
+    // combines Inverse of NO_PTC and no ptc option
+    property UsePTC: TUsePTC read FUsePTC write SetUsePTC;
+    // maximum number of error messages in MF6. MAXERRORS in mfsim.nam options
+    property MaxErrors: Integer read FMaxErrors write SetMaxErrors;
+    // Inverse of NOCHECK in mfsim.nam options
+    property CheckInput: TCheckInput read FCheckInput write SetCheckInput;
+    // MEMORY_PRINT_OPTION in mfsim.nam options
+    property MemoryPrint: TMemoryPrint read FMemoryPrint write SetMemoryPrint;
+
 
     // NONLINEAR block
 
@@ -17951,6 +17972,10 @@ begin
     SolutionGroupMaxIteration := SourceSms.SolutionGroupMaxIteration;
     ContinueModel := SourceSms.ContinueModel;
     CsvOutput := SourceSms.CsvOutput;
+    UsePTC := SourceSms.UsePTC;
+    MaxErrors := SourceSms.MaxErrors;
+    CheckInput := SourceSms.CheckInput;
+    MemoryPrint := SourceSms.MemoryPrint;
   end;
   inherited;
 end;
@@ -18107,6 +18132,10 @@ begin
   SolutionGroupMaxIteration := 1;
   ContinueModel := False;
   FCsvOutput := sspAll;
+  FUsePTC := upUse;
+  FMaxErrors := 0;
+  FCheckInput := ciCheckAll;
+  FMemoryPrint := mpNone;
 
   SmsOverrides := [soLinLinearAcceleration];
 end;
@@ -18135,6 +18164,15 @@ end;
 procedure TSmsPackageSelection.SetBacktrackingTolerance(const Value: double);
 begin
   StoredBacktrackingTolerance.Value := Value;
+end;
+
+procedure TSmsPackageSelection.SetCheckInput(const Value: TCheckInput);
+begin
+  if FCheckInput <> Value then
+  begin
+    FCheckInput := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TSmsPackageSelection.SetComplexity(const Value: TSmsComplexityOption);
@@ -18208,11 +18246,29 @@ begin
   StoredPreconditionerDropTolerance.Value := Value;
 end;
 
+procedure TSmsPackageSelection.SetMaxErrors(const Value: Integer);
+begin
+  if FMaxErrors <> Value then
+  begin
+    FMaxErrors := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TSmsPackageSelection.SetMaxOuterIterations(const Value: integer);
 begin
   if FMaxOuterIterations <> Value then
   begin
     FMaxOuterIterations := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSmsPackageSelection.SetMemoryPrint(const Value: TMemoryPrint);
+begin
+  if FMemoryPrint <> Value then
+  begin
+    FMemoryPrint := Value;
     InvalidateModel;
   end;
 end;
@@ -18408,6 +18464,15 @@ end;
 procedure TSmsPackageSelection.SetUnderRelaxTheta(const Value: double);
 begin
   StoredUnderRelaxTheta.Value := Value;
+end;
+
+procedure TSmsPackageSelection.SetUsePTC(const Value: TUsePTC);
+begin
+  if FUsePTC <> Value then
+  begin
+    FUsePTC := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TSmsPackageSelection.SetXmdLinearAcceleration(

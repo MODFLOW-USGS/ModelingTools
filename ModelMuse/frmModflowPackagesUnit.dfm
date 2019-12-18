@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspSUB
+    ActivePage = jvspSMS
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -4215,7 +4215,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 364
             inherited lblNumExportPeriods: TLabel
-              Top = 158
+              Top = 152
               Width = 176
               Height = 18
               ExplicitTop = 326
@@ -4223,15 +4223,15 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
-              Top = 154
+              Top = 148
               ExplicitTop = 322
             end
             inherited sbInsert: TSpeedButton
-              Top = 154
+              Top = 148
               ExplicitTop = 322
             end
             inherited sbDelete: TSpeedButton
-              Top = 154
+              Top = 148
               ExplicitTop = 322
             end
             inherited cbMultiPrintSave: TCheckBox
@@ -4239,13 +4239,13 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitWidth = 209
             end
             inherited rdgOutput: TRbwDataGrid4
-              Height = 111
-              ExplicitHeight = 111
+              Height = 105
+              ExplicitHeight = 105
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 155
+              Top = 149
               Height = 26
-              ExplicitTop = 155
+              ExplicitTop = 149
               ExplicitHeight = 26
             end
             inherited comboMultiFomat: TJvImageComboBox
@@ -4524,19 +4524,19 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitWidth = 587
             ExplicitHeight = 372
             inherited sbAdd: TSpeedButton
-              Top = 162
+              Top = 159
               ExplicitTop = 330
             end
             inherited sbInsert: TSpeedButton
-              Top = 162
+              Top = 159
               ExplicitTop = 330
             end
             inherited sbDelete: TSpeedButton
-              Top = 162
+              Top = 159
               ExplicitTop = 330
             end
             inherited lblNumExportPeriods: TLabel
-              Top = 165
+              Top = 162
               Width = 176
               Height = 18
               ExplicitTop = 333
@@ -4551,7 +4551,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 64)
             end
             inherited rdgOutput: TRbwDataGrid4
-              Height = 2
+              Height = 0
               Columns = <
                 item
                   AutoAdjustRowHeights = False
@@ -5210,12 +5210,12 @@ inherited frmModflowPackages: TfrmModflowPackages
                   CheckStyle = csCheck
                   AutoAdjustColWidths = True
                 end>
-              ExplicitHeight = 2
+              ExplicitHeight = 0
             end
             inherited seNumExportPeriods: TJvSpinEdit
-              Top = 162
+              Top = 159
               Height = 26
-              ExplicitTop = 162
+              ExplicitTop = 159
               ExplicitHeight = 26
             end
             inherited comboMultiFomat: TJvImageComboBox
@@ -9899,8 +9899,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited tabBasic: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 487
-            ExplicitHeight = 220
+            ExplicitWidth = 587
+            ExplicitHeight = 326
             inherited lblPrintOption: TLabel
               Width = 79
               Height = 18
@@ -9919,6 +9919,22 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitWidth = 201
               ExplicitHeight = 18
             end
+            inherited lblUsePTC: TLabel
+              Width = 555
+              Height = 18
+              ExplicitWidth = 555
+              ExplicitHeight = 18
+            end
+            inherited lblMaxErrors: TLabel
+              Width = 514
+              Height = 18
+              ExplicitWidth = 514
+              ExplicitHeight = 18
+            end
+            inherited lblMemoryPrint: TLabel
+              Width = 383
+              ExplicitWidth = 383
+            end
             inherited comboPrintOption: TJvImageComboBox
               Height = 28
               ItemHeight = 22
@@ -9933,29 +9949,38 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 26
               ExplicitHeight = 26
             end
+            inherited comboUsePTC: TJvImageComboBox
+              Height = 28
+              ItemHeight = 22
+              ItemIndex = -1
+              ExplicitHeight = 28
+            end
+            inherited seMaxErrors: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+            inherited comboMemoryPrint: TJvImageComboBox
+              Height = 28
+              ItemHeight = 22
+              ExplicitHeight = 28
+            end
           end
           inherited tabNonLinear: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 487
-            ExplicitHeight = 220
+            ExplicitHeight = 261
             inherited rdgNonlinearOptions: TRbwDataGrid4
-              Height = 220
+              Height = 261
               FixedCols = 0
-              ExplicitHeight = 220
+              ExplicitHeight = 261
             end
           end
           inherited tabLinear: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 326
+            ExplicitHeight = 261
             inherited rdgLinearOptions: TRbwDataGrid4
-              Width = 587
-              Height = 326
+              Height = 261
               FixedCols = 0
-              ExplicitWidth = 587
-              ExplicitHeight = 326
+              ExplicitHeight = 261
             end
           end
         end
@@ -9987,6 +10012,27 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePkgSMS.rdgLinearOptions
+            end
+            item
+              Control = framePkgSMS.lblUsePTC
+            end
+            item
+              Control = framePkgSMS.comboUsePTC
+            end
+            item
+              Control = framePkgSMS.lblMaxErrors
+            end
+            item
+              Control = framePkgSMS.seMaxErrors
+            end
+            item
+              Control = framePkgSMS.cbCheckInput
+            end
+            item
+              Control = framePkgSMS.lblMemoryPrint
+            end
+            item
+              Control = framePkgSMS.comboMemoryPrint
             end>
         end
       end
@@ -10383,12 +10429,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 93
           ExplicitHeight = 18
         end
-        inherited lblOutputPrecision: TLabel
-          Width = 158
-          Height = 18
-          ExplicitWidth = 158
-          ExplicitHeight = 18
-        end
         inherited lblNumberOfDigits: TLabel
           Width = 142
           Height = 18
@@ -10398,10 +10438,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Width = 564
           ExplicitWidth = 564
-        end
-        inherited comboOutputPrecision: TComboBox
-          Height = 26
-          ExplicitHeight = 26
         end
         inherited comboOutputFormat: TComboBox
           Height = 26
@@ -10971,7 +11007,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Left = 136
     Top = 96
     Bitmap = {
-      494C010108000D00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000D000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

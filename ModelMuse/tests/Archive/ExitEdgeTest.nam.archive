@@ -1,0 +1,13 @@
+# Name File for MODFLOW created on 12/18/2019 by ModelMuse Version 4.1.0.15
+BEGIN OPTIONS
+  LIST ..\..\output\output.ExitEdgeTest\ExitEdgeTest.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.ExitEdgeTest\ExitEdgeTest.dis
+  IC6          ..\..\model\model.ExitEdgeTest\ExitEdgeTest.ic
+  NPF6         ..\..\model\model.ExitEdgeTest\ExitEdgeTest.npf
+  OC6          ..\..\model\model.ExitEdgeTest\ExitEdgeTest.oc
+END PACKAGES

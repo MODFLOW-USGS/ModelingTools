@@ -427,12 +427,31 @@ begin
 
   if FImsPackage.CsvOutput <> sspNone then
   begin
-    WriteString('CSV_OUTPUT FILEOUT ');
+    WriteString('  CSV_OUTPUT FILEOUT ');
     CsvFile := ChangeFileExt(FNameOfFile, '.Solution.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
     NewLine;
+  end;
+
+  case FImsPackage.UsePTC  of
+    upUse:
+      begin
+        // do nothing
+      end;
+    upDontUseForAll:
+      begin
+        WriteString('  NO PTC ALL');
+        NewLine;
+      end;
+    upDontUseForFirst:
+      begin
+        WriteString('  NO PTC FIRST');
+        NewLine;
+      end;
+    else
+      Assert(False);
   end;
 
   WriteEndOptions;

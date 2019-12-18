@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4050
+4061
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4050,3 +4050,14 @@ DipKTest.gpt
 	Archive\DipKTest.pval
 	Archive\DipKTest.zon
 	Archive\usgs.DipKTest.reference
+ExitEdgeTest.gpt
+	Archive\ExitEdgeTest.axml
+	Archive\ExitEdgeTest.dis
+	Archive\ExitEdgeTest.ic
+	Archive\ExitEdgeTest.ims
+	Archive\ExitEdgeTest.nam
+	Archive\ExitEdgeTest.nam.archive
+	Archive\ExitEdgeTest.npf
+	Archive\ExitEdgeTest.oc
+	Archive\ExitEdgeTest.tdis
+	Archive\usgs.ExitEdgeTest.reference

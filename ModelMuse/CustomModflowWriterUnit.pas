@@ -7652,13 +7652,63 @@ end;
 procedure TMf6_SimNameFileWriter.WriteOptions;
 var
   SmsPkg: TSmsPackageSelection;
+  HasOptions: Boolean;
+  procedure WriteBegin;
+  begin
+    if not HasOptions then
+    begin
+      WriteBeginOptions;
+      HasOptions := True;
+    end;
+  end;
 begin
   SmsPkg := Model.ModflowPackages.SmsPackage;
+  HasOptions := False;
   if SmsPkg.ContinueModel then
   begin
-    WriteBeginOptions;
+    WriteBegin;
     WriteString('  CONTINUE');
     NewLine;
+  end;
+
+  if SmsPkg.MaxErrors > 0 then
+  begin
+    WriteBegin;
+    WriteString('  MAXERRORS');
+    WriteInteger(SmsPkg.MaxErrors);
+    NewLine;
+  end;
+
+  if SmsPkg.CheckInput = ciDontCheck then
+  begin
+    WriteBegin;
+    WriteString('  NOCHECK');
+    NewLine;
+  end;
+
+  case SmsPkg.MemoryPrint of
+    mpNone:
+      begin
+        // do nothing
+      end;
+    mpSummary:
+      begin
+        WriteBegin;
+        WriteString('  MEMORY_PRINT_OPTION SUMMARY');
+        NewLine;
+      end;
+    mpAll:
+      begin
+        WriteBegin;
+        WriteString('  MEMORY_PRINT_OPTION ALL');
+        NewLine;
+      end;
+    else
+      Assert(False);
+  end;
+
+  if HasOptions then
+  begin
     WriteEndOptions;
   end;
 end;

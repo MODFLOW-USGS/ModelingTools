@@ -1,11 +1,11 @@
 inherited framePkgSms: TframePkgSms
   Width = 495
-  Height = 410
+  Height = 481
   ExplicitWidth = 495
-  ExplicitHeight = 410
+  ExplicitHeight = 481
   DesignSize = (
     495
-    410)
+    481)
   inherited memoComments: TMemo
     Width = 464
     ExplicitWidth = 464
@@ -14,13 +14,16 @@ inherited framePkgSms: TframePkgSms
     Left = 0
     Top = 157
     Width = 495
-    Height = 253
-    ActivePage = tabLinear
+    Height = 324
+    ActivePage = tabBasic
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
+    ExplicitHeight = 253
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 8
+      ExplicitHeight = 328
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
@@ -37,10 +40,38 @@ inherited framePkgSms: TframePkgSms
       end
       object lblSolutionGroupMaxIter: TLabel
         Left = 264
-        Top = 4
+        Top = 3
         Width = 140
         Height = 13
         Caption = 'Solution group max iterations'
+      end
+      object lblUsePTC: TLabel
+        Left = 16
+        Top = 104
+        Width = 388
+        Height = 13
+        Caption = 
+          'Use pseudo-transient continuation PTC)  (Inverse of  NO_PTC and ' +
+          'no ptc option)'
+        Enabled = False
+      end
+      object lblMaxErrors: TLabel
+        Left = 16
+        Top = 155
+        Width = 349
+        Height = 13
+        Caption = 
+          'Maximum number of allowed error messages (0 for no limit) (MAXER' +
+          'ROR)'
+        Enabled = False
+      end
+      object lblMemoryPrint: TLabel
+        Left = 16
+        Top = 224
+        Width = 263
+        Height = 18
+        Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
+        Enabled = False
       end
       object comboPrintOption: TJvImageComboBox
         Left = 16
@@ -135,15 +166,99 @@ inherited framePkgSms: TframePkgSms
         Enabled = False
         TabOrder = 4
       end
+      object comboUsePTC: TJvImageComboBox
+        Left = 16
+        Top = 123
+        Width = 297
+        Height = 23
+        Style = csOwnerDrawVariable
+        ButtonStyle = fsLighter
+        Color = clBtnFace
+        DroppedWidth = 297
+        Enabled = False
+        ImageHeight = 0
+        ImageWidth = 0
+        ItemHeight = 17
+        ItemIndex = 2
+        TabOrder = 5
+        Items = <
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Use PTC'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Don'#39't use PTC for first stress period'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Don'#39't use PTC for any stress period'
+          end>
+      end
+      object seMaxErrors: TJvSpinEdit
+        Left = 16
+        Top = 174
+        Width = 121
+        Height = 21
+        MaxValue = 2147483647.000000000000000000
+        Value = 1.000000000000000000
+        Enabled = False
+        TabOrder = 6
+      end
+      object cbCheckInput: TCheckBox
+        Left = 16
+        Top = 201
+        Width = 321
+        Height = 17
+        Caption = 'Check model input (Inverse of NOCHECK)'
+        Enabled = False
+        TabOrder = 7
+      end
+      object comboMemoryPrint: TJvImageComboBox
+        Left = 16
+        Top = 248
+        Width = 121
+        Height = 23
+        Style = csOwnerDrawVariable
+        ButtonStyle = fsLighter
+        Color = clBtnFace
+        DroppedWidth = 297
+        Enabled = False
+        ImageHeight = 0
+        ImageWidth = 0
+        ItemHeight = 17
+        ItemIndex = -1
+        TabOrder = 8
+        Items = <
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'None'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Summary'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'All'
+          end>
+      end
     end
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
       ImageIndex = 1
+      ExplicitHeight = 225
       object rdgNonlinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 487
-        Height = 225
+        Height = 296
         Align = alClient
         ColCount = 3
         Enabled = False
@@ -234,6 +349,7 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 225
         ColWidths = (
           84
           64
@@ -243,11 +359,12 @@ inherited framePkgSms: TframePkgSms
     object tabLinear: TTabSheet
       Caption = 'Linear'
       ImageIndex = 2
+      ExplicitHeight = 225
       object rdgLinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 487
-        Height = 225
+        Height = 296
         Align = alClient
         ColCount = 3
         Enabled = False
@@ -338,6 +455,7 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 225
         ColWidths = (
           84
           64
@@ -373,6 +491,27 @@ inherited framePkgSms: TframePkgSms
       end
       item
         Control = rdgLinearOptions
+      end
+      item
+        Control = lblUsePTC
+      end
+      item
+        Control = comboUsePTC
+      end
+      item
+        Control = lblMaxErrors
+      end
+      item
+        Control = seMaxErrors
+      end
+      item
+        Control = cbCheckInput
+      end
+      item
+        Control = lblMemoryPrint
+      end
+      item
+        Control = comboMemoryPrint
       end>
   end
 end

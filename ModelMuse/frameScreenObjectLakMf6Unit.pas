@@ -13,7 +13,7 @@ uses
 
 type
   TLakeColumns = (lcStart, lcEnd, lcStatus, lcStage, lcRainfall, lcEvaporation,
-    lcRunoff, lcWithdrawal);
+    lcRunoff, lcInflow, lcWithdrawal);
 	
   TLakeTableColumns = (ltcStage, ltcVolume, ltcSurfaceArea, ltcExchangeArea);
 
@@ -98,6 +98,7 @@ resourcestring
   StrSurfaceArea = 'Surface area';
   StrExchangeArea = 'Exchange area';
   StrNone = 'none';
+  StrInflow = 'Inflow';
 
 const NonOutletTabs = 3;
 
@@ -273,6 +274,7 @@ begin
             rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1] := ALakeItem.Rainfall;
             rdgModflowBoundary.Cells[Ord(lcEvaporation), TimeIndex+1] := ALakeItem.Evaporation;
             rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1] := ALakeItem.Runoff;
+            rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1] := ALakeItem.Inflow;
             rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1] := ALakeItem.Withdrawal;
           end;
 
@@ -369,6 +371,7 @@ begin
   rdgModflowBoundary.Cells[Ord(lcRainfall), 0] := StrRainfall;
   rdgModflowBoundary.Cells[Ord(lcEvaporation), 0] := StrEvaporation;
   rdgModflowBoundary.Cells[Ord(lcRunoff), 0] := StrRunoff;
+  rdgModflowBoundary.Cells[Ord(lcInflow), 0] := StrInflow;
   rdgModflowBoundary.Cells[Ord(lcWithdrawal), 0] := StrWithdrawal;
 
   frameLakeTable.Grid.Cells[Ord(ltcStage), 0] := StrStage;
@@ -632,6 +635,7 @@ begin
               ALakeItem.Rainfall := rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1];
               ALakeItem.Evaporation := rdgModflowBoundary.Cells[Ord(lcEvaporation), TimeIndex+1];
               ALakeItem.Runoff := rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1];
+              ALakeItem.Inflow := rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1];
               ALakeItem.Withdrawal := rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1];
             end;
           end;

@@ -26,6 +26,13 @@ type
     seSolutionGroupMaxIter: TJvSpinEdit;
     rdgNonlinearOptions: TRbwDataGrid4;
     rdgLinearOptions: TRbwDataGrid4;
+    comboUsePTC: TJvImageComboBox;
+    lblUsePTC: TLabel;
+    lblMaxErrors: TLabel;
+    seMaxErrors: TJvSpinEdit;
+    cbCheckInput: TCheckBox;
+    lblMemoryPrint: TLabel;
+    comboMemoryPrint: TJvImageComboBox;
     procedure rdgNonlinearOptionsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgNonlinearOptionsSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -170,6 +177,10 @@ begin
     comboComplexity.ItemIndex := Ord(SmsPackage.Complexity);
     cbContinue.Checked := SmsPackage.ContinueModel;
     cbCsvOutput.Checked := Boolean(Ord(SmsPackage.CsvOutput));
+    comboUsePTC.ItemIndex := Ord(SmsPackage.UsePTC);
+    seMaxErrors.AsInteger := SmsPackage.MaxErrors;
+    cbCheckInput.Checked := SmsPackage.CheckInput = ciCheckAll;
+    comboMemoryPrint.ItemIndex := Ord(SmsPackage.MemoryPrint);
 
     for SmsOveride := Low(TSmsOverride) to High(TSmsOverride) do
     begin
@@ -1037,7 +1048,10 @@ begin
   SmsPackage.Complexity := TSmsComplexityOption(comboComplexity.ItemIndex);
   SmsPackage.ContinueModel := cbContinue.Checked;
   SmsPackage.CsvOutput := TSmsSolutionPrint(Ord(cbCsvOutput.Checked));
-
+  SmsPackage.UsePTC := TUsePTC(comboUsePTC.ItemIndex);
+  SmsPackage.MaxErrors := seMaxErrors.AsInteger;
+  SmsPackage.CheckInput := TCheckInput(not cbCheckInput.Checked);
+  SmsPackage.MemoryPrint := TMemoryPrint(comboMemoryPrint.ItemIndex);
 
   NewOverRides := [];
   for SmsOveride := Low(TSmsOverride) to High(TSmsOverride) do

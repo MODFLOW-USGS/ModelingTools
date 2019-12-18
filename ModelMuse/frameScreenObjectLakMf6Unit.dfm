@@ -8,7 +8,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Width = 451
     Height = 48
     ExplicitTop = 504
-    ExplicitWidth = 376
+    ExplicitWidth = 451
     ExplicitHeight = 48
     DesignSize = (
       451
@@ -19,19 +19,19 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     end
     inherited btnDelete: TBitBtn
       Left = 351
-      ExplicitLeft = 276
+      ExplicitLeft = 351
     end
     inherited btnInsert: TBitBtn
       Left = 263
-      ExplicitLeft = 188
+      ExplicitLeft = 263
     end
   end
   inherited pnlTop: TPanel
     Width = 451
-    ExplicitWidth = 376
+    ExplicitWidth = 451
     inherited pnlCaption: TPanel
       Width = 449
-      ExplicitWidth = 374
+      ExplicitWidth = 449
     end
   end
   inherited pnlGrid: TPanel
@@ -40,16 +40,16 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Height = 144
     Align = alBottom
     ExplicitTop = 360
-    ExplicitWidth = 376
+    ExplicitWidth = 451
     ExplicitHeight = 144
     inherited pnlEditGrid: TPanel
       Width = 449
-      ExplicitWidth = 374
+      ExplicitWidth = 449
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Width = 449
       Height = 92
-      ColCount = 8
+      ColCount = 9
       Columns = <
         item
           AutoAdjustRowHeights = False
@@ -238,9 +238,32 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           CaseSensitivePicklist = False
           CheckStyle = csCheck
           AutoAdjustColWidths = True
+        end
+        item
+          AutoAdjustRowHeights = True
+          ButtonCaption = 'F()'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = True
+          ButtonWidth = 35
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4String
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = True
         end>
       ExplicitLeft = 1
-      ExplicitWidth = 374
+      ExplicitWidth = 449
       ExplicitHeight = 92
     end
   end
@@ -249,14 +272,12 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Top = 25
     Width = 451
     Height = 335
-    ActivePage = tabLakeProperties
+    ActivePage = tabLakeTransientProperties
     Align = alClient
     TabOrder = 3
-    ExplicitWidth = 376
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
       ImageIndex = 2
-      ExplicitWidth = 368
       object lblOutletCount: TLabel
         Left = 60
         Top = 3
@@ -536,7 +557,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     object tabLakeTable: TTabSheet
       Caption = 'Lake Table'
       ImageIndex = 1
-      ExplicitWidth = 368
       inline frameLakeTable: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -544,13 +564,13 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 307
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 368
+        ExplicitWidth = 443
         ExplicitHeight = 307
         inherited Panel: TPanel
           Top = 266
           Width = 443
           ExplicitTop = 266
-          ExplicitWidth = 368
+          ExplicitWidth = 443
           inherited lbNumber: TLabel
             Top = 6
             Width = 136
@@ -672,12 +692,12 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 368
+          ExplicitWidth = 443
           ExplicitHeight = 209
         end
         inherited pnlTop: TPanel
           Width = 443
-          ExplicitWidth = 368
+          ExplicitWidth = 443
           inherited edFormula: TLabeledEdit
             EditLabel.ExplicitLeft = 0
             EditLabel.ExplicitTop = -16

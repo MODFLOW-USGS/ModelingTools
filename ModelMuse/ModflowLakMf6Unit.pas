@@ -225,13 +225,15 @@ type
       KRainfallPosition = 1;
       KRunoffPosition = 2;
       KEvaporationPosition = 3;
-      KWithdrawalPosition = 4;
+      KInflowPosition = 4;
+      KWithdrawalPosition = 5;
     var
     FStatus: TLakeStatus;
     FStage: TFormulaObject;
     FRainfall: TFormulaObject;
     FRunoff: TFormulaObject;
     FEvaporation: TFormulaObject;
+    FInflow: TFormulaObject;
     FWithdrawal: TFormulaObject;
     function GetStage: string;
     procedure SetStage(const Value: string);
@@ -244,6 +246,8 @@ type
     procedure SetEvaporation(const Value: string);
     function GetWithdrawal: string;
     procedure SetWithdrawal(const Value: string);
+    function GetInflow: string;
+    procedure SetInflow(const Value: string);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -262,6 +266,7 @@ type
     property Rainfall: string read GetRainfall write SetRainfall;
     property Evaporation: string read GetEvaporation write SetEvaporation;
     property Runoff: string read GetRunoff write SetRunoff;
+    property Inflow: string read GetInflow write SetInflow;
     property Withdrawal: string read GetWithdrawal write SetWithdrawal;
   end;
 
@@ -271,6 +276,7 @@ type
     procedure InvalidateRainfall(Sender: TObject);
     procedure InvalidateEvaporation(Sender: TObject);
     procedure InvalidateRunoff(Sender: TObject);
+    procedure InvalidateInflow(Sender: TObject);
     procedure InvalidateWithdrawal(Sender: TObject);
   protected
     class function ItemClass: TBoundaryItemClass; override;
@@ -400,6 +406,7 @@ begin
     Rainfall := LakeItem.Rainfall;
     Evaporation := LakeItem.Evaporation;
     Runoff := LakeItem.Runoff;
+    Inflow := LakeItem.Inflow;
     Withdrawal := LakeItem.Withdrawal;
   end;
   inherited;
@@ -413,6 +420,7 @@ var
   RunoffObserver: TObserver;
   EvaporationObserver: TObserver;
   WithdrawalObserver: TObserver;
+  InflowObserver: TObserver;
 begin
   inherited;
 //  inherited;
@@ -430,13 +438,16 @@ begin
   EvaporationObserver := FObserverList[KEvaporationPosition];
   EvaporationObserver.OnUpToDateSet := ParentCollection.InvalidateEvaporation;
 
+  InflowObserver := FObserverList[KInflowPosition];
+  InflowObserver.OnUpToDateSet := ParentCollection.InvalidateInflow;
+
   WithdrawalObserver := FObserverList[KWithdrawalPosition];
   WithdrawalObserver.OnUpToDateSet := ParentCollection.InvalidateWithdrawal;
 end;
 
 function TLakeTimeItem.BoundaryFormulaCount: integer;
 begin
-  result := 5;
+  result := 6;
 end;
 
 procedure TLakeTimeItem.CreateFormulaObjects;
@@ -446,6 +457,7 @@ begin
   FRainfall := CreateFormulaObject(dsoTop);
   FRunoff := CreateFormulaObject(dsoTop);
   FEvaporation := CreateFormulaObject(dsoTop);
+  FInflow := CreateFormulaObject(dsoTop);
   FWithdrawal := CreateFormulaObject(dsoTop);
 end;
 
@@ -456,6 +468,7 @@ begin
     KRainfallPosition: result := Rainfall;
     KRunoffPosition: result := Runoff;
     KEvaporationPosition: result := Evaporation;
+    KInflowPosition: result := Inflow;
     KWithdrawalPosition: result := Withdrawal;
     else
       Assert(False);
@@ -466,6 +479,12 @@ function TLakeTimeItem.GetEvaporation: string;
 begin
   Result := FEvaporation.Formula;
   ResetItemObserver(KEvaporationPosition);
+end;
+
+function TLakeTimeItem.GetInflow: string;
+begin
+  Result := FInflow.Formula;
+  ResetItemObserver(KInflowPosition);
 end;
 
 procedure TLakeTimeItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -486,6 +505,10 @@ begin
   if Sender = FEvaporation then
   begin
     List.Add(FObserverList[KEvaporationPosition]);
+  end;
+  if Sender = FInflow then
+  begin
+    List.Add(FObserverList[KInflowPosition]);
   end;
   if Sender = FWithdrawal then
   begin
@@ -531,6 +554,7 @@ begin
       and (Rainfall = LakeItem.Rainfall)
       and (Evaporation = LakeItem.Evaporation)
       and (Runoff = LakeItem.Runoff)
+      and (Inflow = LakeItem.Inflow)
       and (Withdrawal = LakeItem.Withdrawal);
   end;
 end;
@@ -550,6 +574,9 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FEvaporation,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FInflow,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FWithdrawal,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
@@ -566,6 +593,8 @@ begin
       Runoff := Value;
     KEvaporationPosition:
       Evaporation := Value;
+    KInflowPosition:
+      Inflow := Value;
     KWithdrawalPosition:
       Withdrawal := Value;
     else
@@ -576,6 +605,11 @@ end;
 procedure TLakeTimeItem.SetEvaporation(const Value: string);
 begin
   UpdateFormula(Value, KEvaporationPosition, FEvaporation);
+end;
+
+procedure TLakeTimeItem.SetInflow(const Value: string);
+begin
+  UpdateFormula(Value, KInflowPosition, FInflow);
 end;
 
 procedure TLakeTimeItem.SetRainfall(const Value: string);
@@ -1087,6 +1121,11 @@ begin
 end;
 
 procedure TLakTimeCollection.InvalidateEvaporation(Sender: TObject);
+begin
+
+end;
+
+procedure TLakTimeCollection.InvalidateInflow(Sender: TObject);
 begin
 
 end;

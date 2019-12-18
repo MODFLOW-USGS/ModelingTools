@@ -30234,25 +30234,60 @@ begin
               end;
 
               // Test if it re-enters the other half of the same cell.
+              // ObjectSegment is the current edge of the object.
               ObjectSegment := EquateSegment(PreviousPoint.X, PreviousPoint.Y,
                 APoint.X, APoint.Y);
               OtherEdgeAssigned := False;
+              // FirstPointInCell is now the location where ObjectSegment
+              // exits the cell.
+              // CellOutlines[HorizontalIndex*2+1,LayerIndicator].X is the
+              // horizontal midpoint of the cell.
+              // Check if ObjectSegment exits the cell in the right half of
+              // the cell and is heading towards the left half.
               if (FirstPointInCell.X >
                 CellOutlines[HorizontalIndex*2+1,LayerIndicator].X)
                and (APoint.X < PreviousPoint.X) then
               begin
-                EdgeSegment :=
-                  EquateSegment(CellOutlines[HorizontalIndex*2+1,LayerIndicator],
-                  CellOutlines[HorizontalIndex*2+2,LayerIndicator]);
+                // EdgeSegment is the left edge of the top or bottom half of the
+                // cell intersected by the object.
+                // This is the other edge from where FirstPointInCell is located.
+                if FScreenObject.ViewDirection = vdFront then
+                begin
+                  EdgeSegment :=
+                    EquateSegment(CellOutlines[HorizontalIndex*2+1,LayerIndicator],
+                    CellOutlines[HorizontalIndex*2,LayerIndicator]);
+                end
+                else
+                begin
+                  Assert(FScreenObject.ViewDirection = vdSide);
+                  EdgeSegment :=
+                    EquateSegment(CellOutlines[HorizontalIndex*2+1,LayerIndicator],
+                    CellOutlines[HorizontalIndex*2+2,LayerIndicator]);
+                end;
                 OtherEdgeAssigned := True;
               end
+              // Check if ObjectSegment exits the cell in the left half of
+              // the cell and is heading towards the right half.
               else if (FirstPointInCell.X <
                 CellOutlines[HorizontalIndex*2+1,LayerIndicator].X)
                and (APoint.X > PreviousPoint.X) then
               begin
-                EdgeSegment :=
-                  EquateSegment(CellOutlines[HorizontalIndex*2+1,LayerIndicator],
-                  CellOutlines[HorizontalIndex*2,LayerIndicator]);
+                // EdgeSegment is the right edge of the top or bottom half of the
+                // cell intersected by the object.
+                // This is the other edge from where FirstPointInCell is located.
+                if FScreenObject.ViewDirection = vdFront then
+                begin
+                  EdgeSegment :=
+                    EquateSegment(CellOutlines[HorizontalIndex*2+1,LayerIndicator],
+                    CellOutlines[HorizontalIndex*2+2,LayerIndicator]);
+                end
+                else
+                begin
+                  Assert(FScreenObject.ViewDirection = vdSide);
+                  EdgeSegment :=
+                    EquateSegment(CellOutlines[HorizontalIndex*2+1,LayerIndicator],
+                    CellOutlines[HorizontalIndex*2,LayerIndicator]);
+                end;
                 OtherEdgeAssigned := True;
               end;
               if OtherEdgeAssigned and Intersect(ObjectSegment,EdgeSegment) then
