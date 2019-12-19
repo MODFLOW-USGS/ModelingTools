@@ -313,7 +313,14 @@ var
   DataArray: TDataArray;
 begin
   frmProgressMM.AddMessage('  Writing K22');
-  DataArray := Model.DataArrayManager.GetDataSetByName(rsKy);
+  if FNpfPackage.UseHorizontalAnisotropy then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KKyOverKx);
+  end
+  else
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(rsKy);
+  end;
   WriteMf6_DataSet(DataArray, 'K22');
 end;
 
@@ -340,7 +347,14 @@ var
   DataArray: TDataArray;
 begin
   frmProgressMM.AddMessage('  Writing K33');
-  DataArray := Model.DataArrayManager.GetDataSetByName(rsKz);
+  if FNpfPackage.UseVerticalAnisotropy then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KKzOverKx);
+  end
+  else
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(rsKz);
+  end;
   WriteMf6_DataSet(DataArray, 'K33');
 end;
 

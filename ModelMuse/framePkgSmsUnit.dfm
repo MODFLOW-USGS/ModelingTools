@@ -19,11 +19,8 @@ inherited framePkgSms: TframePkgSms
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    ExplicitHeight = 253
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 8
-      ExplicitHeight = 328
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
@@ -48,28 +45,28 @@ inherited framePkgSms: TframePkgSms
       object lblUsePTC: TLabel
         Left = 16
         Top = 104
-        Width = 388
+        Width = 398
         Height = 13
         Caption = 
-          'Use pseudo-transient continuation PTC)  (Inverse of  NO_PTC and ' +
-          'no ptc option)'
+          'Use pseudo-transient continuation (PTC)  (Inverse of  NO_PTC and' +
+          ' no_ptc_option)'
         Enabled = False
       end
       object lblMaxErrors: TLabel
         Left = 16
         Top = 155
-        Width = 349
+        Width = 353
         Height = 13
         Caption = 
-          'Maximum number of allowed error messages (0 for no limit) (MAXER' +
-          'ROR)'
+          'Maximum number of allowed error messages (-1 for no limit) (MAXE' +
+          'RROR)'
         Enabled = False
       end
       object lblMemoryPrint: TLabel
         Left = 16
         Top = 224
         Width = 263
-        Height = 18
+        Height = 13
         Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
         Enabled = False
       end
@@ -204,6 +201,7 @@ inherited framePkgSms: TframePkgSms
         Width = 121
         Height = 21
         MaxValue = 2147483647.000000000000000000
+        MinValue = -1.000000000000000000
         Value = 1.000000000000000000
         Enabled = False
         TabOrder = 6
@@ -253,7 +251,6 @@ inherited framePkgSms: TframePkgSms
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
       ImageIndex = 1
-      ExplicitHeight = 225
       object rdgNonlinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -349,7 +346,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 225
         ColWidths = (
           84
           64
@@ -359,7 +355,6 @@ inherited framePkgSms: TframePkgSms
     object tabLinear: TTabSheet
       Caption = 'Linear'
       ImageIndex = 2
-      ExplicitHeight = 225
       object rdgLinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
@@ -455,7 +450,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 225
         ColWidths = (
           84
           64

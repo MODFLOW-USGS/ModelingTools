@@ -11,7 +11,7 @@ uses
 type
   TNprOptions = (noUseXT3D, noXt3dOnRightHandSide, noThickStrt, noVaryingVerticalConductance, noDewatered,
     noPerched, {noNewton, noDampening,} 
-    noSaveSpecificDischarge);
+    noSaveSpecificDischarge, noHorizontalAnis, noVerticalAnis);
 
   TframePackageNpf = class(TframePackage)
     rdgOptions: TRbwDataGrid4;
@@ -64,6 +64,8 @@ resourcestring
   'included on the Right Hand Side of the matrix equation';
   StrSaveXYAndZCom = 'Save X, Y, and Z components of specific discharge. (SA' +
   'VE_SPECIFIC_DISCHARGE)';
+  StrUseHorizontalAniso = 'Use horizontal anisotropy (K22OVERK)';
+  StrUseVerticalAnisotr = 'Use vertical anisotropy (K33OVERK)';
 
 {$R *.dfm}
 
@@ -105,6 +107,8 @@ begin
   rdgOptions.Checked[0, Ord(noUseXT3D)] := NpfPackage.UseXT3D;
   rdgOptions.Checked[0, Ord(noXt3dOnRightHandSide)] := NpfPackage.Xt3dOnRightHandSide;
   rdgOptions.Checked[0, Ord(noSaveSpecificDischarge)] := NpfPackage.SaveSpecificDischarge;
+  rdgOptions.Checked[0, Ord(noHorizontalAnis)] := NpfPackage.UseHorizontalAnisotropy;
+  rdgOptions.Checked[0, Ord(noVerticalAnis)] := NpfPackage.UseVerticalAnisotropy;
 end;
 
 procedure TframePackageNpf.Loaded;
@@ -124,6 +128,8 @@ begin
     rdgOptions.Cells[0, Ord(noUseXT3D)] := StrXT3DOption;
     rdgOptions.Cells[0, Ord(noXt3dOnRightHandSide)] := StrXT3DRHSOption;
     rdgOptions.Cells[0, Ord(noSaveSpecificDischarge)] := StrSaveXYAndZCom;
+    rdgOptions.Cells[0, Ord(noHorizontalAnis)] := StrUseHorizontalAniso;
+    rdgOptions.Cells[0, Ord(noVerticalAnis)] := StrUseVerticalAnisotr;
 
   finally
     rdgOptions.EndUpdate;
@@ -215,6 +221,8 @@ begin
   NpfPackage.UseXT3D := rdgOptions.Checked[0, Ord(noUseXT3D)];
   NpfPackage.Xt3dOnRightHandSide := rdgOptions.Checked[0, Ord(noXt3dOnRightHandSide)];
   NpfPackage.SaveSpecificDischarge := rdgOptions.Checked[0, Ord(noSaveSpecificDischarge)];
+  NpfPackage.UseHorizontalAnisotropy := rdgOptions.Checked[0, Ord(noHorizontalAnis)];
+  NpfPackage.UseVerticalAnisotropy := rdgOptions.Checked[0, Ord(noVerticalAnis)];
 end;
 
 end.

@@ -512,6 +512,8 @@ const
   KLake_Top_Elevation = 'Lake_Top_Elevation';
   KLake_Connection_Length = 'Lake_Connection_Length';
   KLake_Connection_Width = 'Lake_Connection_Width';
+  KKyOverKx = 'Ky_Over_Kx';
+  KKzOverKx = 'Kz_Over_Kx';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2063,6 +2065,9 @@ that affects the model output should also have a comment. }
     function SwiUsed(Sender: TObject): boolean;
     function SftUsed(Sender: TObject): boolean; virtual;
     function ZetaUsed(Sender: TObject): boolean;
+    function HorizAnisotropyMf6Used(Sender: TObject): boolean;
+    function VertAnisotropyMf6Used(Sender: TObject): boolean;
+
     function IndenticalTransientArray(DataArray: TDataArray; DataArrays: TList;
       var CachedIndex: integer): TDataArray;
     // See @link(TimeLists).
@@ -2408,6 +2413,10 @@ that affects the model output should also have a comment. }
     procedure SetUseGsflowFormat(const Value: boolean); virtual; abstract;
     procedure SetCtsSystems(const Value: TCtsSystemCollection); virtual; abstract;
     function GetCtsSystems: TCtsSystemCollection; virtual; abstract;
+    procedure ShouldKyBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
+    procedure ShouldKzBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
+    procedure DetermineKyFromAnisotropy(Sender: TObject);
+    procedure DetermineKzFromAnisotropy(Sender: TObject);
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -8873,10 +8882,12 @@ const
 
   //               Enhancement: Added support for NOCHECK, MEMORY_PRINT_OPTION,
   //                and MAXERRORS in mfsim.nam options.
-  //               Enhancement: Added support for INFLOW, the MODFLOW 6 Lake
+  //               Enhancement: Added support for INFLOW, in the MODFLOW 6 Lake
   //                package.
-  //               Enhancement: Added support for NO_PTC, the MODFLOW 6 IMS
+  //               Enhancement: Added support for NO_PTC, in the MODFLOW 6 IMS
   //                package.
+  //               Enhancement: Added support for K22OVERK and K33OVERK
+  //                in the the MODFLOW 6 NPF package.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.16';
@@ -9025,7 +9036,7 @@ resourcestring
   StrPhastDefaultPath = 'C:\Program Files\USGS\phast-1.5.1\bin\phast.bat';
   StrPhastDefaultPath64 = 'C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat';
   StrZoneBudgetDefaultPath = 'C:\WRDAPP\Zonbud.3_01\Bin\zonbud.exe';
-  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.0.4\bin\zbud6.exe';
+  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.1.0\bin\zbud6.exe';
   StrModelMateDefaultPath = 'C:\WRDAPP\ModelMate_1_0_3\Bin\ModelMate.exe';
   strModflowLgrDefaultPath = 'C:\WRDAPP\mflgr.1_2\bin\mflgr.exe';
   strModflowLgr2DefaultPath = 'C:\WRDAPP\mflgr.2_0\bin\mflgr.exe';
@@ -9454,6 +9465,9 @@ resourcestring
   StrMODFLOWStressPerio = 'MODFLOW Stress periods have not been defined.';
   StrSelectModelMODFLO = 'Select "Model|MODFLOW Time..." to define the stres' +
   's periods.';
+  StrKyOverKxDisplay = KKyOverKx;
+  StrKzOverKxDisplay = KKzOverKx;
+  StrSetByMultiplying = 'Set by multiplying %0:s by %1:s.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -28241,6 +28255,70 @@ begin
   inherited;
 end;
 
+procedure TCustomModel.DetermineKyFromAnisotropy(Sender: TObject);
+var
+  KyDataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  KxDataArray: TDataArray;
+  KyOverKxDataArray: TDataArray;
+  Annotation: String;
+begin
+  Annotation := Format(StrSetByMultiplying, [rsKx, KKyOverKx]);
+  Assert(Sender <> nil);
+  KyDataArray := Sender as TDataArray;
+  Assert(KyDataArray.Name = rsKy);
+  KxDataArray := DataARrayManager.GetDataSetByName(rsKx);
+  KyOverKxDataArray := DataARrayManager.GetDataSetByName(KKyOverKx);
+  for LayerIndex := 0 to KyDataArray.LayerCount - 1 do
+  begin
+    for RowIndex := 0 to KyDataArray.RowCount - 1 do
+    begin
+      for ColIndex := 0 to KyDataArray.ColumnCount - 1 do
+      begin
+        KyDataArray.RealData[LayerIndex,RowIndex,ColIndex] :=
+          KxDataArray.RealData[LayerIndex,RowIndex,ColIndex]
+          * KyOverKxDataArray.RealData[LayerIndex,RowIndex,ColIndex];
+        KyDataArray.Annotation[LayerIndex,RowIndex,ColIndex] := Annotation;
+      end;
+    end;
+  end;
+  KyDataArray.UptoDate := True;
+end;
+
+procedure TCustomModel.DetermineKzFromAnisotropy(Sender: TObject);
+var
+  KzDataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  KxDataArray: TDataArray;
+  KzOverKxDataArray: TDataArray;
+  Annotation: String;
+begin
+  Annotation := Format(StrSetByMultiplying, [rsKx, KKzOverKx]);
+  Assert(Sender <> nil);
+  KzDataArray := Sender as TDataArray;
+  Assert(KzDataArray.Name = rsKz);
+  KxDataArray := DataARrayManager.GetDataSetByName(rsKx);
+  KzOverKxDataArray := DataARrayManager.GetDataSetByName(KKzOverKx);
+  for LayerIndex := 0 to KzDataArray.LayerCount - 1 do
+  begin
+    for RowIndex := 0 to KzDataArray.RowCount - 1 do
+    begin
+      for ColIndex := 0 to KzDataArray.ColumnCount - 1 do
+      begin
+        KzDataArray.RealData[LayerIndex,RowIndex,ColIndex] :=
+          KxDataArray.RealData[LayerIndex,RowIndex,ColIndex]
+          * KzOverKxDataArray.RealData[LayerIndex,RowIndex,ColIndex];
+        KzDataArray.Annotation[LayerIndex,RowIndex,ColIndex] := Annotation;
+      end;
+    end;
+  end;
+  KzDataArray.UptoDate := True;
+end;
+
 procedure TCustomModel.EndGridChange;
 begin
   if Grid <> nil then
@@ -31862,7 +31940,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  ArrayCount = 148;
+  ArrayCount = 150;
 var
   Index: integer;
 begin
@@ -31976,6 +32054,10 @@ begin
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
+  FDataArrayCreationRecords[Index].OnInitialize :=
+    FCustomModel.DetermineKyFromAnisotropy;
+  FDataArrayCreationRecords[Index].OnShouldUseOnInitialize :=
+    FCustomModel.ShouldKyBeDeterminedFromAnisotropy;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TRealPhastDataSet;
@@ -31995,6 +32077,10 @@ begin
   FDataArrayCreationRecords[Index].CheckMax := False;
   FDataArrayCreationRecords[Index].CheckMin := True;
   FDataArrayCreationRecords[Index].Min := 0;
+  FDataArrayCreationRecords[Index].OnInitialize :=
+    FCustomModel.DetermineKzFromAnisotropy;
+  FDataArrayCreationRecords[Index].OnShouldUseOnInitialize :=
+    FCustomModel.ShouldKzBeDeterminedFromAnisotropy;
   Inc(Index);
 
   FPorosityIndex := Index;
@@ -34267,6 +34353,36 @@ begin
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KKyOverKx;
+  FDataArrayCreationRecords[Index].DisplayName := StrKyOverKxDisplay;
+  FDataArrayCreationRecords[Index].Formula := '1';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.HorizAnisotropyMf6Used;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6NPFK22;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KKzOverKx;
+  FDataArrayCreationRecords[Index].DisplayName := StrKzOverKxDisplay;
+  FDataArrayCreationRecords[Index].Formula := '0.1';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.VertAnisotropyMf6Used;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6NPFK33;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
@@ -34933,6 +35049,7 @@ begin
     msModflow2015:
       begin
         result := ModflowPackages.NpfPackage.IsSelected
+          and not ModflowPackages.NpfPackage.UseHorizontalAnisotropy;
       end;
     else Assert(False);
   end;
@@ -34953,7 +35070,7 @@ begin
     msUndefined: result := False;
     msPhast: result := True;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msModflow2015:
+      msModflowFmp, msModflowCfp:
       begin
         if ModflowPackages.HufPackage.IsSelected then
         begin
@@ -35009,6 +35126,11 @@ begin
             end;
           end;
         end;
+      end;
+    msModflow2015:
+      begin
+        result := ModflowPackages.NpfPackage.IsSelected
+          and not ModflowPackages.NpfPackage.UseVerticalAnisotropy;
       end;
     msSutra22, msSutra30, msFootPrint: result := False;
     else Assert(False);
@@ -35557,6 +35679,13 @@ begin
   end;
 end;
 
+function TCustomModel.VertAnisotropyMf6Used(Sender: TObject): boolean;
+begin
+  result := (ModelSelection = msModflow2015)
+    and (ModflowPackages.NpfPackage.IsSelected)
+    and ModflowPackages.NpfPackage.UseVerticalAnisotropy
+end;
+
 function TCustomModel.VerticalAnisotropyUsed(Sender: TObject): boolean;
 var
   UnitIndex: Integer;
@@ -35576,6 +35705,13 @@ begin
       end;
     end;
   end;
+end;
+
+function TCustomModel.HorizAnisotropyMf6Used(Sender: TObject): boolean;
+begin
+  result := (ModelSelection = msModflow2015)
+    and (ModflowPackages.NpfPackage.IsSelected)
+    and ModflowPackages.NpfPackage.UseHorizontalAnisotropy
 end;
 
 function TCustomModel.HorizontalAnisotropyUsed(Sender: TObject): boolean;
@@ -37214,6 +37350,18 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TCustomModel.ShouldKyBeDeterminedFromAnisotropy(Sender: TObject;
+  var ShouldCheck: Boolean);
+begin
+  ShouldCheck := HorizAnisotropyMf6Used(Sender);
+end;
+
+procedure TCustomModel.ShouldKzBeDeterminedFromAnisotropy(Sender: TObject;
+  var ShouldCheck: Boolean);
+begin
+  ShouldCheck := VertAnisotropyMf6Used(Sender);
 end;
 
 function TCustomModel.PackageGeneratedExternally(const PackageName: string): boolean;

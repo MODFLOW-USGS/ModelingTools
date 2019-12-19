@@ -2269,29 +2269,32 @@ begin
     ReadPackages;
     comboModel.ItemIndex := 0;
     comboModelChange(nil);
-    if frmGoPhast.PhastModel.ModflowPackages.LpfPackage.IsSelected then
-    begin
-      jvplPackages.ActivePage := jvspLPF;
-    end
-    else if frmGoPhast.PhastModel.ModflowPackages.HufPackage.IsSelected then
-    begin
-      jvplPackages.ActivePage := jvspHUF;
-    end
-    else if frmGoPhast.PhastModel.ModflowPackages.BcfPackage.IsSelected then
-    begin
-      jvplPackages.ActivePage := jvspBCF;
-    end
-    else if frmGoPhast.PhastModel.ModflowPackages.UpwPackage.IsSelected then
-    begin
-      jvplPackages.ActivePage := jvspUPW;
-    end
-    else if frmGoPhast.PhastModel.ModflowPackages.NpfPackage.IsSelected then
+    if frmGoPhast.ModelSelection = msModflow2015  then
     begin
       jvplPackages.ActivePage := jvspNPF;
     end
     else
     begin
-      jvplPackages.ActivePage := jvspLPF;
+      if frmGoPhast.PhastModel.ModflowPackages.LpfPackage.IsSelected then
+      begin
+        jvplPackages.ActivePage := jvspLPF;
+      end
+      else if frmGoPhast.PhastModel.ModflowPackages.HufPackage.IsSelected then
+      begin
+        jvplPackages.ActivePage := jvspHUF;
+      end
+      else if frmGoPhast.PhastModel.ModflowPackages.BcfPackage.IsSelected then
+      begin
+        jvplPackages.ActivePage := jvspBCF;
+      end
+      else if frmGoPhast.PhastModel.ModflowPackages.UpwPackage.IsSelected then
+      begin
+        jvplPackages.ActivePage := jvspUPW;
+      end
+      else
+      begin
+        jvplPackages.ActivePage := jvspLPF;
+      end;
     end;
     jvplPackagesChange(nil);
     HelpKeyword := 'MODFLOW_Packages_Dialog_Box';

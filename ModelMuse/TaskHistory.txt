@@ -342,7 +342,7 @@ object TTaskHistory
     end
     item
       Name = 'NPF'
-      Display = False
+      Display = True
     end
     item
       Name = 'STO'
@@ -434,6 +434,10 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Obs Extractor'
+      Display = True
+    end
+    item
+      Name = 'CSUB'
       Display = True
     end>
   History = <
@@ -24608,6 +24612,15 @@ object TTaskHistory
         'MF-2015'
         'SMS'
         'SimulationNameFile'
+        'Testing')
+    end
+    item
+      Date = 43818.440915416670000000
+      Categories.Strings = (
+        'Documentation'
+        'CSUB'
+        'MF-2015'
+        'NPF'
         'Testing')
     end>
 end

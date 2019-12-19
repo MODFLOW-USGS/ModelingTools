@@ -29,7 +29,7 @@ inherited framePackageNpf: TframePackageNpf
     ColCount = 1
     Enabled = False
     FixedCols = 0
-    RowCount = 7
+    RowCount = 9
     FixedRows = 0
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
     TabOrder = 2

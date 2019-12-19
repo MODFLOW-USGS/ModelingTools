@@ -7671,7 +7671,7 @@ begin
     NewLine;
   end;
 
-  if SmsPkg.MaxErrors > 0 then
+  if SmsPkg.MaxErrors > -1 then
   begin
     WriteBegin;
     WriteString('  MAXERRORS');

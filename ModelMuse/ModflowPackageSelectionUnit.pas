@@ -385,6 +385,8 @@ Type
     FXt3dOnRightHandSide: Boolean;
     FUseXT3D: boolean;
     FSaveSpecificDischarge: Boolean;
+    FUseVerticalAnisotropy: Boolean;
+    FUseHorizontalAnisotropy: Boolean;
     procedure SetCellAveraging(const Value: TCellAveraging);
     procedure SetApplyHeadDampening(const Value: boolean);
     procedure SetDewatered(const Value: boolean);
@@ -395,6 +397,8 @@ Type
     procedure SetUseXT3D(const Value: boolean);
     procedure SetXt3dOnRightHandSide(const Value: Boolean);
     procedure SetSaveSpecificDischarge(const Value: Boolean);
+    procedure SetUseHorizontalAnisotropy(const Value: Boolean);
+    procedure SetUseVerticalAnisotropy(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -431,6 +435,8 @@ Type
       write SetXt3dOnRightHandSide;
     property SaveSpecificDischarge: Boolean read FSaveSpecificDischarge
       write SetSaveSpecificDischarge;
+    property UseHorizontalAnisotropy: Boolean read FUseHorizontalAnisotropy write SetUseHorizontalAnisotropy;
+    property UseVerticalAnisotropy: Boolean read FUseVerticalAnisotropy write SetUseVerticalAnisotropy;
   end;
 
   TStorageChoice = (scSpecificStorage, scStorageCoefficient);
@@ -1142,7 +1148,8 @@ Type
     // combines Inverse of NO_PTC and no ptc option
     property UsePTC: TUsePTC read FUsePTC write SetUsePTC;
     // maximum number of error messages in MF6. MAXERRORS in mfsim.nam options
-    property MaxErrors: Integer read FMaxErrors write SetMaxErrors;
+    // use -1 for no limit
+    property MaxErrors: Integer read FMaxErrors write SetMaxErrors stored True;
     // Inverse of NOCHECK in mfsim.nam options
     property CheckInput: TCheckInput read FCheckInput write SetCheckInput;
     // MEMORY_PRINT_OPTION in mfsim.nam options
@@ -3160,6 +3167,85 @@ Type
       read FSubBinaryOutputChoice write SetSubBinaryOutputChoice;
     // SUBLNK in MODFLOW-OWHM
     property LinkSubsidence: Boolean read FLinkSubsidence write SetLinkSubsidence;
+  end;
+
+  TInterbedThicknessMethod = (itmThickness, itmCellFraction);
+
+  // Skeletal Storage, Compaction, and Subsidence (CSUB) Package
+  TCSubPackageSelection = class(TModflowPackageSelection)
+  published
+     {GAMMAW <gammaw>
+     unit weight of water. For freshwater, GAMMAW is 9806.65
+     Newtons/cubic meters or 62.48 lb/cubic foot in SI and English units,
+     respectively. By default, GAMMAW is 9806.65 Newtons/cubic meters}
+    property StoredGamma: TRealStorage;
+    {BETA <beta>
+    compressibility of water. Typical values of BETA are 4.6512e-10 1/Pa
+    or 2.2270e-8 lb/square foot in SI and English units, respectively.
+    By default, BETA is 4.6512e-10 1/Pa.}
+    property StoredBeta: TRealStorage;
+    {HEAD_BASED—keyword to indicate the head-based formulation will be used to
+    simulate coarse-grained aquifer materials and no-delay and delay interbeds.
+    Specifying HEAD BASED also specifies the INITIAL PRECONSOLIDATION HEAD
+    option.}
+    property HeadBased: Boolean;
+    {INITIAL_PRECONSOLIDATION_HEAD—keyword to indicate that preconsolidation
+    heads will be specified for no-delay and delay interbeds in the PACKAGEDATA
+    block. If the SPECIFIED_INITIAL_INTERBED STATE option is specified in the
+    OPTIONS block, user-specified preconsolidation heads in the PACKAGEDATA
+    block are absolute values. Otherwise, user-specified preconsolidation heads
+    in the PACKAGEDATA block are relative to steady-state or initial heads.}
+    property PreconsolidationHeadUsed: Boolean;
+    {NDELAYCELLS <ndelaycells>
+    ndelaycells—number of nodes used to discretize delay interbeds.
+    If not specified, then a default value of 19 is assigned.}
+    property NumberOfDelayCells: Integer;
+    {COMPRESSION_INDICES —keyword to indicate that the
+    recompression (CR) and compression (CC) indices are specified instead of
+    the elastic specific storage (SSE) and inelastic specific storage (SSV)
+    coefficients. If not specified, then elastic specific storage (SSE) and
+    inelastic specific storage (SSV) coefficients must be specified.}
+    property UseCompressionIndicies: Boolean;
+    {UPDATE_MATERIAL_PROPERTIES—keyword to indicate that the thickness and
+    void ratio of coarsegrained and interbed sediments (delay and no-delay)
+    will vary during the simulation. If not specified, the thickness and
+    void ratio of coarse-grained and interbed sediments will not vary during
+    the simulation.}
+    property UpdateMaterialProperties: Boolean;
+    {CELL FRACTION—keyword to indicate that the thickness of interbeds will be
+    specified in terms of the fraction of cell thickness. If not specified,
+    interbed thicknness must be specified.}
+    property InterbedThicknessMethod: TInterbedThicknessMethod;
+    {The SPECIFIED_INITIAL_INTERBED STATE option is equivalent to specifying
+    the SPECIFIED_INITIAL_PRECONSOLITATION_STRESS and
+    SPECIFIED_INITIAL_DELAY_HEAD.}
+
+    {SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS keyword to indicate that
+    absolute preconsolidation stresses (heads) will be specified for interbeds
+    defined in the PACKAGEDATA block. If
+    SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS and SPECIFIED_INITIAL_INTERBED
+    are not specified then preconsolidation stress (head) values specified in
+    the PACKAGEDATA block are relative to simulated values if the first stress
+    period is steady-state or initial stresses (heads) if the first stress
+    period is transient.}
+
+  {
+[BOUNDNAMES]
+[PRINT_INPUT]
+[SAVE_FLOWS]
+[SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS]
+[SPECIFIED_INITIAL_DELAY_HEAD]
+[EFFECTIVE_STRESS_LAG]
+[STRAIN_CSV_INTERBED FILEOUT <interbedstrain_filename>]
+[STRAIN_CSV_COARSE FILEOUT <coarsestrain_filename>]
+[COMPACTION FILEOUT <compaction_filename>]
+[COMPACTION_ELASTIC FILEOUT <elastic_compaction_filename>]
+[COMPACTION_INELASTIC FILEOUT <inelastic_compaction_filename>]
+[COMPACTION_INTERBED FILEOUT <interbed_compaction_filename>]
+[COMPACTION_COARSE FILEOUT <coarse_compaction_filename>]
+[ZDISPLACEMENT FILEOUT <zdisplacement_filename>]
+[TS6 FILEIN <ts6_filename>]
+[OBS6 FILEIN <obs6_filename>]  }
   end;
 
   TSwtPrintItem = class(TCustomPrintItem)
@@ -17801,6 +17887,8 @@ begin
     UseXT3D := SourceNfp.UseXT3D;
     Xt3dOnRightHandSide := SourceNfp.Xt3dOnRightHandSide;
     SaveSpecificDischarge := SourceNfp.SaveSpecificDischarge;
+    UseHorizontalAnisotropy := SourceNfp.UseHorizontalAnisotropy;
+    UseVerticalAnisotropy := SourceNfp.UseVerticalAnisotropy;
   end;
   inherited;
 end;
@@ -17824,6 +17912,9 @@ begin
   FUseXT3D := False;
   FXt3dOnRightHandSide := False;
   FSaveSpecificDischarge := True;
+  FUseHorizontalAnisotropy := False;
+  FUseVerticalAnisotropy := False;
+
 end;
 
 procedure TNpfPackage.SetApplyHeadDampening(const Value: boolean);
@@ -17860,6 +17951,11 @@ begin
   SetBooleanProperty(FTimeVaryingVerticalConductance, Value);
 end;
 
+procedure TNpfPackage.SetUseHorizontalAnisotropy(const Value: Boolean);
+begin
+  SetBooleanProperty(FUseHorizontalAnisotropy, Value);
+end;
+
 procedure TNpfPackage.SetUseNewtonRaphson(const Value: boolean);
 begin
   if FUseNewtonRaphson <> Value then
@@ -17872,6 +17968,11 @@ end;
 procedure TNpfPackage.SetUseSaturatedThickness(const Value: boolean);
 begin
   SetBooleanProperty(FUseSaturatedThickness, Value);
+end;
+
+procedure TNpfPackage.SetUseVerticalAnisotropy(const Value: Boolean);
+begin
+  SetBooleanProperty(FUseVerticalAnisotropy, Value);
 end;
 
 procedure TNpfPackage.SetUseXT3D(const Value: boolean);
@@ -18133,7 +18234,7 @@ begin
   ContinueModel := False;
   FCsvOutput := sspAll;
   FUsePTC := upUse;
-  FMaxErrors := 0;
+  FMaxErrors := -1;
   FCheckInput := ciCheckAll;
   FMemoryPrint := mpNone;
 
