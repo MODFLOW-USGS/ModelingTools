@@ -8879,8 +8879,7 @@ const
   //               Bug fix: Fixed a bug that could cause ModelMuse to enter
   //                and infinite loop when evaluating a data set using an
   //                object on the front view of the model.
-
-  //               Enhancement: Added support for NOCHECK, MEMORY_PRINT_OPTION,
+  //    '4.1.0.17' Enhancement: Added support for NOCHECK, MEMORY_PRINT_OPTION,
   //                and MAXERRORS in mfsim.nam options.
   //               Enhancement: Added support for INFLOW, in the MODFLOW 6 Lake
   //                package.
@@ -8890,7 +8889,7 @@ const
   //                in the the MODFLOW 6 NPF package.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.16';
+  IModelVersion = '4.1.0.17';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

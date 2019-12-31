@@ -75,6 +75,7 @@ type
     FMt3dLkt: TMt3dLktPackage;
     FMt3dSft: TMt3dSftPackageSelection;
     FMt3dCts: TMt3dCtsPackageSelection;
+    FCsubPackage: TCSubPackageSelection;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -140,6 +141,7 @@ type
     procedure SetMt3dLkt(const Value: TMt3dLktPackage);
     procedure SetMt3dSft(const Value: TMt3dSftPackageSelection);
     procedure SetMt3dCts(const Value: TMt3dCtsPackageSelection);
+    procedure SetCsubPackage(const Value: TCSubPackageSelection);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -268,6 +270,12 @@ type
       stored False
     {$ENDIF}
       ;
+    property CsubPackage: TCSubPackageSelection read FCsubPackage
+      write SetCsubPackage
+    {$IFNDEF CSUB}
+      stored False
+    {$ENDIF}
+      ;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
@@ -369,6 +377,8 @@ resourcestring
   StrLKTLakeTransport = 'LKT: Lake Transport Package';
   StrSFTStreamFlowTra = 'SFT: Stream Flow Transport Package';
   StrCTSContaminantTre = 'CTS: Contaminant Treatment System Package';
+  StrCSUBSkeletalStora = 'CSUB: Skeletal Storage, Compaction, and Subsidence' +
+  ' Package';
 
 
 { TModflowPackages }
@@ -445,6 +455,7 @@ begin
     Mt3dLkt := SourcePackages.Mt3dLkt;
     Mt3dSft := SourcePackages.Mt3dSft;
     Mt3dCts := SourcePackages.Mt3dCts;
+    CsubPackage := SourcePackages.CsubPackage;
   end
   else
   begin
@@ -770,10 +781,16 @@ begin
   FUzfMf6Package.PackageIdentifier := StrUZFUnsaturatedZonMf6;
   FUzfMf6Package.Classification := BC_HeadDependentFlux;
   FUzfMf6Package.SelectionType := stCheckBox;
+
+  FCsubPackage := TCSubPackageSelection.Create(Model);
+  FCsubPackage.PackageIdentifier := StrCSUBSkeletalStora;
+  FCsubPackage.Classification := StrSubsidence;
+  FCsubPackage.SelectionType := stCheckBox;
 end;
 
 destructor TModflowPackages.Destroy;
 begin
+  FCsubPackage.Free;
   FUzfMf6Package.Free;
   FMvrPackage.Free;
   FLakMf6Package.Free;
@@ -913,6 +930,7 @@ begin
   UzfMf6Package.InitializeVariables;
   Mt3dSft.InitializeVariables;
   Mt3dCts.InitializeVariables;
+  CsubPackage.InitializeVariables;
 end;
 
 function TModflowPackages.SelectedModflowPackageCount: integer;
@@ -1163,6 +1181,12 @@ begin
     Inc(Result);
   end;
 
+  if CsubPackage.IsSelected and (Model.ModelSelection = msModflow2015) then
+  begin
+    Inc(Result);
+  end;
+
+
   // Don't count Modpath or ZoneBudget
   // because they are exported seperately from MODFLOW.
 //  if ZoneBudget.IsSelected then
@@ -1192,6 +1216,11 @@ procedure TModflowPackages.SetConduitFlowProcess(
   const Value: TConduitFlowProcess);
 begin
   FConduitFlowProcess.Assign(Value);
+end;
+
+procedure TModflowPackages.SetCsubPackage(const Value: TCSubPackageSelection);
+begin
+  FCsubPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetDe4Package(const Value: TDE4PackageSelection);

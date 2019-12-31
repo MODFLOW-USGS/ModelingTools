@@ -3170,52 +3170,98 @@ Type
   end;
 
   TInterbedThicknessMethod = (itmThickness, itmCellFraction);
+  TCsubOutputType = (coInterbedStrain, coCourseStrain, coCompaction, coElasticComp,
+    coInelasticComp, coInterbedComp, coCoarseComp, coZDisplacement);
+  TCsubOutputTypes = set of TCsubOutputType;
 
   // Skeletal Storage, Compaction, and Subsidence (CSUB) Package
   TCSubPackageSelection = class(TModflowPackageSelection)
+  private
+    FPreconsolidationHeadUsed: Boolean;
+    FStoredBeta: TRealStorage;
+    FHeadBased: Boolean;
+    FUseCompressionIndicies: Boolean;
+    FUpdateMaterialProperties: Boolean;
+    FInterbedThicknessMethod: TInterbedThicknessMethod;
+    FNumberOfDelayCells: Integer;
+    FStoredGamma: TRealStorage;
+    FEffectiveStressLag: Boolean;
+    FSpecifyInitialPreconsolidationStress: Boolean;
+    FSpecifyInitialDelayHead: Boolean;
+    FOutputTypes: TCsubOutputTypes;
+    procedure SetHeadBased(const Value: Boolean);
+    procedure SetInterbedThicknessMethod(const Value: TInterbedThicknessMethod);
+    procedure SetNumberOfDelayCells(const Value: Integer);
+    procedure SetPreconsolidationHeadUsed(const Value: Boolean);
+    procedure SetStoredBeta(const Value: TRealStorage);
+    procedure SetStoredGamma(const Value: TRealStorage);
+    procedure SetUpdateMaterialProperties(const Value: Boolean);
+    procedure SetUseCompressionIndicies(const Value: Boolean);
+    function GetBeta: double;
+    function GetGamma: double;
+    procedure SetBeta(const Value: double);
+    procedure SetGamma(const Value: double);
+    procedure SetEffectiveStressLag(const Value: Boolean);
+    procedure SetSpecifyInitialDelayHead(const Value: Boolean);
+    procedure SetSpecifyInitialPreconsolidationStress(const Value: Boolean);
+    procedure SetOutputTypes(const Value: TCsubOutputTypes);
+  public
+    procedure Assign(Source: TPersistent); override;
+    { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
+    //
+    Constructor Create(Model: TBaseModel);
+    Destructor Destroy; override;
+    property Gamma: double read GetGamma write SetGamma;
+    property Beta: double read GetBeta write SetBeta;
+    procedure InitializeVariables; override;
   published
      {GAMMAW <gammaw>
      unit weight of water. For freshwater, GAMMAW is 9806.65
      Newtons/cubic meters or 62.48 lb/cubic foot in SI and English units,
      respectively. By default, GAMMAW is 9806.65 Newtons/cubic meters}
-    property StoredGamma: TRealStorage;
+    property StoredGamma: TRealStorage read FStoredGamma write SetStoredGamma;
     {BETA <beta>
     compressibility of water. Typical values of BETA are 4.6512e-10 1/Pa
     or 2.2270e-8 lb/square foot in SI and English units, respectively.
     By default, BETA is 4.6512e-10 1/Pa.}
-    property StoredBeta: TRealStorage;
+    property StoredBeta: TRealStorage read FStoredBeta write SetStoredBeta;
     {HEAD_BASED—keyword to indicate the head-based formulation will be used to
     simulate coarse-grained aquifer materials and no-delay and delay interbeds.
     Specifying HEAD BASED also specifies the INITIAL PRECONSOLIDATION HEAD
     option.}
-    property HeadBased: Boolean;
+    property HeadBased: Boolean read FHeadBased write SetHeadBased Stored True;
     {INITIAL_PRECONSOLIDATION_HEAD—keyword to indicate that preconsolidation
     heads will be specified for no-delay and delay interbeds in the PACKAGEDATA
     block. If the SPECIFIED_INITIAL_INTERBED STATE option is specified in the
     OPTIONS block, user-specified preconsolidation heads in the PACKAGEDATA
     block are absolute values. Otherwise, user-specified preconsolidation heads
     in the PACKAGEDATA block are relative to steady-state or initial heads.}
-    property PreconsolidationHeadUsed: Boolean;
+    property PreconsolidationHeadUsed: Boolean read FPreconsolidationHeadUsed
+      write SetPreconsolidationHeadUsed Stored True;
     {NDELAYCELLS <ndelaycells>
     ndelaycells—number of nodes used to discretize delay interbeds.
     If not specified, then a default value of 19 is assigned.}
-    property NumberOfDelayCells: Integer;
+    property NumberOfDelayCells: Integer read FNumberOfDelayCells
+      write SetNumberOfDelayCells Stored True;
     {COMPRESSION_INDICES —keyword to indicate that the
     recompression (CR) and compression (CC) indices are specified instead of
     the elastic specific storage (SSE) and inelastic specific storage (SSV)
     coefficients. If not specified, then elastic specific storage (SSE) and
     inelastic specific storage (SSV) coefficients must be specified.}
-    property UseCompressionIndicies: Boolean;
+    property UseCompressionIndicies: Boolean read FUseCompressionIndicies
+      write SetUseCompressionIndicies Stored True;
     {UPDATE_MATERIAL_PROPERTIES—keyword to indicate that the thickness and
     void ratio of coarsegrained and interbed sediments (delay and no-delay)
     will vary during the simulation. If not specified, the thickness and
     void ratio of coarse-grained and interbed sediments will not vary during
     the simulation.}
-    property UpdateMaterialProperties: Boolean;
+    property UpdateMaterialProperties: Boolean read FUpdateMaterialProperties
+      write SetUpdateMaterialProperties Stored True;
     {CELL FRACTION—keyword to indicate that the thickness of interbeds will be
     specified in terms of the fraction of cell thickness. If not specified,
     interbed thicknness must be specified.}
-    property InterbedThicknessMethod: TInterbedThicknessMethod;
+    property InterbedThicknessMethod: TInterbedThicknessMethod
+      read FInterbedThicknessMethod write SetInterbedThicknessMethod Stored True;
     {The SPECIFIED_INITIAL_INTERBED STATE option is equivalent to specifying
     the SPECIFIED_INITIAL_PRECONSOLITATION_STRESS and
     SPECIFIED_INITIAL_DELAY_HEAD.}
@@ -3228,7 +3274,20 @@ Type
     the PACKAGEDATA block are relative to simulated values if the first stress
     period is steady-state or initial stresses (heads) if the first stress
     period is transient.}
-
+    property SpecifyInitialPreconsolidationStress: Boolean read FSpecifyInitialPreconsolidationStress write SetSpecifyInitialPreconsolidationStress;
+    {SPECIFIED INITIAL DELAY HEAD—keyword to indicate that absolute initial delay bed
+    head will be specified for interbeds defined in the PACKAGEDATA block. If SPECIFIED
+    INITIAL DELAY HEAD and SPECIFIED INITIAL INTERBED STATE are not specified
+    then delay bed head values specified in the PACKAGEDATA block are relative to simulated values
+    if the first stress period is steady-state or initial GWF heads if the first stress period is transient.}
+    property SpecifyInitialDelayHead: Boolean read FSpecifyInitialDelayHead write SetSpecifyInitialDelayHead;
+    {EFFECTIVE STRESS LAG—keyword to indicate the effective stress from the previous time step will be
+    used to calculate specific storage values. This option can 1) help with convergence in models with
+    thin cells and water table elevations close to land surface; 2) is identical to the approach used in the
+    SUBWT package for MODFLOW-2005; and 3) is only used if the effective-stress formulation is
+    being used. By default, current effective stress values are used to calculate specific storage values.}
+    property EffectiveStressLag: Boolean read FEffectiveStressLag write SetEffectiveStressLag;
+    property OutputTypes: TCsubOutputTypes read FOutputTypes write SetOutputTypes;
   {
 [BOUNDNAMES]
 [PRINT_INPUT]
@@ -20716,6 +20775,161 @@ begin
     FWellPackageChoice := Value;
     InvalidateModel;
   end;
+end;
+
+{ TCSubPackageSelection }
+
+procedure TCSubPackageSelection.Assign(Source: TPersistent);
+var
+  CSubSource: TCSubPackageSelection;
+begin
+  if Source is TCSubPackageSelection then
+  begin
+    CSubSource := TCSubPackageSelection(Source);
+    StoredGamma := CSubSource.StoredGamma;
+    StoredBeta := CSubSource.StoredBeta;
+    HeadBased := CSubSource.HeadBased;
+    PreconsolidationHeadUsed := CSubSource.PreconsolidationHeadUsed;
+    NumberOfDelayCells := CSubSource.NumberOfDelayCells;
+    UseCompressionIndicies := CSubSource.UseCompressionIndicies;
+    UpdateMaterialProperties := CSubSource.UpdateMaterialProperties;
+    InterbedThicknessMethod := CSubSource.InterbedThicknessMethod;
+    SpecifyInitialPreconsolidationStress := CSubSource.SpecifyInitialPreconsolidationStress;
+    SpecifyInitialDelayHead := CSubSource.SpecifyInitialDelayHead;
+    EffectiveStressLag := CSubSource.EffectiveStressLag;
+    OutputTypes := CSubSource.OutputTypes;
+  end;
+  inherited;
+
+end;
+
+constructor TCSubPackageSelection.Create(Model: TBaseModel);
+begin
+  inherited;
+  FStoredBeta := TRealStorage.Create;
+  FStoredBeta.OnChange := OnValueChanged;
+  FStoredGamma := TRealStorage.Create;
+  FStoredGamma.OnChange := OnValueChanged;
+
+  InitializeVariables;
+end;
+
+destructor TCSubPackageSelection.Destroy;
+begin
+  FStoredBeta.Free;
+  FStoredGamma.Free;
+  inherited;
+end;
+
+function TCSubPackageSelection.GetBeta: double;
+begin
+  result := StoredBeta.Value;
+end;
+
+function TCSubPackageSelection.GetGamma: double;
+begin
+  result := StoredGamma.Value;
+end;
+
+procedure TCSubPackageSelection.InitializeVariables;
+begin
+  inherited;
+  Gamma := 9806.65;
+  Beta := 4.6512e-10;
+  FHeadBased := False;
+  FPreconsolidationHeadUsed := False;
+  FUseCompressionIndicies := False;
+  FUpdateMaterialProperties := False;
+  FInterbedThicknessMethod := itmThickness;
+  FNumberOfDelayCells := 0;
+  FEffectiveStressLag := False;
+  FSpecifyInitialPreconsolidationStress := False;
+  FSpecifyInitialDelayHead := False;
+  FOutputTypes := [];
+
+end;
+
+procedure TCSubPackageSelection.SetBeta(const Value: double);
+begin
+  StoredBeta.Value := Value;
+end;
+
+procedure TCSubPackageSelection.SetEffectiveStressLag(const Value: Boolean);
+begin
+  SetBooleanProperty(FEffectiveStressLag, Value);
+end;
+
+procedure TCSubPackageSelection.SetGamma(const Value: double);
+begin
+  StoredGamma.Value := Value;
+end;
+
+procedure TCSubPackageSelection.SetHeadBased(const Value: Boolean);
+begin
+  SetBooleanProperty(FHeadBased, Value);
+end;
+
+procedure TCSubPackageSelection.SetInterbedThicknessMethod(
+  const Value: TInterbedThicknessMethod);
+begin
+  if FInterbedThicknessMethod <> Value then
+  begin
+    FInterbedThicknessMethod := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TCSubPackageSelection.SetNumberOfDelayCells(const Value: Integer);
+begin
+  SetIntegerProperty(FNumberOfDelayCells, Value);
+end;
+
+procedure TCSubPackageSelection.SetOutputTypes(const Value: TCsubOutputTypes);
+begin
+  if FOutputTypes <> Value then
+  begin
+    FOutputTypes := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TCSubPackageSelection.SetPreconsolidationHeadUsed(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FPreconsolidationHeadUsed, Value);
+end;
+
+procedure TCSubPackageSelection.SetSpecifyInitialDelayHead(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FSpecifyInitialDelayHead, Value);
+end;
+
+procedure TCSubPackageSelection.SetSpecifyInitialPreconsolidationStress(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FSpecifyInitialPreconsolidationStress, Value);
+end;
+
+procedure TCSubPackageSelection.SetStoredBeta(const Value: TRealStorage);
+begin
+  FStoredBeta.Assign(Value);
+end;
+
+procedure TCSubPackageSelection.SetStoredGamma(const Value: TRealStorage);
+begin
+  FStoredGamma.Assign(Value);
+end;
+
+procedure TCSubPackageSelection.SetUpdateMaterialProperties(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUpdateMaterialProperties, Value);
+end;
+
+procedure TCSubPackageSelection.SetUseCompressionIndicies(const Value: Boolean);
+begin
+  SetBooleanProperty(FUseCompressionIndicies, Value);
 end;
 
 end.
