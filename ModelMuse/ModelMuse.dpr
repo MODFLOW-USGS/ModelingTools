@@ -690,7 +690,8 @@ uses
   Mt3dCtsWriterUnit in 'Mt3dCtsWriterUnit.pas',
   PlProcUnit in 'PlProcUnit.pas',
   PestArrayWriterUnit in 'PestArrayWriterUnit.pas',
-  PestHeadObsWeightsUnit in 'PestHeadObsWeightsUnit.pas';
+  PestHeadObsWeightsUnit in 'PestHeadObsWeightsUnit.pas',
+  framePackageCsubUnit in 'framePackageCsubUnit.pas' {framePackageCsub: TFrame};
 
 {$R *.res}
 

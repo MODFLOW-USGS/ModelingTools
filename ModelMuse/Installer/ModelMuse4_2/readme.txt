@@ -253,7 +253,7 @@ http://www.madshi.net/
 TurboPower Abbrevia
 http://sourceforge.net/projects/tpabbrevia/
 Deactivate UnzipZipxSupport in AbDefine.inc
-TurboPower Abbervia is also available through the GetIt Package Manager in Delphi 10.2
+TurboPower Abbervia is also available through the GetIt Package Manager in Delphi 10.2 and later.
 
 The Components directory has additional components that need to be installed. 
 They are in the following subdirectories of the Components directory.

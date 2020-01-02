@@ -514,6 +514,11 @@ const
   KLake_Connection_Width = 'Lake_Connection_Width';
   KKyOverKx = 'Ky_Over_Kx';
   KKzOverKx = 'Kz_Over_Kx';
+  KInitialElasticReco = 'Initial_Elastic_Recompression_Index';
+  KInitialCoarsePoros = 'Initial_Coarse_Porosity';
+  KMoistSpecificGravi = 'Moist_Specific_Gravity';
+  KSaturatedSpecificG = 'Saturated_Specific_Gravity';
+  KInitialElasticSpec = 'Initial_Elastic_Specific_Storage';
 //  KRoughnessSFR6 = 'SFR6_Roughness';
 
 const
@@ -2067,6 +2072,9 @@ that affects the model output should also have a comment. }
     function ZetaUsed(Sender: TObject): boolean;
     function HorizAnisotropyMf6Used(Sender: TObject): boolean;
     function VertAnisotropyMf6Used(Sender: TObject): boolean;
+    function CSubDataSetsUsed(Sender: TObject): boolean;
+    function CSubInitialElasticStorageUsed(Sender: TObject): boolean;
+    function CSubInitialRecompressionIndexUsed(Sender: TObject): boolean;
 
     function IndenticalTransientArray(DataArray: TDataArray; DataArrays: TList;
       var CachedIndex: integer): TDataArray;
@@ -9467,6 +9475,15 @@ resourcestring
   StrKyOverKxDisplay = KKyOverKx;
   StrKzOverKxDisplay = KKzOverKx;
   StrSetByMultiplying = 'Set by multiplying %0:s by %1:s.';
+  StrMODFLOW6CSUBCg = 'MODFLOW 6, CSUB: cg_ske_cr';
+  StrInitialElasticSpec = KInitialElasticSpec;
+  StrInitialElasticReco = KInitialElasticReco;
+  StrInitialCoarsePoros = KInitialCoarsePoros;
+  StrMoistSpecificGravi = KMoistSpecificGravi;
+  StrSaturatedSpecificG = KSaturatedSpecificG;
+  StrMODFLOW6CSUBCgTheta = 'MODFLOW 6, CSUB: cg_theta';
+  StrMODFLOW6CSUBSgm = 'MODFLOW 6, CSUB: sgm';
+  StrMODFLOW6CSUBSgs = 'MODFLOW 6, CSUB: sgs';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -31202,6 +31219,25 @@ begin
   end;
 end;
 
+function TCustomModel.CSubDataSetsUsed(Sender: TObject): boolean;
+begin
+  result := (ModelSelection = MsModflow2015)
+    and (ModflowPackages.CSubPackage.IsSelected)
+end;
+
+function TCustomModel.CSubInitialElasticStorageUsed(Sender: TObject): boolean;
+begin
+  result := CSubDataSetsUsed(Sender)
+    and not ModflowPackages.CSubPackage.UseCompressionIndicies;
+end;
+
+function TCustomModel.CSubInitialRecompressionIndexUsed(
+  Sender: TObject): boolean;
+begin
+  result := CSubDataSetsUsed(Sender)
+    and ModflowPackages.CSubPackage.UseCompressionIndicies;
+end;
+
 procedure TCustomModel.RemoveVariables(const DataSet: TDataArray);
 //var
 //  TempCompiler: TRbwParser;
@@ -31939,7 +31975,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  ArrayCount = 150;
+  ArrayCount = 155;
 var
   Index: integer;
 begin
@@ -34379,6 +34415,81 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6NPFK33;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KInitialElasticSpec;
+  FDataArrayCreationRecords[Index].DisplayName := StrInitialElasticSpec;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrSubsidence;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CSubInitialElasticStorageUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6CSUBCg;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KInitialElasticReco;
+  FDataArrayCreationRecords[Index].DisplayName := StrInitialElasticReco;
+  FDataArrayCreationRecords[Index].Formula := '0.005';
+  FDataArrayCreationRecords[Index].Classification := StrSubsidence;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CSubInitialRecompressionIndexUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6CSUBCg;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KInitialCoarsePoros;
+  FDataArrayCreationRecords[Index].DisplayName := StrInitialCoarsePoros;
+  FDataArrayCreationRecords[Index].Formula := '0.25';
+  FDataArrayCreationRecords[Index].Classification := StrSubsidence;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CSubDataSetsUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6CSUBCgTheta;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KMoistSpecificGravi;
+  FDataArrayCreationRecords[Index].DisplayName := StrMoistSpecificGravi;
+  FDataArrayCreationRecords[Index].Formula := '1.7';
+  FDataArrayCreationRecords[Index].Classification := StrSubsidence;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CSubDataSetsUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6CSUBSgm;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KSaturatedSpecificG;
+  FDataArrayCreationRecords[Index].DisplayName := StrSaturatedSpecificG;
+  FDataArrayCreationRecords[Index].Formula := '2.0';
+  FDataArrayCreationRecords[Index].Classification := StrSubsidence;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.CSubDataSetsUsed;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6CSUBSgs;
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 

@@ -1664,6 +1664,11 @@
         <DCCReference Include="PlProcUnit.pas"/>
         <DCCReference Include="PestArrayWriterUnit.pas"/>
         <DCCReference Include="PestHeadObsWeightsUnit.pas"/>
+        <DCCReference Include="framePackageCsubUnit.pas">
+            <Form>framePackageCsub</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

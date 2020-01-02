@@ -32,7 +32,7 @@ package ZoomBox2_10_3_2;
 requires
   rtl,
   vcl,
-  GR32_DSGN_RS10_3_3;
+  GLScene_RT;
 
 contains
   ZoomBox2 in 'ZoomBox2.pas';

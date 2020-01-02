@@ -49,7 +49,7 @@ uses System.UITypes,
   framePackageSfrMF6Unit, System.ImageList, framePackageMawUnit,
   framePackageGNC_Unit, framePackageMf6ObsUnit, framePackageLakMf6Unit,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
-  frameMt3dSftUnit, frameMt3dCtsPkgUnit;
+  frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit;
 
 type
 
@@ -252,6 +252,8 @@ type
     frameMt3dSftPkg: TframeMt3dSftPkg;
     jvspMt3dCts: TJvStandardPage;
     frameMt3dCtsPkg: TframeMt3dCtsPkg;
+    jvspCSUB: TJvStandardPage;
+    framePackageCsub1: TframePackageCsub;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;

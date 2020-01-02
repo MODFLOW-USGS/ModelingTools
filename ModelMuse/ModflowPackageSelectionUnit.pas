@@ -3173,6 +3173,25 @@ Type
   TCsubOutputType = (coInterbedStrain, coCourseStrain, coCompaction, coElasticComp,
     coInelasticComp, coInterbedComp, coCoarseComp, coZDisplacement);
   TCsubOutputTypes = set of TCsubOutputType;
+  TInterbedType = (itDelay, itNoDelay);
+
+  TInterbed = class(TPhastCollectionItem)
+  private
+    FName: string;
+    FInterbedType: TInterbedType;
+    procedure SetInterbedType(const Value: TInterbedType);
+    procedure SetName(const Value: string);
+  public
+    procedure Assign(Source: TPersistent) override;
+  published
+    property Name: string read FName write SetName;
+    property InterbedType: TInterbedType read FInterbedType write SetInterbedType;
+  end;
+
+  TInterbeds = class(TPhastCollection)
+  public
+    constructor Create(InvalidateModelEvent: TNotifyEvent);
+  end;
 
   // Skeletal Storage, Compaction, and Subsidence (CSUB) Package
   TCSubPackageSelection = class(TModflowPackageSelection)
@@ -3189,6 +3208,8 @@ Type
     FSpecifyInitialPreconsolidationStress: Boolean;
     FSpecifyInitialDelayHead: Boolean;
     FOutputTypes: TCsubOutputTypes;
+    FInterbeds: TInterbeds;
+//    FInterbedNames: TStrings;
     procedure SetHeadBased(const Value: Boolean);
     procedure SetInterbedThicknessMethod(const Value: TInterbedThicknessMethod);
     procedure SetNumberOfDelayCells(const Value: Integer);
@@ -3205,6 +3226,8 @@ Type
     procedure SetSpecifyInitialDelayHead(const Value: Boolean);
     procedure SetSpecifyInitialPreconsolidationStress(const Value: Boolean);
     procedure SetOutputTypes(const Value: TCsubOutputTypes);
+    procedure SetInterbeds(const Value: TInterbeds);
+//    procedure SetInterbedNames(const Value: TStrings);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
@@ -3257,7 +3280,7 @@ Type
     the simulation.}
     property UpdateMaterialProperties: Boolean read FUpdateMaterialProperties
       write SetUpdateMaterialProperties Stored True;
-    {CELL FRACTION—keyword to indicate that the thickness of interbeds will be
+    {CELL_FRACTION—keyword to indicate that the thickness of interbeds will be
     specified in terms of the fraction of cell thickness. If not specified,
     interbed thicknness must be specified.}
     property InterbedThicknessMethod: TInterbedThicknessMethod
@@ -3275,34 +3298,33 @@ Type
     period is steady-state or initial stresses (heads) if the first stress
     period is transient.}
     property SpecifyInitialPreconsolidationStress: Boolean read FSpecifyInitialPreconsolidationStress write SetSpecifyInitialPreconsolidationStress;
-    {SPECIFIED INITIAL DELAY HEAD—keyword to indicate that absolute initial delay bed
+    {SPECIFIED_INITIAL_DELAY_HEAD—keyword to indicate that absolute initial delay bed
     head will be specified for interbeds defined in the PACKAGEDATA block. If SPECIFIED
     INITIAL DELAY HEAD and SPECIFIED INITIAL INTERBED STATE are not specified
     then delay bed head values specified in the PACKAGEDATA block are relative to simulated values
     if the first stress period is steady-state or initial GWF heads if the first stress period is transient.}
     property SpecifyInitialDelayHead: Boolean read FSpecifyInitialDelayHead write SetSpecifyInitialDelayHead;
-    {EFFECTIVE STRESS LAG—keyword to indicate the effective stress from the previous time step will be
+    {EFFECTIVE_STRESS_LAG—keyword to indicate the effective stress from the previous time step will be
     used to calculate specific storage values. This option can 1) help with convergence in models with
     thin cells and water table elevations close to land surface; 2) is identical to the approach used in the
     SUBWT package for MODFLOW-2005; and 3) is only used if the effective-stress formulation is
     being used. By default, current effective stress values are used to calculate specific storage values.}
     property EffectiveStressLag: Boolean read FEffectiveStressLag write SetEffectiveStressLag;
+    {[STRAIN_CSV_INTERBED FILEOUT <interbedstrain_filename>]
+    [STRAIN_CSV_COARSE FILEOUT <coarsestrain_filename>]
+    [COMPACTION FILEOUT <compaction_filename>]
+    [COMPACTION_ELASTIC FILEOUT <elastic_compaction_filename>]
+    [COMPACTION_INELASTIC FILEOUT <inelastic_compaction_filename>]
+    [COMPACTION_INTERBED FILEOUT <interbed_compaction_filename>]
+    [COMPACTION_COARSE FILEOUT <coarse_compaction_filename>]
+    [ZDISPLACEMENT FILEOUT <zdisplacement_filename>]}
     property OutputTypes: TCsubOutputTypes read FOutputTypes write SetOutputTypes;
+    // cdelay
+    property Interbeds: TInterbeds read FInterbeds write SetInterbeds;
   {
 [BOUNDNAMES]
 [PRINT_INPUT]
 [SAVE_FLOWS]
-[SPECIFIED_INITIAL_PRECONSOLIDATION_STRESS]
-[SPECIFIED_INITIAL_DELAY_HEAD]
-[EFFECTIVE_STRESS_LAG]
-[STRAIN_CSV_INTERBED FILEOUT <interbedstrain_filename>]
-[STRAIN_CSV_COARSE FILEOUT <coarsestrain_filename>]
-[COMPACTION FILEOUT <compaction_filename>]
-[COMPACTION_ELASTIC FILEOUT <elastic_compaction_filename>]
-[COMPACTION_INELASTIC FILEOUT <inelastic_compaction_filename>]
-[COMPACTION_INTERBED FILEOUT <interbed_compaction_filename>]
-[COMPACTION_COARSE FILEOUT <coarse_compaction_filename>]
-[ZDISPLACEMENT FILEOUT <zdisplacement_filename>]
 [TS6 FILEIN <ts6_filename>]
 [OBS6 FILEIN <obs6_filename>]  }
   end;
@@ -20798,6 +20820,7 @@ begin
     SpecifyInitialDelayHead := CSubSource.SpecifyInitialDelayHead;
     EffectiveStressLag := CSubSource.EffectiveStressLag;
     OutputTypes := CSubSource.OutputTypes;
+    Interbeds := CSubSource.Interbeds;
   end;
   inherited;
 
@@ -20808,14 +20831,18 @@ begin
   inherited;
   FStoredBeta := TRealStorage.Create;
   FStoredBeta.OnChange := OnValueChanged;
+
   FStoredGamma := TRealStorage.Create;
   FStoredGamma.OnChange := OnValueChanged;
+
+  FInterbeds := TInterbeds.Create(OnValueChanged);
 
   InitializeVariables;
 end;
 
 destructor TCSubPackageSelection.Destroy;
 begin
+  FInterbeds.Free;
   FStoredBeta.Free;
   FStoredGamma.Free;
   inherited;
@@ -20867,6 +20894,16 @@ end;
 procedure TCSubPackageSelection.SetHeadBased(const Value: Boolean);
 begin
   SetBooleanProperty(FHeadBased, Value);
+end;
+
+//procedure TCSubPackageSelection.SetInterbedNames(const Value: TStrings);
+//begin
+//  FInterbedNames.Assign(Value);
+//end;
+
+procedure TCSubPackageSelection.SetInterbeds(const Value: TInterbeds);
+begin
+  FInterbeds.Assign(Value);
 end;
 
 procedure TCSubPackageSelection.SetInterbedThicknessMethod(
@@ -20930,6 +20967,45 @@ end;
 procedure TCSubPackageSelection.SetUseCompressionIndicies(const Value: Boolean);
 begin
   SetBooleanProperty(FUseCompressionIndicies, Value);
+end;
+
+{ TInterbed }
+
+procedure TInterbed.Assign(Source: TPersistent);
+var
+  InterbedSource: TInterbed;
+begin
+  if Source is TInterbed then
+  begin
+    InterbedSource := TInterbed(Source);
+    Name := InterbedSource.Name;
+    InterbedType := InterbedSource.InterbedType;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+procedure TInterbed.SetInterbedType(const Value: TInterbedType);
+begin
+  if FInterbedType <> Value then
+  begin
+    FInterbedType := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TInterbed.SetName(const Value: string);
+begin
+  SetStringProperty(FName, Value);
+end;
+
+{ TInterbeds }
+
+constructor TInterbeds.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TInterbed, InvalidateModelEvent);
 end;
 
 end.
