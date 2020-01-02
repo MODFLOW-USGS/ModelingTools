@@ -20,7 +20,6 @@ type
     cbHeadBased: TCheckBox;
     cbPreconsolidationHeadUsed: TCheckBox;
     seNDelayCells: TJvSpinEdit;
-    cbUseCompressionIndicies: TCheckBox;
     cbUpdateMaterialProperties: TCheckBox;
     comboInterbedThicknessMethod: TJvImageComboBox;
     lblInterbedThicknessMethod: TLabel;
@@ -32,6 +31,8 @@ type
     tabInterbeds: TTabSheet;
     frameInterbeds: TframeGrid;
     lblseNDelayCells: TLabel;
+    comboCompressionMethod: TJvImageComboBox;
+    lblCompressionMethod: TLabel;
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -61,6 +62,9 @@ type
 procedure TframePackageCsub.GetData(Package: TModflowPackageSelection);
 var
   CSubPackage: TCSubPackageSelection;
+  CsubOutputType: TCsubOutputType;
+  ItemIndex: Integer;
+  Interbed: TInterbed;
 begin
   inherited;
   CSubPackage := Package as TCSubPackageSelection;
@@ -69,6 +73,30 @@ begin
   cbHeadBased.Checked := CSubPackage.HeadBased;
   cbPreconsolidationHeadUsed.Checked := CSubPackage.PreconsolidationHeadUsed;
   seNDelayCells.asInteger := CSubPackage.NumberOfDelayCells;
+  comboCompressionMethod.ItemIndex := Ord(CSubPackage.CompressionMethod);
+  cbUpdateMaterialProperties.Checked := CSubPackage.UpdateMaterialProperties;
+  comboInterbedThicknessMethod.ItemIndex := Ord(CSubPackage.InterbedThicknessMethod);
+  cbSpecifyInitialPreconsolidationStress.Checked := CSubPackage.SpecifyInitialPreconsolidationStress;
+  cbSpecifyInitialDelayHead.Checked := CSubPackage.SpecifyInitialDelayHead;
+  cbEffectiveStressLag.Checked := CSubPackage.EffectiveStressLag;
+
+  for CsubOutputType := coInterbedStrain to coZDisplacement do
+  begin
+    chklstOutput.Checked[Ord(CsubOutputType)] := CsubOutputType in CSubPackage.OutputTypes;
+  end;
+
+  frameInterbeds.Grid.BeginUpdate;
+  try
+    frameInterbeds.SeNumber.AsInteger := CSubPackage.Interbeds.Count;
+    for ItemIndex := 0 to CSubPackage.Interbeds.Count - 1 do
+    begin
+      Interbed := CSubPackage.Interbeds[ItemIndex];
+      frameInterbeds.Grid.Cells[Ord(icName), ItemIndex+1] := Interbed.Name;
+      frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1] := Ord(Interbed.InterbedType);
+    end;
+  finally
+    frameInterbeds.Grid.EndUpdate;
+  end;
 end;
 
 procedure TframePackageCsub.InitializeGrid;
@@ -86,9 +114,51 @@ end;
 procedure TframePackageCsub.SetData(Package: TModflowPackageSelection);
 var
   CSubPackage: TCSubPackageSelection;
+  CsubOutputType: TCsubOutputType;
+  ItemIndex: Integer;
+  Interbed: TInterbed;
+  OutputTypes: TCsubOutputTypes;
 begin
   inherited;
   CSubPackage := Package as TCSubPackageSelection;
+  if rdeGamma.Text <> '' then
+  begin
+    CSubPackage.Gamma := rdeGamma.RealValue;
+  end;
+  if rdeBeta.Text <> '' then
+  begin
+    CSubPackage.Beta := rdeBeta.RealValue;
+  end;
+  CSubPackage.HeadBased := cbHeadBased.Checked;
+  CSubPackage.PreconsolidationHeadUsed := cbPreconsolidationHeadUsed.Checked;
+  CSubPackage.NumberOfDelayCells := seNDelayCells.asInteger;
+  CSubPackage.CompressionMethod := TCompressionMethod(comboCompressionMethod.ItemIndex);
+  CSubPackage.UpdateMaterialProperties := cbUpdateMaterialProperties.Checked;
+  CSubPackage.InterbedThicknessMethod := TInterbedThicknessMethod(comboInterbedThicknessMethod.ItemIndex);
+  CSubPackage.SpecifyInitialPreconsolidationStress := cbSpecifyInitialPreconsolidationStress.Checked;
+  CSubPackage.SpecifyInitialDelayHead := cbSpecifyInitialDelayHead.Checked;
+  CSubPackage.EffectiveStressLag := cbEffectiveStressLag.Checked;
+
+  OutputTypes := [];
+  for CsubOutputType := coInterbedStrain to coZDisplacement do
+  begin
+    if chklstOutput.Checked[Ord(CsubOutputType)] then
+    begin
+      Include(OutputTypes, CsubOutputType);
+    end;
+  end;
+  CSubPackage.OutputTypes := OutputTypes;
+
+  CSubPackage.Interbeds.Count := frameInterbeds.SeNumber.AsInteger;
+  for ItemIndex := 0 to CSubPackage.Interbeds.Count - 1 do
+  begin
+    Interbed := CSubPackage.Interbeds[ItemIndex];
+    Interbed.Name := frameInterbeds.Grid.Cells[Ord(icName), ItemIndex+1];
+    if frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1] >= 0 then
+    begin
+      Interbed.InterbedType := TInterbedType(frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1]);
+    end;
+  end;
 
 end;
 

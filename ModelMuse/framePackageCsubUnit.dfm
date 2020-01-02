@@ -51,6 +51,13 @@ inherited framePackageCsub: TframePackageCsub
         Height = 13
         Caption = 'Number of nodes used to discretize delay interbeds (NDELAYCELLS)'
       end
+      object lblCompressionMethod: TLabel
+        Left = 227
+        Top = 146
+        Width = 231
+        Height = 13
+        Caption = 'Compression method (COMPRESSION_INDICES)'
+      end
       object rdeGamma: TRbwDataEntry
         Left = 3
         Top = 3
@@ -108,18 +115,6 @@ inherited framePackageCsub: TframePackageCsub
         Enabled = False
         TabOrder = 4
       end
-      object cbUseCompressionIndicies: TCheckBox
-        Left = 3
-        Top = 146
-        Width = 575
-        Height = 32
-        Caption = 
-          'Specify recompression (CR) and compression (CC) indices (COMPRES' +
-          'SION_INDICES)'
-        Enabled = False
-        TabOrder = 5
-        WordWrap = True
-      end
       object cbUpdateMaterialProperties: TCheckBox
         Left = 3
         Top = 184
@@ -127,7 +122,7 @@ inherited framePackageCsub: TframePackageCsub
         Height = 17
         Caption = 'Update material properties (UPDATE_MATERIAL_PROPERTIES)'
         Enabled = False
-        TabOrder = 6
+        TabOrder = 5
       end
       object comboInterbedThicknessMethod: TJvImageComboBox
         Left = 3
@@ -143,7 +138,7 @@ inherited framePackageCsub: TframePackageCsub
         ImageWidth = 0
         ItemHeight = 17
         ItemIndex = 0
-        TabOrder = 7
+        TabOrder = 6
         Items = <
           item
             Brush.Style = bsClear
@@ -165,7 +160,7 @@ inherited framePackageCsub: TframePackageCsub
           'Use effective stress from previous time step (EFFECTIVE_STRESS_L' +
           'AG)'
         Enabled = False
-        TabOrder = 8
+        TabOrder = 7
       end
       object cbSpecifyInitialDelayHead: TCheckBox
         Left = 3
@@ -176,7 +171,7 @@ inherited framePackageCsub: TframePackageCsub
           'Specify absolute initial delay bed head (SPECIFIED_INITIAL_DELAY' +
           '_HEAD)'
         Enabled = False
-        TabOrder = 9
+        TabOrder = 8
       end
       object cbSpecifyInitialPreconsolidationStress: TCheckBox
         Left = 3
@@ -187,8 +182,35 @@ inherited framePackageCsub: TframePackageCsub
           'Specify initial preconsolidation stress (SPECIFIED_INITIAL_PRECO' +
           'NSOLIDATION_STRESS)'
         Enabled = False
-        TabOrder = 10
+        TabOrder = 9
         WordWrap = True
+      end
+      object comboCompressionMethod: TJvImageComboBox
+        Left = 3
+        Top = 143
+        Width = 218
+        Height = 23
+        Style = csOwnerDrawVariable
+        ButtonStyle = fsLighter
+        Color = clBtnFace
+        DroppedWidth = 218
+        Enabled = False
+        ImageHeight = 0
+        ImageWidth = 0
+        ItemHeight = 17
+        ItemIndex = 0
+        TabOrder = 10
+        Items = <
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Use elastic specific storage'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Use recompression index'
+          end>
       end
     end
     object tabOutputTypes: TTabSheet
@@ -338,7 +360,7 @@ inherited framePackageCsub: TframePackageCsub
         Control = seNDelayCells
       end
       item
-        Control = cbUseCompressionIndicies
+        Control = comboCompressionMethod
       end
       item
         Control = cbUpdateMaterialProperties

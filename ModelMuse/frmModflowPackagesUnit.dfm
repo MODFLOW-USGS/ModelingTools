@@ -10904,9 +10904,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 595
       Height = 516
       Caption = 'jvspCSUB'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      inline framePackageCsub1: TframePackageCsub
+      inline framePackageCsub: TframePackageCsub
         Left = 0
         Top = 0
         Width = 595
@@ -10914,8 +10912,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 80
-        ExplicitTop = 40
+        ExplicitWidth = 595
+        ExplicitHeight = 516
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -10930,16 +10928,18 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
+          ExplicitWidth = 564
         end
         inherited pcCsub: TPageControl
           Top = 159
           Width = 595
-          ActivePage = framePackageCsub1.tabOptions
           ExplicitTop = 159
+          ExplicitWidth = 595
           inherited tabOptions: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitHeight = 291
+            ExplicitWidth = 587
+            ExplicitHeight = 324
             inherited lblGamma: TLabel
               Width = 213
               Height = 18
@@ -10953,15 +10953,21 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited lblInterbedThicknessMethod: TLabel
-              Width = 471
-              Height = 54
-              ExplicitWidth = 471
-              ExplicitHeight = 54
+              Width = 446
+              Height = 18
+              ExplicitWidth = 446
+              ExplicitHeight = 18
             end
             inherited lblseNDelayCells: TLabel
               Width = 483
               Height = 18
               ExplicitWidth = 483
+              ExplicitHeight = 18
+            end
+            inherited lblCompressionMethod: TLabel
+              Width = 354
+              Height = 18
+              ExplicitWidth = 354
               ExplicitHeight = 18
             end
             inherited seNDelayCells: TJvSpinEdit
@@ -10974,32 +10980,36 @@ inherited frmModflowPackages: TfrmModflowPackages
               ItemIndex = -1
               ExplicitHeight = 28
             end
+            inherited comboCompressionMethod: TJvImageComboBox
+              Height = 28
+              ItemHeight = 22
+              ItemIndex = -1
+              ExplicitHeight = 28
+            end
           end
           inherited tabOutputTypes: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 291
+            ExplicitWidth = 581
+            ExplicitHeight = 324
             inherited chklstOutput: TCheckListBox
-              Width = 587
               Height = 324
               ItemHeight = 18
               ExplicitLeft = 0
               ExplicitTop = 0
-              ExplicitWidth = 530
-              ExplicitHeight = 291
+              ExplicitWidth = 581
+              ExplicitHeight = 324
             end
           end
           inherited tabInterbeds: TTabSheet
             ExplicitTop = 29
             inherited frameInterbeds: TframeGrid
-              Width = 587
               Height = 324
-              ExplicitWidth = 414
-              ExplicitHeight = 329
+              ExplicitWidth = 581
+              ExplicitHeight = 324
               inherited Panel: TPanel
                 Top = 283
-                Width = 587
-                ExplicitTop = 250
-                ExplicitWidth = 530
+                ExplicitTop = 283
+                ExplicitWidth = 581
                 inherited lbNumber: TLabel
                   Width = 194
                   Height = 18
@@ -11012,10 +11022,9 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
               end
               inherited Grid: TRbwDataGrid4
-                Width = 587
                 Height = 283
-                ExplicitWidth = 414
-                ExplicitHeight = 250
+                ExplicitWidth = 581
+                ExplicitHeight = 283
               end
             end
           end
@@ -11023,52 +11032,52 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited rcSelectionController: TRbwController
           ControlList = <
             item
-              Control = framePackageCsub1.lblComments
+              Control = framePackageCsub.lblComments
             end
             item
-              Control = framePackageCsub1.memoComments
+              Control = framePackageCsub.memoComments
             end
             item
-              Control = framePackageCsub1.rdeGamma
+              Control = framePackageCsub.rdeGamma
             end
             item
-              Control = framePackageCsub1.rdeBeta
+              Control = framePackageCsub.rdeBeta
             end
             item
-              Control = framePackageCsub1.cbHeadBased
+              Control = framePackageCsub.cbHeadBased
             end
             item
-              Control = framePackageCsub1.cbPreconsolidationHeadUsed
+              Control = framePackageCsub.cbPreconsolidationHeadUsed
             end
             item
-              Control = framePackageCsub1.seNDelayCells
+              Control = framePackageCsub.seNDelayCells
             end
             item
-              Control = framePackageCsub1.cbUseCompressionIndicies
+              Control = framePackageCsub.comboCompressionMethod
             end
             item
-              Control = framePackageCsub1.cbUpdateMaterialProperties
+              Control = framePackageCsub.cbUpdateMaterialProperties
             end
             item
-              Control = framePackageCsub1.comboInterbedThicknessMethod
+              Control = framePackageCsub.comboInterbedThicknessMethod
             end
             item
-              Control = framePackageCsub1.cbSpecifyInitialPreconsolidationStress
+              Control = framePackageCsub.cbSpecifyInitialPreconsolidationStress
             end
             item
-              Control = framePackageCsub1.cbSpecifyInitialDelayHead
+              Control = framePackageCsub.cbSpecifyInitialDelayHead
             end
             item
-              Control = framePackageCsub1.cbSpecifyInitialDelayHead
+              Control = framePackageCsub.cbSpecifyInitialDelayHead
             end
             item
-              Control = framePackageCsub1.cbEffectiveStressLag
+              Control = framePackageCsub.cbEffectiveStressLag
             end
             item
-              Control = framePackageCsub1.chklstOutput
+              Control = framePackageCsub.chklstOutput
             end
             item
-              Control = framePackageCsub1.frameInterbeds
+              Control = framePackageCsub.frameInterbeds
             end>
         end
       end

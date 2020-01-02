@@ -253,7 +253,7 @@ type
     jvspMt3dCts: TJvStandardPage;
     frameMt3dCtsPkg: TframeMt3dCtsPkg;
     jvspCSUB: TJvStandardPage;
-    framePackageCsub1: TframePackageCsub;
+    framePackageCsub: TframePackageCsub;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -2132,10 +2132,14 @@ begin
     AddChildNode(BC_SpecifiedFlux, StrSpecifiedFlux, PriorNode);
     AddChildNode(BC_HeadDependentFlux, StrHeaddependentFlux, PriorNode);
     AddNode(StrSolver, StrSolver, PriorNode);
+  {$IFDEF CSUB}
+    AddNode(StrSubSidence, StrSubSidence, PriorNode);
+  {$ELSE}
     if frmGoPhast.ModelSelection <> msModflow2015 then
     begin
       AddNode(StrSubSidence, StrSubSidence, PriorNode);
     end;
+  {$ENDIF}
     AddNode(StrObservations, StrObservations, PriorNode);
     if frmGoPhast.ModelSelection <> msModflow2015 then
     begin
@@ -3784,6 +3788,20 @@ begin
   else
   begin
     framePkgSWR.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+  {$IFDEF CSUB}
+    Packages.CsubPackage.Frame := framePackageCsub;
+    FPackageList.Add(Packages.CsubPackage);
+  {$ELSE}
+    framePackageCsub.NilNode;
+  {$ENDIF}
+  end
+  else
+  begin
+    framePackageCsub.NilNode;
   end;
 
 end;

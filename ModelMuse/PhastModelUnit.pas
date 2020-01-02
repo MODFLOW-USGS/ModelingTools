@@ -31228,14 +31228,14 @@ end;
 function TCustomModel.CSubInitialElasticStorageUsed(Sender: TObject): boolean;
 begin
   result := CSubDataSetsUsed(Sender)
-    and not ModflowPackages.CSubPackage.UseCompressionIndicies;
+    and (ModflowPackages.CSubPackage.CompressionMethod = coElasticSpecificStorage);
 end;
 
 function TCustomModel.CSubInitialRecompressionIndexUsed(
   Sender: TObject): boolean;
 begin
   result := CSubDataSetsUsed(Sender)
-    and ModflowPackages.CSubPackage.UseCompressionIndicies;
+    and (ModflowPackages.CSubPackage.CompressionMethod = coRecompression);
 end;
 
 procedure TCustomModel.RemoveVariables(const DataSet: TDataArray);

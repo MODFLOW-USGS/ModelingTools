@@ -691,7 +691,8 @@ uses
   PlProcUnit in 'PlProcUnit.pas',
   PestArrayWriterUnit in 'PestArrayWriterUnit.pas',
   PestHeadObsWeightsUnit in 'PestHeadObsWeightsUnit.pas',
-  framePackageCsubUnit in 'framePackageCsubUnit.pas' {framePackageCsub: TFrame};
+  framePackageCsubUnit in 'framePackageCsubUnit.pas' {framePackageCsub: TFrame},
+  ModflowCsubUnit in 'ModflowCsubUnit.pas';
 
 {$R *.res}
 

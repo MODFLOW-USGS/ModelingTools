@@ -3175,6 +3175,13 @@ Type
   TCsubOutputTypes = set of TCsubOutputType;
   TInterbedType = (itDelay, itNoDelay);
 
+    {COMPRESSION_INDICES —keyword to indicate that the
+    recompression (CR) and compression (CC) indices are specified instead of
+    the elastic specific storage (SSE) and inelastic specific storage (SSV)
+    coefficients. If not specified, then elastic specific storage (SSE) and
+    inelastic specific storage (SSV) coefficients must be specified.}
+  TCompressionMethod = (coElasticSpecificStorage, coRecompression);
+
   TInterbed = class(TPhastCollectionItem)
   private
     FName: string;
@@ -3182,15 +3189,19 @@ Type
     procedure SetInterbedType(const Value: TInterbedType);
     procedure SetName(const Value: string);
   public
-    procedure Assign(Source: TPersistent) override;
+    procedure Assign(Source: TPersistent); override;
   published
     property Name: string read FName write SetName;
     property InterbedType: TInterbedType read FInterbedType write SetInterbedType;
   end;
 
   TInterbeds = class(TPhastCollection)
+  private
+    function GetItem(Index: Integer): TInterbed;
+    procedure SetItem(Index: Integer; const Value: TInterbed);
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]: TInterbed read GetItem write SetItem; default;
   end;
 
   // Skeletal Storage, Compaction, and Subsidence (CSUB) Package
@@ -3199,7 +3210,7 @@ Type
     FPreconsolidationHeadUsed: Boolean;
     FStoredBeta: TRealStorage;
     FHeadBased: Boolean;
-    FUseCompressionIndicies: Boolean;
+    FCompressionMethod: TCompressionMethod;
     FUpdateMaterialProperties: Boolean;
     FInterbedThicknessMethod: TInterbedThicknessMethod;
     FNumberOfDelayCells: Integer;
@@ -3217,7 +3228,7 @@ Type
     procedure SetStoredBeta(const Value: TRealStorage);
     procedure SetStoredGamma(const Value: TRealStorage);
     procedure SetUpdateMaterialProperties(const Value: Boolean);
-    procedure SetUseCompressionIndicies(const Value: Boolean);
+    procedure SetCompressionMethod(const Value: TCompressionMethod);
     function GetBeta: double;
     function GetGamma: double;
     procedure SetBeta(const Value: double);
@@ -3271,8 +3282,8 @@ Type
     the elastic specific storage (SSE) and inelastic specific storage (SSV)
     coefficients. If not specified, then elastic specific storage (SSE) and
     inelastic specific storage (SSV) coefficients must be specified.}
-    property UseCompressionIndicies: Boolean read FUseCompressionIndicies
-      write SetUseCompressionIndicies Stored True;
+    property CompressionMethod: TCompressionMethod read FCompressionMethod
+      write SetCompressionMethod Stored True;
     {UPDATE_MATERIAL_PROPERTIES—keyword to indicate that the thickness and
     void ratio of coarsegrained and interbed sediments (delay and no-delay)
     will vary during the simulation. If not specified, the thickness and
@@ -20813,7 +20824,7 @@ begin
     HeadBased := CSubSource.HeadBased;
     PreconsolidationHeadUsed := CSubSource.PreconsolidationHeadUsed;
     NumberOfDelayCells := CSubSource.NumberOfDelayCells;
-    UseCompressionIndicies := CSubSource.UseCompressionIndicies;
+    CompressionMethod := CSubSource.CompressionMethod;
     UpdateMaterialProperties := CSubSource.UpdateMaterialProperties;
     InterbedThicknessMethod := CSubSource.InterbedThicknessMethod;
     SpecifyInitialPreconsolidationStress := CSubSource.SpecifyInitialPreconsolidationStress;
@@ -20865,7 +20876,7 @@ begin
   Beta := 4.6512e-10;
   FHeadBased := False;
   FPreconsolidationHeadUsed := False;
-  FUseCompressionIndicies := False;
+  FCompressionMethod := coElasticSpecificStorage;
   FUpdateMaterialProperties := False;
   FInterbedThicknessMethod := itmThickness;
   FNumberOfDelayCells := 0;
@@ -20964,9 +20975,13 @@ begin
   SetBooleanProperty(FUpdateMaterialProperties, Value);
 end;
 
-procedure TCSubPackageSelection.SetUseCompressionIndicies(const Value: Boolean);
+procedure TCSubPackageSelection.SetCompressionMethod(const Value: TCompressionMethod);
 begin
-  SetBooleanProperty(FUseCompressionIndicies, Value);
+  if FCompressionMethod <> Value then
+  begin
+    FCompressionMethod := Value;
+    InvalidateModel;
+  end;
 end;
 
 { TInterbed }
@@ -21006,6 +21021,16 @@ end;
 constructor TInterbeds.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited Create(TInterbed, InvalidateModelEvent);
+end;
+
+function TInterbeds.GetItem(Index: Integer): TInterbed;
+begin
+  result := inherited Items[index] as TInterbed;
+end;
+
+procedure TInterbeds.SetItem(Index: Integer; const Value: TInterbed);
+begin
+  inherited Items[index] := Value;
 end;
 
 end.
