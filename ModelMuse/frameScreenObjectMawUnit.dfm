@@ -32,10 +32,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     TabOrder = 1
     object tabWell: TTabSheet
       Caption = 'Well definition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblRadius: TLabel
         Left = 3
         Top = 19
@@ -199,10 +195,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     object tabWellScreens: TTabSheet
       Caption = 'Well screens'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameWellScreens: TframeGrid
         Left = 0
         Top = 0
@@ -342,10 +334,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
     object tabTransient: TTabSheet
       Caption = 'Transient'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlBottom: TPanel
         Left = 0
         Top = 186

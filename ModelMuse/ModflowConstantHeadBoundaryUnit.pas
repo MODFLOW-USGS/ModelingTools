@@ -622,9 +622,11 @@ begin
         begin
           BoundaryValues.StartingHead :=
             BoundaryValues.StartingHead * FCurrentParameter.Value;
-          BoundaryValues.StartAnnotation :=
-            BoundaryValues.StartAnnotation
-            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+//          BoundaryValues.StartAnnotation :=
+//            BoundaryValues.StartAnnotation
+//            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+          BoundaryValues.StartAnnotation := Format(Str0sMultipliedByT, [
+            BoundaryValues.StartAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TCHD_Cell.Create;
         Assert(ScreenObject <> nil);

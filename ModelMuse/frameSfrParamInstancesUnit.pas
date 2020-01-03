@@ -214,8 +214,8 @@ end;
 
 procedure TframeSfrParamInstances.UpdateNextTimeCell(DataGrid: TRbwDataGrid4;
   ACol, ARow: Integer);
-var
-  SelectIndex: Integer;
+//var
+//  SelectIndex: Integer;
 begin
   if FrameLoaded then
   begin

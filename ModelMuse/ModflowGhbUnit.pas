@@ -848,9 +848,11 @@ begin
         begin
           BoundaryValues.Conductance :=
             BoundaryValues.Conductance * FCurrentParameter.Value;
-          BoundaryValues.ConductanceAnnotation :=
-            BoundaryValues.ConductanceAnnotation
-            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+//          BoundaryValues.ConductanceAnnotation :=
+//            BoundaryValues.ConductanceAnnotation
+//            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+          BoundaryValues.ConductanceAnnotation := Format(Str0sMultipliedByT, [
+            BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TGhb_Cell.Create;
         Assert(ScreenObject <> nil);

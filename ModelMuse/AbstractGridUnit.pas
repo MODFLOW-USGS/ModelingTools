@@ -3797,7 +3797,7 @@ begin
       end
       else if ARowWidth > MaxWidth then
       begin
-        ARowWidth := ARowWidth;
+        MaxWidth := ARowWidth;
       end;
     end;
     result := MaxWidth = MinWidth;

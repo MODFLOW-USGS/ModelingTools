@@ -20466,6 +20466,7 @@ begin
     begin
       Continue;
     end;
+    SftCollection := nil;
     Boundary := ScreenObject.Mt3dSftConcBoundary;
     if (Boundary <> nil) and Boundary.Used then
     begin
@@ -20486,6 +20487,8 @@ begin
           begin
             SftCollection := Boundary.ConstConc;
           end;
+        else
+          Assert(False);
       end;
       for ValueIndex := 0 to SftCollection.Count - 1 do
       begin

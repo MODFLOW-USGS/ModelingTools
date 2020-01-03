@@ -692,7 +692,9 @@ uses
   PestArrayWriterUnit in 'PestArrayWriterUnit.pas',
   PestHeadObsWeightsUnit in 'PestHeadObsWeightsUnit.pas',
   framePackageCsubUnit in 'framePackageCsubUnit.pas' {framePackageCsub: TFrame},
-  ModflowCsubUnit in 'ModflowCsubUnit.pas';
+  ModflowCsubUnit in 'ModflowCsubUnit.pas',
+  frameScreenObjectTabbedUnit in 'frameScreenObjectTabbedUnit.pas' {frameScreenObjectTabbed: TFrame},
+  frameScreenObjectCSubUnit in 'frameScreenObjectCSubUnit.pas' {frameScreenObjectCSub: TFrame};
 
 {$R *.res}
 

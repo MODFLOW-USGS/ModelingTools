@@ -845,6 +845,7 @@ resourcestring
   StrMaxPumpingRate = 'Max pumping rate (QMAX)';
   StrPumpOnlyIfCropRequiresWater = 'Pump only if irrigation required in cell';
   StrFarmID =  'FarmID';
+  StrStressOffset = 'Stress offset';
 
 
   StrVariance = 'Variance (0)';

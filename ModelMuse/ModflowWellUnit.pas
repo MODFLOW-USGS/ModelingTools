@@ -819,9 +819,8 @@ begin
         begin
           BoundaryValues.PumpingRate :=
             BoundaryValues.PumpingRate * FCurrentParameter.Value;
-          BoundaryValues.PumpingRateAnnotation :=
-            BoundaryValues.PumpingRateAnnotation
-            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+          BoundaryValues.PumpingRateAnnotation := Format(Str0sMultipliedByT, [
+            BoundaryValues.PumpingRateAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TWell_Cell.Create;
         Assert(ScreenObject <> nil);

@@ -1156,6 +1156,10 @@ inherited frmSwrStructures: TfrmSwrStructures
     object tabTiming: TTabSheet
       Caption = 'Timing'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameTiming: TframeFormulaGrid
         Left = 0
         Top = 0

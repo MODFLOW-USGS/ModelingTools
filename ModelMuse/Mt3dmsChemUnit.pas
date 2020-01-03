@@ -1838,6 +1838,7 @@ begin
   inherited;
   FObserver:= TObserver.Create(nil);
   SCollection := StringCollection;
+  LocalScreenObject := nil;
 
   if SCollection.FMt3dmsConcCollection is TCustomMt3dmsConcCollection then
   begin

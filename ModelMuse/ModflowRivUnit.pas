@@ -818,8 +818,8 @@ end;
 { TRivBoundary }
 
 procedure TRivBoundary.Assign(Source: TPersistent);
-var
-  SourceRiv: TRivBoundary;
+//var
+//  SourceRiv: TRivBoundary;
 begin
 //  if Source is TRivBoundary then
 //  begin
@@ -882,9 +882,11 @@ begin
         begin
           BoundaryValues.Conductance :=
             BoundaryValues.Conductance * FCurrentParameter.Value;
-          BoundaryValues.ConductanceAnnotation :=
-            BoundaryValues.ConductanceAnnotation
-            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+//          BoundaryValues.ConductanceAnnotation :=
+//            BoundaryValues.ConductanceAnnotation
+//            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
+          BoundaryValues.ConductanceAnnotation := Format(Str0sMultipliedByT, [
+            BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TRiv_Cell.Create;
         Assert(ScreenObject <> nil);

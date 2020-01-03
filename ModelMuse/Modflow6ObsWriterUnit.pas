@@ -705,6 +705,7 @@ begin
 end;
 
 procedure TModflow6Obs_Writer.WriteFile(const AFileName: string);
+{$IFDEF PEST}
 var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
@@ -715,6 +716,7 @@ var
   ObsCells: TObsWeights;
   index: Integer;
   AnotherDisvCell: TModflowIrregularCell2D;
+{$ENDIF}
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   if not Package.IsSelected then

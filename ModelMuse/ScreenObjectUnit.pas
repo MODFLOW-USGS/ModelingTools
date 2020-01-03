@@ -46,7 +46,7 @@ uses
   ModflowSwiObsUnit, ModflowRipUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
   Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit, ModflowMawUnit,
   MeshRenumberingTypes, Modflow6ObsUnit, ModflowLakMf6Unit, ModflowMvrUnit,
-  ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit;
+  ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit;
 
 type
   //
@@ -1448,14 +1448,8 @@ view. }
     FModflowUzfMf6Boundary: TUzfMf6Boundary;
     FMt3dLktConcBoundary: TMt3dLktConcBoundary;
     FMt3dSftConcBoundary: TMt3dSftBoundary;
+    FModflowCSub: TCSubBoundary;
   public
-    procedure Invalidate;
-    { TODO -cRefactor : Consider replacing Model with an interface. }
-    // @name removes a link between a @link(TPhastModel) or @link(TChildModel)
-    // and a @link(TModflowBoundary)
-    procedure RemoveModelLink(AModel: TBaseModel);
-    procedure FreeUnusedBoundaries;
-    Destructor Destroy; override;
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
     property ModflowGhbBoundary: TGhbBoundary read FModflowGhbBoundary
@@ -1554,6 +1548,8 @@ view. }
     property Mt3dSftConcBoundary: TMt3dSftBoundary
       read FMt3dSftConcBoundary write FMt3dSftConcBoundary;
 
+    property ModflowCSub: TCSubBoundary read FModflowCSub write FModflowCSub;
+
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
     // Assign, RemoveModelLink,
@@ -1567,6 +1563,13 @@ view. }
     function UsesATime(ATime: Double): Boolean;
     procedure ReplaceATime(OldTime, NewTime: Double);
     property Model: TBaseModel read FModel write FModel;
+    procedure Invalidate;
+    procedure FreeUnusedBoundaries;
+    Destructor Destroy; override;
+    { TODO -cRefactor : Consider replacing Model with an interface. }
+    // @name removes a link between a @link(TPhastModel) or @link(TChildModel)
+    // and a @link(TModflowBoundary)
+    procedure RemoveModelLink(AModel: TBaseModel);
   end;
 
   TUsedWithModelItem = class(TPhastCollectionItem)
@@ -2734,6 +2737,9 @@ view. }
     function GetMt3dSftConcBoundary: TMt3dSftBoundary;
     procedure SetMt3dSftConcBoundary(const Value: TMt3dSftBoundary);
     function StoreMt3dSftConcBoundary: Boolean;
+    function GetModflowCSub: TCSubBoundary;
+    procedure SetModflowCSub(const Value: TCSubBoundary);
+    function StoreModflowCSub: Boolean;
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -3334,6 +3340,7 @@ view. }
     procedure CreateLakMf6Boundary;
     procedure CreateModflowMvr;
     procedure CreateModflowUzfMf6Boundary;
+    procedure CreateCSubBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     function ModflowDataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -4036,8 +4043,10 @@ view. }
       read GetMt3dSftConcBoundary write SetMt3dSftConcBoundary
       stored StoreMt3dSftConcBoundary;
     property Modflow6Obs: TModflow6Obs read GetModflow6Obs write SetModflow6Obs
-      stored StoreModflow6Obs
-      ;
+      stored StoreModflow6Obs;
+
+    property ModflowCSub: TCSubBoundary read GetModflowCSub Write SetModflowCSub stored StoreModflowCSub;
+
 //    property Mt3dUzfSeepageConcBoundary: TMt3dUzSsmSinkConcBoundary
 //      read GetMt3dUzSsmSinkConcBoundary write SetMt3dUzSsmSinkConcBoundary
 //      stored False;
@@ -6659,6 +6668,7 @@ begin
   ModflowLak6 := AScreenObject.ModflowLak6;
   ModflowMvr := AScreenObject.ModflowMvr;
   ModflowUzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
+  ModflowCSub := AScreenObject.ModflowCSub;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -9425,6 +9435,10 @@ begin
       ModflowUzfMf6Boundary.InvalidateDisplay;
     end;
 
+    if ModflowCSub <> nil then
+    begin
+      ModflowCSub.InvalidateDisplay;
+    end;
 //    if Mt3dmsTransObservations <> nil then
 //    begin
 //      Mt3dmsTransObservations.InvalidateDisplay;
@@ -13498,6 +13512,23 @@ begin
   begin
     CreateChdBoundary;
     ModflowBoundaries.FModflowChdBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetModflowCSub(const Value: TCSubBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FModflowCSub <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FModflowCSub);
+  end
+  else
+  begin
+    CreateCSubBoundary;
+    ModflowBoundaries.FModflowCSub.Assign(Value);
   end;
 end;
 
@@ -31258,6 +31289,16 @@ begin
     and ModflowChdBoundary.Used;
 end;
 
+function TScreenObject.StoreModflowCSub: Boolean;
+begin
+{$IFDEF CSUB}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowCSub <> nil) and ModflowCSub.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowDrnBoundary: Boolean;
 begin
   result := (FModflowBoundaries <> nil)
@@ -32114,6 +32155,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FModflowChdBoundary;
+  end;
+end;
+
+function TScreenObject.GetModflowCSub: TCSubBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateCSubBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FModflowCSub;
   end;
 end;
 
@@ -36741,6 +36799,14 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateCSubBoundary;
+begin
+  if (ModflowBoundaries.FModflowCSub = nil) then
+  begin
+    ModflowBoundaries.FModflowCSub := TCSubBoundary.Create(FModel, self);
+  end;
+end;
+
 procedure TScreenObject.CreateGhbBoundary;
 begin
   if (ModflowBoundaries.FModflowGhbBoundary = nil) then
@@ -40063,11 +40129,25 @@ begin
     FModflowUzfMf6Boundary.Assign(Source.FModflowUzfMf6Boundary);
   end;
 
+  if Source.FModflowCSub = nil then
+  begin
+    FreeAndNil(FModflowCSub);
+  end
+  else
+  begin
+    if FModflowCSub = nil then
+    begin
+      FModflowCSub := TCSubBoundary.Create(Model, nil);
+    end;
+    FModflowCSub.Assign(Source.FModflowCSub);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FModflowCSub.Free;
   FModflow6Obs.Free;
   FModflowMawBoundary.Free;
   FModflowSfr6Boundary.Free;
@@ -40330,7 +40410,10 @@ begin
     FreeAndNil(FMt3dSftConcBoundary);
   end;
 
-
+  if (FModflowCSub <> nil) and not FModflowCSub.Used then
+  begin
+    FreeAndNil(FModflowCSub);
+  end;
 end;
 
 procedure TModflowBoundaries.Invalidate;
@@ -40595,6 +40678,11 @@ begin
     FModflowUzfMf6Boundary.Invalidate;
   end;
 
+  if FModflowCSub <> nil then
+  begin
+    FModflowCSub.Invalidate;
+  end;
+
 end;
 
 procedure TModflowBoundaries.RemoveModelLink(AModel: TBaseModel);
@@ -40818,6 +40906,10 @@ begin
     FMt3dSftConcBoundary.RemoveModelLink(AModel);
   end;
 
+  if FModflowCSub <> nil then
+  begin
+    FModflowCSub.RemoveModelLink(AModel);
+  end;
   {
     FModflow6Obs: TModflow6Obs;
     FModflowLak6: TLakeMf6;
@@ -41075,6 +41167,11 @@ begin
   if FModflowHfbBoundary <> nil then
   begin
     FModflowHfbBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FModflowCSub <> nil then
+  begin
+    FModflowCSub.Values.ReplaceATime(OldTime, NewTime);
   end;
 
   Invalidate;
@@ -41347,6 +41444,11 @@ begin
   if FMt3dSftConcBoundary <> nil then
   begin
     FMt3dSftConcBoundary.StopTalkingToAnyone;
+  end;
+
+  if FModflowCSub <> nil then
+  begin
+    FModflowCSub.StopTalkingToAnyone;
   end;
 end;
 
@@ -41738,6 +41840,14 @@ begin
     end;
   end;
 
+  if FModflowCSub <> nil then
+  begin
+    Result := FModflowCSub.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
 end;
 
 { TSelectedCells }

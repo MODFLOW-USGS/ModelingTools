@@ -762,6 +762,7 @@ resourcestring
   StrWrongHeadModpathDetailed = 'MODPATH version 6 requires that heads be '
   + 'saved in a binary format instead of a text format. You can change the '
   + 'format in the Output Control dialog box.';
+  Str0sMultipliedByT = '%0:s multiplied by the parameter value for "%1:s."';
 
 type
   TEvaluationType = (etExport, etDisplay);
@@ -3070,6 +3071,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMawPumpElevation(Sender: TObject);
     procedure InvalidateMawScalingLength(Sender: TObject);
 
+    procedure InvalidateCSubStressOffset(Sender: TObject);
 
     property NameFileWriter: TObject read FNameFileWriter write SetNameFileWriter;
     property SimNameWriter: IMf6_SimNameFileWriter read FSimNameWriter write FSimNameWriter;
@@ -22537,6 +22539,12 @@ begin
   TopContoursUpToDate := False;
   FrontContoursUpToDate := False;
   SideContoursUpToDate := False;
+end;
+
+procedure TCustomModel.InvalidateCSubStressOffset(Sender: TObject);
+begin
+ { TODO : complete this. }
+  Assert(False);
 end;
 
 procedure TCustomModel.InvalidateEtsDepthFractions(Sender: TObject);

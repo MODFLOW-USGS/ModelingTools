@@ -1962,8 +1962,8 @@ begin
 end;
 
 procedure TfrmSwrStructures.UpdateNextTimeCell(ACol, ARow: Integer);
-var
-  SelectIndex: Integer;
+//var
+//  SelectIndex: Integer;
 begin
   if not FGettingData then
   begin

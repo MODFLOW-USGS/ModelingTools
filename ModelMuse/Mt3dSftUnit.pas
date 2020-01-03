@@ -1733,12 +1733,12 @@ var
 //  Mt3dmsConcData: TModflowTimeList;
 //  Item: TChemSpeciesItem;
   LocalModel: TPhastModel;
-  NCOMP: Integer;
+//  NCOMP: Integer;
 begin
   TimeLists.Clear;
 //  FListOfTimeLists.Clear;
   LocalModel := frmGoPhast.PhastModel;
-  NCOMP := LocalModel.NumberOfMt3dChemComponents;
+//  NCOMP := LocalModel.NumberOfMt3dChemComponents;
 
   for Index := 0 to LocalModel.MobileComponents.Count - 1 do
   begin
@@ -1784,7 +1784,7 @@ end;
 procedure TMt3dSftDispCollection.InvalidateSftDisp(Sender: TObject);
 var
   PhastModel: TPhastModel;
-  Link: TMt3dSftDispTimeListLink;
+//  Link: TMt3dSftDispTimeListLink;
   ChildIndex: Integer;
   ChildModel: TChildModel;
   NCOMP: Integer;
