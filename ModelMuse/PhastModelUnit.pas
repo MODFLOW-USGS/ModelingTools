@@ -8900,6 +8900,8 @@ const
 
   //               Bug fix: Fixed bug that prevented MNW1 wells from being
   //                edited correctly.
+  //               Bug fix: Not in released version. Fixed evaluataion of Ky
+  //                in non MF6 models.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.17';

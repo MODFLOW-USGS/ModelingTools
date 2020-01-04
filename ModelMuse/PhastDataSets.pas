@@ -1396,6 +1396,7 @@ var
   AScreenObject: TScreenObject;
   FreeStack: boolean;
   Position: integer;
+  ShouldCheck: Boolean;
 begin
   if UpToDate and not DimensionsChanged then
   begin
@@ -1418,7 +1419,19 @@ begin
     end;
     Position := Stack.Add(Name);
 
+    ShouldCheck := False;
     if Assigned(OnInitialize) then
+    begin
+      if Assigned(OnShouldUseOnInitialize) then
+      begin
+        OnShouldUseOnInitialize(self,ShouldCheck);
+      end
+      else
+      begin
+        ShouldCheck := True;
+      end;
+    end;
+    if ShouldCheck then
     begin
       OnInitialize(Self);
     end
