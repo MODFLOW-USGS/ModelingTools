@@ -14,8 +14,8 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
     object lblSite: TLabel [1]
       Left = 144
       Top = 19
-      Width = 180
-      Height = 16
+      Width = 148
+      Height = 13
       Caption = 'Site label (Optional) (MNWSite)'
     end
     inherited seNumberOfTimes: TJvSpinEdit
@@ -37,7 +37,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
       Left = 8
       Top = 16
       Width = 121
-      Height = 24
+      Height = 21
       MaxLength = 32
       TabOrder = 0
       OnChange = edSiteLabelChange
@@ -51,13 +51,13 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         Left = 199
         Top = 24
         Width = 81
-        Height = 26
+        Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 81
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 20
+        ItemHeight = 17
         ItemIndex = -1
         TabOrder = 1
         OnChange = comboConductanceChange
@@ -67,13 +67,13 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         Left = 215
         Top = 24
         Width = 81
-        Height = 26
+        Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 81
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 20
+        ItemHeight = 17
         ItemIndex = -1
         TabOrder = 2
         OnChange = comboWaterLevelLimitChange
@@ -83,13 +83,13 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         Left = 231
         Top = 24
         Width = 81
-        Height = 26
+        Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
         DroppedWidth = 81
         ImageHeight = 0
         ImageWidth = 0
-        ItemHeight = 20
+        ItemHeight = 17
         ItemIndex = -1
         TabOrder = 3
         OnChange = comboPumpingLevelLimitChange

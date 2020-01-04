@@ -8898,6 +8898,9 @@ const
   //               Enhancement: Added support for K22OVERK and K33OVERK
   //                in the the MODFLOW 6 NPF package.
 
+  //               Bug fix: Fixed bug that prevented MNW1 wells from being
+  //                edited correctly.
+
   // version number of ModelMuse.
   IModelVersion = '4.1.0.17';
   StrPvalExt = '.pval';
