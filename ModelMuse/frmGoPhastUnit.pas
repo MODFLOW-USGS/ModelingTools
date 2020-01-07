@@ -2150,8 +2150,8 @@ resourcestring
   ' MODFLOW input files.';
   StrMODFLOWLGRDoesNot = 'MODFLOW-LGR does not exist at the location you spe' +
   'cified.  Do you still want to export the MODFLOW input files?';
-  StrYouMustActivateMT = 'You must activate MT3DMS in the MODFLOW Packages a' +
-  'nd Programs dialog box before running MT3DMS.';
+  StrYouMustActivateMT = 'You must activate MT3DMS or MT3D-USGS in the MODFLOW Packages a' +
+  'nd Programs dialog box before running MT3DMS or MT3D-USGS.';
 //  StrMT3DMS = 'MT3DMS';
   StrModelMuseIsClosing = 'ModelMuse is closing becuase the ModelMuse.ini fi' +
   'le is locked.';
@@ -7371,8 +7371,8 @@ var
 begin
   result := True;
   if (PhastModel.ModelSelection = msModflow)
-    and PhastModel.Mt3dmsIsSelected then
-//    and PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
+    and PhastModel.Mt3dmsIsSelected
+    and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS) then
   begin
     ModelProgramName := PhastModel.ModflowLocation;
     if FileExists(ModelProgramName)
@@ -7386,6 +7386,24 @@ begin
         result := false;
       end;
     end;
+  end;
+  if (PhastModel.ModelSelection = msModflowNWT)
+    and PhastModel.Mt3dmsIsSelected
+    and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS)
+    and (PhastModel.SfrIsSelected or PhastModel.LakIsSelected or PhastModel.UzfIsSelected) then
+  begin
+//    ModelProgramName := PhastModel.ModflowLocation;
+    //if FileExists(ModelProgramName)
+//      and (CompareText(ExtractFileName(ModelProgramName),
+      //'mf2005dbl.exe') = 0) then
+//    begin
+      Beep;
+      MessageDlg('MODFLOW-NWT can not be used with MT3DMS if the LAK, SFR, or UZF packages are selected. Use MT3D-USGS instead.', mtError, [mbOK],
+        0);
+//      begin
+        result := false;
+//      end;
+//    end;
   end;
 end;
 

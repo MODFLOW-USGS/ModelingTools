@@ -19,7 +19,7 @@ type
 implementation
 
 uses
-  frmProgressUnit, GoPhastTypes, ModflowTimeUnit;
+  frmProgressUnit, GoPhastTypes, ModflowTimeUnit, Vcl.Forms;
 
 resourcestring
   StrWritingTemporalDis = 'Writing Temporal Discretization (TDIS) Package in' +
@@ -78,6 +78,7 @@ begin
   try
     frmProgressMM.AddMessage(StrWritingTemporalDis);
     frmProgressMM.AddMessage(StrWritingDataSet0);
+    Application.ProcessMessages;
     WriteDataSet0;
     WriteOptions;
     WriteDimensions;

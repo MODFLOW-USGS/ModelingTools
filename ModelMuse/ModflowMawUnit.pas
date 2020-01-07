@@ -322,6 +322,7 @@ type
     ScreenBottomAnnotation: string;
     SkinKAnnotation: string;
     SkinRadiusAnnotation: string;
+    ScreenObjectName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -431,6 +432,7 @@ type
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel); override;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     procedure Loaded; 
   end;
@@ -564,6 +566,8 @@ begin
   Strings.Add(ScreenBottomAnnotation);
   Strings.Add(SkinKAnnotation);
   Strings.Add(SkinRadiusAnnotation);
+  Strings.Add(ScreenObjectName);
+
 end;
 
 procedure TMawSteadyConnectionRecord.Restore(Decomp: TDecompressionStream;
@@ -580,6 +584,7 @@ begin
   ScreenBottomAnnotation := Annotations[ReadCompInt(Decomp)];
   SkinKAnnotation := Annotations[ReadCompInt(Decomp)];
   SkinRadiusAnnotation := Annotations[ReadCompInt(Decomp)];
+  ScreenObjectName := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TMawStorage }
@@ -1169,6 +1174,11 @@ procedure TMawWellScreenCollection.SetBoundaryStartAndEndTime(
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TMawSteadyConnectionStorage).FMawSteadyConnectionArray, BoundaryCount);
   inherited;
+end;
+
+function TMawWellScreenCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+begin
+  result := False;
 end;
 
 { TMawWellScreenTimeListLink }

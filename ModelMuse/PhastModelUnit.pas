@@ -8897,14 +8897,16 @@ const
   //                package.
   //               Enhancement: Added support for K22OVERK and K33OVERK
   //                in the the MODFLOW 6 NPF package.
-
-  //               Bug fix: Fixed bug that prevented MNW1 wells from being
+  //    '4.1.0.18' Bug fix: Fixed bug that prevented MNW1 wells from being
   //                edited correctly.
   //               Bug fix: Not in released version. Fixed evaluataion of Ky
   //                in non MF6 models.
+  //               Bug fix: fixed bug that prevented well screens in MAW wells
+  //                from being edited correctly.
+  //               Enhancement: Added additional error checking for MAW wells.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.17';
+  IModelVersion = '4.1.0.18';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

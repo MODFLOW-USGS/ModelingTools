@@ -21,6 +21,7 @@ type
   TModflowMAW_Writer = class(TCustomTransientWriter)
   private
     FMawObjects: TScreenObjectList;
+    FMawNames: TStringList;
     FWellProperties: array of TMawSteadyWellRecord;
     FWellConnections: TList<TMawSteadyConnectionRecord>;
     FNameOfFile: string;
@@ -98,6 +99,12 @@ resourcestring
   + 'Multi-aquifer wells can be defined with point objects on the top view of '
   + 'the model that have zero Z-formulas.';
   StrMAWPackageSkipped = 'MAW package skipped.';
+  StrMoreThanOneMAWSc = 'More than one MAW screen in the same cell';
+  StrTheObject0sDefi = 'The object %0:s defines two or more MAW  well screen' +
+  's in the same cell (%1:d, %2:d, %3:d). This is only allowed in MEAN is selcted for the conductance equation.';
+  StrMAWSkinRadiusLess = 'MAW skin radius less than or equal to well radius';
+  StrInSTheMAWSkin = 'In %s, the MAW skin radius less than or equal to well ' +
+  'radius';
 
 { TModflowMAW_Writer }
 
@@ -106,6 +113,7 @@ constructor TModflowMAW_Writer.Create(Model: TCustomModel;
 begin
   inherited;
   FMawObjects := TScreenObjectList.Create;
+  FMawNames := TStringList.Create;
   FWellConnections := TList<TMawSteadyConnectionRecord>.Create;
   FMawObservations := TMawObservationList.Create;
   FMawPackage := Package as TMawPackage
@@ -116,6 +124,7 @@ begin
   FMawObservations.Free;
   FWellConnections.Free;
   FMawObjects.Free;
+  FMawNames.Free;
   inherited;
 end;
 
@@ -179,13 +188,15 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrBecauseTheFollowin);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingObjectGrid);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMAWPackageSkipped);
-
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMoreThanOneMAWSc);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWSkinRadiusLess);
   FFlowingWells := False;
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
 //  StartTime := Model.ModflowStressPeriods.First.StartTime;
 
   FMawObjects.Clear;
+  FMawNames.Clear;
   Dummy := TStringList.Create;
   try
     for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -258,6 +269,7 @@ begin
         FirstItem.MawStatus := mwInactive;
       end;
       Boundary.WellNumber := FMawObjects.Add(AScreenObject) + 1;
+      FMawNames.AddObject(AScreenObject.Name, AScreenObject);
       Boundary.GetCellValues(Values, Dummy, Model);
 
       if not FFlowingWells then
@@ -277,6 +289,7 @@ begin
   finally
     Dummy.Free;
   end;
+  FMawNames.Sorted := True;
 
   AssignWellScreensAndWellProperties;
 end;
@@ -645,7 +658,13 @@ procedure TModflowMAW_Writer.WriteConnectionData;
 var
   ConnectionIndex: Integer;
   AWellConnection: TMawSteadyConnectionRecord;
+  ExistingConnections: array of array of array of String;
+  ExistingName: string;
+  ObjectIndex: Integer;
+  ASCreenObject: TScreenObject;
 begin
+  SetLength(ExistingConnections, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+
   WriteBeginConnectionData;
   WriteString('# <wellno> <icon> <cellid(ncelldim)> <scrn_top> <scrn_bot> <hk_skin> <radius_skin>');
   NewLine;
@@ -653,6 +672,28 @@ begin
   for ConnectionIndex := 0 to FWellConnections.Count - 1 do
   begin
     AWellConnection := FWellConnections[ConnectionIndex];
+
+    ObjectIndex := FMawNames.IndexOf(AWellConnection.ScreenObjectName);
+    Assert(ObjectIndex >= 0);
+    ASCreenObject := FMawNames.Objects[ObjectIndex] as TScreenObject;
+    ExistingName := ExistingConnections[AWellConnection.Cell.Layer,
+      AWellConnection.Cell.Row,
+      AWellConnection.Cell.Column];
+    if ExistingName = AWellConnection.ScreenObjectName then
+    begin
+      if (ASCreenObject.ModflowMawBoundary.ConductanceMethod <> mcmMean) then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrMoreThanOneMAWSc,
+          Format(StrTheObject0sDefi, [ExistingName,
+          AWellConnection.Cell.Layer+1,
+          AWellConnection.Cell.Row+1,
+          AWellConnection.Cell.Column+1]), ASCreenObject);
+      end;
+    end;
+    ExistingConnections[AWellConnection.Cell.Layer,
+    AWellConnection.Cell.Row,
+    AWellConnection.Cell.Column] := AWellConnection.ScreenObjectName;
+
     WriteInteger(AWellConnection.WellNumber);
     WriteInteger(AWellConnection.ConnectionNumber);
     WriteInteger(AWellConnection.Cell.Layer+1);
@@ -720,6 +761,7 @@ begin
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMAWPackage);
+    Application.ProcessMessages;
 
     WriteDataSet0;
 
@@ -749,6 +791,7 @@ begin
     end;
 
     frmProgressMM.AddMessage(StrWritingMAWConnec);
+    Application.ProcessMessages;
     WriteConnectionData;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
@@ -1257,6 +1300,7 @@ begin
         AWellRecord.BoundName := AScreenObject.Name;
 
         AWellConnection.WellNumber := Boundary.WellNumber;
+        AWellConnection.ScreenObjectName := AScreenObject.Name;
 
         Cell.Column := AWell.Column;
         Cell.Row := AWell.Row;
@@ -1302,6 +1346,13 @@ begin
               AWellConnection.SkinRadius := Expression.DoubleResult;
               AWellConnection.SkinRadiusAnnotation := Format(
                 StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+
+              if (AWellConnection.SkinRadius <= AWellRecord.Radius)
+                and not (Boundary.ConductanceMethod in [mcmSpecified, mcmThiem]) then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrMAWSkinRadiusLess,
+                  Format(StrInSTheMAWSkin, [AScreenObject.Name]), AScreenObject);
+              end;
 
               Inc(AWellRecord.CellCount);
               AWellConnection.ConnectionNumber := AWellRecord.CellCount;
