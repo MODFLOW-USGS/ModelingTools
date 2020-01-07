@@ -35486,7 +35486,8 @@ end;
 
 function TCustomModel.UzfPackageUsed(Sender: TObject): boolean;
 begin
-  result := ModflowUsed(Sender) and ModflowPackages.UzfPackage.IsSelected;
+  result := ModflowUsed(Sender) and (ModelSelection <> msModflow2015)
+    and ModflowPackages.UzfPackage.IsSelected;
 end;
 
 function TCustomModel.UzfResidualWaterContentUsed(Sender: TObject): boolean;

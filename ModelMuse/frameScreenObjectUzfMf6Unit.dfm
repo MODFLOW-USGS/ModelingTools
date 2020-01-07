@@ -251,6 +251,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           AutoAdjustColWidths = True
         end>
       ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitWidth = 452
       ExplicitHeight = 100
     end
@@ -394,7 +395,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFF000}
         TabOrder = 2
-        Text = '0'
+        Text = '0.2'
         OnChange = edSurfaceDepressionDepthChange
       end
       object edSaturatedWaterContent: TJvComboEdit
@@ -454,7 +455,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFF000}
         TabOrder = 4
-        Text = '0'
+        Text = '0.3'
         OnChange = edSurfaceDepressionDepthChange
       end
       object edBrooksCoreyEpsilon: TJvComboEdit

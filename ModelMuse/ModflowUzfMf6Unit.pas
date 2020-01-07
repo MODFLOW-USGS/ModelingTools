@@ -321,7 +321,8 @@ implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit,
-  ScreenObjectUnit, ModflowTimeUnit, ModflowMvrUnit;
+  ScreenObjectUnit, ModflowTimeUnit, ModflowMvrUnit, ModflowUzfUnit,
+  ModelMuseUtilities, ModflowRchUnit, ModflowEvtUnit;
 
 resourcestring
   StrUZFInfiltrationDat = 'UZF infiltration';
@@ -477,6 +478,10 @@ end;
 procedure TUzfMf6Item.Assign(Source: TPersistent);
 var
   UzfMf6Item: TUzfMf6Item;
+  RchItem: TRchItem;
+  EvtItem: TEvtItem;
+  ExtinctDepthItem: TUzfExtinctDepthItem;
+  WaterContentItem: TUzfWaterContentItem;
 begin
   if Source is TUzfMf6Item then
   begin
@@ -488,7 +493,28 @@ begin
     AirEntryPotential := UzfMf6Item.AirEntryPotential;
     RootPotential := UzfMf6Item.RootPotential;
     RootActivity := UzfMf6Item.RootActivity;
+  end
+  else if Source is TRchItem then
+  begin
+    RchItem := TRchItem(Source);
+    Infiltration := RchItem.RechargeRate;
+  end
+  else if Source is TEvtItem then
+  begin
+    EvtItem := TEvtItem(Source);
+    PotentialET := EvtItem.EvapotranspirationRate;
+  end
+  else if Source is TUzfExtinctDepthItem then
+  begin
+    ExtinctDepthItem := TUzfExtinctDepthItem(Source);
+    ExtinctionDepth := ExtinctDepthItem.UzfExtinctDepth;
+  end
+  else if Source is TUzfExtinctDepthItem then
+  begin
+    WaterContentItem := TUzfWaterContentItem(Source);
+    ExtinctionDepth := WaterContentItem.UzfWaterContent;
   end;
+
   inherited;
 end;
 
@@ -1430,19 +1456,77 @@ end;
 
 procedure TUzfMf6Boundary.Assign(Source: TPersistent);
 var
-  UzfSource: TUzfMf6Boundary;
+  Uzf6Source: TUzfMf6Boundary;
+  UzfSource: TUzfBoundary;
+  LocalModel: TCustomModel;
 begin
   if Source is TUzfMf6Boundary then
   begin
-    UzfSource := TUzfMf6Boundary(Source);
-    SurfaceDepressionDepth := UzfSource.SurfaceDepressionDepth;
-    VerticalSaturatedK := UzfSource.VerticalSaturatedK;
-    ResidualWaterContent := UzfSource.ResidualWaterContent;
-    SaturatedWaterContent := UzfSource.SaturatedWaterContent;
-    InitialWaterContent := UzfSource.InitialWaterContent;
-    BrooksCoreyEpsilon := UzfSource.BrooksCoreyEpsilon;
+    Uzf6Source := TUzfMf6Boundary(Source);
+    SurfaceDepressionDepth := Uzf6Source.SurfaceDepressionDepth;
+    VerticalSaturatedK := Uzf6Source.VerticalSaturatedK;
+    ResidualWaterContent := Uzf6Source.ResidualWaterContent;
+    SaturatedWaterContent := Uzf6Source.SaturatedWaterContent;
+    InitialWaterContent := Uzf6Source.InitialWaterContent;
+    BrooksCoreyEpsilon := Uzf6Source.BrooksCoreyEpsilon;
+  end
+  else if Source is TUzfBoundary then
+  begin
+    UzfSource := TUzfBoundary(Source);
+    LocalModel := UzfSource.ParentModel as TCustomModel;
+    Assert(LocalModel <> nil);
+    SurfaceDepressionDepth := FortranFloatToStr(LocalModel.ModflowPackages.UzfPackage.DepthOfUndulations);
+    if LocalModel.DataArrayManager.GetDataSetByName(StrUzfVerticalK) <> nil then
+    begin
+      VerticalSaturatedK := StrUzfVerticalK;
+    end
+    else
+    begin
+      VerticalSaturatedK := rsKz;
+    end;
+    if LocalModel.DataArrayManager.GetDataSetByName(StrUzfReisidualWaterContent) <> nil then
+    begin
+      ResidualWaterContent := StrUzfReisidualWaterContent;
+    end
+    else
+    begin
+      ResidualWaterContent := '0.2';
+    end;
+    if LocalModel.DataArrayManager.GetDataSetByName(StrUzfSaturatedWaterContent) <> nil then
+    begin
+      SaturatedWaterContent := StrUzfSaturatedWaterContent;
+    end
+    else
+    begin
+      SaturatedWaterContent := '0.3';
+    end;
+    if LocalModel.DataArrayManager.GetDataSetByName(StrUzfInitialUnsaturatedWaterContent) <> nil then
+    begin
+      InitialWaterContent := StrUzfInitialUnsaturatedWaterContent;
+    end
+    else
+    begin
+      InitialWaterContent := '0.3';
+    end;
+    if LocalModel.DataArrayManager.GetDataSetByName(StrUzfBrooksCoreyEpsilon) <> nil then
+    begin
+      BrooksCoreyEpsilon := StrUzfBrooksCoreyEpsilon;
+    end
+    else
+    begin
+      BrooksCoreyEpsilon := '3.5';
+    end;
   end;
+
   inherited;
+  if Source is TUzfBoundary then
+  begin
+    UzfSource := TUzfBoundary(Source);
+    Values.Assign(UzfSource.EvapotranspirationDemand);
+    Values.Assign(UzfSource.ExtinctionDepth);
+    Values.Assign(UzfSource.WaterContent);
+  end;
+
 end;
 
 procedure TUzfMf6Boundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;
