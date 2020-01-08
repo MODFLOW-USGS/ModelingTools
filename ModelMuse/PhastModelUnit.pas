@@ -8904,9 +8904,11 @@ const
   //               Bug fix: fixed bug that prevented well screens in MAW wells
   //                from being edited correctly.
   //               Enhancement: Added additional error checking for MAW wells.
+  //    '4.1.0.19' Enhancement: ModelMuse can now convert the UZF package for
+  //                MODFLOW-2005 to the UZF package for MODFLOW 6.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.18';
+  IModelVersion = '4.1.0.19';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

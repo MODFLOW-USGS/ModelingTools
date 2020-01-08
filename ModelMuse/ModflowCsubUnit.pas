@@ -5,7 +5,7 @@ interface
 uses
   GoPhastTypes, System.Classes, ModflowCellUnit, System.ZLib,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, RbwParser,
-  RealListUnit, System.SysUtils, System.Contnrs;
+  RealListUnit, System.SysUtils, System.Contnrs, ModflowPackageSelectionUnit;
 
 type
   TCSubPackageData = class(TPhastCollectionItem)
@@ -19,6 +19,8 @@ type
     FStoredInitialOffset: TRealStorage;
     FInterbedSystemName: string;
     FStoredEquivInterbedNumber: TRealStorage;
+    FUsed: Boolean;
+    FInterbed: TInterbed;
     procedure SetStoredDelayKv(const Value: TRealStorage);
     procedure SetStoredEquivInterbedNumber(const Value: TRealStorage);
     procedure SetStoredInitialDelayHeadOffset(const Value: TRealStorage);
@@ -45,6 +47,8 @@ type
     procedure SetInitialInelasticSpecificStorage(const Value: Double);
     procedure SetInitialPorosity(const Value: Double);
     procedure SetThickness(const Value: Double);
+    procedure SetUsed(const Value: Boolean);
+    procedure SetInterbed(const Value: TInterbed);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -57,8 +61,10 @@ type
     property InitialPorosity: Double read GetInitialPorosity write SetInitialPorosity;
     property DelayKv: Double read GetDelayKv write SetDelayKv;
     property InitialDelayHeadOffset: Double read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
+    property Interbed: TInterbed read FInterbed write SetInterbed;
   published
     property InterbedSystemName: string read GetInterbedSystemName write SetInterbedSystemName;
+    property Used: Boolean read FUsed write SetUsed;
     {pcs0—is the initial offset from the calculated initial effective stress or initial preconsolidation
     stress in the interbed, in units of height of a column of water. PCS0 is the initial
     preconsolidation stress if SPECIFIED INITIAL INTERBED STATE or SPECIFIED
@@ -98,7 +104,12 @@ type
   end;
 
   TCSubPackageDataCollection = class(TPhastCollection)
+  private
+    function GetItem(Index: integer): TCSubPackageData;
+    procedure SetItem(Index: integer; const Value: TCSubPackageData);
+  public
     constructor Create(Model: TBaseModel);
+    property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
   end;
 
   TCSubRecord = record
@@ -383,7 +394,14 @@ end;
 
 function TCSubPackageData.GetInterbedSystemName: string;
 begin
-  Result := FInterbedSystemName
+  if FInterbed <> nil then
+  begin
+    result := FInterbed.Name;
+  end
+  else
+  begin
+    Result := FInterbedSystemName
+  end;
 end;
 
 function TCSubPackageData.GetThickness: Double;
@@ -460,6 +478,15 @@ begin
   FStoredInitialPorosity.Assign(Value);
 end;
 
+procedure TCSubPackageData.SetInterbed(const Value: TInterbed);
+begin
+  FInterbed := Value;
+  if FInterbed <> nil then
+  begin
+    FInterbedSystemName := FInterbed.Name;
+  end;
+end;
+
 procedure TCSubPackageData.SetInterbedSystemName(const Value: string);
 begin
   FInterbedSystemName := Value;
@@ -480,6 +507,11 @@ begin
   StoredThickness.Value := Value;
 end;
 
+procedure TCSubPackageData.SetUsed(const Value: Boolean);
+begin
+  SetBooleanProperty(FUsed, Value);
+end;
+
 { TCSubPackageDataCollection }
 
 constructor TCSubPackageDataCollection.Create(Model: TBaseModel);
@@ -495,6 +527,17 @@ begin
     OnInvalidateModelEvent := OnInvalidateModel;
   end;
   inherited Create(TCSubPackageData, OnInvalidateModelEvent);
+end;
+
+function TCSubPackageDataCollection.GetItem(Index: integer): TCSubPackageData;
+begin
+  result := inherited Items[Index] as TCSubPackageData;
+end;
+
+procedure TCSubPackageDataCollection.SetItem(Index: integer;
+  const Value: TCSubPackageData);
+begin
+  inherited Items[Index] := Value;
 end;
 
 { TCsubRecord }
@@ -1341,8 +1384,21 @@ begin
 end;
 
 function TCSubBoundary.Used: boolean;
+var
+  ItemIndex: Integer;
 begin
- result := inherited Used or (CSubPackageData.Count > 0);
+  result := inherited Used;
+  if not result and (CSubPackageData.Count > 0) then
+  begin
+    for ItemIndex := 0 to CSubPackageData.Count -1 do
+    begin
+	  result := CSubPackageData[ItemIndex].Used;
+	  if result then
+	  begin
+	    Exit;
+	  end;
+	end;
+  end;
 end;
 
 end.
