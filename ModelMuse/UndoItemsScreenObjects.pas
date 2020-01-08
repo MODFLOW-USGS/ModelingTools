@@ -7,7 +7,7 @@ interface
 
 uses SubscriptionUnit, PhastModelUnit, Types, SysUtils, Classes, Graphics,
   Contnrs, QuadTreeClass, UndoItems, AbstractGridUnit, ScreenObjectUnit,
-  FastGEO, GoPhastTypes, ValueArrayStorageUnit;
+  FastGEO, GoPhastTypes, ValueArrayStorageUnit, ModflowPackageSelectionUnit;
 
 type
   EIllegalMerge = class(Exception);
@@ -895,6 +895,21 @@ type
     procedure Redo; override;
   end;
 
+  TUndoConvertUzfToUzf6 = class(TCustomImportMultipleScreenObjects)
+  private
+    FUzf6Packge: TUzfMf6PackageSelection;
+    FScreenObjectList: TScreenObjectList;
+  protected
+    function Description: string; override;
+  public
+    constructor Create;
+    Destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
+    procedure Redo; override;
+  end;
+
+
 
 implementation
 
@@ -938,6 +953,8 @@ resourcestring
   'MODFLOW 6 horizontal flow barriers';
   StrConvertMODFLOW2005_HOB = 'convert MODFLOW-2005 observations to MOD' +
   'FLOW-6 observation locations';
+  StrConvertUZFToUZF6 = 'convert UZF to UZF6';
+  StrConvertMNW2WellsT = 'convert MNW2 wells to MAW wells';
 
 { TCustomUpdateScreenObjectDisplayUndo }
 
@@ -4938,7 +4955,7 @@ end;
 
 function TUndoConvertMnw2ToMaw.Description: string;
 begin
-  result := 'convert MNW2 wells to MAW wells';
+  result := StrConvertMNW2WellsT;
 end;
 
 procedure TUndoConvertMnw2ToMaw.DoCommand;
@@ -5039,6 +5056,79 @@ function TUndoSimplifyObjects.ShouldStoreData(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := AScreenObject.Selected;
+end;
+
+{ TUndoConvertUzfToUzf6 }
+
+constructor TUndoConvertUzfToUzf6.Create;
+var
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+begin
+  inherited;
+  FShouldUpdateShowHideObjects := True;
+  FUzf6Packge := TUzfMf6PackageSelection.Create(nil);
+  FUzf6Packge.Assign(frmGoPhast.PhastModel.ModflowPackages.UzfPackage);
+  FScreenObjectList := TScreenObjectList.Create;
+  for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
+    if AScreenObject.ModflowUzfBoundary <> nil then
+    begin
+      FScreenObjectList.Add(AScreenObject);
+    end;
+  end;
+end;
+
+function TUndoConvertUzfToUzf6.Description: string;
+begin
+  result := StrConvertUZFToUZF6;
+end;
+
+destructor TUndoConvertUzfToUzf6.Destroy;
+begin
+  FUzf6Packge.Free;
+  FScreenObjectList.Free;
+  inherited;
+end;
+
+procedure TUndoConvertUzfToUzf6.DoCommand;
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+begin
+  inherited;
+
+  frmGoPhast.PhastModel.ModflowPackages.UzfMf6Package.Assign(
+    frmGoPhast.PhastModel.ModflowPackages.UzfPackage);
+  for ObjectIndex := 0 to FScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := FScreenObjectList[ObjectIndex];
+    AScreenObject.CreateModflowUzfMf6Boundary;
+    AScreenObject.ModflowUzfMf6Boundary.Assign(AScreenObject.ModflowUzfBoundary);
+  end;
+  UpdateDisplay;
+end;
+
+procedure TUndoConvertUzfToUzf6.Redo;
+begin
+  inherited;
+  DoCommand;
+end;
+
+procedure TUndoConvertUzfToUzf6.Undo;
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+begin
+  frmGoPhast.PhastModel.ModflowPackages.UzfMf6Package := FUzf6Packge;
+  for ObjectIndex := 0 to FScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := FScreenObjectList[ObjectIndex];
+    AScreenObject.ModflowUzfMf6Boundary  := nil;
+  end;
+  inherited;
+  UpdateDisplay;
 end;
 
 end.

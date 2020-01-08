@@ -8701,7 +8701,6 @@ begin
     ETSmoothed := UZF.ETSmoothed;
     StoredSmoothFactor := UZF.StoredSmoothFactor;
     WriteRechargeAndDischarge := UZF.WriteRechargeAndDischarge;
-
   end;
   inherited;
 end;
@@ -19960,17 +19959,33 @@ end;
 
 procedure TUzfMf6PackageSelection.Assign(Source: TPersistent);
 var
-  UzfSource: TUzfMf6PackageSelection;
+  Uzf6Source: TUzfMf6PackageSelection;
+  UZF: TUzfPackageSelection;
 begin
   if Source is TUzfMf6PackageSelection then
   begin
-    UzfSource := TUzfMf6PackageSelection(Source);
-    GroundwaterET := UzfSource.GroundwaterET;
-    UnsatET := UzfSource.UnsatET;
-    SimulateGroundwaterSeepage := UzfSource.SimulateGroundwaterSeepage;
-    SaveBudgetFile := UzfSource.SaveBudgetFile;
-    NumberOfTrailingWaves := UzfSource.NumberOfTrailingWaves;
-    NumberOfWaveSets := UzfSource.NumberOfWaveSets;
+    Uzf6Source := TUzfMf6PackageSelection(Source);
+    GroundwaterET := Uzf6Source.GroundwaterET;
+    UnsatET := Uzf6Source.UnsatET;
+    SimulateGroundwaterSeepage := Uzf6Source.SimulateGroundwaterSeepage;
+    SaveBudgetFile := Uzf6Source.SaveBudgetFile;
+    NumberOfTrailingWaves := Uzf6Source.NumberOfTrailingWaves;
+    NumberOfWaveSets := Uzf6Source.NumberOfWaveSets;
+  end
+  else if Source is TUzfPackageSelection then
+  begin
+    UZF := TUzfPackageSelection(Source);
+    if UZF.SimulateET then
+    begin
+      GroundwaterET := ugecSimulateUnsatOnly;
+      UnsatET := uuecWaterContent
+    end
+    else
+    begin
+      GroundwaterET := ugecNoEt;
+    end;
+    NumberOfTrailingWaves := UZF.NumberOfTrailingWaves;
+    NumberOfWaveSets := UZF.NumberOfWaveSets;
   end;
   inherited;
 end;

@@ -223,6 +223,7 @@ begin
           edBrooksCoreyEpsilon.Text := UzfBoundary.BrooksCoreyEpsilon;
 
           seNumberOfTimes.asInteger := UzfBoundary.Values.Count;
+          seNumberOfTimes.OnChange(seNumberOfTimes);
           for ItemIndex := 0 to UzfBoundary.Values.Count - 1 do
           begin
             AnItem := UzfBoundary.Values[ItemIndex] as TUzfMf6Item;

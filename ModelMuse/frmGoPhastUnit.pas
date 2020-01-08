@@ -2273,6 +2273,8 @@ resourcestring
   StrMT3DMSInputFiles = 'MT3DMS Input Files';
   StrRunMT3DMS = 'Run MT3DMS';
   StrExportMT3DMSInput = 'Export MT3DMS Input Files';
+  StrDoYouWantToConveUZF = 'Do you want to convert the UZF package in MODFLO' +
+  'W-2005 to UZF package in MODFLOW 6?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -4929,6 +4931,13 @@ begin
         [mbYes, mbNo], 0) = mrYes) then
     begin
       UndoStack.Submit(TUndoConvertMnw2ToMaw.Create);
+    end;
+
+    if PhastModel.UzfIsSelected and not PhastModel.UzfMf6IsSelected
+      and (MessageDlg(StrDoYouWantToConveUZF, mtConfirmation,
+        [mbYes, mbNo], 0) = mrYes) then
+    begin
+      UndoStack.Submit(TUndoConvertUzfToUzf6.Create);
     end;
 
   end;

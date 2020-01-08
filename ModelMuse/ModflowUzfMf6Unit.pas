@@ -1522,9 +1522,18 @@ begin
   if Source is TUzfBoundary then
   begin
     UzfSource := TUzfBoundary(Source);
-    Values.Assign(UzfSource.EvapotranspirationDemand);
-    Values.Assign(UzfSource.ExtinctionDepth);
-    Values.Assign(UzfSource.WaterContent);
+    if UzfSource.EvapotranspirationDemand.Count > 0 then
+    begin
+      Values.Assign(UzfSource.EvapotranspirationDemand);
+    end;
+    if UzfSource.ExtinctionDepth.Count > 0 then
+    begin
+      Values.Assign(UzfSource.ExtinctionDepth);
+    end;
+    if UzfSource.WaterContent.Count > 0 then
+    begin
+      Values.Assign(UzfSource.WaterContent);
+    end;
   end;
 
 end;
