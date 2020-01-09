@@ -215,6 +215,11 @@ var
   Item: TSfrTableRowItem;
 begin
   ItemIndex := Index div 3;
+  if ItemIndex >= SfrTable.Count then
+  begin
+    result := '';
+    Exit;
+  end;
   Item := SfrTable.Items[ItemIndex];
   Index := Index mod 3;
 

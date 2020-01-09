@@ -5,7 +5,7 @@ interface
 uses
   GoPhastTypes, System.Classes, ModflowCellUnit, System.ZLib,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, RbwParser,
-  RealListUnit, System.SysUtils, System.Contnrs, ModflowPackageSelectionUnit;
+  RealListUnit, System.SysUtils, System.Contnrs;
 
 type
   TCSubPackageData = class(TPhastCollectionItem)
@@ -20,7 +20,7 @@ type
     FInterbedSystemName: string;
     FStoredEquivInterbedNumber: TRealStorage;
     FUsed: Boolean;
-    FInterbed: TInterbed;
+    FInterbed: TObject;
     procedure SetStoredDelayKv(const Value: TRealStorage);
     procedure SetStoredEquivInterbedNumber(const Value: TRealStorage);
     procedure SetStoredInitialDelayHeadOffset(const Value: TRealStorage);
@@ -48,7 +48,7 @@ type
     procedure SetInitialPorosity(const Value: Double);
     procedure SetThickness(const Value: Double);
     procedure SetUsed(const Value: Boolean);
-    procedure SetInterbed(const Value: TInterbed);
+    procedure SetInterbed(const Value: TObject);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -61,7 +61,7 @@ type
     property InitialPorosity: Double read GetInitialPorosity write SetInitialPorosity;
     property DelayKv: Double read GetDelayKv write SetDelayKv;
     property InitialDelayHeadOffset: Double read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
-    property Interbed: TInterbed read FInterbed write SetInterbed;
+    property Interbed: TObject read FInterbed write SetInterbed;
   published
     property InterbedSystemName: string read GetInterbedSystemName write SetInterbedSystemName;
     property Used: Boolean read FUsed write SetUsed;
@@ -284,7 +284,7 @@ implementation
 
 uses
   SubscriptionUnit, frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
-  frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit;
+  frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit, ModflowPackageSelectionUnit;
 
 resourcestring
   StrStressOffsetMultip = 'Stress offset multiplier';
@@ -396,7 +396,7 @@ function TCSubPackageData.GetInterbedSystemName: string;
 begin
   if FInterbed <> nil then
   begin
-    result := FInterbed.Name;
+    result := (FInterbed as TInterbed).Name;
   end
   else
   begin
@@ -478,12 +478,12 @@ begin
   FStoredInitialPorosity.Assign(Value);
 end;
 
-procedure TCSubPackageData.SetInterbed(const Value: TInterbed);
+procedure TCSubPackageData.SetInterbed(const Value: TObject);
 begin
   FInterbed := Value;
   if FInterbed <> nil then
   begin
-    FInterbedSystemName := FInterbed.Name;
+    FInterbedSystemName := (FInterbed as TInterbed).Name;
   end;
 end;
 

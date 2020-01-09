@@ -20924,7 +20924,15 @@ begin
     FunctionString := '0';
   end;
 
-  Compiler := rparserThreeDFormulaElements;
+  if (Sender = frameMAW.edWellRadius) or (Sender = frameMAW.edBottom)
+    or (Sender = frameMAW.edStartingHead) then
+  begin
+    Compiler := rparserTopFormulaElements;
+  end
+  else
+  begin
+    Compiler := rparserThreeDFormulaElements;
+  end;
 
   VariableList := TList.Create;
   try

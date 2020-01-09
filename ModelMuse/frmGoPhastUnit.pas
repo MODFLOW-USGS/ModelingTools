@@ -2258,7 +2258,9 @@ resourcestring
   StrDoYouWantToConveObs = 'Do you want to convert the observations in MODFLOW-' +
   '2005 to observation locations in MODFLOW 6?';
   StrDoYouWantToConveMnw2 = 'Do you want to convert the Multinode Wells vers' +
-  'ion 2 in MODFLOW-2005 to multi-aquifer wells in MODFLOW 6?';
+  'ion 2 in MODFLOW-2005 to multi-aquifer wells in MODFLOW 6? You may need ' +
+  'to edit the MAW wells after conversion to make sure any formulas used ' +
+  'well radius, bottom, and starting head for the MAW wells work.';
   StrYouMustCreateTheDisv = 'You must create the DISV grid before attempting' +
   ' to import gridded data.';
   StrNoObjectsAreSelec = 'No objects are selected.';

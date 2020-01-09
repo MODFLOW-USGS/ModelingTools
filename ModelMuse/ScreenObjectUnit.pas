@@ -9711,7 +9711,7 @@ procedure TScreenObject.SetPointPositionValues(
 begin
   if (Value = nil) or (Value.Count= 0) then
   begin
-    if FPointPositionValues <> nil then
+    if (FPointPositionValues <> nil) and (FPointPositionValues.Count > 0) then
     begin
       Invalidate;
     end;
