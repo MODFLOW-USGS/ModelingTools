@@ -4045,7 +4045,8 @@ view. }
     property Modflow6Obs: TModflow6Obs read GetModflow6Obs write SetModflow6Obs
       stored StoreModflow6Obs;
 
-    property ModflowCSub: TCSubBoundary read GetModflowCSub Write SetModflowCSub stored StoreModflowCSub;
+    property ModflowCSub: TCSubBoundary read GetModflowCSub Write SetModflowCSub
+      stored StoreModflowCSub;
 
 //    property Mt3dUzfSeepageConcBoundary: TMt3dUzSsmSinkConcBoundary
 //      read GetMt3dUzSsmSinkConcBoundary write SetMt3dUzSsmSinkConcBoundary

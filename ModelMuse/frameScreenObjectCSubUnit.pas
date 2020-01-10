@@ -33,7 +33,8 @@ var
 implementation
 
 uses
-  ModflowPackageSelectionUnit, frmGoPhastUnit, ScreenObjectUnit;
+  ModflowPackageSelectionUnit, frmGoPhastUnit, ScreenObjectUnit,
+  ModflowCsubUnit;
 
 resourcestring
   StrInterbed = 'Interbed';
@@ -55,9 +56,45 @@ procedure TframeScreenObjectCSub.GetData(
   const List: TScreenObjectEditCollection);
 var
   ScreenObject: TScreenObject;
+  ScreenObjectIndex: Integer;
+  ModflowCSub: TCSubBoundary;
+  FoundFirst: Boolean;
+  InterbedIndex: Integer;
+  Interbed: TCSubPackageData;
+  RowIndex: Integer;
 begin
   InitializeControls;
-  ScreenObject := List[0].ScreenObject;
+  FoundFirst := False;
+  for ScreenObjectIndex := 0 to List.Count - 1 do
+  begin
+    ScreenObject := List[ScreenObjectIndex].ScreenObject;
+    ModflowCSub := ScreenObject.ModflowCSub;
+    if (ModflowCSub <> nil) and ModflowCSub.Used then
+    begin
+      if not FoundFirst then
+      begin
+        FoundFirst := True;
+        for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
+        begin
+          Interbed := ModflowCSub.CSubPackageData[InterbedIndex];
+          RowIndex := rdgSubGroups.Cols[Ord(icName)].IndexOf(Interbed.InterbedSystemName);
+          if RowIndex >= 1 then
+          begin
+            rdgSubGroups.Checked[Ord(icUsed)] := Interbed.Used;
+            rdgSubGroups.Cells[Ord(icInitialOffset)] := Interbed.Used;
+            
+//  TInterbedColumns = (icName, icUsed, icInitialOffset, icThickness,
+//    icEquivInterbedNumber, icInitialInelasticSpecificStorage,
+//    icInitialElasticSpecificStorage, icInitialPorosity, icDelayKv,
+//    icInitialDelayHeadOffset);
+          end;
+        end;
+      end
+      else
+      begin
+      end;
+    end;
+  end;
 
 end;
 

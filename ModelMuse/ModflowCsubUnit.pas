@@ -10,57 +10,33 @@ uses
 type
   TCSubPackageData = class(TPhastCollectionItem)
   private
-    FStoredInitialElasticSpecificStorage: TRealStorage;
-    FStoredInitialInelasticSpecificStorage: TRealStorage;
-    FStoredThickness: TRealStorage;
-    FStoredInitialDelayHeadOffset: TRealStorage;
-    FStoredInitialPorosity: TRealStorage;
-    FStoredDelayKv: TRealStorage;
-    FStoredInitialOffset: TRealStorage;
     FInterbedSystemName: string;
-    FStoredEquivInterbedNumber: TRealStorage;
     FUsed: Boolean;
     FInterbed: TObject;
-    procedure SetStoredDelayKv(const Value: TRealStorage);
-    procedure SetStoredEquivInterbedNumber(const Value: TRealStorage);
-    procedure SetStoredInitialDelayHeadOffset(const Value: TRealStorage);
-    procedure SetStoredInitialElasticSpecificStorage(const Value: TRealStorage);
-    procedure SetStoredInitialInelasticSpecificStorage(const Value: TRealStorage);
-    procedure SetStoredInitialPorosity(const Value: TRealStorage);
-    procedure SetInterbedSystemName(const Value: string);
-    procedure SetStoredInitialOffset(const Value: TRealStorage);
-    procedure SetStoredThickness(const Value: TRealStorage);
     function GetInterbedSystemName: string;
-    function GetInitialOffset: Double;
-    procedure SetInitialOffset(const Value: Double);
-    function GetDelayKv: Double;
-    function GetEquivInterbedNumber: Double;
-    function GetInitialDelayHeadOffset: Double;
-    function GetInitialElasticSpecificStorage: Double;
-    function GetInitialInelasticSpecificStorage: Double;
-    function GetInitialPorosity: Double;
-    function GetThickness: Double;
-    procedure SetDelayKv(const Value: Double);
-    procedure SetEquivInterbedNumber(const Value: Double);
-    procedure SetInitialDelayHeadOffset(const Value: Double);
-    procedure SetInitialElasticSpecificStorage(const Value: Double);
-    procedure SetInitialInelasticSpecificStorage(const Value: Double);
-    procedure SetInitialPorosity(const Value: Double);
-    procedure SetThickness(const Value: Double);
     procedure SetUsed(const Value: Boolean);
     procedure SetInterbed(const Value: TObject);
+    function GetDelayKv: string;
+    function GetEquivInterbedNumber: string;
+    function GetInitialDelayHeadOffset: string;
+    function GetInitialElasticSpecificStorage: string;
+    function GetInitialInelasticSpecificStorage: string;
+    function GetInitialOffset: string;
+    function GetInitialPorosity: string;
+    function GetThickness: string;
+    procedure SetDelayKv(const Value: string);
+    procedure SetEquivInterbedNumber(const Value: string);
+    procedure SetInitialDelayHeadOffset(const Value: string);
+    procedure SetInitialElasticSpecificStorage(const Value: string);
+    procedure SetInitialInelasticSpecificStorage(const Value: string);
+    procedure SetInitialOffset(const Value: string);
+    procedure SetInitialPorosity(const Value: string);
+    procedure SetInterbedSystemName(const Value: string);
+    procedure SetThickness(const Value: string);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    property InitialOffset: Double read GetInitialOffset write SetInitialOffset;
-    property Thickness: Double read GetThickness write SetThickness;
-    property EquivInterbedNumber: Double read GetEquivInterbedNumber write SetEquivInterbedNumber;
-    property InitialInelasticSpecificStorage: Double read GetInitialInelasticSpecificStorage write SetInitialInelasticSpecificStorage;
-    property InitialElasticSpecificStorage: Double read GetInitialElasticSpecificStorage write SetInitialElasticSpecificStorage;
-    property InitialPorosity: Double read GetInitialPorosity write SetInitialPorosity;
-    property DelayKv: Double read GetDelayKv write SetDelayKv;
-    property InitialDelayHeadOffset: Double read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
     property Interbed: TObject read FInterbed write SetInterbed;
   published
     property InterbedSystemName: string read GetInterbedSystemName write SetInterbedSystemName;
@@ -73,34 +49,34 @@ type
     initial head or initial preconsolidation head in the CSUB interbed and the initial preconsolidation
     stress is calculated from the calculated initial effective stress or calculated initial geostatic stress,
     respectively.}
-    property StoredInitialOffset: TRealStorage read FStoredInitialOffset write SetStoredInitialOffset;
+    property InitialOffset: string read GetInitialOffset write SetInitialOffset;
     {thick frac—is the interbed thickness or cell fraction of the interbed. Interbed thickness is specified as
     a fraction of the cell thickness if CELL FRACTION is specified in the OPTIONS block.}
-    property StoredThickness: TRealStorage read FStoredThickness write SetStoredThickness;
+    property Thickness: string read GetThickness write SetThickness;
     {rnb—is the interbed material factor equivalent number of interbeds in the interbed system represented
     by the interbed. RNB must be greater than or equal to 1 if CDELAY is DELAY. Otherwise, RNB
     can be any value.}
-    property StoredEquivInterbedNumber: TRealStorage read FStoredEquivInterbedNumber write SetStoredEquivInterbedNumber;
+    property EquivInterbedNumber: string read GetEquivInterbedNumber write SetEquivInterbedNumber;
     {ssv cc—is the initial inelastic specific storage or compression index of the interbed. The compression
     index is specified if COMPRESSION INDICES is specified in the OPTIONS block. Specified
     or calculated interbed inelastic specific storage values are not adjusted from initial values if
     HEAD BASED is specified in the OPTIONS block.}
-    property StoredInitialInelasticSpecificStorage: TRealStorage read FStoredInitialInelasticSpecificStorage write SetStoredInitialInelasticSpecificStorage;
+    property InitialInelasticSpecificStorage: string read GetInitialInelasticSpecificStorage write SetInitialInelasticSpecificStorage;
     //sse cr—is the initial elastic coarse-grained material specific storage or recompression index of the
     //interbed. The recompression index is specified if COMPRESSION INDICES is specified in the
     //OPTIONS block. Specified or calculated interbed elastic specific storage values are not adjusted
     //from initial values if HEAD BASED is specified in the OPTIONS block.
-    property StoredInitialElasticSpecificStorage: TRealStorage read FStoredInitialElasticSpecificStorage write SetStoredInitialElasticSpecificStorage;
+    property InitialElasticSpecificStorage: string read GetInitialElasticSpecificStorage write SetInitialElasticSpecificStorage;
     //theta—is the initial porosity of the interbed.
-    property StoredInitialPorosity: TRealStorage read FStoredInitialPorosity write SetStoredInitialPorosity;
+    property InitialPorosity: string read GetInitialPorosity write SetInitialPorosity;
     //kv—is the vertical hydraulic conductivity of the delay interbed. KV must be greater than 0 if CDELAY
     //is DELAY. Otherwise, KV can be any value.
-    property StoredDelayKv: TRealStorage read FStoredDelayKv write SetStoredDelayKv;
+    property DelayKv: string read GetDelayKv write SetDelayKv;
     //h0—is the initial offset from the head in cell cellid or the initial head in the delay interbed. H0
     //is the initial head in the delay bed if SPECIFIED INITIAL INTERBED STATE or SPECIFIED
     //INITIAL DELAY HEAD are specified in the OPTIONS block. H0 can be any value if CDELAY
     //is NODELAY.
-    property StoredInitialDelayHeadOffset: TRealStorage read FStoredInitialDelayHeadOffset write SetStoredInitialDelayHeadOffset;
+    property InitialDelayHeadOffset: string read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
   end;
 
   TCSubPackageDataCollection = class(TPhastCollection)
@@ -318,78 +294,113 @@ end;
 constructor TCSubPackageData.Create(Collection: TCollection);
 begin
   inherited;
-  FStoredInitialElasticSpecificStorage := TRealStorage.Create;
-  FStoredInitialElasticSpecificStorage.OnChange := OnInvalidateModel;
-
-  FStoredInitialInelasticSpecificStorage := TRealStorage.Create;
-  FStoredInitialInelasticSpecificStorage.OnChange := OnInvalidateModel;
-
-  FStoredThickness := TRealStorage.Create;
-  FStoredThickness.OnChange := OnInvalidateModel;
-
-  FStoredInitialDelayHeadOffset := TRealStorage.Create;
-  FStoredInitialDelayHeadOffset.OnChange := OnInvalidateModel;
-
-  FStoredInitialPorosity := TRealStorage.Create;
-  FStoredInitialPorosity.OnChange := OnInvalidateModel;
-
-  FStoredDelayKv := TRealStorage.Create;
-  FStoredDelayKv.OnChange := OnInvalidateModel;
-
-  FStoredInitialOffset := TRealStorage.Create;
-  FStoredInitialOffset.OnChange := OnInvalidateModel;
-
-  FStoredEquivInterbedNumber := TRealStorage.Create;
-  FStoredEquivInterbedNumber.OnChange := OnInvalidateModel;
+//  FStoredInitialElasticSpecificStorage := TRealStorage.Create;
+//  FStoredInitialElasticSpecificStorage.OnChange := OnInvalidateModel;
+//
+//  FStoredInitialInelasticSpecificStorage := TRealStorage.Create;
+//  FStoredInitialInelasticSpecificStorage.OnChange := OnInvalidateModel;
+//
+//  FStoredThickness := TRealStorage.Create;
+//  FStoredThickness.OnChange := OnInvalidateModel;
+//
+//  FStoredInitialDelayHeadOffset := TRealStorage.Create;
+//  FStoredInitialDelayHeadOffset.OnChange := OnInvalidateModel;
+//
+//  FStoredInitialPorosity := TRealStorage.Create;
+//  FStoredInitialPorosity.OnChange := OnInvalidateModel;
+//
+//  FStoredDelayKv := TRealStorage.Create;
+//  FStoredDelayKv.OnChange := OnInvalidateModel;
+//
+//  FStoredInitialOffset := TRealStorage.Create;
+//  FStoredInitialOffset.OnChange := OnInvalidateModel;
+//
+//  FStoredEquivInterbedNumber := TRealStorage.Create;
+//  FStoredEquivInterbedNumber.OnChange := OnInvalidateModel;
 end;
 
 destructor TCSubPackageData.Destroy;
 begin
-  FStoredEquivInterbedNumber.Free;
-  FStoredInitialOffset.Free;
-  FStoredDelayKv.Free;
-  FStoredInitialPorosity.Free;
-  FStoredInitialDelayHeadOffset.Free;
-  FStoredThickness.Free;
-  FStoredInitialInelasticSpecificStorage.Free;
-  FStoredInitialElasticSpecificStorage.Free;
+//  FStoredEquivInterbedNumber.Free;
+//  FStoredInitialOffset.Free;
+//  FStoredDelayKv.Free;
+//  FStoredInitialPorosity.Free;
+//  FStoredInitialDelayHeadOffset.Free;
+//  FStoredThickness.Free;
+//  FStoredInitialInelasticSpecificStorage.Free;
+//  FStoredInitialElasticSpecificStorage.Free;
 
   inherited;
 end;
 
-function TCSubPackageData.GetDelayKv: Double;
+//function TCSubPackageData.GetDelayKv: Double;
+//begin
+//  Result := StoredDelayKv.Value;
+//end;
+//
+//function TCSubPackageData.GetEquivInterbedNumber: Double;
+//begin
+//  Result := StoredEquivInterbedNumber.Value;
+//end;
+//
+//function TCSubPackageData.GetInitialDelayHeadOffset: Double;
+//begin
+//  Result := StoredInitialDelayHeadOffset.Value;
+//end;
+//
+//function TCSubPackageData.GetInitialElasticSpecificStorage: Double;
+//begin
+//  Result := StoredInitialElasticSpecificStorage.Value;
+//end;
+//
+//function TCSubPackageData.GetInitialInelasticSpecificStorage: Double;
+//begin
+//  Result := StoredInitialInelasticSpecificStorage.Value;
+//end;
+//
+//function TCSubPackageData.GetInitialOffset: Double;
+//begin
+//  result := StoredInitialOffset.Value;
+//end;
+//
+//function TCSubPackageData.GetInitialPorosity: Double;
+//begin
+//  Result := StoredInitialPorosity.Value;
+//end;
+
+function TCSubPackageData.GetDelayKv: string;
 begin
-  Result := StoredDelayKv.Value;
+
 end;
 
-function TCSubPackageData.GetEquivInterbedNumber: Double;
+function TCSubPackageData.GetEquivInterbedNumber: string;
 begin
-  Result := StoredEquivInterbedNumber.Value;
+
 end;
 
-function TCSubPackageData.GetInitialDelayHeadOffset: Double;
+function TCSubPackageData.GetInitialDelayHeadOffset: string;
 begin
-  Result := StoredInitialDelayHeadOffset.Value;
+
 end;
 
-function TCSubPackageData.GetInitialElasticSpecificStorage: Double;
+function TCSubPackageData.GetInitialElasticSpecificStorage: string;
 begin
-  Result := StoredInitialElasticSpecificStorage.Value;
+
 end;
 
-function TCSubPackageData.GetInitialInelasticSpecificStorage: Double;
+function TCSubPackageData.GetInitialInelasticSpecificStorage: string;
 begin
-  Result := StoredInitialInelasticSpecificStorage.Value;
+
 end;
 
-function TCSubPackageData.GetInitialOffset: Double;
+function TCSubPackageData.GetInitialOffset: string;
 begin
-  result := StoredInitialOffset.Value;
+
 end;
 
-function TCSubPackageData.GetInitialPorosity: Double;
+function TCSubPackageData.GetInitialPorosity: string;
 begin
-  Result := StoredInitialPorosity.Value;
+
 end;
 
 function TCSubPackageData.GetInterbedSystemName: string;
@@ -404,78 +415,120 @@ begin
   end;
 end;
 
-function TCSubPackageData.GetThickness: Double;
+function TCSubPackageData.GetThickness: string;
 begin
-  Result := StoredThickness.Value;
+
 end;
 
-procedure TCSubPackageData.SetStoredDelayKv(const Value: TRealStorage);
+//function TCSubPackageData.GetThickness: Double;
+//begin
+//  Result := StoredThickness.Value;
+//end;
+//
+//procedure TCSubPackageData.SetStoredDelayKv(const Value: TRealStorage);
+//begin
+//  FStoredDelayKv.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetStoredEquivInterbedNumber(const Value: TRealStorage);
+//begin
+//  FStoredEquivInterbedNumber.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetStoredInitialDelayHeadOffset(const Value: TRealStorage);
+//begin
+//  FStoredInitialDelayHeadOffset.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetStoredInitialElasticSpecificStorage(
+//  const Value: TRealStorage);
+//begin
+//  FStoredInitialElasticSpecificStorage.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetStoredInitialInelasticSpecificStorage(
+//  const Value: TRealStorage);
+//begin
+//  FStoredInitialInelasticSpecificStorage.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetDelayKv(const Value: Double);
+//begin
+//  StoredDelayKv.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetEquivInterbedNumber(const Value: Double);
+//begin
+//  StoredEquivInterbedNumber.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetInitialDelayHeadOffset(const Value: Double);
+//begin
+//  StoredInitialDelayHeadOffset.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetInitialElasticSpecificStorage(
+//  const Value: Double);
+//begin
+//  StoredInitialElasticSpecificStorage.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetInitialInelasticSpecificStorage(
+//  const Value: Double);
+//begin
+//  StoredInitialInelasticSpecificStorage.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetInitialOffset(const Value: Double);
+//begin
+//  StoredInitialOffset.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetInitialPorosity(const Value: Double);
+//begin
+//  StoredInitialPorosity.Value := Value;
+//end;
+//
+//procedure TCSubPackageData.SetStoredInitialPorosity(const Value: TRealStorage);
+//begin
+//  FStoredInitialPorosity.Assign(Value);
+//end;
+
+procedure TCSubPackageData.SetDelayKv(const Value: string);
 begin
-  FStoredDelayKv.Assign(Value);
+
 end;
 
-procedure TCSubPackageData.SetStoredEquivInterbedNumber(const Value: TRealStorage);
+procedure TCSubPackageData.SetEquivInterbedNumber(const Value: string);
 begin
-  FStoredEquivInterbedNumber.Assign(Value);
+
 end;
 
-procedure TCSubPackageData.SetStoredInitialDelayHeadOffset(const Value: TRealStorage);
+procedure TCSubPackageData.SetInitialDelayHeadOffset(const Value: string);
 begin
-  FStoredInitialDelayHeadOffset.Assign(Value);
-end;
 
-procedure TCSubPackageData.SetStoredInitialElasticSpecificStorage(
-  const Value: TRealStorage);
-begin
-  FStoredInitialElasticSpecificStorage.Assign(Value);
-end;
-
-procedure TCSubPackageData.SetStoredInitialInelasticSpecificStorage(
-  const Value: TRealStorage);
-begin
-  FStoredInitialInelasticSpecificStorage.Assign(Value);
-end;
-
-procedure TCSubPackageData.SetDelayKv(const Value: Double);
-begin
-  StoredDelayKv.Value := Value;
-end;
-
-procedure TCSubPackageData.SetEquivInterbedNumber(const Value: Double);
-begin
-  StoredEquivInterbedNumber.Value := Value;
-end;
-
-procedure TCSubPackageData.SetInitialDelayHeadOffset(const Value: Double);
-begin
-  StoredInitialDelayHeadOffset.Value := Value;
 end;
 
 procedure TCSubPackageData.SetInitialElasticSpecificStorage(
-  const Value: Double);
+  const Value: string);
 begin
-  StoredInitialElasticSpecificStorage.Value := Value;
+
 end;
 
 procedure TCSubPackageData.SetInitialInelasticSpecificStorage(
-  const Value: Double);
+  const Value: string);
 begin
-  StoredInitialInelasticSpecificStorage.Value := Value;
+
 end;
 
-procedure TCSubPackageData.SetInitialOffset(const Value: Double);
+procedure TCSubPackageData.SetInitialOffset(const Value: string);
 begin
-  StoredInitialOffset.Value := Value;
+
 end;
 
-procedure TCSubPackageData.SetInitialPorosity(const Value: Double);
+procedure TCSubPackageData.SetInitialPorosity(const Value: string);
 begin
-  StoredInitialPorosity.Value := Value;
-end;
 
-procedure TCSubPackageData.SetStoredInitialPorosity(const Value: TRealStorage);
-begin
-  FStoredInitialPorosity.Assign(Value);
 end;
 
 procedure TCSubPackageData.SetInterbed(const Value: TObject);
@@ -492,20 +545,25 @@ begin
   FInterbedSystemName := Value;
 end;
 
-procedure TCSubPackageData.SetStoredInitialOffset(const Value: TRealStorage);
+procedure TCSubPackageData.SetThickness(const Value: string);
 begin
-  FStoredInitialOffset.Assign(Value);
+
 end;
 
-procedure TCSubPackageData.SetStoredThickness(const Value: TRealStorage);
-begin
-  FStoredThickness.Assign(Value);
-end;
-
-procedure TCSubPackageData.SetThickness(const Value: Double);
-begin
-  StoredThickness.Value := Value;
-end;
+//procedure TCSubPackageData.SetStoredInitialOffset(const Value: TRealStorage);
+//begin
+//  FStoredInitialOffset.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetStoredThickness(const Value: TRealStorage);
+//begin
+//  FStoredThickness.Assign(Value);
+//end;
+//
+//procedure TCSubPackageData.SetThickness(const Value: Double);
+//begin
+//  StoredThickness.Value := Value;
+//end;
 
 procedure TCSubPackageData.SetUsed(const Value: Boolean);
 begin
