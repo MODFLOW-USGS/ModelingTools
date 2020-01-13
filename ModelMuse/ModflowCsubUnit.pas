@@ -13,6 +13,14 @@ type
     FInterbedSystemName: string;
     FUsed: Boolean;
     FInterbed: TObject;
+    FDelayKv: TFormulaObject;
+    FEquivInterbedNumber: TFormulaObject;
+    FInitialDelayHeadOffset: TFormulaObject;
+    FInitialElasticSpecificStorage: TFormulaObject;
+    FInitialInelasticSpecificStorage: TFormulaObject;
+    FInitialOffset: TFormulaObject;
+    FInitialPorosity: TFormulaObject;
+    FThickness: TFormulaObject;
     function GetInterbedSystemName: string;
     procedure SetUsed(const Value: Boolean);
     procedure SetInterbed(const Value: TObject);
@@ -38,6 +46,7 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property Interbed: TObject read FInterbed write SetInterbed;
+    function IsSame(CSub: TCSubPackageData): Boolean;
   published
     property InterbedSystemName: string read GetInterbedSystemName write SetInterbedSystemName;
     property Used: Boolean read FUsed write SetUsed;
@@ -86,6 +95,7 @@ type
   public
     constructor Create(Model: TBaseModel);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
+    function IsSame(CSub: TCSubPackageDataCollection): Boolean;
   end;
 
   TCSubRecord = record
@@ -294,113 +304,54 @@ end;
 constructor TCSubPackageData.Create(Collection: TCollection);
 begin
   inherited;
-//  FStoredInitialElasticSpecificStorage := TRealStorage.Create;
-//  FStoredInitialElasticSpecificStorage.OnChange := OnInvalidateModel;
-//
-//  FStoredInitialInelasticSpecificStorage := TRealStorage.Create;
-//  FStoredInitialInelasticSpecificStorage.OnChange := OnInvalidateModel;
-//
-//  FStoredThickness := TRealStorage.Create;
-//  FStoredThickness.OnChange := OnInvalidateModel;
-//
-//  FStoredInitialDelayHeadOffset := TRealStorage.Create;
-//  FStoredInitialDelayHeadOffset.OnChange := OnInvalidateModel;
-//
-//  FStoredInitialPorosity := TRealStorage.Create;
-//  FStoredInitialPorosity.OnChange := OnInvalidateModel;
-//
-//  FStoredDelayKv := TRealStorage.Create;
-//  FStoredDelayKv.OnChange := OnInvalidateModel;
-//
-//  FStoredInitialOffset := TRealStorage.Create;
-//  FStoredInitialOffset.OnChange := OnInvalidateModel;
-//
-//  FStoredEquivInterbedNumber := TRealStorage.Create;
-//  FStoredEquivInterbedNumber.OnChange := OnInvalidateModel;
 end;
 
 destructor TCSubPackageData.Destroy;
 begin
-//  FStoredEquivInterbedNumber.Free;
-//  FStoredInitialOffset.Free;
-//  FStoredDelayKv.Free;
-//  FStoredInitialPorosity.Free;
-//  FStoredInitialDelayHeadOffset.Free;
-//  FStoredThickness.Free;
-//  FStoredInitialInelasticSpecificStorage.Free;
-//  FStoredInitialElasticSpecificStorage.Free;
-
+  InitialOffset := '0';
+  Thickness := '0';
+  EquivInterbedNumber := '0';
+  InitialInelasticSpecificStorage := '0';
+  InitialElasticSpecificStorage := '0';
+  InitialPorosity := '0';
+  DelayKv := '0';
+  InitialDelayHeadOffset := '0';
   inherited;
 end;
 
-//function TCSubPackageData.GetDelayKv: Double;
-//begin
-//  Result := StoredDelayKv.Value;
-//end;
-//
-//function TCSubPackageData.GetEquivInterbedNumber: Double;
-//begin
-//  Result := StoredEquivInterbedNumber.Value;
-//end;
-//
-//function TCSubPackageData.GetInitialDelayHeadOffset: Double;
-//begin
-//  Result := StoredInitialDelayHeadOffset.Value;
-//end;
-//
-//function TCSubPackageData.GetInitialElasticSpecificStorage: Double;
-//begin
-//  Result := StoredInitialElasticSpecificStorage.Value;
-//end;
-//
-//function TCSubPackageData.GetInitialInelasticSpecificStorage: Double;
-//begin
-//  Result := StoredInitialInelasticSpecificStorage.Value;
-//end;
-//
-//function TCSubPackageData.GetInitialOffset: Double;
-//begin
-//  result := StoredInitialOffset.Value;
-//end;
-//
-//function TCSubPackageData.GetInitialPorosity: Double;
-//begin
-//  Result := StoredInitialPorosity.Value;
-//end;
-
 function TCSubPackageData.GetDelayKv: string;
 begin
-
+  result := FDelayKv.Formula;
 end;
 
 function TCSubPackageData.GetEquivInterbedNumber: string;
 begin
-
+  result := FEquivInterbedNumber.Formula;
 end;
 
 function TCSubPackageData.GetInitialDelayHeadOffset: string;
 begin
-
+  result := FInitialDelayHeadOffset.Formula;
 end;
 
 function TCSubPackageData.GetInitialElasticSpecificStorage: string;
 begin
-
+  result := FInitialElasticSpecificStorage.Formula;
 end;
 
 function TCSubPackageData.GetInitialInelasticSpecificStorage: string;
 begin
-
+  result := FInitialInelasticSpecificStorage.Formula;
 end;
 
 function TCSubPackageData.GetInitialOffset: string;
 begin
-
+  result := FInitialOffset.Formula;
 end;
 
 function TCSubPackageData.GetInitialPorosity: string;
 begin
-
+  result := FInitialPorosity.Formula;
 end;
 
 function TCSubPackageData.GetInterbedSystemName: string;
@@ -417,118 +368,100 @@ end;
 
 function TCSubPackageData.GetThickness: string;
 begin
-
+  result := FThickness.Formula;
 end;
 
-//function TCSubPackageData.GetThickness: Double;
-//begin
-//  Result := StoredThickness.Value;
-//end;
-//
-//procedure TCSubPackageData.SetStoredDelayKv(const Value: TRealStorage);
-//begin
-//  FStoredDelayKv.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetStoredEquivInterbedNumber(const Value: TRealStorage);
-//begin
-//  FStoredEquivInterbedNumber.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetStoredInitialDelayHeadOffset(const Value: TRealStorage);
-//begin
-//  FStoredInitialDelayHeadOffset.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetStoredInitialElasticSpecificStorage(
-//  const Value: TRealStorage);
-//begin
-//  FStoredInitialElasticSpecificStorage.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetStoredInitialInelasticSpecificStorage(
-//  const Value: TRealStorage);
-//begin
-//  FStoredInitialInelasticSpecificStorage.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetDelayKv(const Value: Double);
-//begin
-//  StoredDelayKv.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetEquivInterbedNumber(const Value: Double);
-//begin
-//  StoredEquivInterbedNumber.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetInitialDelayHeadOffset(const Value: Double);
-//begin
-//  StoredInitialDelayHeadOffset.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetInitialElasticSpecificStorage(
-//  const Value: Double);
-//begin
-//  StoredInitialElasticSpecificStorage.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetInitialInelasticSpecificStorage(
-//  const Value: Double);
-//begin
-//  StoredInitialInelasticSpecificStorage.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetInitialOffset(const Value: Double);
-//begin
-//  StoredInitialOffset.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetInitialPorosity(const Value: Double);
-//begin
-//  StoredInitialPorosity.Value := Value;
-//end;
-//
-//procedure TCSubPackageData.SetStoredInitialPorosity(const Value: TRealStorage);
-//begin
-//  FStoredInitialPorosity.Assign(Value);
-//end;
+function TCSubPackageData.IsSame(CSub: TCSubPackageData): Boolean;
+begin
+  result := (InterbedSystemName = CSub.InterbedSystemName)
+    and (Used = CSub.Used)
+    and (InitialOffset = CSub.InitialOffset)
+    and (Thickness = CSub.Thickness)
+    and (EquivInterbedNumber = CSub.EquivInterbedNumber)
+    and (InitialInelasticSpecificStorage = CSub.InitialInelasticSpecificStorage)
+    and (InitialElasticSpecificStorage = CSub.InitialElasticSpecificStorage)
+    and (InitialPorosity = CSub.InitialPorosity)
+    and (DelayKv = CSub.DelayKv)
+    and (InitialDelayHeadOffset = CSub.InitialDelayHeadOffset)
+end;
 
 procedure TCSubPackageData.SetDelayKv(const Value: string);
 begin
-
+  if FDelayKv.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FDelayKv, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetEquivInterbedNumber(const Value: string);
 begin
-
+  if FEquivInterbedNumber.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FEquivInterbedNumber, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetInitialDelayHeadOffset(const Value: string);
 begin
-
+  if FInitialDelayHeadOffset.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FInitialDelayHeadOffset, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetInitialElasticSpecificStorage(
   const Value: string);
 begin
-
+  if FInitialElasticSpecificStorage.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FInitialElasticSpecificStorage, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetInitialInelasticSpecificStorage(
   const Value: string);
 begin
-
+  if FInitialInelasticSpecificStorage.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FInitialInelasticSpecificStorage, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetInitialOffset(const Value: string);
 begin
-
+  if FInitialOffset.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FInitialOffset, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetInitialPorosity(const Value: string);
 begin
-
+  if FInitialPorosity.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FInitialPorosity, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
 
 procedure TCSubPackageData.SetInterbed(const Value: TObject);
@@ -547,23 +480,14 @@ end;
 
 procedure TCSubPackageData.SetThickness(const Value: string);
 begin
-
+  if FThickness.Formula <> Value then
+  begin
+    InvalidateModel;
+    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
+      FThickness, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      nil, nil, self);
+  end;
 end;
-
-//procedure TCSubPackageData.SetStoredInitialOffset(const Value: TRealStorage);
-//begin
-//  FStoredInitialOffset.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetStoredThickness(const Value: TRealStorage);
-//begin
-//  FStoredThickness.Assign(Value);
-//end;
-//
-//procedure TCSubPackageData.SetThickness(const Value: Double);
-//begin
-//  StoredThickness.Value := Value;
-//end;
 
 procedure TCSubPackageData.SetUsed(const Value: Boolean);
 begin
@@ -590,6 +514,25 @@ end;
 function TCSubPackageDataCollection.GetItem(Index: integer): TCSubPackageData;
 begin
   result := inherited Items[Index] as TCSubPackageData;
+end;
+
+function TCSubPackageDataCollection.IsSame(
+  CSub: TCSubPackageDataCollection): Boolean;
+var
+  ItemIndex: Integer;
+begin
+  result := Count = CSub.Count;
+  if result then
+  begin
+    for ItemIndex := 0 to Count - 1 do
+    begin
+      result := Items[ItemIndex].IsSame(CSub.Items[ItemIndex]);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 procedure TCSubPackageDataCollection.SetItem(Index: integer;

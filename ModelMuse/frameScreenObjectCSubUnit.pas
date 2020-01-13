@@ -14,10 +14,13 @@ type
     icInitialElasticSpecificStorage, icInitialPorosity, icDelayKv,
     icInitialDelayHeadOffset);
 
+  TStressColumns = (scStartingTime, scEndingTime, scStressOffset);
+
   TframeScreenObjectCSub = class(TframeScreenObjectTabbed)
     tabInterbedSystems: TTabSheet;
     rdgSubGroups: TRbwDataGrid4;
   private
+    FPackageDataCleared: Boolean;
     procedure InitializeControls;
     { Private declarations }
   public
@@ -62,8 +65,10 @@ var
   InterbedIndex: Integer;
   Interbed: TCSubPackageData;
   RowIndex: Integer;
+  FirstCSub: TCSubBoundary;
 begin
   InitializeControls;
+  FPackageDataCleared := False;
   FoundFirst := False;
   for ScreenObjectIndex := 0 to List.Count - 1 do
   begin
@@ -74,24 +79,32 @@ begin
       if not FoundFirst then
       begin
         FoundFirst := True;
+        FirstCSub := ModflowCSub;
         for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
         begin
           Interbed := ModflowCSub.CSubPackageData[InterbedIndex];
           RowIndex := rdgSubGroups.Cols[Ord(icName)].IndexOf(Interbed.InterbedSystemName);
           if RowIndex >= 1 then
           begin
-            rdgSubGroups.Checked[Ord(icUsed)] := Interbed.Used;
-            rdgSubGroups.Cells[Ord(icInitialOffset)] := Interbed.Used;
-            
-//  TInterbedColumns = (icName, icUsed, icInitialOffset, icThickness,
-//    icEquivInterbedNumber, icInitialInelasticSpecificStorage,
-//    icInitialElasticSpecificStorage, icInitialPorosity, icDelayKv,
-//    icInitialDelayHeadOffset);
+            rdgSubGroups.Checked[Ord(icUsed), RowIndex] := Interbed.Used;
+            rdgSubGroups.Cells[Ord(icInitialOffset), RowIndex] := Interbed.InitialOffset;
+            rdgSubGroups.Cells[Ord(icThickness), RowIndex] := Interbed.Thickness;
+            rdgSubGroups.Cells[Ord(icEquivInterbedNumber), RowIndex] := Interbed.EquivInterbedNumber;
+            rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), RowIndex] := Interbed.InitialInelasticSpecificStorage;
+            rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), RowIndex] := Interbed.InitialElasticSpecificStorage;
+            rdgSubGroups.Cells[Ord(icInitialPorosity), RowIndex] := Interbed.InitialPorosity;
+            rdgSubGroups.Cells[Ord(icDelayKv), RowIndex] := Interbed.DelayKv;
+            rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), RowIndex] := Interbed.InitialDelayHeadOffset;
           end;
         end;
       end
       else
       begin
+        if not ModflowCSub.CSubPackageData.IsSame(FirstCSub.CSubPackageData) then
+        begin
+          ClearGrid(rdgSubGroups);
+          FPackageDataCleared := True;
+        end;
       end;
     end;
   end;
@@ -136,9 +149,11 @@ begin
   end;
 
   for ColIndex := 0 to rdgSubGroups.ColCount - 1 do
-	begin
-	  rdgSubGroups.Columns[ColIndex].AutoAdjustColWidths := False;
-	end;
+  begin
+    rdgSubGroups.Columns[ColIndex].AutoAdjustColWidths := False;
+  end;
+
+  ClearGrid(rdgModflowBoundary);
   
 end;
 

@@ -1,6 +1,5 @@
 inherited frameScreenObjectCSub: TframeScreenObjectCSub
   inherited pcMain: TPageControl
-    ActivePage = tabInterbedSystems
     ExplicitWidth = 396
     ExplicitHeight = 332
     object tabInterbedSystems: TTabSheet [0]

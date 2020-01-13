@@ -17747,6 +17747,15 @@ begin
   begin
     Exit;
   end;
+  rdeDrtLay.Min := 1;
+  if frmGoPhast.PhastModel.ModflowPackages.FarmProcess.IsSelected then
+  begin
+    rdeDrtLay.Min := -1;
+  end;
+  if frmGoPhast.PhastModel.ModflowPackages.SwrPackage.IsSelected then
+  begin
+    rdeDrtLay.Min := -2;
+  end;
   comboDrtLocationChoice.ItemIndex := 0;
   comboDrtLocationChoiceChange(nil);
   rdeDrtCol.Text := '1';
