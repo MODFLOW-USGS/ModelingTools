@@ -241,7 +241,6 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
         end>
       WordWrapRowCaptions = False
       ExplicitLeft = 2
-      ExplicitTop = 53
     end
   end
 end

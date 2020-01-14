@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../../helpproject.xsl" ?>
-<topic template="Popup" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
+<topic template="Popup" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../helpproject.xsd">
   <title translate="true">DrainReturn_ReturnLocationVariables</title>
   <body>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[LayR]]></caption></toggle></para>
@@ -8,11 +8,11 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">LayR—is a flag and, if greater than 0, a layer number. </text><text styleclass="New Materials" style="font-family:&apos;Courier New&apos;; font-size:12pt; font-weight:bold; font-style:normal; text-decoration:line-through; text-transform:none; vertical-align:baseline; color:#000000; background-color:transparent; letter-spacing:normal; letter-scaling:100%;" translate="true">If auxiliary variables are being read, LayR must be greater than zero, so that RowR, ColR, and Rfprop are read. </text><text styleclass="Normal" translate="true">LayR is not read if “</text><text styleclass="Keywords" translate="true">RETURNFLOW</text><text styleclass="Normal" translate="true">” is not listed as an option in item 1.</text></para>
-          <list id="17" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR &gt; 0, it is the layer number of the recipient cell.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = 0, there is no return flow for the drain cell, and RowR, ColR, and Rfprop are not read </text><text styleclass="New Materials" translate="true">unless there are auxiliary variables defined</text><text styleclass="Normal" translate="true">.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –1, drain water will be sent to a FMP farm whose farm ID is specified. RowR, ColR, and Rfprop and any aux variables are read.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –2, drain water will be sent to a SWR reach. RowR, ColR, and Rfprop and any auxiliary variables are read.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = 0, there is no return flow for the drain cell, and RowR, ColR, and Rfprop are not read </text><text styleclass="New Materials" translate="true">unless there are auxiliary variables defined</text><text styleclass="Normal" translate="true">.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –1, drain water will be sent to a FMP farm whose farm ID is specified. RowR, ColR, and Rfprop and any aux variables are read. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MODFLOW-OWHM only</text><conditional-text type="END"/></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –2, drain water will be sent to a SWR reach. RowR, ColR, and Rfprop and any auxiliary variables are read. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MODFLOW-OWHM only</text><conditional-text type="END"/><conditional-text type="END"/></li>
           </list>
         </td>
       </tr>
@@ -22,11 +22,11 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">RowR is defined by the value of LayR that is read. RowR is not read if “</text><text styleclass="Keywords" translate="true">RETURNFLOW</text><text styleclass="Normal" translate="true">” is not listed as an option in item 1.</text></para>
-          <list id="18" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="4" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR &gt; 0, RowR is the row number of the recipient cell that will receive the drain water as recharge.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = 0, RowR is NOT read, and there is no return flow for the drain cell, and the water leaves the model.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –1, RowR is the farm ID of the farm that will receive the drain water, and the water stays in the model. If RowR = 0, then the farm located at the drain’s Row and Column is used.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –2, RowR is the SWR reach that will receive the drain water, and the water stays in the model.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = 0, RowR is NOT read, and there is no return flow for the drain cell, and the water leaves the model.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2,MODFLOW-LGR"/></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –1, RowR is the farm ID of the farm that will receive the drain water, and the water stays in the model. If RowR = 0, then the farm located at the drain’s Row and Column is used. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MODFLOW-OWHM only</text><conditional-text type="END"/></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –2, RowR is the SWR reach that will receive the drain water, and the water stays in the model. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MODFLOW-OWHM only</text><conditional-text type="END"/><conditional-text type="END"/></li>
           </list>
         </td>
       </tr>
@@ -36,11 +36,11 @@
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">ColR is defined by the value of LayR that is read. ColR is not read if “</text><text styleclass="Keywords" translate="true">RETURNFLOW</text><text styleclass="Normal" translate="true">” is not listed as an option in item 1.</text></para>
-          <list id="19" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR &gt; 0, ColR is the column number of the recipient cell that will receive the drain water as recharge.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = 0, ColR is NOT read, and there is no return flow for the drain cell.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –1, ColR is read, but is not used. It can be any integer number to serve as a place holder before reading Rfprop and any auxiliary variables.</text></li>
-            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –2, ColR is read, but is not used. It can be any integer number to serve as a place holder before reading Rfprop and any auxiliary variables.</text></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = 0, ColR is NOT read, and there is no return flow for the drain cell.</text><conditional-text type="IF" value="ALLMODELS,MODFLOW-FMP2"/></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –1, ColR is read, but is not used. It can be any integer number to serve as a place holder before reading Rfprop and any auxiliary variables. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MODFLOW-OWHM only</text><conditional-text type="END"/></li>
+            <li styleclass="Normal"><text styleclass="Normal" translate="true">If LayR = –2, ColR is read, but is not used. It can be any integer number to serve as a place holder before reading Rfprop and any auxiliary variables. </text><conditional-text type="IF" value="ALLMODELS"/><text styleclass="Normal" translate="true">MODFLOW-OWHM only</text><conditional-text type="END"/><conditional-text type="END"/></li>
           </list>
         </td>
       </tr>

@@ -42,7 +42,8 @@ uses System.UITypes, Windows,
   frameScreenObjectMawUnit, GrayTabs, frameScreenObjectObsMf6Unit,
   frameScreenObjectHfbMf6Unit, ModflowHfbUnit, frameScreenObjectLakMf6Unit,
   frameScreenObjectMvrUnit, ModflowMvrUnit, frameScreenObjectUzfMf6Unit,
-  frameScreenObjectLktUnit, frameScreenObjectMt3dSftUnit;
+  frameScreenObjectLktUnit, frameScreenObjectMt3dSftUnit,
+  frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -370,6 +371,8 @@ type
     frameMT3D_LKT: TframeScreenObjectLkt;
     jvspMT3D_SFT: TJvStandardPage;
     frameMT3D_SFT: TframeScreenObjectMt3dSft;
+    jvspCSUB: TJvStandardPage;
+    frameCSUB: TframeScreenObjectCSub;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1521,6 +1524,7 @@ type
     FSWR_DirectRunoff_Node: TJvPageIndexNode;
     FSWR_Reach_Node: TJvPageIndexNode;
     FMAW_Node: TJvPageIndexNode;
+    FCSUB_Node: TJvPageIndexNode;
     FMf6Obs_Node: TJvPageIndexNode;
     // @name is used to store the column that the user last selected
     // in one of the grids for boundary-condition, time-varying stress.
@@ -2123,7 +2127,9 @@ type
     procedure GetSfr6Boundary(const ScreenObjectList: TList);
     procedure UpdateSfr6Node(Sender: TObject);
     procedure GetMawBoundary(const ScreenObjectList: TList);
+    procedure GetCSubBoundary(const ScreenObjectList: TList);
     procedure MawChanged(Sender: TObject);
+    procedure CSubChanged(Sender: TObject);
     procedure AssignTransientHfbFormulas(const Row, Col: Integer);
     procedure UpdateHfbBoundaryState(Boundary: THfbBoundary;
       ScreenObjectIndex: Integer; var State: TCheckBoxState);
@@ -2221,6 +2227,7 @@ type
     procedure CreateFarmIDNode(AScreenObject: TScreenObject);
     procedure SetSelectedMfBoundaryNode;
     procedure CreateMawNode(AScreenObject: TScreenObject);
+    procedure CreateCSubNode;
     procedure InitializeVertexGrid;
     procedure InitializePhastSpecifiedHeadGrid;
     procedure InitializePhastSpecifiedFluxGrid;
@@ -2332,6 +2339,7 @@ type
     procedure EnableWellTabfile;
     procedure GetPotentialMvrSources(Sender: TObject;
       var PotentialSources: TSourcePackageChoices);
+    procedure UpdateDrtReturnFlowLabels(Sender: TObject);
     { Private declarations }
   public
     procedure Initialize;
@@ -2389,7 +2397,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowSwiObsUnit, ModflowRipUnit, ModflowWellUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
-  ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit;
+  ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -3379,6 +3387,10 @@ begin
       // do nothing
     end
   {$ENDIF}
+    else if jvtlModflowBoundaryNavigator.Selected = FCSUB_Node then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -3482,6 +3494,7 @@ begin
   // in the order in which they ought to be displayed.
   CreateChdNode;
   CreateChobNode;
+  CreateCSubNode;
   CreateDrnNode;
   CreateDrobNode;
   CreateDrtNode;
@@ -4232,6 +4245,7 @@ begin
         BoundaryNodeList.Add(FMAW_Node);
         BoundaryNodeList.Add(FMf6Obs_Node);
         BoundaryNodeList.Add(FUZF_Mf6_Node);
+        BoundaryNodeList.Add(FCSUB_Node);
 
 
 
@@ -5141,6 +5155,7 @@ begin
   frameCfpFixedHeads.OnChange := CfpFixedHeadsChanged;
   frameRIP.OnChange := RipChanged;
   frameMAW.OnEdited := MawChanged;
+  frameCSUB.OnEdited := CSubChanged;
 
   frameDrnParam.ConductanceColumn := 1;
   frameDrtParam.ConductanceColumn := 1;
@@ -6244,7 +6259,11 @@ begin
   else if Node = FMVR_Node then
   begin
     AllowChange := True;
-  end;
+  end
+  else if (Node = FCSUB_Node) then
+  begin
+    AllowChange := True;
+  end
 
 
 
@@ -6927,6 +6946,13 @@ begin
     frameMaw.SetData(FNewProperties,
       (FMAW_Node.StateIndex = 2),
       (FMAW_Node.StateIndex = 1) and frmGoPhast.PhastModel.MawIsSelected);
+  end;
+
+  if (FCSUB_Node <> nil) then
+  begin
+    frameCSUB.SetData(FNewProperties,
+      (FCSUB_Node.StateIndex = 2),
+      (FCSUB_Node.StateIndex = 1) and frmGoPhast.PhastModel.CSubIsSelected);
   end;
 
   if (FLAKMf6_Node <> nil) then
@@ -9001,6 +9027,32 @@ begin
 //      Assert(False);
 //    end;
 //  end;
+end;
+
+procedure TfrmScreenObjectProperties.GetCSubBoundary(
+  const ScreenObjectList: TList);
+var
+  State: TCheckBoxState;
+  ScreenObjectIndex: integer;
+  AScreenObject: TScreenObject;
+  Boundary: TCSubBoundary;
+begin
+  if not frmGoPhast.PhastModel.CSubIsSelected then
+  begin
+    Exit;
+  end;
+  State := cbUnchecked;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.ModflowCSub;
+    UpdateBoundaryState(Boundary, ScreenObjectIndex, State);
+  end;
+  if FCSUB_Node <> nil then
+  begin
+    FCSUB_Node.StateIndex := Ord(State)+1;
+  end;
+  frameCSUB.GetData(FNewProperties);
 end;
 
 procedure TfrmScreenObjectProperties.AssignImportedValuesColumn(
@@ -12136,6 +12188,24 @@ begin
     frameChob, jvspCHOB, frmGoPhast.PhastModel.HeadFluxObservations);
 end;
 
+procedure TfrmScreenObjectProperties.CreateCSubNode;
+var
+  Node: TJvPageIndexNode;
+begin
+  FCSUB_Node := nil;
+  if (frmGoPhast.ModelSelection = msModflow2015) and
+    frmGoPhast.PhastModel.CSubIsSelected then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+      frmGoPhast.PhastModel.ModflowPackages.CsubPackage.PackageIdentifier)
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspCSUB.PageIndex;
+    frameCSUB.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FCSUB_Node := Node;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.CreateDrobNode;
 begin
   CreateFluxNode(FDrob_Node, frmGoPhast.PhastModel.ModflowPackages.DrobPackage,
@@ -12420,6 +12490,14 @@ begin
     frameWellParam.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FWEL_Node := Node;   
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CSubChanged(Sender: TObject);
+begin
+  if (FCSub_Node <> nil) and (FCSub_Node.StateIndex <> 3) then
+  begin
+    FCSub_Node.StateIndex := 2;
   end;
 end;
 
@@ -13633,6 +13711,28 @@ begin
     begin
       // work around for bug in Microsoft OpenGL driver on 64 bit Windows.
       // do nothing;
+    end;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.UpdateDrtReturnFlowLabels(Sender: TObject);
+begin
+  if Sender = rdeDrtLay then
+  begin
+    if rdeDrtLay.Text = '-1' then
+    begin
+      lblDrtRow.Caption := 'Farm';
+      rdeDrtCol.Enabled := False;
+    end
+    else if rdeDrtLay.Text = '-2' then
+    begin
+      lblDrtRow.Caption := 'SWR Reach';
+      rdeDrtCol.Enabled := False;
+    end
+    else
+    begin
+      lblDrtRow.Caption := 'Row';
+      rdeDrtCol.Enabled := True;
     end;
   end;
 end;
@@ -15073,6 +15173,7 @@ begin
   GetSwiObsBoundray(AScreenObjectList);
   GetRip(AScreenObjectList);
   GetMawBoundary(AScreenObjectList);
+  GetCSubBoundary(AScreenObjectList);
 
   GetMf6Obs(AScreenObjectList);
   GetLakeMf6Boundary(AScreenObjectList);
@@ -17747,20 +17848,23 @@ begin
   begin
     Exit;
   end;
+  rdeDrtLay.Text := '1';
   rdeDrtLay.Min := 1;
-  if frmGoPhast.PhastModel.ModflowPackages.FarmProcess.IsSelected then
+  if frmGoPhast.ModelSelection = msModflowFmp then
   begin
-    rdeDrtLay.Min := -1;
-  end;
-  if frmGoPhast.PhastModel.ModflowPackages.SwrPackage.IsSelected then
-  begin
-    rdeDrtLay.Min := -2;
+    if frmGoPhast.PhastModel.ModflowPackages.FarmProcess.IsSelected then
+    begin
+      rdeDrtLay.Min := -1;
+    end;
+    if frmGoPhast.PhastModel.ModflowPackages.SwrPackage.IsSelected then
+    begin
+      rdeDrtLay.Min := -2;
+    end;
   end;
   comboDrtLocationChoice.ItemIndex := 0;
   comboDrtLocationChoiceChange(nil);
   rdeDrtCol.Text := '1';
   rdeDrtRow.Text := '1';
-  rdeDrtLay.Text := '1';
   rdeDrtX.Text := '0';
   rdeDrtY.Text := '0';
   rdeDrtZ.Text := '0';
@@ -17802,6 +17906,7 @@ begin
               rdeDrtCol.Text := IntToStr(DrainReturn.ReturnCell.Col);
               rdeDrtRow.Text := IntToStr(DrainReturn.ReturnCell.Row);
               rdeDrtLay.Text := IntToStr(DrainReturn.ReturnCell.Lay);
+              UpdateDrtReturnFlowLabels(rdeDrtLay);
               FirstCell := False;
             end;
           else Assert(False);
@@ -17868,6 +17973,7 @@ begin
                 rdeDrtCol.Text := IntToStr(DrainReturn.ReturnCell.Col);
                 rdeDrtRow.Text := IntToStr(DrainReturn.ReturnCell.Row);
                 rdeDrtLay.Text := IntToStr(DrainReturn.ReturnCell.Lay);
+                UpdateDrtReturnFlowLabels(rdeDrtLay);
                 FirstCell := False;
               end
               else
@@ -17883,6 +17989,7 @@ begin
                 if rdeDrtLay.Text <> FloatToStr(DrainReturn.ReturnCell.Lay) then
                 begin
                   rdeDrtLay.Text := '';
+                  UpdateDrtReturnFlowLabels(rdeDrtLay);
                 end;
               end;
             end;
@@ -19635,6 +19742,7 @@ begin
   inherited;
   UpdateNodeState(FDRT_Node);
   StoreDrtBoundary;
+  UpdateDrtReturnFlowLabels(Sender);
 end;
 
 procedure TfrmScreenObjectProperties.rdeGridCellSizeExit(Sender: TObject);

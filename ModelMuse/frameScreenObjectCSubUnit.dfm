@@ -1,28 +1,35 @@
 inherited frameScreenObjectCSub: TframeScreenObjectCSub
   inherited pcMain: TPageControl
-    ExplicitWidth = 396
-    ExplicitHeight = 332
+    ActivePage = tabInterbedSystems
+    ExplicitTop = 88
+    ExplicitHeight = 244
     object tabInterbedSystems: TTabSheet [0]
       Caption = 'Interbed systems'
       ImageIndex = 1
+      ExplicitHeight = 304
       object rdgSubGroups: TRbwDataGrid4
         Left = 0
-        Top = 0
+        Top = 56
         Width = 388
-        Height = 304
+        Height = 207
         Align = alClient
         ColCount = 10
         FixedCols = 1
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         TabOrder = 0
+        OnMouseUp = rdgSubGroupsMouseUp
+        OnSetEditText = rdgSubGroupsSetEditText
         ExtendedAutoDistributeText = False
-        AutoMultiEdit = False
-        AutoDistributeText = False
+        AutoMultiEdit = True
+        AutoDistributeText = True
         AutoIncreaseColCount = False
-        AutoIncreaseRowCount = False
+        AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
+        OnColSize = rdgSubGroupsColSize
+        OnStateChange = rdgSubGroupsStateChange
         ColorRangeSelection = False
+        OnHorizontalScroll = rdgSubGroupsHorizontalScroll
         Columns = <
           item
             AutoAdjustRowHeights = True
@@ -255,28 +262,47 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 104
+        ExplicitHeight = 159
       end
-    end
-    inherited tabTransient: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
-      ExplicitWidth = 388
-      ExplicitHeight = 304
-      inherited pnlBottom: TPanel
-        ExplicitTop = 258
-        ExplicitWidth = 388
-        inherited btnDelete: TBitBtn
-          ExplicitLeft = 300
+      object pnlEditPkgProp: TPanel
+        Left = 0
+        Top = 0
+        Width = 388
+        Height = 56
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 1
+        ExplicitTop = 8
+        object lblFormulaPkgProp: TLabel
+          Left = 232
+          Top = 5
+          Width = 38
+          Height = 13
+          Alignment = taCenter
+          Caption = 'Formula'
         end
-        inherited btnInsert: TBitBtn
-          ExplicitLeft = 212
+        object rdeFormulaPkgProp: TRbwDataEntry
+          Left = 232
+          Top = 28
+          Width = 57
+          Height = 22
+          Color = clBtnFace
+          Enabled = False
+          TabOrder = 0
+          Text = ''
+          OnChange = rdeFormulaPkgPropChange
+          Max = 1.000000000000000000
+          ChangeDisabledColor = True
         end
-      end
-      inherited pnlGrid: TPanel
-        ExplicitWidth = 388
-        ExplicitHeight = 258
-        inherited rdgModflowBoundary: TRbwDataGrid4
-          ExplicitWidth = 386
+        object cbUsedPkgProp: TCheckBox
+          Left = 72
+          Top = 29
+          Width = 49
+          Height = 17
+          Caption = 'Used'
+          TabOrder = 1
+          OnClick = cbUsedPkgPropClick
         end
       end
     end

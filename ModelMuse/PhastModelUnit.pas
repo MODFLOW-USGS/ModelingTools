@@ -4430,6 +4430,7 @@ that affects the model output should also have a comment. }
     function SwrIsSelected: Boolean; override;
     function RipIsSelected: Boolean;
     function MawIsSelected: Boolean;
+    function CSubIsSelected: Boolean;
     function GncIsSelected: Boolean;
     function Mf6ObsIsSelected: Boolean; override;
     function PackageIsSelected(APackage: TObject): Boolean;
@@ -8906,9 +8907,12 @@ const
   //               Enhancement: Added additional error checking for MAW wells.
   //    '4.1.0.19' Enhancement: ModelMuse can now convert the UZF package for
   //                MODFLOW-2005 to the UZF package for MODFLOW 6.
+  //    '4.1.0.20' Bug fix: ModelMuse now allows the user to specify a return
+  //                location in DRT as a Farm in the Farm process or a SWR
+  //                reach with MODFLOW-OWHM models.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.19';
+  IModelVersion = '4.1.0.20';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -24617,6 +24621,29 @@ begin
   FWellSolution.DataType := rdtInteger;
   FWellSolution.OnTimeListUsed := PhastUsed;
   AddTimeList(FWellSolution);
+end;
+
+function TPhastModel.CSubIsSelected: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := (ModelSelection = msModflow2015);
+  if result then
+  begin
+    result := ModflowPackages.CSubPackage.IsSelected;
+    if not result and frmGoPhast.PhastModel.LgrUsed then
+    begin
+      for ChildIndex := 0 to ChildModels.Count - 1 do
+      begin
+        ChildModel := ChildModels[ChildIndex].ChildModel;
+        if ChildModel <> nil then
+        begin
+          result := result or ChildModel.ModflowPackages.CSubPackage.IsSelected;
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TCustomModel.InvalidateScreenObjects;

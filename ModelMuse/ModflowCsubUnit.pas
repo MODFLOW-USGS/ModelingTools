@@ -41,12 +41,15 @@ type
     procedure SetInitialPorosity(const Value: string);
     procedure SetInterbedSystemName(const Value: string);
     procedure SetThickness(const Value: string);
+    function CreateFormulaObject(Orientation:
+      TDataSetOrientation): TFormulaObject; virtual;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property Interbed: TObject read FInterbed write SetInterbed;
     function IsSame(CSub: TCSubPackageData): Boolean;
+    procedure CreateFormulaObjects;
   published
     property InterbedSystemName: string read GetInterbedSystemName write SetInterbedSystemName;
     property Used: Boolean read FUsed write SetUsed;
@@ -96,6 +99,7 @@ type
     constructor Create(Model: TBaseModel);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
     function IsSame(CSub: TCSubPackageDataCollection): Boolean;
+    function Add: TCSubPackageData;
   end;
 
   TCSubRecord = record
@@ -173,6 +177,8 @@ type
   TCSubCollection = class(TCustomMF_ListBoundColl)
   private
     procedure InvalidateStressOffsetData(Sender: TObject);
+    function GetItem(Index: Integer): TCSubItem;
+    procedure SetItem(Index: Integer; const Value: TCSubItem);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -194,6 +200,11 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+    procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
+      AModel: TBaseModel); override;
+   public
+     function Add: TCSubItem;
+     property Items[Index: Integer]: TCSubItem read GetItem write SetItem; default;
   end;
 
   TCSubCell = class(TValueCell)
@@ -243,7 +254,8 @@ type
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
-    procedure Assign(Source: TPersistent);override;
+    procedure Assign(Source: TPersistent); override;
+    procedure Clear; override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TCSubStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -304,6 +316,40 @@ end;
 constructor TCSubPackageData.Create(Collection: TCollection);
 begin
   inherited;
+  CreateFormulaObjects;
+end;
+
+function TCSubPackageData.CreateFormulaObject(
+  Orientation: TDataSetOrientation): TFormulaObject;
+begin
+  result := frmGoPhast.PhastModel.FormulaManager.Add;
+  case Orientation of
+    dsoTop:
+      begin
+        result.Parser := frmGoPhast.PhastModel.rpTopFormulaCompiler;
+      end;
+    dso3D:
+      begin
+        result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+      end;
+    else Assert(False);
+  end;
+  Assert(False);
+  // This next statement may be wrong.
+  result.AddSubscriptionEvents(nil, nil, self);
+end;
+
+procedure TCSubPackageData.CreateFormulaObjects;
+begin
+
+  FDelayKv := CreateFormulaObject(dso3D);
+  FEquivInterbedNumber := CreateFormulaObject(dso3D);
+  FInitialDelayHeadOffset := CreateFormulaObject(dso3D);
+  FInitialElasticSpecificStorage := CreateFormulaObject(dso3D);
+  FInitialInelasticSpecificStorage := CreateFormulaObject(dso3D);
+  FInitialOffset := CreateFormulaObject(dso3D);
+  FInitialPorosity := CreateFormulaObject(dso3D);
+  FThickness := CreateFormulaObject(dso3D);
 end;
 
 destructor TCSubPackageData.Destroy;
@@ -316,6 +362,19 @@ begin
   InitialPorosity := '0';
   DelayKv := '0';
   InitialDelayHeadOffset := '0';
+
+  if frmGoPhast.PhastModel <> nil then
+  begin
+    frmGoPhast.PhastModel.FormulaManager.Remove(FDelayKv, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FEquivInterbedNumber, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FInitialDelayHeadOffset, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FInitialElasticSpecificStorage, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FInitialInelasticSpecificStorage, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FInitialOffset, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FInitialPorosity, nil, nil, self);
+    frmGoPhast.PhastModel.FormulaManager.Remove(FThickness, nil, nil, self);
+  end;
+
   inherited;
 end;
 
@@ -495,6 +554,11 @@ begin
 end;
 
 { TCSubPackageDataCollection }
+
+function TCSubPackageDataCollection.Add: TCSubPackageData;
+begin
+  result := inherited Add as TCSubPackageData;
+end;
 
 constructor TCSubPackageDataCollection.Create(Model: TBaseModel);
 var
@@ -738,6 +802,11 @@ end;
 
 { TCSubCollection }
 
+function TCSubCollection.Add: TCSubItem;
+begin
+  result := inherited Add as TCSubItem;
+end;
+
 procedure TCSubCollection.AddSpecificBoundary(AModel: TBaseModel);
 begin
   AddBoundary(TCSubStorage.Create(AModel));
@@ -802,6 +871,13 @@ begin
   begin
     Assert(False);
   end;
+end;
+
+procedure TCSubCollection.AssignArrayCellValues(DataSets: TList;
+  ItemIndex: Integer; AModel: TBaseModel);
+begin
+  inherited;
+  Assert(False);
 end;
 
 procedure TCSubCollection.AssignCellList(Expression: TExpression;
@@ -878,6 +954,11 @@ begin
   end;
 end;
 
+function TCSubCollection.GetItem(Index: Integer): TCSubItem;
+begin
+  result := inherited Items[Index] as TCSubItem;
+end;
+
 function TCSubCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TCSubTimeListLink;
@@ -928,6 +1009,11 @@ procedure TCSubCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TCSubStorage).FCSubArray, BoundaryCount);
   inherited;
+end;
+
+procedure TCSubCollection.SetItem(Index: Integer; const Value: TCSubItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 { TCSubTimeListLink }
@@ -1151,6 +1237,12 @@ end;
 class function TCSubBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TCSubCollection;
+end;
+
+procedure TCSubBoundary.Clear;
+begin
+  inherited;
+  CSubPackageData.Clear;
 end;
 
 constructor TCSubBoundary.Create(Model: TBaseModel; ScreenObject: TObject);

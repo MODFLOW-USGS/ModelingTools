@@ -243,6 +243,7 @@ procedure TModflowDRT_Writer.WriteCell(Cell: TValueCell; const DataSetIdentifier
 var
   Drt_Cell: TDrt_Cell;
   LocalLayer: integer;
+  Limit: Integer;
 begin
   Drt_Cell := Cell as TDrt_Cell;
   LocalLayer := Model.
@@ -253,7 +254,15 @@ begin
   WriteFloat(Drt_Cell.Elevation);
   WriteFloat(Drt_Cell.Conductance);
   WriteInteger(Drt_Cell.ReturnCell.Layer);
-  if Drt_Cell.ReturnCell.Layer > 0 then
+  if Model.ModelSelection = msModflowFmp then
+  begin
+    Limit := -2;
+  end
+  else
+  begin
+    Limit := 1;
+  end;
+  if Drt_Cell.ReturnCell.Layer >= Limit then
   begin
     WriteInteger(Drt_Cell.ReturnCell.Row);
     WriteInteger(Drt_Cell.ReturnCell.Column);
