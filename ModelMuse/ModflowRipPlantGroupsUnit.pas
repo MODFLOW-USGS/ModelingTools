@@ -146,31 +146,10 @@ type
     property MaxID: Integer read FMaxID write SetMaxID;
   end;
 
-//procedure GlobalRemoveFormulaObjectSubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//procedure GlobalRestoreFormulaObjectSubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-
 implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit;
-
-//procedure GlobalRemoveFormulaObjectSubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//begin
-//// Because, these formulas are only used during export,
-//// nothing needs to be done here.
-////  (Subject as TFormulaOrderedItem).RemoveSubscription(Sender, AName);
-//end;
-//
-//procedure GlobalRestoreFormulaObjectSubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//begin
-//// Because, these formulas are only used during export,
-//// nothing needs to be done here.
-////  (Subject as TFormulaOrderedItem).RestoreSubscription(Sender, AName);
-//end;
 
 { TRipETSegment }
 

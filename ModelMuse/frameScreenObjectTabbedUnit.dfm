@@ -5,31 +5,27 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
   ExplicitHeight = 332
   object pcMain: TPageControl
     Left = 0
-    Top = 0
+    Top = 41
     Width = 396
-    Height = 332
+    Height = 291
     ActivePage = tabTransient
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 320
-    ExplicitHeight = 240
+    ExplicitTop = 0
+    ExplicitHeight = 332
     object tabTransient: TTabSheet
       Caption = 'Transient'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 304
       object pnlBottom: TPanel
         Left = 0
-        Top = 258
+        Top = 217
         Width = 388
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 186
-        ExplicitWidth = 541
+        ExplicitTop = 258
         DesignSize = (
           388
           46)
@@ -87,7 +83,6 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 2
           OnClick = btnDeleteClick
-          ExplicitLeft = 224
         end
         object btnInsert: TBitBtn
           Left = 212
@@ -108,18 +103,16 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
             FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
           TabOrder = 1
           OnClick = btnInsertClick
-          ExplicitLeft = 136
         end
       end
       object pnlGrid: TPanel
         Left = 0
         Top = 0
         Width = 388
-        Height = 258
+        Height = 217
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 541
-        ExplicitHeight = 186
+        ExplicitHeight = 258
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -128,7 +121,6 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitWidth = 539
           object lblFormula: TLabel
             Left = 232
             Top = 5
@@ -155,13 +147,15 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           Left = 1
           Top = 57
           Width = 386
-          Height = 200
+          Height = 159
           Align = alClient
           ColCount = 3
           FixedCols = 0
           RowCount = 2
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
           TabOrder = 1
+          OnMouseUp = rdgModflowBoundaryMouseUp
+          OnSetEditText = rdgModflowBoundarySetEditText
           ExtendedAutoDistributeText = False
           AutoMultiEdit = True
           AutoDistributeText = True
@@ -247,7 +241,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitWidth = 696
+          ExplicitTop = 58
           ColWidths = (
             64
             64
@@ -255,5 +249,16 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
         end
       end
     end
+  end
+  object pnlCaption: TPanel
+    Left = 0
+    Top = 0
+    Width = 396
+    Height = 41
+    Align = alTop
+    TabOrder = 1
+    ExplicitLeft = 152
+    ExplicitTop = 8
+    ExplicitWidth = 185
   end
 end

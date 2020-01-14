@@ -22,6 +22,7 @@ type
     lblFormula: TLabel;
     rdeFormula: TRbwDataEntry;
     rdgModflowBoundary: TRbwDataGrid4;
+    pnlCaption: TPanel;
     procedure seNumberOfTimesChange(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
@@ -30,16 +31,26 @@ type
       ARow: Integer);
     procedure rdgModflowBoundaryColSize(Sender: TObject; ACol,
       PriorWidth: Integer);
+    procedure rdgModflowBoundarySetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure rdgModflowBoundaryMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
+    FOnEdited: TNotifyEvent;
     procedure ClearSelectedRow;
     procedure UpdateNumTimes;
     procedure UpdateTransientEditor;
     { Private declarations }
   protected
+    FGettingData: Boolean;
     function CanEdit(Sender: TObject; ACol, ARow: Integer): Boolean; virtual;
     procedure CanSelectTimeCell(ARow: Integer; ACol: Integer; var CanSelect: Boolean); virtual;
     procedure LayoutMultiRowEditControls; virtual;
+    procedure FillPicklistsWithStartTimes;
+    procedure Edited;
   public
+    constructor Create(AOwner: TComponent); override;
+    property OnEdited: TNotifyEvent read FOnEdited write FOnEdited;
     { Public declarations }
   end;
 
@@ -49,7 +60,7 @@ var
 implementation
 
 uses
-  System.Math, frmCustomGoPhastUnit;
+  System.Math, frmCustomGoPhastUnit, frmGoPhastUnit;
 
 {$R *.dfm}
 
@@ -70,6 +81,7 @@ begin
       ClearSelectedRow;
       seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger -1;
     end;
+    Edited;
   end;
 end;
 
@@ -80,13 +92,14 @@ begin
     rdgModflowBoundary.InsertRow(rdgModflowBoundary.SelectedRow);
     ClearSelectedRow;
     UpdateNumTimes;
+    Edited;
   end;
 end;
 
 function TframeScreenObjectTabbed.CanEdit(Sender: TObject; ACol,
   ARow: Integer): Boolean;
 begin
-  result := True;
+  result := ACol >= 2;
 end;
 
 procedure TframeScreenObjectTabbed.CanSelectTimeCell(ARow, ACol: Integer;
@@ -105,6 +118,29 @@ begin
     rdgModflowBoundary.Checked[ColIndex, rdgModflowBoundary.SelectedRow] := False;
     rdgModflowBoundary.Objects[ColIndex, rdgModflowBoundary.SelectedRow] := nil;
   end;
+end;
+
+constructor TframeScreenObjectTabbed.Create(AOwner: TComponent);
+begin
+  inherited;
+  FLastTimeColumn := 1;
+end;
+
+procedure TframeScreenObjectTabbed.Edited;
+begin
+  if Assigned(FOnEdited) and not FGettingData then
+  begin
+    FOnEdited(self);
+  end;
+end;
+
+procedure TframeScreenObjectTabbed.FillPicklistsWithStartTimes;
+begin
+    frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes
+      (rdgModflowBoundary, 0);
+    frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithEndTimes
+      (rdgModflowBoundary, 1);
+
 end;
 
 procedure TframeScreenObjectTabbed.LayoutMultiRowEditControls;
@@ -173,6 +209,42 @@ begin
   LayoutMultiRowEditControls;
 end;
 
+procedure TframeScreenObjectTabbed.rdgModflowBoundaryMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  ShouldEnable: Boolean;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  ShouldEnable := False;
+  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  begin
+    for ColIndex := 2 to rdgModflowBoundary.ColCount do
+    begin
+      ShouldEnable := rdgModflowBoundary.IsSelectedCell(ColIndex,RowIndex);
+      if ShouldEnable then
+      begin
+        break;
+      end;
+    end;
+    if ShouldEnable then
+    begin
+      break;
+    end;
+  end;
+  rdeFormula.Enabled := ShouldEnable;
+
+end;
+
+procedure TframeScreenObjectTabbed.rdgModflowBoundarySetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateNextTimeCell(rdgModflowBoundary, ACol, ARow);
+  seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1;
+  Edited;
+end;
+
 procedure TframeScreenObjectTabbed.seNumberOfTimesChange(Sender: TObject);
 begin
   inherited;
@@ -181,6 +253,7 @@ begin
   begin
     ClearGrid(rdgModflowBoundary);
   end;
+  Edited;
 end;
 
 procedure TframeScreenObjectTabbed.UpdateNumTimes;

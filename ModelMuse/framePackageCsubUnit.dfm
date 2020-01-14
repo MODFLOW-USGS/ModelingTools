@@ -8,20 +8,113 @@ inherited framePackageCsub: TframePackageCsub
     514)
   inherited memoComments: TMemo
     Width = 558
+    ExplicitWidth = 558
   end
   object pcCsub: TPageControl [3]
     Left = 0
     Top = 157
     Width = 589
     Height = 357
-    ActivePage = tabOptions
+    ActivePage = tabInterbeds
     Align = alBottom
     TabOrder = 1
+    object tabInterbeds: TTabSheet
+      Caption = 'Interbeds'
+      ImageIndex = 2
+      inline frameInterbeds: TframeGrid
+        Left = 0
+        Top = 0
+        Width = 581
+        Height = 329
+        Align = alClient
+        Enabled = False
+        TabOrder = 0
+        ExplicitWidth = 581
+        ExplicitHeight = 329
+        inherited Panel: TPanel
+          Top = 288
+          Width = 581
+          ExplicitTop = 288
+          ExplicitWidth = 581
+          inherited lbNumber: TLabel
+            Width = 135
+            Caption = 'Number of interbed systems'
+            ExplicitWidth = 135
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 334
+            ExplicitLeft = 235
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 363
+            ExplicitLeft = 363
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 392
+            ExplicitLeft = 392
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 581
+          Height = 288
+          ColCount = 2
+          Columns = <
+            item
+              AutoAdjustRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = False
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = True
+              Format = rcf4String
+              LimitToList = True
+              MaxLength = 0
+              ParentButtonFont = False
+              PickList.Strings = (
+                'no-delay'
+                'delay')
+              WordWrapCaptions = False
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+          ExplicitWidth = 581
+          ExplicitHeight = 288
+        end
+      end
+    end
     object tabOptions: TTabSheet
       Caption = 'Options'
-      ExplicitLeft = 8
-      ExplicitWidth = 414
-      ExplicitHeight = 384
       object lblGamma: TLabel
         Left = 155
         Top = 6
@@ -39,8 +132,8 @@ inherited framePackageCsub: TframePackageCsub
       object lblInterbedThicknessMethod: TLabel
         Left = 106
         Top = 210
-        Width = 413
-        Height = 26
+        Width = 304
+        Height = 13
         Caption = 'Method for specifying thickness of interbeds (CELL_FRACTION)'
         WordWrap = True
       end
@@ -216,8 +309,6 @@ inherited framePackageCsub: TframePackageCsub
     object tabOutputTypes: TTabSheet
       Caption = 'Output types'
       ImageIndex = 1
-      ExplicitWidth = 414
-      ExplicitHeight = 384
       object chklstOutput: TCheckListBox
         Left = 0
         Top = 0
@@ -236,103 +327,6 @@ inherited framePackageCsub: TframePackageCsub
           'Coarse compaction'
           'Z displacement')
         TabOrder = 0
-        ExplicitLeft = 64
-        ExplicitTop = 80
-        ExplicitWidth = 121
-        ExplicitHeight = 97
-      end
-    end
-    object tabInterbeds: TTabSheet
-      Caption = 'Interbeds'
-      ImageIndex = 2
-      ExplicitWidth = 414
-      ExplicitHeight = 384
-      inline frameInterbeds: TframeGrid
-        Left = 0
-        Top = 0
-        Width = 581
-        Height = 329
-        Align = alClient
-        Enabled = False
-        TabOrder = 0
-        ExplicitLeft = 32
-        ExplicitTop = 64
-        inherited Panel: TPanel
-          Top = 288
-          Width = 581
-          inherited lbNumber: TLabel
-            Width = 135
-            Caption = 'Number of interbed systems'
-            ExplicitWidth = 135
-          end
-          inherited sbAdd: TSpeedButton
-            Left = 334
-            ExplicitLeft = 235
-          end
-          inherited sbInsert: TSpeedButton
-            Left = 363
-            ExplicitLeft = 363
-          end
-          inherited sbDelete: TSpeedButton
-            Left = 392
-            ExplicitLeft = 392
-          end
-        end
-        inherited Grid: TRbwDataGrid4
-          Width = 581
-          Height = 288
-          ColCount = 2
-          Columns = <
-            item
-              AutoAdjustRowHeights = False
-              ButtonCaption = '...'
-              ButtonFont.Charset = DEFAULT_CHARSET
-              ButtonFont.Color = clWindowText
-              ButtonFont.Height = -11
-              ButtonFont.Name = 'Tahoma'
-              ButtonFont.Style = []
-              ButtonUsed = False
-              ButtonWidth = 20
-              CheckMax = False
-              CheckMin = False
-              ComboUsed = False
-              Format = rcf4String
-              LimitToList = False
-              MaxLength = 0
-              ParentButtonFont = False
-              WordWrapCaptions = True
-              WordWrapCells = False
-              CaseSensitivePicklist = False
-              CheckStyle = csCheck
-              AutoAdjustColWidths = True
-            end
-            item
-              AutoAdjustRowHeights = False
-              ButtonCaption = '...'
-              ButtonFont.Charset = DEFAULT_CHARSET
-              ButtonFont.Color = clWindowText
-              ButtonFont.Height = -11
-              ButtonFont.Name = 'Tahoma'
-              ButtonFont.Style = []
-              ButtonUsed = False
-              ButtonWidth = 20
-              CheckMax = False
-              CheckMin = False
-              ComboUsed = True
-              Format = rcf4String
-              LimitToList = True
-              MaxLength = 0
-              ParentButtonFont = False
-              PickList.Strings = (
-                'no-delay'
-                'delay')
-              WordWrapCaptions = False
-              WordWrapCells = False
-              CaseSensitivePicklist = False
-              CheckStyle = csCheck
-              AutoAdjustColWidths = True
-            end>
-        end
       end
     end
   end
