@@ -3182,12 +3182,14 @@ Type
     inelastic specific storage (SSV) coefficients must be specified.}
   TCompressionMethod = (coElasticSpecificStorage, coRecompression);
 
-  TInterbed = class(TPhastCollectionItem)
+  TInterbed = class(TOrderedItem)
   private
     FName: string;
     FInterbedType: TInterbedType;
     procedure SetInterbedType(const Value: TInterbedType);
     procedure SetName(const Value: string);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
   published
@@ -3195,12 +3197,12 @@ Type
     property InterbedType: TInterbedType read FInterbedType write SetInterbedType;
   end;
 
-  TInterbeds = class(TPhastCollection)
+  TInterbeds = class(TOrderedCollection)
   private
     function GetItem(Index: Integer): TInterbed;
     procedure SetItem(Index: Integer; const Value: TInterbed);
   public
-    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TInterbed read GetItem write SetItem; default;
   end;
 
@@ -3245,7 +3247,9 @@ Type
     //
     Constructor Create(Model: TBaseModel);
     Destructor Destroy; override;
+    // GAMMAW <gammaw>
     property Gamma: double read GetGamma write SetGamma;
+    // BETA <beta>
     property Beta: double read GetBeta write SetBeta;
     procedure InitializeVariables; override;
   published
@@ -20864,7 +20868,7 @@ begin
   FStoredGamma := TRealStorage.Create;
   FStoredGamma.OnChange := OnValueChanged;
 
-  FInterbeds := TInterbeds.Create(OnValueChanged);
+  FInterbeds := TInterbeds.Create(Model);
 
   InitializeVariables;
 end;
@@ -21020,6 +21024,19 @@ begin
   end;
 end;
 
+function TInterbed.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  InterbedSource: TInterbed;
+begin
+  result := AnotherItem is TInterbed;
+  if result then
+  begin
+    InterbedSource := TInterbed(AnotherItem);
+    result := (Name = InterbedSource.Name)
+      and (InterbedType = InterbedSource.InterbedType);
+  end;
+end;
+
 procedure TInterbed.SetInterbedType(const Value: TInterbedType);
 begin
   if FInterbedType <> Value then
@@ -21031,14 +21048,14 @@ end;
 
 procedure TInterbed.SetName(const Value: string);
 begin
-  SetStringProperty(FName, Value);
+  SetCaseSensitiveStringProperty(FName, Value);
 end;
 
 { TInterbeds }
 
-constructor TInterbeds.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TInterbeds.Create(Model: TBaseModel);
 begin
-  inherited Create(TInterbed, InvalidateModelEvent);
+  inherited Create(TInterbed, Model);
 end;
 
 function TInterbeds.GetItem(Index: Integer): TInterbed;

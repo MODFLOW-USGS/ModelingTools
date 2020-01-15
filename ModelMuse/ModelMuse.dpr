@@ -694,7 +694,8 @@ uses
   framePackageCsubUnit in 'framePackageCsubUnit.pas' {framePackageCsub: TFrame},
   ModflowCsubUnit in 'ModflowCsubUnit.pas',
   frameScreenObjectTabbedUnit in 'frameScreenObjectTabbedUnit.pas' {frameScreenObjectTabbed: TFrame},
-  frameScreenObjectCSubUnit in 'frameScreenObjectCSubUnit.pas' {frameScreenObjectCSub: TFrame};
+  frameScreenObjectCSubUnit in 'frameScreenObjectCSubUnit.pas' {frameScreenObjectCSub: TFrame},
+  ModflowCSubWriterUnit in 'ModflowCSubWriterUnit.pas';
 
 {$R *.res}
 

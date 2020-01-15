@@ -1,12 +1,15 @@
 inherited frameScreenObjectCSub: TframeScreenObjectCSub
   inherited pcMain: TPageControl
     ActivePage = tabInterbedSystems
-    ExplicitTop = 88
-    ExplicitHeight = 244
+    ExplicitTop = 41
+    ExplicitHeight = 291
     object tabInterbedSystems: TTabSheet [0]
       Caption = 'Interbed systems'
       ImageIndex = 1
-      ExplicitHeight = 304
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgSubGroups: TRbwDataGrid4
         Left = 0
         Top = 56
@@ -262,8 +265,6 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 104
-        ExplicitHeight = 159
       end
       object pnlEditPkgProp: TPanel
         Left = 0
@@ -273,7 +274,6 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 8
         object lblFormulaPkgProp: TLabel
           Left = 232
           Top = 5
@@ -303,6 +303,18 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
           Caption = 'Used'
           TabOrder = 1
           OnClick = cbUsedPkgPropClick
+        end
+      end
+    end
+    inherited tabTransient: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
+      ExplicitWidth = 388
+      ExplicitHeight = 263
+      inherited pnlGrid: TPanel
+        ExplicitHeight = 217
+        inherited rdgModflowBoundary: TRbwDataGrid4
+          ExplicitTop = 57
         end
       end
     end

@@ -8,7 +8,7 @@ uses
   RealListUnit, System.SysUtils, System.Contnrs;
 
 type
-  TCSubPackageData = class(TPhastCollectionItem)
+  TCSubPackageData = class(TFormulaOrderedItem)
   private
     FInterbedSystemName: string;
     FUsed: Boolean;
@@ -41,15 +41,16 @@ type
     procedure SetInitialPorosity(const Value: string);
     procedure SetInterbedSystemName(const Value: string);
     procedure SetThickness(const Value: string);
-    function CreateFormulaObject(Orientation:
-      TDataSetOrientation): TFormulaObject; virtual;
+  protected
+    procedure Loaded;
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property Interbed: TObject read FInterbed write SetInterbed;
-    function IsSame(CSub: TCSubPackageData): Boolean;
     procedure CreateFormulaObjects;
+    property StoredInterbedSystemName: string read FInterbedSystemName;
   published
     property InterbedSystemName: string read GetInterbedSystemName write SetInterbedSystemName;
     property Used: Boolean read FUsed write SetUsed;
@@ -91,15 +92,17 @@ type
     property InitialDelayHeadOffset: string read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
   end;
 
-  TCSubPackageDataCollection = class(TPhastCollection)
+  TCSubPackageDataCollection = class(TOrderedCollection)
   private
     function GetItem(Index: integer): TCSubPackageData;
     procedure SetItem(Index: integer; const Value: TCSubPackageData);
+  protected
+    procedure Loaded;
   public
     constructor Create(Model: TBaseModel);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
-    function IsSame(CSub: TCSubPackageDataCollection): Boolean;
     function Add: TCSubPackageData;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   end;
 
   TCSubRecord = record
@@ -273,6 +276,7 @@ type
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean; AModel: TBaseModel); override;
     function Used: boolean; override;
+    procedure Loaded;
   published
     property CSubPackageData: TCSubPackageDataCollection read FCSubPackageData write SetCSubPackageData;
 //    property Interp;
@@ -297,6 +301,8 @@ begin
   if Source is TCSubPackageData then
   begin
     SubSource := TCSubPackageData(Source);
+    InterbedSystemName := SubSource.InterbedSystemName;
+    Used := SubSource.Used;
     InitialOffset := SubSource.InitialOffset;
     Thickness := SubSource.Thickness;
     EquivInterbedNumber := SubSource.EquivInterbedNumber;
@@ -319,37 +325,17 @@ begin
   CreateFormulaObjects;
 end;
 
-function TCSubPackageData.CreateFormulaObject(
-  Orientation: TDataSetOrientation): TFormulaObject;
-begin
-  result := frmGoPhast.PhastModel.FormulaManager.Add;
-  case Orientation of
-    dsoTop:
-      begin
-        result.Parser := frmGoPhast.PhastModel.rpTopFormulaCompiler;
-      end;
-    dso3D:
-      begin
-        result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
-      end;
-    else Assert(False);
-  end;
-  Assert(False);
-  // This next statement may be wrong.
-  result.AddSubscriptionEvents(nil, nil, self);
-end;
-
 procedure TCSubPackageData.CreateFormulaObjects;
 begin
 
-  FDelayKv := CreateFormulaObject(dso3D);
-  FEquivInterbedNumber := CreateFormulaObject(dso3D);
-  FInitialDelayHeadOffset := CreateFormulaObject(dso3D);
-  FInitialElasticSpecificStorage := CreateFormulaObject(dso3D);
-  FInitialInelasticSpecificStorage := CreateFormulaObject(dso3D);
-  FInitialOffset := CreateFormulaObject(dso3D);
-  FInitialPorosity := CreateFormulaObject(dso3D);
-  FThickness := CreateFormulaObject(dso3D);
+  FDelayKv := CreateBlockFormulaObject(dso3D);
+  FEquivInterbedNumber := CreateBlockFormulaObject(dso3D);
+  FInitialDelayHeadOffset := CreateBlockFormulaObject(dso3D);
+  FInitialElasticSpecificStorage := CreateBlockFormulaObject(dso3D);
+  FInitialInelasticSpecificStorage := CreateBlockFormulaObject(dso3D);
+  FInitialOffset := CreateBlockFormulaObject(dso3D);
+  FInitialPorosity := CreateBlockFormulaObject(dso3D);
+  FThickness := CreateBlockFormulaObject(dso3D);
 end;
 
 destructor TCSubPackageData.Destroy;
@@ -430,18 +416,63 @@ begin
   result := FThickness.Formula;
 end;
 
-function TCSubPackageData.IsSame(CSub: TCSubPackageData): Boolean;
+function TCSubPackageData.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  CSub: TCSubPackageData;
 begin
-  result := (InterbedSystemName = CSub.InterbedSystemName)
-    and (Used = CSub.Used)
-    and (InitialOffset = CSub.InitialOffset)
-    and (Thickness = CSub.Thickness)
-    and (EquivInterbedNumber = CSub.EquivInterbedNumber)
-    and (InitialInelasticSpecificStorage = CSub.InitialInelasticSpecificStorage)
-    and (InitialElasticSpecificStorage = CSub.InitialElasticSpecificStorage)
-    and (InitialPorosity = CSub.InitialPorosity)
-    and (DelayKv = CSub.DelayKv)
-    and (InitialDelayHeadOffset = CSub.InitialDelayHeadOffset)
+  if AnotherItem is TCSubPackageData then
+  begin
+    CSub := AnotherItem as TCSubPackageData;
+    result := (InterbedSystemName = CSub.InterbedSystemName)
+      and (Used = CSub.Used)
+      and (InitialOffset = CSub.InitialOffset)
+      and (Thickness = CSub.Thickness)
+      and (EquivInterbedNumber = CSub.EquivInterbedNumber)
+      and (InitialInelasticSpecificStorage = CSub.InitialInelasticSpecificStorage)
+      and (InitialElasticSpecificStorage = CSub.InitialElasticSpecificStorage)
+      and (InitialPorosity = CSub.InitialPorosity)
+      and (DelayKv = CSub.DelayKv)
+      and (InitialDelayHeadOffset = CSub.InitialDelayHeadOffset)
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+procedure TCSubPackageData.Loaded;
+var
+  LocalModel: TCustomModel;
+  Interbeds: TInterbeds;
+  InterbedIndex: Integer;
+begin
+  LocalModel := (Collection as TCSubPackageDataCollection).Model as TCustomModel;
+  if LocalModel <> nil then
+  begin
+    Interbeds := LocalModel.ModflowPackages.CSubPackage.Interbeds;
+    if Interbed = nil then
+    begin
+      for InterbedIndex := 0 to Interbeds.Count - 1 do
+      begin
+        if Interbeds[InterbedIndex].Name = InterbedSystemName then
+        begin
+          Interbed := Interbeds[InterbedIndex];
+          Exit;
+        end;
+      end;
+    end
+    else
+    begin
+      for InterbedIndex := 0 to Interbeds.Count - 1 do
+      begin
+        if Interbeds[InterbedIndex] = Interbed then
+        begin
+          Exit;
+        end;
+      end;
+      Interbed := nil;
+    end;
+  end;
 end;
 
 procedure TCSubPackageData.SetDelayKv(const Value: string);
@@ -561,18 +592,8 @@ begin
 end;
 
 constructor TCSubPackageDataCollection.Create(Model: TBaseModel);
-var
-  OnInvalidateModelEvent: TNotifyEvent;
 begin
-  if Model = nil then
-  begin
-    OnInvalidateModelEvent := nil;
-  end
-  else
-  begin
-    OnInvalidateModelEvent := OnInvalidateModel;
-  end;
-  inherited Create(TCSubPackageData, OnInvalidateModelEvent);
+  inherited Create(TCSubPackageData, Model);
 end;
 
 function TCSubPackageDataCollection.GetItem(Index: integer): TCSubPackageData;
@@ -581,21 +602,22 @@ begin
 end;
 
 function TCSubPackageDataCollection.IsSame(
-  CSub: TCSubPackageDataCollection): Boolean;
-var
-  ItemIndex: Integer;
+  AnOrderedCollection: TOrderedCollection): boolean;
 begin
-  result := Count = CSub.Count;
+  result := AnOrderedCollection is TCSubPackageDataCollection;
   if result then
   begin
-    for ItemIndex := 0 to Count - 1 do
-    begin
-      result := Items[ItemIndex].IsSame(CSub.Items[ItemIndex]);
-      if not result then
-      begin
-        Exit;
-      end;
-    end;
+    result := inherited IsSame(AnOrderedCollection);
+  end;
+end;
+
+procedure TCSubPackageDataCollection.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
   end;
 end;
 
@@ -704,6 +726,7 @@ begin
   begin
     StressOffset := TCSubItem(Source).StressOffset;
   end;
+  inherited;
 end;
 
 procedure TCSubItem.AssignObserverEvents(Collection: TCollection);
@@ -1164,6 +1187,7 @@ begin
     CSubPackageData := SourceCSub.CSubPackageData;
 //    Interp := SourceCSub.Interp;
   end;
+  Loaded;
   inherited;
 end;
 
@@ -1433,6 +1457,11 @@ begin
   end;
 end;
 
+procedure TCSubBoundary.Loaded;
+begin
+  CSubPackageData.Loaded;
+end;
+
 class function TCSubBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := nil;
@@ -1485,12 +1514,12 @@ begin
   begin
     for ItemIndex := 0 to CSubPackageData.Count -1 do
     begin
-	  result := CSubPackageData[ItemIndex].Used;
-	  if result then
-	  begin
-	    Exit;
-	  end;
-	end;
+      result := CSubPackageData[ItemIndex].Used;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
   end;
 end;
 

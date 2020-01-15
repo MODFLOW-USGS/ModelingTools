@@ -18227,6 +18227,12 @@ begin
   begin
     ResultType := rdtDouble;
   end
+  else if (DataGrid = frameCSUB.rdgModflowBoundary)
+    or (DataGrid = frameCSUB.rdgSubGroups)
+    then
+  begin
+    ResultType := rdtDouble;
+  end
   else
   begin
     Assert(False);

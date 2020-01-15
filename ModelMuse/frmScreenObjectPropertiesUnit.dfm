@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspCfpPipes
+        ActivePage = jvspCSUB
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -2664,7 +2664,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameChdParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 256
                 ColWidths = (
@@ -2908,7 +2907,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameGhbParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 211
                 ColWidths = (
@@ -3150,7 +3148,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameWellParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 184
                 ColWidths = (
@@ -3415,7 +3412,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameRivParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 219
                 ColWidths = (
@@ -3662,7 +3658,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameDrnParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 208
                 ColWidths = (
@@ -3915,7 +3910,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameDrtParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 169
                 ColWidths = (
@@ -4357,7 +4351,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameRchParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 259
                 ColWidths = (
@@ -4551,7 +4544,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameEvtParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 286
                 ColWidths = (
@@ -4755,7 +4747,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameEtsParamdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 256
                 ColWidths = (
@@ -4945,7 +4936,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameResdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -5315,7 +5305,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameLakdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 141
                 ColWidths = (
@@ -6937,7 +6926,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitWidth = 573
                   inherited zbFlowDepthTable: TQRbwZoomBox2
                     Width = 279
-                    Image32.Top = 0
                     Image32.Width = 279
                     Image32.ExplicitWidth = 279
                     ExplicitWidth = 279
@@ -6945,7 +6933,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited zbFlowWidthTable: TQRbwZoomBox2
                     Left = 289
                     Width = 280
-                    Image32.Top = 0
                     Image32.Width = 280
                     Image32.ExplicitWidth = 280
                     ExplicitLeft = 289
@@ -7422,7 +7409,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameScreenObjectUZFdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 231
                 ColWidths = (
@@ -8787,7 +8773,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameMT3DMSdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 302
                 ColWidths = (
@@ -9236,7 +9221,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -9333,7 +9317,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 323
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 323
                 ColWidths = (
@@ -9570,7 +9553,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end>
                 OnEndUpdate = frameFarmWelldgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 251
                 ColWidths = (
@@ -9656,7 +9638,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -9740,7 +9721,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -9824,7 +9804,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -10110,7 +10089,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnSetEditText = frameCfpRechargeFractiondgModflowBoundarySetEditText
                 OnEndUpdate = frameCfpRechargeFractiondgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -10200,7 +10178,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameSWR_RaindgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -10290,7 +10267,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameSWR_EvapdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -10389,7 +10365,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameSWR_LatInfldgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 315
                 ColWidths = (
@@ -10476,7 +10451,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameSWR_StagedgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -10563,7 +10537,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameSWR_DirectRunoffdgModflowBoundaryEndUpdate
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -10906,7 +10879,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                           AutoAdjustColWidths = True
                         end>
                       ExplicitLeft = 1
-                      ExplicitTop = 51
                       ExplicitHeight = 225
                       ColWidths = (
                         64
@@ -11020,7 +10992,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 315
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 315
                 ColWidths = (
@@ -11117,7 +11088,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -11298,7 +11268,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -11382,7 +11351,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnSetEditText = frameMt3d_UZTdgModflowBoundarySetEditText
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -11466,7 +11434,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnSetEditText = frameMt3d_UZT_UnsatdgModflowBoundarySetEditText
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -11550,7 +11517,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnSetEditText = frameMt3d_UZT_SatdgModflowBoundarySetEditText
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -11634,7 +11600,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 353
                 OnSetEditText = frameMT3D_Uzf_SeepagedgModflowBoundarySetEditText
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 353
                 ColWidths = (
@@ -12274,7 +12239,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnSetEditText = frameHfbMf6rdgModflowBoundarySetEditText
                 OnButtonClick = frameHfbMf6rdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 227
               end
@@ -12349,7 +12313,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
                 OnButtonClick = frameResdgModflowBoundaryButtonClick
-                ExplicitTop = 51
                 ExplicitWidth = 579
               end
             end
@@ -12580,7 +12543,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited rdgModflowBoundary: TRbwDataGrid4
                 Width = 579
                 OnButtonClick = frameMVRrdgModflowBoundaryButtonClick
-                ExplicitTop = 51
                 ExplicitWidth = 579
               end
             end
@@ -12902,7 +12864,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 579
                 OnSetEditText = frameMT3D_LKTrdgModflowBoundarySetEditText
                 OnButtonClick = frameResdgModflowBoundaryButtonClick
-                ExplicitTop = 51
                 ExplicitWidth = 579
               end
             end
@@ -13232,8 +13193,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 581
           Height = 476
           Caption = 'jvspCSUB'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           inline frameCSUB: TframeScreenObjectCSub
             Left = 0
             Top = 0
@@ -13241,25 +13200,44 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Height = 476
             Align = alClient
             TabOrder = 0
-            ExplicitLeft = 48
-            ExplicitTop = 40
+            ExplicitWidth = 581
+            ExplicitHeight = 476
             inherited pcMain: TPageControl
               Width = 581
               Height = 435
+              ExplicitWidth = 581
+              ExplicitHeight = 435
               inherited tabInterbedSystems: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 30
+                ExplicitWidth = 573
+                ExplicitHeight = 401
                 inherited rdgSubGroups: TRbwDataGrid4
                   Width = 573
-                  Height = 401
+                  Height = 345
                   FixedCols = 0
+                  OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                  ExplicitWidth = 573
+                  ExplicitHeight = 345
+                end
+                inherited pnlEditPkgProp: TPanel
+                  Width = 573
+                  ExplicitWidth = 573
+                  inherited lblFormulaPkgProp: TLabel
+                    Width = 59
+                    Height = 19
+                    ExplicitWidth = 59
+                    ExplicitHeight = 19
+                  end
                 end
               end
               inherited tabTransient: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 298
+                ExplicitHeight = 257
                 inherited pnlBottom: TPanel
                   Top = 355
                   Width = 573
-                  ExplicitTop = 252
+                  ExplicitTop = 211
                   inherited lblNumTimes: TLabel
                     Width = 119
                     Height = 19
@@ -13271,16 +13249,18 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     ExplicitHeight = 27
                   end
                   inherited btnDelete: TBitBtn
-                    Left = 485
+                    Left = 670
+                    ExplicitLeft = 485
                   end
                   inherited btnInsert: TBitBtn
-                    Left = 397
+                    Left = 582
+                    ExplicitLeft = 397
                   end
                 end
                 inherited pnlGrid: TPanel
                   Width = 573
                   Height = 355
-                  ExplicitHeight = 252
+                  ExplicitHeight = 211
                   inherited pnlEditGrid: TPanel
                     Width = 571
                     inherited lblFormula: TLabel
@@ -13293,13 +13273,20 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited rdgModflowBoundary: TRbwDataGrid4
                     Width = 571
                     Height = 297
-                    ExplicitHeight = 194
+                    OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                    ExplicitLeft = 2
+                    ExplicitTop = 56
+                    ExplicitWidth = 571
+                    ExplicitHeight = 297
                   end
                 end
               end
             end
             inherited pnlCaption: TPanel
               Width = 581
+              ExplicitLeft = 0
+              ExplicitTop = 0
+              ExplicitWidth = 581
             end
           end
         end

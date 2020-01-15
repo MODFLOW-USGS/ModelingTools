@@ -19034,6 +19034,11 @@ begin
     ModflowBoundaries.Mt3dSftConcBoundary.Loaded;
   end;
 
+  if ModflowBoundaries.ModflowCSub <> nil then
+  begin
+    ModflowBoundaries.ModflowCSub.Loaded;
+  end;
+
   UpdateUzfGage1and2;
   UpdateUzfGage3;
 
