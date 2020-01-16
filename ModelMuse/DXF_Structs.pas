@@ -33,8 +33,8 @@ uses
 ///////////////////////////////////////////////////////////////////////////////
 const
   max_vertices_per_polyline = 8192; // AutoCAD places a limit on this, but
-  max_attribs               = 16;   // I don't know what it is...
-  max_my_attribs            = 16;
+  max_attribs               = 256;   // I don't know what it is...
+  max_my_attribs            = 256;
 
 type
   file_type = (off,geo,pslg);

@@ -4,25 +4,9 @@ interface
 
 uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
-  PhastModelUnit, SparseDataSets, DataSetUnit;
+  PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed;
 
 type
-  TCSubPackageDataSets = class(TObject)
-  private
-    DelayKv: TRealSparseDataSet;
-    EquivInterbedNumber: TRealSparseDataSet;
-    InitialDelayHeadOffset: TRealSparseDataSet;
-    InitialElasticSpecificStorage: TRealSparseDataSet;
-    InitialInelasticSpecificStorage: TRealSparseDataSet;
-    InitialOffset: TRealSparseDataSet;
-    InitialPorosity: TRealSparseDataSet;
-    Thickness: TRealSparseDataSet;
-    FInterbed: TInterbed;
-  public
-    constructor Create(Interbed: TInterbed);
-    destructor Destroy; override;
-  end;
-
   TCSubWriter = class(TCustomTransientWriter)
   private
     FCSubPackage: TCSubPackageSelection;
@@ -302,35 +286,6 @@ end;
 procedure TCSubWriter.WriteStressPeriods;
 begin
 
-end;
-
-{ TCSubPackageDataSets }
-
-constructor TCSubPackageDataSets.Create(Interbed: TInterbed);
-begin
-  FInterbed := Interbed;
-  DelayKv := TRealSparseDataSet.Create(nil);
-  EquivInterbedNumber := TRealSparseDataSet.Create(nil);
-  InitialDelayHeadOffset := TRealSparseDataSet.Create(nil);
-  InitialElasticSpecificStorage := TRealSparseDataSet.Create(nil);
-  InitialInelasticSpecificStorage := TRealSparseDataSet.Create(nil);
-  InitialOffset := TRealSparseDataSet.Create(nil);
-  InitialPorosity := TRealSparseDataSet.Create(nil);
-  Thickness := TRealSparseDataSet.Create(nil);
-
-end;
-
-destructor TCSubPackageDataSets.Destroy;
-begin
-  DelayKv.Free;
-  EquivInterbedNumber.Free;
-  InitialDelayHeadOffset.Free;
-  InitialElasticSpecificStorage.Free;
-  InitialInelasticSpecificStorage.Free;
-  InitialOffset.Free;
-  InitialPorosity.Free;
-  Thickness.Free;
-  inherited;
 end;
 
 end.

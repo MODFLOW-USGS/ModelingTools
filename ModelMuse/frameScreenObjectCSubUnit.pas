@@ -53,7 +53,8 @@ implementation
 
 uses
   ModflowPackageSelectionUnit, frmGoPhastUnit, ScreenObjectUnit,
-  ModflowCsubUnit, GoPhastTypes, System.Math, frmCustomGoPhastUnit;
+  ModflowCsubUnit, GoPhastTypes, System.Math, frmCustomGoPhastUnit,
+  ModflowCSubInterbed;
 
 resourcestring
   StrInterbed = 'Interbed';
@@ -187,7 +188,7 @@ end;
 
 procedure TframeScreenObjectCSub.InitializeControls;
 var
-  Interbeds: TInterbeds;
+  Interbeds: TCSubInterbeds;
   ColIndex: Integer;
   RowIndex: Integer;
 begin
@@ -350,10 +351,10 @@ var
   Item: TScreenObjectEditItem;
   Boundary: TCSubBoundary;
   BoundaryUsed: Boolean;
-  Interbeds: TInterbeds;
+  Interbeds: TCSubInterbeds;
   CSubPackageData: TCSubPackageDataCollection;
   CSubValues: TCSubCollection;
-  AnInterBed: TInterbed;
+  AnInterBed: TCSubInterbed;
   InterBedSystem: TCSubPackageData;
   Formula: string;
   TimeIndex: Integer;

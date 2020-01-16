@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModpathParticleUnit, ModflowBoundaryDisplayUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
-  Mt3dSftUnit;
+  Mt3dSftUnit, ModflowCSubInterbed;
 
 Type
   TSelectionType = (stCheckBox, stRadioButton);
@@ -3173,7 +3173,6 @@ Type
   TCsubOutputType = (coInterbedStrain, coCourseStrain, coCompaction, coElasticComp,
     coInelasticComp, coInterbedComp, coCoarseComp, coZDisplacement);
   TCsubOutputTypes = set of TCsubOutputType;
-  TInterbedType = (itDelay, itNoDelay);
 
     {COMPRESSION_INDICES —keyword to indicate that the
     recompression (CR) and compression (CC) indices are specified instead of
@@ -3181,30 +3180,6 @@ Type
     coefficients. If not specified, then elastic specific storage (SSE) and
     inelastic specific storage (SSV) coefficients must be specified.}
   TCompressionMethod = (coElasticSpecificStorage, coRecompression);
-
-  TInterbed = class(TOrderedItem)
-  private
-    FName: string;
-    FInterbedType: TInterbedType;
-    procedure SetInterbedType(const Value: TInterbedType);
-    procedure SetName(const Value: string);
-  protected
-    function IsSame(AnotherItem: TOrderedItem): boolean; override;
-  public
-    procedure Assign(Source: TPersistent); override;
-  published
-    property Name: string read FName write SetName;
-    property InterbedType: TInterbedType read FInterbedType write SetInterbedType;
-  end;
-
-  TInterbeds = class(TOrderedCollection)
-  private
-    function GetItem(Index: Integer): TInterbed;
-    procedure SetItem(Index: Integer; const Value: TInterbed);
-  public
-    constructor Create(Model: TBaseModel);
-    property Items[Index: Integer]: TInterbed read GetItem write SetItem; default;
-  end;
 
   // Skeletal Storage, Compaction, and Subsidence (CSUB) Package
   TCSubPackageSelection = class(TModflowPackageSelection)
@@ -3221,7 +3196,7 @@ Type
     FSpecifyInitialPreconsolidationStress: Boolean;
     FSpecifyInitialDelayHead: Boolean;
     FOutputTypes: TCsubOutputTypes;
-    FInterbeds: TInterbeds;
+    FInterbeds: TCSubInterbeds;
 //    FInterbedNames: TStrings;
     procedure SetHeadBased(const Value: Boolean);
     procedure SetInterbedThicknessMethod(const Value: TInterbedThicknessMethod);
@@ -3239,7 +3214,7 @@ Type
     procedure SetSpecifyInitialDelayHead(const Value: Boolean);
     procedure SetSpecifyInitialPreconsolidationStress(const Value: Boolean);
     procedure SetOutputTypes(const Value: TCsubOutputTypes);
-    procedure SetInterbeds(const Value: TInterbeds);
+    procedure SetInterbeds(const Value: TCSubInterbeds);
 //    procedure SetInterbedNames(const Value: TStrings);
   public
     procedure Assign(Source: TPersistent); override;
@@ -3335,7 +3310,7 @@ Type
     [ZDISPLACEMENT FILEOUT <zdisplacement_filename>]}
     property OutputTypes: TCsubOutputTypes read FOutputTypes write SetOutputTypes;
     // cdelay
-    property Interbeds: TInterbeds read FInterbeds write SetInterbeds;
+    property Interbeds: TCSubInterbeds read FInterbeds write SetInterbeds;
   {
 [BOUNDNAMES]
 [PRINT_INPUT]
@@ -20868,7 +20843,7 @@ begin
   FStoredGamma := TRealStorage.Create;
   FStoredGamma.OnChange := OnValueChanged;
 
-  FInterbeds := TInterbeds.Create(Model);
+  FInterbeds := TCSubInterbeds.Create(Model);
 
   InitializeVariables;
 end;
@@ -20934,7 +20909,7 @@ end;
 //  FInterbedNames.Assign(Value);
 //end;
 
-procedure TCSubPackageSelection.SetInterbeds(const Value: TInterbeds);
+procedure TCSubPackageSelection.SetInterbeds(const Value: TCSubInterbeds);
 begin
   FInterbeds.Assign(Value);
 end;
@@ -21004,68 +20979,6 @@ begin
     FCompressionMethod := Value;
     InvalidateModel;
   end;
-end;
-
-{ TInterbed }
-
-procedure TInterbed.Assign(Source: TPersistent);
-var
-  InterbedSource: TInterbed;
-begin
-  if Source is TInterbed then
-  begin
-    InterbedSource := TInterbed(Source);
-    Name := InterbedSource.Name;
-    InterbedType := InterbedSource.InterbedType;
-  end
-  else
-  begin
-    inherited;
-  end;
-end;
-
-function TInterbed.IsSame(AnotherItem: TOrderedItem): boolean;
-var
-  InterbedSource: TInterbed;
-begin
-  result := AnotherItem is TInterbed;
-  if result then
-  begin
-    InterbedSource := TInterbed(AnotherItem);
-    result := (Name = InterbedSource.Name)
-      and (InterbedType = InterbedSource.InterbedType);
-  end;
-end;
-
-procedure TInterbed.SetInterbedType(const Value: TInterbedType);
-begin
-  if FInterbedType <> Value then
-  begin
-    FInterbedType := Value;
-    InvalidateModel;
-  end;
-end;
-
-procedure TInterbed.SetName(const Value: string);
-begin
-  SetCaseSensitiveStringProperty(FName, Value);
-end;
-
-{ TInterbeds }
-
-constructor TInterbeds.Create(Model: TBaseModel);
-begin
-  inherited Create(TInterbed, Model);
-end;
-
-function TInterbeds.GetItem(Index: Integer): TInterbed;
-begin
-  result := inherited Items[index] as TInterbed;
-end;
-
-procedure TInterbeds.SetItem(Index: Integer; const Value: TInterbed);
-begin
-  inherited Items[index] := Value;
 end;
 
 end.

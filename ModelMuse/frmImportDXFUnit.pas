@@ -311,6 +311,8 @@ begin
                         except on E: EScreenObjectError do
                           begin
                             Inc(InvalidPointCount);
+                            Assert(ScreenObjectList.Last = AScreenObject);
+                            ScreenObjectList.Delete(ScreenObjectList.Count-1);
                             AScreenObject.Free;
                             if cbSingleObject.Checked then
                             begin

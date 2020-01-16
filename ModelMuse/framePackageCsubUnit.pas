@@ -49,6 +49,8 @@ var
 
 implementation
 
+uses ModflowCSubInterbed;
+
 resourcestring
   StrInterbedName = 'Interbed name';
   StrInterbedType = 'Interbed type';
@@ -64,7 +66,7 @@ var
   CSubPackage: TCSubPackageSelection;
   CsubOutputType: TCsubOutputType;
   ItemIndex: Integer;
-  Interbed: TInterbed;
+  Interbed: TCSubInterbed;
 begin
   inherited;
   CSubPackage := Package as TCSubPackageSelection;
@@ -92,6 +94,7 @@ begin
     begin
       Interbed := CSubPackage.Interbeds[ItemIndex];
       frameInterbeds.Grid.Cells[Ord(icName), ItemIndex+1] := Interbed.Name;
+      frameInterbeds.Grid.Objects[Ord(icName), ItemIndex+1] := Interbed;
       frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1] := Ord(Interbed.InterbedType);
     end;
   finally
@@ -116,10 +119,10 @@ var
   CSubPackage: TCSubPackageSelection;
   CsubOutputType: TCsubOutputType;
   ItemIndex: Integer;
-  Interbed: TInterbed;
+  Interbed: TCSubInterbed;
   OutputTypes: TCsubOutputTypes;
-  CSubCount: Integer;
   RowIndex: Integer;
+  InterbedIndex: Integer;
 begin
   inherited;
   CSubPackage := Package as TCSubPackageSelection;
@@ -151,31 +154,35 @@ begin
   end;
   CSubPackage.OutputTypes := OutputTypes;
 
-  CSubCount := 0;
-  for ItemIndex := 0 to frameInterbeds.SeNumber.AsInteger - 1 do
+  for InterbedIndex := CSubPackage.Interbeds.Count -1 downto 0 do
   begin
-    if (frameInterbeds.Grid.Cells[Ord(icName), ItemIndex+1] <> '')
-      and (frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1] >= 0)  then
+    Interbed := CSubPackage.Interbeds[InterbedIndex];
+    if frameInterbeds.Grid.Cols[Ord(icName)].IndexOfObject(Interbed) < 0 then
     begin
-      Inc(CSubCount);
+      CSubPackage.Interbeds.Delete(InterbedIndex);
     end;
   end;
 
   ItemIndex := -1;
-  CSubPackage.Interbeds.Count := CSubCount;
-  for RowIndex := 1 to frameInterbeds.SeNumber.AsInteger do
+  for RowIndex := 1 to frameInterbeds.seNumber.AsInteger do
   begin
     if (frameInterbeds.Grid.Cells[Ord(icName), RowIndex] <> '')
       and (frameInterbeds.Grid.ItemIndex[Ord(icType), RowIndex] >= 0)  then
     begin
       Inc(ItemIndex);
 
-      Interbed := CSubPackage.Interbeds[ItemIndex];
-      Interbed.Name := frameInterbeds.Grid.Cells[Ord(icName), ItemIndex+1];
-      if frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1] >= 0 then
+      Interbed := frameInterbeds.Grid.Objects[Ord(icName), RowIndex] as TCSubInterbed;
+      if Interbed = nil then
       begin
-        Interbed.InterbedType := TInterbedType(frameInterbeds.Grid.ItemIndex[Ord(icType), ItemIndex+1]);
+        Interbed := CSubPackage.Interbeds.Add;
+        Interbed.Index := ItemIndex;
       end;
+      Interbed.Name := frameInterbeds.Grid.Cells[Ord(icName), ItemIndex+1];
+      Interbed.InterbedType := TCSubInterbedType(frameInterbeds.Grid.ItemIndex[Ord(icType), RowIndex]);
+    end
+    else
+    begin
+      frameInterbeds.Grid.Objects[Ord(icName), RowIndex].Free;
     end;
   end;
 

@@ -286,7 +286,8 @@ implementation
 
 uses
   SubscriptionUnit, frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
-  frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit, ModflowPackageSelectionUnit;
+  frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit,
+  ModflowPackageSelectionUnit, ModflowCSubInterbed;
 
 resourcestring
   StrStressOffsetMultip = 'Stress offset multiplier';
@@ -403,7 +404,7 @@ function TCSubPackageData.GetInterbedSystemName: string;
 begin
   if FInterbed <> nil then
   begin
-    result := (FInterbed as TInterbed).Name;
+    result := (FInterbed as TCSubInterbed).Name;
   end
   else
   begin
@@ -443,7 +444,7 @@ end;
 procedure TCSubPackageData.Loaded;
 var
   LocalModel: TCustomModel;
-  Interbeds: TInterbeds;
+  Interbeds: TCSubInterbeds;
   InterbedIndex: Integer;
 begin
   LocalModel := (Collection as TCSubPackageDataCollection).Model as TCustomModel;
@@ -559,7 +560,7 @@ begin
   FInterbed := Value;
   if FInterbed <> nil then
   begin
-    FInterbedSystemName := (FInterbed as TInterbed).Name;
+    FInterbedSystemName := (FInterbed as TCSubInterbed).Name;
   end;
 end;
 

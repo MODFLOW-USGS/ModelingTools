@@ -794,8 +794,8 @@ var
   Basename: string;
 begin
   LocalModel := AModel as TCustomModel;
-  DataArrayManager := LocalModel.DataArrayManager;
   Assert(LocalModel <> nil);
+  DataArrayManager := LocalModel.DataArrayManager;
   if LayerName = '' then
   begin
     DataArray := nil;
@@ -824,35 +824,13 @@ begin
     DataArray := DataArrayManager.CreateNewDataArray(TDataArray, LayerName,
       '0.', LayerDisplayName, StandardLock, rdtDouble, eaBlocks, dsoTop, StrHUF);
     LocalModel.UpdateDataArrayDimensions(DataArray);
-//    if frmGoPhast.Grid = nil then
-//    begin
-//      DataArray.UpdateDimensions(0,0,0);
-//    end
-//    else
-//    begin
-//      DataArray.UpdateDimensions(frmGoPhast.Grid.LayerCount,
-//        frmGoPhast.Grid.RowCount, frmGoPhast.Grid.ColumnCount);
-//    end;
-//    DataArray := TDataArray.Create(LocalModel);
-//    DataArray.UpdateWithName(LayerName);
-//    DataArray.OnNameChange := LocalModel.DataArrayNameChange;
-//    DataArray.Orientation := dsoTop;
-//    DataArray.EvaluatedAt := eaBlocks;
-//    DataArray.DataType := rdtDouble;
-//    DataArray.Formula := '0.';
-//    DataArray.Lock := StandardLock;
-//    DataArray.Classification := StrHUF;
     DataArray.OnDataSetUsed := LocalModel.HufDataArrayUsed;
-//    LocalModel.AddDataSet(DataArray);
     HufUnits.AddOwnedDataArray(DataArray);
   end
   else
   begin
     LocalModel.RenameDataArray(DataArray, LayerName, LayerDisplayName);
-//    DataArray.DisplayName := LayerDisplayName;
-//    DataArray.UpdateWithName(LayerName);
     DataArray.Lock := StandardLock;
-//    DataArray.OnNameChange := LocalModel.DataArrayNameChange;
     DataArray.OnDataSetUsed := LocalModel.HufDataArrayUsed;
   end;
   if AModel is TPhastModel then

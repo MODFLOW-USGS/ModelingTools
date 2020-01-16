@@ -446,7 +446,7 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   frmManageFluxObservationsUnit, ModflowSubsidenceDefUnit, Mt3dmsChemUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit,
-  ModflowCsubUnit;
+  ModflowCsubUnit, ModflowCSubInterbed;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -4153,7 +4153,7 @@ end;
 
 procedure TUndoChangeLgrPackageSelection.UpdateInterbedsInObjects;
 var
-  Interbeds: TInterbeds;
+  Interbeds: TCSubInterbeds;
   LocalModel: TPhastModel;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;

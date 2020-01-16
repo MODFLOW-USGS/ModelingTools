@@ -2595,6 +2595,7 @@ that affects the model output should also have a comment. }
     // TDataArray.OnDataSetUsed) for @link(TDataArray)s related to the HUF
     // package.
     function HufDataArrayUsed(Sender: TObject): boolean;
+    function CSubInterbedDataArrayUsed(Sender: TObject): boolean;
     // @name assigns frmGoPhast.Grid.@link(TCustomModelGrid.FrontDataSet)
     // to be the @link(TDataArray) in TimeList at Time.
     procedure UpdateFrontTimeDataSet(const TimeList: TCustomTimeList;
@@ -8910,9 +8911,11 @@ const
   //    '4.1.0.20' Bug fix: ModelMuse now allows the user to specify a return
   //                location in DRT as a Farm in the Farm process or a SWR
   //                reach with MODFLOW-OWHM models.
+  //    '4.1.0.21' Bug fix: Fixed a bug that prevented some DXF files from
+  //                being imported correctly.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.20';
+  IModelVersion = '4.1.0.21';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -31282,58 +31285,15 @@ begin
     and (ModflowPackages.CSubPackage.CompressionMethod = coRecompression);
 end;
 
+function TCustomModel.CSubInterbedDataArrayUsed(Sender: TObject): boolean;
+begin
+  result := CSubDataSetsUsed(Sender) and ModflowPackages.CSubPackage.Interbeds.DataArrayUsed(Sender as TDataArray);
+end;
+
 procedure TCustomModel.RemoveVariables(const DataSet: TDataArray);
-//var
-//  TempCompiler: TRbwParser;
-//  Local3DCompiler: TRbwParser;
-//  VarIndex: integer;
-//  Variable: TCustomVariable;
-//  LocalModel: TPhastModel;
-//  ChildIndex: Integer;
-//  ChildItem: TChildModelItem;
 begin
   RemoveVariables(DataSet.Name, DataSet.Orientation,
     DataSet.EvaluatedAt);
-//  TempCompiler := GetCompiler(DataSet.Orientation,
-//    DataSet.EvaluatedAt);
-//
-//  Local3DCompiler := nil;
-//  case DataSet.EvaluatedAt of
-//    eaBlocks:
-//      begin
-//        Local3DCompiler := rpThreeDFormulaCompiler;
-//      end;
-//    eaNodes:
-//      begin
-//        Local3DCompiler := rpThreeDFormulaCompilerNodes;
-//      end;
-//  else
-//    Assert(False);
-//  end;
-//  VarIndex := TempCompiler.IndexOfVariable(DataSet.Name);
-//  if VarIndex >= 0 then
-//  begin
-//    Variable := TempCompiler.Variables[VarIndex] as TCustomVariable;
-//    TempCompiler.RemoveVariable(Variable);
-//  end;
-//  if TempCompiler <> Local3DCompiler then
-//  begin
-//    VarIndex := Local3DCompiler.IndexOfVariable(DataSet.Name);
-//    if VarIndex >= 0 then
-//    begin
-//      Variable := Local3DCompiler.Variables[VarIndex] as TCustomVariable;
-//      Local3DCompiler.RemoveVariable(Variable);
-//    end;
-//  end;
-//  if self is TPhastModel then
-//  begin
-//    LocalModel := TPhastModel(self);
-//    for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
-//    begin
-//      ChildItem := LocalModel.ChildModels[ChildIndex];
-//      ChildItem.ChildModel.RemoveVariables(DataSet);
-//    end;
-//  end;
 end;
 
 procedure TCustomModel.SetEdgeDisplay(const Value: TCustomModflowGridEdgeDisplay);
