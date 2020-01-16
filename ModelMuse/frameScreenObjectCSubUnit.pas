@@ -101,8 +101,8 @@ var
 begin
   FGettingData := True;
   try
-
     InitializeControls;
+
     FPackageDataCleared := False;
     FTimeDataCleared := False;
     FoundFirst := False;
@@ -118,8 +118,8 @@ begin
           FoundFirst := True;
           FirstCSub := ModflowCSub;
           rdgSubGroups.BeginUpdate;
-            for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
           try
+            for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
             begin
               Interbed := ModflowCSub.CSubPackageData[InterbedIndex];
               RowIndex := rdgSubGroups.Cols[Ord(icName)].IndexOf(Interbed.InterbedSystemName);
@@ -153,9 +153,12 @@ begin
             for RowIndex := 1 to ModflowCSub.Values.Count do
             begin
               Item := ModflowCSub.Values[RowIndex-1] as TCSubItem;
-              rdgModflowBoundary.Cells[Ord(scStartingTime), RowIndex] := FloatToStr(Item.StartTime);
-              rdgModflowBoundary.Cells[Ord(scEndingTime), RowIndex] := FloatToStr(Item.EndTime);
-              rdgModflowBoundary.Cells[Ord(scStressOffset), RowIndex] := Item.StressOffset;
+              rdgModflowBoundary.Cells[Ord(scStartingTime), RowIndex] :=
+                FloatToStr(Item.StartTime);
+              rdgModflowBoundary.Cells[Ord(scEndingTime), RowIndex] :=
+                FloatToStr(Item.EndTime);
+              rdgModflowBoundary.Cells[Ord(scStressOffset), RowIndex] :=
+                Item.StressOffset;
             end;
           finally
             rdgModflowBoundary.EndUpdate;
@@ -188,6 +191,7 @@ var
   ColIndex: Integer;
   RowIndex: Integer;
 begin
+  pcMain.ActivePageIndex := 0;
   Interbeds := frmGoPhast.PhastModel.ModflowPackages.CSubPackage.Interbeds;
   ClearGrid(rdgSubGroups);
   rdgSubGroups.BeginUpdate;

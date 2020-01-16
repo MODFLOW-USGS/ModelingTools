@@ -43,14 +43,17 @@ inherited framePackageCsub: TframePackageCsub
           end
           inherited sbAdd: TSpeedButton
             Left = 334
+            Hint = 'Add interbed|Add an interbed after the last interbed'
             ExplicitLeft = 235
           end
           inherited sbInsert: TSpeedButton
             Left = 363
+            Hint = 'Insert interbed|Insert an interbed before the selected interbed.'
             ExplicitLeft = 363
           end
           inherited sbDelete: TSpeedButton
             Left = 392
+            Hint = 'Delete interbed|Delete the selected interbed.'
             ExplicitLeft = 392
           end
         end

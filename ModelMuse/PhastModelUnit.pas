@@ -22557,7 +22557,7 @@ end;
 procedure TCustomModel.InvalidateCSubStressOffset(Sender: TObject);
 begin
  { TODO : complete this. }
-  Assert(False);
+//  Assert(False);
 end;
 
 procedure TCustomModel.InvalidateEtsDepthFractions(Sender: TObject);

@@ -417,6 +417,7 @@ type
     FNewImmobileComponents: TChemSpeciesCollection;
     FOldMt3dTimes: TMt3dmsTimeCollection;
     FComponentsSame: Boolean;
+    procedure UpdateInterbedsInObjects;
     procedure UpdateLayerGroupProperties(BcfPackage: TModflowPackageSelection);
     procedure RecreateMt3dTimeLists;
     procedure SetMt3dCaption;
@@ -444,7 +445,8 @@ uses Contnrs, JvListComb, frmGoPhastUnit, ScreenObjectUnit,
   frameSfrParamInstancesUnit, LayerStructureUnit, frmErrorsAndWarningsUnit, 
   frmManageFluxObservationsUnit, ModflowSubsidenceDefUnit, Mt3dmsChemUnit,
   ModflowTimeUnit, ModflowDiscretizationWriterUnit, Mt3dUztRchUnit,
-  Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit;
+  Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, Mt3dSftUnit,
+  ModflowCsubUnit;
 
 resourcestring
   StrLPFParameters = 'LPF or NWT Parameters';
@@ -3987,6 +3989,7 @@ begin
   finally
     PhastModel.ModflowPackages.SfrPackage.AssignParameterInstances := True;
   end;
+  UpdateInterbedsInObjects;
 
   FComponentsSame := PhastModel.MobileComponents.IsSame(FNewMobileComponents)
     and PhastModel.ImmobileComponents.IsSame(FNewImmobileComponents);
@@ -4125,6 +4128,7 @@ begin
   finally
     frmGoPhast.PhastModel.ModflowPackages.SfrPackage.AssignParameterInstances := True;
   end;
+  UpdateInterbedsInObjects;
 
   frmGoPhast.PhastModel.MobileComponents := FOldMobileComponents;
   frmGoPhast.PhastModel.ImmobileComponents := FOldImmobileComponents;
@@ -4145,6 +4149,34 @@ begin
   frmGoPhast.EnableFarmMenuItems;
   frmGoPhast.EnableSwrActions;
   SetMt3dCaption;
+end;
+
+procedure TUndoChangeLgrPackageSelection.UpdateInterbedsInObjects;
+var
+  Interbeds: TInterbeds;
+  LocalModel: TPhastModel;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  CSub: TCSubBoundary;
+  InterbedIndex: Integer;
+  CSubPkgData: TCSubPackageData;
+begin
+  LocalModel := frmGoPhast.PhastModel;
+  Interbeds := LocalModel.ModflowPackages.CSubPackage.Interbeds;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    CSub := AScreenObject.ModflowCSub;
+    if CSub <> nil then
+    begin
+      CSub.Loaded;
+//      for InterbedIndex := 0 to CSub.CSubPackageData.Count - 1 do
+//      begin
+//        CSubPkgData := CSub.CSubPackageData[InterbedIndex];
+//        CSubPkgData.Interbed := Interbeds.GetInterbedByName(CSubPkgData.StoredInterbedSystemName);
+//      end;
+    end;
+  end;
 end;
 
 procedure TUndoChangeLgrPackageSelection.UpdateLayerGroupProperties(

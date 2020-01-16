@@ -378,7 +378,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarFile: TToolBar
-      Left = 11
+      Left = 14
       Top = 2
       Width = 159
       Height = 28
