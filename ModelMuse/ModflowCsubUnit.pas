@@ -324,6 +324,46 @@ constructor TCSubPackageData.Create(Collection: TCollection);
 begin
   inherited;
   CreateFormulaObjects;
+  
+  InitialOffset := '0';
+  Thickness := '0';
+  EquivInterbedNumber := '1';
+  InitialInelasticSpecificStorage := '0.01';
+  InitialElasticSpecificStorage := '1E-5';
+  InitialPorosity := '0.25';
+  DelayKv := '2.5E-6';
+  InitialDelayHeadOffset := '0';
+
+{
+    property InitialOffset: string read GetInitialOffset write SetInitialOffset;
+    {thick frac—is the interbed thickness or cell fraction of the interbed. Interbed thickness is specified as
+    a fraction of the cell thickness if CELL FRACTION is specified in the OPTIONS block.}
+//    property Thickness: string read GetThickness write SetThickness;
+    {rnb—is the interbed material factor equivalent number of interbeds in the interbed system represented
+    by the interbed. RNB must be greater than or equal to 1 if CDELAY is DELAY. Otherwise, RNB
+    can be any value.}
+//    property EquivInterbedNumber: string read GetEquivInterbedNumber write SetEquivInterbedNumber;
+    {ssv cc—is the initial inelastic specific storage or compression index of the interbed. The compression
+    index is specified if COMPRESSION INDICES is specified in the OPTIONS block. Specified
+    or calculated interbed inelastic specific storage values are not adjusted from initial values if
+    HEAD BASED is specified in the OPTIONS block.}
+//    property InitialInelasticSpecificStorage: string read GetInitialInelasticSpecificStorage write SetInitialInelasticSpecificStorage;
+    //sse cr—is the initial elastic coarse-grained material specific storage or recompression index of the
+    //interbed. The recompression index is specified if COMPRESSION INDICES is specified in the
+    //OPTIONS block. Specified or calculated interbed elastic specific storage values are not adjusted
+    //from initial values if HEAD BASED is specified in the OPTIONS block.
+//    property InitialElasticSpecificStorage: string read GetInitialElasticSpecificStorage write SetInitialElasticSpecificStorage;
+    //theta—is the initial porosity of the interbed.
+//    property InitialPorosity: string read GetInitialPorosity write SetInitialPorosity;
+    //kv—is the vertical hydraulic conductivity of the delay interbed. KV must be greater than 0 if CDELAY
+    //is DELAY. Otherwise, KV can be any value.
+//    property DelayKv: string read GetDelayKv write SetDelayKv;
+    //h0—is the initial offset from the head in cell cellid or the initial head in the delay interbed. H0
+    //is the initial head in the delay bed if SPECIFIED INITIAL INTERBED STATE or SPECIFIED
+    //INITIAL DELAY HEAD are specified in the OPTIONS block. H0 can be any value if CDELAY
+    //is NODELAY.
+//    property InitialDelayHeadOffset: string read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
+//}
 end;
 
 procedure TCSubPackageData.CreateFormulaObjects;

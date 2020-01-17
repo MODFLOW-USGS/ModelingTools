@@ -59,8 +59,8 @@ uses
 resourcestring
   StrInterbed = 'Interbed';
   StrUsed = 'Used';
-  StrInitialOffset = 'Initial Offset';
-  StrThickness = 'Thickness';
+  StrInitialOffset = 'Initial Stress Offset';
+  StrThickness = 'Interbed Thickness';
   StrEquivalentInterbed = 'Equivalent Interbed Number';
   StrInitialInelasticS = ' Initial Inelastic Specific Storage';
   StrInitialElasticSpec = 'Initial Elastic Specific Storage';
@@ -68,6 +68,11 @@ resourcestring
   StrDelayKv = 'Delay Kv';
   StrInitialDelayHeadO = 'Initial Delay Head Offset';
   StrStressOffset = 'Stress Offset';
+  StrInitialPreconsolida = 'Initial Preconsolidation Stress';
+  StrInterbedCellFracti = 'Interbed Cell Fraction';
+  StrInitialCompression = 'Initial Inelastic Compression Index';
+  StrInitialElasticComp = 'Initial Elastic Compression Index';
+  StrInitialDelayHead = 'Initial Delay Head';
 
 {$R *.dfm}
 
@@ -191,9 +196,11 @@ var
   Interbeds: TCSubInterbeds;
   ColIndex: Integer;
   RowIndex: Integer;
+  CSubPackage: TCSubPackageSelection;
 begin
   pcMain.ActivePageIndex := 0;
-  Interbeds := frmGoPhast.PhastModel.ModflowPackages.CSubPackage.Interbeds;
+  CSubPackage := frmGoPhast.PhastModel.ModflowPackages.CSubPackage;
+  Interbeds := CSubPackage.Interbeds;
   ClearGrid(rdgSubGroups);
   rdgSubGroups.BeginUpdate;
   try
@@ -212,14 +219,56 @@ begin
 
     rdgSubGroups.Cells[Ord(icName), 0] := StrInterbed;
     rdgSubGroups.Cells[Ord(icUsed), 0] := StrUsed;
-    rdgSubGroups.Cells[Ord(icInitialOffset), 0] := StrInitialOffset;
-    rdgSubGroups.Cells[Ord(icThickness), 0] := StrThickness;
+
+    if CSubPackage.SpecifyInitialPreconsolidationStress then
+    begin
+      rdgSubGroups.Cells[Ord(icInitialOffset), 0] := StrInitialPreconsolida;
+    end
+    else
+    begin
+      rdgSubGroups.Cells[Ord(icInitialOffset), 0] := StrInitialOffset;
+    end;
+    
+    if CSubPackage.InterbedThicknessMethod = itmThickness then
+    begin
+      rdgSubGroups.Cells[Ord(icThickness), 0] := StrThickness;
+    end
+    else
+    begin
+      rdgSubGroups.Cells[Ord(icThickness), 0] := StrInterbedCellFracti;
+    end;
+    
     rdgSubGroups.Cells[Ord(icEquivInterbedNumber), 0] := StrEquivalentInterbed;
-    rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), 0] := StrInitialInelasticS;
-    rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), 0] := StrInitialElasticSpec;
+    
+    if CSubPackage.CompressionMethod = coRecompression then
+    begin
+      rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), 0] := StrInitialCompression;
+    end
+    else
+    begin
+      rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), 0] := StrInitialInelasticS;
+    end;
+
+    if CSubPackage.CompressionMethod = coRecompression then
+    begin
+      rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), 0] := StrInitialElasticComp;
+    end
+    else
+    begin
+      rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), 0] := StrInitialElasticSpec;
+    end;
+
     rdgSubGroups.Cells[Ord(icInitialPorosity), 0] := StrInitialPorosity;
     rdgSubGroups.Cells[Ord(icDelayKv), 0] := StrDelayKv;
-    rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), 0] := StrInitialDelayHeadO;
+
+    if CSubPackage.SpecifyInitialDelayHead then
+    begin
+      rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), 0] := StrInitialDelayHead;
+    end
+    else
+    begin
+      rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), 0] := StrInitialDelayHeadO;
+    end;
   finally
     rdgSubGroups.EndUpdate;
   end;

@@ -6,10 +6,6 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
     object tabInterbedSystems: TTabSheet [0]
       Caption = 'Interbed systems'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgSubGroups: TRbwDataGrid4
         Left = 0
         Top = 56
