@@ -1,4 +1,4 @@
-unit ModflowCSubInterbed;
+﻿unit ModflowCSubInterbed;
 
 interface
 
@@ -21,17 +21,38 @@ type
     FInitialOffset: string;
     FInitialPorosity: string;
     FThickness: string;
+    FDataSetNames: TStringList;
     procedure SetInterbedType(const Value: TCSubInterbedType);
     procedure SetName(const Value: string);
     procedure RenameInterbed(const NewInterbedName: string);
     procedure CreateOrRenameDataArray(var InterbedName: string;
       Extension, DisplayExtension: string; const NewInterbedName: string;
       AModel: TBaseModel);
+    function GetDataSetNames: TStringList;
+    procedure UpdataInterbedDataSetNames;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
+    destructor Destroy; override;
     function DataArrayUsed(ADataArray: TDataArray): Boolean;
+    // pcs0
+    property InitialOffset: string read FInitialOffset;
+    // thick_frac
+    property Thickness: string read FThickness;
+    // rnb
+    property EquivInterbedNumberName: string read FEquivInterbedNumberName;
+    // ssv_cc
+    property InitialInelasticSpecificStorage: string read FInitialInelasticSpecificStorage;
+    // sse_cr
+    property InitialElasticSpecificStorage: string read FInitialElasticSpecificStorage;
+    // theta
+    property InitialPorosity: string read FInitialPorosity;
+    // kv
+    property DelayKvName: string read FDelayKvName;
+    // h0
+    property InitialDelayHeadOffset: string read FInitialDelayHeadOffset;
+    property DataSetNames: TStringList read GetDataSetNames;
   published
     property Name: string read FName write SetName;
     property InterbedType: TCSubInterbedType read FInterbedType write SetInterbedType;
@@ -46,6 +67,8 @@ type
     constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TCSubInterbed read GetItem write SetItem; default;
     function DataArrayUsed(ADataArray: TDataArray): Boolean;
+    function GetInterbedByName(AName: string): TCSubInterbed;
+    procedure UpdataInterbedDataSetNames;
   end;
 
 implementation
@@ -276,6 +299,33 @@ begin
     or (AName = FThickness);
 end;
 
+destructor TCSubInterbed.Destroy;
+begin
+  FDataSetNames.Free;
+  inherited;
+end;
+
+function TCSubInterbed.GetDataSetNames: TStringList;
+begin
+  if FDataSetNames = nil then
+  begin
+    FDataSetNames := TStringList.Create;
+  end
+  else
+  begin
+    FDataSetNames.Clear;
+  end;
+  FDataSetNames.Add(FDelayKvName);
+  FDataSetNames.Add(FEquivInterbedNumberName);
+  FDataSetNames.Add(FInitialDelayHeadOffset);
+  FDataSetNames.Add(FInitialElasticSpecificStorage);
+  FDataSetNames.Add(FInitialInelasticSpecificStorage);
+  FDataSetNames.Add(FInitialOffset);
+  FDataSetNames.Add(FInitialPorosity);
+  FDataSetNames.Add(FThickness);
+  result := FDataSetNames;
+end;
+
 procedure TCSubInterbed.SetInterbedType(const Value: TCSubInterbedType);
 begin
   if FInterbedType <> Value then
@@ -292,6 +342,11 @@ begin
     RenameInterbed(Value);
   end;
   SetCaseSensitiveStringProperty(FName, Value);
+end;
+
+procedure TCSubInterbed.UpdataInterbedDataSetNames;
+begin
+  RenameInterbed(Name);
 end;
 
 { TCSubInterbeds }
@@ -321,6 +376,21 @@ begin
   end;
 end;
 
+function TCSubInterbeds.GetInterbedByName(AName: string): TCSubInterbed;
+var
+  Index: Integer;
+begin
+  result := nil;
+  for Index := 0 to Count - 1 do
+  begin
+    if Items[Index].Name = AName then
+    begin
+      result := Items[Index];
+      Exit;
+    end;
+  end;
+end;
+
 function TCSubInterbeds.GetItem(Index: Integer): TCSubInterbed;
 begin
   result := inherited Items[index] as TCSubInterbed;
@@ -329,6 +399,16 @@ end;
 procedure TCSubInterbeds.SetItem(Index: Integer; const Value: TCSubInterbed);
 begin
   inherited Items[index] := Value;
+end;
+
+procedure TCSubInterbeds.UpdataInterbedDataSetNames;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].UpdataInterbedDataSetNames
+  end;
 end;
 
 end.

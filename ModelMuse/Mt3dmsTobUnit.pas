@@ -80,21 +80,21 @@ type
 
   // @name represents MODFLOW Head observations
   // for a series of times.
-  TMt3dmsTobCollection = class(TEnhancedOrderedCollection)
+  TMt3dmsTobCollection = class(TCustomObjectOrderedCollection)
   private
     FBoundary: TMt3dmsTransObservations;
     FObservationConcentrations: TMt3dmsConcObsTimeList;
     FObsTimesModelLinkList: TMt3dmsConcObsTimesModelLinkList;
     FObservationRowOffset: double;
     FObservationColumnOffset: double;
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     function GetMt3dmsTobItems(Index: integer): TMt3dmsTobItem;
     function GetObservationConcentrations(AModel: TBaseModel): TMt3dmsConcObsTimeList;
   protected
     procedure InvalidateModel; override;
   public
     procedure RemoveModelLink(AModel: TBaseModel);
-    property ScreenObject: TObject read FScreenObject;
+//    property ScreenObject: TObject read FScreenObject;
     // @name creates an instance of @classname
     constructor Create(Boundary: TMt3dmsTransObservations; Model: TBaseModel;
       ScreenObject: TObject);
@@ -450,10 +450,10 @@ end;
 constructor TMt3dmsTobCollection.Create(Boundary: TMt3dmsTransObservations;
   Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited Create(TMt3dmsTobItem, Model);
+  inherited Create(TMt3dmsTobItem, Model, ScreenObject);
   FBoundary := Boundary;
-  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-  FScreenObject := ScreenObject;
+//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
+//  FScreenObject := ScreenObject;
   FObsTimesModelLinkList := TMt3dmsConcObsTimesModelLinkList.Create;
 end;
 

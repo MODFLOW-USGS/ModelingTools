@@ -9048,7 +9048,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
-  Mt3dCtsWriterUnit;
+  Mt3dCtsWriterUnit, ModflowCSubWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -38625,6 +38625,7 @@ var
   LakeMf6Writer: TModflowLAKMf6Writer;
   ModflowMvrWriter: TModflowMvrWriter;
   UzfMf6Writer: TModflowUzfMf6Writer;
+  CSubWriter: TCSubWriter;
 begin
   // Note: MODFLOW can not read Unicode text files.
 
@@ -39437,6 +39438,25 @@ begin
           Exit;
         end;
         if ModflowPackages.UzfMf6Package.IsSelected
+          and (ModelSelection in [msModflow2015]) then
+        begin
+          frmProgressMM.StepIt;
+        end;
+
+        CSubWriter := TCSubWriter.Create(self, etExport);
+        try
+//          CSubWriter.MvrWriter := ModflowMvrWriter;
+          CSubWriter.WriteFile(FileName);
+        finally
+          CSubWriter.Free;
+        end;
+        FDataArrayManager.CacheDataArrays;
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+        if ModflowPackages.CsubPackage.IsSelected
           and (ModelSelection in [msModflow2015]) then
         begin
           frmProgressMM.StepIt;

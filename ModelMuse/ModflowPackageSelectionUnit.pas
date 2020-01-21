@@ -20812,10 +20812,19 @@ end;
 procedure TCSubPackageSelection.Assign(Source: TPersistent);
 var
   CSubSource: TCSubPackageSelection;
+  RenameDataSets: Boolean;
 begin
   if Source is TCSubPackageSelection then
   begin
+
     CSubSource := TCSubPackageSelection(Source);
+
+    RenameDataSets :=
+      (SpecifyInitialPreconsolidationStress <> CSubSource.SpecifyInitialPreconsolidationStress)
+      or (InterbedThicknessMethod <> CSubSource.InterbedThicknessMethod)
+      or (CompressionMethod <> CSubSource.CompressionMethod)
+      or (SpecifyInitialDelayHead <> CSubSource.SpecifyInitialDelayHead);
+
     StoredGamma := CSubSource.StoredGamma;
     StoredBeta := CSubSource.StoredBeta;
     HeadBased := CSubSource.HeadBased;
@@ -20829,6 +20838,11 @@ begin
     EffectiveStressLag := CSubSource.EffectiveStressLag;
     OutputTypes := CSubSource.OutputTypes;
     Interbeds := CSubSource.Interbeds;
+
+    if RenameDataSets and (FModel <> nil) then
+    begin
+      Interbeds.UpdataInterbedDataSetNames;
+    end;
   end;
   inherited;
 

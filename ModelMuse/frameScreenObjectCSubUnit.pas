@@ -34,7 +34,7 @@ type
     procedure cbUsedPkgPropClick(Sender: TObject);
     procedure rdeFormulaPkgPropChange(Sender: TObject);
   private
-    FPackageDataCleared: Boolean;
+//    FPackageDataCleared: Boolean;
     FTimeDataCleared: Boolean;
     procedure InitializeControls;
     procedure LayoutMultiRowEditControlsPkgProp;
@@ -54,7 +54,7 @@ implementation
 uses
   ModflowPackageSelectionUnit, frmGoPhastUnit, ScreenObjectUnit,
   ModflowCsubUnit, GoPhastTypes, System.Math, frmCustomGoPhastUnit,
-  ModflowCSubInterbed;
+  ModflowCSubInterbed, PhastModelUnit, DataSetUnit;
 
 resourcestring
   StrInterbed = 'Interbed';
@@ -105,11 +105,11 @@ var
   FirstCSub: TCSubBoundary;
   Item: TCSubItem;
 begin
+  rdgSubGroups.BeginUpdate;
   FGettingData := True;
   try
     InitializeControls;
 
-    FPackageDataCleared := False;
     FTimeDataCleared := False;
     FoundFirst := False;
     FirstCSub := nil;
@@ -123,7 +123,6 @@ begin
         begin
           FoundFirst := True;
           FirstCSub := ModflowCSub;
-          rdgSubGroups.BeginUpdate;
           try
             for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
             begin
@@ -150,7 +149,6 @@ begin
               end;
             end;
           finally
-            rdgSubGroups.EndUpdate;
           end;
 
           rdgModflowBoundary.BeginUpdate;
@@ -174,8 +172,50 @@ begin
         begin
           if not ModflowCSub.CSubPackageData.IsSame(FirstCSub.CSubPackageData) then
           begin
-            ClearGrid(rdgSubGroups);
-            FPackageDataCleared := True;
+            for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
+            begin
+              Interbed := ModflowCSub.CSubPackageData[InterbedIndex];
+              RowIndex := rdgSubGroups.Cols[Ord(icName)].IndexOf(Interbed.InterbedSystemName);
+              if RowIndex >= 1 then
+              begin
+                if rdgSubGroups.Checked[Ord(icUsed), RowIndex] <> Interbed.Used then
+                begin
+                  rdgSubGroups.CheckState[Ord(icUsed), RowIndex] := cbGrayed;
+                end;
+                if rdgSubGroups.Cells[Ord(icInitialOffset), RowIndex] <> Interbed.InitialOffset then
+                begin
+                  rdgSubGroups.Cells[Ord(icInitialOffset), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icThickness), RowIndex] <> Interbed.Thickness then
+                begin
+                  rdgSubGroups.Cells[Ord(icThickness), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icEquivInterbedNumber), RowIndex] <> Interbed.EquivInterbedNumber then
+                begin
+                  rdgSubGroups.Cells[Ord(icEquivInterbedNumber), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), RowIndex] <> Interbed.InitialInelasticSpecificStorage then
+                begin
+                  rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), RowIndex] <> Interbed.InitialElasticSpecificStorage then
+                begin
+                  rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icInitialPorosity), RowIndex] <> Interbed.InitialPorosity then
+                begin
+                  rdgSubGroups.Cells[Ord(icInitialPorosity), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icDelayKv), RowIndex] <> Interbed.DelayKv then
+                begin
+                  rdgSubGroups.Cells[Ord(icDelayKv), RowIndex] := '';
+                end;
+                if rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), RowIndex] <> Interbed.InitialDelayHeadOffset then
+                begin
+                  rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), RowIndex] := '';
+                end;
+              end;
+            end;
           end;
           if not ModflowCSub.Values.IsSame(FirstCSub.Values) then
           begin
@@ -187,6 +227,7 @@ begin
     end;
   finally
     FGettingData := False;
+    rdgSubGroups.EndUpdate;
   end;
 
 end;
@@ -410,9 +451,17 @@ var
   StartTime: double;
   EndTime: double;
   CSubItem: TCSubItem;
+  SubDataSets: TStringList;
+  DsIndex: Integer;
+  DataArrayManager: TDataArrayManager;
+  ADataArray: TDataArray;
+  PackageDataIndex: Integer;
+  DataSetIndex: Integer;
+  IbIndex: Integer;
 begin
+  DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   Interbeds := frmGoPhast.PhastModel.ModflowPackages.CSubPackage.Interbeds;
-  CSubPackageData := TCSubPackageDataCollection.Create(nil);
+  CSubPackageData := TCSubPackageDataCollection.Create(nil, nil);
   CSubValues := TCSubCollection.Create(nil, nil, nil);
   try
   for Index := 0 to Interbeds.Count -1 do
@@ -421,48 +470,48 @@ begin
     InterBedSystem := CSubPackageData.Add;
     InterBedSystem.Interbed := AnInterBed;
     InterBedSystem.Used := rdgSubGroups.Checked[Ord(icUsed), Index+1];
-    if InterBedSystem.Used then
-    begin
-      FPackageDataCleared := False;
-    end;
+//    if InterBedSystem.Used then
+//    begin
+//      FPackageDataCleared := False;
+//    end;
 
     Formula := rdgSubGroups.Cells[Ord(icInitialOffset), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.InitialOffset := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icThickness), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.Thickness := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icEquivInterbedNumber), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.EquivInterbedNumber := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icInitialInelasticSpecificStorage), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.InitialInelasticSpecificStorage := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icInitialElasticSpecificStorage), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.InitialElasticSpecificStorage := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icInitialPorosity), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.InitialPorosity := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icDelayKv), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.DelayKv := Formula;
     end;
     Formula := rdgSubGroups.Cells[Ord(icInitialDelayHeadOffset), Index+1];
-    if Formula <> '' then
+//    if Formula <> '' then
     begin
       InterBedSystem.InitialDelayHeadOffset := Formula;
     end;
@@ -506,15 +555,90 @@ begin
       
       if (Boundary <> nil) then 
       begin
-        if not FPackageDataCleared then
+        Boundary.CSubPackageData := CSubPackageData;
+        for PackageDataIndex := 0 to Boundary.CSubPackageData.Count - 1 do
         begin
-          Boundary.CSubPackageData := CSubPackageData;
+          InterBedSystem := Boundary.CSubPackageData[PackageDataIndex];
+           AnInterBed := Interbeds.GetInterbedByName(InterBedSystem.InterbedSystemName);
+//          AnInterBed := InterBedSystem.Interbed as TCSubInterbed;
+          Assert(AnInterBed <> nil);
+          if InterBedSystem.Used then
+          begin
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.DelayKvName);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.DelayKv;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.EquivInterbedNumberName);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.EquivInterbedNumber;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialDelayHeadOffset);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.InitialDelayHeadOffset;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialElasticSpecificStorage);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.InitialElasticSpecificStorage;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialInelasticSpecificStorage);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.InitialInelasticSpecificStorage;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialOffset);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.InitialOffset;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialPorosity);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.InitialPorosity;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.Thickness);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.Thickness;
+          end
+          else
+          begin
+            SubDataSets := AnInterBed.DataSetNames;
+            for DsIndex := 0 to SubDataSets.Count - 1 do
+            begin
+              ADataArray := DataArrayManager.GetDataSetByName(SubDataSets[DsIndex]);
+              if ADataArray <> nil then
+              begin
+                Item.ScreenObject.RemoveDataSet(ADataArray)
+              end;
+            end;
+          end;
         end;
-        
+
         if (not FTimeDataCleared) or (CSubValues.Count > 0) then
         begin
           Boundary.Values := CSubValues;
         end;
+      end
+      else
+      begin
+        for IbIndex := 0 to Interbeds.Count -1 do
+        begin
+          AnInterBed := Interbeds[IbIndex];
+          SubDataSets := AnInterBed.DataSetNames;
+          for DsIndex := 0 to SubDataSets.Count - 1 do
+          begin
+            ADataArray := DataArrayManager.GetDataSetByName(SubDataSets[DsIndex]);
+            if ADataArray <> nil then
+            begin
+              Item.ScreenObject.RemoveDataSet(ADataArray)
+            end;
+          end;
+        end;
+
       end;
     end;
   end;

@@ -63,7 +63,6 @@ resourcestring
   StrWritingDISVPackage = 'Writing DISV package input';
   StrWritingOptions = 'Writing Options';
   StrWritingDimensions = 'Writing Dimensions';
-  StrWritingGridData = 'Writing Grid Data';
   StrWritingVertices = 'Writing Vertices';
   StrWritingCells = 'Writing Cells';
   StrOverlappingLayers = 'Overlapping layers';

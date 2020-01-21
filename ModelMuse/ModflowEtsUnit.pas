@@ -72,10 +72,10 @@ type
   TStringCollectionPurpose = (scpDepthFractions, scpEtFractions);
   TEtsSurfDepthCollection = class;
 
-  TStringCollection = class(TOrderedCollection)
+  TStringCollection = class(TCustomObjectOrderedCollection)
   private
     FPurpose: TStringCollectionPurpose;
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     FEtsSurfDepthCollection: TCollection;
   public
     procedure Assign(Source: TPersistent); override;
@@ -1868,7 +1868,7 @@ end;
 
 function TStringValueItem.GetScreenObject: TObject;
 begin
-  result := StringCollection.FScreenObject;
+  result := StringCollection.ScreenObject;
 end;
 
 function TStringValueItem.GetValue: string;
@@ -2026,8 +2026,8 @@ end;
 constructor TStringCollection.Create(Model: TBaseModel; ScreenObject: TObject;
   EtsSurfDepthCollection: TCollection);
 begin
-  inherited Create(TStringValueItem, Model);
-  FScreenObject := ScreenObject;
+  inherited Create(TStringValueItem, Model, ScreenObject);
+//  FScreenObject := ScreenObject;
   FEtsSurfDepthCollection := EtsSurfDepthCollection;
 end;
 

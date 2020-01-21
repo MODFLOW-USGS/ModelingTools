@@ -114,9 +114,9 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
-  TIndividualMvrItems = class(TOrderedCollection)
+  TIndividualMvrItems = class(TCustomObjectOrderedCollection)
   private
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     FMvrItems: TCollection;
     function GetItem(Index: Integer): TIndividualMvrItem;
     procedure SetItem(Index: Integer; const Value: TIndividualMvrItem);
@@ -344,7 +344,7 @@ end;
 
 function TIndividualMvrItem.GetScreenObject: TObject;
 begin
-  result := ItemCollection.FScreenObject;
+  result := ItemCollection.ScreenObject;
 end;
 
 function TIndividualMvrItem.GetValue: string;
@@ -696,8 +696,8 @@ end;
 constructor TIndividualMvrItems.Create(Model: TBaseModel; ScreenObject: TObject;
   MvrItems: TCollection);
 begin
-  inherited Create(TIndividualMvrItem, Model);
-  FScreenObject := ScreenObject;
+  inherited Create(TIndividualMvrItem, Model, ScreenObject);
+//  FScreenObject := ScreenObject;
   FMvrItems := MvrItems;
 end;
 

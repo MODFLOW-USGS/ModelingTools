@@ -4,13 +4,23 @@ interface
 
 uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
-  PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed;
+  PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed,
+  System.Classes, ModflowCellUnit;
 
 type
   TCSubWriter = class(TCustomTransientWriter)
   private
+    // After @link(Evaluate) is called,
+    // @name contains a series of @link(TValueCellList)s;
+    // one for each stress period.
+    // Each such list contains series of @link(TValueCell)s. Each
+    // @link(TValueCell) defines one boundary cell for one stress period.
+    // @name is a TObjectList.
+    FValues: TList;
     FCSubPackage: TCSubPackageSelection;
     FFileName: string;
+    FStressPeriod: Integer;
+    FBoundaryIndex: Integer;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WriteGridData;
@@ -20,15 +30,22 @@ type
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
     class function Extension: string; override;
+    procedure WriteAndCheckCells({const VariableIdentifiers: string;
+      const DataSetIdentifier: string;} List: TValueCellList;
+      TimeIndex: integer);
+    procedure WriteCell(Cell: TValueCell{;
+      const DataSetIdentifier, VariableIdentifiers: string}); //virtual; abstract;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
   end;
 
 implementation
 
 uses
-  frmProgressUnit;
+  frmProgressUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit, ModflowCsubUnit,
+  Vcl.Forms, GoPhastTypes, System.Contnrs;
 
 { TCSubWriter }
 
@@ -37,12 +54,56 @@ constructor TCSubWriter.Create(Model: TCustomModel;
 begin
   inherited;
   FCSubPackage := Package as TCSubPackageSelection;
+  FValues := TObjectList.Create;
+end;
+
+destructor TCSubWriter.Destroy;
+begin
+  FValues.Free;
+  inherited;
 end;
 
 procedure TCSubWriter.Evaluate;
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  NoAssignmentErrorRoot: string;
+  Boundary: TCSubBoundary;
 begin
-  inherited;
+  NoAssignmentErrorRoot := Format(StrNoBoundaryConditio,
+    [Package.PackageIdentifier]);
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, NoAssignmentErrorRoot);
+    frmProgressMM.AddMessage('Evaluating CSUB Package data.');
 
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if ScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      if not ScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+      Boundary := ScreenObject.ModflowCSub;
+      if Boundary <> nil then
+      begin
+        frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
+        if not ScreenObject.SetValuesOfEnclosedCells
+          and not ScreenObject.SetValuesOfIntersectedCells then
+        begin
+          frmErrorsAndWarnings.AddError(Model,
+            NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
+        end;
+        Boundary.GetCellValues(Values, nil, Model);
+      end;
+    end;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
 end;
 
 class function TCSubWriter.Extension: string;
@@ -52,19 +113,238 @@ end;
 
 function TCSubWriter.Package: TModflowPackageSelection;
 begin
+  Result := Model.ModflowPackages.CsubPackage;
+end;
 
+procedure TCSubWriter.WriteAndCheckCells(List: TValueCellList;
+  TimeIndex: integer);
+var
+  CellIndex: Integer;
+  Cell: TValueCell;
+  ShouldWrite: Boolean;
+  ActiveDS: TDataArray;
+begin
+//  if Model.ModelSelection = msModflow2015 then
+//  begin
+	  ActiveDS := Model.DataArrayManager.GetDataSetByName(rsActive);
+//  end
+//  else
+//  begin
+//    ActiveDS := nil;
+//  end;
+  for CellIndex := 0 to List.Count - 1 do
+  begin
+    Cell := List[CellIndex] as TValueCell;
+    ShouldWrite := {(Model.ModelSelection <> msModflow2015)
+      or} ActiveDS.BooleanData[Cell.Layer,
+      Cell.Row, Cell.Column];
+    if ShouldWrite then
+    begin
+      WriteCell(Cell{, DataSetIdentifier, VariableIdentifiers});
+    end;
+    CheckCell(Cell, Package.PackageIdentifier);
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  end;
+end;
+
+procedure TCSubWriter.WriteCell(Cell: TValueCell);
+const
+  DataSetIdentifier = '';
+  VariableIdentifiers = 'sig0';
+var
+  CSubCell: TCSubCell;
+  LocalLayer: integer;
+//  MvrKey: TMvrRegisterKey;
+begin
+  Inc(FBoundaryIndex);
+
+  CSubCell := Cell as TCSubCell;
+  LocalLayer := Model.
+    DataSetLayerToModflowLayer(CSubCell.Layer);
+  WriteInteger(LocalLayer);
+  if not Model.DisvUsed then
+  begin
+    WriteInteger(CSubCell.Row+1);
+  end;
+  WriteInteger(CSubCell.Column+1);
+//  if CSubCell.TimeSeriesName = '' then
+//  begin
+    WriteFloat(CSubCell.StressOffset);
+//  end
+//  else
+//  begin
+//    WriteString(' ');
+//    WriteString(CSubCell.TimeSeriesName);
+//    WriteString(' ');
+//  end;
+//  WriteIface(CSubCell.IFace);
+  WriteBoundName(CSubCell);
+  if Model.DisvUsed then
+  begin
+    WriteString(' # ' + DataSetIdentifier + ' Layer cell2d '
+      + VariableIdentifiers + ' ');
+  end
+  else
+  begin
+    WriteString(' # ' + DataSetIdentifier + ' Layer Row Column '
+      + VariableIdentifiers + ' ');
+  end;
+  // The annotation identifies the object used to define the well.
+  // This can be helpful in identifying when used with PEST.
+  WriteString(CSubCell.StressOffsetAnnotation);
+  NewLine;
+
+//  if CSubCell.MvrUsed and (MvrWriter <> nil) then
+//  begin
+//    MvrKey.StressPeriod := FStressPeriod;
+//    MvrKey.Index := FBoundaryIndex;
+//    MvrKey.SourceKey.MvrIndex := CSubCell.MvrIndex;
+//    MvrKey.SourceKey.ScreenObject := CSubCell.ScreenObject;
+//    TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
+//  end;
 end;
 
 procedure TCSubWriter.WriteDimensions;
+var
+  DataArrayManager: TDataArrayManager;
+  InterbedIndex: Integer;
+  Interbed: TCSubInterbed;
+  pcsDataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ninterbeds: Integer;
 begin
   WriteBeginDimensions;
+
+  ninterbeds := 0;
+  DataArrayManager := Model.DataArrayManager;
+  for InterbedIndex := 0 to FCSubPackage.Interbeds.Count - 1 do
+  begin
+    Interbed := FCSubPackage.Interbeds[InterbedIndex];
+    pcsDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialOffset);
+    pcsDataArray.Initialize;
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+          begin
+            Inc(ninterbeds);
+          end;
+        end;
+      end;
+    end;
+  end;
+  
+  WriteString('  NINTERBEDS');
+  WriteInteger(ninterbeds);
+  NewLine;
+
+  CountCells(MAXBOUND);
+  WriteString('  MAXSIG0');
+  WriteInteger(MAXBOUND);
+  NewLine;
+
 
   WriteEndDimensions
 end;
 
 procedure TCSubWriter.WriteFile(const AFileName: string);
+var
+  Abbreviation: string;
 begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  Abbreviation := 'CSUB6';
+  if Model.PackageGeneratedExternally(Abbreviation) then
+  begin
+    Exit;
+  end;
+
   FFileName := FileName(AFileName);
+  Evaluate;
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+
+//  ClearTimeLists(Model);
+  OpenFile(FFileName);
+  try
+    WriteToNameFile(Abbreviation, 0,
+      FFileName, foInput, Model);
+
+    frmProgressMM.AddMessage( 'Writing CSUB Package input.');
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+//    if Model.ModelSelection = msModflow2015 then
+    begin
+      frmProgressMM.AddMessage(StrWritingOptions);
+      WriteOptions;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      frmProgressMM.AddMessage(StrWritingDimensions);
+      WriteDimensions;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      if MAXBOUND = 0 then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model,  'No Transient CSUB data defined', 'No transient data is defined for the CSUB package. The CSUB package does not require transient data.');
+        Exit;
+      end;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingGridData);
+    WriteGridData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingPackageData);
+    WritePackageData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingStressPerio);
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end
+
 end;
 
 procedure TCSubWriter.WriteGridData;
@@ -277,15 +557,166 @@ begin
 end;
 
 procedure TCSubWriter.WritePackageData;
+var
+  InterbedIndex: Integer;
+  Interbed: TCSubInterbed;
+  DataArrayManager: TDataArrayManager;
+  cdelay: string;
+  pcsDataArray: TDataArray;
+  thick_fracDataArray: TDataArray;
+  rnbDataArray: TDataArray;
+  ssv_ccDataArray: TDataArray;
+  sse_crDataArray: TDataArray;
+  thetaDataArray: TDataArray;
+  kvDataArray: TDataArray;
+  h0DataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  pcs: Double;
+  thick_frac: Double;
+  rnb: Double;
+  ssv_cc: Double;
+  sse_cr: Double;
+  theta: Double;
+  kv: Double;
+  h0: Double;
+  DisvUsed: Boolean;
+  icsubno: Integer;
 begin
   WriteBeginPackageData;
+  DisvUsed := Model.DisvUsed;
+  icsubno := 0;
+
+  DataArrayManager := Model.DataArrayManager;
+  for InterbedIndex := 0 to FCSubPackage.Interbeds.Count - 1 do
+  begin
+    Interbed := FCSubPackage.Interbeds[InterbedIndex];
+    case Interbed.InterbedType of
+      itDelay: cdelay := '   DELAY';
+      itNoDelay: cdelay := ' NODELAY';
+    end;
+// <icsubno> <cellid(ncelldim)> <pcs> <pcs0> <thick_fracDataArray> <rnbDataArray> <ssv_ccDataArray> <sse_crDataArray> <thetaDataArray> <kvDataArray> <h0DataArray> [<boundname>]
+    pcsDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialOffset);
+    pcsDataArray.Initialize;
+
+    thick_fracDataArray := DataArrayManager.GetDataSetByName(Interbed.Thickness);
+    thick_fracDataArray.Initialize;
+
+    rnbDataArray := DataArrayManager.GetDataSetByName(Interbed.EquivInterbedNumberName);
+    rnbDataArray.Initialize;
+
+    ssv_ccDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialInelasticSpecificStorage);
+    ssv_ccDataArray.Initialize;
+
+    sse_crDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialElasticSpecificStorage);
+    sse_crDataArray.Initialize;
+
+    thetaDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialPorosity);
+    thetaDataArray.Initialize;
+
+    kvDataArray := DataArrayManager.GetDataSetByName(Interbed.DelayKvName);
+    kvDataArray.Initialize;
+
+    h0DataArray := DataArrayManager.GetDataSetByName(Interbed.InitialDelayHeadOffset);
+    h0DataArray.Initialize;
+
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+          begin
+            Inc(icsubno);
+            pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            thick_frac := thick_fracDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            rnb := rnbDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            ssv_cc := ssv_ccDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            sse_cr := sse_crDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            kv := kvDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            theta := thetaDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            h0 := h0DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+
+            WriteString('  ');
+            WriteInteger(icsubno);
+            WriteInteger(LayerIndex+1);
+            if not DisvUsed then
+            begin
+              WriteInteger(RowIndex+1);
+            end;
+            WriteInteger(ColIndex+1);
+            WriteString(cdelay);
+            WriteFloat(pcs);
+            WriteFloat(thick_frac);
+            WriteFloat(rnb);
+            WriteFloat(ssv_cc);
+            WriteFloat(sse_cr);
+            WriteFloat(theta);
+            WriteFloat(kv);
+            WriteFloat(h0);
+
+            NewLine;
+          end;
+        end;
+      end;
+    end;
+  end;
 
   WriteEndPackageData
 end;
 
 procedure TCSubWriter.WriteStressPeriods;
+var
+  ITMP: Integer;
+  List: TValueCellList;
+  TimeIndex: Integer;
 begin
+  for TimeIndex := 0 to FValues.Count - 1 do
+  begin
+    FStressPeriod := TimeIndex;
+    FBoundaryIndex := 0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
 
+    frmProgressMM.AddMessage(Format(StrWritingStressPer, [TimeIndex+1]));
+    GetITMP(ITMP, TimeIndex, List);
+    if (ITMP = 0) then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model,
+        Format(StrNoBoundaryConditio1, [Package.PackageIdentifier]),
+        Format(StrStressPeriod0d, [TimeIndex+1]));
+    end;
+
+    if (ITMP < 0) then
+    begin
+      Continue;
+    end;
+    WriteBeginPeriod(TimeIndex);
+
+    if ITMP > 0 then
+    begin
+      WriteAndCheckCells(List, TimeIndex);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+    end;
+    WriteEndPeriod;
+
+    if TimeIndex = FValues.Count - 1 then
+    begin
+      if List <> nil then
+      begin
+        List.Cache;
+      end;
+    end;
+  end;
 end;
 
 end.

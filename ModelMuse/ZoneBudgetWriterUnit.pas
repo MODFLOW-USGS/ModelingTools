@@ -96,7 +96,7 @@ resourcestring
 //  StrWritingDataSet3 = '  Writing Data Set 3.';
   StrWritingZONEBUDGETR = 'Writing ZONEBUDGET Response file.';
   StrWritingDimensions = '  Writing Dimensions';
-  StrWritingGridData = '  Writing Grid Data';
+//  StrWritingGridData = '  Writing Grid Data';
   StrTheBinaryGridFile = 'The binary grid file required by ZONEBUDGET is abs' +
   'ent. Be sure you have the option to save the binary grid file selected in' +
   ' "Model|MODFLOW Options". Then try running MODFLOW again.';

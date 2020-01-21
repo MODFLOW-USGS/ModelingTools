@@ -146,9 +146,9 @@ type
     property Outlet: TLakeOutlet read FOutlet write SetOutlet;
   end;
 
-  TLakeOutlets = class(TOrderedCollection)
+  TLakeOutlets = class(TCustomObjectOrderedCollection)
   private
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     function GetItems(Index: Integer): TLakeOutletItem;
     procedure SetItems(Index: Integer; const Value: TLakeOutletItem);
     procedure Loaded;
@@ -992,7 +992,7 @@ begin
   inherited;
   LakeOutlets := Collection as TLakeOutlets;
 //  LakeOutlets.
-  FOutlet := TLakeOutlet.Create(LakeOutlets.Model, LakeOutlets.FScreenObject);
+  FOutlet := TLakeOutlet.Create(LakeOutlets.Model, LakeOutlets.ScreenObject);
   FOutlet.OutletIndex := Index + 1;
 end;
 
@@ -1034,8 +1034,8 @@ end;
 
 constructor TLakeOutlets.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
-  FScreenObject := ScreenObject;
-  inherited Create(TLakeOutletItem, Model);
+//  FScreenObject := ScreenObject;
+  inherited Create(TLakeOutletItem, Model, ScreenObject);
 end;
 
 function TLakeOutlets.GetItems(Index: Integer): TLakeOutletItem;

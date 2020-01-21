@@ -70,9 +70,9 @@ type
     property Width: string read GetWidth write SetWidth;
   end;
 
-  TSfrTable = class(TOrderedCollection)
+  TSfrTable = class(TCustomObjectOrderedCollection)
   private
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     function GetItems(Index: integer): TSfrTableRowItem;
     procedure SetItems(Index: integer; const Value: TSfrTableRowItem);
   public
@@ -522,7 +522,7 @@ begin
   FFormulaList.Add(FDepth);
   FFormulaList.Add(FWidth);
 
-  ScreenObject := SfrTable.FScreenObject as TScreenObject;
+  ScreenObject := SfrTable.ScreenObject as TScreenObject;
   if (ScreenObject <> nil) and ScreenObject.CanInvalidateModel then
   begin
     ScreenObject.TalksTo(FFlowObserver);
@@ -595,7 +595,7 @@ end;
 
 function TSfrTableRowItem.GetScreenObject: TObject;
 begin
-  result := SfrTable.FScreenObject;
+  result := SfrTable.ScreenObject;
 end;
 
 function TSfrTableRowItem.GetWidth: string;
@@ -795,8 +795,8 @@ end;
 
 constructor TSfrTable.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited Create(TSfrTableRowItem, Model);
-  FScreenObject := ScreenObject;
+  inherited Create(TSfrTableRowItem, Model, ScreenObject);
+//  FScreenObject := ScreenObject;
 end;
 
 function TSfrTable.GetItems(Index: integer): TSfrTableRowItem;

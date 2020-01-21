@@ -44,6 +44,7 @@ type
   protected
     procedure Loaded;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    function GetScreenObject: TObject; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -92,14 +93,14 @@ type
     property InitialDelayHeadOffset: string read GetInitialDelayHeadOffset write SetInitialDelayHeadOffset;
   end;
 
-  TCSubPackageDataCollection = class(TOrderedCollection)
+  TCSubPackageDataCollection = class(TCustomObjectOrderedCollection)
   private
     function GetItem(Index: integer): TCSubPackageData;
     procedure SetItem(Index: integer; const Value: TCSubPackageData);
   protected
     procedure Loaded;
   public
-    constructor Create(Model: TBaseModel);
+    constructor Create(Model: TBaseModel; ScreenObject: TObject);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
     function Add: TCSubPackageData;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
@@ -287,7 +288,7 @@ implementation
 uses
   SubscriptionUnit, frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
   frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit,
-  ModflowPackageSelectionUnit, ModflowCSubInterbed;
+  ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit;
 
 resourcestring
   StrStressOffsetMultip = 'Stress offset multiplier';
@@ -304,15 +305,39 @@ begin
     SubSource := TCSubPackageData(Source);
     InterbedSystemName := SubSource.InterbedSystemName;
     Used := SubSource.Used;
-    InitialOffset := SubSource.InitialOffset;
-    Thickness := SubSource.Thickness;
-    EquivInterbedNumber := SubSource.EquivInterbedNumber;
-    InitialInelasticSpecificStorage := SubSource.InitialInelasticSpecificStorage;
-    InitialElasticSpecificStorage := SubSource.InitialElasticSpecificStorage;
-    InitialPorosity := SubSource.InitialPorosity;
-    DelayKv := SubSource.DelayKv;
-    InitialDelayHeadOffset := SubSource.InitialDelayHeadOffset;
-    InterbedSystemName := SubSource.InterbedSystemName;
+    if SubSource.InitialOffset <> '' then
+    begin
+      InitialOffset := SubSource.InitialOffset;
+    end;
+    if SubSource.Thickness <> '' then
+    begin
+      Thickness := SubSource.Thickness;
+    end;
+    if SubSource.EquivInterbedNumber <> '' then
+    begin
+      EquivInterbedNumber := SubSource.EquivInterbedNumber;
+    end;
+    if SubSource.InitialInelasticSpecificStorage <> '' then
+    begin
+      InitialInelasticSpecificStorage := SubSource.InitialInelasticSpecificStorage;
+    end;
+    if SubSource.InitialElasticSpecificStorage <> '' then
+    begin
+      InitialElasticSpecificStorage := SubSource.InitialElasticSpecificStorage;
+    end;
+    if SubSource.InitialPorosity <> '' then
+    begin
+      InitialPorosity := SubSource.InitialPorosity;
+    end;
+    if SubSource.DelayKv <> '' then
+    begin
+      DelayKv := SubSource.DelayKv;
+    end;
+    if SubSource.InitialDelayHeadOffset <> '' then
+    begin
+      InitialDelayHeadOffset := SubSource.InitialDelayHeadOffset;
+    end;
+//    InterbedSystemName := SubSource.InterbedSystemName;
   end
   else
   begin
@@ -452,6 +477,11 @@ begin
   end;
 end;
 
+function TCSubPackageData.GetScreenObject: TObject;
+begin
+  result := (Collection as TCSubPackageDataCollection).ScreenObject;
+end;
+
 function TCSubPackageData.GetThickness: string;
 begin
   result := FThickness.Formula;
@@ -486,6 +516,12 @@ var
   LocalModel: TCustomModel;
   Interbeds: TCSubInterbeds;
   InterbedIndex: Integer;
+  LocalScreenObject: TScreenObject;
+  DataArrayManager: TDataArrayManager;
+  ADataArray: TDataArray;
+  LocalInterbed: TCSubInterbed;
+  DataSetIndex: Integer;
+  FoundInterbed: Boolean;
 begin
   LocalModel := (Collection as TCSubPackageDataCollection).Model as TCustomModel;
   if LocalModel <> nil then
@@ -498,20 +534,72 @@ begin
         if Interbeds[InterbedIndex].Name = InterbedSystemName then
         begin
           Interbed := Interbeds[InterbedIndex];
-          Exit;
+          break;
         end;
       end;
     end
     else
     begin
+      FoundInterbed := False;
       for InterbedIndex := 0 to Interbeds.Count - 1 do
       begin
         if Interbeds[InterbedIndex] = Interbed then
         begin
-          Exit;
+          FoundInterbed := True;
+          break;
         end;
       end;
-      Interbed := nil;
+      if not FoundInterbed then
+      begin
+        Interbed := nil;
+      end;
+    end;
+
+    if (Interbed <> nil) and Used then
+    begin
+      LocalInterbed := Interbed as TCSubInterbed;
+      DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
+      LocalScreenObject := ScreenObject as TScreenObject;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.DelayKvName);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := DelayKv;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := EquivInterbedNumber;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialDelayHeadOffset;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialElasticSpecificStorage);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialElasticSpecificStorage;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialInelasticSpecificStorage);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialInelasticSpecificStorage;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialOffset);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialOffset;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialPorosity);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialPorosity;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.Thickness);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := Thickness;
     end;
   end;
 end;
@@ -632,9 +720,9 @@ begin
   result := inherited Add as TCSubPackageData;
 end;
 
-constructor TCSubPackageDataCollection.Create(Model: TBaseModel);
+constructor TCSubPackageDataCollection.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited Create(TCSubPackageData, Model);
+  inherited Create(TCSubPackageData, Model, ScreenObject);
 end;
 
 function TCSubPackageDataCollection.GetItem(Index: integer): TCSubPackageData;
@@ -1313,7 +1401,7 @@ end;
 constructor TCSubBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FCSubPackageData := TCSubPackageDataCollection.Create(Model);
+  FCSubPackageData := TCSubPackageDataCollection.Create(Model, ScreenObject);
 end;
 
 destructor TCSubBoundary.Destroy;
@@ -1350,143 +1438,132 @@ begin
 //  EvaluateArrayBoundaries;
   EvaluateListBoundaries(AModel);
   LocalModel := AModel as TCustomModel;
-//  FMaxTabCells := 0;
-//  if LocalModel.ModflowPackages.CSubPackage.UseTabFilesInThisModel then
-//  begin
-//    if (Values.Count > 0) and (Values.BoundaryCount[AModel] > 0) then
-//    begin
-//      BoundaryStorage := Values.Boundaries[0, AModel] as TCSubStorage;
-//      FMaxTabCells := Length(BoundaryStorage.CSubArray);
-//      BoundaryStorage.CacheData;
-//    end;
-//  end;
-//  else
-//  begin
-    for ValueIndex := 0 to Values.Count - 1 do
-    begin
-      if ValueIndex < Values.BoundaryCount[AModel] then
-      begin
-        BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TCSubStorage;
-        AssignCells(BoundaryStorage, ValueTimeList, AModel);
-      end;
-    end;
-//  end;
-  for ParamIndex := 0 to Parameters.Count - 1 do
+
+  for ValueIndex := 0 to Values.Count - 1 do
   begin
-    Param := Parameters[ParamIndex];
-    ParamName := Param.Param.ParamName;
-    if LocalModel.ModelSelection = msModflow2015 then
+    if ValueIndex < Values.BoundaryCount[AModel] then
     begin
-      FCurrentParameter := LocalModel.ModflowTransientParameters.GetParamByName(ParamName);
-    end
-    else
-    begin
-      FCurrentParameter := nil;
-    end;
-    Position := ParamList.IndexOf(ParamName);
-    if Position < 0 then
-    begin
-      Times := TObjectList.Create;
-      ParamList.AddObject(ParamName, Times);
-    end
-    else
-    begin
-      Times := ParamList.Objects[Position] as TList;
-    end;
-
-    if FCurrentParameter <> nil then
-    begin
-      BoundaryList := Param.Param.BoundaryList[AModel];
-      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-      StartTime := StressPeriods.First.StartTime;
-      EndTime := StressPeriods.Last.EndTime;
-      TimeCount := BoundaryList.Count;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          Inc(TimeCount);
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        Inc(TimeCount);
-      end;
-
-      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-      TimeSeries := TTimeSeries.Create;
-      TimeSeriesList.Add(TimeSeries);
-      TimeSeries.SeriesCount := Length(BoundaryStorage.CSubArray);
-      TimeSeries.TimeCount := TimeCount;
-      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-      for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
-      begin
-        TimeSeries.SeriesNames[SeriesIndex] :=
-          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-          TimeSeriesList.Count, SeriesIndex+1]);
-        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-      end;
-
-      TimeCount := 0;
-      StartTime := StressPeriods.First.StartTime;
-      InitialTime := StartTime;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
-          begin
-            if ItemIndex > 0 then
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-            end
-            else
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] :=
-                BoundaryStorage.CSubArray[SeriesIndex].StressOffset;
-            end;
-          end;
-          Inc(TimeCount);
-        end;
-        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.CSubArray[SeriesIndex].StressOffset;
-//          BoundaryStorage.CSubArray[SeriesIndex].TimeSeriesName :=
-//            TimeSeries.SeriesNames[SeriesIndex];
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-        Inc(TimeCount);
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.CSubArray[SeriesIndex].StressOffset;
-        end;
-      end;
-    end;
-
-    for ValueIndex := 0 to Param.Param.Count - 1 do
-    begin
-      if ValueIndex < Param.Param.BoundaryCount[AModel] then
-      begin
-        BoundaryStorage := Param.Param.Boundaries[ValueIndex, AModel] as TCSubStorage;
-        AssignCells(BoundaryStorage, Times, AModel);
-      end;
+      BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TCSubStorage;
+      AssignCells(BoundaryStorage, ValueTimeList, AModel);
     end;
   end;
+
+//  for ParamIndex := 0 to Parameters.Count - 1 do
+//  begin
+//    Param := Parameters[ParamIndex];
+//    ParamName := Param.Param.ParamName;
+//    if LocalModel.ModelSelection = msModflow2015 then
+//    begin
+//      FCurrentParameter := LocalModel.ModflowTransientParameters.GetParamByName(ParamName);
+//    end
+//    else
+//    begin
+//      FCurrentParameter := nil;
+//    end;
+//    Position := ParamList.IndexOf(ParamName);
+//    if Position < 0 then
+//    begin
+//      Times := TObjectList.Create;
+//      ParamList.AddObject(ParamName, Times);
+//    end
+//    else
+//    begin
+//      Times := ParamList.Objects[Position] as TList;
+//    end;
+//
+//    if FCurrentParameter <> nil then
+//    begin
+//      BoundaryList := Param.Param.BoundaryList[AModel];
+//      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
+//      StartTime := StressPeriods.First.StartTime;
+//      EndTime := StressPeriods.Last.EndTime;
+//      TimeCount := BoundaryList.Count;
+//      for ItemIndex := 0 to BoundaryList.Count - 1 do
+//      begin
+//        BoundaryStorage := BoundaryList[ItemIndex];
+//        if BoundaryStorage.StartingTime > StartTime then
+//        begin
+//          Inc(TimeCount);
+//        end;
+//        StartTime := BoundaryStorage.EndingTime;
+//      end;
+//      BoundaryStorage := BoundaryList.Last;
+//      if BoundaryStorage.EndingTime <= EndTime then
+//      begin
+//        Inc(TimeCount);
+//      end;
+//
+//      TimeSeriesList := FCurrentParameter.TimeSeriesList;
+//      TimeSeries := TTimeSeries.Create;
+//      TimeSeriesList.Add(TimeSeries);
+//      TimeSeries.SeriesCount := Length(BoundaryStorage.CSubArray);
+//      TimeSeries.TimeCount := TimeCount;
+//      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
+//      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
+//      for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
+//      begin
+//        TimeSeries.SeriesNames[SeriesIndex] :=
+//          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
+//          TimeSeriesList.Count, SeriesIndex+1]);
+//        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
+//        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
+//      end;
+//
+//      TimeCount := 0;
+//      StartTime := StressPeriods.First.StartTime;
+//      InitialTime := StartTime;
+//      for ItemIndex := 0 to BoundaryList.Count - 1 do
+//      begin
+//        BoundaryStorage := BoundaryList[ItemIndex];
+//        if BoundaryStorage.StartingTime > StartTime then
+//        begin
+//          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
+//          for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
+//          begin
+//            if ItemIndex > 0 then
+//            begin
+//              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
+//            end
+//            else
+//            begin
+//              TimeSeries.Values[SeriesIndex,TimeCount] :=
+//                BoundaryStorage.CSubArray[SeriesIndex].StressOffset;
+//            end;
+//          end;
+//          Inc(TimeCount);
+//        end;
+//        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
+//        begin
+//          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//            BoundaryStorage.CSubArray[SeriesIndex].StressOffset;
+////          BoundaryStorage.CSubArray[SeriesIndex].TimeSeriesName :=
+////            TimeSeries.SeriesNames[SeriesIndex];
+//        end;
+//        StartTime := BoundaryStorage.EndingTime;
+//        Inc(TimeCount);
+//      end;
+//      BoundaryStorage := BoundaryList.Last;
+//      if BoundaryStorage.EndingTime <= EndTime then
+//      begin
+//        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.CSubArray) - 1 do
+//        begin
+//          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//            BoundaryStorage.CSubArray[SeriesIndex].StressOffset;
+//        end;
+//      end;
+//    end;
+//
+//    for ValueIndex := 0 to Param.Param.Count - 1 do
+//    begin
+//      if ValueIndex < Param.Param.BoundaryCount[AModel] then
+//      begin
+//        BoundaryStorage := Param.Param.Boundaries[ValueIndex, AModel] as TCSubStorage;
+//        AssignCells(BoundaryStorage, Times, AModel);
+//      end;
+//    end;
+//  end;
 end;
 
 procedure TCSubBoundary.InvalidateDisplay;

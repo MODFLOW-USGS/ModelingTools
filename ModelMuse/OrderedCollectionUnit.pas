@@ -257,10 +257,20 @@ type
     procedure Remove(Item: TOrderedItem);
   end;
 
+  TCustomObjectOrderedCollection = class(TEnhancedOrderedCollection)
+  private
+    FScreenObject: TObject;
+  protected
+    property ScreenObject: TObject read FScreenObject;
+  public
+    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel;
+      AScreenObject: TObject);
+  end;
+
   // @name is a @link(TEnhancedOrderedCollection) that stores of list of
   // @link(TDataArray)s that it can delete. The list (@link(NewDataSets))
   // is not created by the @classname.  Instead another class
-  // creates it and assigns it to @classname. @link(TUndoChangeLgrPackageSelection)
+  // creates it and assigns it to @classname. @link(TCustomCreateRequiredDataSetsUndo)
   // is an example of a class that assigns @link(NewDataSets).
   //
   // When a new @link(TDataArray) is created, it should be added to
@@ -1441,6 +1451,19 @@ begin
   finally
     NewUses.Free;
     OldUses.Free;
+  end;
+end;
+
+{ TCustomObjectOrderedCollection }
+
+constructor TCustomObjectOrderedCollection.Create(
+  ItemClass: TCollectionItemClass; Model: TBaseModel; AScreenObject: TObject);
+begin
+  inherited Create(ItemClass, Model);
+  FScreenObject := AScreenObject;
+  if FScreenObject <> nil then
+  begin
+    Assert(FScreenObject is TScreenObject);
   end;
 end;
 

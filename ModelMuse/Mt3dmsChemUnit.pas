@@ -103,9 +103,9 @@ type
   TStringConcValueItemClass = class of TStringConcValueItem;
 
 
-  TStringConcCollection = class(TOrderedCollection)
+  TStringConcCollection = class(TCustomObjectOrderedCollection)
   private
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     FMt3dmsConcCollection: TCollection;
     function GetItem(Index: integer): TStringConcValueItem;
     procedure SetItem(Index: integer; const Value: TStringConcValueItem);
@@ -1926,7 +1926,7 @@ end;
 
 function TStringConcValueItem.GetScreenObject: TObject;
 begin
-  result := StringCollection.FScreenObject;
+  result := StringCollection.ScreenObject;
 end;
 
 function TStringConcValueItem.GetValue: string;
@@ -1999,8 +1999,8 @@ end;
 constructor TStringConcCollection.Create(ItemClass: TStringConcValueItemClass;
   Model: TBaseModel; ScreenObject: TObject; Mt3dmsConcCollection: TCollection);
 begin
-  inherited Create(ItemClass, Model);
-  FScreenObject := ScreenObject;
+  inherited Create(ItemClass, Model, ScreenObject);
+//  FScreenObject := ScreenObject;
   FMt3dmsConcCollection := Mt3dmsConcCollection;
 end;
 

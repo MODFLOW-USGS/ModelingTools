@@ -598,7 +598,6 @@ type
 
   TCustomListWriter = class(TCustomParameterTransientWriter)
   private
-//    FBoundNames: TStringList;
     FObjectNames: TStringList;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: integer);

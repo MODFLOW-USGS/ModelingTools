@@ -114,6 +114,7 @@ type
     FvstModflowMawNode: PVirtualNode;
     FvstModflowGhbNode: PVirtualNode;
     FvstModflowMvrNode: PVirtualNode;
+    FvstModflowCSubNode: PVirtualNode;
 
 
     FvstModflowFhbHeadNode: PVirtualNode;
@@ -202,6 +203,7 @@ type
     FDrtReturnList: TList;
     FHobList: TList;
     FDrnList: TList;
+    FCSubList: TList;
     FRivList: TList;
     FHydmodList: TList;
     // @name holds a list of all the @link(TScreenObject)s.
@@ -855,7 +857,13 @@ begin
     begin
       Data.Caption := Packages.MvrPackage.PackageIdentifier;
       Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstModflowCSubNode then
+    begin
+      Data.Caption := Packages.CsubPackage.PackageIdentifier;
+      Node.CheckType := ctTriStateCheckBox;
     end;
+
 
 
 
@@ -1462,6 +1470,12 @@ begin
       InitializeData(FvstModflowRipNode);
     end;
 
+    if (AScreenObject.ModflowCSub <> nil)
+      and AScreenObject.ModflowCSub.Used then
+    begin
+      InitializeData(FvstModflowCSubNode);
+    end;
+
     if (AScreenObject.Mt3dmsConcBoundary <> nil)
       and AScreenObject.Mt3dmsConcBoundary.Used then
     begin
@@ -1654,6 +1668,8 @@ begin
   vstCheckDeleteNode(FvstModflowHobNode);
   vstCheckDeleteNode(FvstModflowHfbNode);
   vstCheckDeleteNode(FvstModflowMvrNode);
+  vstCheckDeleteNode(FvstModflowCSubNode);
+
 
 
   vstCheckDeleteNode(FvstModflowSwrReachNode);
@@ -1988,6 +2004,8 @@ begin
   InitializeNodeData(FvstModflowChdNode, FChdList);
   PriorNode := FvstModflowChdNode;
 
+
+  InitializeMF_BoundaryNode(FvstModflowCSubNode, PriorNode, FCSubList);
   InitializeMF_BoundaryNode(FvstModflowDrnNode, PriorNode, FDrnList);
   InitializeMF_BoundaryNode(FvstModflowDrtNode, PriorNode, FDrtList);
   InitializeMF_BoundaryNode(FvstModflowDrtReturnLocation, PriorNode, FDrtReturnList);
@@ -2203,6 +2221,7 @@ begin
   FHobList.Free;
   FSwiObsList.Free;
   FHfbList.Free;
+  FCSubList.Free;
 
   FSwrReachList.Free;
   FSwrRainList.Free;
@@ -2287,6 +2306,7 @@ begin
   FSfrGagList := TList.Create;
   FUzfList := TList.Create;
   FUzfMf6List := TList.Create;
+  FCSubList := TList.Create;
 
   FSwrReachList := TList.Create;
   FSwrRainList := TList.Create;
@@ -2389,6 +2409,7 @@ begin
   FvstModflowHobNode := nil;
   FvstModflowHfbNode := nil;
   FvstModflowMvrNode := nil;
+  FvstModflowCSubNode := nil;
 
   FvstModflowSwrReachNode := nil;
   FvstModflowSwrRainNode := nil;
@@ -2596,6 +2617,7 @@ begin
   FUztRechList.Sort(ScreenObjectCompare);
   FUztSatList.Sort(ScreenObjectCompare);
   FUztUnsatList.Sort(ScreenObjectCompare);
+  FCSubList.Sort(ScreenObjectCompare);
 
   FSwrReachList.Sort(ScreenObjectCompare);
   FSwrRainList.Sort(ScreenObjectCompare);

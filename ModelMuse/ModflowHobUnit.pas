@@ -98,21 +98,21 @@ type
 
   // @name represents MODFLOW Head observations
   // for a series of times.
-  THobCollection = class(TEnhancedOrderedCollection)
+  THobCollection = class(TCustomObjectOrderedCollection)
   private
     FBoundary: THobBoundary;
     FObservationHeads: TObservationTimeList;
     FObsTimesModelLinkList: TObsTimesModelLinkList;
     FObservationRowOffset: double;
     FObservationColumnOffset: double;
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     function GetHobItems(Index: integer): THobItem;
     function GetObservationHeads(AModel: TBaseModel): TObservationTimeList;
   protected
     procedure InvalidateModel; override;
   public
     procedure RemoveModelLink(AModel: TBaseModel);
-    property ScreenObject: TObject read FScreenObject;
+    property ScreenObject;
     // @name creates an instance of @classname
     constructor Create(Boundary: THobBoundary; Model: TBaseModel;
       ScreenObject: TObject);
@@ -561,10 +561,10 @@ end;
 constructor THobCollection.Create(Boundary: THobBoundary; Model: TBaseModel;
   ScreenObject: TObject);
 begin
-  inherited Create(THobItem, Model);
+  inherited Create(THobItem, Model, ScreenObject);
   FBoundary := Boundary;
-  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-  FScreenObject := ScreenObject;
+//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
+//  FScreenObject := ScreenObject;
   FObsTimesModelLinkList := TObsTimesModelLinkList.Create;
 end;
 

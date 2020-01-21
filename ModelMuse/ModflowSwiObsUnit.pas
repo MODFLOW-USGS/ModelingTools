@@ -70,21 +70,21 @@ type
 
   // @name represents MODFLOW Zeta observations
   // for a series of times.
-  TSwiObsCollection = class(TEnhancedOrderedCollection)
+  TSwiObsCollection = class(TCustomObjectOrderedCollection)
   private
     FBoundary: TSwiObsBoundary;
     FSwiObservations: TSwiObservationTimeList;
     FObsTimesModelLinkList: TSwiObsTimesModelLinkList;
     FObservationRowOffset: double;
     FObservationColumnOffset: double;
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     function GetSwiItems(Index: integer): TSwiObsItem;
     function GetSwiObservations(AModel: TBaseModel): TSwiObservationTimeList;
   protected
     procedure InvalidateModel; override;
   public
     procedure RemoveModelLink(AModel: TBaseModel);
-    property ScreenObject: TObject read FScreenObject;
+//    property ScreenObject: TObject read FScreenObject;
     // @name creates an instance of @classname
     constructor Create(Boundary: TSwiObsBoundary; Model: TBaseModel;
       ScreenObject: TObject);
@@ -361,10 +361,10 @@ end;
 constructor TSwiObsCollection.Create(Boundary: TSwiObsBoundary;
   Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited Create(TSwiObsItem, Model);
+  inherited Create(TSwiObsItem, Model, ScreenObject);
   FBoundary := Boundary;
-  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-  FScreenObject := ScreenObject;
+//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
+//  FScreenObject := ScreenObject;
   FObsTimesModelLinkList := TSwiObsTimesModelLinkList.Create;
 end;
 

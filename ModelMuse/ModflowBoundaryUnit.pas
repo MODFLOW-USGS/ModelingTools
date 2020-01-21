@@ -190,10 +190,10 @@ type
   // of the @link(TSfrBoundary SFR boundary) is defined using a direct
   // descendant of @name.  Boundaries that are defined at cells typically
   // descend from @link(TCustomMF_BoundColl) which descends from @name.
-  TCustomNonSpatialBoundColl = class(TEnhancedOrderedCollection)
+  TCustomNonSpatialBoundColl = class(TCustomObjectOrderedCollection)
   private
     // See @link(ScreenObject)
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     // @name is the @link(TModflowBoundary) that owns the current @classname.
     FBoundary: TModflowScreenObjectProperty;
 //    FBoundary: TModflowBoundary;
@@ -202,7 +202,7 @@ type
     // See @link(Items).
     function GetItem(Index: Integer): TCustomBoundaryItem;
   protected
-    function GetScreenObject: TObject;
+//    function GetScreenObject: TObject;
     // @name is the @link(TModflowBoundary) that owns @classname.
     property BoundaryGroup: TModflowScreenObjectProperty read FBoundary;
 //    property BoundaryGroup: TModflowBoundary read FBoundary;
@@ -222,7 +222,8 @@ type
     // @name is the @link(TScreenObject) for this boundary.
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
     // the boundary conditions for different time periods.
-    property ScreenObject: TObject read GetScreenObject;
+    property ScreenObject;
+
     // @name is the @link(TScreenObject) for this boundary.
     // @name provides access to @link(TCustomModflowBoundaryItem) representing
     // the boundary conditions for different time periods.
@@ -675,10 +676,10 @@ type
   // @name stores a series of MODFLOW boundaries
   // associated with a series of MODFLOW parameters.
   // @seealso(TModflowParamItem)
-  TModflowParameters = class(TEnhancedOrderedCollection)
+  TModflowParameters = class(TCustomObjectOrderedCollection)
   private
     // See @link(ScreenObject).
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     // @name is the @link(TModflowBoundary) that owns @classname.
     FBoundary: TModflowParamBoundary;
     // See @link(Items).
@@ -719,7 +720,8 @@ type
     // TModflowParamBoundary.DeleteParam).
     function IndexOfParam(AParam: TModflowTransientListParameter): integer;
     // @name is @nil or the @link(TScreenObject) that owns this @classname.
-    property ScreenObject: TObject read FScreenObject;
+//    property ScreenObject: TObject read FScreenObject;
+
     // @name returns @true if any @link(TModflowParamItem) in @link(Items)
     // returns @true.
     function Used: boolean;
@@ -815,9 +817,9 @@ type
     property Proportion: double read FProportion write SetProportion;
   end;
 
-  TMultiHeadCollection = class(TEnhancedOrderedCollection)
+  TMultiHeadCollection = class(TCustomObjectOrderedCollection)
   private
-    FScreenObject: TObject;
+//    FScreenObject: TObject;
     function GetMultiHeadItem(Index: integer): TMultiHeadItem;
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -1916,10 +1918,10 @@ end;
 constructor TModflowParameters.Create(Boundary: TModflowParamBoundary;
   ItemClass: TModflowParamItemClass; Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited Create(ItemClass, Model);
+  inherited Create(ItemClass, Model, ScreenObject);
   FBoundary := Boundary;
-  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-  FScreenObject := ScreenObject;
+//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
+//  FScreenObject := ScreenObject;
 end;
 
 function TModflowParameters.DataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -2409,10 +2411,10 @@ end;
 constructor TCustomNonSpatialBoundColl.Create(Boundary: TModflowScreenObjectProperty; Model: TBaseModel;
   ScreenObject: TObject);
 begin
-  inherited Create(ItemClass, Model);
+  inherited Create(ItemClass, Model, ScreenObject);
   FBoundary := Boundary;
-  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-  FScreenObject := ScreenObject;
+//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
+//  FScreenObject := ScreenObject;
 end;
 
 function TCustomNonSpatialBoundColl.Used: boolean;
@@ -2506,10 +2508,10 @@ begin
   result := inherited Items[Index] as TCustomBoundaryItem
 end;
 
-function TCustomNonSpatialBoundColl.GetScreenObject: TObject;
-begin
-  result := FScreenObject;
-end;
+//function TCustomNonSpatialBoundColl.GetScreenObject: TObject;
+//begin
+//  result := ScreenObject;
+//end;
 
 function TCustomNonSpatialBoundColl.QueryInterface(const IID: TGUID;
   out Obj): HResult;
@@ -2610,7 +2612,7 @@ begin
   begin
     Exit;
   end;
-  result := (Collection as TCustomNonSpatialBoundColl).FScreenObject;
+  result := (Collection as TCustomNonSpatialBoundColl).ScreenObject;
 end;
 
 { TCustomBoundaryStorage }
@@ -4159,9 +4161,9 @@ end;
 constructor TMultiHeadCollection.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
-  inherited Create(TMultiHeadItem, Model);
-  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
-  FScreenObject := ScreenObject;
+  inherited Create(TMultiHeadItem, Model, ScreenObject);
+//  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
+//  FScreenObject := ScreenObject;
 end;
 
 function TMultiHeadCollection.GetMultiHeadItem(Index: integer): TMultiHeadItem;
