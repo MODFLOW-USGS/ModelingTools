@@ -238,7 +238,7 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
-  TCSubBoundary = class(TSpecificModflowBoundary)
+  TCSubBoundary = class(TModflowParamBoundary)
   private
     FCSubPackageData: TCSubPackageDataCollection;
     procedure SetCSubPackageData(const Value: TCSubPackageDataCollection);
@@ -977,47 +977,47 @@ begin
     Boundary := BoundaryGroup as TCSubBoundary;
     ScreenObject := Boundary.ScreenObject as TScreenObject;
     Item := Items[ItemIndex] as TCSubItem;
-    case Boundary.FormulaInterpretation of
-      fiSpecific:
-        begin
-          if ScreenObject.ScreenObjectLength = 0 then
-          begin
-            result := Item.StressOffset;
-          end
-          else if ScreenObject.Closed then
-          begin
-            result := '(' + Item.StressOffset
-              + ') * ' + StrObjectIntersectArea;
-          end
-          else
-          begin
-            result := '(' + Item.StressOffset
-              + ') * ' + StrObjectSectionIntersectLength;
-          end;
-        end;
-      fiDirect:
-        begin
+//    case Boundary.FormulaInterpretation of
+//      fiSpecific:
+//        begin
+//          if ScreenObject.ScreenObjectLength = 0 then
+//          begin
+//            result := Item.StressOffset;
+//          end
+//          else if ScreenObject.Closed then
+//          begin
+//            result := '(' + Item.StressOffset
+//              + ') * ' + StrObjectIntersectArea;
+//          end
+//          else
+//          begin
+//            result := '(' + Item.StressOffset
+//              + ') * ' + StrObjectSectionIntersectLength;
+//          end;
+//        end;
+//      fiDirect:
+//        begin
           result := Item.StressOffset;
-        end;
-      fiTotal:
-        begin
-          if ScreenObject.ScreenObjectLength = 0 then
-          begin
-            result := Item.StressOffset;
-          end
-          else if ScreenObject.Closed then
-          begin
-            result := '((' + Item.StressOffset
-              + ') * ' + StrObjectIntersectArea + ') / ' + StrObjectArea;
-          end
-          else
-          begin
-            result := '((' + Item.StressOffset
-              + ') * ' + StrObjectSectionIntersectLength+ ') / ' + StrObjectLength;
-          end;
-        end;
-      else Assert(False);
-    end;
+//        end;
+//      fiTotal:
+//        begin
+//          if ScreenObject.ScreenObjectLength = 0 then
+//          begin
+//            result := Item.StressOffset;
+//          end
+//          else if ScreenObject.Closed then
+//          begin
+//            result := '((' + Item.StressOffset
+//              + ') * ' + StrObjectIntersectArea + ') / ' + StrObjectArea;
+//          end
+//          else
+//          begin
+//            result := '((' + Item.StressOffset
+//              + ') * ' + StrObjectSectionIntersectLength+ ') / ' + StrObjectLength;
+//          end;
+//        end;
+//      else Assert(False);
+//    end;
   end
   else
   begin

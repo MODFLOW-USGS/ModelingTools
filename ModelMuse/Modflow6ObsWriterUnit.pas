@@ -7,7 +7,7 @@ uses
   ModflowPackageSelectionUnit, ModflowCellUnit, PhastModelUnit, QuadTreeClass,
   Modflow6ObsUnit, ScreenObjectUnit, System.SysUtils, ModflowMawWriterUnit,
   ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit, System.Classes,
-  ModflowUzfMf6WriterUnit;
+  ModflowUzfMf6WriterUnit, Vcl.Forms;
 
 type
   THeadDrawdownObservationLocation = record
@@ -1308,6 +1308,14 @@ begin
         begin
           obsnam := Format('MawObs%d', [ObsIndex+1]);
         end;
+
+        frmProgressMM.AddMessage(Format('  Exporting %s', [obsnam]));
+        Application.ProcessMessages;
+        if not frmProgressMM.ShouldContinue then
+        begin
+          Exit;
+        end;
+
         Assert(Length(obsnam) <= 40);
         boundname := Trim(AnObs.FBoundName);
         boundname := Copy(boundname, 1, 40);

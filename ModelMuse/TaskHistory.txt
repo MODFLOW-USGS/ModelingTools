@@ -24776,5 +24776,12 @@ object TTaskHistory
         'Dialog boxes'
         'CSUB'
         'MF-2015')
+    end
+    item
+      Date = 43852.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'CSUB'
+        'MF-2015')
     end>
 end

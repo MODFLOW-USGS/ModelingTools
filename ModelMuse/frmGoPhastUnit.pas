@@ -2930,6 +2930,10 @@ procedure TfrmGoPhast.WarningsandErrors1Click(Sender: TObject);
 begin
   inherited;
   frmErrorsAndWarnings.Show;
+  if frmErrorsAndWarnings.WindowState = wsMinimized then
+  begin
+    frmErrorsAndWarnings.WindowState := wsNormal
+  end;
 end;
 
 procedure TfrmGoPhast.WMMenuSelect(var Msg: TWMMenuSelect);
@@ -11519,6 +11523,10 @@ procedure TfrmGoPhast.miShowFormulaErrorsClick(Sender: TObject);
 begin
   frmFormulaErrors.Handle;
   frmFormulaErrors.Show;
+  if frmFormulaErrors.WindowState = wsMinimized then
+  begin
+    frmFormulaErrors.WindowState := wsNormal
+  end;
 end;
 
 procedure TfrmGoPhast.acGenerateGridExecute(Sender: TObject);

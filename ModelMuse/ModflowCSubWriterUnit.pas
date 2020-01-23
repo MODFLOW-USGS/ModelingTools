@@ -16,7 +16,7 @@ type
     // Each such list contains series of @link(TValueCell)s. Each
     // @link(TValueCell) defines one boundary cell for one stress period.
     // @name is a TObjectList.
-    FValues: TList;
+//    FValues: TList;
     FCSubPackage: TCSubPackageSelection;
     FFileName: string;
     FStressPeriod: Integer;
@@ -54,12 +54,12 @@ constructor TCSubWriter.Create(Model: TCustomModel;
 begin
   inherited;
   FCSubPackage := Package as TCSubPackageSelection;
-  FValues := TObjectList.Create;
+//  FValues := TObjectList.Create;
 end;
 
 destructor TCSubWriter.Destroy;
 begin
-  FValues.Free;
+//  FValues.Free;
   inherited;
 end;
 
@@ -673,7 +673,7 @@ var
   List: TValueCellList;
   TimeIndex: Integer;
 begin
-  for TimeIndex := 0 to FValues.Count - 1 do
+  for TimeIndex := 0 to Values.Count - 1 do
   begin
     FStressPeriod := TimeIndex;
     FBoundaryIndex := 0;
@@ -709,7 +709,7 @@ begin
     end;
     WriteEndPeriod;
 
-    if TimeIndex = FValues.Count - 1 then
+    if TimeIndex = Values.Count - 1 then
     begin
       if List <> nil then
       begin

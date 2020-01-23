@@ -8913,9 +8913,11 @@ const
   //                reach with MODFLOW-OWHM models.
   //    '4.1.0.21' Bug fix: Fixed a bug that prevented some DXF files from
   //                being imported correctly.
+  //    '4.1.0.22' Enhancement: Improved display of actions during export of
+  //                MAW package.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.21';
+  IModelVersion = '4.1.0.22';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -13348,7 +13350,8 @@ var
   ChildModel: TChildModel;
   ChildDataArray: TDataArray;
 begin
-  FDataArrayManager.DataSetsCapacity := FDataSetCollection.Count;
+  FDataArrayManager.DataSetsCapacity := FDataSetCollection.Count
+    + FDataArrayManager.DataSetCount;
   for Index := 0 to FDataSetCollection.Count - 1 do
   begin
     Item := FDataSetCollection.Items[Index] as TDataSetItem;

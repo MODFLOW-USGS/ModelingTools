@@ -101,10 +101,15 @@ resourcestring
   StrMAWPackageSkipped = 'MAW package skipped.';
   StrMoreThanOneMAWSc = 'More than one MAW screen in the same cell';
   StrTheObject0sDefi = 'The object %0:s defines two or more MAW  well screen' +
-  's in the same cell (%1:d, %2:d, %3:d). This is only allowed in MEAN is selcted for the conductance equation.';
+  's in the same cell (%1:d, %2:d, %3:d). This is only allowed if MEAN is selcted for the conductance equation.';
   StrMAWSkinRadiusLess = 'MAW skin radius less than or equal to well radius';
   StrInSTheMAWSkin = 'In %s, the MAW skin radius less than or equal to well ' +
   'radius';
+  StrEvaluatingS = '    Evaluating %s';
+  StrEvaluatingMAWPacka = 'Evaluating MAW Package data.';
+  StrWritingMAWObservat = 'Writing MAW observations';
+  StrFormulaErrorInMAW = 'Formula Error in MAW';
+  StrThereWasAnErrorI = 'There was an error in a MAW formula in %s.';
 
 { TModflowMAW_Writer }
 
@@ -190,6 +195,8 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMAWPackageSkipped);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMoreThanOneMAWSc);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWSkinRadiusLess);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFormulaErrorInMAW);
+
   FFlowingWells := False;
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
@@ -223,6 +230,14 @@ begin
       begin
         Continue;
       end;
+
+      frmProgressMM.AddMessage(Format(StrEvaluatingS, [AScreenObject.Name]));
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
 //      if AScreenObject.Count <> 1 then
 //      begin
 //        frmErrorsAndWarnings.AddWarning(Model, StrTheFollowingObject,
@@ -741,6 +756,13 @@ begin
     Exit;
   end;
 
+  frmProgressMM.AddMessage(StrEvaluatingMAWPacka);
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+
   Evaluate;
 
   if Values.Count = 0 then
@@ -813,6 +835,12 @@ begin
 
   if FMawObservations.Count > 0 then
   begin
+    frmProgressMM.AddMessage(StrWritingMAWObservat);
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     ObsWriter := TMawObsWriter.Create(Model, etExport, FMawObservations);
     try
       ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, ObservationExtension));
@@ -1151,6 +1179,8 @@ var
       begin
         frmFormulaErrors.AddFormulaError(AScreenObject.Name, FormulaName,
           OutFormula, E.Message);
+        frmErrorsAndWarnings.AddError(Model, StrFormulaErrorInMAW,
+          Format(StrThereWasAnErrorI, [AScreenObject.Name]) , AScreenObject);
         OutFormula := '0';
         Compiler.Compile(OutFormula);
       end;
