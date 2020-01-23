@@ -9504,6 +9504,11 @@ resourcestring
   StrMODFLOW6CSUBCgTheta = 'MODFLOW 6, CSUB: cg_theta';
   StrMODFLOW6CSUBSgm = 'MODFLOW 6, CSUB: sgm';
   StrMODFLOW6CSUBSgs = 'MODFLOW 6, CSUB: sgs';
+  StrSetToTrueBecause = 'Set to True because it is inside %s which sets cell' +
+  ' size.';
+  StrSetToFalseBecause = 'Set to False because it is not inside any object t' +
+  'hat sets cell size.';
+  StrSeeAlsoTheSDa = 'See also the "%s" data set for the Storage package.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -33819,7 +33824,8 @@ begin
     StrMODFLOW6NPFIcel + sLineBreak
     + Str0ConstantCellThi + sLineBreak
     + Str0CalculatedCell + sLineBreak
-    + Str0ConstantOrCalc;
+    + Str0ConstantOrCalc + sLineBreak
+    + Format(StrSeeAlsoTheSDa, [StrConvertible]);
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
@@ -38393,7 +38399,7 @@ begin
       begin
         ActiveDatArray.BooleanData[LayerIndex,RowIndex,ColIndex] := False;
         ActiveDatArray.Annotation[LayerIndex,RowIndex,ColIndex] :=
-          'Set to False because not inside any object that sets cell size.'
+          StrSetToFalseBecause
       end;
     end;
   end;
@@ -38427,7 +38433,7 @@ begin
             begin
               ActiveDatArray.BooleanData[LayerIndex,RowIndex,ColIndex] := True;
               ActiveDatArray.Annotation[LayerIndex,RowIndex,ColIndex] :=
-                Format('Set to True because inside %s which sets cell size.',
+                Format(StrSetToTrueBecause,
                 [AScreenObject.Name]);
             end;
           end;
@@ -38439,17 +38445,6 @@ begin
   end;
 
   ActiveDatArray.AssignValuesWithScreenObjects;
-//  if not ActiveDatArray.ParameterUsed then
-//  begin
-//    for ObjectIndex := 0 to ScreenObjectCount - 1 do
-//    begin
-//      AScreenObject := ScreenObjects[ObjectIndex];
-//      if not AScreenObject.Deleted then
-//      begin
-//        AScreenObject.AssignValuesToDataSet(ActiveDatArray, self, ActiveDatArray.UseLgrEdgeCells);
-//      end;
-//    end;
-//  end;
   {$ENDREGION}
 end;
 

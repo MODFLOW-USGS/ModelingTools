@@ -3311,12 +3311,6 @@ Type
     property OutputTypes: TCsubOutputTypes read FOutputTypes write SetOutputTypes;
     // cdelay
     property Interbeds: TCSubInterbeds read FInterbeds write SetInterbeds;
-  {
-[BOUNDNAMES]
-[PRINT_INPUT]
-[SAVE_FLOWS]
-[TS6 FILEIN <ts6_filename>]
-[OBS6 FILEIN <obs6_filename>]  }
   end;
 
   TSwtPrintItem = class(TCustomPrintItem)

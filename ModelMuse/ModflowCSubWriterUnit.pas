@@ -218,11 +218,14 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   ninterbeds: Integer;
+  IDomain: TDataArray;
 begin
   WriteBeginDimensions;
 
   ninterbeds := 0;
   DataArrayManager := Model.DataArrayManager;
+  IDomain := DataArrayManager.GetDataSetByName(K_IDOMAIN);
+
   for InterbedIndex := 0 to FCSubPackage.Interbeds.Count - 1 do
   begin
     Interbed := FCSubPackage.Interbeds[InterbedIndex];
@@ -234,7 +237,8 @@ begin
       begin
         for ColIndex := 0 to Model.ColumnCount - 1 do
         begin
-          if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+          if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
+            and (IDomain.IntegerData[LayerIndex, RowIndex, ColIndex] > 0) then
           begin
             Inc(ninterbeds);
           end;
@@ -385,9 +389,15 @@ var
 begin
   WriteBeginOptions;
 
-//  [BOUNDNAMES]
-//  [PRINT_INPUT]
-//  [SAVE_FLOWS]
+//[BOUNDNAMES]
+  WriteString('  BOUNDNAMES');
+  NewLine;
+
+//[PRINT_INPUT]
+  PrintListInputOption;
+
+  //[SAVE_FLOWS]
+  WriteSaveFlowsOption;
 
 //  [GAMMAW <gammaw>]
   WriteString('  GAMMAW ');
@@ -583,12 +593,15 @@ var
   h0: Double;
   DisvUsed: Boolean;
   icsubno: Integer;
+  IDomain: TDataArray;
 begin
   WriteBeginPackageData;
   DisvUsed := Model.DisvUsed;
   icsubno := 0;
 
   DataArrayManager := Model.DataArrayManager;
+  IDomain := DataArrayManager.GetDataSetByName(K_IDOMAIN);
+
   for InterbedIndex := 0 to FCSubPackage.Interbeds.Count - 1 do
   begin
     Interbed := FCSubPackage.Interbeds[InterbedIndex];
@@ -627,7 +640,8 @@ begin
       begin
         for ColIndex := 0 to Model.ColumnCount - 1 do
         begin
-          if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+          if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
+            and (IDomain.IntegerData[LayerIndex, RowIndex, ColIndex] > 0) then
           begin
             Inc(icsubno);
             pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
@@ -656,6 +670,15 @@ begin
             WriteFloat(theta);
             WriteFloat(kv);
             WriteFloat(h0);
+
+            if Model.DisvUsed then
+            begin
+              WriteString(Format(' L%:0d_C%:1d', [LayerIndex+1, ColIndex+1]));
+            end
+            else
+            begin
+              WriteString(Format(' L%:0d_R%:1d_C$:2d', [LayerIndex+1, RowIndex+1, ColIndex+1]));
+            end;
 
             NewLine;
           end;

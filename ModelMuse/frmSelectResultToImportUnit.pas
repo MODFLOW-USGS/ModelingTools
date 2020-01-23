@@ -209,7 +209,7 @@ type
       var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
       var Description: string; var A3DArray: T3DTModflowArray; var AuxArray: TAuxArrays;
       Precision: TModflowPrecision; HufFormat: boolean;
-      ShouldReadArray: boolean);
+      ShouldReadArray: boolean; AModel: TCustomModel);
     procedure Assign3DValues(ScreenObject: TScreenObject; LayerData: TDataArray;
       AnArray: T3DTModflowArray; ModflowLayerIndex, DataSetLayerIndex: integer; CheckAllLayers: boolean;
       ValuesToIgnore: TOneDRealArray; AModel: TCustomModel);
@@ -321,12 +321,12 @@ resourcestring
   StrTheFileCouldNotB = 'The file could not be read.' + sLineBreak + '"%s"';
   StrImportModelResults = 'import model results';
   StrTheNumberOfRowsOrColumns = 'The number of rows or columns in the data s' +
-  'et doesn''t match the number of rows or columns in the grid.';
+  'et doesn''t match the number of rows or columns in the grid for data set "%s".';
   StrFileIsEmpty = 'File is empty.';
   StrTheNumberOfLayersOrCol = 'The number of layers or columns in the data s' +
-  'et doesn''t match the number of layers or columns in the grid.';
-  StrTheNumberOfRows = 'The number of rows, columns, or layers in the data s' +
-  'et doesn''t match the number of rows, columns, or layers in the grid.';
+  'et doesn''t match the number of layers or columns in the grid for data set "%s".';
+  StrTheNumberOfRows = 'The number of layers, rows, or columns in the data s' +
+  'et doesn''t match the number of rows, columns, or layers in the grid for data set "%s".';
   StrTheNumberOfHydrogeologic = 'The number of rows, columns, or hydrogeolog' +
   'ic units in the data set doesn''t match the number of rows, columns, or h' +
   'ydrogeologic units in the grid.';
@@ -1074,7 +1074,6 @@ var
   ADir: string;
 begin
   FMaxTrans := -1;
-//  result := True;
   try
     Screen.Cursor := crHourGlass;
     rdgModels.BeginUpdate;
@@ -2906,11 +2905,11 @@ begin
                       ILAY := 0;
                       NTRANS := 0;
                       Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
-                        A3DArray, AuxArray, Precision, HufFormat, True);
+                        A3DArray, AuxArray, Precision, HufFormat, True, AModel);
                       if Description = 'FLOW-JA-FACE' then
                       begin
                         Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
-                          A3DArray, AuxArray, Precision, HufFormat, True);
+                          A3DArray, AuxArray, Precision, HufFormat, True, AModel);
                       end;
                       ALabel := WriteLabel(Description, AModel, ILAY, KPER, KSTP, NTRANS, SwrTimeStep, TOTIM);
                       CheckIndex := clData.Items.IndexOf(ALabel);
@@ -3191,7 +3190,7 @@ begin
                       if (Index = 0) or ((Index mod NLAY) = 0) then
                       begin
                         Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
-                          A3DArray, AuxArray, Precision, HufFormat, clData.Checked[Index]);
+                          A3DArray, AuxArray, Precision, HufFormat, clData.Checked[Index], AModel);
                       end;
 
                       if clData.Checked[Index] then
@@ -3790,6 +3789,7 @@ var
   LayerCount: Integer;
   PriorCount: Integer;
   AuxArray: TAuxArrays;
+  Mf6Description: string;
   procedure RecordItem(Description: String);
   var
     TrimmedDescription: string;
@@ -3924,7 +3924,7 @@ begin
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
                 Beep;
-                MessageDlg(StrTheNumberOfRowsOrColumns,
+                MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC))]),
                   mtError, [mbOK], 0);
                 result := False;
                 break;
@@ -3974,7 +3974,7 @@ begin
                     or (AModel.ModflowGrid.ColumnCount <> NCOL) then
                   begin
                     Beep;
-                    MessageDlg(StrTheNumberOfLayersOrCol,
+                    MessageDlg(Format(StrTheNumberOfLayersOrCol, [Trim(string(DESC))]),
                       mtError, [mbOK], 0);
                     result := False;
                     break;
@@ -3986,7 +3986,7 @@ begin
                     or (AModel.ModflowGrid.ColumnCount <> NCOL) then
                   begin
                     Beep;
-                    MessageDlg(StrTheNumberOfRowsOrColumns,
+                    MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC))]),
                       mtError, [mbOK], 0);
                     result := False;
                     break;
@@ -4000,7 +4000,7 @@ begin
                   or (AModel.DisvGrid.ColumnCount <> NCOL) then
                 begin
                   Beep;
-                  MessageDlg(StrTheNumberOfRowsOrColumns,
+                  MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC))]),
                     mtError, [mbOK], 0);
                   result := False;
                   break;
@@ -4031,7 +4031,7 @@ begin
                   or (AModel.ModflowGrid.ColumnCount <> NCOL) then
                 begin
                   Beep;
-                  MessageDlg(StrTheNumberOfLayersOrCol,
+                  MessageDlg(Format(StrTheNumberOfLayersOrCol, [Trim(string(DESC2))]),
                     mtError, [mbOK], 0);
                   result := False;
                   break;
@@ -4043,7 +4043,7 @@ begin
                   or (AModel.ModflowGrid.ColumnCount <> NCOL) then
                 begin
                   Beep;
-                  MessageDlg(StrTheNumberOfRowsOrColumns,
+                  MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC2))]),
                     mtError, [mbOK], 0);
                   result := False;
                   break;
@@ -4062,17 +4062,25 @@ begin
                     False);
                 mpDouble:
                   ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER,
-                    PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat,
-                    False);
+                    PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray,
+                    AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
+                    HufFormat, False);
                 else Assert(False);
               end;
-              if Trim(string(DESC)) = 'FLOW-JA-FACE' then
+              Mf6Description := Trim(string(DESC));
+              if Mf6Description = 'FLOW-JA-FACE' then
               begin
                 Continue;
               end;
               RecordItem(string(DESC));
               if (frmGoPhast.ModelSelection = msModflow2015) then
               begin
+                Mf6Description := Trim(string(DESC));
+                if (Mf6Description = 'CSUB-ELASTIC')
+                  or (Mf6Description = 'CSUB-INELASTIC') then
+                begin
+                  Continue;
+                end;
                 if AModel.DisvUsed then
                 begin
                   if (AModel.ModflowLayerCount * AModel.DisvGrid.RowCount
@@ -4080,7 +4088,7 @@ begin
                     <> (Abs(NLAY) * NROW * NCOL) then
                   begin
                     Beep;
-                    MessageDlg(StrTheNumberOfRowsOrColumns,
+                    MessageDlg(Format(StrTheNumberOfLayersOrCol, [Trim(string(DESC))]),
                       mtError, [mbOK], 0);
                     result := False;
                     break;
@@ -4093,7 +4101,7 @@ begin
                     <> (Abs(NLAY) * NROW * NCOL) then
                   begin
                     Beep;
-                    MessageDlg(StrTheNumberOfRowsOrColumns,
+                    MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC))]),
                       mtError, [mbOK], 0);
                     result := False;
                     break;
@@ -4107,7 +4115,7 @@ begin
                   or (AModel.ModflowLayerCount <> Abs(NLAY)) then
                 begin
                   Beep;
-                  MessageDlg(StrTheNumberOfRows,
+                  MessageDlg(Format(StrTheNumberOfRows, [Trim(string(DESC))]),
                     mtError, [mbOK], 0);
                   result := False;
                   break;
@@ -4135,7 +4143,7 @@ begin
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
                 Beep;
-                MessageDlg(StrTheNumberOfRowsOrColumns,
+                MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC2))]),
                   mtError, [mbOK], 0);
                 result := False;
                 break;
@@ -4160,7 +4168,7 @@ begin
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
                 Beep;
-                MessageDlg(StrTheNumberOfRowsOrColumns,
+                MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Trim(string(DESC))]),
                   mtError, [mbOK], 0);
                 result := False;
                 break;
@@ -4178,8 +4186,9 @@ begin
                     False);
                 mpDouble:
                   ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER,
-                    PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat,
-                    False);
+                    PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, A3DArray, AuxArray,
+                    AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
+                    HufFormat, False);
                 else Assert(False);
               end;
               for LayerIndex := 0 to Abs(NLAY) - 1 do
@@ -4220,7 +4229,7 @@ begin
                 or (AModel.ModflowGrid.ColumnCount <> NCOL) then
               begin
                 Beep;
-                MessageDlg(StrTheNumberOfRowsOrColumns,
+                MessageDlg(Format(StrTheNumberOfRowsOrColumns, [Description]),
                   mtError, [mbOK], 0);
                 result := False;
                 break;
@@ -4584,7 +4593,8 @@ end;
 procedure TfrmSelectResultToImport.Read3DArray(var NLAY: Integer;
    var EndReached: Boolean; var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
    var Description: string; var A3DArray: T3DTModflowArray; var AuxArray: TAuxArrays;
-   Precision: TModflowPrecision; HufFormat: boolean; ShouldReadArray: boolean);
+   Precision: TModflowPrecision; HufFormat: boolean; ShouldReadArray: boolean;
+   AModel: TCustomModel);
 var
   PERTIM: TModflowDouble;
   DESC: TModflowDesc;
@@ -4599,7 +4609,9 @@ begin
           NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat, ShouldReadArray);
       mpDouble:
         ReadModflowDoublePrecFluxArray(FFileStream, KSTP, KPER, PERTIM, TOTIM, DESC,
-          NCOL, NROW, NLAY, A3DArray, AuxArray, HufFormat, ShouldReadArray);
+          NCOL, NROW, NLAY, A3DArray, AuxArray,
+          AModel.LayerCount, AModel.RowCount, AModel.ColumnCount,
+          HufFormat, ShouldReadArray);
       else Assert(False);
     end;
     Description := string(Trim(DESC));

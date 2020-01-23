@@ -123,7 +123,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
-  var AuxArray: TAuxArrays;
+  var AuxArray: TAuxArrays; const AltNLay, AltNRow, AltNCol: integer;
   HufFormat: boolean;
   ReadArray: Boolean = True
   );
@@ -2110,7 +2110,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
-  var AuxArray: TAuxArrays;
+  var AuxArray: TAuxArrays; const AltNLay, AltNRow, AltNCol: integer;
   HufFormat: boolean;
   ReadArray: Boolean = True);
 var
@@ -2142,6 +2142,7 @@ var
   AuxValue: TModflowDouble;
   AuxVarIndex: Integer;
   NodeIndex: Integer;
+  Mf6Description: string;
   procedure ReadModflow6Name(var AName: string);
   var
     NameArray: TModflowDesc;
@@ -2158,6 +2159,18 @@ begin
   AFile.Read(NLAY, SizeOf(NLAY));
   if ReadArray then
   begin
+    Mf6Description := Trim(string(DESC));
+    if (Mf6Description = 'CSUB-ELASTIC')
+      or (Mf6Description = 'CSUB-INELASTIC') then
+    begin
+      Assert(AltNRow >= 1);
+      Assert(AltNCol >= 1);
+      Assert(AltNLay >= 1);
+      Assert(NROW * NCOL <= AltNRow * AltNCol * AltNLay);
+      NROW := AltNRow;;
+      NCOL := AltNCol;
+      NLAY := AltNLay;
+    end;
     SetLength(AnArray, Abs(NLAY), NROW, NCOL);
     for LayerIndex := 0 to Abs(NLAY) - 1 do
     begin

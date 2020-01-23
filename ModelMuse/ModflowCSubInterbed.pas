@@ -7,7 +7,7 @@ uses
   DataSetUnit;
 
 type
-  TCSubInterbedType = (itDelay, itNoDelay);
+  TCSubInterbedType = (itNoDelay, itDelay);
 
   TCSubInterbed = class(TOrderedItem)
   private

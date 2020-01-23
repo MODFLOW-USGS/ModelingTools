@@ -281,7 +281,7 @@ begin
     Result[1] := UpperCase(Result)[1];
     for Index := 1 to Length(result) - 1 do
     begin
-      if (result[Index] = ' ') then
+      if (result[Index] = ' ') or (result[Index] = '-') then
       begin
         result[Index+1] := UpperCase(result[Index+1])[1];
       end;

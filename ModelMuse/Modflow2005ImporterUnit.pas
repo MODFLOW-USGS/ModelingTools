@@ -4944,7 +4944,7 @@ begin
             mpDouble:
               begin
                 ReadModflowDoublePrecFluxArray(FFileStream,
-                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, AnArray, AuxArray, HufFormat);
+                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, NLAY, AnArray, AuxArray, -1, -1, -1, HufFormat);
               end;
           end;
           DefineBoundary;
