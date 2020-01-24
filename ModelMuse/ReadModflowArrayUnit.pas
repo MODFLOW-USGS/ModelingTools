@@ -2143,6 +2143,7 @@ var
   AuxVarIndex: Integer;
   NodeIndex: Integer;
   Mf6Description: string;
+  NeedToUpdateDimensions: Boolean;
   procedure ReadModflow6Name(var AName: string);
   var
     NameArray: TModflowDesc;
@@ -2157,28 +2158,37 @@ begin
   AFile.Read(NCOL, SizeOf(NCOL));
   AFile.Read(NROW, SizeOf(NROW));
   AFile.Read(NLAY, SizeOf(NLAY));
+  NeedToUpdateDimensions := False;
   if ReadArray then
   begin
     Mf6Description := Trim(string(DESC));
     if (Mf6Description = 'CSUB-ELASTIC')
       or (Mf6Description = 'CSUB-INELASTIC') then
     begin
-      Assert(AltNRow >= 1);
-      Assert(AltNCol >= 1);
-      Assert(AltNLay >= 1);
-      Assert(NROW * NCOL <= AltNRow * AltNCol * AltNLay);
-      NROW := AltNRow;;
-      NCOL := AltNCol;
-      NLAY := AltNLay;
-    end;
-    SetLength(AnArray, Abs(NLAY), NROW, NCOL);
-    for LayerIndex := 0 to Abs(NLAY) - 1 do
-    begin
-      for RowIndex := 0 to NROW - 1 do
+      NeedToUpdateDimensions := True;
+      SetLength(AnArray, Abs(AltNLay), AltNRow, AltNCol);
+      for LayerIndex := 0 to Abs(AltNLay) - 1 do
       begin
-        for ColIndex := 0 to NCOL - 1 do
+        for RowIndex := 0 to AltNRow - 1 do
         begin
-          AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+          for ColIndex := 0 to AltNCol - 1 do
+          begin
+            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+          end;
+        end;
+      end;
+    end
+    else
+    begin
+      SetLength(AnArray, Abs(NLAY), NROW, NCOL);
+      for LayerIndex := 0 to Abs(NLAY) - 1 do
+      begin
+        for RowIndex := 0 to NROW - 1 do
+        begin
+          for ColIndex := 0 to NCOL - 1 do
+          begin
+            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+          end;
         end;
       end;
     end;
@@ -2357,6 +2367,17 @@ begin
           end;
         end;
         AFile.Read(NLIST, SizeOf(NLIST));
+
+        if NeedToUpdateDimensions then
+        begin
+          Assert(AltNRow >= 1);
+          Assert(AltNCol >= 1);
+          Assert(AltNLay >= 1);
+          Assert(NROW * NCOL <= AltNRow * AltNCol * AltNLay);
+          NROW := AltNRow;;
+          NCOL := AltNCol;
+          NLAY := AltNLay;
+        end;
 
         if ReadArray then
         begin
