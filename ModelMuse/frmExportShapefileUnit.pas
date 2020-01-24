@@ -139,6 +139,7 @@ resourcestring
   StrTheFileSizeOfThe2GB = 'The file size of the dBASE file (%g) for this Sh' +
   'apefile exceeds 2 GB. It may not be useable in some software. Do you want' +
   ' to continue?';
+  StrDoYouWantToSave = 'Do you want to save the a Shapefile at the %s?';
 
 {$R *.dfm}
 
@@ -520,6 +521,17 @@ begin
   end;
 
   FShapeFileName := jfeNodes.FileName;
+  if ExpandFileName(FShapeFileName) <> FShapeFileName then
+  begin
+    Beep;
+    if (MessageDlg(Format(StrDoYouWantToSave, [ExpandFileName(FShapeFileName)]),
+      mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then
+    begin
+      Exit;
+    end;
+    FShapeFileName := ExpandFileName(FShapeFileName);
+  end;
+
   if FileExists(FShapeFileName)
     and (MessageDlg(Format(StrSAlreadyExists, [FShapeFileName]),
     mtInformation, [mbYes, mbNo], 0) <> mrYes) then
@@ -554,7 +566,13 @@ begin
     try
       try
         InitializeDataBase(FShapeFileName, FShapeDataBase, FFields);
-      except on E: EFOpenError do
+      except
+        on E: EFOpenError do
+        begin
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
         begin
           MessageDlg(E.Message, mtError, [mbOK], 0);
           Exit;
@@ -587,6 +605,18 @@ begin
   end;
 
   FShapeFileName := jfeElements.FileName;
+
+  if ExpandFileName(FShapeFileName) <> FShapeFileName then
+  begin
+    Beep;
+    if (MessageDlg(Format(StrDoYouWantToSave, [ExpandFileName(FShapeFileName)]),
+      mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then
+    begin
+      Exit;
+    end;
+    FShapeFileName := ExpandFileName(FShapeFileName);
+  end;
+
   if FileExists(FShapeFileName)
     and (MessageDlg(Format(StrSAlreadyExists, [FShapeFileName]),
     mtInformation, [mbYes, mbNo], 0) <> mrYes) then
@@ -621,7 +651,13 @@ begin
     try
       try
         InitializeDataBase(FShapeFileName, FShapeDataBase, FFields);
-      except on E: EFOpenError do
+      except
+        on E: EFOpenError do
+        begin
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
         begin
           MessageDlg(E.Message, mtError, [mbOK], 0);
           Exit;
@@ -674,6 +710,18 @@ begin
   end;
 
   ShapeFileName := jfeHorizontalFlowBarrier.FileName;
+
+  if ExpandFileName(ShapeFileName) <> ShapeFileName then
+  begin
+    Beep;
+    if (MessageDlg(Format(StrDoYouWantToSave, [ExpandFileName(ShapeFileName)]),
+      mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then
+    begin
+      Exit;
+    end;
+    ShapeFileName := ExpandFileName(ShapeFileName);
+  end;
+
   if FileExists(ShapeFileName)
     and (MessageDlg(Format(StrSAlreadyExists, [ShapeFileName]),
     mtInformation, [mbYes, mbNo], 0) <> mrYes) then
@@ -718,7 +766,13 @@ begin
     try
       try
         InitializeDataBase(ShapeFileName, ShapeDataBase, Fields);
-      except on E: EFOpenError do
+      except
+        on E: EFOpenError do
+        begin
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
         begin
           MessageDlg(E.Message, mtError, [mbOK], 0);
           Exit;

@@ -5,7 +5,7 @@ inherited frmExportShapefile: TfrmExportShapefile
   ClientHeight = 555
   ClientWidth = 449
   ExplicitWidth = 465
-  ExplicitHeight = 593
+  ExplicitHeight = 594
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -333,14 +333,10 @@ inherited frmExportShapefile: TfrmExportShapefile
       Tree.Left = 0
       Tree.Top = 0
       Tree.Width = 304
-      Tree.Height = 202
+      Tree.Height = 201
       Tree.Align = alClient
+      Tree.DefaultNodeHeight = 20
       Tree.Header.AutoSizeIndex = 0
-      Tree.Header.Font.Charset = DEFAULT_CHARSET
-      Tree.Header.Font.Color = clWindowText
-      Tree.Header.Font.Height = -11
-      Tree.Header.Font.Name = 'Tahoma'
-      Tree.Header.Font.Style = []
       Tree.Header.MainColumn = -1
       Tree.TabOrder = 0
       Tree.OnGetText = treeComboFilterTreeGetText

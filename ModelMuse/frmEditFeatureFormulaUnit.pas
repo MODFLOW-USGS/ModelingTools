@@ -17,7 +17,7 @@ type
     ftUZF, ftMt3dms, ftCfpFixed, ftCfpPipes, ftCfpRecharge, ftSwrReach,
     ftSwrRain, ftSwrET, ftSwrLateralInflow, ftSwrDirectRunoff, ftSwrStage,
     ftFmpFarmID, ftFmpCropID, ftFmpRefEvap, ftFmpPrecip, ftFmpWell,
-    ftMt3dRechConc, ftMt3dUnsatConc, ftMt3dSatConc);
+    ftMt3dRechConc, ftMt3dUnsatConc, ftMt3dSatConc, ftMaw);
 
   TMfFeatureTypes = set of TMfFeatureType;
 
@@ -121,7 +121,7 @@ uses
   frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ModflowPackagesUnit,
   ModflowConstantHeadBoundaryUnit, RbwParser, ModflowMnw2Unit,
   ModflowCfpFixedUnit, ModflowCfpPipeUnit, frmFormulaUnit, DataSetUnit,
-  ModflowStrUnit, RealListUnit, SutraBoundariesUnit;
+  ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit;
 
 resourcestring
   StrNoObjectsOfTheSe = 'No objects of the selected type were selected for e' +
@@ -452,6 +452,10 @@ begin
               Include(FMfFeatureTypes, ftMt3dUnsatConc);
               Include(FMfFeatureTypes, ftMt3dSatConc);
             end;
+            if Packages.MawPackage.IsSelected then
+            begin
+              Include(FMfFeatureTypes, ftMaw);
+            end;
           end;
 
           Packages := PackageList[0];
@@ -742,6 +746,14 @@ begin
             FeatureSelection.FFeatureType := ftSwrDirectRunoff;
             FeatureSelection.FFeatureName := 'Direct Runoff in ' +
               Packages.SwrPackage.PackageIdentifier;
+          end;
+          if ftMaw in FMfFeatureTypes then
+          begin
+            FeatureSelection := TModflowFeatureTypeSelection.Create;
+            FSelectedFeatureTypes.Add(FeatureSelection);
+            FeatureSelection.FFeatureType := ftMaw;
+            FeatureSelection.FFeatureName :=
+              Packages.MawPackage.PackageIdentifier;
           end;
 
           for FeatureIndex := FSelectedFeatureTypes.Count - 1 downto 0 do
@@ -1061,6 +1073,18 @@ begin
         tvFeatures.Items.AddChild(SelectedType.FNode, 'Conductance Permeability');
         tvFeatures.Items.AddChild(SelectedType.FNode, 'Elevation');
       end;
+    ftMaw:
+      begin
+        Boundary := FeatureTypeToBoundary(SelectedType.FFeatureType, FirstScreenObject);
+        AddBoundaryParam2(Boundary, SelectedType.FNode);
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'Radius');
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'Bottom');
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'Initial Head');
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'All Screen Tops');
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'All Screen Bottoms');
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'All Skin Ks');
+        tvFeatures.Items.AddChild(SelectedType.FNode, 'All Skin Radii');
+      end
     else Assert(False);
   end;
 //  if comboFeatureProperty.Items.Count = 1 then
@@ -1205,6 +1229,9 @@ var
   Lake: TSutraLake;
   ADataArray: TDataArray;
   FormulaPosition: Integer;
+  ModflowMawBoundary: TMawBoundary;
+  ValueCount: Integer;
+  ScreenIndex: Integer;
   procedure SetItemFormula(AnItem: TCustomBoundaryItem;
     FormulaIndex: Integer);
   begin
@@ -1576,6 +1603,63 @@ begin
               CfpPipes := ScreenObject.ModflowCfpPipes;
               CfpPipes.BoundaryFormula[FormulaIndex] := Formula;
             end;
+          ftMaw:
+            begin
+              ModflowMawBoundary := ScreenObject.ModflowMawBoundary;
+              ValueCount := ModflowMawBoundary.Values.TimeListCount(frmGoPhast.PhastModel) ;
+              if FormulaIndex < ValueCount then
+              begin
+                SetCollectionFormula(ModflowMawBoundary.Values, FormulaIndex);
+              end
+              else
+              begin
+                FormulaIndex := FormulaIndex - ValueCount;
+                case FormulaIndex of
+                  0:
+                    begin
+                      ModflowMawBoundary.Radius := Formula;
+                    end;
+                  1:
+                    begin
+                      ModflowMawBoundary.Bottom := Formula;
+                    end;
+                  2:
+                    begin
+                      ModflowMawBoundary.InitialHead := Formula;
+                    end;
+                  3:
+                    begin
+                      for ScreenIndex := 0 to ModflowMawBoundary.WellScreens.Count -1 do
+                      begin
+                        ModflowMawBoundary.WellScreens[ScreenIndex].ScreenTop := Formula;
+                      end;
+                    end;
+                  4:
+                    begin
+                      for ScreenIndex := 0 to ModflowMawBoundary.WellScreens.Count -1 do
+                      begin
+                        ModflowMawBoundary.WellScreens[ScreenIndex].ScreenBottom := Formula;
+                      end;
+                    end;
+                  5:
+                    begin
+                      for ScreenIndex := 0 to ModflowMawBoundary.WellScreens.Count -1 do
+                      begin
+                        ModflowMawBoundary.WellScreens[ScreenIndex].SkinK := Formula;
+                      end;
+                    end;
+                  6:
+                    begin
+                      for ScreenIndex := 0 to ModflowMawBoundary.WellScreens.Count -1 do
+                      begin
+                        ModflowMawBoundary.WellScreens[ScreenIndex].SkinRadius := Formula;
+                      end;
+                    end;
+                  else
+                    Assert(False);
+                end;
+              end;
+            end;
           else Assert(False);
         end;
       end
@@ -1778,6 +1862,7 @@ begin
     ftMt3dRechConc: Result := ScreenObject.Mt3dUzfRechConc;
     ftMt3dUnsatConc: Result := ScreenObject.Mt3dUztUnsatEtConcBoundary;
     ftMt3dSatConc: Result := ScreenObject.Mt3dUztSatEtConcBoundary;
+    ftMaw: Result := ScreenObject.ModflowMawBoundary;
     else Assert(False);
   end;
 end;
@@ -2107,6 +2192,14 @@ begin
           begin
             if ((AScreenObject.Mt3dUztSatEtConcBoundary <> nil)
               and AScreenObject.Mt3dUztSatEtConcBoundary.Used) then
+            begin
+              SelectedType.FScreenObjects.Add(AScreenObject);
+            end;
+          end;
+        ftMaw:
+          begin
+            if ((AScreenObject.ModflowMawBoundary <> nil)
+              and AScreenObject.ModflowMawBoundary.Used) then
             begin
               SelectedType.FScreenObjects.Add(AScreenObject);
             end;

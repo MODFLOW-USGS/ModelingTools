@@ -736,10 +736,16 @@ begin
   try
     try
       InitializeDataBase;
-    except on E: EFOpenError do
+    except
+      on E: EFOpenError do
       begin
         Beep;
         MessageDlg(Format(StrThereWasAnErrorI, [E.message]), mtError, [mbOK], 0);
+        Exit;
+      end;
+      on E: EXBaseException do
+      begin
+        MessageDlg(E.Message, mtError, [mbOK], 0);
         Exit;
       end;
     end;

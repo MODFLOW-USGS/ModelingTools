@@ -409,6 +409,8 @@ type
     procedure InvalidateScreenBottomData(Sender: TObject);
     procedure InvalidateSkinKData(Sender: TObject);
     procedure InvalidateSkinRadiusData(Sender: TObject);
+    function GetItems(Index: Integer): TMawWellScreenItem;
+    procedure SetItems(Index: Integer; const Value: TMawWellScreenItem);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -435,6 +437,7 @@ type
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     procedure Loaded; 
+    property Items[Index: Integer]: TMawWellScreenItem read GetItems write SetItems; default;
   end;
 
   TMawBoundary = class(TModflowBoundary)
@@ -1022,6 +1025,11 @@ begin
   end;
 end;
 
+function TMawWellScreenCollection.GetItems(Index: Integer): TMawWellScreenItem;
+begin
+  result := inherited Items[Index] as TMawWellScreenItem;
+end;
+
 function TMawWellScreenCollection.GetTimeListLinkClass: TTimeListsModelLinkClass;
 begin
   result := TMawWellScreenTimeListLink;
@@ -1174,6 +1182,12 @@ procedure TMawWellScreenCollection.SetBoundaryStartAndEndTime(
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TMawSteadyConnectionStorage).FMawSteadyConnectionArray, BoundaryCount);
   inherited;
+end;
+
+procedure TMawWellScreenCollection.SetItems(Index: Integer;
+  const Value: TMawWellScreenItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 function TMawWellScreenCollection.ShouldDeleteItemsWithZeroDuration: Boolean;

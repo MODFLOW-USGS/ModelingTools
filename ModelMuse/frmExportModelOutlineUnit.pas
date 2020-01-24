@@ -760,7 +760,20 @@ var
   Dummy: integer;
   InactiveCells: TGpcPolygonClass;
 begin
-  InitializeDataBase;
+  try
+    InitializeDataBase;
+  except
+    on E: EFOpenError do
+    begin
+      MessageDlg(E.Message, mtError, [mbOK], 0);
+      Exit;
+    end;
+    on E: EXBaseException do
+    begin
+      MessageDlg(E.Message, mtError, [mbOK], 0);
+      Exit;
+    end;
+  end;
   InitializeGeometryWriter;
   try
     FModel := comboModelSelection.Items.Objects[

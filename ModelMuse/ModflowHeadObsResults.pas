@@ -366,7 +366,22 @@ begin
       Fields.Add('TIME=N18,10');
       Fields.Add('MIN_LAYER=N');
       Fields.Add('MAX_LAYER=N');
-      InitializeDataBase(ChangeFileExt(FileName, '.dbf'), XBase, Fields);
+      try
+        InitializeDataBase(ChangeFileExt(FileName, '.dbf'), XBase, Fields);
+      except
+        on E: EFOpenError do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
     finally
       Fields.Free;
     end;

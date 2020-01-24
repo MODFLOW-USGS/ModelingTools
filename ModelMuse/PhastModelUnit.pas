@@ -8915,9 +8915,11 @@ const
   //                being imported correctly.
   //    '4.1.0.22' Enhancement: Improved display of actions during export of
   //                MAW package.
+  //    '4.1.0.23' Enhancement: The Edit Feature Formula dialog box can now be
+  //                used with the MAW package.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.22';
+  IModelVersion = '4.1.0.23';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

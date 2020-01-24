@@ -1528,9 +1528,10 @@ begin
   NSOP := FFluidSourceNodes.Count;
   NSOU := FMassEnergySourceNodes.Count;
 
+  NPBG := 0;
+  NUBG := 0;
   if Model.ModelSelection <> msSutra22 then
   begin
-    NPBG := 0;
     if Assigned(FGeneralFlowNodes) and (FGeneralFlowNodes.Count > 0)  then
     begin
       for ListIndex := 0 to FGeneralFlowNodes.Count - 1 do
@@ -1543,7 +1544,6 @@ begin
       end;
     end;
 
-    NUBG := 0;
     if Assigned(FGeneralTransportNodes) and (FGeneralTransportNodes.Count > 0)  then
     begin
       for ListIndex := 0 to FGeneralTransportNodes.Count - 1 do

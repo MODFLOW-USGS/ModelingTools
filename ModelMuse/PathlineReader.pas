@@ -2339,7 +2339,20 @@ begin
     Fields := TStringList.Create;
     try
       DefineShapeFileFields(Fields);
-      InitializeDataBase(FileName, ShapeDataBase, Fields);
+      try
+        InitializeDataBase(FileName, ShapeDataBase, Fields);
+      except
+        on E: EFOpenError do
+        begin
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
+        begin
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
     finally
       Fields.Free;
     end;
@@ -2716,7 +2729,22 @@ begin
 
       Fields.Add(string(StrPARTICLE) + '=N');
 
-      InitializeDataBase(FileName, ShapeDataBase, Fields);
+      try
+        InitializeDataBase(FileName, ShapeDataBase, Fields);
+      except
+        on E: EFOpenError do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
     finally
       Fields.Free;
     end;
@@ -2822,7 +2850,22 @@ begin
 
       Fields.Add(string(StrPARTICLE) + '=N');
 
-      InitializeDataBase(FileName, ShapeDataBase, Fields);
+      try
+        InitializeDataBase(FileName, ShapeDataBase, Fields);
+      except
+        on E: EFOpenError do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
     finally
       Fields.Free;
     end;
@@ -5375,7 +5418,22 @@ begin
     Fields := TStringList.Create;
     try
       Fields.Add(string(StrTRACKTIME) + '=N18,10');
-      InitializeDataBase(FileName, ShapeDataBase, Fields);
+      try
+        InitializeDataBase(FileName, ShapeDataBase, Fields);
+      except
+        on E: EFOpenError do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+        on E: EXBaseException do
+        begin
+          Beep;
+          MessageDlg(E.Message, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
     finally
       Fields.Free;
     end;

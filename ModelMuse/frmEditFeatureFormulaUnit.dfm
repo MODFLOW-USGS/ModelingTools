@@ -5,7 +5,7 @@ inherited frmEditFeatureFormula: TfrmEditFeatureFormula
   ClientHeight = 499
   ClientWidth = 601
   ExplicitWidth = 617
-  ExplicitHeight = 537
+  ExplicitHeight = 538
   PixelsPerInch = 96
   TextHeight = 18
   object spl1: TSplitter

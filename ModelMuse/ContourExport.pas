@@ -4,7 +4,7 @@ interface
 
 uses System.Types, Classes, FastGeo, QuadtreeClass, RealListUnit, AbstractGridUnit,
   DataSetUnit, SysUtils, GoPhastTypes, ContourUnit, ValueArrayStorageUnit,
-  PhastModelUnit;
+  PhastModelUnit, Vcl.Dialogs;
 
 type
   TPointList = class(TObject)
@@ -660,7 +660,20 @@ begin
         end;
         FieldDescription := FieldName + '=' + FieldFormat;
         Fields.Add(string(FieldDescription));
-        InitializeDataBase(FileName, ShapeDataBase, Fields);
+        try
+          InitializeDataBase(FileName, ShapeDataBase, Fields);
+        except
+          on E: EFOpenError do
+          begin
+            MessageDlg(E.Message, mtError, [mbOK], 0);
+            Exit;
+          end;
+          on E: EXBaseException do
+          begin
+            MessageDlg(E.Message, mtError, [mbOK], 0);
+            Exit;
+          end;
+      end;
       finally
         Fields.Free;
         FieldNames.Free;

@@ -157,12 +157,12 @@ begin
   begin
     Assert( FTimeSeries.UniformScaleFactor);
     WriteString('  SFAC');
-    ParamID := ' ' + ParameterDelimiter + FTimeSeries.ParameterName;
+    ParamID := ' ' + string(ParameterDelimiter) + FTimeSeries.ParameterName;
     while Length(ParamID) < 23 do
     begin
       ParamID := ParamID + ' ';
     end;
-    ParamID := ParamID + ParameterDelimiter;
+    ParamID := ParamID + string(ParameterDelimiter);
     WriteString(ParamID)
   end;
   NewLine;

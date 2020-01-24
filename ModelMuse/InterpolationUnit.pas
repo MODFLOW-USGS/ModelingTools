@@ -381,7 +381,7 @@ type
     procedure WriteScript(const DataSet: TDataArray);
     procedure ReadResults;
     procedure RunPlProc;
-    procedure PlProcTerminated(Sender: TObject; ExitCode: DWORD);
+//    procedure PlProcTerminated(Sender: TObject; ExitCode: DWORD);
   protected
     procedure StoreDataValue(Count: Integer; const DataSet: TDataArray;
       APoint: TPoint2D; AScreenObject: TScreenObject; SectionIndex: integer);
@@ -411,6 +411,8 @@ resourcestring
   Str0sUsing1s = '%0:s using %1:s';
   StrErrorAssigningValu = 'Error assigning value to interpolate';
   StrErrorMessage0 = 'Error message = "%0:s" in %1:s';
+  StrNeitherPlproc64exe = 'Neither plproc64.exe nor plproc32.exe are in the ' +
+  'ModelMuse directory.';
 
 type
   TSortRecord = record
@@ -3128,12 +3130,12 @@ begin
   result := 'PLPROC Kriging';
 end;
 
-procedure TCustomPlProcInterpolator.PlProcTerminated(Sender: TObject;
-  ExitCode: DWORD);
-begin
-//  ReadResults;
-//  FIsTerminated := True;
-end;
+//procedure TCustomPlProcInterpolator.PlProcTerminated(Sender: TObject;
+//  ExitCode: DWORD);
+//begin
+////  ReadResults;
+////  FIsTerminated := True;
+//end;
 
 function TCustomPlProcInterpolator.RealResult(const Location: TPoint2D): real;
 var
@@ -3154,7 +3156,7 @@ procedure TCustomPlProcInterpolator.RunPlProc;
 var
   Runner: TJvCreateProcess;
   PlProcName: string;
-  P: TProcessInformation;
+//  P: TProcessInformation;
 begin
     PlProcName  := ExtractFileDir(Application.ExeName)
       + '\' + 'plproc64.exe';
@@ -3164,7 +3166,7 @@ begin
         + '\' + 'plproc32.exe';
       if not TFile.Exists(PlProcName) then
       begin
-        raise EPlProcException.Create('Neither plproc64.exe nor plproc32.exe are in the ModelMuse directory.');
+        raise EPlProcException.Create(StrNeitherPlproc64exe);
       end;
     end;
 
@@ -3371,6 +3373,7 @@ begin
     WriteScript(DataSet);
     FFilesToDelete.Add(FScriptFileName);
 
+    ViewDirection := vdTop;
     case DataSet.Orientation of
       dsoTop: ViewDirection := vdTop;
       dsoFront: ViewDirection := vdFront;
