@@ -69,7 +69,7 @@ implementation
 
 uses
   ScreenObjectUnit, Mt3dLktUnit, PhastModelUnit, frmGoPhastUnit, GoPhastTypes,
-  frmCustomGoPhastUnit, System.Math, System.UITypes;
+  frmCustomGoPhastUnit, System.Math, System.UITypes, DataSetUnit;
 
 resourcestring
   StrChemicalSpecies = 'Chemical species';
@@ -356,6 +356,8 @@ var
   Model: TPhastModel;
   NCOMP: Integer;
   BoundaryUsed: Boolean;
+  LakeTransportConc: TDataArray;
+  DSIndex: Integer;
   function LakeUsed(AScreenObject: TScreenObject): Boolean;
   begin
     result := ((AScreenObject.ModflowLakBoundary <> nil)
@@ -384,6 +386,8 @@ begin
   PrecipConc := TMt3dLktConcCollection.Create(nil, nil, nil);
   RunoffConcentration := TMt3dLktConcCollection.Create(nil, nil, nil);
   try
+    LakeTransportConc := Model.DataArrayManager.GetDataSetByName(KLakeTransportConce);
+
     if not ClearAll then
     begin
       for TimeIndex := 0 to seNumberOfTimes.AsInteger - 1 do
@@ -433,6 +437,7 @@ begin
         if BoundaryUsed then
         begin
           Mt3dLktConcBoundary.Clear;
+          AScreenObject.RemoveDataSet(LakeTransportConc);
         end;
       end
       else if SetAll or BoundaryUsed then
@@ -449,6 +454,7 @@ begin
           if not LakeUsed(AScreenObject) then
           begin
             Mt3dLktConcBoundary.Clear;
+            AScreenObject.RemoveDataSet(LakeTransportConc);
           end
           else
           begin
@@ -467,6 +473,12 @@ begin
 
                 Mt3dLktConcBoundary.InitialConcentrations[ComponentIndex-1].InitConc
                   := rdgInitialConcentration.Cells[1, ComponentIndex];
+              end;
+              if (ComponentIndex = 1) and (LakeTransportConc <> nil) then
+              begin
+                DSIndex := AScreenObject.AddDataSet(LakeTransportConc);
+                AScreenObject.DataSetFormulas[DSIndex] :=
+                  rdgInitialConcentration.Cells[1, ComponentIndex];
               end;
             end;
 

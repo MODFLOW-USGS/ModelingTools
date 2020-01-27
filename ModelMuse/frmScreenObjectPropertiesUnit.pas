@@ -6981,7 +6981,7 @@ begin
   begin
     frameMT3D_LKT.SetData(FNewProperties,
       (FMt3d_LKT_Node.StateIndex = 2),
-      (FMt3d_LKT_Node.StateIndex = 1) and frmGoPhast.PhastModel.Mt3d_LktIsSelected);
+      (FMt3d_LKT_Node.StateIndex = 1) and frmGoPhast.PhastModel.Mt3d_LktIsSelected(nil));
   end;
 
   if (FMt3d_SFT_Node <> nil) then
@@ -12252,7 +12252,7 @@ begin
   begin
   {$IFDEF Mt3dUSGS}
     Used := frmGoPhast.PhastModel.LakIsSelected and
-      frmGoPhast.PhastModel.Mt3d_LktIsSelected
+      frmGoPhast.PhastModel.Mt3d_LktIsSelected(nil);
   {$ELSE}
     Used := False
   {$ENDIF}
@@ -17316,7 +17316,7 @@ var
   AScreenObject: TScreenObject;
   Boundary: TMt3dLktConcBoundary;
 begin
-  if not frmGoPhast.PhastModel.Mt3d_LktIsSelected then
+  if not frmGoPhast.PhastModel.Mt3d_LktIsSelected(nil) then
   begin
     Exit;
   end;

@@ -25,11 +25,11 @@ object Model: TPhastModel
   ModflowGrid.RowCount = 1
   ModflowGrid.RowDirection = rdNorthToSouth
   ModflowGrid.SelectedColumn = 0
-  ModflowGrid.SelectedLayer = 209
+  ModflowGrid.SelectedLayer = 208
   ModflowGrid.SelectedRow = 0
   ModflowGrid.DisplayColumn = 0
   ModflowGrid.DisplayRow = 0
-  ModflowGrid.DisplayLayer = 209
+  ModflowGrid.DisplayLayer = 208
   ModflowGrid.ColumnPositions = (
     0.00000000000000000
     1.00000000000000000
@@ -70,7 +70,7 @@ object Model: TPhastModel
   ModflowPackages.PcgnPackage.RATE_D.Value = 0.05000000000000000
   ModflowPackages.PcgnPackage.CHGLIMIT.Value = 0.00000000000000000
   ModflowPackages.PcgnPackage.ACNVG = cmStandard
-  ModflowPackages.PcgnPackage.CNVG_LB.Value = 0.01000000000000000
+  ModflowPackages.PcgnPackage.CNVG_LB.Value = 0.00999999999999999
   ModflowPackages.PcgnPackage.MCNVG = 2
   ModflowPackages.PcgnPackage.RATE_C.Value = 0.10000000000000000
   ModflowPackages.PcgnPackage.IPUNIT = prListing
@@ -150,7 +150,7 @@ object Model: TPhastModel
   ModflowPackages.GmgPackage.IUNITMHC = False
   ModflowPackages.GmgPackage.ISM = 0
   ModflowPackages.GmgPackage.ISC = 1
-  ModflowPackages.GmgPackage.DUP.Value = 0.70000000000000000
+  ModflowPackages.GmgPackage.DUP.Value = 0.69999999999999990
   ModflowPackages.GmgPackage.DLOW.Value = 0.00100000000000000
   ModflowPackages.GmgPackage.CHGLIMIT.Value = 0.00100000000000000
   ModflowPackages.GmgPackage.RELAX.Value = 1.00000000000000000
@@ -278,7 +278,7 @@ object Model: TPhastModel
   ModflowPackages.NwtPackage.PrintFlag = 1
   ModflowPackages.NwtPackage.CorrectForCellBottom = 1
   ModflowPackages.NwtPackage.Option = noSpecified
-  ModflowPackages.NwtPackage.DBDTheta.Value = 0.98000000000000000
+  ModflowPackages.NwtPackage.DBDTheta.Value = 0.97999999999999990
   ModflowPackages.NwtPackage.DBDKappa.Value = 0.00009999999700000
   ModflowPackages.NwtPackage.DBDGamma.Value = 0.10000000000000000
   ModflowPackages.NwtPackage.MomementumCoefficient.Value = 0.00000000000000000
@@ -306,7 +306,7 @@ object Model: TPhastModel
   ModflowPackages.Mt3dBasic.IsSelected = True
   ModflowPackages.Mt3dBasic.StoredMassUnit.Value = 'g'
   ModflowPackages.Mt3dBasic.StoredInactiveConcentration.Value = -999.00000000000000000
-  ModflowPackages.Mt3dBasic.StoredMinimumSaturatedFraction.Value = 0.01000000000000000
+  ModflowPackages.Mt3dBasic.StoredMinimumSaturatedFraction.Value = 0.00999999999999999
   ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS
   ModflowPackages.Mt3dBasic.InitialChoice = micSpecifyTimeStep
   ModflowPackages.Mt3dBasic.Mt3dUsgsOptions = [muoWetDryPrint, muoIncludeDryCellBudget]
@@ -335,7 +335,7 @@ object Model: TPhastModel
   ModflowPackages.Mt3dmsAdvection.SinkParticlePlacementMethod = ppmRandom
   ModflowPackages.Mt3dmsAdvection.SinkNumberOfParticlePlanes = 1
   ModflowPackages.Mt3dmsAdvection.SinkParticleCount = 10
-  ModflowPackages.Mt3dmsAdvection.StoredCriticalConcGradient.Value = 0.01000000000000000
+  ModflowPackages.Mt3dmsAdvection.StoredCriticalConcGradient.Value = 0.00999999999999999
   ModflowPackages.Mt3dmsDispersion.IsSelected = True
   ModflowPackages.Mt3dmsDispersion.MultiDifussion = False
   ModflowPackages.Mt3dmsDispersion.CrossTermsUsed = True
@@ -434,8 +434,8 @@ object Model: TPhastModel
   ModflowPackages.SwiPackage.NBPOL = peeEstimate
   ModflowPackages.SwiPackage.DAMP.Value = 1.00000000000000000
   ModflowPackages.SwiPackage.DAMPT.Value = 1.00000000000000000
-  ModflowPackages.SwiPackage.ToeSlope.Value = 0.04000000000000000
-  ModflowPackages.SwiPackage.TipSlope.Value = 0.04000000000000000
+  ModflowPackages.SwiPackage.ToeSlope.Value = 0.03999999999999999
+  ModflowPackages.SwiPackage.TipSlope.Value = 0.03999999999999999
   ModflowPackages.SwiPackage.Alpha.Value = 0.10000000000000000
   ModflowPackages.SwiPackage.Beta.Value = 0.10000000000000000
   ModflowPackages.SwiPackage.MaxAdaptiveTimeSteps = 10
@@ -463,9 +463,9 @@ object Model: TPhastModel
   ModflowPackages.SwrPackage.Scaling = ssNone
   ModflowPackages.SwrPackage.Reordering = srNone
   ModflowPackages.SwrPackage.NewtonCorrection = sncExplicit
-  ModflowPackages.SwrPackage.StoredInitialTimeStepLength.Value = 0.01000000000000000
+  ModflowPackages.SwrPackage.StoredInitialTimeStepLength.Value = 0.00999999999999999
   ModflowPackages.SwrPackage.StoredMinTimeStepLength.Value = 0.00010000000000000
-  ModflowPackages.SwrPackage.StoredMaxTimeStepLength.Value = 0.01000000000000000
+  ModflowPackages.SwrPackage.StoredMaxTimeStepLength.Value = 0.00999999999999999
   ModflowPackages.SwrPackage.StoredTimeStepMultiplier.Value = 1.01000000000000000
   ModflowPackages.SwrPackage.TimeStepIncreaseFrequency = 10
   ModflowPackages.SwrPackage.StoredMinGradientForDiffusiveFlow.Value = 0.00000000000100000
@@ -500,7 +500,7 @@ object Model: TPhastModel
   ModflowPackages.SwrPackage.FlowToleranceOption = rtoNone
   ModflowPackages.SwrPackage.StoredFlowTolerance.Value = 100.00000000000000000
   ModflowPackages.SwrPackage.ExchangeToleranceOption = etNone
-  ModflowPackages.SwrPackage.StoredExchangeTolerance.Value = 0.01000000000000000
+  ModflowPackages.SwrPackage.StoredExchangeTolerance.Value = 0.00999999999999999
   ModflowPackages.SwrPackage.StoredSteadyStateDampingFactor.Value = 1.00000000000000000
   ModflowPackages.SwrPackage.StoredTransientDampingFactor.Value = 1.00000000000000000
   ModflowPackages.SwrPackage.ConvergencePrintoutInterval = 1
@@ -529,6 +529,8 @@ object Model: TPhastModel
   ModflowPackages.NpfPackage.UseXT3D = False
   ModflowPackages.NpfPackage.Xt3dOnRightHandSide = False
   ModflowPackages.NpfPackage.SaveSpecificDischarge = True
+  ModflowPackages.NpfPackage.UseHorizontalAnisotropy = False
+  ModflowPackages.NpfPackage.UseVerticalAnisotropy = False
   ModflowPackages.StoPackage.IsSelected = False
   ModflowPackages.StoPackage.StorageChoice = scSpecificStorage
   ModflowPackages.SmsPackage.IsSelected = False
@@ -538,10 +540,14 @@ object Model: TPhastModel
   ModflowPackages.SmsPackage.Print = spFull
   ModflowPackages.SmsPackage.Complexity = scoSimple
   ModflowPackages.SmsPackage.CsvOutput = sspAll
+  ModflowPackages.SmsPackage.UsePTC = upUse
+  ModflowPackages.SmsPackage.MaxErrors = -1
+  ModflowPackages.SmsPackage.CheckInput = ciCheckAll
+  ModflowPackages.SmsPackage.MemoryPrint = mpNone
   ModflowPackages.SmsPackage.StoredOuterHclose.Value = 0.00100000000000000
   ModflowPackages.SmsPackage.MaxOuterIterations = 100
   ModflowPackages.SmsPackage.UnderRelaxation = surNone
-  ModflowPackages.SmsPackage.StoredUnderRelaxTheta.Value = 0.70000000000000000
+  ModflowPackages.SmsPackage.StoredUnderRelaxTheta.Value = 0.69999999999999990
   ModflowPackages.SmsPackage.StoredUnderRelaxKappa.Value = 0.10000000000000000
   ModflowPackages.SmsPackage.StoredUnderRelaxGamma.Value = 0.20000000000000000
   ModflowPackages.SmsPackage.StoredUnderRelaxMomentum.Value = 0.00100000000000000
@@ -574,7 +580,7 @@ object Model: TPhastModel
   ModflowPackages.MawPackage.SaveMnwHeads = True
   ModflowPackages.MawPackage.SaveMnwFlows = True
   ModflowPackages.MawPackage.IncludeWellStorage = True
-  ModflowPackages.MawPackage.StoredShutDownTheta.Value = 0.70000000000000000
+  ModflowPackages.MawPackage.StoredShutDownTheta.Value = 0.69999999999999990
   ModflowPackages.MawPackage.StoredShutDownKappa.Value = 0.00010000000000000
   ModflowPackages.GncPackage.IsSelected = True
   ModflowPackages.GncPackage.EquationFormulation = efImplicit
@@ -594,6 +600,20 @@ object Model: TPhastModel
   ModflowPackages.Mt3dCts.IsSelected = False
   ModflowPackages.Mt3dCts.ForceOption = ctsDontForce
   ModflowPackages.Mt3dCts.WellPackageChoice = cwpcMnw2
+  ModflowPackages.CsubPackage.IsSelected = False
+  ModflowPackages.CsubPackage.StoredGamma.Value = 9806.65000000000000000
+  ModflowPackages.CsubPackage.StoredBeta.Value = 0.00000000046512000
+  ModflowPackages.CsubPackage.HeadBased = False
+  ModflowPackages.CsubPackage.PreconsolidationHeadUsed = False
+  ModflowPackages.CsubPackage.NumberOfDelayCells = 0
+  ModflowPackages.CsubPackage.CompressionMethod = coElasticSpecificStorage
+  ModflowPackages.CsubPackage.UpdateMaterialProperties = False
+  ModflowPackages.CsubPackage.InterbedThicknessMethod = itmThickness
+  ModflowPackages.CsubPackage.SpecifyInitialPreconsolidationStress = False
+  ModflowPackages.CsubPackage.SpecifyInitialDelayHead = False
+  ModflowPackages.CsubPackage.EffectiveStressLag = False
+  ModflowPackages.CsubPackage.OutputTypes = []
+  ModflowPackages.CsubPackage.Interbeds = <>
   FilesToArchive.Strings = (
     'C:\ModelingTools\ModelMuse\Mt3d_USGS_Examples\UztTest2.gpt')
   ModelInputFiles.Strings = (
@@ -696,11 +716,11 @@ object Model: TPhastModel
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.DesiredElementCount = 0
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.AutomaticeElementCount = True
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.ShapeMeasure = gsmQuadraticMeanRatio
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredQuadSplittingValue.Value = 0.01000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredQuadSplittingValue.Value = 0.00999999999999999
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.KeepQuadsAlongEdges = True
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.MaxImprovementIterations = 3
   SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.MaxSmoothingIterations = 2
-  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredOptimizationBasedSmoothingCriterion.Value = 0.35000000000000000
+  SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions.StoredOptimizationBasedSmoothingCriterion.Value = 0.34999999999999990
   SutraMesh.ElementDrawingChoice = dcAll
   SutraMesh.NodeDrawingChoice = dcEdge
   SutraMesh.MeshType = mt3D
@@ -797,7 +817,7 @@ object Model: TPhastModel
   FootPrintGrid.ColumnPositions = ()
   FootPrintGrid.RowPositions = ()
   FootprintProperties.Name = ''
-  FootprintProperties.StoredClosureCriterion.Value = 0.01000000000000000
+  FootprintProperties.StoredClosureCriterion.Value = 0.00999999999999999
   FootprintProperties.SaveResultsText = False
   FootprintProperties.StoredMinimumDepthRateIndex.Value = 0.00000100000000000
   CtsSystems = <>
@@ -1295,7 +1315,7 @@ object Model: TPhastModel
       ScreenObject.HigherElevationFormula = '0.'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = '0.'
-      ScreenObject.Selected = False
+      ScreenObject.Selected = True
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
@@ -1420,7 +1440,7 @@ object Model: TPhastModel
       Points = <
         item
           X = 1.53544303797468300
-          Y = -0.31835443037974650
+          Y = -0.31835443037974660
         end>
       ScreenObject.Name = 'Object4'
       ScreenObject.CellSize = 1.00000000000000000
@@ -1439,6 +1459,7 @@ object Model: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -1615,19 +1636,19 @@ object Model: TPhastModel
       ScreenObject.QuadtreeRefinementLevel = 0
       SelectedVertices = <>
     end>
-  Version = '4.1.0.10'
+  Version = '4.1.0.23'
   GuiSettings.FrontHeight = 322
   GuiSettings.Height = 745
   GuiSettings.FrontX = -1.26381909547738700
   GuiSettings.FrontY = -26.40582542341338000
-  GuiSettings.Left = 182
+  GuiSettings.Left = 369
   GuiSettings.MagnificationFront = 179.10000000000000000
   GuiSettings.MagnificationSide = 179.10000000000000000
   GuiSettings.MagnificationTop = 179.10000000000000000
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = 14.53964265773308000
   GuiSettings.SideY = -1.02484645449469600
-  GuiSettings.Top = 182
+  GuiSettings.Top = 207
   GuiSettings.TopViewHeight = 258
   GuiSettings.TopViewWidth = 927
   GuiSettings.TopX = -1.26381909547738700
@@ -8029,7 +8050,7 @@ object Model: TPhastModel
     end
     item
       DrawDownReference = False
-      EndTime = 4233600.00000000000000000
+      EndTime = 4233600.00000000100000000
       MaxLengthOfFirstTimeStep = 900.00000000000000000
       PeriodLength = 86400.00000000000000000
       StartTime = 4147200.00000000000000000
@@ -8041,7 +8062,7 @@ object Model: TPhastModel
       EndTime = 4320000.00000000000000000
       MaxLengthOfFirstTimeStep = 900.00000000000000000
       PeriodLength = 86400.00000000000000000
-      StartTime = 4233600.00000000000000000
+      StartTime = 4233600.00000000100000000
       StressPeriodType = sptTransient
       TimeStepMultiplier = 1.00000000000000000
     end
@@ -8101,7 +8122,7 @@ object Model: TPhastModel
     end
     item
       DrawDownReference = False
-      EndTime = 4924800.00000000000000000
+      EndTime = 4924800.00000000100000000
       MaxLengthOfFirstTimeStep = 900.00000000000000000
       PeriodLength = 86400.00000000000000000
       StartTime = 4838400.00000000000000000
@@ -8113,13 +8134,13 @@ object Model: TPhastModel
       EndTime = 5011200.00000000000000000
       MaxLengthOfFirstTimeStep = 900.00000000000000000
       PeriodLength = 86400.00000000000000000
-      StartTime = 4924800.00000000000000000
+      StartTime = 4924800.00000000100000000
       StressPeriodType = sptTransient
       TimeStepMultiplier = 1.00000000000000000
     end
     item
       DrawDownReference = False
-      EndTime = 5097600.00000000000000000
+      EndTime = 5097599.99999999900000000
       MaxLengthOfFirstTimeStep = 900.00000000000000000
       PeriodLength = 86400.00000000000000000
       StartTime = 5011200.00000000000000000
@@ -8131,7 +8152,7 @@ object Model: TPhastModel
       EndTime = 5184000.00000000000000000
       MaxLengthOfFirstTimeStep = 900.00000000000000000
       PeriodLength = 86400.00000000000000000
-      StartTime = 5097600.00000000000000000
+      StartTime = 5097599.99999999900000000
       StressPeriodType = sptTransient
       TimeStepMultiplier = 1.00000000000000000
     end
@@ -8273,7 +8294,7 @@ object Model: TPhastModel
       StoredObservationTime.Value = 4147200.00000000000000000
     end
     item
-      StoredObservationTime.Value = 4233600.00000000000000000
+      StoredObservationTime.Value = 4233600.00000000100000000
     end
     item
       StoredObservationTime.Value = 4320000.00000000000000000
@@ -8297,13 +8318,13 @@ object Model: TPhastModel
       StoredObservationTime.Value = 4838400.00000000000000000
     end
     item
-      StoredObservationTime.Value = 4924800.00000000000000000
+      StoredObservationTime.Value = 4924800.00000000100000000
     end
     item
       StoredObservationTime.Value = 5011200.00000000000000000
     end
     item
-      StoredObservationTime.Value = 5097600.00000000000000000
+      StoredObservationTime.Value = 5097599.99999999900000000
     end>
   Mt3dmsOutputControl.ObservationFrequency = 0
   Mt3dmsOutputControl.MassBalanceFrequency = 0
@@ -8574,7 +8595,7 @@ object Model: TPhastModel
       SteadyState = False
       MaxSteps = 3000
       StoredStartTime.Value = 4147200.00000000000000000
-      StoredEndTime.Value = 4233600.00000000000000000
+      StoredEndTime.Value = 4233600.00000000100000000
       StoredStepSize.Value = 0.00000000000000000
       StoredTimeStepMultiplier.Value = 1.00000000000000000
       StoredMaxStepSize.Value = 0.00000000000000000
@@ -8582,7 +8603,7 @@ object Model: TPhastModel
     item
       SteadyState = False
       MaxSteps = 3000
-      StoredStartTime.Value = 4233600.00000000000000000
+      StoredStartTime.Value = 4233600.00000000100000000
       StoredEndTime.Value = 4320000.00000000000000000
       StoredStepSize.Value = 0.00000000000000000
       StoredTimeStepMultiplier.Value = 1.00000000000000000
@@ -8646,7 +8667,7 @@ object Model: TPhastModel
       SteadyState = False
       MaxSteps = 3000
       StoredStartTime.Value = 4838400.00000000000000000
-      StoredEndTime.Value = 4924800.00000000000000000
+      StoredEndTime.Value = 4924800.00000000100000000
       StoredStepSize.Value = 0.00000000000000000
       StoredTimeStepMultiplier.Value = 1.00000000000000000
       StoredMaxStepSize.Value = 0.00000000000000000
@@ -8654,7 +8675,7 @@ object Model: TPhastModel
     item
       SteadyState = False
       MaxSteps = 3000
-      StoredStartTime.Value = 4924800.00000000000000000
+      StoredStartTime.Value = 4924800.00000000100000000
       StoredEndTime.Value = 5011200.00000000000000000
       StoredStepSize.Value = 0.00000000000000000
       StoredTimeStepMultiplier.Value = 1.00000000000000000
@@ -8664,7 +8685,7 @@ object Model: TPhastModel
       SteadyState = False
       MaxSteps = 3000
       StoredStartTime.Value = 5011200.00000000000000000
-      StoredEndTime.Value = 5097600.00000000000000000
+      StoredEndTime.Value = 5097599.99999999900000000
       StoredStepSize.Value = 0.00000000000000000
       StoredTimeStepMultiplier.Value = 1.00000000000000000
       StoredMaxStepSize.Value = 0.00000000000000000
@@ -8672,7 +8693,7 @@ object Model: TPhastModel
     item
       SteadyState = False
       MaxSteps = 3000
-      StoredStartTime.Value = 5097600.00000000000000000
+      StoredStartTime.Value = 5097599.99999999900000000
       StoredEndTime.Value = 5184000.00000000000000000
       StoredStepSize.Value = 0.00000000000000000
       StoredTimeStepMultiplier.Value = 1.00000000000000000
@@ -8725,7 +8746,7 @@ object Model: TPhastModel
       DataSet.Limits.LowerLimit.DataType = rdtDouble
       DataSet.Limits.LowerLimit.IntegerLimitValue = 0
       DataSet.Limits.LowerLimit.UseLimit = False
-      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = True
       DataSet.Limits.UpperLimit.DataType = rdtDouble
       DataSet.Limits.UpperLimit.IntegerLimitValue = 0
       DataSet.Limits.UpperLimit.UseLimit = False
@@ -16874,80 +16895,10 @@ object Model: TPhastModel
       DataSet.ContourInterval.Value = 0.00000000000000000
       DataSet.InterpolationDirection = pidX
       DataSet.UsePHAST_InterpolationForAllCells = False
-    end
-    item
-      DataSetClass = 'TDataArray'
-      DataSetFormula = '0.08'
-      DataSet.Name = 'InitialWaterContent'
-      DataSet.Classification = 'UZT'
-      DataSet.CheckMax = False
-      DataSet.CheckMin = False
-      DataSet.DataType = rdtDouble
-      DataSet.EvaluatedAt = eaBlocks
-      DataSet.Limits.LowerLimit.BooleanLimitValue = False
-      DataSet.Limits.LowerLimit.DataType = rdtDouble
-      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
-      DataSet.Limits.LowerLimit.UseLimit = False
-      DataSet.Limits.UpperLimit.BooleanLimitValue = False
-      DataSet.Limits.UpperLimit.DataType = rdtDouble
-      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
-      DataSet.Limits.UpperLimit.UseLimit = False
-      DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
-      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
-      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
-      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
-      DataSet.ContourLimits.LowerLimit.UseLimit = False
-      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
-      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
-      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
-      DataSet.ContourLimits.UpperLimit.UseLimit = False
-      DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
-      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
-      DataSet.Orientation = dso3D
-      DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.00000000000000000
-    end
-    item
-      DataSetClass = 'TDataArray'
-      DataSetFormula = 
-        'IfR(ConfinedLayer, LayerHeight, MaxR(0., MinR(LayerHeight, (Modf' +
-        'low_Initial_Head - LayerBoundaryPosition((Layer + 1))))))'
-      DataSet.Name = 'SaturatedThickness'
-      DataSet.Classification = 'UZT'
-      DataSet.CheckMax = False
-      DataSet.CheckMin = False
-      DataSet.DataType = rdtDouble
-      DataSet.EvaluatedAt = eaBlocks
-      DataSet.Limits.LowerLimit.BooleanLimitValue = False
-      DataSet.Limits.LowerLimit.DataType = rdtDouble
-      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
-      DataSet.Limits.LowerLimit.UseLimit = False
-      DataSet.Limits.UpperLimit.BooleanLimitValue = True
-      DataSet.Limits.UpperLimit.DataType = rdtDouble
-      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
-      DataSet.Limits.UpperLimit.UseLimit = False
-      DataSet.Limits.LogTransform = False
-      DataSet.Limits.StoredEpsilon.Value = 0.00000100000000000
-      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
-      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
-      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
-      DataSet.ContourLimits.LowerLimit.UseLimit = False
-      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
-      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
-      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
-      DataSet.ContourLimits.UpperLimit.UseLimit = False
-      DataSet.ContourLimits.LogTransform = False
-      DataSet.ContourLimits.StoredEpsilon.Value = 0.00000100000000000
-      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt]
-      DataSet.Orientation = dso3D
-      DataSet.AngleType = atNone
-      DataSet.ContourInterval.Value = 0.00000000000000000
     end>
   CombinedDisplayColumn = 0
   CombinedDisplayRow = 0
-  CombinedDisplayLayer = 209
+  CombinedDisplayLayer = 208
   ContourFont.Charset = ANSI_CHARSET
   ContourFont.Color = clBlack
   ContourFont.Height = -16

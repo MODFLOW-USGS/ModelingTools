@@ -50,6 +50,7 @@ type
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
+    procedure ShowNoBoundaryError(const NoDefinedErrorRoot: string); override;
   end;
 
 implementation
@@ -135,7 +136,7 @@ begin
     inherited;
     CountParametersAndParameterCells(ParamCount, ParamCellCount);
     CountCells(MXACTC);
-    if (ParamCellCount = 0) and (MXACTC = 0) then
+    if (ParamCellCount = 0) and (MXACTC = 0) and (FEvaluationType = etExport) then
     begin
       frmErrorsAndWarnings.AddError(Model, StrErrorInCHDPackage,
         StrTheCHDPackageIsA);
@@ -594,6 +595,15 @@ end;
 function TModflowCHD_Writer.ParameterType: TParameterType;
 begin
   result := ptCHD;
+end;
+
+procedure TModflowCHD_Writer.ShowNoBoundaryError(
+  const NoDefinedErrorRoot: string);
+begin
+  if FEvaluationType = etExport then
+  begin
+    inherited;
+  end;
 end;
 
 end.

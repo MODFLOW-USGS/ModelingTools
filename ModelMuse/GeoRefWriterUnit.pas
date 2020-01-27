@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  GeoRefUnit, frmErrorsAndWarningsUnit;
+  GeoRefUnit, frmErrorsAndWarningsUnit, ModflowPackageSelectionUnit;
 
 resourcestring
   StrTheSOfYourModel = 'The %s of your model is undefined. You can define it' +
@@ -62,7 +62,17 @@ begin
     smtMain: ;
     smtZoneBudget2: FFileName := FFileName + '_ZoneBudget';
     smtModpath5, smtModpath6: FFileName := FFileName + '_Modpath';
-    smtMt3dms: FFileName := FFileName + '_MT3DMS';
+    smtMt3dms:
+      begin
+        if Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+        begin
+          FFileName := FFileName + '_MT3D-USGS';
+        end
+        else
+        begin
+          FFileName := FFileName + '_MT3DMS';
+        end;
+      end
   else
     Assert(False);
   end;

@@ -146,6 +146,7 @@ type
     FvstMt3dUztUnsat: PVirtualNode;
     FvstMt3dSeepage: PVirtualNode;
     FvstMt3dSft: PVirtualNode;
+    FvstMt3dLkt: PVirtualNode;
 
     FvstSutraFeaturesNode: PVirtualNode;
     FvstSutraObsNode: PVirtualNode;
@@ -252,6 +253,7 @@ type
     FHfbList: TList;
     FSsmList: TList;
     FSftList: TList;
+    FLktList: TList;
     FTobList: TList;
     FUztRechList: TList;
     FUztSatList: TList;
@@ -604,6 +606,11 @@ begin
     else if Node = FvstMt3dSft then
     begin
       Data.Caption := Packages.Mt3dSft.PackageIdentifier;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstMt3dLkt then
+    begin
+      Data.Caption := Packages.Mt3dLkt.PackageIdentifier;
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstMt3dmsSsm then
@@ -1488,6 +1495,12 @@ begin
       InitializeData(FvstMt3dSft);
     end;
 
+    if (AScreenObject.Mt3dLktConcBoundary <> nil)
+      and AScreenObject.Mt3dLktConcBoundary.Used then
+    begin
+      InitializeData(FvstMt3dLkt);
+    end;
+
     if (AScreenObject.Mt3dUzfRechConc <> nil)
       and AScreenObject.Mt3dUzfRechConc.Used then
     begin
@@ -1687,6 +1700,7 @@ begin
   vstCheckDeleteNode(FvstModflowCfpRechargeNode);
   vstCheckDeleteNode(FvstObsMf6Node);
   vstCheckDeleteNode(FvstMt3dSft);
+  vstCheckDeleteNode(FvstMt3dLkt);
   vstCheckDeleteNode(FvstMt3dmsSsm);
   vstCheckDeleteNode(FvstMt3dmsTob);
   vstCheckDeleteNode(FvstMt3dUztRech);
@@ -2056,6 +2070,7 @@ begin
   InitializeMF_BoundaryNode(FvstModflowCfpRechargeNode, PriorNode, FCfpRechargeList);
 
 
+  InitializeMF_BoundaryNode(FvstMt3dLkt, PriorNode, FLktList);
   InitializeMF_BoundaryNode(FvstMt3dSft, PriorNode, FSftList);
   InitializeMF_BoundaryNode(FvstMt3dmsSsm, PriorNode, FSsmList);
   InitializeMF_BoundaryNode(FvstMt3dmsTob, PriorNode, FTobList);
@@ -2238,6 +2253,7 @@ begin
   FCfpRechargeList.Free;
   FObs6List.Free;
   FSsmList.Free;
+  FLktList.Free;
   FSftList.Free;
   FTobList.Free;
   FUztRechList.Free;
@@ -2327,6 +2343,7 @@ begin
   FHfbList := TList.Create;
   FSsmList := TList.Create;
   FSftList := TList.Create;
+  FLktList := TList.Create;
   FTobList := TList.Create;
   FUztRechList := TList.Create;
   FUztSatList := TList.Create;
@@ -2613,6 +2630,7 @@ begin
   FHfbList.Sort(ScreenObjectCompare);
   FSsmList.Sort(ScreenObjectCompare);
   FSftList.Sort(ScreenObjectCompare);
+  FLktList.Sort(ScreenObjectCompare);
   FTobList.Sort(ScreenObjectCompare);
   FUztRechList.Sort(ScreenObjectCompare);
   FUztSatList.Sort(ScreenObjectCompare);

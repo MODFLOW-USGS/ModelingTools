@@ -253,6 +253,7 @@ const
 //  KFootprint_Code = 'Footprint_Code';
   KSFTInitialConcentra = 'SFT_InitialConcentration';
   KSFTDispersion = 'SFT_Dispersion';
+  KLakeTransportConce = 'Lake_Transport_Concentration';
 
 
   // @name is the name of the @link(TDataArray) that specifies
@@ -445,7 +446,7 @@ const
   StrMT3DMSSSMConcentra = 'MT3DMS SSM Concentration';
   StrMt3dRechConcentrat = 'UZT Recharge Concentration';
   StrMt3dUnsatConcentrat = 'UZT Unsaturated ET Concentration';
-  StrMt3dSatConcentrat = 'UZT Saturated ET  Concentration';
+  StrMt3dSatConcentrat = 'UZT Saturated ET Concentration';
   StrMt3dSsmRechConcentrat = 'SSM UZF Recharge Concentration';
   StrMt3dSsmSinkConcentrat = 'SSM UZF Sink Concentration';
 
@@ -2426,6 +2427,7 @@ that affects the model output should also have a comment. }
     procedure ShouldKzBeDeterminedFromAnisotropy(Sender: TObject; var ShouldCheck: Boolean);
     procedure DetermineKyFromAnisotropy(Sender: TObject);
     procedure DetermineKzFromAnisotropy(Sender: TObject);
+    function Mt3d_LktIsSelected(Sender: TObject): Boolean; virtual;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -4407,7 +4409,7 @@ that affects the model output should also have a comment. }
     function Mt3dmsSsmIsSelected: Boolean;
     function Mt3d_UztIsSelected: Boolean;
     function Mt3d_UztEtIsSelected: Boolean;
-    function Mt3d_LktIsSelected: Boolean;
+    function Mt3d_LktIsSelected(Sender: TObject): Boolean; override;
     function Mt3d_SftIsSelected: Boolean;
     function Mt3dmsTobIsSelected: Boolean;
     function PcgIsSelected: Boolean;
@@ -9511,6 +9513,9 @@ resourcestring
   StrSetToFalseBecause = 'Set to False because it is not inside any object t' +
   'hat sets cell size.';
   StrSeeAlsoTheSDa = 'See also the "%s" data set for the Storage package.';
+  StrExportingMT3DUSGS = 'Exporting MT3D-USGS input files';
+  StrExportingMT3DMSInp = 'Exporting MT3DMS input files';
+  StrLakeTransportConce = KLakeTransportConce;
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -10384,6 +10389,8 @@ var
   ChildIndex: Integer;
   ModelDirectory: string;
   ModelRootName: string;
+  Mt3dVersion: TMt3dVersion;
+  Mt3dPrefix: string;
   procedure RemoveProgramFilesFromList;
   var
     ProgramIndex: Integer;
@@ -10589,6 +10596,34 @@ begin
       AddFiles(StrModelOutputFiles, ModelRootName + '_ZoneBudget', FileNames);
 //      AddFiles('ZoneBudget_Output_Files', FileNames);
 
+      Mt3dVersion := mvUSGS;
+      if ModflowPackages.Mt3dBasic.IsSelected then
+      begin
+        Mt3dVersion := ModflowPackages.Mt3dBasic.Mt3dVersion;
+      end
+      else
+      begin
+        for ChildIndex := 0 to ChildModels.Count - 1 do
+        begin
+          if ChildModels[ChildIndex].ChildModel.ModflowPackages.Mt3dBasic.IsSelected  then
+          begin
+            Mt3dVersion := ChildModels[ChildIndex].ChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion;
+            break;
+          end;
+        end;
+      end;
+
+      case Mt3dVersion of
+        mvUSGS:
+          begin
+            Mt3dPrefix := '_MT3D-USGS';
+          end;
+        mvMS:
+          begin
+            Mt3dPrefix := '_MT3DMS';
+          end;
+      end;
+
       FileNames.Clear;
       FileNames.Add(Mt3dmsInputFiles);
       for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -10596,7 +10631,7 @@ begin
         FileNames.Add(ChildModels[ChildIndex].ChildModel.Mt3dmsInputFiles);
       end;
       RemoveProgramFilesFromList;
-      AddFiles(StrModelInputFiles, ModelRootName + '_MT3DMS', FileNames);
+      AddFiles(StrModelInputFiles, ModelRootName + Mt3dPrefix, FileNames);
 //      AddFiles('Mt3dms_Input_Files', FileNames);
 
       FileNames.Clear;
@@ -10605,7 +10640,7 @@ begin
       begin
         FileNames.Add(ChildModels[ChildIndex].ChildModel.Mt3dmsOutputFiles);
       end;
-      AddFiles(StrModelOutputFiles, ModelRootName + '_MT3DMS', FileNames);
+      AddFiles(StrModelOutputFiles, ModelRootName + Mt3dPrefix, FileNames);
 //      AddFiles('Mt3dms_Output_Files', FileNames);
     finally
       ProgramFiles.Free;
@@ -13754,8 +13789,6 @@ var
   ArchiveFiles: TXmlVerySimple;
   ANode: TXmlNode;
   FileNames: TStringList;
-//  ModelFile: string;
-//  InputIndex: integer;
   ModelIndex: integer;
   ChildIndex: Integer;
   AChildModel: TChildModel;
@@ -13764,8 +13797,6 @@ var
   AList: TStrings;
   DocNode: TXmlNode;
   BinaryFiles: TStringList;
-//  BinIndex: Integer;
-//  FileIndex: Integer;
   ModelDirectory: string;
   FileToSaveName: string;
   FileIndex: Integer;
@@ -13823,11 +13854,26 @@ var
         end;
       atMt3dInput:
         begin
-          ANode.SetAttribute('FileType', 'Mt3dms Input')
+          if ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+          begin
+            ANode.SetAttribute('FileType', 'Mt3d-USGS Input')
+          end
+          else
+          begin
+            ANode.SetAttribute('FileType', 'Mt3dms Input')
+          end;
         end;
       atMt3dOutput:
         begin
-          ANode.SetAttribute('FileType', 'Mt3dms Output')
+          if ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+          begin
+            ANode.SetAttribute('FileType', 'Mt3d-USGS Output')
+          end
+          else
+          begin
+            ANode.SetAttribute('FileType', 'Mt3dms Output')
+
+          end;
         end;
       atGeoRef:
         begin
@@ -14196,7 +14242,14 @@ begin
       FileNames.Duplicates := dupIgnore;
       FileNames.AddStrings(Mt3dmsInputFiles);
       RemoveBinaryFiles(FileNames);
-      TestArchiveFiles('Mt3dms_Input_Files', FileNames, atMt3dInput);
+      if ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+      begin
+        TestArchiveFiles('Mt3d-USGS_Input_Files', FileNames, atMt3dInput);
+      end
+      else
+      begin
+        TestArchiveFiles('Mt3dms_Input_Files', FileNames, atMt3dInput);
+      end;
       if LgrUsed then
       begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -14205,7 +14258,16 @@ begin
           FileNames.Clear;
           FileNames.AddStrings(AChildModel.Mt3dmsInputFiles);
           RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Input_Files', FileNames, atMt3dInput, AChildModel.ModelName);
+          if AChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+          begin
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3d-USGS_Input_Files',
+              FileNames, atMt3dInput, AChildModel.ModelName);
+          end
+          else
+          begin
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Input_Files',
+              FileNames, atMt3dInput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -14213,7 +14275,14 @@ begin
       FileNames.Duplicates := dupIgnore;
       FileNames.AddStrings(Mt3dmsOutputFiles);
       RemoveBinaryFiles(FileNames);
-      TestArchiveFiles('Mt3dms_Output_Files', FileNames, atMt3dOutput);
+      if ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+      begin
+        TestArchiveFiles('Mt3d-USGS_Output_Files', FileNames, atMt3dOutput);
+      end
+      else
+      begin
+        TestArchiveFiles('Mt3dms_Output_Files', FileNames, atMt3dOutput);
+      end;
       if LgrUsed then
       begin
         for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -14222,7 +14291,16 @@ begin
           FileNames.Clear;
           FileNames.AddStrings(AChildModel.Mt3dmsOutputFiles);
           RemoveBinaryFiles(FileNames);
-          TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Output_Files', FileNames, atMt3dOutput, AChildModel.ModelName);
+          if AChildModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+          begin
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3d-USGS_Output_Files',
+              FileNames, atMt3dOutput, AChildModel.ModelName);
+          end
+          else
+          begin
+            TestArchiveFiles(AChildModel.ModelNameForDos + '_' + 'Mt3dms_Output_Files',
+              FileNames, atMt3dOutput, AChildModel.ModelName);
+          end;
         end;
       end;
 
@@ -18687,7 +18765,7 @@ begin
 end;
 
 
-function TPhastModel.Mt3d_LktIsSelected: Boolean;
+function TPhastModel.Mt3d_LktIsSelected(Sender: TObject): Boolean;
 var
   ChildIndex: integer;
   ChildModel: TChildModel;
@@ -18703,7 +18781,7 @@ begin
         ChildModel := ChildModels[ChildIndex].ChildModel;
         if ChildModel <> nil then
         begin
-          result := result or ChildModel.ModflowPackages.Mt3dLkt.IsSelected;
+          result := result or ChildModel.Mt3d_LktIsSelected(Sender);
         end;
       end;
     end;
@@ -31989,7 +32067,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  ArrayCount = 155;
+  ArrayCount = 156;
 var
   Index: integer;
 begin
@@ -34508,6 +34586,23 @@ begin
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
+  FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KLakeTransportConce;
+  FDataArrayCreationRecords[Index].DisplayName := StrLakeTransportConce;
+  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Classification := StrMT3DMS_Classificaton;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Mt3d_LktIsSelected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrMODFLOW6UZF6PacVks;
+  FDataArrayCreationRecords[Index].Visible := False;
+  Inc(Index);
+
+
+
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
 end;
@@ -36235,6 +36330,11 @@ function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
     and ModflowPackages.Mt3dBasic.IsSelected;
+end;
+
+function TCustomModel.Mt3d_LktIsSelected(Sender: TObject): Boolean;
+begin
+  result := ModflowPackages.Mt3dLkt.IsSelected;
 end;
 
 function TCustomModel.NpfUsed(Sender: TObject): boolean;
@@ -40078,7 +40178,14 @@ begin
     frmFormulaErrors.DelayShowing := True;
     try
       frmProgressMM.Prefix := 'File ';
-      frmProgressMM.Caption := 'Exporting MT3DMS input files';
+      if ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+      begin
+        frmProgressMM.Caption := StrExportingMT3DUSGS;
+      end
+      else
+      begin
+        frmProgressMM.Caption := StrExportingMT3DMSInp;
+      end;
       frmProgressMM.btnAbort.Visible := True;
       frmProgressMM.ShouldContinue := True;
       frmProgressMM.Show;

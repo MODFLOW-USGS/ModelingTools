@@ -1121,8 +1121,16 @@ begin
     ModelDirectory := result;
     NetworkDrive := IsNetworkDrive(FileName);
     SetCurrentDir(result);
-    result := IncludeTrailingPathDelimiter(result)
-      + 'RunMt3dms.Bat';
+    if Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+    begin
+      result := IncludeTrailingPathDelimiter(result)
+        + 'RunMt3d-USGS.Bat';
+    end
+    else
+    begin
+      result := IncludeTrailingPathDelimiter(result)
+        + 'RunMt3dms.Bat';
+    end;
 
     if Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS then
     begin
@@ -7041,7 +7049,14 @@ end;
 
 function TMt3dmsNameWriter.ArchiveExtension: string;
 begin
-  Result := '_MT3DMS';
+  if Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
+  begin
+    Result := '_MT3D-USGS';
+  end
+  else
+  begin
+    Result := '_MT3DMS';
+  end;
 end;
 
 class function TMt3dmsNameWriter.Extension: string;

@@ -172,7 +172,7 @@ type
 implementation
 
 uses
-  frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions;
+  frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions, DataSetUnit;
 
 resourcestring
   StrLKTInitialConcentr = 'LKT Initial Concentration';
@@ -738,10 +738,23 @@ end;
 procedure TLktInitConcCollection.Loaded;
 var
   ItemIndex: Integer;
+  LktItem: TLktInitConcItem;
+  LakeTransportConc: TDataArray;
+  DSIndex: Integer;
+  LocalScreenObject: TScreenObject;
 begin
   for ItemIndex := 0 to Count -1 do
   begin
     (Items[ItemIndex] as TLktInitConcItem).Loaded;
+  end;
+  
+  if Count > 0 then
+  begin
+    LktItem := Items[0] as TLktInitConcItem;
+    LakeTransportConc := (Model as TCustomModel).DataArrayManager.GetDataSetByName(KLakeTransportConce);
+    LocalScreenObject := ScreenObject as TScreenObject; 
+    DSIndex := LocalScreenObject.AddDataSet(LakeTransportConc);
+    LocalScreenObject.DataSetFormulas[DSIndex] := LktItem.InitConc;
   end;
 end;
 

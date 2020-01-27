@@ -378,7 +378,7 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS UZT'
-      Display = False
+      Display = True
     end
     item
       Name = 'MT3D-USGS SSM'
@@ -410,11 +410,11 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS LKT'
-      Display = False
+      Display = True
     end
     item
       Name = 'MT3D-USGS SFT'
-      Display = False
+      Display = True
     end
     item
       Name = 'Simplify Objects'
@@ -24799,5 +24799,19 @@ object TTaskHistory
         'MF-2015'
         'CSUB'
         'Bug fix')
+    end
+    item
+      Date = 43855.000000000000000000
+    end
+    item
+      Date = 43856.000000000000000000
+    end
+    item
+      Date = 43857.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'MT3D-USGS SFT'
+        'MT3D-USGS LKT'
+        'MT3D-USGS UZT')
     end>
 end

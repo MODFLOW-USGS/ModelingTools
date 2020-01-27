@@ -4131,6 +4131,7 @@ Type
     procedure GetRechConcentrationUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetUnsatConcentrationUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetSatConcentrationUseList(Sender: TObject; NewUseList: TStringList);
+    function UztEtUsed(Sender: TObject): boolean;
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -13993,6 +13994,7 @@ begin
     Packages := (FModel as TCustomModel).ModflowPackages;
     result := Packages.UzfPackage.IsSelected
       and (Packages.Mt3dBasic.Mt3dVersion = mvUSGS)
+      and not Packages.Mt3dUnsatTransport.IsSelected
   end;
 end;
 
@@ -18914,14 +18916,14 @@ begin
     FUnsatConcentrations := TModflowBoundaryDisplayTimeList.Create(Model);
     UnsatConcentrations.OnInitialize := InitializeRechConcentrationDisplay;
     UnsatConcentrations.OnGetUseList := GetUnsatConcentrationUseList;
-    UnsatConcentrations.OnTimeListUsed := PackageUsed;
+    UnsatConcentrations.OnTimeListUsed := UztEtUsed;
     UnsatConcentrations.Name := StrMt3dUnsatConcentrat;
     AddTimeList(UnsatConcentrations);
 
     FSatConcentrations := TModflowBoundaryDisplayTimeList.Create(Model);
     SatConcentrations.OnInitialize := InitializeRechConcentrationDisplay;
     SatConcentrations.OnGetUseList := GetSatConcentrationUseList;
-    SatConcentrations.OnTimeListUsed := PackageUsed;
+    SatConcentrations.OnTimeListUsed := UztEtUsed;
     SatConcentrations.Name := StrMt3dSatConcentrat;
     AddTimeList(SatConcentrations);
 
@@ -19049,6 +19051,18 @@ begin
   FRechConcentrations.ComputeAverage;
   FUnsatConcentrations.ComputeAverage;
   FSatConcentrations.ComputeAverage;
+end;
+
+function TMt3dUztPackage.UztEtUsed(Sender: TObject): boolean;
+var
+  Packages: TModflowPackages;
+begin
+  result := PackageUsed(Sender);
+  if result then
+  begin
+    Packages := (FModel as TCustomModel).ModflowPackages;
+    result := Packages.UzfPackage.SimulateET;
+  end;
 end;
 
 { TSfrModflow6PackageSelection }

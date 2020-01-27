@@ -128,7 +128,7 @@ resourcestring
   StrWritingMNWIPackage = 'Writing MNWI Package input.';
   StrTheMNW2PackageMt3dms = 'The MNW2 package is not supported by MT3DMS.';
   StrAlthoughMT3DMSVers = 'Although MT3DMS version 5.3 supports the MNW1 pac' +
-  'kage, is does not suppport the MNW2 package.';
+  'kage, is does not suppport the MNW2 package. MT3D-USGS does support the MNW2 package.';
 //  StrWritingDataSet3 = '  Writing Data Set 3.';
   StrNoWellID = 'The following objects failed to define WELLIDs in the MNW2 package.';
 
@@ -216,7 +216,8 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrWhenPumpingCapacit);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheMNW2PackageMt3dms);
 
-    if Model.ModflowPackages.Mt3dBasic.IsSelected then
+    if Model.ModflowPackages.Mt3dBasic.IsSelected
+      and (Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS) then
     begin
       frmErrorsAndWarnings.AddWarning(Model, StrTheMNW2PackageMt3dms,
         StrAlthoughMT3DMSVers);
