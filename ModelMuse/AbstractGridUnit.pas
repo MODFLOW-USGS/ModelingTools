@@ -93,7 +93,7 @@ type
     function OkLocation(const DataSet: TDataArray;
       const Layer, Row, Col: integer): boolean; virtual;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-      StringValues: TStringList); virtual; abstract;
+      StringValues: TStringList; out MinMaxInitialized: Boolean); virtual; abstract;
    { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
    //
     Constructor Create(Model: TBaseModel);
@@ -1005,7 +1005,7 @@ side views of the model.}
     property ElementCoordinates[Col, Row, Layer: integer]: T3DElementCoordinates
       read GetElementCoordinates;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-      StringValues: TStringList); override;
+      StringValues: TStringList; out MinMaxInitialized: Boolean); override;
     property GridAngleDegrees: double read GetGridAngleDegrees;
     property ElevationsNeedUpdating: Boolean read GetElevationsNeedUpdating;
     property TopElementOutline[Row: Integer; Column: Integer]: TElementOutline
@@ -1076,7 +1076,7 @@ side views of the model.}
     function QueryInterface(const IID: TGUID; out Obj): HRESULT;
       virtual; stdcall;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-      StringValues: TStringList); override;
+      StringValues: TStringList; out MinMaxInitialized: Boolean); override;
   end;
 
 {
@@ -4469,9 +4469,8 @@ begin
 end;
 
 procedure TCustomModelGrid.GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-  StringValues: TStringList);
+  StringValues: TStringList; out MinMaxInitialized: Boolean);
 var
-  MinMaxInitialized: Boolean;
   LayerCount, RowCount, ColCount: integer;
 begin
   Assert(DataSet <> nil);
@@ -5516,33 +5515,6 @@ begin
   Assert(RowCount <= Self.RowCount + 1);
   Assert(ColCount <= Self.ColumnCount + 1);
   inherited;
-//  DataSet.Initialize;
-//
-//  for LayerIndex := 0 to LayerCount - 1 do
-//  begin
-//    for RowIndex := 0 to RowCount - 1 do
-//    begin
-//      for ColIndex := 0 to ColCount - 1 do
-//      begin
-//        UpdateMinMax(LayerIndex, RowIndex, ColIndex, DataSet,
-//          MinMaxInitialized, MinMax, StringValues);
-//      end;
-//    end;
-//  end;
-//  if not MinMaxInitialized then
-//  begin
-//    MinMax.RMin := 0;
-//    MinMax.RMax := 0;
-//    MinMax.RMinPositive := 1e-20;
-//    MinMax.LogRMin := 1e-20;
-//    MinMax.LogRMax := 1e-20;
-//    MinMax.IMin := 0;
-//    MinMax.IMax := 0;
-//    MinMax.BMin := False;
-//    MinMax.BMax := False;
-//    MinMax.SMin := '';
-//    MinMax.SMax := '';
-//  end;
 end;
 
 procedure TCustomModelGrid.GetRealMinMax(DataSet: TDataArray; var MinMax: TMinMax);
@@ -5817,6 +5789,7 @@ var
   ChildModel: TChildModel;
   LocalPhastModel: TPhastModel;
   MinMax: TMinMax;
+  MinMaxInitialized: Boolean;
 begin
   StringValues := TStringList.Create;
   try
@@ -5838,7 +5811,7 @@ begin
       Exit;
     end;
 
-    GetMinMax(MinMax, DataSet, StringValues);
+    GetMinMax(MinMax, DataSet, StringValues, MinMaxInitialized);
     ApplyLimittoMinMax(DataSet, MinMax, DataSet.Limits);
 
     case ViewDirection of
@@ -9143,9 +9116,8 @@ begin
 end;
 
 procedure TCustomMesh.GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-  StringValues: TStringList);
+  StringValues: TStringList; out MinMaxInitialized: Boolean);
 var
-  MinMaxInitialized: boolean;
   LayerIndex: integer;
   RowIndex: integer;
   ColIndex: integer;

@@ -251,7 +251,6 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           AutoAdjustColWidths = True
         end>
       ExplicitLeft = 1
-      ExplicitTop = 51
       ExplicitWidth = 452
       ExplicitHeight = 100
     end
@@ -492,6 +491,10 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     object tabTime: TTabSheet
       Caption = 'Time varying properties'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
 end

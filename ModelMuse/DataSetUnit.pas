@@ -8849,6 +8849,10 @@ begin
     Stream.Write(RowArray[0], Count*SizeOf(integer));
     Stream.Write(ColumnArray[0], Count*SizeOf(integer));
     Stream.Write(IntegerValues[0], Count*SizeOf(integer));
+  end
+  else
+  begin
+    Stream.Write(Count, SizeOf(Count));
   end;
 end;
 

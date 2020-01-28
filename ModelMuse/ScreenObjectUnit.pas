@@ -19019,6 +19019,11 @@ begin
     ModflowBoundaries.ModflowLak6.Loaded;
   end;
 
+  if ModflowBoundaries.ModflowUzfMf6Boundary <> nil then
+  begin
+    ModflowBoundaries.ModflowUzfMf6Boundary.Loaded;
+  end;
+
   if ModflowBoundaries.ModflowMvr <> nil then
   begin
     ModflowBoundaries.ModflowMvr.Loaded;

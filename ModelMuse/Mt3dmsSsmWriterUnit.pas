@@ -443,62 +443,50 @@ begin
     Exit;
   end;
 
-//  NoAssignmentErrorRoot := Format(StrNoBoundaryConditio,
-//    [Package.PackageIdentifier]);
-//  frmProgressMM.AddMessage(StrEvaluatingSSMPacka);
-//  frmErrorsAndWarnings.BeginUpdate;
-//  try
-//    frmErrorsAndWarnings.RemoveErrorGroup(Model, NoAssignmentErrorRoot);
-//    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrBothEVTAndETSPac);
-
-    RechBoundaryList := TList.Create;
-    try
-      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  RechBoundaryList := TList.Create;
+  try
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if ScreenObject.Deleted then
       begin
-        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-        if ScreenObject.Deleted then
-        begin
-          Continue;
-        end;
-        if not ScreenObject.UsedModels.UsesModel(Model) then
-        begin
-          Continue;
-        end;
-        Boundary := ScreenObject.Mt3dUzfRechConc;
-        if Boundary <> nil then
-        begin
-          frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
-          Application.ProcessMessages;
-          if not ScreenObject.SetValuesOfEnclosedCells
-            and not ScreenObject.SetValuesOfIntersectedCells then
-          begin
-            frmErrorsAndWarnings.AddError(Model,
-              NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
-          end;
-          Boundary.GetCellValues(FRechConValues, nil, Model);
-          RechBoundaryList.Add(Boundary);
-        end;
+        Continue;
       end;
-      Application.ProcessMessages;
-      for BoundaryIndex := 0 to RechBoundaryList.Count - 1 do
+      if not ScreenObject.UsedModels.UsesModel(Model) then
       begin
-        Boundary := RechBoundaryList[BoundaryIndex];
-        ScreenObject := Boundary.ScreenObject as TScreenObject;
-        frmProgressMM.AddMessage(Format(StrTransferringDat, [ScreenObject.Name]));
-        Boundary.BoundaryAssignCells(Model,FRechConValues);
+        Continue;
       end;
-      for ValueIndex := 0 to FRechConValues.Count - 1 do
+      Boundary := ScreenObject.Mt3dUzfRechConc;
+      if Boundary <> nil then
       begin
-        Cells := FRechConValues[ValueIndex];
-        Cells.Cache;
+        frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
+        Application.ProcessMessages;
+        if not ScreenObject.SetValuesOfEnclosedCells
+          and not ScreenObject.SetValuesOfIntersectedCells then
+        begin
+          frmErrorsAndWarnings.AddError(Model,
+            NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
+        end;
+        Boundary.GetCellValues(FRechConValues, nil, Model);
+        RechBoundaryList.Add(Boundary);
       end;
-    finally
-      RechBoundaryList.Free;
     end;
-//    CountCells(MXSS);
-//  finally
-//    frmErrorsAndWarnings.EndUpdate;
-//  end;
+    Application.ProcessMessages;
+    for BoundaryIndex := 0 to RechBoundaryList.Count - 1 do
+    begin
+      Boundary := RechBoundaryList[BoundaryIndex];
+      ScreenObject := Boundary.ScreenObject as TScreenObject;
+      frmProgressMM.AddMessage(Format(StrTransferringDat, [ScreenObject.Name]));
+      Boundary.BoundaryAssignCells(Model,FRechConValues);
+    end;
+    for ValueIndex := 0 to FRechConValues.Count - 1 do
+    begin
+      Cells := FRechConValues[ValueIndex];
+      Cells.Cache;
+    end;
+  finally
+    RechBoundaryList.Free;
+  end;
 end;
 
 procedure TMt3dmsSsmWriter.EvaluateUzfSeepageStressData;
@@ -673,6 +661,13 @@ begin
           ConcentrationArray.UpToDate := True;
           ConcentrationArray.CacheData;
         end;
+        for TimeIndex := FRechConValues.Count to RechargeTimes.Count - 1 do
+        begin
+          ConcentrationArray := RechargeTimes[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          ConcentrationArray.UpToDate := True;
+          ConcentrationArray.CacheData;
+        end;
       end;
 
       if SinkTimes <> nil then
@@ -692,6 +687,13 @@ begin
             UpdateCellDisplay(CellList, DataArrayList, ParameterIndicies);
           end;
 
+          ConcentrationArray.UpToDate := True;
+          ConcentrationArray.CacheData;
+        end;
+        for TimeIndex := FSeepConcValues.Count to SinkTimes.Count - 1 do
+        begin
+          ConcentrationArray := SinkTimes[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
           ConcentrationArray.UpToDate := True;
           ConcentrationArray.CacheData;
         end;

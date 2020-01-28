@@ -722,6 +722,9 @@ begin
   WriteString('  READASARRAYS');
   NewLine;
 }
+  WriteString('  AUXILIARY IFACE');
+  NewLine;
+
 
   PrintOutputOptions;
   WriteBoundNamesOption;
@@ -810,6 +813,7 @@ begin
         begin
           WriteFloat(SurfDepthCell.EtFractions[SegmentIndex-1]);
         end;
+        WriteIface(EvtCell.IFace);
 
         WriteBoundName(EvtCell);
 

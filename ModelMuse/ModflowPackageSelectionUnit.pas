@@ -13982,6 +13982,11 @@ begin
     List.Free;
   end;
   FConcentrations.ComputeAverage;
+  if UzfUsed(self) then
+  begin
+    FRechConcentrations.ComputeAverage;
+    FSinkConcentrations.ComputeAverage;
+  end
 end;
 
 function TMt3dmsSourceSinkMixing.UzfUsed(Sender: TObject): Boolean;

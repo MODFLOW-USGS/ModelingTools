@@ -840,9 +840,12 @@ var
   Cells: TValueCellList;
   LocalBoundaryStorage: TRchStorage;
   LocalModel: TCustomModel;
+  LocalScreenObject: TScreenObject;
 begin
   LocalModel := AModel as TCustomModel;
   LocalBoundaryStorage := BoundaryStorage as TRchStorage;
+  Assert(ScreenObject <> nil);
+  LocalScreenObject := ScreenObject as TScreenObject;
   for TimeIndex := 0 to
     LocalModel.ModflowFullStressPeriods.Count - 1 do
   begin
@@ -870,6 +873,8 @@ begin
       begin
         BoundaryValues := LocalBoundaryStorage.RchArray[BoundaryIndex];
         Cell := TRch_Cell.Create;
+        Assert(ScreenObject <> nil);
+        Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;

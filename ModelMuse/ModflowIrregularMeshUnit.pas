@@ -2689,6 +2689,7 @@ var
   IDomainDataArray: TDataArray;
   Outline: TPolygon2Darray;
   DrawCellLabel: Boolean;
+  MinMaxInitialized: Boolean;
   procedure DrawMeshOutline;
   var
     Points: GoPhastTypes.TPointArray;
@@ -2726,7 +2727,7 @@ begin
   end;
   if (ColorDataArray <> nil) then
   begin
-    GetMinMax(MinMax, ColorDataArray, StringValues);
+    GetMinMax(MinMax, ColorDataArray, StringValues, MinMaxInitialized);
     ApplyLimittoMinMax(ColorDataArray, MinMax, ColorDataArray.Limits);
   end;
   IDomainDataArray := (Model as TCustomModel).DataArrayManager.GetDataSetByName(K_IDOMAIN);
@@ -6259,6 +6260,7 @@ var
   SegmentAngle: double;
   OriginAngle: Double;
   ActiveDataArray: TDataArray;
+  MinMaxInitialized: Boolean;
 //  ANode: INode;
   function Interpolate(Length1, Length2, Value1, Value2: double): double;
   var
@@ -6321,7 +6323,7 @@ begin
   try
     if (ThreeDDataSet <> nil) then
     begin
-      GetMinMax(MinMax, ThreeDDataSet, StringValues);
+      GetMinMax(MinMax, ThreeDDataSet, StringValues, MinMaxInitialized);
       ApplyLimittoMinMax(ThreeDDataSet, MinMax, ThreeDDataSet.Limits);
     end;
 
@@ -7468,11 +7470,12 @@ var
   LayerMax: integer;
   ACell2D: TModflowIrregularCell2D;
   AnElement3D: TModflowDisVCell;
+  MinMaxInitialized: Boolean;
 begin
   Assert(ThreeDDataSet <> nil);
   StringValues := TStringList.Create;
   try
-    GetMinMax(MinMax, ThreeDDataSet, StringValues);
+    GetMinMax(MinMax, ThreeDDataSet, StringValues, MinMaxInitialized);
     ApplyLimittoMinMax(ThreeDDataSet, MinMax, ThreeDDataSet.Limits);
 
 //    LayerMax := -1;

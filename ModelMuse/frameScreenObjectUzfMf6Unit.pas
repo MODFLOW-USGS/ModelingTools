@@ -350,12 +350,18 @@ var
     end;
   end;
 begin
-  Brooks_Corey_Epsilon := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
-  Initial_Unsaturated_Water_Content := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
-  Residual_Water_Content := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6ReisidualWaterContent);
-  Saturated_Water_Content := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6SaturatedWaterContent);
-  Surface_Depression_Depth := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
-  Vertical_Saturated_K := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(StrUzfMf6VerticalSaturatedK);
+  Brooks_Corey_Epsilon := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
+  Initial_Unsaturated_Water_Content := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
+  Residual_Water_Content := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6ReisidualWaterContent);
+  Saturated_Water_Content := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6SaturatedWaterContent);
+  Surface_Depression_Depth := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+  Vertical_Saturated_K := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6VerticalSaturatedK);
 
 
   NewValues := nil;

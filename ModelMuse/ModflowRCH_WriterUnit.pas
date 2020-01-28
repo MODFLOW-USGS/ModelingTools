@@ -518,6 +518,8 @@ begin
 
 //  WriteString('  READASARRAYS');
 //  NewLine;
+  WriteString('  AUXILIARY IFACE');
+  NewLine;
 
   PrintOutputOptions;
 
@@ -623,7 +625,8 @@ begin
           WriteString(RchCell.TimeSeriesName);
           WriteString(' ');
         end;
-  //      WriteFloat(RchCell.RechargeRate);
+
+        WriteIface(RchCell.IFace);
 
         WriteBoundName(RchCell);
 

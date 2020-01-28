@@ -33,12 +33,12 @@ type
     procedure SetValueSource(const Value: TObserver);
     procedure HasChanged(Sender: TObject);
     procedure SetEdgeDataToPlot(const Value: integer);
-    procedure GetStringValues(StringValues: TStringList; DataArray: TDataArray);
+    procedure GetStringValues(StringValues: TStringList; DataArray: TDataArray; out MinMaxInitialized: Boolean);
     procedure SetFractions(const Value: TValueArrayStorage);
     procedure GetIntegerLimits(var MinInteger, MaxInteger: Integer;
-      DataArray: TDataArray);
+      DataArray: TDataArray; out MinMaxInitialized: Boolean);
     procedure GetRealNumberLimits(var MinReal, MaxReal: double;
-      DataArray: TDataArray);
+      DataArray: TDataArray; out MinMaxInitialized: Boolean);
     procedure GetRealLimitsForEdgeDisplay(var MinReal, MaxReal: double;
       EdgeDisplay: TCustomModflowGridEdgeDisplay);
     function GetFractions: TValueArrayStorage;
@@ -119,6 +119,7 @@ var
   EdgeDisplay: TCustomModflowGridEdgeDisplay;
   AFraction: double;
   Contours: TContours;
+  MinMaxInitialized: Boolean;
 begin
   result := True;
 //  DataArray := nil;
@@ -214,7 +215,12 @@ begin
             case LegendType of
               ltColor, ltEndpoints:
                 begin
-                  GetRealNumberLimits(MinReal, MaxReal, DataArray);
+                  GetRealNumberLimits(MinReal, MaxReal, DataArray, MinMaxInitialized);
+                  if not MinMaxInitialized then
+                  begin
+                    Fractions.Clear;
+                    Exit;
+                  end;
                 end;
               ltContour:
                 begin
@@ -318,7 +324,12 @@ begin
           end
           else
           begin
-            GetIntegerLimits(MinInteger, MaxInteger, DataArray);
+            GetIntegerLimits(MinInteger, MaxInteger, DataArray, MinMaxInitialized);
+            if not MinMaxInitialized then
+            begin
+              Fractions.Clear;
+              Exit;
+            end;
             IntRange := MaxInteger - MinInteger;
             for Index := 0 to Values.Count - 1 do
             begin
@@ -366,7 +377,7 @@ begin
           begin
             StringValues := TStringList.Create;
             try
-              GetStringValues(StringValues, DataArray);
+              GetStringValues(StringValues, DataArray, MinMaxInitialized);
               for Index := 0 to Values.Count - 1 do
               begin
                 StringPos := StringValues.IndexOf(Values.StringValues[Index]);
@@ -469,6 +480,7 @@ var
   StringPos: Integer;
   Contours: TContours;
   DSIndex: Integer;
+  MinMaxInitialized: Boolean;
   procedure  AssignRealValues;
   var
     Index: Integer;
@@ -530,17 +542,27 @@ begin
               case DataArray.DataType of
                 rdtDouble:
                   begin
-                    GetRealNumberLimits(MinReal, MaxReal, DataArray);
-                    AssignRealValues;
+                    GetRealNumberLimits(MinReal, MaxReal, DataArray, MinMaxInitialized);
+                    if not MinMaxInitialized then
+                    begin
+                      Values.Clear;
+                    end
+                    else
+                    begin
+                      AssignRealValues;
+                    end;
                   end;
                 rdtInteger:
                   begin
-                    GetIntegerLimits(MinInteger, MaxInteger, DataArray);
+                    GetIntegerLimits(MinInteger, MaxInteger, DataArray, MinMaxInitialized);
 
                     if MaxInteger = MinInteger then
                     begin
                       Values.Clear;
-                      Values.Add(MaxInteger);
+                      if not MinMaxInitialized then
+                      begin
+                        Values.Add(MaxInteger);
+                      end;
                     end
                     else
                     begin
@@ -590,7 +612,7 @@ begin
                   begin
                     StringValues := TStringList.Create;
                     try
-                      GetStringValues(StringValues, DataArray);
+                      GetStringValues(StringValues, DataArray, MinMaxInitialized);
 
                       if ColoringLimits.UpperLimit.UseLimit then
                       begin
@@ -758,7 +780,7 @@ begin
 end;
 
 procedure TLegend.GetStringValues(StringValues: TStringList;
-  DataArray: TDataArray);
+  DataArray: TDataArray; out MinMaxInitialized: Boolean);
 var
   MaxString: string;
   MinString: string;
@@ -766,17 +788,18 @@ var
   Index: Integer;
   Model: TCustomModel;
   MinMax: TMinMax;
+//  MinMaxInitialized: Boolean;
 begin
   Model := DataArray.Model as TCustomModel;
 
   if Model.Grid <> nil then
   begin
-    Model.Grid.GetMinMax(MinMax, DataArray, StringValues);
+    Model.Grid.GetMinMax(MinMax, DataArray, StringValues, MinMaxInitialized);
     Model.Grid.ApplyLimitToMinMax(DataArray, MinMax, ColoringLimits);
   end
   else
   begin
-    Model.Mesh3D.GetMinMax(MinMax, DataArray, StringValues);
+    Model.Mesh3D.GetMinMax(MinMax, DataArray, StringValues, MinMaxInitialized);
     Model.Mesh3D.ApplyLimitToMinMax(DataArray, MinMax, ColoringLimits);
   end;
 
@@ -799,26 +822,6 @@ begin
   begin
     MinString := MinMax.SMin;
   end;
-
-//  StringValues.Clear;
-//  StringValues.CaseSensitive := False;
-//  StringValues.Duplicates := dupIgnore;
-//  StringValues.Sorted := True;
-//  StringValues.Capacity := DataArray.LayerCount
-//    * DataArray.RowCount * DataArray.ColumnCount;
-//  for LayerIndex := 0 to DataArray.LayerCount - 1 do
-//  begin
-//    for RowIndex := 0 to DataArray.RowCount - 1 do
-//    begin
-//      for ColIndex := 0 to DataArray.ColumnCount - 1 do
-//      begin
-//        if DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
-//        begin
-//          StringValues.Add(DataArray.StringData[LayerIndex, RowIndex, ColIndex]);
-//        end;
-//      end;
-//    end;
-//  end;
 
   if StringValues.Count > 0 then
   begin
@@ -1131,12 +1134,13 @@ begin
 end;
 
 procedure TLegend.GetRealNumberLimits(var MinReal, MaxReal: double;
-  DataArray: TDataArray);
+  DataArray: TDataArray; out MinMaxInitialized: Boolean);
 var
   Model: TCustomModel;
   MinMax: TMinMax;
   StringList: TStringList;
   Mesh: IMesh3D;
+//  MinMaxInitialized: Boolean;
 begin
   Model := DataArray.Model as TCustomModel;
 
@@ -1144,14 +1148,14 @@ begin
   try
     if Model.Grid <> nil then
     begin
-      Model.Grid.GetMinMax(MinMax, DataArray, StringList);
+      Model.Grid.GetMinMax(MinMax, DataArray, StringList, MinMaxInitialized);
     end
     else
     begin
       Mesh := Model.Mesh3D;
       if Mesh <> nil then
       begin
-        Mesh.GetMinMax(MinMax, DataArray, StringList);
+        Mesh.GetMinMax(MinMax, DataArray, StringList, MinMaxInitialized);
       end;
     end;
 
@@ -1200,12 +1204,13 @@ begin
 end;
 
 procedure TLegend.GetIntegerLimits(var MinInteger, MaxInteger: Integer;
-  DataArray: TDataArray);
+  DataArray: TDataArray; out MinMaxInitialized: Boolean);
 var
   Model: TCustomModel;
   MinMax: TMinMax;
   StringList: TStringList;
   Mesh: IMesh3D;
+//  MinMaxInitialized: Boolean;
 begin
   Model := DataArray.Model as TCustomModel;
 
@@ -1213,14 +1218,14 @@ begin
   try
     if Model.Grid <> nil then
     begin
-      Model.Grid.GetMinMax(MinMax, DataArray, StringList);
+      Model.Grid.GetMinMax(MinMax, DataArray, StringList, MinMaxInitialized);
     end
     else
     begin
       Mesh := Model.Mesh3D;
       if Mesh <> nil then
       begin
-        Mesh.GetMinMax(MinMax, DataArray, StringList);
+        Mesh.GetMinMax(MinMax, DataArray, StringList, MinMaxInitialized);
       end;
     end;
   finally

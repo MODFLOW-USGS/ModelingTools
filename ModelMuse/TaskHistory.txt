@@ -24813,5 +24813,13 @@ object TTaskHistory
         'MT3D-USGS SFT'
         'MT3D-USGS LKT'
         'MT3D-USGS UZT')
+    end
+    item
+      Date = 43858.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix'
+        'MT3D-USGS UZT'
+        'core code')
     end>
 end

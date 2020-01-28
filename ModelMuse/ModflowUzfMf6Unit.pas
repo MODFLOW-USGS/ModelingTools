@@ -286,6 +286,7 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    procedure Loaded;
   published
     // surfdep
     property SurfaceDepressionDepth: string read GetSurfaceDepressionDepth
@@ -1910,6 +1911,70 @@ begin
     Model.InvalidateUzfMf6RootPotential(self);
     Model.InvalidateUzfMf6RootActivity(self);
   end;
+end;
+
+procedure TUzfMf6Boundary.Loaded;
+var
+  Brooks_Corey_Epsilon: TDataArray;
+  Initial_Unsaturated_Water_Content: TDataArray;
+  Residual_Water_Content: TDataArray;
+  Saturated_Water_Content: TDataArray;
+  Surface_Depression_Depth: TDataArray;
+  Vertical_Saturated_K: TDataArray;
+  AScreenObject: TScreenObject;
+  DataSetIndex: Integer;
+begin
+  Brooks_Corey_Epsilon := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
+  Initial_Unsaturated_Water_Content := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
+  Residual_Water_Content := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6ReisidualWaterContent);
+  Saturated_Water_Content := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6SaturatedWaterContent);
+  Surface_Depression_Depth := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+  Vertical_Saturated_K := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(StrUzfMf6VerticalSaturatedK);
+
+  AScreenObject := ScreenObject as TScreenObject;
+
+  if Brooks_Corey_Epsilon <> nil then
+  begin
+    DataSetIndex := AScreenObject.AddDataSet(Brooks_Corey_Epsilon);
+    AScreenObject.DataSetFormulas[DataSetIndex] := BrooksCoreyEpsilon;
+  end;
+
+  if Initial_Unsaturated_Water_Content <> nil then
+  begin
+    DataSetIndex := AScreenObject.AddDataSet(Initial_Unsaturated_Water_Content);
+    AScreenObject.DataSetFormulas[DataSetIndex] := InitialWaterContent;
+  end;
+
+  if Residual_Water_Content <> nil then
+  begin
+    DataSetIndex := AScreenObject.AddDataSet(Residual_Water_Content);
+    AScreenObject.DataSetFormulas[DataSetIndex] := ResidualWaterContent;
+  end;
+
+  if Saturated_Water_Content <> nil then
+  begin
+    DataSetIndex := AScreenObject.AddDataSet(Saturated_Water_Content);
+    AScreenObject.DataSetFormulas[DataSetIndex] := SaturatedWaterContent;
+  end;
+
+  if Surface_Depression_Depth <> nil then
+  begin
+    DataSetIndex := AScreenObject.AddDataSet(Surface_Depression_Depth);
+    AScreenObject.DataSetFormulas[DataSetIndex] := SurfaceDepressionDepth;
+  end;
+
+  if Vertical_Saturated_K <> nil then
+  begin
+    DataSetIndex := AScreenObject.AddDataSet(Vertical_Saturated_K);
+    AScreenObject.DataSetFormulas[DataSetIndex] := VerticalSaturatedK;
+  end;
+
 end;
 
 procedure TUzfMf6Boundary.SetBrooksCoreyEpsilon(const Value: string);

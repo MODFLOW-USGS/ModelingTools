@@ -253,7 +253,7 @@ type
     function GetElementI(Index: Integer): IElement3D;
     property ElementsI[Index: Integer]: IElement3D read GetElementI;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-      StringValues: TStringList);
+      StringValues: TStringList; out MinMaxInitialized: Boolean);
     procedure ApplyLimitToMinMax(DataSet: TDataArray; var MinMax: TMinMax;
       Limits: TColoringLimits);
     end;

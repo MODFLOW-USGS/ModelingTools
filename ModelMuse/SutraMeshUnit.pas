@@ -524,7 +524,7 @@ Type
   public
     procedure Assign(Source: TPersistent); override;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-      StringValues: TStringList); override;
+      StringValues: TStringList; out MinMaxInitialized: Boolean); override;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
     //
     Constructor Create(Model: TBaseModel; ParentMesh: TSutraMesh3D);
@@ -3983,6 +3983,7 @@ var
   DrawNode: Boolean;
   Layer: Integer;
   MinMax: TMinMax;
+  MinMaxInitialized: Boolean;
 begin
   if ColorDataArray <> nil then
   begin
@@ -4008,7 +4009,7 @@ begin
   end;
   if (ColorDataArray <> nil) and (ColorDataArray.EvaluatedAt = eaNodes) then
   begin
-    GetMinMax(MinMax, ColorDataArray, StringValues);
+    GetMinMax(MinMax, ColorDataArray, StringValues, MinMaxInitialized);
     ApplyLimittoMinMax(ColorDataArray, MinMax, ColorDataArray.Limits);
   end;
   for NodeIndex := 0 to Nodes.Count - 1 do
@@ -4049,6 +4050,7 @@ var
   Element2D: TSutraElement2D;
   ElementLayer: Integer;
   MinMax: TMinMax;
+  MinMaxInitialized: Boolean;
 begin
   if BitMap is TBitmap32 then
   begin
@@ -4077,7 +4079,7 @@ begin
   end;
   if (ColorDataArray <> nil) and (ColorDataArray.EvaluatedAt = eaBlocks) then
   begin
-    GetMinMax(MinMax, ColorDataArray, StringValues);
+    GetMinMax(MinMax, ColorDataArray, StringValues, MinMaxInitialized);
     ApplyLimittoMinMax(ColorDataArray, MinMax, ColorDataArray.Limits);
   end;
   for ElementIndex := 0 to Elements.Count - 1 do
@@ -4209,9 +4211,8 @@ begin
 end;
 
 procedure TSutraMesh2D.GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
-  StringValues: TStringList);
+  StringValues: TStringList; out MinMaxInitialized: Boolean);
 var
-  MinMaxInitialized: Boolean;
   LayerCount, RowCount, ColCount: integer;
 begin
   Assert(DataSet <> nil);
@@ -6853,6 +6854,7 @@ var
   MinMax: TMinMax;
   Extent: TSize;
   ACanvas: TCanvas;
+  MinMaxInitialized: Boolean;
   function Point2DtoPoint(const APoint: TPoint2D): TPoint;
   begin
     Result.X := ZoomBox.XCoord(APoint.x);
@@ -6998,31 +7000,8 @@ begin
 
         if ThreeDDataSet <> nil then
         begin
-          GetMinMax(MinMax, ThreeDDataSet, StringValues);
+          GetMinMax(MinMax, ThreeDDataSet, StringValues, MinMaxInitialized);
           ApplyLimittoMinMax(ThreeDDataSet, MinMax, ThreeDDataSet.Limits);
-//          ThreeDDataSet.Initialize;
-//          if ThreeDDataSet.DataType = rdtString then
-//          begin
-//            StringValues.Sorted := True;
-//            StringValues.Duplicates := dupIgnore;
-//            StringValues.CaseSensitive := True;
-//            StringValues.Capacity := ThreeDDataSet.LayerCount *
-//              ThreeDDataSet.RowCount * ThreeDDataSet.ColumnCount;
-//            for LayerIndex := 0 to ThreeDDataSet.LayerCount - 1 do
-//            begin
-//              for RowIndex := 0 to ThreeDDataSet.RowCount - 1 do
-//              begin
-//                for ColIndex := 0 to ThreeDDataSet.ColumnCount - 1 do
-//                begin
-//                  if ThreeDDataSet.IsValue[LayerIndex, RowIndex, ColIndex] then
-//                  begin
-//                    StringValues.Add(ThreeDDataSet.StringData[
-//                      LayerIndex, RowIndex, ColIndex]);
-//                  end;
-//                end;
-//              end;
-//            end;
-//          end;
         end;
 
         if (ThreeDDataSet <> nil) and (ThreeDDataSet.EvaluatedAt = eaBlocks) then
@@ -7971,11 +7950,12 @@ var
   ANode3D: TSutraNode3D;
   MinMax: TMinMax;
   LayerMax: integer;
+  MinMaxInitialized: Boolean;
 begin
   Assert(ThreeDDataSet <> nil);
   StringValues := TStringList.Create;
   try
-    GetMinMax(MinMax, ThreeDDataSet, StringValues);
+    GetMinMax(MinMax, ThreeDDataSet, StringValues, MinMaxInitialized);
     ApplyLimittoMinMax(ThreeDDataSet, MinMax, ThreeDDataSet.Limits);
 
     LayerMax := -1;

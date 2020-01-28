@@ -466,9 +466,12 @@ var
   Cells: TValueCellList;
   LocalBoundaryStorage: TEvtStorage;
   LocalModel: TCustomModel;
+  LocalScreenObject: TScreenObject;
 begin
   LocalModel := AModel as TCustomModel;
   LocalBoundaryStorage := BoundaryStorage as TEvtStorage;
+  Assert(ScreenObject <> nil);
+  LocalScreenObject := ScreenObject as TScreenObject;
   for TimeIndex := 0 to
     LocalModel.ModflowFullStressPeriods.Count - 1 do
   begin
@@ -497,6 +500,8 @@ begin
       begin
         BoundaryValues := LocalBoundaryStorage.EvtArray[BoundaryIndex];
         Cell := TEvt_Cell.Create;
+        Assert(ScreenObject <> nil);
+        Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;

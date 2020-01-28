@@ -682,7 +682,7 @@ begin
         OK := IUZFBND.IntegerData[0,RowIndex,ColIndex] > 0;
         if not OK then
         begin
-          frmErrorsAndWarnings.AddError(Model,
+          frmErrorsAndWarnings.AddWarning(Model,
             Format(StrWhenTheUZFPackage, [IUZFBND.DisplayName]),
             Format(StrRow0dColumn1, [RowIndex+1,ColIndex+1]));
         end;
@@ -874,7 +874,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheETExtinctionDe);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheETExtinctionWa);
   IUZFBND := Model.DataArrayManager.GetDataSetByName(StrUzfLayer);
-  frmErrorsAndWarnings.RemoveErrorGroup(Model, Format(StrWhenTheUZFPackage, [IUZFBND.DisplayName]));
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, Format(StrWhenTheUZFPackage, [IUZFBND.DisplayName]));
 
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrUZF, Model.UnitNumbers.UnitNumber(StrUZF), FNameOfFile, foInput, Model);
