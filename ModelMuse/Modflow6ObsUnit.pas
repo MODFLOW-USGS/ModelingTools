@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, GoPhastTypes, System.SysUtils, ModflowMawUnit,
-  ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit;
+  ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
+  ModflowCsubUnit;
 
 type
   TGwFlowOb = (gfoNearestNeighbor, gfoAllNeighbors, gfoAbove, gfoBelow);
@@ -32,6 +33,7 @@ type
     FToMvrFlowObs: Boolean;
     FStoredUzfObsDepthFraction: TRealStorage;
     FUzfObs: TUzfObs;
+    FCSubObs: TCSubObs;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -54,6 +56,7 @@ type
     procedure SetStoredUzfObsDepthFraction(const Value: TRealStorage);
     procedure SetUzfObs(const Value: TUzfObs);
     procedure SetUzfObsDepthFraction(const Value: double);
+    procedure SetCSubObs(const Value: TCSubObs);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
@@ -82,6 +85,7 @@ type
     property LakObs: TLakObs read FLakObs write SetLakObs;
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read FUzfObs write SetUzfObs;
+    property CSubObs: TCSubObs read FCSubObs write SetCSubObs;
     property StoredUzfObsDepthFraction: TRealStorage read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
   end;
 
@@ -120,6 +124,7 @@ begin
     SfrObs := SourceObs.SfrObs;
     LakObs := SourceObs.LakObs;
     UzfObs := SourceObs.UzfObs;
+    CSubObs := SourceObs.CSubObs;
     UzfObsDepthFraction := SourceObs.UzfObsDepthFraction;
 
     SfrObsLocation := SourceObs.SfrObsLocation;
@@ -153,6 +158,15 @@ end;
 procedure TModflow6Obs.SetChdFlowObs(const Value: Boolean);
 begin
   SetBooleanProperty(FChdFlowObs, Value);
+end;
+
+procedure TModflow6Obs.SetCSubObs(const Value: TCSubObs);
+begin
+  if FCSubObs <> Value then
+  begin
+    FCSubObs := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TModflow6Obs.SetDrawdownObs(const Value: Boolean);

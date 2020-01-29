@@ -7,7 +7,7 @@ uses
   ModflowPackageSelectionUnit, ModflowCellUnit, PhastModelUnit, QuadTreeClass,
   Modflow6ObsUnit, ScreenObjectUnit, System.SysUtils, ModflowMawWriterUnit,
   ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit, System.Classes,
-  ModflowUzfMf6WriterUnit, Vcl.Forms;
+  ModflowUzfMf6WriterUnit, ModflowCSubWriterUnit, Vcl.Forms;
 
 type
   THeadDrawdownObservationLocation = record
@@ -137,6 +137,18 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+  TCSubObsWriter = class(TCustomMf6ObservationWriter)
+  private
+    FObsList: TCSubObservationList;
+    procedure WriteCSubObs;
+  protected
+    class function Extension: string; override;
+    procedure Evaluate; override;
+  public
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
+      ObsList: TCSubObservationList); reintroduce;
+    procedure WriteFile(const AFileName: string);
+  end;
 
 implementation
 
@@ -145,7 +157,7 @@ uses
   AbstractGridUnit, MeshRenumberingTypes, GoPhastTypes, FastGEO,
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowUzfWriterUnit, PestHeadObsWeightsUnit;
+  ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +
@@ -165,6 +177,13 @@ resourcestring
   StrTheFollowingSFROb = 'The following SFR observation name "%0:s" is repea' +
   'ted more than once';
   StrWritingUZFObservat = 'Writing UZF observations';
+  StrNonuniqueUZFObser = 'Non-unique UZF observation names';
+  StrNonuniqueLakeObse = 'Non-unique Lake observation names';
+  StrNonuniqueCSUBObse = 'Non-unique CSUB observation names';
+  StrTheFollowingCSUBOb = 'The following CSUB observation name "%0:s" is repea' +
+  'ted more than once';
+  StrTheFollowingUZFOb = 'The following UZF observation name "%0:s" is repea' +
+  'ted more than once';
 
 
 { TModflow6Obs_Writer }
@@ -1674,7 +1693,7 @@ end;
 
 procedure TLakObsWriter.WriteFile(const AFileName: string);
 begin
-  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueSFRObser);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueLakeObse);
   if not Package.IsSelected then
   begin
     Exit
@@ -1892,7 +1911,7 @@ end;
 
 procedure TUzfObsWriter.WriteFile(const AFileName: string);
 begin
-  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueSFRObser);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueUZFObser);
   if not Package.IsSelected then
   begin
     Exit
@@ -1930,9 +1949,6 @@ var
   obsnam: string;
   ObservationType: string;
   boundname: string;
-//  ReachIndex: Integer;
-//  ReachNumber: Integer;
-//  ReachNumberStr: string;
   ObsNames: TStringList;
   Root: string;
   CellIndex: Integer;
@@ -1941,8 +1957,8 @@ var
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
     begin
-      frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueSFRObser,
-        Format(StrTheFollowingSFROb, [obsnam]));
+      frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueUZFObser,
+        Format(StrTheFollowingUZFOb, [obsnam]));
     end
     else
     begin
@@ -2102,6 +2118,383 @@ begin
               NewLine;
             end;
           end;
+        end;
+      end;
+
+      WriteString('END CONTINUOUS');
+      NewLine;
+      NewLine;
+    end;
+  finally
+    ObsNames.Free;
+  end;
+end;
+
+{ TCSubObsWriter }
+
+constructor TCSubObsWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType; ObsList: TCSubObservationList);
+begin
+  inherited Create(Model, EvaluationType);
+  FObsList := ObsList;
+end;
+
+procedure TCSubObsWriter.Evaluate;
+begin
+//  do nothing
+
+end;
+
+class function TCSubObsWriter.Extension: string;
+begin
+  Result := '';
+  Assert(False);
+end;
+
+procedure TCSubObsWriter.WriteFile(const AFileName: string);
+begin
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNonuniqueCSUBObse);
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  FNameOfFile := AFileName;
+
+  frmProgressMM.AddMessage(StrWritingUZFObservat);
+  Assert(FObsList.Count > 0);
+  Model.AddModelInputFile(FNameOfFile);
+
+  OpenFile(FNameOfFile);
+  try
+    WriteDataSet0;
+    WriteOptions;
+    WriteCSubObs;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TCSubObsWriter.WriteCSubObs;
+var
+  ObTypes: TCSubObs;
+  ObsIndex: Integer;
+  ObsPackage: TMf6ObservationUtility;
+  OutputTypeExtension: string;
+  AnObsType: TCSubOb;
+  OutputExtension: string;
+  OutputFileName: string;
+  AnObs: TCSubObservation;
+  obsnam: string;
+  ObservationType: string;
+  boundname: string;
+  ObsNames: TStringList;
+  Root: string;
+  CellIndex: Integer;
+  obsname: string;
+  ACell: TCellLocation;
+  DisvUsed: Boolean;
+  IBIndex: Integer;
+  icsubno: Integer;
+  procedure CheckForDuplicateObsNames;
+  begin
+    if ObsNames.IndexOf(obsnam) >= 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueCSUBObse,
+        Format(StrTheFollowingCSUBOb, [obsnam]));
+    end
+    else
+    begin
+      ObsNames.Add(obsnam);
+    end;
+  end;
+begin
+  DisvUsed := Model.DisvUsed;
+  ObTypes := [];
+  for ObsIndex := 0 to FObsList.Count - 1 do
+  begin
+    ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
+  end;
+  ObsPackage := Package as TMf6ObservationUtility;
+  case ObsPackage.OutputFormat of
+    ofText:
+      begin
+        OutputTypeExtension := '.csv';
+      end;
+    ofBinary:
+      begin
+        OutputTypeExtension := '.bin';
+      end;
+    else
+      Assert(False);
+  end;
+  ObsNames := TStringList.Create;
+  try
+    ObsNames.Sorted := True;
+    for AnObsType in ObTypes do
+    begin
+      case AnObsType of
+        coCSub:
+          begin
+            OutputExtension := '.csub_ob' + OutputTypeExtension;
+            ObservationType := 'csub';
+          end;
+        coInelastCSub:
+          begin
+            OutputExtension := '.inelastic-csub_ob' + OutputTypeExtension;
+            ObservationType := 'inelastic-csub';
+          end;
+        coElastCSub:
+          begin
+            OutputExtension := '.elastic-csub_ob' + OutputTypeExtension;
+            ObservationType := 'elastic-csub';
+          end;
+        coCoarseCSub:
+          begin
+            OutputExtension := '.coarse-csub_ob' + OutputTypeExtension;
+            ObservationType := 'coarse-csub';
+          end;
+        coCSubCell:
+          begin
+            OutputExtension := '.csub-cell_ob' + OutputTypeExtension;
+            ObservationType := 'csub-cell';
+          end;
+        coWcompCSubCell:
+          begin
+            OutputExtension := '.wcomp-csub-cell_ob' + OutputTypeExtension;
+            ObservationType := 'wcomp-csub-cell';
+          end;
+        coSk:
+          begin
+            OutputExtension := '.sk_ob' + OutputTypeExtension;
+            ObservationType := 'sk';
+          end;
+        coSke:
+          begin
+            OutputExtension := '.ske_ob' + OutputTypeExtension;
+            ObservationType := 'ske';
+          end;
+        coSkCell:
+          begin
+            OutputExtension := '.sk-cell_ob' + OutputTypeExtension;
+            ObservationType := 'sk-cell';
+          end;
+        coSkeCell:
+          begin
+            OutputExtension := '.ske-cell_ob' + OutputTypeExtension;
+            ObservationType := 'ske-cell';
+          end;
+        coEStressCell:
+          begin
+            OutputExtension := '.estress-cell_ob' + OutputTypeExtension;
+            ObservationType := 'estress-cell';
+          end;
+        coGStressCell:
+          begin
+            OutputExtension := '.gstress-cell_ob' + OutputTypeExtension;
+            ObservationType := 'gstress-cell';
+          end;
+        coIntbedComp:
+          begin
+            OutputExtension := '.interbed-compaction_ob' + OutputTypeExtension;
+            ObservationType := 'interbed-compaction';
+          end;
+        coInelastComp:
+          begin
+            OutputExtension := '.inelastic-compaction_ob' + OutputTypeExtension;
+            ObservationType := 'inelastic-compaction';
+          end;
+        coElastComp:
+          begin
+            OutputExtension := '.elastic-compaction_ob' + OutputTypeExtension;
+            ObservationType := 'elastic-compaction';
+          end;
+        coCoarseCompaction:
+          begin
+            OutputExtension := '.coarse-compaction_ob' + OutputTypeExtension;
+            ObservationType := 'coarse-compaction';
+          end;
+        coCompCell:
+          begin
+            OutputExtension := '.compaction-cell_ob' + OutputTypeExtension;
+            ObservationType := 'compaction-cell';
+          end;
+        coThickness:
+          begin
+            OutputExtension := '.thickness_ob' + OutputTypeExtension;
+            ObservationType := 'thickness';
+          end;
+        coCoarseThickness:
+          begin
+            OutputExtension := '.coarse-thickness_ob' + OutputTypeExtension;
+            ObservationType := 'coarse-thickness';
+          end;
+        coThickCell:
+          begin
+            OutputExtension := '.thickness-cell_ob' + OutputTypeExtension;
+            ObservationType := 'thickness-cell';
+          end;
+        coTheta:
+          begin
+            OutputExtension := '.theta_ob' + OutputTypeExtension;
+            ObservationType := 'theta';
+          end;
+        coCoarseTheta:
+          begin
+            OutputExtension := '.coarse-theta_ob' + OutputTypeExtension;
+            ObservationType := 'coarse-theta';
+          end;
+        ooThetaCell:
+          begin
+            OutputExtension := '.theta-cell_ob' + OutputTypeExtension;
+            ObservationType := 'theta-cell';
+          end;
+        coDelayFlowTop:
+          begin
+            OutputExtension := '.delay-flowtop_ob' + OutputTypeExtension;
+            ObservationType := 'delay-flowtop';
+          end;
+        coDelayFlowBot:
+          begin
+            OutputExtension := '.delay-flowbot_ob' + OutputTypeExtension;
+            ObservationType := 'delay-flowbot';
+          end;
+//        coDelayHead:
+//          begin
+//            OutputExtension := '.delay-head_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-head';
+//          end;
+//        coDelayGStress:
+//          begin
+//            OutputExtension := '.delay-gstress_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-gstress';
+//          end;
+//        coDelayEStress:
+//          begin
+//            OutputExtension := '.delay-estress_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-estress';
+//          end;
+//        coDelayPreConStress:
+//          begin
+//            OutputExtension := '.delay-preconstress_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-preconstress';
+//          end;
+//        coDelayComp:
+//          begin
+//            OutputExtension := '.delay-compaction_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-compaction';
+//          end;
+//        coDelayThickness:
+//          begin
+//            OutputExtension := '.delay-thickness_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-thickness';
+//          end;
+//        coDelayTheta:
+//          begin
+//            OutputExtension := '.delay-theta_ob' + OutputTypeExtension;
+//            ObservationType := 'delay-theta';
+//          end;
+        coPreConsStressCell:
+          begin
+            OutputExtension := '.preconstress-cell_ob' + OutputTypeExtension;
+            ObservationType := 'preconstress-cell';
+          end;
+      end;
+
+      WriteString('BEGIN CONTINUOUS FILEOUT ');
+      OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+      Model.AddModelOutputFile(OutputFileName);
+      OutputFileName := ExtractFileName(OutputFileName);
+      WriteString(OutputFileName);
+      if ObsPackage.OutputFormat = ofBinary then
+      begin
+        WriteString(' BINARY');
+      end;
+      NewLine;
+
+      for ObsIndex := 0 to FObsList.Count - 1 do
+      begin
+        AnObs := FObsList[ObsIndex];
+        if AnObsType in AnObs.FObsTypes then
+        begin
+          Root := AnObs.FName;
+          if Root = '' then
+          begin
+            Root := Format('CSubObs%d', [ObsIndex+1]);
+          end;
+          Assert(Length(Root) <= 40);
+          boundname := Trim(AnObs.FBoundName);
+          boundname := Copy(boundname, 1, 40);
+          boundname := ' ' + boundname + ' ';
+
+          obsname := '  ' + Root + ' ';
+
+          case AnObsType of
+            coCSub, coInelastCSub, coElastCSub, coSk, coSke, coIntbedComp,
+            coInelastComp, coElastComp, coThickness, coCoarseTheta, ooThetaCell:
+              begin
+                WriteString(obsname);
+                WriteString(ObservationType);
+                WriteString(boundname);
+                NewLine;
+              end;
+            coCoarseCSub, coCSubCell, coWcompCSubCell, coSkCell, coSkeCell,
+            coEStressCell, coGStressCell, coCoarseCompaction, coCompCell,
+            coCoarseThickness, coThickCell, coPreConsStressCell:
+              begin
+                for CellIndex := 0 to Length(AnObs.FCells) - 1 do
+                begin
+                  obsname := obsname + '_' + IntToStr(CellIndex+1);
+                  ACell := AnObs.FCells[CellIndex];
+                  WriteString(obsname);
+                  WriteString(ObservationType);
+                  WriteInteger(ACell.Layer+1);
+                  if not DisvUsed then
+                  begin
+                    WriteInteger(ACell.Row+1);
+                  end;
+                  WriteInteger(ACell.Column+1);
+                  NewLine;
+                end;
+              end;
+            coTheta, coDelayFlowTop, coDelayFlowBot:
+              begin
+                for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                begin
+                  obsname := obsname + '_' + IntToStr(IBIndex+1);
+                  WriteString(obsname);
+                  WriteString(ObservationType);
+                  icsubno := AnObs.FInterbedNumbers[CellIndex];
+                  WriteInteger(icsubno);
+                  NewLine;
+                end;
+              end;
+//            coDelayHead:
+//              begin
+//              end;
+//            coDelayGStress:
+//              begin
+//              end;
+//            coDelayEStress:
+//              begin
+//              end;
+//            coDelayPreConStress:
+//              begin
+//              end;
+//            coDelayComp:
+//              begin
+//              end;
+//            coDelayThickness:
+//              begin
+//              end;
+//            coDelayTheta:
+//              begin
+//              end;
+          end;
+
         end;
       end;
 

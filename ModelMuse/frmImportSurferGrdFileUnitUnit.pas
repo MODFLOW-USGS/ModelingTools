@@ -6,8 +6,8 @@ uses System.UITypes,
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, frmCustomImportSimpleFileUnit, StdCtrls,
   Buttons, ExtCtrls, Grids, RbwDataGrid4, SurferGridFileReaderUnit,
-  frmImportShapefileUnit, FastGEO, AbstractGridUnit, SutraMeshUnit,
-  GoPhastTypes;
+  frmImportShapefileUnit, FastGEO, AbstractGridUnit,
+  GoPhastTypes, MeshRenumberingTypes;
 
 type
   {@abstract(@name is the command used to import
@@ -35,9 +35,10 @@ type
     FFileType: TSurferFileType;
     FGrd7: TSurferRaster7File2;
     FGrid: TCustomModelGrid;
-    FMesh: TSutraMesh3D;
+//    FMesh: TSutraMesh3D;
     ImportMethod: TImportMethod;
     EvalAt: TEvaluatedAt;
+    FMesh: IMesh3D;
     procedure HandleARasterPoint(Sender: TObject; APoint: TPoint3D);
     procedure SetData;
     { Private declarations }
@@ -368,7 +369,7 @@ begin
             begin
               ImportMethod := TImportMethod(rgFilterMethod.ItemIndex);
               FGrid := LocalModel.Grid;
-              FMesh := LocalModel.Mesh as TSutraMesh3D;
+              FMesh := LocalModel.Mesh3D;
               if not InitializeArrays(ImportMethod) then
               begin
                 Exit;
@@ -625,11 +626,11 @@ begin
                 case EvalAt of
                   eaBlocks:
                     begin
-                      AScreenObject.Capacity := FMesh.Mesh2D.Elements.Count;
+                      AScreenObject.Capacity := FMesh.Mesh2DI.ElementCount;
                     end;
                   eaNodes:
                     begin
-                      AScreenObject.Capacity := FMesh.Mesh2D.Nodes.Count;
+                      AScreenObject.Capacity := FMesh.Mesh2DI.NodeCount;
                     end;
                   else
                     Assert(False);

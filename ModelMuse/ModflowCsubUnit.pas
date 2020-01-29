@@ -8,6 +8,17 @@ uses
   RealListUnit, System.SysUtils, System.Contnrs;
 
 type
+  TCSubOb = (coCSub, coInelastCSub, coElastCSub, coCoarseCSub, coCSubCell,
+    coWcompCSubCell, coSk, coSke, coSkCell, coSkeCell, coEStressCell,
+    coGStressCell, coIntbedComp, coInelastComp, coElastComp, coCoarseCompaction,
+    coCompCell, coThickness, coCoarseThickness, coThickCell, coTheta,
+    coCoarseTheta, ooThetaCell, coDelayFlowTop, coDelayFlowBot,
+//    coDelayHead,
+//    coDelayGStress, coDelayEStress, coDelayPreConStress, coDelayComp,
+//    coDelayThickness, coDelayTheta,
+    coPreConsStressCell);
+  TCSubObs = set of TCSubOb;
+
   TCSubPackageData = class(TFormulaOrderedItem)
   private
     FInterbedSystemName: string;

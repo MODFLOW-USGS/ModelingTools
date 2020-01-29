@@ -7921,7 +7921,7 @@ var
 //      Layer := (CellNumber -1) div (NRow * NCol) + 1;
       CellNumber := (CellNumber -1) mod (NRow * NCol);
       ARow := CellNumber div NCol + 1;
-      ACol := CellNumber mod ARow + 1;
+      ACol := CellNumber -(ARow-1)*NCol + 1;
     end;
   end;
   procedure PositionToRowCol(XPrime, YPrime: double; out ARow, ACol: Integer);

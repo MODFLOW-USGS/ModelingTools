@@ -402,7 +402,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Observation Utility'
-      Display = False
+      Display = True
     end
     item
       Name = 'MVR'
@@ -24821,5 +24821,13 @@ object TTaskHistory
         'Bug fix'
         'MT3D-USGS UZT'
         'core code')
+    end
+    item
+      Date = 43859.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'CSUB'
+        'MF6 Observation Utility'
+        'Import')
     end>
 end

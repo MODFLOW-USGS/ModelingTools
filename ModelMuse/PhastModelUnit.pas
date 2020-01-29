@@ -8922,13 +8922,14 @@ const
   //    '4.1.0.24' Bug fix: ModelMuse now assigns IFACE values for recharge
   //                and evapotranspiration in MODFLOW 6.
   //               Bug fix: Fixed assignment of UZF6 package data.
-
-  //               Enhancement: If no data has been assigned to a data set, 
+  //    '4.1.0.25' Enhancement: If no data has been assigned to a data set,
   //                the legend tab in the Data Visualization dialog box will
   //                be empty.
+  //               Bug fix: Fixed import of Surfer Grid files into a
+  //                DISV MODFLOW 6 model.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.24';
+  IModelVersion = '4.1.0.25';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

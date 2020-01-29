@@ -5,9 +5,20 @@ interface
 uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
   PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed,
-  System.Classes, ModflowCellUnit;
+  System.Classes, ModflowCellUnit, ModflowCsubUnit, GoPhastTypes,
+  System.Generics.Collections;
 
 type
+  TCSubObservation = record
+    FName: string;
+    FBoundName: string;
+    FObsTypes: TCSubObs;
+    FScreenObject: TObject;
+    FInterbedNumbers: TOneDIntegerArray;
+    FCells: array of TCellLocation;
+  end;
+  TCSubObservationList = TList<TCSubObservation>;
+
   TCSubWriter = class(TCustomTransientWriter)
   private
     // After @link(Evaluate) is called,
@@ -44,8 +55,8 @@ type
 implementation
 
 uses
-  frmProgressUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit, ModflowCsubUnit,
-  Vcl.Forms, GoPhastTypes, System.Contnrs;
+  frmProgressUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit,
+  Vcl.Forms, System.Contnrs;
 
 { TCSubWriter }
 

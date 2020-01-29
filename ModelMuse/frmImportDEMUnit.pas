@@ -45,7 +45,7 @@ implementation
 uses
   frmGoPhastUnit, DemReaderUnit, 
   ModelMuseUtilities, DataSetUnit, frmProgressUnit, UndoItems,
-  GIS_Functions, CoordinateConversionUnit, SutraMeshUnit;
+  GIS_Functions, CoordinateConversionUnit, MeshRenumberingTypes;
 
 resourcestring
   StrSampleDigitalEleva = 'sample Digital Elevation Model';
@@ -187,14 +187,14 @@ end;
 function TfrmImportDEM.GetData: boolean;
 var
   Grid: TCustomModelGrid;
-  Mesh: TSutraMesh3D;
+  Mesh: IMesh3D;
 begin
   result := False;
+  Mesh := frmGoPhast.PhastModel.Mesh3D;
   case frmGoPhast.ModelSelection of
     msSutra22, msSutra30:
       begin
-        Mesh := frmGoPhast.PhastModel.Mesh as TSutraMesh3D;
-        result := (Mesh <> nil) and (Mesh.Mesh2D.Nodes.Count > 0);
+        result := (Mesh <> nil) and (Mesh.Mesh2DI.NodeCount > 0);
         if result then
         begin
           result := OpenDialogFile.Execute;
@@ -205,7 +205,7 @@ begin
         end;
       end;
     msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
-      msModflowFmp, msModflowCfp, msFootPrint, msModflow2015:
+      msModflowFmp, msModflowCfp, msFootPrint:
       begin
         Grid := frmGoPhast.PhastModel.Grid;
         result := (Grid <> nil) and (Grid.ColumnCount > 0)
@@ -219,6 +219,35 @@ begin
           MessageDlg(StrYouMustCreateThe, mtInformation, [mbOK], 0);
         end;
       end;
+    msModflow2015:
+      begin
+        if frmGoPhast.PhastModel.DisvUsed then
+        begin
+          result := (Mesh <> nil) and (Mesh.Mesh2DI.NodeCount > 0);
+          if result then
+          begin
+            result := OpenDialogFile.Execute;
+          end
+          else
+          begin
+            MessageDlg(StrYouMustCreateTheMesh, mtInformation, [mbOK], 0);
+          end;
+        end
+        else
+        begin
+          Grid := frmGoPhast.PhastModel.Grid;
+          result := (Grid <> nil) and (Grid.ColumnCount > 0)
+            and (Grid.RowCount > 0);
+          if result then
+          begin
+            result := OpenDialogFile.Execute;
+          end
+          else
+          begin
+            MessageDlg(StrYouMustCreateThe, mtInformation, [mbOK], 0);
+          end;
+        end;
+      end
     else Assert(False);
   end;
   if result then
@@ -322,7 +351,7 @@ var
   DS_Position: Integer;
   IgnoreValue: Integer;
   APoint3D: TPoint3D;
-  Mesh: TSutraMesh3D;
+  Mesh: IMesh3D;
   DivAmount: Integer;
   Fraction: Extended;
 begin
@@ -354,7 +383,7 @@ begin
     GetDiscretizationMinMax;
 
     Grid := frmGoPhast.PhastModel.Grid;
-    Mesh := frmGoPhast.PhastModel.Mesh as TSutraMesh3D;
+    Mesh := frmGoPhast.PhastModel.Mesh3D;
 
     IgnoreValue := StrToInt(rdeIgnore.Text);
     try
