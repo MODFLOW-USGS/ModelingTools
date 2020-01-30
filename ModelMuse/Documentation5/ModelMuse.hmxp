@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4078</config-value>
+      <config-value name="autohelpstart">4090</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -624,6 +624,7 @@ document.write('</frameset>');
       <helpcontext-number href="AbsR" value="690"/>
       <helpcontext-number href="Abstract" value="3442"/>
       <helpcontext-number href="Acknowledgments" value="3260"/>
+      <helpcontext-number href="Activating_MT3D_USGS_in_CTS1" value="4082"/>
       <helpcontext-number href="ActiveOnLayer" value="360"/>
       <helpcontext-number href="Add_or_remove_flux_observation" value="3507"/>
       <helpcontext-number href="Additional_Options_Tab_Newton_" value="3629"/>
@@ -812,6 +813,11 @@ document.write('</frameset>');
       <helpcontext-number href="Data_Type_Problem_Dialog_Box" value="1860"/>
       <helpcontext-number href="Data_Visualization_Dialog_Box" value="3636"/>
       <helpcontext-number href="DE4_Direct_Solver_Package_Pane" value="2800"/>
+      <helpcontext-number href="Define_Initial_Concentrations_" value="4084"/>
+      <helpcontext-number href="Define_Specified_Concentration" value="4083"/>
+      <helpcontext-number href="Defining_Contaminant_Treatment" value="4086"/>
+      <helpcontext-number href="Defining_MT3D_USGS_Time_data_i" value="4088"/>
+      <helpcontext-number href="Defining_Treatments_in_CTS1" value="4087"/>
       <helpcontext-number href="DegToRad" value="1390"/>
       <helpcontext-number href="Delay_Beds_Tab" value="3561"/>
       <helpcontext-number href="Delete_Image_Dialog_Box" value="3520"/>
@@ -1002,6 +1008,7 @@ document.write('</frameset>');
       <helpcontext-number href="Import_T_PROGS_File_Dialog_Box" value="3672"/>
       <helpcontext-number href="Imported_Data_Tab" value="3443"/>
       <helpcontext-number href="ImportEdit_Bitmap_Dialog_Box" value="1600"/>
+      <helpcontext-number href="Importing_CTS1_Flow_Model" value="4080"/>
       <helpcontext-number href="Importing_Data" value="3180"/>
       <helpcontext-number href="Importing_Meshes" value="4019"/>
       <helpcontext-number href="Importing_MODFLOW_Models" value="3485"/>
@@ -1178,6 +1185,7 @@ document.write('</frameset>');
       <helpcontext-number href="MODPATH_MODPATH_Object_Options" value="3462"/>
       <helpcontext-number href="MODPATH_Time_Series_Display" value="3544"/>
       <helpcontext-number href="More_PHAST_Options" value="2990"/>
+      <helpcontext-number href="MT3D_USGS_Contaminant_Treatmen" value="4079"/>
       <helpcontext-number href="MT3DMS" value="3639"/>
       <helpcontext-number href="MT3DMS_Pane" value="3648"/>
       <helpcontext-number href="MT3DMS_Pane#TIMPRS" value="3662"/>
@@ -1303,6 +1311,7 @@ document.write('</frameset>');
       <helpcontext-number href="Rearrange_Objects_Dialog_Box" value="2210"/>
       <helpcontext-number href="Recharge_conc_in_UZT_Unsaturat" value="4067"/>
       <helpcontext-number href="Rectangles" value="1510"/>
+      <helpcontext-number href="Redefining_Wells_in_CTS1" value="4081"/>
       <helpcontext-number href="Ref_Evap_in_FMP_Farm_Process" value="3791"/>
       <helpcontext-number href="References_Cited" value="3270"/>
       <helpcontext-number href="References_Cited#Bakker" value="3842"/>
@@ -1362,6 +1371,7 @@ document.write('</frameset>');
       <helpcontext-number href="RowCount" value="530"/>
       <helpcontext-number href="RowWidth" value="540"/>
       <helpcontext-number href="Ruler_Format_Dialog_Box" value="2380"/>
+      <helpcontext-number href="Running_CTS1" value="4090"/>
       <helpcontext-number href="Running_ModelMuse_from_the_Com" value="3453"/>
       <helpcontext-number href="Running_the_Model" value="3230"/>
       <helpcontext-number href="Running_the_Model2" value="3455"/>
@@ -1426,6 +1436,8 @@ document.write('</frameset>');
       <helpcontext-number href="Specify_Mesh_Dialog_Box" value="3766"/>
       <helpcontext-number href="Specifying_a_Grid_with_Numbers" value="210"/>
       <helpcontext-number href="Specifying_a_Uniform_Initial_G" value="200"/>
+      <helpcontext-number href="Specifying_Dispersion_in_CTS1" value="4085"/>
+      <helpcontext-number href="Specifying_Porosity_in_CTS1" value="4089"/>
       <helpcontext-number href="Sqr" value="900"/>
       <helpcontext-number href="SqrI" value="910"/>
       <helpcontext-number href="SqrR" value="920"/>

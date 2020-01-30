@@ -2618,7 +2618,8 @@ procedure TfrmModflowPackages.EnableRchModpathOption;
 begin
   frameModpath.comboRchSource.Enabled :=
     frameModpath.rcSelectionController.Enabled
-    and framePkgRCH.rcSelectionController.Enabled;
+    and framePkgRCH.rcSelectionController.Enabled
+    and (frmGoPhast.ModelSelection <> msModflow2015);
 end;
 
 procedure TfrmModflowPackages.EnableConduitRecharge;
@@ -2650,7 +2651,8 @@ procedure TfrmModflowPackages.EnableEvtModpathOption;
 begin
   frameModpath.comboEvtSink.Enabled :=
     frameModpath.rcSelectionController.Enabled
-    and framePkgEVT.rcSelectionController.Enabled;
+    and framePkgEVT.rcSelectionController.Enabled
+    and (frmGoPhast.ModelSelection <> msModflow2015);
 end;
 
 procedure TfrmModflowPackages.jvplPackagesChange(Sender: TObject);

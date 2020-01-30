@@ -1607,8 +1607,8 @@ resourcestring
   StrMODFLOWStream = 'MODFLOW Stream';
   StrMODFLOWUnsaturated = 'MODFLOW Unsaturated Zone Flow';
   StrMODFLOWObservations = 'MODFLOW Observations';
-  StrMt3dmsObservations = 'MT3DMS Observations';
-  StrMT3DMSSinkAndSour = 'MT3DMS Sink and Source Mixing';
+  StrMt3dmsObservations = 'MT3DMS or MT3D-USGS Observations';
+  StrMT3DMSSinkAndSour = 'MT3DMS or MT3D-USGS Sink and Source Mixing';
   StrMODFLOW_Farm = 'MODFLOW Farm Process';
   StrMODFLOW_CFP = 'MODFLOW Conduit Flow Process';
   StrUndefined = 'Undefined';

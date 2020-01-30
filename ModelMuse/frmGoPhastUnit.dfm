@@ -3540,7 +3540,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acEditCTS: TAction
       Category = 'Model'
-      Caption = 'Contaminant Treatment Systems'
+      Caption = 'Contaminant Treatment Systems...'
       Hint = 'Display the Contaminant Treatment Systems dialog box'
       OnExecute = acEditCTSExecute
     end

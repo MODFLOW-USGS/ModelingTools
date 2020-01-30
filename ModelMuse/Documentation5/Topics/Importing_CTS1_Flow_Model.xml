@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Importing CTS1 Flow Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Importing CTS1 Flow Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The primary interest of this model is the contaminant treatment package in MT3D-USGS rather than the flow model. Therefore, we will just import the existing flow model rather than recreating it. We will need to make a few modifications in order to simplify how the model is represented in ModelMuse.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">When ModelMuse imports a model, it overwrites all the output from the model. To get around that, we will import a copy of the model rather than the original version of the model. Make a copy of the CTS1 folder from the MT3D-USGS distribution. Then start ModelMuse and select </text><text styleclass="Strong" translate="true">Import MODFLOW-2005 or MODFLOW-NWT model</text><text styleclass="Normal" translate="true">.</text><br/><image src="ImportCTS1_1.png" scale="60.00%" width="452" height="263" styleclass="Image Caption"><title translate="true">Select &quot;Import MODFLOW-2005 or MODFLOW-NWT model.&quot;</title><caption translate="true"><![CDATA[Select "Import MODFLOW-2005 or MODFLOW-NWT model."]]></caption></image></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Then select the name file for the flow model: &quot;cts1_mf.nam&quot; and click OK.</text><br/><image src="ImportCTS1_2.png" scale="60.00%" width="340" height="286" styleclass="Image Caption"><title translate="true">Select the flow model name file &quot;cts1_mf.nam/&quot;</title><caption translate="true"><![CDATA[Select the flow model name file "cts1_mf.nam/"]]></caption></image></li>
+    </list>
+  </body>
+</topic>

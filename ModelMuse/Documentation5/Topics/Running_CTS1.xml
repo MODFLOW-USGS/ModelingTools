@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Running CTS1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Running CTS1</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To run the model, first select </text><text styleclass="Strong" translate="true">File|Export|MODFLOW-2005 Input Files</text><text styleclass="Normal" translate="true">. After the model as finished running, select </text><text styleclass="Strong" translate="true">File|Export|MT3D-USGS Input Files</text><text styleclass="Normal" translate="true">. The data of most interest here is the time series of concentrations at the extraction and injection wells. This data has been saved in cts1_Chem.mto (if the mobile species in the BTN package is named &quot;Chem&quot;). </text></para>
+    <para styleclass="Normal"><image src="CTS_ExtractionWells.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Concentration in extraction wells vs time</title></image></para>
+    <para styleclass="Normal"><image src="CTS_InjectionWells.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Concentration in injection wells vs time</title></image></para>
+  </body>
+</topic>

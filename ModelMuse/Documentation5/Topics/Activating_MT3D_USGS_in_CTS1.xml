@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Activating MT3D-USGS in CTS1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Activating MT3D-USGS in CTS1</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to active MT3D-USGS and all the packages in it that we will use. Select </text><text styleclass="Strong" translate="true">Model|MODFLOW Packages and Programs</text><text styleclass="Normal" translate="true"> and check the check boxes for the BTN, ADV, DSP, SSM, GCG, and CTS packages. In the BTN (Basic Transport Package) define one mobile species.</text></para>
+    <para styleclass="Normal"><image src="CTS1_MT3D_Packages.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">Activate MT3D-USGS packages and define one chemical species.</title><caption translate="true"><![CDATA[Activate MT3D-USGS packages and define one chemical species.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the MT3D Options tab of the Basic Transport package, change the mass unit to lb. Also sure that MT3D-USGS is selected on this tab.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Advection package, change the Advection solution scheme to </text><text styleclass="Strong" translate="true">Standard finite difference method (0)</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Contaminant Treatment package, change the </text><text styleclass="Strong" translate="true">Well package choice</text><text styleclass="Normal" translate="true"> to </text><text styleclass="Strong" translate="true">WEL: Well package</text><text styleclass="Normal" translate="true">. Then click OK to close the MODFLOW Packages and Programs dialog box.</text><br/><image src="CTS1_WellPackageChoice.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">Well package choice</title></image></para>
+  </body>
+</topic>

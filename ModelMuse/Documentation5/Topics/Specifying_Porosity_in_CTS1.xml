@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specifying Porosity in CTS1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Specifying Porosity in CTS1</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">Edit|Edit Data Sets</text><text styleclass="Normal" translate="true"> to display the Data Sets dialog box and set the porosity to 0.3.</text></para>
+    <para styleclass="Normal"><image src="CTS1_Porosity.png" scale="60.00%" width="383" height="297" styleclass="Image Caption"><title translate="true">Specify porosity</title></image></para>
+  </body>
+</topic>

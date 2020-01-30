@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Defining Treatments in CTS1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Defining Treatments in CTS1</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to define the treatments for each treatment system. In this case both treatment systems use the same treatment as one another and in both stress periods. Select each treatment system in turn and select </text><text styleclass="Strong" translate="true">All Wells treatment alike (1)</text><text styleclass="Normal" translate="true">. Specify the starting and ending times to include both stress periods. The treatment option to </text><text styleclass="Strong" translate="true">Percentage (1)</text><text styleclass="Normal" translate="true"> and the treatment value to &quot;-0.5&quot; meaning that 50% of the solute will be removed.</text></para>
+    <para styleclass="Normal"><image src="CTS1_Treatment.png" scale="60.00%" width="453" height="256" styleclass="Image Caption"><title translate="true">Define Treatments</title></image><text styleclass="Normal" translate="true">&#32;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">On the </text><text styleclass="Strong" translate="true">External Flow</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Strong" translate="true">Max Allowed Concentration</text><text styleclass="Normal" translate="true"> tabs, set the times to include both stress periods and set all the other values to 0.</text></para>
+    <para styleclass="Normal"><image src="CTS1_ExternalFlows.png" scale="60.00%" width="453" height="256" styleclass="Image Caption"><title translate="true">CTS1_ExternalFlows</title></image></para>
+    <para styleclass="Normal"><image src="CTS1_MaxConc.png" scale="60.00%" width="453" height="256" styleclass="Image Caption"><title translate="true">Maximum allowed concentration</title></image></para>
+  </body>
+</topic>

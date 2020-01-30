@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Specifying Dispersion in CTS1</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Specifying Dispersion in CTS1</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model specifies a longitudinal dispersivity of 100, a horizontal and vertical transverse dispersivity of 1, and a diffusion coefficient is zero. The longitudinal dispersivity is specified in the </text><text styleclass="Strong" translate="true">Data Sets</text><text styleclass="Normal" translate="true"> dialog box. Select </text><text styleclass="Strong" translate="true">Edit|Edit Data Sets</text><text styleclass="Normal" translate="true"> to display it.</text></para>
+    <para styleclass="Normal"><image src="CTS1_LongitudinalDispersivity.png" scale="60.00%" width="383" height="297" styleclass="Image Caption"><title translate="true">Specifying Longitudinal dispersivity</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The other dispersivities and the diffusion coefficient are specified in the </text><text styleclass="Strong" translate="true">Model|MODFLOW Layers</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><image src="CTS1_Dispersivity.png" scale="60.00%" width="351" height="274" styleclass="Image Caption"><title translate="true">Dispersivity in CTS1</title></image></para>
+  </body>
+</topic>
