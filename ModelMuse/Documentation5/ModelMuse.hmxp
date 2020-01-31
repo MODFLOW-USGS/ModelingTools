@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4090</config-value>
+      <config-value name="autohelpstart">4098</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -625,6 +625,7 @@ document.write('</frameset>');
       <helpcontext-number href="Abstract" value="3442"/>
       <helpcontext-number href="Acknowledgments" value="3260"/>
       <helpcontext-number href="Activating_MT3D_USGS_in_CTS1" value="4082"/>
+      <helpcontext-number href="Activating_MT3D_USGS_in_GWT_mo" value="4094"/>
       <helpcontext-number href="ActiveOnLayer" value="360"/>
       <helpcontext-number href="Add_or_remove_flux_observation" value="3507"/>
       <helpcontext-number href="Additional_Options_Tab_Newton_" value="3629"/>
@@ -647,6 +648,7 @@ document.write('</frameset>');
       <helpcontext-number href="ArcTan" value="3767"/>
       <helpcontext-number href="ArcTan2" value="1350"/>
       <helpcontext-number href="ArcTanh" value="1360"/>
+      <helpcontext-number href="Assign_Porosity_and_Longitudin" value="4095"/>
       <helpcontext-number href="Assigning_Values_to_Data_Sets" value="70"/>
       <helpcontext-number href="Assigning_Values_to_Data_Sets_in_MODFLOW" value="3478"/>
       <helpcontext-number href="Assigning_Values_to_Data_Sets_in_PHAST" value="3477"/>
@@ -690,6 +692,8 @@ document.write('</frameset>');
       <helpcontext-number href="CFP_Conduit_Flow_Process_Pane" value="3828"/>
       <helpcontext-number href="CFP_Conduit_Recharge_Pane" value="3830"/>
       <helpcontext-number href="CFP_Fixed_Heads_Pane" value="3829"/>
+      <helpcontext-number href="Change_Length_Unit_in_GWT_mode" value="4098"/>
+      <helpcontext-number href="Change_Model_Selection_in_GWT_" value="4093"/>
       <helpcontext-number href="Changes_to_the_Main_ModelMuse_" value="3783"/>
       <helpcontext-number href="Changing_the_Magnification" value="2270"/>
       <helpcontext-number href="Channel_Tab" value="2130"/>
@@ -713,6 +717,7 @@ document.write('</frameset>');
       <helpcontext-number href="Comments_Tab" value="3566"/>
       <helpcontext-number href="Comparison_of_Objects_and_Shap" value="3483"/>
       <helpcontext-number href="Concentration_Observations_TOB" value="3650"/>
+      <helpcontext-number href="Concentrations_in_Specified_He" value="4097"/>
       <helpcontext-number href="Conductance_Interpretation" value="3330"/>
       <helpcontext-number href="Conduit_Layers_Tab" value="3831"/>
       <helpcontext-number href="Configuration_Pane" value="3752"/>
@@ -1010,6 +1015,7 @@ document.write('</frameset>');
       <helpcontext-number href="ImportEdit_Bitmap_Dialog_Box" value="1600"/>
       <helpcontext-number href="Importing_CTS1_Flow_Model" value="4080"/>
       <helpcontext-number href="Importing_Data" value="3180"/>
+      <helpcontext-number href="Importing_GWT_model" value="4092"/>
       <helpcontext-number href="Importing_Meshes" value="4019"/>
       <helpcontext-number href="Importing_MODFLOW_Models" value="3485"/>
       <helpcontext-number href="Inefficiency_Losses_to_Surface" value="3813"/>
@@ -1168,6 +1174,7 @@ document.write('</frameset>');
       <helpcontext-number href="MODFLOW_Output_Control_Dialog_Box" value="2500"/>
       <helpcontext-number href="MODFLOW_Packages_Dialog_Box" value="2540"/>
       <helpcontext-number href="MODFLOW_Program_Locations_Dialog_Box" value="2810"/>
+      <helpcontext-number href="MODFLOW_Time_data_in_GWT_model" value="4096"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box" value="2490"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box#MT3DMS" value="3647"/>
       <helpcontext-number href="MODFLOW_Time_Dialog_Box#TTSMULT" value="3661"/>
@@ -1186,6 +1193,7 @@ document.write('</frameset>');
       <helpcontext-number href="MODPATH_Time_Series_Display" value="3544"/>
       <helpcontext-number href="More_PHAST_Options" value="2990"/>
       <helpcontext-number href="MT3D_USGS_Contaminant_Treatmen" value="4079"/>
+      <helpcontext-number href="MT3D_USGS_Stream_and_Lake_Tran" value="4091"/>
       <helpcontext-number href="MT3DMS" value="3639"/>
       <helpcontext-number href="MT3DMS_Pane" value="3648"/>
       <helpcontext-number href="MT3DMS_Pane#TIMPRS" value="3662"/>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Assign Porosity and Longitudinal Dispersivity in GWT model</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Assign Porosity and Longitudinal Dispersivity in GWT model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has a longitudinal dispersivity of 20 and a porosity of 0.3. These can be set in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Strong" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box. Select &quot;Edit|Edit Data Sets&quot; to display it.</text></para>
+    <para styleclass="Normal"><image src="GWT_DataSets.png" scale="60.00%" width="383" height="297" styleclass="Image Caption"><title translate="true">Specify Porosity and Longitudinal Dispersivity</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The horizontal and vertical dispersivity and diffusion coefficient are specified by layer in the MODFLOW Layer Groups dialog box. However, the default values for those variables match the variables used in this model so it is not necessary to &#160;change them.</text></para>
+  </body>
+</topic>

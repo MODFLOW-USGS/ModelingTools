@@ -3537,24 +3537,26 @@ begin
   CreateFarmCropIDNode(AScreenObject);
   CreateFarmPrecipNode(AScreenObject);
   CreateFarmRefEvapNode(AScreenObject);
-  CreateModpathNode;
-  CreateMt3dmsSsmNode;
-  CreateMt3dmsTobConcNode(AScreenObject);
-  CreateMt3dmsTobFluxNode;
-{$IFDEF Mt3dUSGS}
-  CreateMt3d_UztRechNode;
-  CreateMt3d_UztSatNode;
-  CreateMt3d_UztUnsatNode;
-  CreateMt3d_Uzf_Seep_Node;
-  CreateMt3d_LktNode;
-  CreateMt3d_SftNode;
-{$ENDIF}
   CreateSWR_Reach_Node(AScreenObject);
   CreateSWR_Rain_Node(AScreenObject);
   CreateSWR_Evap_Node(AScreenObject);
   CreateSWR_LatInflow_Node(AScreenObject);
   CreateSWR_Stage_Node(AScreenObject);
   CreateSWR_DirectRunoff_Node(AScreenObject);
+  CreateModpathNode;
+{$IFDEF Mt3dUSGS}
+  CreateMt3d_LktNode;
+  CreateMt3d_SftNode;
+{$ENDIF}
+  CreateMt3dmsSsmNode;
+  CreateMt3dmsTobConcNode(AScreenObject);
+  CreateMt3dmsTobFluxNode;
+{$IFDEF Mt3dUSGS}
+  CreateMt3d_Uzf_Seep_Node;
+  CreateMt3d_UztRechNode;
+  CreateMt3d_UztSatNode;
+  CreateMt3d_UztUnsatNode;
+{$ENDIF}
 
   CreateSutraFeatureNodes;
 

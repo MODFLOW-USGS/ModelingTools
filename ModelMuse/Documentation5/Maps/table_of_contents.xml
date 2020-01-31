@@ -2461,6 +2461,30 @@
           <caption translate="true">Running CTS1</caption>
         </topicref>
       </topicref>
+      <topicref type="topic" id="438614952612595" build="ALL" modified="2020-01-31T11:37:49.218Z" icon="0" href="MT3D_USGS_Stream_and_Lake_Tran">
+        <caption translate="true">MT3D-USGS Stream and Lake Transport</caption>
+        <topicref type="topic" id="438614773577294" build="ALL" modified="2020-01-31T13:00:31.787Z" icon="0" href="Importing_GWT_model">
+          <caption translate="true">Importing GWT model</caption>
+        </topicref>
+        <topicref type="topic" id="438614036375307" build="ALL" modified="2020-01-31T13:22:16.067Z" icon="0" href="Change_Model_Selection_in_GWT_">
+          <caption translate="true">Change Model Selection in GWT model</caption>
+        </topicref>
+        <topicref type="topic" id="438617394298710" build="ALL" modified="2020-01-31T14:40:53.204Z" icon="0" href="Change_Length_Unit_in_GWT_mode">
+          <caption translate="true">Change Length Unit in GWT model</caption>
+        </topicref>
+        <topicref type="topic" id="438616285685337" build="ALL" modified="2020-01-31T13:36:29.234Z" icon="0" href="Activating_MT3D_USGS_in_GWT_mo">
+          <caption translate="true">Activating MT3D-USGS in GWT model</caption>
+        </topicref>
+        <topicref type="topic" id="438616027816275" build="ALL" modified="2020-01-31T14:05:35.402Z" icon="0" href="Assign_Porosity_and_Longitudin">
+          <caption translate="true">Assign Porosity and Longitudinal Dispersivity in GWT model</caption>
+        </topicref>
+        <topicref type="topic" id="43861281386784" build="ALL" modified="2020-01-31T14:14:17.131Z" icon="0" href="MODFLOW_Time_data_in_GWT_model">
+          <caption translate="true">MODFLOW Time data in GWT model</caption>
+        </topicref>
+        <topicref type="topic" id="438615465437380" build="ALL" modified="2020-01-31T14:24:34.502Z" icon="0" href="Concentrations_in_Specified_He">
+          <caption translate="true">Concentrations in Specified Head Boundaries in GWT model</caption>
+        </topicref>
+      </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">
       <caption translate="true">SUTRA Examples</caption>

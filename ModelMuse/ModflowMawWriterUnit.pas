@@ -110,6 +110,12 @@ resourcestring
   StrWritingMAWObservat = 'Writing MAW observations';
   StrFormulaErrorInMAW = 'Formula Error in MAW';
   StrThereWasAnErrorI = 'There was an error in a MAW formula in %s.';
+  StrMAWWellScreenInva = 'MAW Well screen invalid';
+  StrWellScreen0dOf = 'Well screen %0:d of the MAW boundary defined by %1:s ' +
+  'does not intersect any cells.';
+  StrMAWWellScreensInv = 'MAW Well screens invalid';
+  StrNoneOfTheWellScr = 'None of the well screens of the MAW boundary define' +
+  'd by %0:s intersect any cells.';
 
 { TModflowMAW_Writer }
 
@@ -193,9 +199,11 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrBecauseTheFollowin);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingObjectGrid);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMAWPackageSkipped);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMAWWellScreenInva);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMoreThanOneMAWSc);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWSkinRadiusLess);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFormulaErrorInMAW);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellScreensInv);
 
   FFlowingWells := False;
 
@@ -1158,6 +1166,8 @@ var
   AWellSteady: TMawSteadyWellRecord;
   MfObs: TModflow6Obs;
   Obs: TMawObservation;
+  ConnectionFound: Boolean;
+  ValidScreensFound: Boolean;
   procedure CompileFormula(Formula: string; const FormulaName: string;
     var OutFormula: string; SpecifiedLayer: Integer = 0);
   var
@@ -1338,6 +1348,7 @@ begin
 
         AWellRecord.CellCount := 0;
 
+        ValidScreensFound := False;
         for ScreenIndex := 0 to Boundary.WellScreens.Count - 1 do
         begin
           AWellScreen := Boundary.WellScreens[ScreenIndex] as TMawWellScreenItem;
@@ -1354,6 +1365,7 @@ begin
           AWellConnection.ScreenBottomAnnotation := Format(
             StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
 
+          ConnectionFound := False;
           for LayerIndex := 0 to LayerCount - 1 do
           begin
             CellTop := GetCellTop(Cell.Column, Cell.Row, LayerIndex);
@@ -1388,8 +1400,20 @@ begin
               AWellConnection.ConnectionNumber := AWellRecord.CellCount;
 
               FWellConnections.Add(AWellConnection);
+              ConnectionFound := True;
+              ValidScreensFound := True;
             end;
           end;
+          if not ConnectionFound then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrMAWWellScreenInva,
+              Format(StrWellScreen0dOf, [ScreenIndex+1, AScreenObject.Name]), AScreenObject);
+          end;
+        end;
+        if not ValidScreensFound then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrMAWWellScreensInv,
+            Format(StrNoneOfTheWellScr, [AScreenObject.Name]), AScreenObject);
         end;
 
         FWellProperties[WellIndex] := AWellRecord;
