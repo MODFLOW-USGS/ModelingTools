@@ -1685,8 +1685,8 @@
           <topicref type="topic" id="393936109263935" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-11-07T11:05:29.284Z" icon="0" href="Budget_Pane">
             <caption translate="true">Budget Pane</caption>
           </topicref>
-          <topicref type="topic" id="409316580833310" build="ALL" modified="2012-01-23T16:02:47.328Z" icon="0" href="MT3DMS_Pane">
-            <caption translate="true">MT3DMS Pane</caption>
+          <topicref type="topic" id="409316580833310" build="ALL" modified="2020-02-03T11:24:19.456Z" icon="0" href="MT3DMS_Pane">
+            <caption translate="true">MT3D Pane</caption>
           </topicref>
         </topicref>
         <topicref type="topic" id="393917332333648" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-11-05T15:35:43.784Z" icon="0" href="MODFLOW_Options_Dialog_Box">
@@ -2463,26 +2463,41 @@
       </topicref>
       <topicref type="topic" id="438614952612595" build="ALL" modified="2020-01-31T11:37:49.218Z" icon="0" href="MT3D_USGS_Stream_and_Lake_Tran">
         <caption translate="true">MT3D-USGS Stream and Lake Transport</caption>
-        <topicref type="topic" id="438614773577294" build="ALL" modified="2020-01-31T13:00:31.787Z" icon="0" href="Importing_GWT_model">
-          <caption translate="true">Importing GWT model</caption>
+        <topicref type="topic" id="438614773577294" build="ALL" modified="2020-02-03T09:45:34.027Z" icon="0" href="Importing_GWT_model">
+          <caption translate="true">Importing GWT Model</caption>
         </topicref>
-        <topicref type="topic" id="438614036375307" build="ALL" modified="2020-01-31T13:22:16.067Z" icon="0" href="Change_Model_Selection_in_GWT_">
-          <caption translate="true">Change Model Selection in GWT model</caption>
+        <topicref type="topic" id="438614036375307" build="ALL" modified="2020-02-03T09:45:52.716Z" icon="0" href="Change_Model_Selection_in_GWT_">
+          <caption translate="true">Change Model Selection in GWT Model</caption>
         </topicref>
-        <topicref type="topic" id="438617394298710" build="ALL" modified="2020-01-31T14:40:53.204Z" icon="0" href="Change_Length_Unit_in_GWT_mode">
-          <caption translate="true">Change Length Unit in GWT model</caption>
+        <topicref type="topic" id="438617394298710" build="ALL" modified="2020-02-03T09:46:04.729Z" icon="0" href="Change_Length_Unit_in_GWT_mode">
+          <caption translate="true">Change Length Unit in GWT Model</caption>
         </topicref>
-        <topicref type="topic" id="438616285685337" build="ALL" modified="2020-01-31T13:36:29.234Z" icon="0" href="Activating_MT3D_USGS_in_GWT_mo">
-          <caption translate="true">Activating MT3D-USGS in GWT model</caption>
+        <topicref type="topic" id="438616285685337" build="ALL" modified="2020-02-03T09:46:15.217Z" icon="0" href="Activating_MT3D_USGS_in_GWT_mo">
+          <caption translate="true">Activating MT3D-USGS in GWT Model</caption>
         </topicref>
-        <topicref type="topic" id="438616027816275" build="ALL" modified="2020-01-31T14:05:35.402Z" icon="0" href="Assign_Porosity_and_Longitudin">
-          <caption translate="true">Assign Porosity and Longitudinal Dispersivity in GWT model</caption>
+        <topicref type="topic" id="438616027816275" build="ALL" modified="2020-02-03T10:26:19.200Z" icon="0" href="Assign_Porosity_and_Longitudin">
+          <caption translate="true">Assign Porosity and Longitudinal Dispersivity and  in GWT Model</caption>
         </topicref>
-        <topicref type="topic" id="43861281386784" build="ALL" modified="2020-01-31T14:14:17.131Z" icon="0" href="MODFLOW_Time_data_in_GWT_model">
-          <caption translate="true">MODFLOW Time data in GWT model</caption>
+        <topicref type="topic" id="43861281386784" build="ALL" modified="2020-02-03T11:26:48.506Z" icon="0" href="MODFLOW_Time_data_in_GWT_model">
+          <caption translate="true">MT3D-USGS Time data in GWT Model</caption>
         </topicref>
-        <topicref type="topic" id="438615465437380" build="ALL" modified="2020-01-31T14:24:34.502Z" icon="0" href="Concentrations_in_Specified_He">
-          <caption translate="true">Concentrations in Specified Head Boundaries in GWT model</caption>
+        <topicref type="topic" id="438646644349920" build="ALL" modified="2020-02-03T11:27:57.449Z" icon="0" href="MT3D-USGS_Output_Control_in_GW">
+          <caption translate="true">MT3D-USGS Output Control in GWT Model</caption>
+        </topicref>
+        <topicref type="topic" id="438615465437380" build="ALL" modified="2020-02-03T09:47:06.512Z" icon="0" href="Concentrations_in_Specified_He">
+          <caption translate="true">Concentrations in Specified Head Boundaries in GWT Model</caption>
+        </topicref>
+        <topicref type="topic" id="438645172775349" build="ALL" modified="2020-02-03T09:45:15.427Z" icon="0" href="Initial_Concentrations_in_Lake">
+          <caption translate="true">Initial Concentrations in Lakes in GWT Model</caption>
+        </topicref>
+        <topicref type="topic" id="438646027960476" build="ALL" modified="2020-02-03T10:01:18.874Z" icon="0" href="Headwater_Concentrations_in_St">
+          <caption translate="true">Headwater Concentrations in Streams in GWT Model</caption>
+        </topicref>
+        <topicref type="topic" id="438647386717220" build="ALL" modified="2020-02-03T12:41:43.315Z" icon="0" href="Run_MODFLOW_and_MT3D-USGS_and_">
+          <caption translate="true">Run MODFLOW and MT3D-USGS and Displaying Results</caption>
+        </topicref>
+        <topicref type="topic" id="438647635814522" build="ALL" modified="2020-02-03T13:14:39.696Z" icon="0" href="Evaluating_the_Effects_of_the_">
+          <caption translate="true">Evaluating the Effects of the LKT and SFT Packages</caption>
         </topicref>
       </topicref>
     </topicref>

@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4098</config-value>
+      <config-value name="autohelpstart">4103</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -858,6 +858,7 @@ document.write('</frameset>');
       <helpcontext-number href="Errors_and_Warnings_Dialog_Box" value="2340"/>
       <helpcontext-number href="ETS_Evapotranspiration_Segments_Package" value="2690"/>
       <helpcontext-number href="ETS_Object_Pane" value="1980"/>
+      <helpcontext-number href="Evaluating_the_Effects_of_the_" value="4103"/>
       <helpcontext-number href="Evaporation_in_SWR_Surface_Wat" value="3861"/>
       <helpcontext-number href="Evaporation_in_SWR_Surface_Wat#EVAP" value="3891"/>
       <helpcontext-number href="EVT_Evapotranspiration_Package" value="2700"/>
@@ -977,6 +978,7 @@ document.write('</frameset>');
       <helpcontext-number href="Head_Dependant_Flux" value="2660"/>
       <helpcontext-number href="Head_Observation_Results" value="3634"/>
       <helpcontext-number href="Heads_in_FHB_Flow_and_Head_Bou" value="3779"/>
+      <helpcontext-number href="Headwater_Concentrations_in_St" value="4100"/>
       <helpcontext-number href="Help" value="2910"/>
       <helpcontext-number href="Henry_2D_Model" value="3771"/>
       <helpcontext-number href="HFB_Horizontal_Flow_Barrier_Package" value="3382"/>
@@ -1019,6 +1021,7 @@ document.write('</frameset>');
       <helpcontext-number href="Importing_Meshes" value="4019"/>
       <helpcontext-number href="Importing_MODFLOW_Models" value="3485"/>
       <helpcontext-number href="Inefficiency_Losses_to_Surface" value="3813"/>
+      <helpcontext-number href="Initial_Concentrations_in_Lake" value="4099"/>
       <helpcontext-number href="Initial_Conditions" value="3220"/>
       <helpcontext-number href="Initial_Conditions_Pane" value="3754"/>
       <helpcontext-number href="Initial_Dialog_Boxes" value="90"/>
@@ -1197,6 +1200,7 @@ document.write('</frameset>');
       <helpcontext-number href="MT3DMS" value="3639"/>
       <helpcontext-number href="MT3DMS_Pane" value="3648"/>
       <helpcontext-number href="MT3DMS_Pane#TIMPRS" value="3662"/>
+      <helpcontext-number href="MT3D-USGS_Output_Control_in_GW" value="4101"/>
       <helpcontext-number href="MultiInterpolate" value="850"/>
       <helpcontext-number href="Multiplier_and_Zone_Arrays" value="3300"/>
       <helpcontext-number href="MVR_Water_Mover_Package_Pane" value="4013"/>
@@ -1379,6 +1383,7 @@ document.write('</frameset>');
       <helpcontext-number href="RowCount" value="530"/>
       <helpcontext-number href="RowWidth" value="540"/>
       <helpcontext-number href="Ruler_Format_Dialog_Box" value="2380"/>
+      <helpcontext-number href="Run_MODFLOW_and_MT3D-USGS_and_" value="4102"/>
       <helpcontext-number href="Running_CTS1" value="4090"/>
       <helpcontext-number href="Running_ModelMuse_from_the_Com" value="3453"/>
       <helpcontext-number href="Running_the_Model" value="3230"/>

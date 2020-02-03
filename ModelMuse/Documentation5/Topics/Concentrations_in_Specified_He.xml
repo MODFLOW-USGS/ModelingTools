@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Concentrations in Specified Head Boundaries in GWT model</title>
+  <title translate="true">Concentrations in Specified Head Boundaries in GWT Model</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Concentrations in Specified Head Boundaries in GWT model</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Concentrations in Specified Head Boundaries in GWT Model</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Nearly all the specified head boundaries in this model have concentrations of zero. The four that do not are the ones in layers 1 and 2, row 1, columns 12-15 for a total of 8 CHD cells. There are 8 CHD objects - one for each layer. There are several methods that could be used to specify the concentrations at the specified head boundaries. One method would be to split the CHD objects </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Redefining_Wells_in_CTS1" styleclass="Normal" translate="true">as was done with the well boundaries in the CTS model</link><text styleclass="Normal" translate="true">. However, there is an easier method of doing it in this case. We will define a new data set named CHD_Conc and use a formula in the two objects defining the CHD boundaries in the top two layers of the model. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">First add a new data set in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Strong" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box named CHD_Conc. Click the Add button and name the data set. Then click the Apply button. </text></para>

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">Change Model Selection in GWT model</title>
+  <title translate="true">Change Model Selection in GWT Model</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Change Model Selection in GWT model</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Change Model Selection in GWT Model</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">We will be using the Stream-Flow Transport and Lake Transport packages in our model. However, those are only supported in conjunction with MODFLOW-NWT models. However, ModelMuse imported the model as a MODFLOW-2005 model. To switch to MODLOW-NWT, select </text><text styleclass="Strong" translate="true">Model Selection|MODFLOW-NWT</text><text styleclass="Normal" translate="true">. When you do, ModelMuse will suggest you switch to the Upstream Weighting package and NWT solvers. Do not switch the flow or solver packages. The model uses the Block-Centered Flow (BCF) package. If we did switch flow packages, we would have to define additional data for hydraulic conductivity that is not part of the input for the BCF package. </text></para>
   </body>

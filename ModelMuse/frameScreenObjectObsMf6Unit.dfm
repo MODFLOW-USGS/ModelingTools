@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 490
     Height = 448
-    ActivePage = tabUZF
+    ActivePage = tabCSUB
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -210,8 +210,8 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Caption = 'Fraction of cell height in water content observations (depth)'
       end
       object chklstUZF: TCheckListBox
-        Left = 6
-        Top = 11
+        Left = 3
+        Top = 3
         Width = 476
         Height = 262
         ItemHeight = 13
@@ -247,6 +247,58 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         CheckMax = True
         CheckMin = True
         ChangeDisabledColor = True
+      end
+    end
+    object tabCSUB: TTabSheet
+      Caption = 'CSUB'
+      ImageIndex = 5
+      object chklstCSUB: TCheckListBox
+        Left = 0
+        Top = 0
+        Width = 482
+        Height = 420
+        Align = alClient
+        ItemHeight = 13
+        Items.Strings = (
+          'Flow: groundwater (GW) and interbeds (IB) (csub)'
+          'Flow: GW and IB from inelastic compaction (inelastic-csub)'
+          'Flow: GW and IB from elastic compaction (elastic-csub)'
+          'Flow: GW and coarse materials (CM) in a GWF cell (coarse-csub)'
+          'Flow: GW for all IB and CM (csub-cell)'
+          
+            'Flow: GW for all IB and CM from water compressibility (wcomp-csu' +
+            'b-cell)'
+          'Convertible interbed storativity in interbeds (sk)'
+          'Elastic interbed storativity in interbeds (ske)'
+          
+            'Convertible interbed and coarse-grained material storativity (sk' +
+            '-cell)'
+          'Elastic interbed and coarse material storativity (ske-cell)'
+          'Effective stress in a GWF cell (estress-cell)'
+          'Geostatic stress in a GWF cell (gstress-cell)'
+          'Interbed compaction in interbeds (interbed-compaction)'
+          
+            'Inelastic interbed compaction in interbeds (inelastic-compaction' +
+            ')'
+          'Elastic interbed compaction in interbeds (elastic-compaction)'
+          'Elastic compaction in CM  in a GWF cell (coarse-compaction)'
+          'Compaction in CM and all interbeds (compaction-cell)'
+          'Thickness of interbeds (thickness)'
+          'Thickness of CM in a GWF cell (coarse-thickness)'
+          'Total thickness of CM and all IB in a GWF cell (thickness-cell)'
+          'Porosity of an interbed (theta)'
+          'Porosity of coarse-grained materials in  GWF cell (coarse-theta)'
+          
+            'Thickness-weighted porosity of CM and all IB in a GWF cell (thet' +
+            'a-cell)'
+          'Flow: GW and delay IB across the top of the IB (delay-flowtop)'
+          
+            'Flow: GW and delay IB across the bottom of the IB (delay-flowbot' +
+            ')'
+          
+            'Preconsolidation stress in a cell containing at least one IB (pr' +
+            'econstress-cell)')
+        TabOrder = 0
       end
     end
   end

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Run MODFLOW and MT3D-USGS and Displaying Results</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Run MODFLOW and MT3D-USGS and Displaying Results</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Run MODFLOW-nwt (File|Export|MODFLOW-NWT Input Files) followed by MT3D-USGS (File|Export|MT3D-USGS Input Files). When MT3D-USGS is finished running, import the concentrations (File|Import|Model Results). The concentrations will be in the file with the .ucn extension. The concentrations should look similar to the figure below. While the concentrations are highest at the source cells in the CHD boundaries. However, the concentrations are also somewhat higher in the cells below the southern half of the northern lake and beneath the streams flowing out of that lake.</text></para>
+    <para styleclass="Normal"><image src="FinalConcentrations.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Final Concentrations</title></image></para>
+  </body>
+</topic>

@@ -524,7 +524,7 @@ inherited frmModflowTime: TfrmModflowTime
       end
     end
     object tabMt3dms: TTabSheet
-      Caption = 'MT3DMS'
+      Caption = 'MT3DMS or MT3D-USGS'
       ImageIndex = 1
       inline frameGrid: TframeGrid
         Left = 0

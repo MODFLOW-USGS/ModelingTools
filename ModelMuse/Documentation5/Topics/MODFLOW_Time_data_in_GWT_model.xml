@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">MODFLOW Time data in GWT model</title>
+  <title translate="true">MT3D-USGS Time data in GWT Model</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW Time data in GWT model</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MT3D-USGS Time data in GWT Model</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">A few variables need to be specified in the </text><text styleclass="Strong" translate="true">Model|MODFLOW Time</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">A few variables need to be specified in the </text><text styleclass="Strong" translate="true">Model|MODFLOW Time</text><text styleclass="Normal" translate="true"> dialog box on the MT3D tab.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="4" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
         <td>
@@ -41,6 +41,6 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><image src="GWT_Time.png" scale="60.00%" width="454" height="215" styleclass="Image Caption"><title translate="true">GWT time data</title></image></para>
+    <para styleclass="Normal"><image src="GWT_Time.png" scale="60.00%" width="680" height="323" styleclass="Image Caption"><title translate="true">GWT time data</title></image></para>
   </body>
 </topic>

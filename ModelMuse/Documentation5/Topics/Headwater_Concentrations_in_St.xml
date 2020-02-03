@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Headwater Concentrations in Streams in GWT Model</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Headwater Concentrations in Streams in GWT Model</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Two of the four stream segments (segments 1 and 3) have headwater concentrations of 1E-5. The other two have headwater concentrations of zero. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Edit each of the objects that define stream segments. Activate the SFT package in each of them. Specify the initial concentrations and dispersions of all of them as zero. Then switch to the </text><text styleclass="Strong" translate="true">Head Water Conc</text><text styleclass="Normal" translate="true"> tab and set the head water concentration to 1E-5 for segments 1 and 3 and to zero for segments 2 and 4. It would also be possible to specify the concentration of precipitation or runoff into the stream or specify a constant concentration for the stream but those capabilities are not used in this model.</text></para>
+    <para styleclass="Normal"><image src="GWT_StreamInitialConc.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Object Properties dialog box showing how to specify the initial concentration and dispersion in the stream</title></image></para>
+    <para styleclass="Normal"><image src="GWT_StreamHeadwaterConc.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Object Properties dialog box showing how to specify the headwaterconcentration in the stream</title></image></para>
+  </body>
+</topic>

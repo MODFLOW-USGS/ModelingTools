@@ -45,6 +45,8 @@ type
     chklstUZF: TCheckListBox;
     rdeDepthFraction: TRbwDataEntry;
     lblDepthFraction: TLabel;
+    tabCSUB: TTabSheet;
+    chklstCSUB: TCheckListBox;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -78,7 +80,7 @@ implementation
 
 uses
   Modflow6ObsUnit, ScreenObjectUnit, ModflowMawUnit, ModflowSfr6Unit,
-  ModflowLakMf6Unit, ModflowUzfMf6Unit;
+  ModflowLakMf6Unit, ModflowUzfMf6Unit, ModflowCsubUnit;
 
 {$R *.dfm}
 
@@ -146,7 +148,11 @@ var
   SfrOb: TSfrOb;
   LakOb: TLakOb;
   UzfOb: TUzfOb;
+  CSubOb: TCSubOb;
 begin
+{$IFNDEF CSUB}
+  tabCSUB.TabVisible := False;
+{$ENDIF}
   FActiveObs := False;
   FInitializing := True;
   try
@@ -209,6 +215,12 @@ begin
               UzfOb in Mf6Obs.UzfObs;
           end;
           rdeDepthFraction.RealValue := Mf6Obs.UzfObsDepthFraction;
+
+          for CSubOb := Low(TCSubOb) to High(TCSubOb) do
+          begin
+            chklstCSUB.Checked[Ord(CSubOb)] :=
+              CSubOb in Mf6Obs.CSubObs;
+          end;
 
           FoundFirst := True;
         end
@@ -274,6 +286,16 @@ begin
               chklstUZF.State[Ord(UzfOb)] := cbGrayed;
             end;
           end;
+
+          for CSubOb := Low(TCSubOb) to High(TCSubOb) do
+          begin
+            if chklstCSUB.State[Ord(CSubOb)] <>
+              TCheckBoxState(CSubOb in Mf6Obs.CSubObs) then
+            begin
+              chklstCSUB.State[Ord(CSubOb)] := cbGrayed;
+            end;
+          end;
+
 
           if chklstBoundaryFlow.State[Ord(forCHD)] <>
             TCheckBoxState(Mf6Obs.ChdFlowObs) then

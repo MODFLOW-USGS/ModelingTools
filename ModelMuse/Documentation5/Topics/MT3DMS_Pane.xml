@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">MT3DMS Pane</title>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MT3D Pane</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MT3DMS Pane</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MT3D Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">MT3DMS</text><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Output_Control_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Output Control</link><text styleclass="Normal" translate="true"> dialog box is used to control how what is saved in MT3DMS. </text></para>
-    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[SAVUCN]]></caption></toggle></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">MT3D</text><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Output_Control_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Output Control</link><text styleclass="Normal" translate="true"> dialog box is used to control how what is saved in MT3DMS and MT3D-USGS. </text></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[SAVUCN]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">SAVUCN is a logical flag indicating whether the concentration solution should be saved in a default unformatted (binary) file named MT3Dnnn.UCN, where nnn is the species index number, for post-processing purposes or for use as the initial condition in a continuation run.</text></para>
@@ -17,8 +17,8 @@
         </td>
       </tr>
     </table></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRS]]></caption></toggle></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">NPRS is a flag indicating the frequency of the output and also indicating whether the output frequency is specified in terms of total elapsed simulation time or the transport step number. Note that what is actually printed or saved is controlled by the input values entered in the preceding record (Record A15).</text></para>
@@ -28,16 +28,16 @@
         </td>
       </tr>
     </table></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPROBS]]></caption></toggle></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPROBS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">NPROBS is an integer indicating how frequently the concentration at the specified observation points should be saved in the observation file MT3Dnnn.OBS. Concentrations are saved every NPROBS step.</text></para>
         </td>
       </tr>
     </table></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CHKMAS]]></caption></toggle></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CHKMAS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">CHKMAS is a logical flag indicating whether a one-line summary of mass balance information should be printed, for checking and postprocessing purposes, in the default file MT3Dnnn.MAS where nnn is the species index number.</text></para>
@@ -46,21 +46,21 @@
         </td>
       </tr>
     </table></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRMAS]]></caption></toggle></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[NPRMAS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">NPRMAS is an integer indicating how frequently the mass budget information should be saved in the mass balance summary file MT3Dnnn.MAS. Mass budget information is saved every NPRMAS step.</text></para>
         </td>
       </tr>
     </table></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab/><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[TIMPRS]]></caption></toggle></para>
-  <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[TIMPRS]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><anchor id="TIMPRS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">TIMPRS is the total elapsed time at which the simulation results are printed to the standard output text file or saved in the default unformatted (binary) concentration file MT3Dnnn.UCN.</text></para>
         </td>
       </tr>
     </table></para>
- </body>
+  </body>
 </topic>
