@@ -2199,6 +2199,7 @@ var
   DisvUsed: Boolean;
   IBIndex: Integer;
   icsubno: Integer;
+  ScreenObject: TScreenObject;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -2240,167 +2241,167 @@ begin
         coCSub:
           begin
             OutputExtension := '.csub_ob' + OutputTypeExtension;
-            ObservationType := 'csub';
+            ObservationType := ' csub';
           end;
         coInelastCSub:
           begin
             OutputExtension := '.inelastic-csub_ob' + OutputTypeExtension;
-            ObservationType := 'inelastic-csub';
+            ObservationType := ' inelastic-csub';
           end;
         coElastCSub:
           begin
             OutputExtension := '.elastic-csub_ob' + OutputTypeExtension;
-            ObservationType := 'elastic-csub';
+            ObservationType := ' elastic-csub';
           end;
         coCoarseCSub:
           begin
             OutputExtension := '.coarse-csub_ob' + OutputTypeExtension;
-            ObservationType := 'coarse-csub';
+            ObservationType := ' coarse-csub';
           end;
         coCSubCell:
           begin
             OutputExtension := '.csub-cell_ob' + OutputTypeExtension;
-            ObservationType := 'csub-cell';
+            ObservationType := ' csub-cell';
           end;
         coWcompCSubCell:
           begin
             OutputExtension := '.wcomp-csub-cell_ob' + OutputTypeExtension;
-            ObservationType := 'wcomp-csub-cell';
+            ObservationType := ' wcomp-csub-cell';
           end;
         coSk:
           begin
             OutputExtension := '.sk_ob' + OutputTypeExtension;
-            ObservationType := 'sk';
+            ObservationType := ' sk';
           end;
         coSke:
           begin
             OutputExtension := '.ske_ob' + OutputTypeExtension;
-            ObservationType := 'ske';
+            ObservationType := ' ske';
           end;
         coSkCell:
           begin
             OutputExtension := '.sk-cell_ob' + OutputTypeExtension;
-            ObservationType := 'sk-cell';
+            ObservationType := ' sk-cell';
           end;
         coSkeCell:
           begin
             OutputExtension := '.ske-cell_ob' + OutputTypeExtension;
-            ObservationType := 'ske-cell';
+            ObservationType := ' ske-cell';
           end;
         coEStressCell:
           begin
             OutputExtension := '.estress-cell_ob' + OutputTypeExtension;
-            ObservationType := 'estress-cell';
+            ObservationType := ' estress-cell';
           end;
         coGStressCell:
           begin
             OutputExtension := '.gstress-cell_ob' + OutputTypeExtension;
-            ObservationType := 'gstress-cell';
+            ObservationType := ' gstress-cell';
           end;
         coIntbedComp:
           begin
             OutputExtension := '.interbed-compaction_ob' + OutputTypeExtension;
-            ObservationType := 'interbed-compaction';
+            ObservationType := ' interbed-compaction';
           end;
         coInelastComp:
           begin
             OutputExtension := '.inelastic-compaction_ob' + OutputTypeExtension;
-            ObservationType := 'inelastic-compaction';
+            ObservationType := ' inelastic-compaction';
           end;
         coElastComp:
           begin
             OutputExtension := '.elastic-compaction_ob' + OutputTypeExtension;
-            ObservationType := 'elastic-compaction';
+            ObservationType := ' elastic-compaction';
           end;
         coCoarseCompaction:
           begin
             OutputExtension := '.coarse-compaction_ob' + OutputTypeExtension;
-            ObservationType := 'coarse-compaction';
+            ObservationType := ' coarse-compaction';
           end;
         coCompCell:
           begin
             OutputExtension := '.compaction-cell_ob' + OutputTypeExtension;
-            ObservationType := 'compaction-cell';
+            ObservationType := ' compaction-cell';
           end;
         coThickness:
           begin
             OutputExtension := '.thickness_ob' + OutputTypeExtension;
-            ObservationType := 'thickness';
+            ObservationType := ' thickness';
           end;
         coCoarseThickness:
           begin
             OutputExtension := '.coarse-thickness_ob' + OutputTypeExtension;
-            ObservationType := 'coarse-thickness';
+            ObservationType := ' coarse-thickness';
           end;
         coThickCell:
           begin
             OutputExtension := '.thickness-cell_ob' + OutputTypeExtension;
-            ObservationType := 'thickness-cell';
+            ObservationType := ' thickness-cell';
           end;
         coTheta:
           begin
             OutputExtension := '.theta_ob' + OutputTypeExtension;
-            ObservationType := 'theta';
+            ObservationType := ' theta';
           end;
         coCoarseTheta:
           begin
             OutputExtension := '.coarse-theta_ob' + OutputTypeExtension;
-            ObservationType := 'coarse-theta';
+            ObservationType := ' coarse-theta';
           end;
         ooThetaCell:
           begin
             OutputExtension := '.theta-cell_ob' + OutputTypeExtension;
-            ObservationType := 'theta-cell';
+            ObservationType := ' theta-cell';
           end;
         coDelayFlowTop:
           begin
             OutputExtension := '.delay-flowtop_ob' + OutputTypeExtension;
-            ObservationType := 'delay-flowtop';
+            ObservationType := ' delay-flowtop';
           end;
         coDelayFlowBot:
           begin
             OutputExtension := '.delay-flowbot_ob' + OutputTypeExtension;
-            ObservationType := 'delay-flowbot';
+            ObservationType := ' delay-flowbot';
           end;
 //        coDelayHead:
 //          begin
 //            OutputExtension := '.delay-head_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-head';
+//            ObservationType := ' delay-head';
 //          end;
 //        coDelayGStress:
 //          begin
 //            OutputExtension := '.delay-gstress_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-gstress';
+//            ObservationType := ' delay-gstress';
 //          end;
 //        coDelayEStress:
 //          begin
 //            OutputExtension := '.delay-estress_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-estress';
+//            ObservationType := ' delay-estress';
 //          end;
 //        coDelayPreConStress:
 //          begin
 //            OutputExtension := '.delay-preconstress_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-preconstress';
+//            ObservationType := ' delay-preconstress';
 //          end;
 //        coDelayComp:
 //          begin
 //            OutputExtension := '.delay-compaction_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-compaction';
+//            ObservationType := ' delay-compaction';
 //          end;
 //        coDelayThickness:
 //          begin
 //            OutputExtension := '.delay-thickness_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-thickness';
+//            ObservationType := ' delay-thickness';
 //          end;
 //        coDelayTheta:
 //          begin
 //            OutputExtension := '.delay-theta_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-theta';
+//            ObservationType := ' delay-theta';
 //          end;
         coPreConsStressCell:
           begin
             OutputExtension := '.preconstress-cell_ob' + OutputTypeExtension;
-            ObservationType := 'preconstress-cell';
+            ObservationType := ' preconstress-cell';
           end;
       end;
 
@@ -2418,6 +2419,7 @@ begin
       for ObsIndex := 0 to FObsList.Count - 1 do
       begin
         AnObs := FObsList[ObsIndex];
+        ScreenObject := AnObs.FScreenObject as TScreenObject;
         if AnObsType in AnObs.FObsTypes then
         begin
           Root := AnObs.FName;
@@ -2434,21 +2436,35 @@ begin
 
           case AnObsType of
             coCSub, coInelastCSub, coElastCSub, coSk, coSke, coIntbedComp,
-            coInelastComp, coElastComp, coThickness, coCoarseTheta, ooThetaCell:
+            coInelastComp, coElastComp, coThickness:
               begin
-                WriteString(obsname);
-                WriteString(ObservationType);
-                WriteString(boundname);
-                NewLine;
+                if ScreenObject.ModflowCSub <> nil then
+                begin
+                  WriteString(obsname);
+                  WriteString(ObservationType);
+                  WriteString(boundname);
+                  NewLine;
+                end;
               end;
             coCoarseCSub, coCSubCell, coWcompCSubCell, coSkCell, coSkeCell,
             coEStressCell, coGStressCell, coCoarseCompaction, coCompCell,
-            coCoarseThickness, coThickCell, coPreConsStressCell:
+            coCoarseThickness, coThickCell, coCoarseTheta, ooThetaCell,
+            coPreConsStressCell:
               begin
                 for CellIndex := 0 to Length(AnObs.FCells) - 1 do
                 begin
-                  obsname := obsname + '_' + IntToStr(CellIndex+1);
                   ACell := AnObs.FCells[CellIndex];
+                  if not DisvUsed then
+                  begin
+                    obsname := ' ' + Root + '_' + IntToStr(ACell.Layer + 1)
+                      + '_' + IntToStr(ACell.Row + 1)
+                      + '_' + IntToStr(ACell.Column + 1);
+                  end
+                  else
+                  begin
+                    obsname := ' ' + Root + '_' + IntToStr(ACell.Layer + 1)
+                      + '_' + IntToStr(ACell.Column + 1);
+                  end;
                   WriteString(obsname);
                   WriteString(ObservationType);
                   WriteInteger(ACell.Layer+1);
@@ -2464,10 +2480,10 @@ begin
               begin
                 for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
                 begin
-                  obsname := obsname + '_' + IntToStr(IBIndex+1);
+                  icsubno := AnObs.FInterbedNumbers[IBIndex];
+                  obsname := ' ' + Root + '_' + IntToStr(icsubno);
                   WriteString(obsname);
                   WriteString(ObservationType);
-                  icsubno := AnObs.FInterbedNumbers[CellIndex];
                   WriteInteger(icsubno);
                   NewLine;
                 end;

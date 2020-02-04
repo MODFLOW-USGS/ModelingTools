@@ -33,23 +33,23 @@
     <FileName Model_Name="LakeMf6" FileType="Model Output">LakeMf6.Solution.CSV</FileName>
     <FileName Model_Name="LakeMf6" FileType="Model Output">mfsim.lst</FileName>
   </output>
-  <Mt3dms_Input_Files Model_Name="LakeMf6" FileType="Mt3dms Input">
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.adv</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.bhd</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.btn</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.cbc</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.dis.grb</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.dsp</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.gcg</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.mt_nam.archive</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">LakeMf6.ssm</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Input">usgs.LakeMf6_MT3DMS.reference</FileName>
-  </Mt3dms_Input_Files>
-  <Mt3dms_Output_Files Model_Name="LakeMf6" FileType="Mt3dms Output">
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6.cnf</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6.mls</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6_Conc._mas</FileName>
-    <FileName Model_Name="LakeMf6" FileType="Mt3dms Output">LakeMf6_Conc.ucn</FileName>
-  </Mt3dms_Output_Files>
+  <Mt3d-USGS_Input_Files Model_Name="LakeMf6" FileType="Mt3d-USGS Input">
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.adv</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.bhd</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.btn</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.cbc</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.dis.grb</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.dsp</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.gcg</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.mt_nam.archive</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">LakeMf6.ssm</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">RunMt3d-USGS.Bat.archive</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Input">usgs.LakeMf6_MT3D-USGS.reference</FileName>
+  </Mt3d-USGS_Input_Files>
+  <Mt3d-USGS_Output_Files Model_Name="LakeMf6" FileType="Mt3d-USGS Output">
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Output">LakeMf6.cnf</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Output">LakeMf6.mls</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Output">LakeMf6_Conc._mas</FileName>
+    <FileName Model_Name="LakeMf6" FileType="Mt3d-USGS Output">LakeMf6_Conc.ucn</FileName>
+  </Mt3d-USGS_Output_Files>
 </Model_Archive_List>

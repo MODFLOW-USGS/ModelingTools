@@ -1,0 +1,15 @@
+# Name File for MT3DMS created on 2/4/2020 by ModelMuse
+LIST 16 ..\..\output\output.GWT_MT3D-USGS\GWT.mls
+FTL 10 ..\..\output\output.GWT\GWT.ftl
+DATA 17 ..\..\output\output.GWT_MT3D-USGS\GWT.cnf
+LKT 18 ..\..\model\model.GWT_MT3D-USGS\GWT.lkt
+DATA 81 ..\..\output\output.GWT_MT3D-USGS\GWT.lktobs
+SFT 19 ..\..\model\model.GWT_MT3D-USGS\GWT.sft
+DATA 40 ..\..\output\output.GWT_MT3D-USGS\GWT.obs_sft
+BTN 1 ..\..\model\model.GWT_MT3D-USGS\GWT.btn
+DATA(BINARY) 201 ..\..\output\output.GWT_MT3D-USGS\GWT_Chem.ucn
+DATA 601 ..\..\output\output.GWT_MT3D-USGS\GWT_Chem._mas
+ADV 2 ..\..\model\model.GWT_MT3D-USGS\GWT.adv
+DSP 3 ..\..\model\model.GWT_MT3D-USGS\GWT.dsp
+SSM 4 ..\..\model\model.GWT_MT3D-USGS\GWT.ssm
+GCG 9 ..\..\model\model.GWT_MT3D-USGS\GWT.gcg

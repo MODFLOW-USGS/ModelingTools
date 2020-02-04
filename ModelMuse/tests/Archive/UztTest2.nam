@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 2/4/2020 by ModelMuse Version 4.1.0.25
+LIST             11 UztTest2.lst REPLACE
+DATA(BINARY)      9 UztTest2.cbc REPLACE
+DIS              12 UztTest2.dis OLD
+BAS6             13 UztTest2.bas OLD
+OC               39 UztTest2.oc OLD
+DATA             37 UztTest2.fhd REPLACE
+DATA             38 UztTest2.fdn REPLACE
+NWT             133 UztTest2.nwt OLD
+UPW             134 UztTest2.upw OLD
+LMT6            135 UztTest2.lmt OLD
+CHD              17 UztTest2.chd OLD
+UZF              31 UztTest2.uzf OLD
+DATA          20206 UztTest21.uzfg REPLACE

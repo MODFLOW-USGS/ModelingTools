@@ -56,6 +56,7 @@ type
     procedure chklstSFRClickCheck(Sender: TObject);
     procedure chklstLAKClick(Sender: TObject);
     procedure chklstUZFClick(Sender: TObject);
+    procedure chklstCSUBClick(Sender: TObject);
   private
     FOnChangeProperties: TNotifyEvent;
     FInitializing: Boolean;
@@ -99,6 +100,11 @@ procedure TframeScreenObjectObsMf6.chklstBoundaryFlowClickCheck(
   Sender: TObject);
 begin
   DoOnChangeProperties;
+end;
+
+procedure TframeScreenObjectObsMf6.chklstCSUBClick(Sender: TObject);
+begin
+  DoOnChangeProperties
 end;
 
 procedure TframeScreenObjectObsMf6.chklstFlowObsClick(Sender: TObject);
@@ -150,9 +156,6 @@ var
   UzfOb: TUzfOb;
   CSubOb: TCSubOb;
 begin
-{$IFNDEF CSUB}
-  tabCSUB.TabVisible := False;
-{$ENDIF}
   FActiveObs := False;
   FInitializing := True;
   try
@@ -370,6 +373,7 @@ var
   MawIndex: Integer;
   SfrIndex: Integer;
   UzfIndex: Integer;
+  CSubIndex: Integer;
 begin
   pgcMain.ActivePageIndex := 0;
 
@@ -397,6 +401,11 @@ begin
   for UzfIndex := 0 to chklstUZF.Items.Count - 1 do
   begin
     chklstUZF.Checked[UzfIndex] := False;
+  end;
+
+  for CSubIndex := 0 to chklstCSUB.Items.Count - 1 do
+  begin
+    chklstCSUB.Checked[CSubIndex] := False;
   end;
 
   DoOnChangeProperties;
@@ -431,6 +440,8 @@ var
   LakOb: TLakOb;
   NewUzfObs: TUzfObs;
   UzfOb: TUzfOb;
+  CSubOb: TCSubOb;
+  NewCSubObs: TCSubObs;
 begin
   for Index := 0 to List.Count - 1 do
   begin
@@ -556,6 +567,23 @@ begin
       end;
       Mf6Obs.UzfObs := NewUzfObs;
 
+      NewCSubObs := Mf6Obs.CSubObs;
+      for CSubOb := Low(TCSubOb) to High(TCSubOb) do
+      begin
+        if chklstCSUB.State[Ord(CSubOb)] <> cbGrayed then
+        begin
+          if chklstCSUB.Checked[Ord(CSubOb)] then
+          begin
+            Include(NewCSubObs, CSubOb);
+          end
+          else
+          begin
+            Exclude(NewCSubObs, CSubOb);
+          end;
+        end;
+      end;
+      Mf6Obs.CSubObs := NewCSubObs;
+
       if chklstBoundaryFlow.State[Ord(forCHD)] <> cbGrayed then
       begin
         Mf6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(forCHD)];
@@ -660,6 +688,17 @@ begin
     for ItemIndex := 0 to chklstUZF.Items.Count - 1 do
     begin
       if chklstUZF.State[ItemIndex] <> cbUnchecked then
+      begin
+        ObsUsed := True;
+        break;
+      end;
+    end;
+  end;
+  if not ObsUsed then
+  begin
+    for ItemIndex := 0 to chklstCSUB.Items.Count - 1 do
+    begin
+      if chklstCSUB.State[ItemIndex] <> cbUnchecked then
       begin
         ObsUsed := True;
         break;

@@ -6,7 +6,7 @@ uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
   PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed,
   System.Classes, ModflowCellUnit, ModflowCsubUnit, GoPhastTypes,
-  System.Generics.Collections;
+  System.Generics.Collections, ScreenObjectUnit;
 
 type
   TCSubObservation = record
@@ -32,11 +32,15 @@ type
     FFileName: string;
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
+    FObservations: TCSubObservationList;
+    FInterBedNumbers: array of array of array of Integer;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WriteGridData;
     procedure WritePackageData;
     procedure WriteStressPeriods;
+    function ObservationsUsed: Boolean;  reintroduce;
+    function IsMf6Observation(AScreenObject: TScreenObject): Boolean; reintroduce;
   protected
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
@@ -46,6 +50,7 @@ type
       TimeIndex: integer);
     procedure WriteCell(Cell: TValueCell{;
       const DataSetIdentifier, VariableIdentifiers: string}); //virtual; abstract;
+    class function ObservationExtension: string; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -55,8 +60,8 @@ type
 implementation
 
 uses
-  frmProgressUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit,
-  Vcl.Forms, System.Contnrs;
+  frmProgressUnit, frmErrorsAndWarningsUnit,
+  Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit, Modflow6ObsUnit;
 
 { TCSubWriter }
 
@@ -65,11 +70,13 @@ constructor TCSubWriter.Create(Model: TCustomModel;
 begin
   inherited;
   FCSubPackage := Package as TCSubPackageSelection;
+  FObservations := TCSubObservationList.Create;
 //  FValues := TObjectList.Create;
 end;
 
 destructor TCSubWriter.Destroy;
 begin
+  FObservations.Free;
 //  FValues.Free;
   inherited;
 end;
@@ -80,10 +87,20 @@ var
   ScreenObject: TScreenObject;
   NoAssignmentErrorRoot: string;
   Boundary: TCSubBoundary;
+  MfObs: TModflow6Obs;
+  Obs: TCSubObservation;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  IDomainArray: TDataArray;
+  CellCount: Integer;
 begin
   NoAssignmentErrorRoot := Format(StrNoBoundaryConditio,
     [Package.PackageIdentifier]);
   frmErrorsAndWarnings.BeginUpdate;
+  IDomainArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  IDomainArray.Initialize;
+  CellList := TCellAssignmentList.Create;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, NoAssignmentErrorRoot);
     frmProgressMM.AddMessage('Evaluating CSUB Package data.');
@@ -102,6 +119,29 @@ begin
       Boundary := ScreenObject.ModflowCSub;
       if Boundary <> nil then
       begin
+        if ObservationsUsed and IsMf6Observation(ScreenObject) then
+        begin
+          MfObs := ScreenObject.Modflow6Obs;
+          Obs.FName := MfObs.Name;
+          Obs.FBoundName := ScreenObject.Name;
+          Obs.FObsTypes := MfObs.CSubObs;
+          Obs.FScreenObject := ScreenObject;
+          CellList.Clear;
+          ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+          SetLength(Obs.FCells, CellList.Count);
+          CellCount := 0;
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            if IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+            begin
+              Obs.FCells[CellCount] := ACell.Cell;
+              Inc(CellCount);
+            end;
+          end;
+          SetLength(Obs.FCells, CellCount);
+          FObservations.Add(Obs);
+        end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
         if not ScreenObject.SetValuesOfEnclosedCells
           and not ScreenObject.SetValuesOfIntersectedCells then
@@ -110,9 +150,34 @@ begin
             NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
         end;
         Boundary.GetCellValues(Values, nil, Model);
+      end
+      else if ObservationsUsed and IsMf6Observation(ScreenObject) then
+      begin
+        MfObs := ScreenObject.Modflow6Obs;
+        Obs.FName := MfObs.Name;
+        Obs.FBoundName := ScreenObject.Name;
+        Obs.FObsTypes := MfObs.CSubObs;
+        Obs.FScreenObject := ScreenObject;
+        CellList.Clear;
+        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        SetLength(Obs.FCells, CellList.Count);
+        CellCount := 0;
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          if IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+          begin
+            Obs.FCells[CellCount] := ACell.Cell;
+            Inc(CellCount);
+          end;
+        end;
+        SetLength(Obs.FCells, CellCount);
+
+        FObservations.Add(Obs);
       end;
     end;
   finally
+    CellList.fREE;;
     frmErrorsAndWarnings.EndUpdate;
   end;
 end;
@@ -120,6 +185,27 @@ end;
 class function TCSubWriter.Extension: string;
 begin
   result := '.csub';
+end;
+
+function TCSubWriter.IsMf6Observation(AScreenObject: TScreenObject): Boolean;
+var
+  MfObs: TModflow6Obs;
+begin
+  MfObs := AScreenObject.Modflow6Obs;
+  Result := (MfObs <> nil) and MfObs.Used and (MfObs.CSubObs <> []);
+//  result := (Model.ModelSelection = msModflow2015)
+//    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
+end;
+
+class function TCSubWriter.ObservationExtension: string;
+begin
+  result := '.ob_csub';
+end;
+
+function TCSubWriter.ObservationsUsed: Boolean;
+begin
+  result := (Model.ModelSelection = msModflow2015)
+    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
 end;
 
 function TCSubWriter.Package: TModflowPackageSelection;
@@ -274,6 +360,14 @@ end;
 procedure TCSubWriter.WriteFile(const AFileName: string);
 var
   Abbreviation: string;
+  ObsWriter: TCSubObsWriter;
+  ObsIndex: Integer;
+  CSubObs: TCSubObservation;
+  IbObsTypes: TCSubObs;
+  CellIndex: Integer;
+  InterbedNumbers: TOneDIntegerArray;
+  IBCount: Integer;
+  ACell: TCellLocation;
 begin
   if not Package.IsSelected then
   begin
@@ -358,7 +452,42 @@ begin
     end;
   finally
     CloseFile;
-  end
+  end;
+
+  if FObservations.Count > 0 then
+  begin
+    for ObsIndex := 0 to FObservations.Count - 1 do
+    begin
+      CSubObs := FObservations[ObsIndex];
+      IbObsTypes := [coTheta, coDelayFlowTop, coDelayFlowBot] * CSubObs.FObsTypes;
+      if IbObsTypes <> [] then
+      begin
+        SetLength(InterbedNumbers, Length(CSubObs.FCells));
+        IBCount := 0;
+        for CellIndex := 0 to Length(CSubObs.FCells) - 1 do
+        begin
+          ACell := CSubObs.FCells[CellIndex];
+          // FInterBedNumbers is specified in WritePackageData.
+          if FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column] <> 0 then
+          begin
+            InterbedNumbers[IBCount] :=
+              FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column];
+            Inc(IBCount);
+          end;
+        end;
+        SetLength(InterbedNumbers, IBCount);
+        CSubObs.FInterbedNumbers := InterbedNumbers;
+        FObservations[ObsIndex] := CSubObs;
+      end;
+    end;
+
+    ObsWriter := TCSubObsWriter.Create(Model, etExport, FObservations);
+    try
+      ObsWriter.WriteFile(ChangeFileExt(FFileName, ObservationExtension));
+    finally
+      ObsWriter.Free;
+    end;
+  end;
 
 end;
 
@@ -397,6 +526,7 @@ end;
 procedure TCSubWriter.WriteOptions;
 var
   OutputFileName: string;
+  NameOfFile: string;
 begin
   WriteBeginOptions;
 
@@ -571,6 +701,16 @@ begin
     NewLine;
   end;
 
+  if FObservations.Count > 0 then
+  begin
+    WriteString('    OBS6 FILEIN ');
+    NameOfFile := ChangeFileExt(FFileName, ObservationExtension);
+    Model.AddModelInputFile(NameOfFile);
+    NameOfFile := ExtractFileName(NameOfFile);
+    WriteString(NameOfFile);
+    NewLine;
+  end;
+
 //  [TS6 FILEIN <ts6_filename>]
 //  [OBS6 FILEIN <obs6_filename>]
 
@@ -606,6 +746,8 @@ var
   icsubno: Integer;
   IDomain: TDataArray;
 begin
+  SetLength(FInterBedNumbers, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+
   WriteBeginPackageData;
   DisvUsed := Model.DisvUsed;
   icsubno := 0;
@@ -651,10 +793,13 @@ begin
       begin
         for ColIndex := 0 to Model.ColumnCount - 1 do
         begin
+          FInterBedNumbers[LayerIndex, RowIndex, ColIndex] := 0;
           if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
             and (IDomain.IntegerData[LayerIndex, RowIndex, ColIndex] > 0) then
           begin
             Inc(icsubno);
+            FInterBedNumbers[LayerIndex, RowIndex, ColIndex] := icsubno;
+
             pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             thick_frac := thick_fracDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             rnb := rnbDataArray.RealData[LayerIndex, RowIndex, ColIndex];

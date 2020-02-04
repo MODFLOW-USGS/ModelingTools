@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="CTS1" FileType="bin">
+    <FileName Model_Name="CTS1" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.1.4\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="CTS1" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_64.exe</FileName>
+  </bin>
+  <ancillary Model_Name="CTS1" FileType="ancillary">
+    <FileName Model_Name="CTS1" FileType="ancillary">CTS1.gpt</FileName>
+  </ancillary>
+  <model Model_Name="CTS1" FileType="Model Input">
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.bas</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.chd</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.dis</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.gsf</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.lmt</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.lpf</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.nam.archive</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.oc</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.sip</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">CTS1.wel</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Input">usgs.CTS1.reference</FileName>
+  </model>
+  <output Model_Name="CTS1" FileType="Model Output">
+    <FileName Model_Name="CTS1" FileType="Model Output">CTS1.cbc</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Output">CTS1.fdn</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Output">CTS1.fhd</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Output">CTS1.ftl</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Output">CTS1.lst</FileName>
+    <FileName Model_Name="CTS1" FileType="Model Output">CTS1.wel_dewater.txt</FileName>
+  </output>
+  <Mt3d-USGS_Input_Files Model_Name="CTS1" FileType="Mt3d-USGS Input">
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.adv</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.btn</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.cts</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.dsp</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.gcg</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.mt_nam.archive</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">CTS1.ssm</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">RunMt3d-USGS.Bat.archive</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Input">usgs.CTS1_MT3D-USGS.reference</FileName>
+  </Mt3d-USGS_Input_Files>
+  <Mt3d-USGS_Output_Files Model_Name="CTS1" FileType="Mt3d-USGS Output">
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Output">CTS1.cnf</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Output">CTS1.cto</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Output">CTS1.mls</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Output">CTS1_Chem._mas</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Output">CTS1_Chem.mto</FileName>
+    <FileName Model_Name="CTS1" FileType="Mt3d-USGS Output">CTS1_Chem.ucn</FileName>
+  </Mt3d-USGS_Output_Files>
+</Model_Archive_List>

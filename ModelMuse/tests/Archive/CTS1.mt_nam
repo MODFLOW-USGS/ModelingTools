@@ -1,0 +1,14 @@
+# Name File for MT3DMS created on 2/4/2020 by ModelMuse
+LIST 16 CTS1.mls
+FTL 10 CTS1.ftl
+DATA 17 CTS1.cnf
+CTS 20 CTS1.cts
+DATA 28 CTS1.cto
+BTN 1 CTS1.btn
+DATA(BINARY) 201 CTS1_Chem.ucn
+DATA 601 CTS1_Chem._mas
+DATA 401 CTS1_Chem.mto
+ADV 2 CTS1.adv
+DSP 3 CTS1.dsp
+SSM 4 CTS1.ssm
+GCG 9 CTS1.gcg

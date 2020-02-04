@@ -1,13 +1,13 @@
-# Name File for MT3DMS created on 11/16/2019 by ModelMuse
-LIST             16 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6.mls
-FT6              25 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.cbc
-FT6              26 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.bhd
-FT6              27 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.dis.grb
-DATA             17 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6.cnf
-BTN               1 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.btn
-DATA(BINARY)    201 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6_Conc.ucn
-DATA            601 ..\..\output\output.LakeMf6_MT3DMS\LakeMf6_Conc._mas
-ADV               2 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.adv
-DSP               3 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.dsp
-SSM               4 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.ssm
-GCG               9 ..\..\model\model.LakeMf6_MT3DMS\LakeMf6.gcg
+# Name File for MT3DMS created on 2/4/2020 by ModelMuse
+LIST             16 ..\..\output\output.LakeMf6_MT3D-USGS\LakeMf6.mls
+FT6              25 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.cbc
+FT6              26 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.bhd
+FT6              27 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.dis.grb
+DATA             17 ..\..\output\output.LakeMf6_MT3D-USGS\LakeMf6.cnf
+BTN               1 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.btn
+DATA(BINARY)    201 ..\..\output\output.LakeMf6_MT3D-USGS\LakeMf6_Conc.ucn
+DATA            601 ..\..\output\output.LakeMf6_MT3D-USGS\LakeMf6_Conc._mas
+ADV               2 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.adv
+DSP               3 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.dsp
+SSM               4 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.ssm
+GCG               9 ..\..\model\model.LakeMf6_MT3D-USGS\LakeMf6.gcg

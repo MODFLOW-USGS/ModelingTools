@@ -1,0 +1,11 @@
+# LPF: Layer Property Flow package file created on 2/4/2020 by ModelMuse version 4.1.0.25.
+     9 -9.990000000000E+002      0 # ILPFCB, HDRY, NPLPF
+     0 # LAYTYP
+     2 # LAYAVG
+    -1 # CHANI
+     1 # LAYVKA
+     0 # LAYWET
+CONSTANT     4.999999900000E-003  # HK Layer 1 Layer 1
+CONSTANT     1.000000000000E+000  # HANI Layer 1 Layer 1
+CONSTANT     1.000000000000E+001  # VKA Layer 1 Layer 1
+CONSTANT     0.000000000000E+000  # SS Layer 1 Layer 1

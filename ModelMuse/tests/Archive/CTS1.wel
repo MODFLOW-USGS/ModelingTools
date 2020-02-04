@@ -1,0 +1,23 @@
+# WEL: Well package file created on 2/4/2020 by ModelMuse version 4.1.0.25.
+OPTIONS
+SPECIFY  1.000000000000E-001    141
+END
+     8     9 AUXILIARY IFACE # DataSet 2: MXACTW IWELCB Option
+     8     0 # Data Set 5: ITMP NP Stress period 1
+     1     8     6 -4.320000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well1 with formula: ObjectImportedValuesR("WelPump1")
+     1    13     6 -2.592000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well2 with formula: ObjectImportedValuesR("WelPump1")
+     1    18     6 -1.728000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well3 with formula: ObjectImportedValuesR("WelPump1")
+     1    23     6 -8.640000000000E+004      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well4 with formula: ObjectImportedValuesR("WelPump1")
+     1     8    25  4.320000000000E+004      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well5 with formula: ObjectImportedValuesR("WelPump1")
+     1    13    25  1.296000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well6 with formula: ObjectImportedValuesR("WelPump1")
+     1    18    25  3.024000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well7 with formula: ObjectImportedValuesR("WelPump1")
+     1    23    25  4.752000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well8 with formula: ObjectImportedValuesR("WelPump1")
+     8     0 # Data Set 5: ITMP NP Stress period 2
+     1     8     6 -5.184000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well1 with formula: -518400
+     1    13     6 -3.456000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well2 with formula: -345600
+     1    18     6 -2.592000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well3 with formula: -259200
+     1    23     6 -1.728000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well4 with formula: -172800
+     1     8    25  1.296000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well5 with formula: 129600
+     1    13    25  2.160000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well6 with formula: 216000
+     1    18    25  3.888000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well7 with formula: 388800
+     1    23    25  5.616000000000E+005      0 # Data Set 6: Layer Row Column Q IFACE Intersected by Well8 with formula: 561600

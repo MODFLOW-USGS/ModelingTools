@@ -1,0 +1,1158 @@
+
+
+       210         1         3        42         1         1         0 # Data Set 3: NLAY NROW NCOL NPER NCOMP MCOMP, IATS
+ sec  cm   g # Data Set 4: TUNIT LUNIT MUNIT
+
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 # Data Set 6: LAYCON
+         0         1                            12 # DELR
+         0         1                            12 # DELC
+         0       200                            12 # TOP
+         0         1                            12 # Data Set 10: DZ Layer: 1
+         0         1                            12 # Data Set 10: DZ Layer: 2
+         0         1                            12 # Data Set 10: DZ Layer: 3
+         0         1                            12 # Data Set 10: DZ Layer: 4
+         0         1                            12 # Data Set 10: DZ Layer: 5
+         0         1                            12 # Data Set 10: DZ Layer: 6
+         0         1                            12 # Data Set 10: DZ Layer: 7
+         0         1                            12 # Data Set 10: DZ Layer: 8
+         0         1                            12 # Data Set 10: DZ Layer: 9
+         0         1                            12 # Data Set 10: DZ Layer: 10
+         0         1                            12 # Data Set 10: DZ Layer: 11
+         0         1                            12 # Data Set 10: DZ Layer: 12
+         0         1                            12 # Data Set 10: DZ Layer: 13
+         0         1                            12 # Data Set 10: DZ Layer: 14
+         0         1                            12 # Data Set 10: DZ Layer: 15
+         0         1                            12 # Data Set 10: DZ Layer: 16
+         0         1                            12 # Data Set 10: DZ Layer: 17
+         0         1                            12 # Data Set 10: DZ Layer: 18
+         0         1                            12 # Data Set 10: DZ Layer: 19
+         0         1                            12 # Data Set 10: DZ Layer: 20
+         0         1                            12 # Data Set 10: DZ Layer: 21
+         0         1                            12 # Data Set 10: DZ Layer: 22
+         0         1                            12 # Data Set 10: DZ Layer: 23
+         0         1                            12 # Data Set 10: DZ Layer: 24
+         0         1                            12 # Data Set 10: DZ Layer: 25
+         0         1                            12 # Data Set 10: DZ Layer: 26
+         0         1                            12 # Data Set 10: DZ Layer: 27
+         0         1                            12 # Data Set 10: DZ Layer: 28
+         0         1                            12 # Data Set 10: DZ Layer: 29
+         0         1                            12 # Data Set 10: DZ Layer: 30
+         0         1                            12 # Data Set 10: DZ Layer: 31
+         0         1                            12 # Data Set 10: DZ Layer: 32
+         0         1                            12 # Data Set 10: DZ Layer: 33
+         0         1                            12 # Data Set 10: DZ Layer: 34
+         0         1                            12 # Data Set 10: DZ Layer: 35
+         0         1                            12 # Data Set 10: DZ Layer: 36
+         0         1                            12 # Data Set 10: DZ Layer: 37
+         0         1                            12 # Data Set 10: DZ Layer: 38
+         0         1                            12 # Data Set 10: DZ Layer: 39
+         0         1                            12 # Data Set 10: DZ Layer: 40
+         0         1                            12 # Data Set 10: DZ Layer: 41
+         0         1                            12 # Data Set 10: DZ Layer: 42
+         0         1                            12 # Data Set 10: DZ Layer: 43
+         0         1                            12 # Data Set 10: DZ Layer: 44
+         0         1                            12 # Data Set 10: DZ Layer: 45
+         0         1                            12 # Data Set 10: DZ Layer: 46
+         0         1                            12 # Data Set 10: DZ Layer: 47
+         0         1                            12 # Data Set 10: DZ Layer: 48
+         0         1                            12 # Data Set 10: DZ Layer: 49
+         0         1                            12 # Data Set 10: DZ Layer: 50
+         0         1                            12 # Data Set 10: DZ Layer: 51
+         0         1                            12 # Data Set 10: DZ Layer: 52
+         0         1                            12 # Data Set 10: DZ Layer: 53
+         0         1                            12 # Data Set 10: DZ Layer: 54
+         0         1                            12 # Data Set 10: DZ Layer: 55
+         0         1                            12 # Data Set 10: DZ Layer: 56
+         0         1                            12 # Data Set 10: DZ Layer: 57
+         0         1                            12 # Data Set 10: DZ Layer: 58
+         0         1                            12 # Data Set 10: DZ Layer: 59
+         0         1                            12 # Data Set 10: DZ Layer: 60
+         0         1                            12 # Data Set 10: DZ Layer: 61
+         0         1                            12 # Data Set 10: DZ Layer: 62
+         0         1                            12 # Data Set 10: DZ Layer: 63
+         0         1                            12 # Data Set 10: DZ Layer: 64
+         0         1                            12 # Data Set 10: DZ Layer: 65
+         0         1                            12 # Data Set 10: DZ Layer: 66
+         0         1                            12 # Data Set 10: DZ Layer: 67
+         0         1                            12 # Data Set 10: DZ Layer: 68
+         0         1                            12 # Data Set 10: DZ Layer: 69
+         0         1                            12 # Data Set 10: DZ Layer: 70
+         0         1                            12 # Data Set 10: DZ Layer: 71
+         0         1                            12 # Data Set 10: DZ Layer: 72
+         0         1                            12 # Data Set 10: DZ Layer: 73
+         0         1                            12 # Data Set 10: DZ Layer: 74
+         0         1                            12 # Data Set 10: DZ Layer: 75
+         0         1                            12 # Data Set 10: DZ Layer: 76
+         0         1                            12 # Data Set 10: DZ Layer: 77
+         0         1                            12 # Data Set 10: DZ Layer: 78
+         0         1                            12 # Data Set 10: DZ Layer: 79
+         0         1                            12 # Data Set 10: DZ Layer: 80
+         0         1                            12 # Data Set 10: DZ Layer: 81
+         0         1                            12 # Data Set 10: DZ Layer: 82
+         0         1                            12 # Data Set 10: DZ Layer: 83
+         0         1                            12 # Data Set 10: DZ Layer: 84
+         0         1                            12 # Data Set 10: DZ Layer: 85
+         0         1                            12 # Data Set 10: DZ Layer: 86
+         0         1                            12 # Data Set 10: DZ Layer: 87
+         0         1                            12 # Data Set 10: DZ Layer: 88
+         0         1                            12 # Data Set 10: DZ Layer: 89
+         0         1                            12 # Data Set 10: DZ Layer: 90
+         0         1                            12 # Data Set 10: DZ Layer: 91
+         0         1                            12 # Data Set 10: DZ Layer: 92
+         0         1                            12 # Data Set 10: DZ Layer: 93
+         0         1                            12 # Data Set 10: DZ Layer: 94
+         0         1                            12 # Data Set 10: DZ Layer: 95
+         0         1                            12 # Data Set 10: DZ Layer: 96
+         0         1                            12 # Data Set 10: DZ Layer: 97
+         0         1                            12 # Data Set 10: DZ Layer: 98
+         0         1                            12 # Data Set 10: DZ Layer: 99
+         0         1                            12 # Data Set 10: DZ Layer: 100
+         0         1                            12 # Data Set 10: DZ Layer: 101
+         0         1                            12 # Data Set 10: DZ Layer: 102
+         0         1                            12 # Data Set 10: DZ Layer: 103
+         0         1                            12 # Data Set 10: DZ Layer: 104
+         0         1                            12 # Data Set 10: DZ Layer: 105
+         0         1                            12 # Data Set 10: DZ Layer: 106
+         0         1                            12 # Data Set 10: DZ Layer: 107
+         0         1                            12 # Data Set 10: DZ Layer: 108
+         0         1                            12 # Data Set 10: DZ Layer: 109
+         0         1                            12 # Data Set 10: DZ Layer: 110
+         0         1                            12 # Data Set 10: DZ Layer: 111
+         0         1                            12 # Data Set 10: DZ Layer: 112
+         0         1                            12 # Data Set 10: DZ Layer: 113
+         0         1                            12 # Data Set 10: DZ Layer: 114
+         0         1                            12 # Data Set 10: DZ Layer: 115
+         0         1                            12 # Data Set 10: DZ Layer: 116
+         0         1                            12 # Data Set 10: DZ Layer: 117
+         0         1                            12 # Data Set 10: DZ Layer: 118
+         0         1                            12 # Data Set 10: DZ Layer: 119
+         0         1                            12 # Data Set 10: DZ Layer: 120
+         0         1                            12 # Data Set 10: DZ Layer: 121
+         0         1                            12 # Data Set 10: DZ Layer: 122
+         0         1                            12 # Data Set 10: DZ Layer: 123
+         0         1                            12 # Data Set 10: DZ Layer: 124
+         0         1                            12 # Data Set 10: DZ Layer: 125
+         0         1                            12 # Data Set 10: DZ Layer: 126
+         0         1                            12 # Data Set 10: DZ Layer: 127
+         0         1                            12 # Data Set 10: DZ Layer: 128
+         0         1                            12 # Data Set 10: DZ Layer: 129
+         0         1                            12 # Data Set 10: DZ Layer: 130
+         0         1                            12 # Data Set 10: DZ Layer: 131
+         0         1                            12 # Data Set 10: DZ Layer: 132
+         0         1                            12 # Data Set 10: DZ Layer: 133
+         0         1                            12 # Data Set 10: DZ Layer: 134
+         0         1                            12 # Data Set 10: DZ Layer: 135
+         0         1                            12 # Data Set 10: DZ Layer: 136
+         0         1                            12 # Data Set 10: DZ Layer: 137
+         0         1                            12 # Data Set 10: DZ Layer: 138
+         0         1                            12 # Data Set 10: DZ Layer: 139
+         0         1                            12 # Data Set 10: DZ Layer: 140
+         0         1                            12 # Data Set 10: DZ Layer: 141
+         0         1                            12 # Data Set 10: DZ Layer: 142
+         0         1                            12 # Data Set 10: DZ Layer: 143
+         0         1                            12 # Data Set 10: DZ Layer: 144
+         0         1                            12 # Data Set 10: DZ Layer: 145
+         0         1                            12 # Data Set 10: DZ Layer: 146
+         0         1                            12 # Data Set 10: DZ Layer: 147
+         0         1                            12 # Data Set 10: DZ Layer: 148
+         0         1                            12 # Data Set 10: DZ Layer: 149
+         0         1                            12 # Data Set 10: DZ Layer: 150
+         0         1                            12 # Data Set 10: DZ Layer: 151
+         0         1                            12 # Data Set 10: DZ Layer: 152
+         0         1                            12 # Data Set 10: DZ Layer: 153
+         0         1                            12 # Data Set 10: DZ Layer: 154
+         0         1                            12 # Data Set 10: DZ Layer: 155
+         0         1                            12 # Data Set 10: DZ Layer: 156
+         0         1                            12 # Data Set 10: DZ Layer: 157
+         0         1                            12 # Data Set 10: DZ Layer: 158
+         0         1                            12 # Data Set 10: DZ Layer: 159
+         0         1                            12 # Data Set 10: DZ Layer: 160
+         0         1                            12 # Data Set 10: DZ Layer: 161
+         0         1                            12 # Data Set 10: DZ Layer: 162
+         0         1                            12 # Data Set 10: DZ Layer: 163
+         0         1                            12 # Data Set 10: DZ Layer: 164
+         0         1                            12 # Data Set 10: DZ Layer: 165
+         0         1                            12 # Data Set 10: DZ Layer: 166
+         0         1                            12 # Data Set 10: DZ Layer: 167
+         0         1                            12 # Data Set 10: DZ Layer: 168
+         0         1                            12 # Data Set 10: DZ Layer: 169
+         0         1                            12 # Data Set 10: DZ Layer: 170
+         0         1                            12 # Data Set 10: DZ Layer: 171
+         0         1                            12 # Data Set 10: DZ Layer: 172
+         0         1                            12 # Data Set 10: DZ Layer: 173
+         0         1                            12 # Data Set 10: DZ Layer: 174
+         0         1                            12 # Data Set 10: DZ Layer: 175
+         0         1                            12 # Data Set 10: DZ Layer: 176
+         0         1                            12 # Data Set 10: DZ Layer: 177
+         0         1                            12 # Data Set 10: DZ Layer: 178
+         0         1                            12 # Data Set 10: DZ Layer: 179
+         0         1                            12 # Data Set 10: DZ Layer: 180
+         0         1                            12 # Data Set 10: DZ Layer: 181
+         0         1                            12 # Data Set 10: DZ Layer: 182
+         0         1                            12 # Data Set 10: DZ Layer: 183
+         0         1                            12 # Data Set 10: DZ Layer: 184
+         0         1                            12 # Data Set 10: DZ Layer: 185
+         0         1                            12 # Data Set 10: DZ Layer: 186
+         0         1                            12 # Data Set 10: DZ Layer: 187
+         0         1                            12 # Data Set 10: DZ Layer: 188
+         0         1                            12 # Data Set 10: DZ Layer: 189
+         0         1                            12 # Data Set 10: DZ Layer: 190
+         0         1                            12 # Data Set 10: DZ Layer: 191
+         0         1                            12 # Data Set 10: DZ Layer: 192
+         0         1                            12 # Data Set 10: DZ Layer: 193
+         0         1                            12 # Data Set 10: DZ Layer: 194
+         0         1                            12 # Data Set 10: DZ Layer: 195
+         0         1                            12 # Data Set 10: DZ Layer: 196
+         0         1                            12 # Data Set 10: DZ Layer: 197
+         0         1                            12 # Data Set 10: DZ Layer: 198
+         0         1                            12 # Data Set 10: DZ Layer: 199
+         0         1                            12 # Data Set 10: DZ Layer: 200
+         0         1                            12 # Data Set 10: DZ Layer: 201
+         0         1                            12 # Data Set 10: DZ Layer: 202
+         0         1                            12 # Data Set 10: DZ Layer: 203
+         0         1                            12 # Data Set 10: DZ Layer: 204
+         0         1                            12 # Data Set 10: DZ Layer: 205
+         0         1                            12 # Data Set 10: DZ Layer: 206
+         0         1                            12 # Data Set 10: DZ Layer: 207
+         0         1                            12 # Data Set 10: DZ Layer: 208
+         0         1                            12 # Data Set 10: DZ Layer: 209
+         0         1                            12 # Data Set 10: DZ Layer: 210
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 1
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 2
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 3
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 4
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 5
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 6
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 7
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 8
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 9
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 10
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 11
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 12
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 13
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 14
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 15
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 16
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 17
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 18
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 19
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 20
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 21
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 22
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 23
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 24
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 25
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 26
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 27
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 28
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 29
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 30
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 31
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 32
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 33
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 34
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 35
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 36
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 37
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 38
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 39
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 40
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 41
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 42
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 43
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 44
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 45
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 46
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 47
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 48
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 49
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 50
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 51
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 52
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 53
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 54
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 55
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 56
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 57
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 58
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 59
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 60
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 61
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 62
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 63
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 64
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 65
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 66
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 67
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 68
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 69
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 70
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 71
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 72
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 73
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 74
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 75
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 76
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 77
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 78
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 79
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 80
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 81
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 82
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 83
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 84
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 85
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 86
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 87
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 88
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 89
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 90
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 91
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 92
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 93
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 94
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 95
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 96
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 97
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 98
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 99
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 100
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 101
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 102
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 103
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 104
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 105
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 106
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 107
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 108
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 109
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 110
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 111
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 112
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 113
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 114
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 115
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 116
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 117
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 118
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 119
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 120
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 121
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 122
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 123
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 124
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 125
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 126
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 127
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 128
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 129
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 130
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 131
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 132
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 133
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 134
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 135
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 136
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 137
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 138
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 139
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 140
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 141
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 142
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 143
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 144
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 145
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 146
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 147
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 148
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 149
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 150
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 151
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 152
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 153
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 154
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 155
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 156
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 157
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 158
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 159
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 160
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 161
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 162
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 163
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 164
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 165
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 166
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 167
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 168
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 169
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 170
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 171
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 172
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 173
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 174
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 175
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 176
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 177
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 178
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 179
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 180
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 181
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 182
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 183
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 184
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 185
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 186
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 187
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 188
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 189
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 190
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 191
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 192
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 193
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 194
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 195
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 196
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 197
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 198
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 199
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 200
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 201
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 202
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 203
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 204
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 205
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 206
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 207
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 208
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 209
+         0      0.43                            12 # Data Set 11: PRSITY, Layer: 210
+       103         1                             5 # Data Set 12: ICBUND, Layer: 1
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 2
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 3
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 4
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 5
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 6
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 7
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 8
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 9
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 10
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 11
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 12
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 13
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 14
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 15
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 16
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 17
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 18
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 19
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 20
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 21
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 22
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 23
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 24
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 25
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 26
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 27
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 28
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 29
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 30
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 31
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 32
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 33
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 34
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 35
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 36
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 37
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 38
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 39
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 40
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 41
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 42
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 43
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 44
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 45
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 46
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 47
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 48
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 49
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 50
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 51
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 52
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 53
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 54
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 55
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 56
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 57
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 58
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 59
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 60
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 61
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 62
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 63
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 64
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 65
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 66
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 67
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 68
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 69
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 70
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 71
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 72
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 73
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 74
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 75
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 76
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 77
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 78
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 79
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 80
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 81
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 82
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 83
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 84
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 85
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 86
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 87
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 88
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 89
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 90
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 91
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 92
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 93
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 94
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 95
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 96
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 97
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 98
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 99
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 100
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 101
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 102
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 103
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 104
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 105
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 106
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 107
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 108
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 109
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 110
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 111
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 112
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 113
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 114
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 115
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 116
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 117
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 118
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 119
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 120
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 121
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 122
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 123
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 124
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 125
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 126
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 127
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 128
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 129
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 130
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 131
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 132
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 133
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 134
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 135
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 136
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 137
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 138
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 139
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 140
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 141
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 142
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 143
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 144
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 145
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 146
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 147
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 148
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 149
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 150
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 151
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 152
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 153
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 154
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 155
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 156
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 157
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 158
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 159
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 160
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 161
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 162
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 163
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 164
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 165
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 166
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 167
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 168
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 169
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 170
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 171
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 172
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 173
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 174
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 175
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 176
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 177
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 178
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 179
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 180
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 181
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 182
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 183
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 184
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 185
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 186
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 187
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 188
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 189
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 190
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 191
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 192
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 193
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 194
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 195
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 196
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 197
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 198
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 199
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 200
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 201
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 202
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 203
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 204
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 205
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 206
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 207
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 208
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 209
+     0     1     0
+       103         1                             5 # Data Set 12: ICBUND, Layer: 210
+     0     1     0
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 1
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 2
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 3
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 4
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 5
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 6
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 7
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 8
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 9
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 10
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 11
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 12
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 13
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 14
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 15
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 16
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 17
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 18
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 19
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 20
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 21
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 22
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 23
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 24
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 25
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 26
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 27
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 28
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 29
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 30
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 31
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 32
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 33
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 34
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 35
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 36
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 37
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 38
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 39
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 40
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 41
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 42
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 43
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 44
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 45
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 46
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 47
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 48
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 49
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 50
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 51
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 52
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 53
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 54
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 55
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 56
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 57
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 58
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 59
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 60
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 61
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 62
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 63
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 64
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 65
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 66
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 67
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 68
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 69
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 70
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 71
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 72
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 73
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 74
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 75
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 76
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 77
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 78
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 79
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 80
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 81
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 82
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 83
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 84
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 85
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 86
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 87
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 88
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 89
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 90
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 91
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 92
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 93
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 94
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 95
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 96
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 97
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 98
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 99
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 100
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 101
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 102
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 103
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 104
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 105
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 106
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 107
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 108
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 109
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 110
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 111
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 112
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 113
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 114
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 115
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 116
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 117
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 118
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 119
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 120
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 121
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 122
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 123
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 124
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 125
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 126
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 127
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 128
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 129
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 130
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 131
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 132
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 133
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 134
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 135
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 136
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 137
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 138
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 139
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 140
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 141
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 142
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 143
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 144
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 145
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 146
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 147
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 148
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 149
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 150
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 151
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 152
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 153
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 154
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 155
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 156
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 157
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 158
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 159
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 160
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 161
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 162
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 163
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 164
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 165
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 166
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 167
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 168
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 169
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 170
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 171
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 172
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 173
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 174
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 175
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 176
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 177
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 178
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 179
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 180
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 181
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 182
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 183
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 184
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 185
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 186
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 187
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 188
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 189
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 190
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 191
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 192
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 193
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 194
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 195
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 196
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 197
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 198
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 199
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 200
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 201
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 202
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 203
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 204
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 205
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 206
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 207
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 208
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 209
+         0         0                            12 # Data Set 13: SCONC: a, Layer: 210
+      -999      0.01 # Data Set 14: CINACT, THKMIN
+        12         5        12        12         T # Data set 15: IFMTCN IFMTNP IFMTRF IFMTDP SAVUCN
+        40 # Data Set 16, NPRS
+   1728000   1814400   1900800   1987200   2073600   2160000   2246400   2332800
+   2419200   2505600   2592000   2678400   2764800   2851200   2937600   3024000
+   3110400   3196800   3283200   3369600   3456000   3542400   3628800   3715200
+   3801600   3888000   3974400   4060800   4147200   4233600   4320000   4406400
+   4492800   4579200   4665600   4752000   4838400   4924800   5011200   5097600
+         0         0 # Data set 18, NOBS NPROBS
+         T         0 # Data Set 20: CHKMAS NPRMAS
+   1728000        20         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 1)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 2)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 3)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 4)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 5)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 6)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 7)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 8)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 9)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 10)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 11)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 12)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 13)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 14)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 15)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 16)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 17)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 18)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 19)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 20)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 21)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 22)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 23)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 24)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 25)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 26)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 27)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 28)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 29)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 30)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 31)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 32)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 33)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 34)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 35)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 36)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 37)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 38)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 39)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 40)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 41)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX
+     86400        96         1 # Data Set 21: PERLEN NSTP TSMULT SSflag (Stress period 42)
+         0      3000         1         0 # Data Set 23: DT0, MXSTRN, TTSMULT, TTSMAX

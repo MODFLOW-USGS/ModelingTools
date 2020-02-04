@@ -1,0 +1,15 @@
+# Name File for MT3DMS created on 2/4/2020 by ModelMuse
+LIST 16 GWT.mls
+FTL 10 GWT.ftl
+DATA 17 GWT.cnf
+LKT 18 GWT.lkt
+DATA 81 GWT.lktobs
+SFT 19 GWT.sft
+DATA 40 GWT.obs_sft
+BTN 1 GWT.btn
+DATA(BINARY) 201 GWT_Chem.ucn
+DATA 601 GWT_Chem._mas
+ADV 2 GWT.adv
+DSP 3 GWT.dsp
+SSM 4 GWT.ssm
+GCG 9 GWT.gcg

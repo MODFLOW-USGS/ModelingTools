@@ -2949,8 +2949,10 @@ begin
         and  (FSFR6_Node.StateIndex in [2,3]);
       frameObsMf6.tabLAK.TabVisible := (FLAKMf6_Node <> nil)
         and  (FLAKMf6_Node.StateIndex in [2,3]);
-      frameObsMf6.tabUZF.TabVisible := (FUZF_Mf6_Node <> nil)
+      frameObsMf6.tabUZF.TabVisible := (FUZF_Mf6_Node <> nil);
 //        and  (FUZF_Mf6_Node.StateIndex in [2,3]);
+      frameObsMf6.tabCSUB.TabVisible := (FCSUB_Node <> nil)
+        and  (FCSUB_Node.StateIndex in [2,3]);
   end;
 end;
 

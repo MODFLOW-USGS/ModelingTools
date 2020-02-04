@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 2/4/2020 by ModelMuse Version 4.1.0.25
+LIST             11 CTS1.lst REPLACE
+DATA(BINARY)      9 CTS1.cbc REPLACE
+DIS              12 CTS1.dis OLD
+BAS6             13 CTS1.bas OLD
+OC               39 CTS1.oc OLD
+DATA             37 CTS1.fhd REPLACE
+DATA             38 CTS1.fdn REPLACE
+SIP              35 CTS1.sip OLD
+LPF              14 CTS1.lpf OLD
+LMT6            135 CTS1.lmt OLD
+CHD              17 CTS1.chd OLD
+DATA            141 CTS1.wel_dewater.txt REPLACE
+WEL              20 CTS1.wel OLD

@@ -1,0 +1,12 @@
+# Name File for MT3DMS created on 2/4/2020 by ModelMuse
+LIST 16 ..\..\output\output.UztTest2_MT3D-USGS\UztTest2.mls
+FTL 10 ..\..\output\output.UztTest2\UztTest2.ftl
+DATA 17 ..\..\output\output.UztTest2_MT3D-USGS\UztTest2.cnf
+UZT2 7 ..\..\model\model.UztTest2_MT3D-USGS\UztTest2.uzt
+BTN 1 ..\..\model\model.UztTest2_MT3D-USGS\UztTest2.btn
+DATA(BINARY) 201 ..\..\output\output.UztTest2_MT3D-USGS\UztTest2_a.ucn
+DATA 601 ..\..\output\output.UztTest2_MT3D-USGS\UztTest2_a._mas
+ADV 2 ..\..\model\model.UztTest2_MT3D-USGS\UztTest2.adv
+DSP 3 ..\..\model\model.UztTest2_MT3D-USGS\UztTest2.dsp
+SSM 4 ..\..\model\model.UztTest2_MT3D-USGS\UztTest2.ssm
+GCG 9 ..\..\model\model.UztTest2_MT3D-USGS\UztTest2.gcg

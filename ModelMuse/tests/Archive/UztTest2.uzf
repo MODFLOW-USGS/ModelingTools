@@ -1,0 +1,96 @@
+# UZF: Unsaturated-Zone Flow package file created on 2/4/2020 by ModelMuse version 4.1.0.25.
+# NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NTRAIL2 NSETS2 NUZGAG SURFDEP RTSOLUTE
+OPTIONS
+END
+     3     1     0     0     0    -9    25    80     1  1.000000000000E-003  # Data Set 1b: NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NTRAIL2 NSETS2 NUZGAG SURFDEP
+INTERNAL 1 (FREE)        5 # Data Set 2: IUZFBND
+     0     1     0
+CONSTANT     5.787040000000E-004  # Data Set 4: VKS
+CONSTANT     1.450000000000E+001  # Data Set 5: EPS
+CONSTANT     4.300000000000E-001  # Data Set 6a: THTS
+CONSTANT     7.999999800000E-002  # Data Set 7: THTI
+     1     1 20206     3 # Data Set 8: IUZROW IUZCOL IFTUNIT IUZOPT
+     0 # Data Set 9, Stress Period      1: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      2: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      3: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      4: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      5: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      6: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      7: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      8: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period      9: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     10: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     11: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     12: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     13: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     14: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     15: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     16: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     17: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     18: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     19: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     20: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     21: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     22: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     23: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     24: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     25: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     26: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     27: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     28: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     29: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     30: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     31: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     32: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     33: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     34: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     35: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     36: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     37: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     38: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     39: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     40: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     41: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF
+     0 # Data Set 9, Stress Period     42: NUZF1
+CONSTANT     5.787039800000E-005  # # Data Set 10: FINF

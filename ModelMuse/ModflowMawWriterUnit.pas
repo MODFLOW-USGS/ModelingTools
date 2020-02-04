@@ -940,7 +940,6 @@ begin
   end;
 {
 [TS6 FILEIN <ts6_filename>]   not supported
-[OBS6 FILEIN <obs6_filename>] not supported
 [MOVER]                       not supported
 }
 

@@ -1,0 +1,14 @@
+# Name File for MT3DMS created on 2/4/2020 by ModelMuse
+LIST 16 ..\..\output\output.CTS1_MT3D-USGS\CTS1.mls
+FTL 10 ..\..\output\output.CTS1\CTS1.ftl
+DATA 17 ..\..\output\output.CTS1_MT3D-USGS\CTS1.cnf
+CTS 20 ..\..\model\model.CTS1_MT3D-USGS\CTS1.cts
+DATA 28 ..\..\output\output.CTS1_MT3D-USGS\CTS1.cto
+BTN 1 ..\..\model\model.CTS1_MT3D-USGS\CTS1.btn
+DATA(BINARY) 201 ..\..\output\output.CTS1_MT3D-USGS\CTS1_Chem.ucn
+DATA 601 ..\..\output\output.CTS1_MT3D-USGS\CTS1_Chem._mas
+DATA 401 ..\..\output\output.CTS1_MT3D-USGS\CTS1_Chem.mto
+ADV 2 ..\..\model\model.CTS1_MT3D-USGS\CTS1.adv
+DSP 3 ..\..\model\model.CTS1_MT3D-USGS\CTS1.dsp
+SSM 4 ..\..\model\model.CTS1_MT3D-USGS\CTS1.ssm
+GCG 9 ..\..\model\model.CTS1_MT3D-USGS\CTS1.gcg

@@ -299,6 +299,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             'Preconsolidation stress in a cell containing at least one IB (pr' +
             'econstress-cell)')
         TabOrder = 0
+        OnClick = chklstCSUBClick
       end
     end
   end

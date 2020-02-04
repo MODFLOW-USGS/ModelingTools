@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4061
+4134
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -3946,7 +3946,7 @@ LakeMf6.gpt
 	Archive\LakeMf6.ssm
 	Archive\LakeMf6.tdis
 	Archive\usgs.LakeMf6.reference
-	Archive\usgs.LakeMf6_MT3DMS.reference
+	Archive\usgs.LakeMf6_MT3D-USGS.reference
 LakeNWT.gpt
 	Archive\LakeNWT.adv
 	Archive\LakeNWT.axml
@@ -3970,7 +3970,7 @@ LakeNWT.gpt
 	Archive\LakeNWT.ssm
 	Archive\LakeNWT.upw
 	Archive\usgs.LakeNWT.reference
-	Archive\usgs.LakeNWT_MT3DMS.reference
+	Archive\usgs.LakeNWT_MT3D-USGS.reference
 MF6_TestSfrMawLak.gpt
 	Archive\MF6_TestSfrMawLak.axml
 	Archive\MF6_TestSfrMawLak.chd
@@ -4061,3 +4061,76 @@ ExitEdgeTest.gpt
 	Archive\ExitEdgeTest.oc
 	Archive\ExitEdgeTest.tdis
 	Archive\usgs.ExitEdgeTest.reference
+UztTest2.gpt
+	Archive\UztTest2.adv
+	Archive\UztTest2.axml
+	Archive\UztTest2.bas
+	Archive\UztTest2.btn
+	Archive\UztTest2.chd
+	Archive\UztTest2.dis
+	Archive\UztTest2.dsp
+	Archive\UztTest2.gcg
+	Archive\UztTest2.gsf
+	Archive\UztTest2.lmt
+	Archive\UztTest2.mt_nam
+	Archive\UztTest2.mt_nam.archive
+	Archive\UztTest2.nam
+	Archive\UztTest2.nam.archive
+	Archive\UztTest2.nwt
+	Archive\UztTest2.oc
+	Archive\UztTest2.ssm
+	Archive\UztTest2.upw
+	Archive\UztTest2.uzf
+	Archive\UztTest2.uzt
+	Archive\usgs.UztTest2.reference
+	Archive\usgs.UztTest2_MT3D-USGS.reference
+CTS1.gpt
+	Archive\CTS1.adv
+	Archive\CTS1.axml
+	Archive\CTS1.bas
+	Archive\CTS1.btn
+	Archive\CTS1.chd
+	Archive\CTS1.cts
+	Archive\CTS1.dis
+	Archive\CTS1.dsp
+	Archive\CTS1.gcg
+	Archive\CTS1.gsf
+	Archive\CTS1.lmt
+	Archive\CTS1.lpf
+	Archive\CTS1.mt_nam
+	Archive\CTS1.mt_nam.archive
+	Archive\CTS1.nam
+	Archive\CTS1.nam.archive
+	Archive\CTS1.oc
+	Archive\CTS1.sip
+	Archive\CTS1.ssm
+	Archive\CTS1.wel
+	Archive\usgs.CTS1.reference
+	Archive\usgs.CTS1_MT3D-USGS.reference
+GWT.gpt
+	Archive\GWT.adv
+	Archive\GWT.axml
+	Archive\GWT.bas
+	Archive\GWT.bcf
+	Archive\GWT.btn
+	Archive\GWT.chd
+	Archive\GWT.dis
+	Archive\GWT.dsp
+	Archive\GWT.gag
+	Archive\GWT.gcg
+	Archive\GWT.gsf
+	Archive\GWT.lak
+	Archive\GWT.lkt
+	Archive\GWT.lmt
+	Archive\GWT.mt_nam
+	Archive\GWT.mt_nam.archive
+	Archive\GWT.nam
+	Archive\GWT.nam.archive
+	Archive\GWT.oc
+	Archive\GWT.rch
+	Archive\GWT.sfr
+	Archive\GWT.sft
+	Archive\GWT.sip
+	Archive\GWT.ssm
+	Archive\usgs.GWT.reference
+	Archive\usgs.GWT_MT3D-USGS.reference

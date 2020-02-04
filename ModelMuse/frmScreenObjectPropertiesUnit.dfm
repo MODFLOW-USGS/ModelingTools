@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitLeft = -90
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -12057,6 +12056,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pgcMain: TPageControl
               Width = 581
               Height = 405
+              ActivePage = frameObsMf6.tabBasic
               ExplicitWidth = 581
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
@@ -12102,8 +12102,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLAK: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 371
+                ExplicitHeight = 414
                 inherited chklstLAK: TCheckListBox
                   Height = 366
                   ItemHeight = 19
@@ -12125,12 +12124,14 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabCSUB: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 414
+                ExplicitWidth = 573
+                ExplicitHeight = 371
                 inherited chklstCSUB: TCheckListBox
                   Width = 573
                   Height = 371
                   ItemHeight = 19
-                  ExplicitHeight = 414
+                  ExplicitWidth = 573
+                  ExplicitHeight = 371
                 end
               end
             end

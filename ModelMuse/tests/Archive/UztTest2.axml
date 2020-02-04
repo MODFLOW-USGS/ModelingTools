@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="UztTest2" FileType="bin">
+    <FileName Model_Name="UztTest2" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.1.4\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="UztTest2" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_64.exe</FileName>
+  </bin>
+  <ancillary Model_Name="UztTest2" FileType="ancillary">
+    <FileName Model_Name="UztTest2" FileType="ancillary">UztTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="UztTest2" FileType="Model Input">
+    <FileName Model_Name="UztTest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">usgs.UztTest2.reference</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.bas</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.chd</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.dis</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.gsf</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.lmt</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.nam.archive</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.nwt</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.oc</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.upw</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Input">UztTest2.uzf</FileName>
+  </model>
+  <output Model_Name="UztTest2" FileType="Model Output">
+    <FileName Model_Name="UztTest2" FileType="Model Output">UztTest2.cbc</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Output">UztTest2.fdn</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Output">UztTest2.fhd</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Output">UztTest2.ftl</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Output">UztTest2.lst</FileName>
+    <FileName Model_Name="UztTest2" FileType="Model Output">UztTest21.uzfg</FileName>
+  </output>
+  <Mt3d-USGS_Input_Files Model_Name="UztTest2" FileType="Mt3d-USGS Input">
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">RunMt3d-USGS.Bat.archive</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">usgs.UztTest2_MT3D-USGS.reference</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.adv</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.btn</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.dsp</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.gcg</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.mt_nam.archive</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.ssm</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Input">UztTest2.uzt</FileName>
+  </Mt3d-USGS_Input_Files>
+  <Mt3d-USGS_Output_Files Model_Name="UztTest2" FileType="Mt3d-USGS Output">
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Output">UztTest2.cnf</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Output">UztTest2.mls</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Output">UztTest2_a._mas</FileName>
+    <FileName Model_Name="UztTest2" FileType="Mt3d-USGS Output">UztTest2_a.ucn</FileName>
+  </Mt3d-USGS_Output_Files>
+</Model_Archive_List>

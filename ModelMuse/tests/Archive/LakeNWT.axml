@@ -29,22 +29,22 @@
     <FileName Model_Name="LakeNWT" FileType="Model Output">LakeNWT.ftl</FileName>
     <FileName Model_Name="LakeNWT" FileType="Model Output">LakeNWT.lst</FileName>
   </output>
-  <Mt3dms_Input_Files Model_Name="LakeNWT" FileType="Mt3dms Input">
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.adv</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.btn</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.dsp</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.gcg</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.lkt</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.mt_nam.archive</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">LakeNWT.ssm</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">RunMt3dms.Bat.archive</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Input">usgs.LakeNWT_MT3DMS.reference</FileName>
-  </Mt3dms_Input_Files>
-  <Mt3dms_Output_Files Model_Name="LakeNWT" FileType="Mt3dms Output">
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Output">LakeNWT.cnf</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Output">LakeNWT.lktobs</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Output">LakeNWT.mls</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Output">LakeNWT_Conc._mas</FileName>
-    <FileName Model_Name="LakeNWT" FileType="Mt3dms Output">LakeNWT_Conc.ucn</FileName>
-  </Mt3dms_Output_Files>
+  <Mt3d-USGS_Input_Files Model_Name="LakeNWT" FileType="Mt3d-USGS Input">
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.adv</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.btn</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.dsp</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.gcg</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.lkt</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.mt_nam.archive</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">LakeNWT.ssm</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">RunMt3d-USGS.Bat.archive</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Input">usgs.LakeNWT_MT3D-USGS.reference</FileName>
+  </Mt3d-USGS_Input_Files>
+  <Mt3d-USGS_Output_Files Model_Name="LakeNWT" FileType="Mt3d-USGS Output">
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Output">LakeNWT.cnf</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Output">LakeNWT.lktobs</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Output">LakeNWT.mls</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Output">LakeNWT_Conc._mas</FileName>
+    <FileName Model_Name="LakeNWT" FileType="Mt3d-USGS Output">LakeNWT_Conc.ucn</FileName>
+  </Mt3d-USGS_Output_Files>
 </Model_Archive_List>

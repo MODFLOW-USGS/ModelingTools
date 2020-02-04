@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="GWT" FileType="bin">
+    <FileName Model_Name="GWT" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.1.4\bin\MODFLOW-NWT.exe</FileName>
+    <FileName Model_Name="GWT" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_64.exe</FileName>
+  </bin>
+  <ancillary Model_Name="GWT" FileType="ancillary">
+    <FileName Model_Name="GWT" FileType="ancillary">GWT.gpt</FileName>
+  </ancillary>
+  <model Model_Name="GWT" FileType="Model Input">
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.bas</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.bcf</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.chd</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.dis</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.gag</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.gsf</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.lak</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.lmt</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.nam.archive</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.oc</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.rch</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.sfr</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">GWT.sip</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="GWT" FileType="Model Input">usgs.GWT.reference</FileName>
+  </model>
+  <output Model_Name="GWT" FileType="Model Output">
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.cbc</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.fdn</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.fhd</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.ftl</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.lakg1</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.lst</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.sfrg2</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.sfrg3</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.sfrg4</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.sfrg5</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.sfrg6</FileName>
+    <FileName Model_Name="GWT" FileType="Model Output">GWT.sfrg7</FileName>
+  </output>
+  <Mt3d-USGS_Input_Files Model_Name="GWT" FileType="Mt3d-USGS Input">
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.adv</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.btn</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.dsp</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.gcg</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.lkt</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.mt_nam.archive</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.sft</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">GWT.ssm</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">RunMt3d-USGS.Bat.archive</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Input">usgs.GWT_MT3D-USGS.reference</FileName>
+  </Mt3d-USGS_Input_Files>
+  <Mt3d-USGS_Output_Files Model_Name="GWT" FileType="Mt3d-USGS Output">
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Output">GWT.cnf</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Output">GWT.lktobs</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Output">GWT.mls</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Output">GWT.obs_sft</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Output">GWT_Chem._mas</FileName>
+    <FileName Model_Name="GWT" FileType="Mt3d-USGS Output">GWT_Chem.ucn</FileName>
+  </Mt3d-USGS_Output_Files>
+</Model_Archive_List>
