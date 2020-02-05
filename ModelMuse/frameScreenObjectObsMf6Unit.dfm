@@ -23,6 +23,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblTypesOfFlowObservation: TLabel
         Left = 3
         Top = 74
@@ -101,6 +105,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabMAW: TTabSheet
       Caption = 'MAW'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstMAW: TCheckListBox
         Left = 3
         Top = 3
@@ -128,6 +136,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabSFR: TTabSheet
       Caption = 'SFR'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstSFR: TCheckListBox
         Left = 3
         Top = 83
@@ -169,6 +181,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabLAK: TTabSheet
       Caption = 'LAK'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstLAK: TCheckListBox
         Left = 3
         Top = 3
@@ -202,6 +218,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabUZF: TTabSheet
       Caption = 'UZF'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblDepthFraction: TLabel
         Left = 159
         Top = 299
@@ -256,7 +276,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Left = 0
         Top = 0
         Width = 482
-        Height = 420
+        Height = 320
         Align = alClient
         ItemHeight = 13
         Items.Strings = (
@@ -300,6 +320,30 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             'econstress-cell)')
         TabOrder = 0
         OnClick = chklstCSUBClick
+      end
+      object pnlDelayBeds: TPanel
+        Left = 0
+        Top = 320
+        Width = 482
+        Height = 100
+        Align = alBottom
+        TabOrder = 1
+        object lblDelayInterbedNumber: TLabel
+          Left = 8
+          Top = 9
+          Width = 234
+          Height = 13
+          Caption = 'Sub-layer number within delay interbed (idcellno)'
+        end
+        object chklstDelayBeds: TCheckListBox
+          Left = 1
+          Top = 28
+          Width = 480
+          Height = 71
+          Align = alBottom
+          ItemHeight = 13
+          TabOrder = 0
+        end
       end
     end
   end

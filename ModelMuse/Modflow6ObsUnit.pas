@@ -34,6 +34,7 @@ type
     FStoredUzfObsDepthFraction: TRealStorage;
     FUzfObs: TUzfObs;
     FCSubObs: TCSubObs;
+    FCSubDelayCells: TIntegerCollection;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -57,6 +58,7 @@ type
     procedure SetUzfObs(const Value: TUzfObs);
     procedure SetUzfObsDepthFraction(const Value: double);
     procedure SetCSubObs(const Value: TCSubObs);
+    procedure SetCSubDelayCells(const Value: TIntegerCollection);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     destructor Destroy; override;
@@ -86,6 +88,7 @@ type
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read FUzfObs write SetUzfObs;
     property CSubObs: TCSubObs read FCSubObs write SetCSubObs;
+    property CSubDelayCells: TIntegerCollection read FCSubDelayCells write SetCSubDelayCells;
     property StoredUzfObsDepthFraction: TRealStorage read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
   end;
 
@@ -125,6 +128,8 @@ begin
     LakObs := SourceObs.LakObs;
     UzfObs := SourceObs.UzfObs;
     CSubObs := SourceObs.CSubObs;
+
+    CSubDelayCells := SourceObs.CSubDelayCells;
     UzfObsDepthFraction := SourceObs.UzfObsDepthFraction;
 
     SfrObsLocation := SourceObs.SfrObsLocation;
@@ -142,10 +147,12 @@ begin
   FGwFlowObsChoices := [gfoNearestNeighbor];
   FStoredUzfObsDepthFraction := TRealStorage.Create;
   FStoredUzfObsDepthFraction.OnChange := OnInvalidateModel;
+  FCSubDelayCells := TIntegerCollection.Create(OnInvalidateModel);
 end;
 
 destructor TModflow6Obs.Destroy;
 begin
+  FCSubDelayCells.Free;
   FStoredUzfObsDepthFraction.Free;
   inherited;
 end;
@@ -167,6 +174,11 @@ begin
     FCSubObs := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflow6Obs.SetCSubDelayCells(const Value: TIntegerCollection);
+begin
+  FCSubDelayCells.Assign(Value);
 end;
 
 procedure TModflow6Obs.SetDrawdownObs(const Value: Boolean);

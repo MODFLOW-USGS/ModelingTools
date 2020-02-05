@@ -2826,28 +2826,18 @@ end;
 function TPointAverageInterpolator.PointToArrayLocation(
   APoint: TPoint2D): TArrayLocation;
 var
-//  AGrid: TCustomModelGrid;
-//  Mesh: TSutraMesh3D;
   ACell: TCellAssignment;
-//  Mesh: IMesh3D;
 begin
   FCellList.Clear;
   FInternalScreenObject.Points[0] := APoint;
-//  AGrid := (FModel as TCustomModel).Grid;
-//  if AGrid = nil then
-//  begin
-//    Mesh := (FModel as TCustomModel).Mesh3D;
-    FInternalScreenObject.GetCellsToAssign({Mesh,} '0', nil, DataSet,
-      FCellList, alAll, FModel);
-//  end
-//  else
-//  begin
-//    FInternalScreenObject.GetCellsToAssign(AGrid, '0', nil, DataSet,
-//      FCellList, alAll, FModel);
-//  end;
+  FInternalScreenObject.GetCellsToAssign({Mesh,} '0', nil, DataSet,
+    FCellList, alAll, FModel);
   if FCellList.Count > 0 then
   begin
-    Assert(FCellList.Count = 1);
+    // If the point in FInternalScreenObject is exactly on the edge of a cell,
+    // two or more cells may be selected. Only the first will be used here.
+
+//    Assert(FCellList.Count = 1);
     ACell := FCellList[0];
     case FInternalScreenObject.ViewDirection of
       vdTop:
@@ -3220,9 +3210,9 @@ var
   ResultLocations: TResultLocationWriter;
   LocalModel: TCustomModel;
   Limits: TGridLimit;
-  PlProcName: string;
+//  PlProcName: string;
   ViewDirection: TViewDirection;
-  CurrentDir: string;
+//  CurrentDir: string;
   ErrorMessage: string;
 begin
   FReady := False;

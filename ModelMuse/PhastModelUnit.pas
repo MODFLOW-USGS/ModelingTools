@@ -8927,9 +8927,12 @@ const
   //                be empty.
   //               Bug fix: Fixed import of Surfer Grid files into a
   //                DISV MODFLOW 6 model.
+  //    '4.1.0.26' Bug fix: Fixed a bug that could cause the Point Average
+  //                Interpolation method to fail if a point was at the edge
+  //                of two cells.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.25';
+  IModelVersion = '4.1.0.26';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

@@ -47,6 +47,9 @@ type
     lblDepthFraction: TLabel;
     tabCSUB: TTabSheet;
     chklstCSUB: TCheckListBox;
+    pnlDelayBeds: TPanel;
+    chklstDelayBeds: TCheckListBox;
+    lblDelayInterbedNumber: TLabel;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -81,7 +84,7 @@ implementation
 
 uses
   Modflow6ObsUnit, ScreenObjectUnit, ModflowMawUnit, ModflowSfr6Unit,
-  ModflowLakMf6Unit, ModflowUzfMf6Unit, ModflowCsubUnit;
+  ModflowLakMf6Unit, ModflowUzfMf6Unit, ModflowCsubUnit, frmGoPhastUnit;
 
 {$R *.dfm}
 
@@ -155,12 +158,20 @@ var
   LakOb: TLakOb;
   UzfOb: TUzfOb;
   CSubOb: TCSubOb;
+  DelayArray: array of Boolean;
+  DelayIndex: Integer;
+  Position: Integer;
 begin
   FActiveObs := False;
   FInitializing := True;
   try
     Initialize;
 
+    SetLength(DelayArray, chklstDelayBeds.Items.Count);
+    for DelayIndex := 0 to Mf6Obs.CSubDelayCells.Count - 1 do
+    begin
+      DelayArray[DelayIndex] := False;
+    end;
     FoundFirst := False;
     for ScreenObjectIndex := 0 to List.Count - 1 do
     begin
@@ -223,6 +234,16 @@ begin
           begin
             chklstCSUB.Checked[Ord(CSubOb)] :=
               CSubOb in Mf6Obs.CSubObs;
+          end;
+          
+          for DelayIndex := 0 to Mf6Obs.CSubDelayCells.Count - 1 do
+          begin
+            Position := Mf6Obs.CSubDelayCells[DelayIndex].Value - 1;
+            if (Position >= 0) and (Position < chklstDelayBeds.Items.Count) then
+            begin
+              chklstDelayBeds.Checked[Position] := True;
+              DelayArray[Position] := True;
+            end;
           end;
 
           FoundFirst := True;
@@ -296,6 +317,18 @@ begin
               TCheckBoxState(CSubOb in Mf6Obs.CSubObs) then
             begin
               chklstCSUB.State[Ord(CSubOb)] := cbGrayed;
+            end;
+          end;
+
+          for DelayIndex := 0 to Mf6Obs.CSubDelayCells.Count - 1 do
+          begin
+            Position := Mf6Obs.CSubDelayCells[DelayIndex].Value - 1;
+            if (Position >= 0) and (Position < chklstDelayBeds.Items.Count) then
+            begin
+              if not DelayArray[Position] then
+              begin
+                chklstDelayBeds.State[Position] := cbGrayed;
+              end;              
             end;
           end;
 
@@ -374,6 +407,7 @@ var
   SfrIndex: Integer;
   UzfIndex: Integer;
   CSubIndex: Integer;
+  IbIndex: Integer;
 begin
   pgcMain.ActivePageIndex := 0;
 
@@ -406,6 +440,15 @@ begin
   for CSubIndex := 0 to chklstCSUB.Items.Count - 1 do
   begin
     chklstCSUB.Checked[CSubIndex] := False;
+  end;
+  
+  chklstDelayBeds.Items.Clear;
+  if frmGoPhast.PhastModel.ModflowPackages.CSubPackage.IsSelected then
+  begin
+    for IbIndex := 1 to frmGoPhast.PhastModel.ModflowPackages.CSubPackage.NumberOfDelayCells do
+    begin
+      chklstDelayBeds.Items.Add(IntToStr(IbIndex));
+    end;
   end;
 
   DoOnChangeProperties;
@@ -442,7 +485,11 @@ var
   UzfOb: TUzfOb;
   CSubOb: TCSubOb;
   NewCSubObs: TCSubObs;
+  DelayArray: array of Boolean;
+  DelayIndex: Integer;
+  Position: Integer;
 begin
+  SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
   begin
     Item := List.Items[Index];
@@ -587,6 +634,31 @@ begin
       if chklstBoundaryFlow.State[Ord(forCHD)] <> cbGrayed then
       begin
         Mf6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(forCHD)];
+      end;
+
+      for DelayIndex := 0 to Length(DelayArray) - 1 do
+      begin
+        DelayArray[DelayIndex] := False;
+      end;
+      for DelayIndex := 0 to Mf6Obs.CSubDelayCells.Count - 1 do
+      begin
+        Position := Mf6Obs.CSubDelayCells[DelayIndex].Value -1;
+        DelayArray[Position] := True;
+      end;
+      for DelayIndex := 0 to chklstDelayBeds.Items.Count -1 do
+      begin
+        if chklstDelayBeds.State[DelayIndex] <> cbGrayed then
+        begin
+          DelayArray[DelayIndex] := chklstDelayBeds.Checked[DelayIndex];
+        end;
+      end;
+      Mf6Obs.CSubDelayCells.Clear;
+      for DelayIndex := 0 to Length(DelayArray) - 1 do
+      begin
+        if DelayArray[DelayIndex] then
+        begin
+          Mf6Obs.CSubDelayCells.Add.Value := DelayIndex + 1;
+        end;
       end;
 
       if chklstBoundaryFlow.State[Ord(forDRN)] <> cbGrayed then

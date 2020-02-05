@@ -270,7 +270,7 @@ type
       stored False
     {$ENDIF}
       ;
-    property CsubPackage: TCSubPackageSelection read FCsubPackage
+    property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage
     {$IFNDEF CSUB}
       stored False
