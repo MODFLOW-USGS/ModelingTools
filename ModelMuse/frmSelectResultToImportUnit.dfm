@@ -280,6 +280,8 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
         ItemHeight = 18
         TabOrder = 1
         OnStateChange = clTimeStateChange
+        ExplicitLeft = 1
+        ExplicitTop = 87
         InternalVersion = 202
       end
       object clDescription: TJvxCheckListBox

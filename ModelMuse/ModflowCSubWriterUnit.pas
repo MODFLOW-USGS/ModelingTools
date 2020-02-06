@@ -12,9 +12,11 @@ type
   TCSubObservation = record
     FName: string;
     FBoundName: string;
-    FObsTypes: TCSubObs;
+    FObsTypes: TSubObsSet;
     FScreenObject: TObject;
     FInterbedNumbers: TOneDIntegerArray;
+    FDelayInterbeds: TBoolArray;
+    FDelayCellNumbers: TOneDIntegerArray;
     FCells: array of TCellLocation;
   end;
   TCSubObservationList = TList<TCSubObservation>;
@@ -33,7 +35,7 @@ type
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
     FObservations: TCSubObservationList;
-    FInterBedNumbers: array of array of array of Integer;
+    FInterBedNumbers: array of array of array of array of Integer;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WriteGridData;
@@ -62,6 +64,7 @@ implementation
 uses
   frmProgressUnit, frmErrorsAndWarningsUnit,
   Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit, Modflow6ObsUnit;
+
 
 { TCSubWriter }
 
@@ -94,6 +97,7 @@ var
   ACell: TCellAssignment;
   IDomainArray: TDataArray;
   CellCount: Integer;
+  IbIndex: Integer;
 begin
   NoAssignmentErrorRoot := Format(StrNoBoundaryConditio,
     [Package.PackageIdentifier]);
@@ -124,7 +128,7 @@ begin
           MfObs := ScreenObject.Modflow6Obs;
           Obs.FName := MfObs.Name;
           Obs.FBoundName := ScreenObject.Name;
-          Obs.FObsTypes := MfObs.CSubObs;
+          Obs.FObsTypes := MfObs.CSubObs.CSubObsSet;
           Obs.FScreenObject := ScreenObject;
           CellList.Clear;
           ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
@@ -140,6 +144,11 @@ begin
             end;
           end;
           SetLength(Obs.FCells, CellCount);
+          SetLength(Obs.FDelayCellNumbers, MfObs.CSubDelayCells.Count);
+          for IbIndex := 0 to MfObs.CSubDelayCells.Count - 1 do
+          begin
+            Obs.FDelayCellNumbers[IbIndex] := MfObs.CSubDelayCells[IbIndex].Value;
+          end;
           FObservations.Add(Obs);
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
@@ -156,7 +165,7 @@ begin
         MfObs := ScreenObject.Modflow6Obs;
         Obs.FName := MfObs.Name;
         Obs.FBoundName := ScreenObject.Name;
-        Obs.FObsTypes := MfObs.CSubObs;
+        Obs.FObsTypes := MfObs.CSubObs.CSubObsSet;
         Obs.FScreenObject := ScreenObject;
         CellList.Clear;
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
@@ -172,6 +181,11 @@ begin
           end;
         end;
         SetLength(Obs.FCells, CellCount);
+        SetLength(Obs.FDelayCellNumbers, MfObs.CSubDelayCells.Count);
+        for IbIndex := 0 to MfObs.CSubDelayCells.Count - 1 do
+        begin
+          Obs.FDelayCellNumbers[IbIndex] := MfObs.CSubDelayCells[IbIndex].Value;
+        end;
 
         FObservations.Add(Obs);
       end;
@@ -192,7 +206,7 @@ var
   MfObs: TModflow6Obs;
 begin
   MfObs := AScreenObject.Modflow6Obs;
-  Result := (MfObs <> nil) and MfObs.Used and (MfObs.CSubObs <> []);
+  Result := (MfObs <> nil) and MfObs.Used and (MfObs.CSubObs.CSubObsSet <> []);
 //  result := (Model.ModelSelection = msModflow2015)
 //    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
 end;
@@ -363,11 +377,14 @@ var
   ObsWriter: TCSubObsWriter;
   ObsIndex: Integer;
   CSubObs: TCSubObservation;
-  IbObsTypes: TCSubObs;
+  IbObsTypes: TSubObsSet;
   CellIndex: Integer;
   InterbedNumbers: TOneDIntegerArray;
+  DelayInterbeds: TBoolArray;
   IBCount: Integer;
   ACell: TCellLocation;
+  InterbedSystemCount: Integer;
+  IbIndex: Integer;
 begin
   if not Package.IsSelected then
   begin
@@ -456,27 +473,42 @@ begin
 
   if FObservations.Count > 0 then
   begin
+    InterbedSystemCount := FCSubPackage.Interbeds.Count;
     for ObsIndex := 0 to FObservations.Count - 1 do
     begin
       CSubObs := FObservations[ObsIndex];
-      IbObsTypes := [coTheta, coDelayFlowTop, coDelayFlowBot] * CSubObs.FObsTypes;
+      IbObsTypes := [coTheta, coDelayFlowTop, coDelayFlowBot, coDelayHead,
+        coDelayGStress, coDelayEStress, coDelayPreConStress, coDelayComp,
+        coDelayThickness, coDelayTheta]
+        * CSubObs.FObsTypes;
       if IbObsTypes <> [] then
       begin
-        SetLength(InterbedNumbers, Length(CSubObs.FCells));
+        SetLength(InterbedNumbers, Length(CSubObs.FCells) * InterbedSystemCount);
+        SetLength(DelayInterbeds, Length(CSubObs.FCells) * InterbedSystemCount);
         IBCount := 0;
         for CellIndex := 0 to Length(CSubObs.FCells) - 1 do
         begin
           ACell := CSubObs.FCells[CellIndex];
           // FInterBedNumbers is specified in WritePackageData.
-          if FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column] <> 0 then
+          if FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column] <> nil then
           begin
-            InterbedNumbers[IBCount] :=
-              FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column];
-            Inc(IBCount);
+            for IbIndex := 0 to InterbedSystemCount -1 do
+            begin
+              if FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column, IbIndex] <> 0 then
+              begin
+                InterbedNumbers[IBCount] :=
+                  FInterBedNumbers[ACell.Layer, ACell.Row, ACell.Column, IbIndex];
+                DelayInterbeds[IBCount] :=
+                  FCSubPackage.Interbeds[IbIndex].InterbedType = itDelay;
+                Inc(IBCount);
+              end;
+            end;
           end;
         end;
         SetLength(InterbedNumbers, IBCount);
         CSubObs.FInterbedNumbers := InterbedNumbers;
+        SetLength(DelayInterbeds, IBCount);
+        CSubObs.FDelayInterbeds := DelayInterbeds;
         FObservations[ObsIndex] := CSubObs;
       end;
     end;
@@ -617,7 +649,7 @@ begin
   if coInterbedStrain in FCSubPackage.OutputTypes then
   begin
     WriteString('  STRAIN_CSV_INTERBED FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_strn');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubstrncsv);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -628,7 +660,7 @@ begin
   if coCourseStrain in FCSubPackage.OutputTypes then
   begin
     WriteString('  STRAIN_CSV_COARSE FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_crs_strn');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubcrsstrncsv);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -639,7 +671,7 @@ begin
   if coCompaction in FCSubPackage.OutputTypes then
   begin
     WriteString('  COMPACTION FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_cmpct');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubcmpct);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -650,7 +682,7 @@ begin
   if coElasticComp in FCSubPackage.OutputTypes then
   begin
     WriteString('  COMPACTION_ELASTIC FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_elst_cmpct');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubelstcmpct);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -661,7 +693,7 @@ begin
   if coInelasticComp in FCSubPackage.OutputTypes then
   begin
     WriteString('  COMPACTION_INELASTIC FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_inelst_cmpct');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubinelstcmpct);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -672,7 +704,7 @@ begin
   if coInterbedComp in FCSubPackage.OutputTypes then
   begin
     WriteString('  COMPACTION_INTERBED FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_intrbd_cmpct');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubintrbdcmpct);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -683,7 +715,7 @@ begin
   if coCoarseComp in FCSubPackage.OutputTypes then
   begin
     WriteString('  COMPACTION_COARSE FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_crs_cmpct');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubcrscmpct);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -694,7 +726,7 @@ begin
   if coZDisplacement in FCSubPackage.OutputTypes then
   begin
     WriteString('  ZDISPLACEMENT FILEOUT ');
-    OutputFileName := ChangeFileExt(FFileName, '.csub_z_dis');
+    OutputFileName := ChangeFileExt(FFileName, StrCsubzdis);
     Model.ModelOutputFiles.Add(OutputFileName);
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -745,6 +777,8 @@ var
   DisvUsed: Boolean;
   icsubno: Integer;
   IDomain: TDataArray;
+  InterbedSystemCount: Integer;
+  IbIndex: Integer;
 begin
   SetLength(FInterBedNumbers, Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
@@ -754,6 +788,7 @@ begin
 
   DataArrayManager := Model.DataArrayManager;
   IDomain := DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  InterbedSystemCount := FCSubPackage.Interbeds.Count;
 
   for InterbedIndex := 0 to FCSubPackage.Interbeds.Count - 1 do
   begin
@@ -793,12 +828,20 @@ begin
       begin
         for ColIndex := 0 to Model.ColumnCount - 1 do
         begin
-          FInterBedNumbers[LayerIndex, RowIndex, ColIndex] := 0;
+//          FInterBedNumbers[LayerIndex, RowIndex, ColIndex] := 0;
           if pcsDataArray.IsValue[LayerIndex, RowIndex, ColIndex]
             and (IDomain.IntegerData[LayerIndex, RowIndex, ColIndex] > 0) then
           begin
             Inc(icsubno);
-            FInterBedNumbers[LayerIndex, RowIndex, ColIndex] := icsubno;
+            if FInterBedNumbers[LayerIndex, RowIndex, ColIndex] = nil then
+            begin
+              SetLength(FInterBedNumbers[LayerIndex, RowIndex, ColIndex], InterbedSystemCount);
+              for IbIndex := 0 to InterbedSystemCount - 1 do
+              begin
+                FInterBedNumbers[LayerIndex, RowIndex, ColIndex, IbIndex] := 0;
+              end;
+            end;
+            FInterBedNumbers[LayerIndex, RowIndex, ColIndex, InterbedIndex] := icsubno;
 
             pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             thick_frac := thick_fracDataArray.RealData[LayerIndex, RowIndex, ColIndex];

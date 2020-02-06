@@ -20903,7 +20903,7 @@ begin
   FCompressionMethod := coElasticSpecificStorage;
   FUpdateMaterialProperties := False;
   FInterbedThicknessMethod := itmThickness;
-  FNumberOfDelayCells := 0;
+  FNumberOfDelayCells := 19;
   FEffectiveStressLag := False;
   FSpecifyInitialPreconsolidationStress := False;
   FSpecifyInitialDelayHead := False;

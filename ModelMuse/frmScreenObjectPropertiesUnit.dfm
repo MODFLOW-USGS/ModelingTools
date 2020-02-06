@@ -12056,7 +12056,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pgcMain: TPageControl
               Width = 581
               Height = 405
-              ActivePage = frameObsMf6.tabBasic
               ExplicitWidth = 581
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
@@ -12126,12 +12125,35 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371
+                inherited splCSub: TSplitter
+                  Top = 266
+                  Width = 573
+                  ExplicitTop = 315
+                  ExplicitWidth = 573
+                end
                 inherited chklstCSUB: TCheckListBox
                   Width = 573
-                  Height = 371
+                  Height = 266
                   ItemHeight = 19
                   ExplicitWidth = 573
-                  ExplicitHeight = 371
+                  ExplicitHeight = 271
+                end
+                inherited pnlDelayBeds: TPanel
+                  Top = 271
+                  Width = 573
+                  ExplicitTop = 271
+                  ExplicitWidth = 573
+                  inherited lblDelayInterbedNumber: TLabel
+                    Width = 357
+                    Height = 19
+                    ExplicitWidth = 357
+                    ExplicitHeight = 19
+                  end
+                  inherited chklstDelayBeds: TCheckListBox
+                    Width = 571
+                    ItemHeight = 19
+                    ExplicitWidth = 571
+                  end
                 end
               end
             end
@@ -13213,7 +13235,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 435
               inherited tabInterbedSystems: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 401

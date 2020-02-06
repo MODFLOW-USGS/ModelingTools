@@ -50,6 +50,7 @@ type
     pnlDelayBeds: TPanel;
     chklstDelayBeds: TCheckListBox;
     lblDelayInterbedNumber: TLabel;
+    splCSub: TSplitter;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -168,7 +169,7 @@ begin
     Initialize;
 
     SetLength(DelayArray, chklstDelayBeds.Items.Count);
-    for DelayIndex := 0 to Mf6Obs.CSubDelayCells.Count - 1 do
+    for DelayIndex := 0 to chklstDelayBeds.Items.Count - 1 do
     begin
       DelayArray[DelayIndex] := False;
     end;
@@ -233,7 +234,7 @@ begin
           for CSubOb := Low(TCSubOb) to High(TCSubOb) do
           begin
             chklstCSUB.Checked[Ord(CSubOb)] :=
-              CSubOb in Mf6Obs.CSubObs;
+              CSubOb in Mf6Obs.CSubObs.CSubObsSet;
           end;
           
           for DelayIndex := 0 to Mf6Obs.CSubDelayCells.Count - 1 do
@@ -314,7 +315,7 @@ begin
           for CSubOb := Low(TCSubOb) to High(TCSubOb) do
           begin
             if chklstCSUB.State[Ord(CSubOb)] <>
-              TCheckBoxState(CSubOb in Mf6Obs.CSubObs) then
+              TCheckBoxState(CSubOb in Mf6Obs.CSubObs.CSubObsSet) then
             begin
               chklstCSUB.State[Ord(CSubOb)] := cbGrayed;
             end;
@@ -484,7 +485,7 @@ var
   NewUzfObs: TUzfObs;
   UzfOb: TUzfOb;
   CSubOb: TCSubOb;
-  NewCSubObs: TCSubObs;
+  NewCSubObs: TSubObsSet;
   DelayArray: array of Boolean;
   DelayIndex: Integer;
   Position: Integer;
@@ -614,7 +615,7 @@ begin
       end;
       Mf6Obs.UzfObs := NewUzfObs;
 
-      NewCSubObs := Mf6Obs.CSubObs;
+      NewCSubObs := Mf6Obs.CSubObs.CSubObsSet;
       for CSubOb := Low(TCSubOb) to High(TCSubOb) do
       begin
         if chklstCSUB.State[Ord(CSubOb)] <> cbGrayed then
@@ -629,7 +630,7 @@ begin
           end;
         end;
       end;
-      Mf6Obs.CSubObs := NewCSubObs;
+      Mf6Obs.CSubObs.CSubObsSet := NewCSubObs;
 
       if chklstBoundaryFlow.State[Ord(forCHD)] <> cbGrayed then
       begin

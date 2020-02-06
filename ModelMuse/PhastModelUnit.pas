@@ -8931,6 +8931,9 @@ const
   //                Interpolation method to fail if a point was at the edge
   //                of two cells.
 
+  //               Bug fix: Fixed option to select all the data from a single
+  //                time step whem importing results.
+
   // version number of ModelMuse.
   IModelVersion = '4.1.0.26';
   StrPvalExt = '.pval';
@@ -8983,6 +8986,15 @@ const
   StrUzfRch = '.UzfRch';
   StrUzfDisch = '.UzfDisch';
 
+  // CSUB output file extensions.
+  StrCsubstrncsv = '.csub_strn.csv';
+  StrCsubcrsstrncsv = '.csub_crs_strn.csv';
+  StrCsubcmpct = '.csub_cmpct';
+  StrCsubelstcmpct = '.csub_elst_cmpct';
+  StrCsubinelstcmpct = '.csub_inelst_cmpct';
+  StrCsubintrbdcmpct = '.csub_intrbd_cmpct';
+  StrCsubcrscmpct = '.csub_crs_cmpct';
+  StrCsubzdis = '.csub_z_dis';
 
 
   MaxString12 = 12;

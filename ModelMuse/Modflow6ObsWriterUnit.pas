@@ -1016,7 +1016,6 @@ begin
   begin
     result := Format('_%0:d_%1:d_%2:d', [Cell.Layer+1, Cell.Row+1, Cell.Column+1]);
   end;
-  WriteInteger(Cell.Layer+1);
 end;
 
 
@@ -2191,7 +2190,7 @@ end;
 
 procedure TCSubObsWriter.WriteCSubObs;
 var
-  ObTypes: TCSubObs;
+  ObTypes: TSubObsSet;
   ObsIndex: Integer;
   ObsPackage: TMf6ObservationUtility;
   OutputTypeExtension: string;
@@ -2211,6 +2210,9 @@ var
   IBIndex: Integer;
   icsubno: Integer;
   ScreenObject: TScreenObject;
+  DelayBedIndex: Integer;
+  idcellno: Integer;
+  NDELAYCELLS: Integer;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -2231,6 +2233,7 @@ begin
     ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
   end;
   ObsPackage := Package as TMf6ObservationUtility;
+  NDELAYCELLS := Model.ModflowPackages.CSubPackage.NumberOfDelayCells;
   case ObsPackage.OutputFormat of
     ofText:
       begin
@@ -2359,7 +2362,7 @@ begin
             OutputExtension := '.coarse-theta_ob' + OutputTypeExtension;
             ObservationType := 'coarse-theta';
           end;
-        ooThetaCell:
+        coThetaCell:
           begin
             OutputExtension := '.theta-cell_ob' + OutputTypeExtension;
             ObservationType := 'theta-cell';
@@ -2374,46 +2377,48 @@ begin
             OutputExtension := '.delay-flowbot_ob' + OutputTypeExtension;
             ObservationType := 'delay-flowbot';
           end;
-//        coDelayHead:
-//          begin
-//            OutputExtension := '.delay-head_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-head';
-//          end;
-//        coDelayGStress:
-//          begin
-//            OutputExtension := '.delay-gstress_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-gstress';
-//          end;
-//        coDelayEStress:
-//          begin
-//            OutputExtension := '.delay-estress_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-estress';
-//          end;
-//        coDelayPreConStress:
-//          begin
-//            OutputExtension := '.delay-preconstress_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-preconstress';
-//          end;
-//        coDelayComp:
-//          begin
-//            OutputExtension := '.delay-compaction_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-compaction';
-//          end;
-//        coDelayThickness:
-//          begin
-//            OutputExtension := '.delay-thickness_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-thickness';
-//          end;
-//        coDelayTheta:
-//          begin
-//            OutputExtension := '.delay-theta_ob' + OutputTypeExtension;
-//            ObservationType := 'delay-theta';
-//          end;
+        coDelayHead:
+          begin
+            OutputExtension := '.delay-head_ob' + OutputTypeExtension;
+            ObservationType := 'delay-head';
+          end;
+        coDelayGStress:
+          begin
+            OutputExtension := '.delay-gstress_ob' + OutputTypeExtension;
+            ObservationType := 'delay-gstress';
+          end;
+        coDelayEStress:
+          begin
+            OutputExtension := '.delay-estress_ob' + OutputTypeExtension;
+            ObservationType := 'delay-estress';
+          end;
+        coDelayPreConStress:
+          begin
+            OutputExtension := '.delay-preconstress_ob' + OutputTypeExtension;
+            ObservationType := 'delay-preconstress';
+          end;
+        coDelayComp:
+          begin
+            OutputExtension := '.delay-compaction_ob' + OutputTypeExtension;
+            ObservationType := 'delay-compaction';
+          end;
+        coDelayThickness:
+          begin
+            OutputExtension := '.delay-thickness_ob' + OutputTypeExtension;
+            ObservationType := 'delay-thickness';
+          end;
+        coDelayTheta:
+          begin
+            OutputExtension := '.delay-theta_ob' + OutputTypeExtension;
+            ObservationType := 'delay-theta';
+          end;
         coPreConsStressCell:
           begin
             OutputExtension := '.preconstress-cell_ob' + OutputTypeExtension;
             ObservationType := 'preconstress-cell';
           end;
+        else
+          Assert(False);
       end;
 
       WriteString('BEGIN CONTINUOUS FILEOUT ');
@@ -2455,11 +2460,23 @@ begin
                   WriteString(ObservationType);
                   WriteString(boundname);
                   NewLine;
+                end
+                else
+                begin
+                  for CellIndex := 0 to Length(AnObs.FCells) - 1 do
+                  begin
+                    ACell := AnObs.FCells[CellIndex];
+                    obsname := ' ''' + Root + WriteCellName(ACell) + ''' ';
+                    WriteString(obsname);
+                    WriteString(ObservationType);
+                    WriteCell(ACell);
+                    NewLine;
+                  end;
                 end;
               end;
             coCoarseCSub, coCSubCell, coWcompCSubCell, coSkCell, coSkeCell,
             coEStressCell, coGStressCell, coCoarseCompaction, coCompCell,
-            coCoarseThickness, coThickCell, coCoarseTheta, ooThetaCell,
+            coCoarseThickness, coThickCell, coCoarseTheta, coThetaCell,
             coPreConsStressCell:
               begin
                 for CellIndex := 0 to Length(AnObs.FCells) - 1 do
@@ -2472,7 +2489,7 @@ begin
                   NewLine;
                 end;
               end;
-            coTheta, coDelayFlowTop, coDelayFlowBot:
+            coTheta:
               begin
                 for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
                 begin
@@ -2484,27 +2501,48 @@ begin
                   NewLine;
                 end;
               end;
-//            coDelayHead:
-//              begin
-//              end;
-//            coDelayGStress:
-//              begin
-//              end;
-//            coDelayEStress:
-//              begin
-//              end;
-//            coDelayPreConStress:
-//              begin
-//              end;
-//            coDelayComp:
-//              begin
-//              end;
-//            coDelayThickness:
-//              begin
-//              end;
-//            coDelayTheta:
-//              begin
-//              end;
+            coDelayFlowTop, coDelayFlowBot:
+              begin
+                for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                begin
+                  if AnObs.FDelayInterbeds[IBIndex] then
+                  begin
+                    icsubno := AnObs.FInterbedNumbers[IBIndex];
+                    obsname := ' ''' + Root + '_' + IntToStr(icsubno) + ''' ';
+                    WriteString(obsname);
+                    WriteString(ObservationType);
+                    WriteInteger(icsubno);
+                    NewLine;
+                  end;
+                end;
+              end;
+            coDelayHead, coDelayGStress, coDelayEStress, coDelayPreConStress,
+            coDelayComp, coDelayThickness, coDelayTheta:
+              begin
+                for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                begin
+                  if AnObs.FDelayInterbeds[IBIndex] then
+                  begin
+                    icsubno := AnObs.FInterbedNumbers[IBIndex];
+                    for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
+                    begin
+                      idcellno := AnObs.FDelayCellNumbers[DelayBedIndex];
+                      if (1 <= idcellno) and (idcellno <> NDELAYCELLS) then
+                      begin
+                        obsname := Format(' ''%0:s_%1:d_%2:d'' ', [Root, icsubno, idcellno]);
+                        WriteString(obsname);
+                        WriteString(ObservationType);
+                        WriteInteger(icsubno);
+                        WriteInteger(idcellno);
+                        NewLine;
+                      end;
+                    end;
+                  end;
+
+                end;
+              end;
+            else
+              Assert(False);
           end;
 
         end;

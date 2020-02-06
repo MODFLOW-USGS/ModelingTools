@@ -87,8 +87,16 @@ type
     property LakObs: TLakObs read FLakObs write SetLakObs;
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read FUzfObs write SetUzfObs;
-    property CSubObs: TCSubObs read FCSubObs write SetCSubObs;
-    property CSubDelayCells: TIntegerCollection read FCSubDelayCells write SetCSubDelayCells;
+    property CSubObs: TCSubObs read FCSubObs write SetCSubObs
+  {$IFNDEF CSUB}
+    stored False
+  {$ENDIF}
+    ;
+    property CSubDelayCells: TIntegerCollection read FCSubDelayCells write SetCSubDelayCells
+  {$IFNDEF CSUB}
+    stored False
+  {$ENDIF}
+    ;
     property StoredUzfObsDepthFraction: TRealStorage read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
   end;
 
@@ -148,10 +156,12 @@ begin
   FStoredUzfObsDepthFraction := TRealStorage.Create;
   FStoredUzfObsDepthFraction.OnChange := OnInvalidateModel;
   FCSubDelayCells := TIntegerCollection.Create(OnInvalidateModel);
+  FCSubObs := TCSubObs.Create;
 end;
 
 destructor TModflow6Obs.Destroy;
 begin
+  FCSubObs.Free;
   FCSubDelayCells.Free;
   FStoredUzfObsDepthFraction.Free;
   inherited;
@@ -171,7 +181,7 @@ procedure TModflow6Obs.SetCSubObs(const Value: TCSubObs);
 begin
   if FCSubObs <> Value then
   begin
-    FCSubObs := Value;
+    FCSubObs.Assign(Value);
     InvalidateModel;
   end;
 end;

@@ -44,6 +44,10 @@ type
   }
   T2DRealPointArray = array of TRealPointArray;
 
+  {@abstract(@name is a one-dimensional array of booleans.)
+  }
+  TBoolArray = array of boolean;
+
   {@abstract(@name is a two-dimensional array of booleans.)
   }
   T2DBoolArray = array of array of boolean;

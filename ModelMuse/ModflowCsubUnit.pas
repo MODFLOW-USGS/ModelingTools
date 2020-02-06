@@ -12,12 +12,27 @@ type
     coWcompCSubCell, coSk, coSke, coSkCell, coSkeCell, coEStressCell,
     coGStressCell, coIntbedComp, coInelastComp, coElastComp, coCoarseCompaction,
     coCompCell, coThickness, coCoarseThickness, coThickCell, coTheta,
-    coCoarseTheta, ooThetaCell, coDelayFlowTop, coDelayFlowBot,
-//    coDelayHead,
-//    coDelayGStress, coDelayEStress, coDelayPreConStress, coDelayComp,
-//    coDelayThickness, coDelayTheta,
+    coCoarseTheta, coThetaCell, coDelayFlowTop, coDelayFlowBot,
+    coDelayHead,
+    coDelayGStress, coDelayEStress, coDelayPreConStress, coDelayComp,
+    coDelayThickness, coDelayTheta,
     coPreConsStressCell);
-  TCSubObs = set of TCSubOb;
+  TSubObsSet = set of TCSubOb;
+
+//  TCSubObs = set of TCSubOb;
+  TCSubObs = class(TPersistent)
+  private
+    FCSubObsOptions: TSubObsSet;
+    function GetCSubObsOptions: string;
+    procedure SetCSubObsOptions(const Value: string);
+    function CSubObToString(CSubOb: TCSubOb): string;
+    function StringToCSubOb(AString: string): TCSubOb;
+  public
+    procedure Assign(Source: TPersistent); override;
+    property CSubObsSet: TSubObsSet read FCSubObsOptions write FCSubObsOptions;
+  published
+    property CSubObsOptions: string read GetCSubObsOptions write SetCSubObsOptions;
+  end;
 
   TCSubPackageData = class(TFormulaOrderedItem)
   private
@@ -294,6 +309,7 @@ type
 //    property Interp;
   end;
 
+
 implementation
 
 uses
@@ -304,6 +320,9 @@ uses
 resourcestring
   StrStressOffsetMultip = 'Stress offset multiplier';
   StrStressOffsetSetTo = 'Stress offset set to zero because of a math error';
+
+var
+  CSubOptionNames: TStringList;
 
 { TCSubPackageData }
 
@@ -1651,5 +1670,127 @@ begin
     end;
   end;
 end;
+
+{ TCSubObs }
+
+procedure TCSubObs.Assign(Source: TPersistent);
+begin
+  if Source is TCSubObs then
+  begin
+    CSubObsOptions := TCSubObs(Source).CSubObsOptions;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+function TCSubObs.GetCSubObsOptions: string;
+var
+  CSubObs: TCSubOb;
+begin
+  Result:= '';
+  for CSubObs:= Low(TCSubOb) to High(TCSubOb) do
+  begin
+    if CSubObs in FCSubObsOptions then
+    begin
+      Result:= Result + CSubObToString(CSubObs) + ',';
+    end;
+  end;
+end;
+
+procedure TCSubObs.SetCSubObsOptions(const Value: string);
+var
+  Items: TStringList;
+  ItemIndex: Integer;
+  Item: TCSubOb;
+  AnItemName: String;
+begin
+  FCSubObsOptions := [];
+  if Value <> '' then
+  begin
+    Items := TStringList.Create;
+    try
+      Items.CommaText := Value;
+      for ItemIndex := 0 to Items.Count - 1 do
+      begin
+        AnItemName := Items[ItemIndex];
+        if AnItemName <> '' then
+        begin
+          Item := StringToCSubOb(Items[ItemIndex]);
+          Include(FCSubObsOptions, Item);
+        end;
+      end;
+    finally
+      Items.Free;
+    end;
+  end;
+end;
+
+function TCSubObs.StringToCSubOb(AString: string): TCSubOb;
+var
+  ItemIndex: Integer;
+begin
+  ItemIndex := CSubOptionNames.IndexOf(AString);
+  Assert(ItemIndex >= 0);
+  result := TCSubOb(ItemIndex);
+end;
+
+function TCSubObs.CSubObToString(CSubOb: TCSubOb): string;
+begin
+  result := CSubOptionNames[Ord(CSubOb)];
+end;
+
+initialization
+  CSubOptionNames := TStringList.Create;
+  CSubOptionNames.Add('coCSub');
+  CSubOptionNames.Add('coInelastCSub');
+  CSubOptionNames.Add('coElastCSub');
+  CSubOptionNames.Add('coCoarseCSub');
+  CSubOptionNames.Add('coCSubCell');
+  CSubOptionNames.Add('coWcompCSubCell');
+  CSubOptionNames.Add('coSk');
+  CSubOptionNames.Add('coSke');
+  CSubOptionNames.Add('coSkCell');
+  CSubOptionNames.Add('coSkeCell');
+  CSubOptionNames.Add('coEStressCell');
+  CSubOptionNames.Add('coGStressCell');
+  CSubOptionNames.Add('coIntbedComp');
+  CSubOptionNames.Add('coInelastComp');
+  CSubOptionNames.Add('coElastComp');
+  CSubOptionNames.Add('coCoarseCompaction');
+  CSubOptionNames.Add('coCompCell');
+  CSubOptionNames.Add('coThickness');
+  CSubOptionNames.Add('coCoarseThickness');
+  CSubOptionNames.Add('coThickCell');
+  CSubOptionNames.Add('coTheta');
+  CSubOptionNames.Add('coCoarseTheta');
+  CSubOptionNames.Add('coThetaCell');
+  CSubOptionNames.Add('coDelayFlowTop');
+  CSubOptionNames.Add('coDelayFlowBot');
+  CSubOptionNames.Add('coDelayHead');
+  CSubOptionNames.Add('coDelayGStress');
+  CSubOptionNames.Add('coDelayEStress');
+  CSubOptionNames.Add('coDelayPreConStress');
+  CSubOptionNames.Add('coDelayComp');
+  CSubOptionNames.Add('coDelayThickness');
+  CSubOptionNames.Add('coDelayTheta');
+  CSubOptionNames.Add('coPreConsStressCell');
+
+{
+  TCSubOb = (coCSub, coInelastCSub, coElastCSub, coCoarseCSub, coCSubCell,
+    coWcompCSubCell, coSk, coSke, coSkCell, coSkeCell, coEStressCell,
+    coGStressCell, coIntbedComp, coInelastComp, coElastComp, coCoarseCompaction,
+    coCompCell, coThickness, coCoarseThickness, coThickCell, coTheta,
+    coCoarseTheta, ooThetaCell, coDelayFlowTop, coDelayFlowBot,
+    coDelayHead,
+    coDelayGStress, coDelayEStress, coDelayPreConStress, coDelayComp,
+    coDelayThickness, coDelayTheta,
+    coPreConsStressCell);
+}
+
+finalization
+  CSubOptionNames.Free;
 
 end.

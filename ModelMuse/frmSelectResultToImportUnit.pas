@@ -15,7 +15,7 @@ type
   TModflowResultFormat = (mrBinary, mrAscii, mrFlux, mrHufAscii, mrHufBinary,
     mrHufFlux, mfSubBinary, mfMt3dConc, mfSwrStageAscii, mfSwrStageBinary,
     mfSwrReachExchangeAscii, mfSwrReachExchangeBinary,
-    mfSwrReachGroupBudgetAscii, mfSwrReachGroupBudgetBinary);
+    mfSwrReachGroupBudgetAscii, mfSwrReachGroupBudgetBinary, mfCSubBinary);
 
   TModelColumns = (mcModelName, mcUse, mcFileName);
 
@@ -456,6 +456,12 @@ resourcestring
   'mport.';
   StrUZFRecharge = 'UZF Recharge';
   StrUZFDischarge = 'UZF Discharge';
+  StrCSUBCompaction = 'CSUB Compaction';
+  StrCSUBElasticCompact = 'CSUB Elastic Compaction';
+  StrCSUBInlasticCompac = 'CSUB Inlastic Compaction';
+  StrCSUBInterbedCompac = 'CSUB Interbed Compaction';
+  StrCSUBCoarseCompacti = 'CSUB Coarse Compaction';
+  StrCSUBZDisplacement = 'CSUB Z Displacement';
 
 {$R *.dfm}
 
@@ -2737,7 +2743,7 @@ begin
               for Index := 0 to clData.Items.Count - 1 do
               begin
                 case FResultFormat of
-                  mrBinary, mrAscii, mfMt3dConc:
+                  mrBinary, mrAscii, mfMt3dConc, mfCSubBinary:
                     begin
                       if Index > LastItem then
                       begin
@@ -3583,6 +3589,27 @@ begin
     SubsidenceDescriptions.Add(StrSWTLayercenterEle);
     SubsidenceExtensions.Add(StrSwtLayerCentElevOut);
 
+    SubsidenceDescriptions.Add(StrCSUBCompaction);
+    SubsidenceExtensions.Add(StrCsubcmpct);
+
+    SubsidenceDescriptions.Add(StrCSUBElasticCompact);
+    SubsidenceExtensions.Add(StrCsubelstcmpct);
+
+    SubsidenceDescriptions.Add(StrCSUBInlasticCompac);
+    SubsidenceExtensions.Add(StrCsubinelstcmpct);
+
+    SubsidenceDescriptions.Add(StrCSUBInterbedCompac);
+    SubsidenceExtensions.Add(StrCsubintrbdcmpct);
+
+    SubsidenceDescriptions.Add(StrCSUBCoarseCompacti);
+    SubsidenceExtensions.Add(StrCsubcrscmpct);
+
+    SubsidenceDescriptions.Add(StrCSUBZDisplacement);
+    SubsidenceExtensions.Add(StrCsubzdis);
+
+
+
+
     odSelectFiles.Filter := StrCommonSupportedFil + Trim(FileExtensions[0]);
     for index := 1 to FileExtensions.Count - 1 do
     begin
@@ -3828,7 +3855,7 @@ var
       end;
       ItemList.Add(ItemIndex);
 
-      Item := SysUtils.StringReplace(Item, Description, '', []);
+      Item := SysUtils.StringReplace(Item, TrimmedDescription, '', []);
       while (Length(Item) > 0) and CharInSet(Item[1], ['_', ':', ' ']) do
       begin
         Item := Copy(Item, 2, MaxInt);
@@ -3931,7 +3958,7 @@ begin
               end;
             end;
           end;
-        mrBinary:
+        mrBinary, mfCSubBinary:
           begin
             LayerCount := AModel.ModflowLayerCount;
             PriorCount := LayerCount;
@@ -4700,7 +4727,7 @@ begin
             EndReached := True;
           end;
         end;
-      mrBinary, mrHufBinary, mfSubBinary:
+      mrBinary, mrHufBinary, mfSubBinary, mfCSubBinary:
         begin
           if FFileStream.Position < FFileStream.Size then
           begin
@@ -4856,8 +4883,6 @@ begin
     FResultFormat := mfSubBinary;
   end
 
-
-
   else if (SameText(Extension, StrSwtSubOut)) then
   begin
     FResultFormat := mfSubBinary;
@@ -4938,6 +4963,18 @@ begin
   begin
     FResultFormat := mfSwrReachGroupBudgetBinary;
   end
+
+  else if SameText(Extension, StrCsubcmpct)
+    or SameText(Extension, StrCsubelstcmpct)
+    or SameText(Extension, StrCsubinelstcmpct)
+    or SameText(Extension, StrCsubintrbdcmpct)
+    or SameText(Extension, StrCsubcrscmpct)
+    or SameText(Extension, StrCsubzdis)
+    then
+  begin
+    FResultFormat := mfCSubBinary;
+  end
+
   else
   begin
     result := False;
@@ -5062,7 +5099,12 @@ begin
         finally
           AFileStream.Free;
         end;
-      end
+      end;
+    mfCSubBinary:
+      begin
+        Precision := mpDouble;
+        FFileStream := TFileStream.Create(AFileName, fmOpenRead or fmShareDenyWrite);
+      end;
     else Assert(False);
   end;
 end;
