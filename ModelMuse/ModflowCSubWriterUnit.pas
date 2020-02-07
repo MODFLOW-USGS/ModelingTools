@@ -590,7 +590,7 @@ begin
   end;
 
 //  [INITIAL_PRECONSOLIDATION_HEAD]
-  if FCSubPackage.PreconsolidationHeadUsed then
+  if not FCSubPackage.HeadBased and FCSubPackage.PreconsolidationHeadUsed then
   begin
     WriteString('  INITIAL_PRECONSOLIDATION_HEAD');
     NewLine;
@@ -763,6 +763,7 @@ var
   thetaDataArray: TDataArray;
   kvDataArray: TDataArray;
   h0DataArray: TDataArray;
+  CSubDataArray: TDataArray;
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
@@ -779,6 +780,7 @@ var
   IDomain: TDataArray;
   InterbedSystemCount: Integer;
   IbIndex: Integer;
+  boundname: string;
 begin
   SetLength(FInterBedNumbers, Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
@@ -822,6 +824,9 @@ begin
     h0DataArray := DataArrayManager.GetDataSetByName(Interbed.InitialDelayHeadOffset);
     h0DataArray.Initialize;
 
+    CSubDataArray := DataArrayManager.GetDataSetByName(Interbed.CSubBoundName);
+    CSubDataArray.Initialize;
+
     for LayerIndex := 0 to Model.LayerCount - 1 do
     begin
       for RowIndex := 0 to Model.RowCount - 1 do
@@ -851,6 +856,8 @@ begin
             kv := kvDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             theta := thetaDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             h0 := h0DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            boundname := ' ' + CSubDataArray.StringData[LayerIndex, RowIndex, ColIndex];
+//            boundname := Format(' "%s"', [boundname]);
 
             WriteString('  ');
             WriteInteger(icsubno);
@@ -869,15 +876,18 @@ begin
             WriteFloat(theta);
             WriteFloat(kv);
             WriteFloat(h0);
+            WriteString(boundname);
 
+{
             if Model.DisvUsed then
             begin
               WriteString(Format(' L%:0d_C%:1d', [LayerIndex+1, ColIndex+1]));
             end
             else
             begin
-              WriteString(Format(' L%:0d_R%:1d_C$:2d', [LayerIndex+1, RowIndex+1, ColIndex+1]));
+              WriteString(Format(' L%:0d_R%:1d_C%:2d', [LayerIndex+1, RowIndex+1, ColIndex+1]));
             end;
+}           
 
             NewLine;
           end;

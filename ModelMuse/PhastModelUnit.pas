@@ -8933,6 +8933,14 @@ const
 
   //               Bug fix: Fixed option to select all the data from a single
   //                time step whem importing results.
+  //               Bug fix: Added OUTER_RCLOSEBND to variables in that can be
+  //                edited in the IMS solver.
+  //               Bug fix: If the values of INNER_HCLOSE, INNER_MAXIMUM,
+  //                INNER_MAXIMUM,LINEAR_ACCELERATION, OUTER_HCLOSE,
+  //                OUTER_MAXIMUM, and BACKTRACKING_NUMBER are not overriden,
+  //                the values that are written to the IMS input file are the
+  //                values suggested in the MODFLOW 6 input instructions based
+  //                on the complexity of the problem.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.26';

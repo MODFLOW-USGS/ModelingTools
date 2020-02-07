@@ -1314,6 +1314,53 @@ type
       NumberOfColumns: integer; ForceResize: boolean = False); override;
   end;
 
+  {@abstract(@name is used to store integers in a sparse array.)}
+  TStringSparseDataSet = class(TCustomSparseDataSet)
+  private
+    // @name is used to store the integers in @classname.
+    FStringValues: T3DSparseStringArray;
+    // @name is used to indicate that this data set is being
+    // used to define the type of boundary condition at various
+    // locations.
+    FIsBoundary: boolean;
+  protected
+    // @name removes all the data from @classname.
+    procedure Clear; override;
+    function GetStringData(const Layer, Row, Col: integer): string; override;
+    // @name checks whether @link(FIntegerValues) has been
+    // assigned at Layer, Row, Col as well as inherited @name.
+    function GetIsValue(const Layer, Row, Col: Integer): boolean;
+      override;
+    // @name checks that Value is rdtInteger.
+    procedure SetDataType(const Value: TRbwDataType); override;
+    // @name clears @link(FIntegerValues) and calls
+    // inherited @Link(TCustomSparseDataSet.SetDimensions).
+    procedure SetDimensions(const SetToZero: boolean); override;
+    // @name stores an integer at Layer, Row, Col.
+    procedure SetStringData(const Layer, Row, Col: integer;
+      const Value: string); override;
+    // @name if BoundaryTypeDataSet = self then FIntegerValues.IsValue is set
+    // to Value. Otherwise inherited IsValue is set.
+    procedure SetIsValue(const Layer, Row, Col: Integer;
+      const Value: boolean); override;
+  public
+    procedure RemoveValue(const Layer, Row, Col: Integer);
+    // @name creates an instance of @classname and sets
+    // @link(TDataArray.DataType) to rdtInteger.
+    constructor Create(AnOwner: TComponent); override;
+    // @name destroys the the current instance of @classname.
+    // Do not call @name directly. Call Free instead.
+    destructor Destroy; override;
+    // @name is true if this data set is used to record the type of
+    // boundary condition at a location.
+    property IsBoundaryTypeDataSet: boolean read FIsBoundary write FIsBoundary;
+    procedure GetMinMaxStoredLimits(out LayerMin, RowMin, ColMin,
+      LayerMax, RowMax, ColMax: integer); override;
+    procedure UpdateDimensions(NumberOfLayers, NumberOfRows,
+      NumberOfColumns: integer; ForceResize: boolean = False); override;
+  end;
+
+
   TTransientIntegerSparseDataSet = class(TIntegerSparseDataSet)
   protected
     procedure UpdateNotifiers; override;
@@ -8886,6 +8933,123 @@ begin
   FFormula := AFormula;
 end;
 
+{ TStringSparseDataSet }
+
+procedure TStringSparseDataSet.Clear;
+begin
+  inherited;
+  if FStringValues <> nil then
+  begin
+    FStringValues.Clear;
+  end;
+end;
+
+constructor TStringSparseDataSet.Create(AnOwner: TComponent);
+begin
+  inherited;
+  FStringValues := T3DSparseStringArray.Create(SPASmall, SPASmall, SPASmall);
+  DataType := rdtString;
+
+end;
+
+destructor TStringSparseDataSet.Destroy;
+begin
+  FreeAndNil(FStringValues);
+  inherited;
+end;
+
+function TStringSparseDataSet.GetIsValue(const Layer, Row,
+  Col: Integer): boolean;
+begin
+  result := inherited GetIsValue(Layer, Row, Col)
+    and FStringValues.IsValue[Layer, Row, Col];
+  FPriorResult := result;
+end;
+
+procedure TStringSparseDataSet.GetMinMaxStoredLimits(out LayerMin, RowMin,
+  ColMin, LayerMax, RowMax, ColMax: integer);
+begin
+  CheckRestoreData;
+  LayerMin := FStringValues.MinLayer;
+  RowMin := FStringValues.MinRow;
+  ColMin := FStringValues.MinCol;
+  LayerMax := FStringValues.MaxLayer;
+  RowMax := FStringValues.MaxRow;
+  ColMax := FStringValues.MaxCol;
+end;
+
+function TStringSparseDataSet.GetStringData(const Layer, Row,
+  Col: integer): string;
+begin
+  Assert(IsValue[Layer, Row, Col]);
+  result := FStringValues[Layer, Row, Col];
+end;
+
+procedure TStringSparseDataSet.RemoveValue(const Layer, Row, Col: Integer);
+begin
+  if IsValue[Layer, Row, Col] then
+  begin
+    FStringValues.RemoveValue(Layer, Row, Col);
+  end;
+end;
+
+procedure TStringSparseDataSet.SetDataType(const Value: TRbwDataType);
+begin
+  Assert(Value = rdtString);
+  inherited;
+
+end;
+
+procedure TStringSparseDataSet.SetDimensions(const SetToZero: boolean);
+begin
+  inherited;
+  if FStringValues <> nil then
+  begin
+    FStringValues.Clear;
+  end;
+end;
+
+procedure TStringSparseDataSet.SetIsValue(const Layer, Row, Col: Integer;
+  const Value: boolean);
+begin
+  if (BoundaryTypeDataSet = self) then
+  begin
+    FStringValues.IsValue[Layer, Row, Col] := Value;
+  end
+  else
+  begin
+    inherited SetIsValue(Layer, Row, Col, Value)
+  end;
+end;
+
+procedure TStringSparseDataSet.SetStringData(const Layer, Row, Col: Integer;
+  const Value: string);
+begin
+  FStringValues[Layer, Row, Col] := Value;
+end;
+
+procedure TStringSparseDataSet.UpdateDimensions(NumberOfLayers, NumberOfRows,
+  NumberOfColumns: integer; ForceResize: boolean);
+var
+  OldLayerCount: integer;
+  OldRowCount: integer;
+  OldColumnCount: integer;
+begin
+  OldLayerCount := LayerCount;
+  OldRowCount := RowCount;
+  OldColumnCount := ColumnCount;
+  inherited;
+  if ((OldLayerCount > MaxSmallArraySize) <> (NumberOfLayers > MaxSmallArraySize))
+    or ((OldRowCount > MaxSmallArraySize) <> (NumberOfRows > MaxSmallArraySize))
+    or ((OldColumnCount > MaxSmallArraySize) <> (NumberOfColumns > MaxSmallArraySize))
+    then
+  begin
+    FStringValues.Free;
+    FStringValues := T3DSparseStringArray.Create(GetQuantum(NumberOfLayers),
+      GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
+  end;
+end;
+
 initialization
   StrRequired := StrDataSets + StrRequiredPart;
   // @name is used in the classification of data sets.
@@ -8893,7 +9057,8 @@ initialization
   // @name is used in the classification of data sets.
   strDefaultClassification := StrDataSets + '|' + StrUserDefined;
 
-  RegisterClasses([TDataArray, TCustom2DInterpolater, TRealSparseDataSet]);
+  RegisterClasses([TDataArray, TCustom2DInterpolater, TRealSparseDataSet,
+    TStringSparseDataSet]);
 
 end.
 

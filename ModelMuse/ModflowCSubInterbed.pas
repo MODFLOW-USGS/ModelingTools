@@ -4,7 +4,7 @@ interface
 
 uses
   OrderedCollectionUnit, System.Classes, GoPhastTypes, System.SysUtils,
-  DataSetUnit;
+  DataSetUnit, RbwParser;
 
 type
   TCSubInterbedType = (itNoDelay, itDelay);
@@ -21,11 +21,12 @@ type
     FInitialOffset: string;
     FInitialPorosity: string;
     FThickness: string;
+    FCSubBoundName: string;
     FDataSetNames: TStringList;
     procedure SetInterbedType(const Value: TCSubInterbedType);
     procedure SetName(const Value: string);
     procedure RenameInterbed(const NewInterbedName: string);
-    procedure CreateOrRenameDataArray(var InterbedName: string;
+    procedure CreateOrRenameDataArray(var InterbedName: string; DataType: TRbwDataType;
       Extension, DisplayExtension: string; const NewInterbedName: string;
       AModel: TBaseModel);
     function GetDataSetNames: TStringList;
@@ -50,6 +51,8 @@ type
     property InitialPorosity: string read FInitialPorosity;
     // kv
     property DelayKvName: string read FDelayKvName;
+    // boundname
+    property CSubBoundName: string read FCSubBoundName;
     // h0
     property InitialDelayHeadOffset: string read FInitialDelayHeadOffset;
     property DataSetNames: TStringList read GetDataSetNames;
@@ -74,7 +77,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, GlobalVariablesUnit, frmGoPhastUnit, RbwParser,
+  PhastModelUnit, GlobalVariablesUnit, frmGoPhastUnit,
   ModflowPackagesUnit, ModflowPackageSelectionUnit;
 
 const
@@ -91,6 +94,8 @@ const
   KInitialInelasticComp = 'InitialInelasticCompressionIndex';
   KInitialElasticCompre = 'InitialElasticCompressionIndex';
   KInitialDelayHead = 'InitialDelayHead';
+  
+  KCSubBoundName = 'CSUB_BoundName';
 
 resourcestring
   StrDelayKv = KDelayKv;
@@ -106,6 +111,8 @@ resourcestring
   StrInitialInelasticComp = KInitialInelasticComp;
   StrInitialElasticCompre = KInitialElasticCompre;
   StrInitialDelayHead = KInitialDelayHead;
+
+  StrCSubBoundName = KCSubBoundName;
 
 { TCSubInterbed }
 
@@ -151,54 +158,55 @@ begin
 
     if CSubPackage.SpecifyInitialPreconsolidationStress then
     begin
-      CreateOrRenameDataArray(FInitialOffset, KInitialPreconsolidat, StrInitialPreconsolidat, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialPreconsolidat, StrInitialPreconsolidat, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialOffset, KInitialOffset, StrInitialOffset, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialOffset, StrInitialOffset, NewInterbedName, Model);
     end;
     
     if CSubPackage.InterbedThicknessMethod = itmThickness then
     begin
-      CreateOrRenameDataArray(FThickness, KThickness, StrThickness, NewInterbedName, Model);
+      CreateOrRenameDataArray(FThickness, rdtDouble, KThickness, StrThickness, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FThickness, KCellThicknessFractio, StrCellThicknessFractio, NewInterbedName, Model);
+      CreateOrRenameDataArray(FThickness, rdtDouble, KCellThicknessFractio, StrCellThicknessFractio, NewInterbedName, Model);
     end;
     
-    CreateOrRenameDataArray(FEquivInterbedNumberName, KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
+    CreateOrRenameDataArray(FEquivInterbedNumberName, rdtDouble, KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
     
     if CSubPackage.CompressionMethod = coRecompression then
     begin
-      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble, KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, KInitialInelasticSpec, StrInitialInelasticSpec, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble, KInitialInelasticSpec, StrInitialInelasticSpec, NewInterbedName, Model);
     end;
     
     if CSubPackage.CompressionMethod = coRecompression then
     begin
-      CreateOrRenameDataArray(FInitialElasticSpecificStorage, KInitialElasticCompre, StrInitialElasticCompre, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble, KInitialElasticCompre, StrInitialElasticCompre, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialElasticSpecificStorage, KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble, KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model);
     end;
     
-    CreateOrRenameDataArray(FInitialPorosity, KInitialPorosity, StrInitialPorosity, NewInterbedName, Model);
-    CreateOrRenameDataArray(FDelayKvName, KDelayKv, StrDelayKv, NewInterbedName, Model);
+    CreateOrRenameDataArray(FInitialPorosity, rdtDouble, KInitialPorosity, StrInitialPorosity, NewInterbedName, Model);
+    CreateOrRenameDataArray(FDelayKvName, rdtDouble, KDelayKv, StrDelayKv, NewInterbedName, Model);
     
     if CSubPackage.SpecifyInitialDelayHead then
     begin
-      CreateOrRenameDataArray(FInitialDelayHeadOffset, KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialDelayHeadOffset, KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
     end;
     
+    CreateOrRenameDataArray(FCSubBoundName, rdtString, KCSubBoundName, StrCSubBoundName, NewInterbedName, Model);
 
 
 {
@@ -213,7 +221,7 @@ begin
   end;
 end;
 
-procedure TCSubInterbed.CreateOrRenameDataArray(var InterbedName: string;
+procedure TCSubInterbed.CreateOrRenameDataArray(var InterbedName: string; DataType: TRbwDataType;
   Extension, DisplayExtension: string; const NewInterbedName: string; AModel: TBaseModel);
 var
   LocalModel: TCustomModel;
@@ -226,6 +234,8 @@ var
   GlobalVariables: TGlobalVariables;
   Basename: string;
   Index: Integer;
+  NewFormula: String;
+  ClassType: TDataArrayType;
 begin
   LocalModel := AModel as TCustomModel;
   Assert(LocalModel <> nil);
@@ -257,8 +267,21 @@ begin
   end;
   if DataArray = nil then
   begin
-    DataArray := DataArrayManager.CreateNewDataArray(TRealSparseDataSet, InterbedName,
-      '0.', InterbedDisplayName, StandardLock + [dcFormula], rdtDouble, eaBlocks,
+    Case DataType of
+      rdtDouble:
+        begin
+          NewFormula := '0.';
+          ClassType := TRealSparseDataSet;
+        end;
+      rdtString:
+        begin
+          NewFormula := '""';
+          ClassType := TStringSparseDataSet;
+        end;
+      else Assert(false);
+    end;
+    DataArray := DataArrayManager.CreateNewDataArray(ClassType, InterbedName,
+      NewFormula, InterbedDisplayName, StandardLock + [dcFormula], DataType, eaBlocks,
       dso3D, StrSubsidence + '|' + NewInterbedName);
     LocalModel.UpdateDataArrayDimensions(DataArray);
     DataArray.OnDataSetUsed := LocalModel.CSubInterbedDataArrayUsed;
@@ -277,7 +300,7 @@ begin
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      CreateOrRenameDataArray(InterbedName, Extension, DisplayExtension,
+      CreateOrRenameDataArray(InterbedName, rdtDouble, Extension, DisplayExtension,
         NewInterbedName, ChildModel);
     end;
   end;
@@ -296,7 +319,8 @@ begin
     or (AName = FInitialInelasticSpecificStorage)
     or (AName = FInitialOffset)
     or (AName = FInitialPorosity)
-    or (AName = FThickness);
+    or (AName = FThickness)
+    or (AName = FCSubBoundName);
 end;
 
 destructor TCSubInterbed.Destroy;
@@ -323,6 +347,7 @@ begin
   FDataSetNames.Add(FInitialOffset);
   FDataSetNames.Add(FInitialPorosity);
   FDataSetNames.Add(FThickness);
+  FDataSetNames.Add(FCSubBoundName);
   result := FDataSetNames;
 end;
 

@@ -142,7 +142,12 @@ begin
   end
   else
   begin
-    WriteFloat(0.0001);
+    case FImsPackage.Complexity of
+      scoSimple: WriteFloat(0.001);
+      scoModerate: WriteFloat(0.01); 
+      scoComplex: WriteFloat(0.1);
+      else Assert(False);
+    end;
   end;
   NewLine;
 end;
@@ -156,7 +161,12 @@ begin
   end
   else
   begin
-    WriteInteger(100);
+    case FImsPackage.Complexity of
+      scoSimple: WriteInteger(50);
+      scoModerate: WriteInteger(100); 
+      scoComplex: WriteInteger(500);
+      else Assert(False);
+    end;
   end;
   NewLine;
 end;
@@ -203,17 +213,10 @@ begin
   NewLine;
 
   WriteString('  LINEAR_ACCELERATION ');
-  if soLinLinearAcceleration in FImsPackage.SmsOverrides then
-  begin
-    case FImsPackage.LinLinearAcceleration of
-      sllaCg: WriteString('CG');
-      sllaBiCgStab: WriteString('BICGSTAB');
-      else Assert(False);
-    end;
-  end
-  else
-  begin
-    WriteString('CG');
+  case FImsPackage.UsedLinAccel of
+    sllaCg: WriteString('CG');
+    sllaBiCgStab: WriteString('BICGSTAB');
+    else Assert(False);
   end;
   NewLine;
 
@@ -280,9 +283,21 @@ begin
   end
   else
   begin
-    WriteFloat(0.01);
+    case FImsPackage.Complexity of
+      scoSimple: WriteFloat(0.001);
+      scoModerate: WriteFloat(0.01); 
+      scoComplex: WriteFloat(0.1);
+      else Assert(False);
+    end;
   end;
   NewLine;
+
+  if soOuterRClose in FImsPackage.SmsOverrides then
+  begin
+    WriteString('  OUTER_RCLOSEBND ');
+    WriteFloat(FImsPackage.OuterRClose);
+    NewLine;
+  end;
 
   WriteString('  OUTER_MAXIMUM ');
   if soOuterMaxIt in FImsPackage.SmsOverrides then
@@ -291,7 +306,12 @@ begin
   end
   else
   begin
-    WriteInteger(100);
+    case FImsPackage.Complexity of
+      scoSimple: WriteInteger(25);
+      scoModerate: WriteInteger(50); 
+      scoComplex: WriteInteger(100);
+      else Assert(False);
+    end;
   end;
   NewLine;
 
@@ -301,7 +321,7 @@ begin
     case FImsPackage.UnderRelaxation of
       surNone: WriteString('NONE');
       surSimple: WriteString('SIMPLE');
-      surDbd: WriteString('DTD');
+      surDbd: WriteString('DBD');
       surCooley: WriteString('COOLEY');
       else Assert(False);
     end;
@@ -359,7 +379,12 @@ begin
   end
   else
   begin
-    BacktrackingNumber := 10;
+    case FImsPackage.Complexity of
+      scoSimple: BacktrackingNumber := 0;
+      scoModerate: BacktrackingNumber := 0; 
+      scoComplex: BacktrackingNumber := 20;
+      else Assert(False);
+    end;
   end;
   WriteString('  BACKTRACKING_NUMBER');
   WriteInteger(BacktrackingNumber);

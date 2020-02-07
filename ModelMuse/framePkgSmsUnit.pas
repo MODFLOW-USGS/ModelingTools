@@ -101,6 +101,7 @@ resourcestring
   StrRcloseOption = 'Rclose option';
   StrRelaxationFactor = 'Relaxation factor';
   StrScalingMethod = 'Scaling method';
+  StrOuterRCloseBND = 'Outer RClose BND';
 
 { TframePkgSms }
 
@@ -202,6 +203,8 @@ begin
 
     rdgNonlinearOptions.RealValue[Ord(scValue), Ord(soOuterHclose)+1] :=
       SmsPackage.OuterHclose;
+    rdgNonlinearOptions.RealValue[Ord(scValue), Ord(soOuterRClose)+1] :=
+      SmsPackage.OuterRClose;
     rdgNonlinearOptions.IntegerValue[Ord(scValue), Ord(soOuterMaxIt)+1] :=
       SmsPackage.MaxOuterIterations;
     rdgNonlinearOptions.Cells[Ord(scValue), Ord(soUnderRelax)+1] :=
@@ -274,6 +277,7 @@ begin
     rdgNonlinearOptions.Cells[Ord(scValue), 0] := StrValue;
 
     rdgNonlinearOptions.Cells[Ord(scName), Ord(soOuterHclose)+1] := StrOuterHClose;
+    rdgNonlinearOptions.Cells[Ord(scName), Ord(soOuterRClose)+1] := StrOuterRCloseBND;
     rdgNonlinearOptions.Cells[Ord(scName), Ord(soOuterMaxIt)+1] := StrOuterMaximumIterat;
     rdgNonlinearOptions.Cells[Ord(scName), Ord(soUnderRelax)+1] := StrUnderrelaxationSch;
     rdgNonlinearOptions.Cells[Ord(scName), Ord(soUnderRelaxTheta)+1] := StrUnderRelaxationThe;
@@ -739,7 +743,7 @@ begin
       scOverride:
         begin
           case SmsOverride of
-            soOuterHclose, soOuterMaxIt, soUnderRelax:
+            soOuterHclose, soOuterRClose, soOuterMaxIt, soUnderRelax:
               begin
                 CanSelect := True;
               end;
@@ -883,6 +887,10 @@ begin
       AColumn := rdgNonlinearOptions.Columns[ACol];
       case SmsOverride of
         soOuterHclose:
+          begin
+            AColumn.ComboUsed := False;
+          end;
+        soOuterRClose:
           begin
             AColumn.ComboUsed := False;
           end;
@@ -1078,6 +1086,7 @@ begin
   SmsPackage.SmsOverrides := NewOverRides;
 
   SmsPackage.OuterHclose := rdgNonlinearOptions.RealValueDefault[Ord(scValue), Ord(soOuterHclose)+1, SmsPackage.OuterHclose];
+  SmsPackage.OuterRClose := rdgNonlinearOptions.RealValueDefault[Ord(scValue), Ord(soOuterRClose)+1, SmsPackage.OuterRClose];
   SmsPackage.MaxOuterIterations := rdgNonlinearOptions.IntegerValue[Ord(scValue), Ord(soOuterMaxIt)+1];
   SmsPackage.UnderRelaxation := TSmsUnderRelaxation(FUnderRelaxPickList.IndexOf(rdgNonlinearOptions.Cells[Ord(scValue), Ord(soUnderRelax)+1]));
 

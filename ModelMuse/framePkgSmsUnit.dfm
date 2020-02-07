@@ -15,7 +15,7 @@ inherited framePkgSms: TframePkgSms
     Top = 157
     Width = 495
     Height = 324
-    ActivePage = tabBasic
+    ActivePage = tabNonLinear
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
@@ -260,7 +260,7 @@ inherited framePkgSms: TframePkgSms
         ColCount = 3
         Enabled = False
         FixedCols = 1
-        RowCount = 23
+        RowCount = 24
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
         OnSelectCell = rdgNonlinearOptionsSelectCell

@@ -603,6 +603,11 @@ begin
             Assert(ADataArray <> nil);
             DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
             Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.Thickness;
+
+            ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.CSubBoundName);
+            Assert(ADataArray <> nil);
+            DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
+            Item.ScreenObject.DataSetFormulas[DataSetIndex] := Format('"%s"', [Item.ScreenObject.Name]);
           end
           else
           begin

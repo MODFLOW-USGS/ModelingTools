@@ -630,6 +630,11 @@ begin
       Assert(ADataArray <> nil);
       DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
       LocalScreenObject.DataSetFormulas[DataSetIndex] := Thickness;
+
+      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.CSubBoundName);
+      Assert(ADataArray <> nil);
+      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+      LocalScreenObject.DataSetFormulas[DataSetIndex] := Format('"%s"', [LocalScreenObject.Name]);
     end;
   end;
 end;

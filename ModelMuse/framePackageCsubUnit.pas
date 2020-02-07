@@ -33,6 +33,8 @@ type
     lblseNDelayCells: TLabel;
     comboCompressionMethod: TJvImageComboBox;
     lblCompressionMethod: TLabel;
+    procedure cbHeadBasedClick(Sender: TObject);
+    procedure rcSelectionControllerEnabledChange(Sender: TObject);
   private
     procedure InitializeGrid;
     { Private declarations }
@@ -60,6 +62,13 @@ resourcestring
 type
   TInterbedColumns = (icName, icType);
 { TframePackageCsub }
+
+procedure TframePackageCsub.cbHeadBasedClick(Sender: TObject);
+begin
+  inherited;
+  cbPreconsolidationHeadUsed.Enabled := rcSelectionController.Enabled
+    and not cbHeadBased.Checked;
+end;
 
 procedure TframePackageCsub.GetData(Package: TModflowPackageSelection);
 var
@@ -112,6 +121,12 @@ procedure TframePackageCsub.Loaded;
 begin
   inherited;
   InitializeGrid;
+end;
+
+procedure TframePackageCsub.rcSelectionControllerEnabledChange(Sender: TObject);
+begin
+  inherited;
+  cbHeadBasedClick(Sender);
 end;
 
 procedure TframePackageCsub.SetData(Package: TModflowPackageSelection);

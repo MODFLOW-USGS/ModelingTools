@@ -15,7 +15,7 @@ inherited framePackageCsub: TframePackageCsub
     Top = 157
     Width = 589
     Height = 357
-    ActivePage = tabInterbeds
+    ActivePage = tabOutputTypes
     Align = alBottom
     TabOrder = 1
     object tabInterbeds: TTabSheet
@@ -190,6 +190,7 @@ inherited framePackageCsub: TframePackageCsub
         Caption = 'Use head-based formulation (HEAD_BASED)'
         Enabled = False
         TabOrder = 2
+        OnClick = cbHeadBasedClick
       end
       object cbPreconsolidationHeadUsed: TCheckBox
         Left = 3
@@ -321,14 +322,14 @@ inherited framePackageCsub: TframePackageCsub
         Enabled = False
         ItemHeight = 13
         Items.Strings = (
-          'Interbed strain'
-          'Coarse strain'
-          'Compaction'
-          'Elastic compaction'
-          'Inelastic compaction'
-          'Interbed compaction'
-          'Coarse compaction'
-          'Z displacement')
+          'Interbed strain (comma-separated values)'
+          'Coarse strain (comma-separated values)'
+          'Compaction (binary)'
+          'Elastic compaction (binary)'
+          'Inelastic compaction (binary)'
+          'Interbed compaction (binary)'
+          'Elastic coarse-grained compaction (binary)'
+          'Z displacement (binary)')
         TabOrder = 0
       end
     end
@@ -349,9 +350,6 @@ inherited framePackageCsub: TframePackageCsub
       end
       item
         Control = cbHeadBased
-      end
-      item
-        Control = cbPreconsolidationHeadUsed
       end
       item
         Control = seNDelayCells
@@ -383,5 +381,6 @@ inherited framePackageCsub: TframePackageCsub
       item
         Control = frameInterbeds
       end>
+    OnEnabledChange = rcSelectionControllerEnabledChange
   end
 end

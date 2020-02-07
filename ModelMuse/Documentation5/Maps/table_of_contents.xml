@@ -1492,6 +1492,9 @@
             <topicref type="topic" id="403613770039896" build="ALL" modified="2010-07-02T11:28:15.600Z" icon="0" href="SWT_Package">
               <caption translate="true">SWT: Subsidence and Aquifer-System Compaction Package for Water-Table Aquifers Pane</caption>
             </topicref>
+            <topicref type="topic" id="43869392234717" build="ALL" modified="2020-02-07T13:57:01.458Z" icon="0" href="CSUB_Skeletal_Storage__Compact">
+              <caption translate="true">CSUB: Skeletal Storage, Compaction, and Subsidence Package Pane</caption>
+            </topicref>
           </topicref>
           <topicref type="topic" id="394514768236993" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2008-01-04T16:28:28.250Z" icon="0" href="Observations">
             <caption translate="true">Observations</caption>

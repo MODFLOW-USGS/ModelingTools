@@ -986,7 +986,7 @@ Type
     srmMinimumDegreeOrdering);
   // soLinearSolver, soXmdLinearAcceleration, and soRedBlackOrder are for
   // backwards compatibility
-  TSmsOverride = (soOuterHclose, soOuterMaxIt, soUnderRelax, soUnderRelaxTheta,
+  TSmsOverride = (soOuterHclose, soOuterRClose, soOuterMaxIt, soUnderRelax, soUnderRelaxTheta,
     soUnderRelaxKappa, soUnderRelaxGamma, soUnderRelaxMomentum,
     soBacktrackingNumber, soBacktrackingTolerance,
     soBacktrackingReductionFactor, soBacktrackingResidualLimit,
@@ -1039,6 +1039,7 @@ Type
     FMaxErrors: Integer;
     FCheckInput: TCheckInput;
     FMemoryPrint: TMemoryPrint;
+    FStoredOuterRClose: TRealStorage;
     procedure SetBacktrackingNumber(const Value: Integer);
     procedure SetComplexity(const Value: TSmsComplexityOption);
     procedure SetInnerMaxIterations(const Value: integer);
@@ -1099,6 +1100,10 @@ Type
     procedure SetMaxErrors(const Value: Integer);
     procedure SetCheckInput(const Value: TCheckInput);
     procedure SetMemoryPrint(const Value: TMemoryPrint);
+    procedure SetStoredOuterRClose(const Value: TRealStorage);
+    function GetOuterRClose: double;
+    procedure SetOuterRClose(const Value: double);
+    function GetUsedLinAccel: TSmsLinLinearAcceleration;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1107,7 +1112,10 @@ Type
     Destructor Destroy; override;
     procedure InitializeVariables; override;
 
+    property UsedLinAccel: TSmsLinLinearAcceleration read GetUsedLinAccel;
+
     property OuterHclose: double read GetOuterHclose write SetOuterHclose;
+    property OuterRClose: double read GetOuterRClose write SetOuterRClose;
     property UnderRelaxTheta: double read GetUnderRelaxTheta
       write SetUnderRelaxTheta;
     property UnderRelaxKappa: double read GetUnderRelaxKappa
@@ -1159,11 +1167,18 @@ Type
     // NONLINEAR block
 
     // OUTER_HCLOSE
-    // Default for SIMPLE = 1E-4
-    // Default for MODERATE = 1E-3
+    // Default for SIMPLE = 1E-3
+    // Default for MODERATE = 1E-2
     // Default for COMPLEX = 0.1
     property StoredOuterHclose: TRealStorage read FStoredOuterHclose
       write SetStoredOuterHclose;
+    {
+    OUTER_RCLOSEBND
+    Default = 0.1
+    }
+    property StoredOuterRClose: TRealStorage read FStoredOuterRClose
+      write SetStoredOuterRClose;
+
     // OUTER_MAXIMUM
     // Default for SIMPLE = 25
     // Default for MODERATE = 50
@@ -1172,7 +1187,7 @@ Type
       write SetMaxOuterIterations;
     // UNDER_RELAXATION
     // by default: not used
-    // Default for COMPLEX =  used DBD?
+    // Default for MODERATE and COMPLEX =  used DBD
     property UnderRelaxation: TSmsUnderRelaxation read FUnderRelaxation
       write SetUnderRelaxation;
     // UNDER_RELAXATION_THETA, reduction factor for the learning rate.
@@ -1271,7 +1286,7 @@ Type
     // Default for MODERATE = CG
     // Default for COMPLEX = CG
     property LinLinearAcceleration: TSmsLinLinearAcceleration
-      read FLinLinearAcceleration write SetLinLinearAcceleration;
+      read FLinLinearAcceleration write SetLinLinearAcceleration stored True;
     // PRECONDITIONER_LEVELS
     // Default for SIMPLE = 0
     // Default for MODERATE = 0
@@ -18166,6 +18181,9 @@ begin
 
   FStoredOuterHclose := TRealStorage.Create;
   FStoredOuterHclose.OnChange := OnValueChanged;
+  
+  FStoredOuterRClose := TRealStorage.Create;
+  FStoredOuterRClose.OnChange := OnValueChanged;
 
   FStoredBacktrackingTolerance := TRealStorage.Create;
   FStoredBacktrackingTolerance.OnChange := OnValueChanged;
@@ -18197,6 +18215,7 @@ end;
 destructor TSmsPackageSelection.Destroy;
 begin
   FStoredInnerRclose.Free;
+  FStoredOuterRClose.Free;
   FStoredOuterHclose.Free;
   FStoredBacktrackingTolerance.Free;
   FStoredUnderRelaxKappa.Free;
@@ -18226,6 +18245,22 @@ begin
   Result := StoredBacktrackingTolerance.Value;
 end;
 
+function TSmsPackageSelection.GetUsedLinAccel: TSmsLinLinearAcceleration;
+begin
+  if soLinLinearAcceleration in SmsOverrides then
+  begin
+    result := LinLinearAcceleration;
+  end
+  else if Complexity = scoSimple then
+  begin
+    result := sllaCg 
+  end
+  else
+  begin
+    result := sllaBiCgStab 
+  end;
+end;
+
 function TSmsPackageSelection.GetInnerHclose: double;
 begin
   Result := StoredInnerHclose.Value;
@@ -18244,6 +18279,11 @@ end;
 function TSmsPackageSelection.GetOuterHclose: double;
 begin
   Result := StoredOuterHclose.Value;
+end;
+
+function TSmsPackageSelection.GetOuterRClose: double;
+begin
+  Result := FStoredOuterRClose.Value;
 end;
 
 function TSmsPackageSelection.GetRelaxationFactor: double;
@@ -18275,6 +18315,7 @@ procedure TSmsPackageSelection.InitializeVariables;
 begin
   inherited;
   OuterHclose := 1e-3;
+  OuterRClose := 0.1;
   UnderRelaxTheta := 0.7;
   UnderRelaxKappa := 0.1;
   UnderRelaxGamma := 0.2;
@@ -18309,7 +18350,7 @@ begin
   FCheckInput := ciCheckAll;
   FMemoryPrint := mpNone;
 
-  SmsOverrides := [soLinLinearAcceleration];
+  SmsOverrides := [];
 end;
 
 procedure TSmsPackageSelection.SetBacktrackingNumber(const Value: Integer);
@@ -18460,6 +18501,11 @@ begin
   StoredOuterHclose.Value := Value;
 end;
 
+procedure TSmsPackageSelection.SetOuterRClose(const Value: double);
+begin
+  FStoredOuterRClose.Value := Value;
+end;
+
 procedure TSmsPackageSelection.SetPreconditionerLevel(const Value: Integer);
 begin
   if FPreconditionerLevel <> Value then
@@ -18576,6 +18622,11 @@ end;
 procedure TSmsPackageSelection.SetStoredOuterHclose(const Value: TRealStorage);
 begin
   FStoredOuterHclose.Assign(Value);
+end;
+
+procedure TSmsPackageSelection.SetStoredOuterRClose(const Value: TRealStorage);
+begin
+  FStoredOuterRClose.Assign(Value);
 end;
 
 procedure TSmsPackageSelection.SetStoredRelaxationFactor(

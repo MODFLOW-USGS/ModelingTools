@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4103</config-value>
+      <config-value name="autohelpstart">4104</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -761,6 +761,7 @@ document.write('</frameset>');
       <helpcontext-number href="Cross_Sectional_Model_Specifie" value="3621"/>
       <helpcontext-number href="Cross_Sectional_Model_Specifyi" value="3618"/>
       <helpcontext-number href="Cross_Sections_Pane" value="3838"/>
+      <helpcontext-number href="CSUB_Skeletal_Storage__Compact" value="4104"/>
       <helpcontext-number href="CTS_Contaminant_Treatment_Syst" value="4066"/>
       <helpcontext-number href="Custom_Color_Schemes_Dialog_Bo" value="3674"/>
       <helpcontext-number href="Customize" value="2360"/>
