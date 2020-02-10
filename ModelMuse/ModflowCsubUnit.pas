@@ -123,13 +123,14 @@ type
   private
     function GetItem(Index: integer): TCSubPackageData;
     procedure SetItem(Index: integer; const Value: TCSubPackageData);
-  protected
-    procedure Loaded;
+    function GetUsed: Boolean;
   public
+    property Used: Boolean read GetUsed;
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
     property Items[Index: integer]: TCSubPackageData read GetItem write SetItem; default;
     function Add: TCSubPackageData;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+    procedure Loaded;
   end;
 
   TCSubRecord = record
@@ -593,18 +594,39 @@ begin
 
       ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.DelayKvName);
       Assert(ADataArray <> nil);
-      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
-      LocalScreenObject.DataSetFormulas[DataSetIndex] := DelayKv;
+      if LocalInterbed.InterbedType = itDelay then
+      begin
+        DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+        LocalScreenObject.DataSetFormulas[DataSetIndex] := DelayKv;
+      end
+      else
+      begin
+        LocalScreenObject.RemoveDataSet(ADataArray);
+      end;
 
       ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
       Assert(ADataArray <> nil);
-      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
-      LocalScreenObject.DataSetFormulas[DataSetIndex] := EquivInterbedNumber;
+      if LocalInterbed.InterbedType = itDelay then
+      begin
+        DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+        LocalScreenObject.DataSetFormulas[DataSetIndex] := EquivInterbedNumber;
+      end
+      else
+      begin
+        LocalScreenObject.RemoveDataSet(ADataArray);
+      end;
 
       ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
       Assert(ADataArray <> nil);
-      DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
-      LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialDelayHeadOffset;
+      if LocalInterbed.InterbedType = itDelay then
+      begin
+        DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
+        LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialDelayHeadOffset;
+      end
+      else
+      begin
+        LocalScreenObject.RemoveDataSet(ADataArray);
+      end;
 
       ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialElasticSpecificStorage);
       Assert(ADataArray <> nil);
@@ -763,6 +785,21 @@ end;
 function TCSubPackageDataCollection.GetItem(Index: integer): TCSubPackageData;
 begin
   result := inherited Items[Index] as TCSubPackageData;
+end;
+
+function TCSubPackageDataCollection.GetUsed: Boolean;
+var
+  ItemIndex: Integer;
+begin
+  result := False;
+  for ItemIndex := 0 to Count -1 do
+  begin
+    result := Items[ItemIndex].Used;
+    if result then
+    begin
+      Exit;
+    end;
+  end;
 end;
 
 function TCSubPackageDataCollection.IsSame(
@@ -1002,15 +1039,15 @@ end;
 function TCSubCollection.AdjustedFormula(FormulaIndex,
   ItemIndex: integer): string;
 var
-  Boundary: TCSubBoundary;
+//  Boundary: TCSubBoundary;
   Item: TCSubItem;
-  ScreenObject: TScreenObject;
+//  ScreenObject: TScreenObject;
 begin
   result := '';
   if FormulaIndex = 0 then
   begin
-    Boundary := BoundaryGroup as TCSubBoundary;
-    ScreenObject := Boundary.ScreenObject as TScreenObject;
+//    Boundary := BoundaryGroup as TCSubBoundary;
+//    ScreenObject := Boundary.ScreenObject as TScreenObject;
     Item := Items[ItemIndex] as TCSubItem;
 //    case Boundary.FormulaInterpretation of
 //      fiSpecific:
@@ -1452,27 +1489,27 @@ const
 var
   ValueIndex: Integer;
   BoundaryStorage: TCSubStorage;
-  ParamIndex: Integer;
-  Param: TModflowParamItem;
-  Times: TList;
-  Position: integer;
-  ParamName: string;
-  LocalModel: TCustomModel;
-  TimeSeriesList: TTimeSeriesList;
-  BoundaryList: TList;
-  TimeSeries: TTimeSeries;
-  StartTime: Double;
-  StressPeriods: TModflowStressPeriods;
-  EndTime: Double;
-  TimeCount: Integer;
-  ItemIndex: Integer;
-  SeriesIndex: Integer;
-  InitialTime: Double;
+//  ParamIndex: Integer;
+//  Param: TModflowParamItem;
+//  Times: TList;
+//  Position: integer;
+//  ParamName: string;
+//  LocalModel: TCustomModel;
+//  TimeSeriesList: TTimeSeriesList;
+//  BoundaryList: TList;
+//  TimeSeries: TTimeSeries;
+//  StartTime: Double;
+//  StressPeriods: TModflowStressPeriods;
+//  EndTime: Double;
+//  TimeCount: Integer;
+//  ItemIndex: Integer;
+//  SeriesIndex: Integer;
+//  InitialTime: Double;
 begin
   FCurrentParameter := nil;
 //  EvaluateArrayBoundaries;
   EvaluateListBoundaries(AModel);
-  LocalModel := AModel as TCustomModel;
+//  LocalModel := AModel as TCustomModel;
 
   for ValueIndex := 0 to Values.Count - 1 do
   begin
@@ -1659,21 +1696,8 @@ begin
 end;
 
 function TCSubBoundary.Used: boolean;
-var
-  ItemIndex: Integer;
 begin
-  result := inherited Used;
-  if not result and (CSubPackageData.Count > 0) then
-  begin
-    for ItemIndex := 0 to CSubPackageData.Count -1 do
-    begin
-      result := CSubPackageData[ItemIndex].Used;
-      if result then
-      begin
-        Exit;
-      end;
-    end;
-  end;
+  result := inherited Used or CSubPackageData.Used;
 end;
 
 { TCSubObs }

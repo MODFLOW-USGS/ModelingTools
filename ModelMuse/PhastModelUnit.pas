@@ -8930,8 +8930,7 @@ const
   //    '4.1.0.26' Bug fix: Fixed a bug that could cause the Point Average
   //                Interpolation method to fail if a point was at the edge
   //                of two cells.
-
-  //               Bug fix: Fixed option to select all the data from a single
+  //    '4.1.0.27' Bug fix: Fixed option to select all the data from a single
   //                time step whem importing results.
   //               Bug fix: Added OUTER_RCLOSEBND to variables in that can be
   //                edited in the IMS solver.
@@ -8941,9 +8940,19 @@ const
   //                the values that are written to the IMS input file are the
   //                values suggested in the MODFLOW 6 input instructions based
   //                on the complexity of the problem.
+  //               Bug fix: Fixed a bug in importing Shapefiles in which
+  //                two or more Shapefile Attributes have the same name.
+  //    '4.1.0.28' Bug fix: Fixed bug in export of MAW. FLOWING_WELL now
+  //                exported correctly.
+  //               Bug fix: ModelMuse will now generate an error message
+  //                instead of sending a bug report if no valid times have
+  //                been defined in the HFB package in MODFLOW 6.
+
+  //               Bug fix: Fixed export of grid lines for the active area
+  //                to a Shapefile.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.26';
+  IModelVersion = '4.1.0.28';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

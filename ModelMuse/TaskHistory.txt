@@ -170,7 +170,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Shapefile'
-      Display = False
+      Display = True
     end
     item
       Name = 'MODPATH'
@@ -24892,5 +24892,22 @@ object TTaskHistory
         'MF6 Observation Utility'
         'CSUB'
         'core code')
+    end
+    item
+      Date = 43869.000000000000000000
+    end
+    item
+      Date = 43870.000000000000000000
+    end
+    item
+      Date = 43871.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix'
+        'Export Shapefile'
+        'MF-2015'
+        'MAW'
+        'CSUB'
+        'Testing')
     end>
 end

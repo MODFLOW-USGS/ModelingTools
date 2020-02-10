@@ -195,7 +195,14 @@ begin
   try
     Cell.NumberOfContours := 1;
     Cell.VertexCount[0] := 4;
-    ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
+    if FModel.ModelSelection <> msModflow2015 then
+    begin
+      ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
+    end
+    else
+    begin
+      ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    end;
     for RowIndex := 0 to ActiveDataArray.RowCount - 1 do
     begin
       for ColIndex := 0 to ActiveDataArray.ColumnCount - 1 do
@@ -203,7 +210,14 @@ begin
         IsActive := False;
         for LayerIndex := 0 to ActiveDataArray.LayerCount - 1 do
         begin
-          IsActive := ActiveDataArray.BooleanData[LayerIndex,RowIndex,ColIndex];
+          if FModel.ModelSelection <> msModflow2015 then
+          begin
+            IsActive := ActiveDataArray.BooleanData[LayerIndex,RowIndex,ColIndex];
+          end
+          else
+          begin
+            IsActive := ActiveDataArray.IntegerData[LayerIndex,RowIndex,ColIndex] > 0;
+          end;
           if IsActive then
           begin
             break;
@@ -552,7 +566,14 @@ var
     begin
       for LayerIndex := 0 to Active.LayerCount - 1 do
       begin
-        Result := Active.BooleanData[LayerIndex, Row, Col];
+        if FModel.ModelSelection <> msModflow2015 then
+        begin
+          Result := Active.BooleanData[LayerIndex, Row, Col];
+        end
+        else
+        begin
+          Result := Active.IntegerData[LayerIndex, Row, Col] > 0;
+        end;
         if Result then
         begin
           Exit;
@@ -563,18 +584,32 @@ var
     begin
       for LayerIndex := 0 to Active.LayerCount - 1 do
       begin
-        Result := Active.BooleanData[LayerIndex, Row, Col-1];
+        if FModel.ModelSelection <> msModflow2015 then
+        begin
+          Result := Active.BooleanData[LayerIndex, Row, Col-1];
+        end
+        else
+        begin
+          Result := Active.IntegerData[LayerIndex, Row, Col-1] > 0;
+        end;
         if Result then
         begin
           Exit;
         end;
       end;
     end;
-    if (Col < FGrid.ColumnCount) and (Row > 0) then
+    if (Row > 0) and (Col < FGrid.ColumnCount) then
     begin
       for LayerIndex := 0 to Active.LayerCount - 1 do
       begin
-        Result := Active.BooleanData[LayerIndex, Row-1, Col];
+        if FModel.ModelSelection <> msModflow2015 then
+        begin
+          Result := Active.BooleanData[LayerIndex, Row-1, Col];
+        end
+        else
+        begin
+          Result := Active.IntegerData[LayerIndex, Row-1, Col] > 0;
+        end;
         if Result then
         begin
           Exit;
@@ -585,7 +620,14 @@ var
     begin
       for LayerIndex := 0 to Active.LayerCount - 1 do
       begin
-        Result := Active.BooleanData[LayerIndex, Row-1, Col-1];
+        if FModel.ModelSelection <> msModflow2015 then
+        begin
+          Result := Active.BooleanData[LayerIndex, Row-1, Col-1];
+        end
+        else
+        begin
+          Result := Active.IntegerData[LayerIndex, Row-1, Col-1] > 0;
+        end;
         if Result then
         begin
           Exit;
@@ -597,7 +639,14 @@ begin
   Frequency := seGridLines.AsInteger;
   FRowIndex := -1;
   FColIndex := -1;
-  Active := FModel.DataArrayManager.GetDataSetByName(rsActive);
+  if FModel.ModelSelection <> msModflow2015 then
+  begin
+    Active := FModel.DataArrayManager.GetDataSetByName(rsActive);
+  end
+  else
+  begin
+    Active := FModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  end;
   For RowIndex := 0 to FGrid.RowCount do
   begin
   	if (RowIndex = 0) or (RowIndex = FGrid.RowCount) or ((RowIndex mod Frequency) = 0) then
@@ -615,6 +664,7 @@ begin
         PointIndex := 0;
         for ColIndex := 0 to FGrid.ColumnCount do
         begin
+//        try
           if IsActive(ColIndex, FRowIndex) then
           begin
             APoint := FGrid.TwoDElementCorner(ColIndex, FRowIndex);
@@ -635,6 +685,9 @@ begin
           begin
             PriorActive := False;
           end;
+//        except
+//          ShowMessage(ColIndex.ToString + ' ' + FRowIndex.ToString);
+//        end;
         end;
         SetLength(AShape.FPoints, AShape.FNumPoints);
         if AShape.FNumPoints = 0 then

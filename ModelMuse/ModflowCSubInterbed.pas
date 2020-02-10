@@ -31,29 +31,30 @@ type
       AModel: TBaseModel);
     function GetDataSetNames: TStringList;
     procedure UpdataInterbedDataSetNames;
+    procedure UpdatePackageDataFormulas;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
     destructor Destroy; override;
     function DataArrayUsed(ADataArray: TDataArray): Boolean;
-    // pcs0
+    // @name defines the name of the @link(TDataArray) that specifies pcs0
     property InitialOffset: string read FInitialOffset;
-    // thick_frac
+    // @name defines the name of the @link(TDataArray) that specifies thick_frac
     property Thickness: string read FThickness;
-    // rnb
+    // @name defines the name of the @link(TDataArray) that specifies rnb
     property EquivInterbedNumberName: string read FEquivInterbedNumberName;
-    // ssv_cc
+    // @name defines the name of the @link(TDataArray) that specifies ssv_cc
     property InitialInelasticSpecificStorage: string read FInitialInelasticSpecificStorage;
-    // sse_cr
+    // @name defines the name of the @link(TDataArray) that specifies sse_cr
     property InitialElasticSpecificStorage: string read FInitialElasticSpecificStorage;
-    // theta
+    // @name defines the name of the @link(TDataArray) that specifies theta
     property InitialPorosity: string read FInitialPorosity;
-    // kv
+    // @name defines the name of the @link(TDataArray) that specifies kv
     property DelayKvName: string read FDelayKvName;
-    // boundname
+    // @name defines the name of the @link(TDataArray) that specifies boundname
     property CSubBoundName: string read FCSubBoundName;
-    // h0
+    // @name defines the name of the @link(TDataArray) that specifies h0
     property InitialDelayHeadOffset: string read FInitialDelayHeadOffset;
     property DataSetNames: TStringList read GetDataSetNames;
   published
@@ -78,7 +79,7 @@ implementation
 
 uses
   PhastModelUnit, GlobalVariablesUnit, frmGoPhastUnit,
-  ModflowPackagesUnit, ModflowPackageSelectionUnit;
+  ModflowPackagesUnit, ModflowPackageSelectionUnit, ScreenObjectUnit;
 
 const
   KDelayKv = 'DelayKv';
@@ -207,17 +208,6 @@ begin
     end;
     
     CreateOrRenameDataArray(FCSubBoundName, rdtString, KCSubBoundName, StrCSubBoundName, NewInterbedName, Model);
-
-
-{
-
-
-    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FThickessArrayName);
-    Assert(DataArray <> nil);
-    DataArray.CheckMin := True;
-    DataArray.Min := 0;
-    HufUsedParameters.RenameLayer(NewInterbedName);
-}    
   end;
 end;
 
@@ -372,6 +362,26 @@ end;
 procedure TCSubInterbed.UpdataInterbedDataSetNames;
 begin
   RenameInterbed(Name);
+end;
+
+procedure TCSubInterbed.UpdatePackageDataFormulas;
+var
+  LocalModel: TCustomModel;
+  ObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+begin
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    for ObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+    begin
+      ScreenObject := LocalModel.ScreenObjects[ObjectIndex];
+      if (ScreenObject.ModflowCSub <> nil) and ScreenObject.ModflowCSub.CSubPackageData.Used then
+      begin
+        ScreenObject.ModflowCSub.CSubPackageData.Loaded;
+      end;
+    end;
+  end;
 end;
 
 { TCSubInterbeds }

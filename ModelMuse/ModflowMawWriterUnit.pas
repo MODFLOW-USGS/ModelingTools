@@ -1074,15 +1074,15 @@ begin
       case ACell.FlowingWell of
         fwNotFlowing:
           begin
+            // do nothing
+          end;
+        fwFlowing:
+          begin
             WriteInteger(ACell.WellNumber);
             WriteString(' FLOWING_WELL');
             WriteFloat(ACell.FlowingWellElevation);
             WriteFloat(ACell.FlowingWellConductance);
             NewLine;
-          end;
-        fwFlowing:
-          begin
-            // do nothing
           end;
       end;
 

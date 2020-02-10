@@ -6,10 +6,6 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
     object tabInterbedSystems: TTabSheet [0]
       Caption = 'Interbed systems'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgSubGroups: TRbwDataGrid4
         Left = 0
         Top = 56
@@ -21,6 +17,7 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         TabOrder = 0
         OnMouseUp = rdgSubGroupsMouseUp
+        OnSelectCell = rdgSubGroupsSelectCell
         OnSetEditText = rdgSubGroupsSetEditText
         ExtendedAutoDistributeText = False
         AutoMultiEdit = True

@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMf6Obs
+        ActivePage = jvspCSUB
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -6926,7 +6926,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitWidth = 573
                   inherited zbFlowDepthTable: TQRbwZoomBox2
                     Width = 279
-                    Image32.Top = 0
                     Image32.Width = 279
                     Image32.ExplicitWidth = 279
                     ExplicitWidth = 279
@@ -6934,7 +6933,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited zbFlowWidthTable: TQRbwZoomBox2
                     Left = 289
                     Width = 280
-                    Image32.Top = 0
                     Image32.Width = 280
                     Image32.ExplicitWidth = 280
                     ExplicitLeft = 289
@@ -12059,7 +12057,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited lblTypesOfFlowObservation: TLabel
                   Width = 183
@@ -12082,7 +12082,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabMAW: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstMAW: TCheckListBox
                   Height = 270
@@ -12091,7 +12093,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabSFR: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstSFR: TCheckListBox
                   Height = 278
@@ -12100,7 +12104,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabLAK: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstLAK: TCheckListBox
                   Height = 366
@@ -12109,7 +12115,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabUZF: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
+                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited lblDepthFraction: TLabel
                   Width = 430
@@ -12122,6 +12130,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCSUB: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371
@@ -12135,8 +12144,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Width = 573
                   Height = 266
                   ItemHeight = 19
+                  ExplicitLeft = 0
+                  ExplicitTop = 0
                   ExplicitWidth = 573
-                  ExplicitHeight = 271
+                  ExplicitHeight = 266
                 end
                 inherited pnlDelayBeds: TPanel
                   Top = 271
@@ -13219,6 +13230,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 581
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'CSUB_Skeletal_Storage__Compac2'
           Caption = 'jvspCSUB'
           inline frameCSUB: TframeScreenObjectCSub
             Left = 0

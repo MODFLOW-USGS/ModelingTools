@@ -1047,6 +1047,10 @@ resourcestring
   StrScreenBottom = 'Screen Bottom';
   StrSkinHydraulicCondu = 'Skin Hydraulic Conductivity';
   StrSkinRadius = 'Skin Radius';
+  StrTheAttributeNamed = 'The attribute named %0:s on row %1:d has the same ' +
+  'name as another attribute. It will be skipped.';
+  StrTheCSVAttributeNa = 'The CSV attribute named %0:s has the same ' +
+  'name as another attribute. It will be skipped.';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -10988,6 +10992,13 @@ begin
     FieldName := AnsiString(dgFields.Cells[Ord(fgcAttributes),RowIndex]);
     FieldNumber := xbShapeDataBase.GetFieldNumberFromName(FieldName);
     VariableName := FieldToVarName(dgFields.Cells[Ord(fgcAttributes),RowIndex]);
+    if Parser.IndexOfVariable(VariableName) >= 0 then
+    begin
+      Beep;
+      MessageDlg(Format(StrTheAttributeNamed, [VariableName, RowIndex]),
+        mtWarning, [mbOK], 0);
+      Continue;
+    end;
     if VariableName <> '' then
     begin
       case xbShapeDataBase.GetFieldType(FieldNumber) of
@@ -11021,6 +11032,13 @@ begin
   for AttrIndex := 0 to FCsvAttributes.Count - 1 do
   begin
     VariableName := FieldToVarName(FCsvAttributes[AttrIndex].AttributeName);
+    if Parser.IndexOfVariable(VariableName) >= 0 then
+    begin
+      Beep;
+      MessageDlg(Format(StrTheCSVAttributeNa, [VariableName]),
+        mtWarning, [mbOK], 0);
+      Continue;
+    end;
     Parser.CreateVariable(VariableName, StrAttributes, 0.0, TValueReal, VariableName);
   end;
 

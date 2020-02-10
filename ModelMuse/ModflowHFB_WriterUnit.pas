@@ -36,6 +36,7 @@ type
     FThicknessAnnotation: TStringList;
     FDuplicate: Boolean;
     FPriorIndex: Integer;
+    FScreenObject: TScreenObject;
     function IdenticalDoubleList(List1, List2: TDoubleList): Boolean;
 //    function IdenticalStringList(List1, List2: TStringList): Boolean;
   protected
@@ -43,7 +44,7 @@ type
     function GetRealValue(Index: integer): double; override;
     function GetHasData: Boolean; override;
   public
-    constructor Create(AModel: TBaseModel);
+    constructor Create(AModel: TBaseModel; ScreenObject: TScreenObject);
     destructor Destroy; override;
     Function LocationSame(ABarrier: TTransientBarrier): boolean;
     procedure WriteBarrier(Writer: TModflowHfb_Writer; const time: double);
@@ -169,6 +170,9 @@ resourcestring
   StrHFBHydraulicConduc = 'HFB Hydraulic Conductivity';
   StrHFBThickness = 'HFB Thickness';
   StrLayer0dCell1 = 'Layer %0:d, Cell 1 %1:d, Cell 2 %2:d';
+  StrNoValidHFBTimesH = 'No valid HFB times have been defined';
+  StrInSNoValidHori = 'In %s, no valid Horizontal Flow Barrier times have be' +
+  'en defined.';
 
 { TModflowHfb_Writer }
 
@@ -703,7 +707,7 @@ var
               and (IDomainDataSet.IntegerData[
               Segment.Layer, CrossRow, Segment.Col] > 0) then
             begin
-              Barrier := TTransientBarrier.Create(Model);
+              Barrier := TTransientBarrier.Create(Model, ScreenObject);
               Barrier.FCol1 := Segment.Col;
               Barrier.FCol2 := Segment.Col;
               Barrier.FRow1 := Segment.Row;
@@ -771,7 +775,7 @@ var
               and (IDomainDataSet.IntegerData[
               Segment.Layer, Segment.Row, CrossColumn] > 0) then
             begin
-              Barrier := TTransientBarrier.Create(Model);
+              Barrier := TTransientBarrier.Create(Model, ScreenObject);
               Barrier.FCol1 := Segment.Col;
               Barrier.FCol2 := CrossColumn;
               Barrier.FRow1 := Segment.Row;
@@ -840,7 +844,7 @@ var
                 and (IDomainDataSet.IntegerData[
                 Segment.Layer, Segment.Row, OtherCell.ElementNumber] > 0) then
               begin
-                Barrier := TTransientBarrier.Create(Model);
+                Barrier := TTransientBarrier.Create(Model, ScreenObject);
                 Barrier.FCol1 := Segment.Col;
                 Barrier.FCol2 := OtherCell.ElementNumber;
                 Barrier.FRow1 := Segment.Row;
@@ -914,6 +918,7 @@ begin
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInTheHFBPackage1);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoDefinedBoundarie);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrHFBThicknessOrHyd);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoValidHFBTimesH);
 
     IDomainDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
     frmProgressMM.AddMessage(StrEvaluatingHFBPacka);
@@ -1728,9 +1733,9 @@ end;
 
 { TTransientBarrier }
 
-constructor TTransientBarrier.Create(AModel: TBaseModel);
+constructor TTransientBarrier.Create(AModel: TBaseModel; ScreenObject: TScreenObject);
 begin
-  inherited;
+  inherited Create(AModel);
   FStartTimes := TDoubleList.Create;
   FEndTimes := TDoubleList.Create;
   FHydraulicConductivities := TDoubleList.Create;
@@ -1739,6 +1744,8 @@ begin
   FThicknessAnnotation := TStringList.Create;
   FDuplicate := False;
   FPriorIndex := 0;
+  FScreenObject := ScreenObject;
+  Assert(ScreenObject <> nil);
 end;
 
 destructor TTransientBarrier.Destroy;
@@ -1898,6 +1905,12 @@ begin
     begin
       Break;
     end;
+  end;
+  if FStartTimes.Count = 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Writer.Model, StrNoValidHFBTimesH,
+      Format(StrInSNoValidHori, [FScreenObject.Name]), FScreenObject);
+    Exit;
   end;
   if (FStartTimes[FPriorIndex] <= time) and (FEndTimes[FPriorIndex] > time) then
   begin

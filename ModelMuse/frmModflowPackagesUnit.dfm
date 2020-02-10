@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspModpath
+    ActivePage = jvspCSUB
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -9899,8 +9899,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited tabBasic: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 326
+            ExplicitWidth = 487
+            ExplicitHeight = 291
             inherited lblPrintOption: TLabel
               Width = 79
               Height = 18
@@ -9970,12 +9970,14 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited tabNonLinear: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 487
-            ExplicitHeight = 291
+            ExplicitWidth = 587
+            ExplicitHeight = 326
             inherited rdgNonlinearOptions: TRbwDataGrid4
-              Height = 291
+              Width = 587
+              Height = 326
               FixedCols = 0
-              ExplicitHeight = 291
+              ExplicitWidth = 587
+              ExplicitHeight = 326
             end
           end
           inherited tabLinear: TTabSheet
@@ -10903,6 +10905,8 @@ inherited frmModflowPackages: TfrmModflowPackages
       Top = 0
       Width = 595
       Height = 516
+      HelpType = htKeyword
+      HelpKeyword = 'CSUB_Skeletal_Storage__Compact'
       Caption = 'jvspCSUB'
       inline framePackageCsub: TframePackageCsub
         Left = 0
@@ -10938,18 +10942,14 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited tabInterbeds: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 587
+            ExplicitWidth = 581
             ExplicitHeight = 324
             inherited frameInterbeds: TframeGrid
-              Width = 587
               Height = 324
-              ExplicitWidth = 587
               ExplicitHeight = 324
               inherited Panel: TPanel
                 Top = 283
-                Width = 587
                 ExplicitTop = 283
-                ExplicitWidth = 587
                 inherited lbNumber: TLabel
                   Width = 194
                   Height = 18
@@ -10957,15 +10957,12 @@ inherited frmModflowPackages: TfrmModflowPackages
                   ExplicitHeight = 18
                 end
                 inherited sbAdd: TSpeedButton
-                  Left = 338
                   ExplicitLeft = 338
                 end
                 inherited sbInsert: TSpeedButton
-                  Left = 367
                   ExplicitLeft = 367
                 end
                 inherited sbDelete: TSpeedButton
-                  Left = 396
                   ExplicitLeft = 396
                 end
                 inherited seNumber: TJvSpinEdit
@@ -10974,9 +10971,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
               end
               inherited Grid: TRbwDataGrid4
-                Width = 587
                 Height = 283
-                ExplicitWidth = 587
                 ExplicitHeight = 283
               end
             end
@@ -11036,11 +11031,13 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited tabOutputTypes: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 581
+            ExplicitWidth = 587
             ExplicitHeight = 324
             inherited chklstOutput: TCheckListBox
+              Width = 587
               Height = 324
               ItemHeight = 18
+              ExplicitWidth = 587
               ExplicitHeight = 324
             end
           end

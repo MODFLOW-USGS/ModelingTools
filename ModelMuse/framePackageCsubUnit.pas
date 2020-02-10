@@ -78,6 +78,7 @@ var
   Interbed: TCSubInterbed;
 begin
   inherited;
+  pcCsub.ActivePageIndex := 0;
   CSubPackage := Package as TCSubPackageSelection;
   rdeGamma.RealValue := CSubPackage.Gamma;
   rdeBeta.RealValue := CSubPackage.Beta;

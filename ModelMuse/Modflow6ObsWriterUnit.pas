@@ -2454,7 +2454,8 @@ begin
             coCSub, coInelastCSub, coElastCSub, coSk, coSke, coIntbedComp,
             coInelastComp, coElastComp, coThickness:
               begin
-                if ScreenObject.ModflowCSub <> nil then
+                if (ScreenObject.ModflowCSub <> nil)
+                  and ScreenObject.ModflowCSub.CSubPackageData.Used then
                 begin
                   WriteString(obsname);
                   WriteString(ObservationType);
