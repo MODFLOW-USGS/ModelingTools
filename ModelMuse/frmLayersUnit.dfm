@@ -29,6 +29,10 @@ inherited frmLayers: TfrmLayers
       HelpType = htKeyword
       HelpKeyword = 'Basics_Tab'
       Caption = 'Basics'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         433
         350)
@@ -210,6 +214,8 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Discretization_Tab'
       Caption = 'Discretization'
       ImageIndex = 1
+      ExplicitWidth = 154
+      ExplicitHeight = 127
       inline frameDiscretization: TframeDiscretization
         Left = 0
         Top = 0
@@ -217,7 +223,8 @@ inherited frmLayers: TfrmLayers
         Height = 350
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 350
+        ExplicitWidth = 154
+        ExplicitHeight = 127
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -441,6 +448,10 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Dispersion_Tab'
       Caption = 'Dispersion'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgDispersion: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -597,6 +608,10 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Conduit_Layers_Tab'
       Caption = 'Conduit Layers'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgConduitLayers: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -971,7 +986,7 @@ inherited frmLayers: TfrmLayers
     Left = 16
     Top = 16
     Bitmap = {
-      494C010105000900200010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1263,7 +1278,7 @@ inherited frmLayers: TfrmLayers
     Left = 16
     Top = 56
     Bitmap = {
-      494C010106000900200010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010106000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

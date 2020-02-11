@@ -24909,5 +24909,12 @@ object TTaskHistory
         'MAW'
         'CSUB'
         'Testing')
+    end
+    item
+      Date = 43872.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'MF-2015'
+        'CSUB')
     end>
 end

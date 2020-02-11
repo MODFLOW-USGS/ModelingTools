@@ -806,8 +806,15 @@ begin
     thick_fracDataArray := DataArrayManager.GetDataSetByName(Interbed.Thickness);
     thick_fracDataArray.Initialize;
 
-    rnbDataArray := DataArrayManager.GetDataSetByName(Interbed.EquivInterbedNumberName);
-    rnbDataArray.Initialize;
+    if Interbed.InterbedType = itDelay then
+    begin
+      rnbDataArray := DataArrayManager.GetDataSetByName(Interbed.EquivInterbedNumberName);
+      rnbDataArray.Initialize;
+    end
+    else
+    begin
+      rnbDataArray := nil;
+    end;
 
     ssv_ccDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialInelasticSpecificStorage);
     ssv_ccDataArray.Initialize;
@@ -818,11 +825,19 @@ begin
     thetaDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialPorosity);
     thetaDataArray.Initialize;
 
-    kvDataArray := DataArrayManager.GetDataSetByName(Interbed.DelayKvName);
-    kvDataArray.Initialize;
+    if Interbed.InterbedType = itDelay  then
+    begin
+      kvDataArray := DataArrayManager.GetDataSetByName(Interbed.DelayKvName);
+      kvDataArray.Initialize;
 
-    h0DataArray := DataArrayManager.GetDataSetByName(Interbed.InitialDelayHeadOffset);
-    h0DataArray.Initialize;
+      h0DataArray := DataArrayManager.GetDataSetByName(Interbed.InitialDelayHeadOffset);
+      h0DataArray.Initialize;
+    end
+    else
+    begin
+      kvDataArray := nil;
+      h0DataArray := nil;
+    end;
 
     CSubDataArray := DataArrayManager.GetDataSetByName(Interbed.CSubBoundName);
     CSubDataArray.Initialize;
@@ -850,12 +865,33 @@ begin
 
             pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             thick_frac := thick_fracDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            rnb := rnbDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            if rnbDataArray <> nil then
+            begin
+              rnb := rnbDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            end
+            else
+            begin
+              rnb := 0;
+            end;
             ssv_cc := ssv_ccDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             sse_cr := sse_crDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            kv := kvDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             theta := thetaDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            h0 := h0DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            if kvDataArray <> nil then
+            begin
+              kv := kvDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            end
+            else
+            begin
+              kv := 0;
+            end;
+            if h0DataArray <> nil then
+            begin
+              h0 := h0DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            end
+            else
+            begin
+              h0 := 0;
+            end;
             boundname := ' ' + CSubDataArray.StringData[LayerIndex, RowIndex, ColIndex];
 //            boundname := Format(' "%s"', [boundname]);
 

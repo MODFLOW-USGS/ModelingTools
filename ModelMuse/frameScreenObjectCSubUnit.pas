@@ -73,7 +73,7 @@ resourcestring
   StrInitialPreconsolida = 'Initial Preconsolidation Stress (pcs0)';
   StrInterbedCellFracti = 'Interbed Cell Fraction (thick_frac)';
   StrInitialCompression = 'Initial Inelastic Compression Index (ssv_cc)';
-  StrInitialElasticComp = 'Initial Elastic Compression Index (sse_cr)';
+  StrInitialElasticComp = 'Initial Elastic Recompression Index (sse_cr)';
   StrInitialDelayHead = 'Initial Delay Head (h0)';
 
 {$R *.dfm}
@@ -587,39 +587,48 @@ begin
           if InterBedSystem.Used then
           begin
             ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.DelayKvName);
-            Assert(ADataArray <> nil);
             if AnInterBed.InterbedType = itDelay then
             begin
+              Assert(ADataArray <> nil);
               DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
               Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.DelayKv;
             end
             else
             begin
-              Item.ScreenObject.RemoveDataSet(ADataArray)
+              if ADataArray <> nil then
+              begin
+                Item.ScreenObject.RemoveDataSet(ADataArray)
+              end;
             end;
 
             ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.EquivInterbedNumberName);
-            Assert(ADataArray <> nil);
             if AnInterBed.InterbedType = itDelay then
             begin
+              Assert(ADataArray <> nil);
               DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
               Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.EquivInterbedNumber;
             end
             else
             begin
-              Item.ScreenObject.RemoveDataSet(ADataArray)
+              if ADataArray <> nil then
+              begin
+                Item.ScreenObject.RemoveDataSet(ADataArray)
+              end;
             end;
 
             ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialDelayHeadOffset);
-            Assert(ADataArray <> nil);
             if AnInterBed.InterbedType = itDelay then
             begin
+              Assert(ADataArray <> nil);
               DataSetIndex := Item.ScreenObject.AddDataSet(ADataArray);
               Item.ScreenObject.DataSetFormulas[DataSetIndex] := InterBedSystem.InitialDelayHeadOffset;
             end
             else
             begin
-              Item.ScreenObject.RemoveDataSet(ADataArray)
+              if ADataArray <> nil then
+              begin
+                Item.ScreenObject.RemoveDataSet(ADataArray)
+              end;
             end;
 
             ADataArray := DataArrayManager.GetDataSetByName(AnInterBed.InitialElasticSpecificStorage);

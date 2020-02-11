@@ -1974,11 +1974,17 @@ var
   LocalModel: TPhastModel;
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  LayerCountChanged: Boolean;
 begin
   frmGoPhast.CanDraw := False;
   try
     inherited;
     LocalModel := frmGoPhast.PhastModel;
+    LayerCountChanged := LocalModel.LayerStructure.LayerCount <> FNewLayerStructure.LayerCount;
+    if LayerCountChanged then
+    begin
+      LocalModel.ThreeDDataSet := nil;
+    end;
     LocalModel.LayerStructure.NewDataSets := FNewDataSets;
     LocalModel.LayerStructure.ClearNewDataSets;
     LocalModel.LayerStructure.Assign(FNewLayerStructure);
@@ -2007,11 +2013,17 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
   NewDis: TChildDiscretizationCollection;
+  LayerCountChanged: Boolean;
 begin
   frmGoPhast.CanDraw := False;
   try
     inherited;
     frmGoPhast.PhastModel.LayerStructure.NewDataSets := FNewDataSets;
+    LayerCountChanged := frmGoPhast.PhastModel.LayerStructure.LayerCount <> FNewLayerStructure.LayerCount;
+    if LayerCountChanged then
+    begin
+      frmGoPhast.PhastModel.ThreeDDataSet := nil;
+    end;
     frmGoPhast.PhastModel.LayerStructure.Assign(FOldLayerStructure);
     frmGoPhast.PhastModel.LayerStructure.RemoveNewDataSets;
     frmGoPhast.PhastModel.LayerStructure.NewDataSets := nil;

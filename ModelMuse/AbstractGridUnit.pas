@@ -6467,11 +6467,23 @@ var
 begin
   result := True;
   LocalModel := Model as TCustomModel;
-  ActiveDataSet := LocalModel.DataArrayManager.GetDataSetByName(rsActive);
-  if ActiveDataSet <> nil then
+  if LocalModel.ModelSelection = msModflow2015 then
   begin
-    ActiveDataSet.Initialize;
-    result := ActiveDataSet.BooleanData[Layer, Row, Col];
+    ActiveDataSet := LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    if ActiveDataSet <> nil then
+    begin
+      ActiveDataSet.Initialize;
+      result := ActiveDataSet.IntegerData[Layer, Row, Col] >= 1;
+    end;
+  end
+  else
+  begin
+    ActiveDataSet := LocalModel.DataArrayManager.GetDataSetByName(rsActive);
+    if ActiveDataSet <> nil then
+    begin
+      ActiveDataSet.Initialize;
+      result := ActiveDataSet.BooleanData[Layer, Row, Col];
+    end;
   end;
 end;
 

@@ -592,40 +592,72 @@ begin
       DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
       LocalScreenObject := ScreenObject as TScreenObject;
 
-      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.DelayKvName);
-      Assert(ADataArray <> nil);
-      if LocalInterbed.InterbedType = itDelay then
+      if LocalInterbed.DelayKvName <> '' then
       begin
+        ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.DelayKvName);
+      end
+      else
+      begin
+        ADataArray := nil;
+      end;
+      if (LocalInterbed.InterbedType = itDelay) {and (ADataArray <> nil} then
+      begin
+        Assert(ADataArray <> nil);
         DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
         LocalScreenObject.DataSetFormulas[DataSetIndex] := DelayKv;
       end
       else
       begin
-        LocalScreenObject.RemoveDataSet(ADataArray);
+        if ADataArray <> nil then
+        begin
+          LocalScreenObject.RemoveDataSet(ADataArray);
+        end;
       end;
 
-      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
-      Assert(ADataArray <> nil);
-      if LocalInterbed.InterbedType = itDelay then
+//      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
+      if LocalInterbed.EquivInterbedNumberName <> '' then
       begin
+        ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.EquivInterbedNumberName);
+      end
+      else
+      begin
+        ADataArray := nil;
+      end;
+      if (LocalInterbed.InterbedType = itDelay) {and (ADataArray <> nil)} then
+      begin
+        Assert(ADataArray <> nil);
         DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
         LocalScreenObject.DataSetFormulas[DataSetIndex] := EquivInterbedNumber;
       end
       else
       begin
-        LocalScreenObject.RemoveDataSet(ADataArray);
+        if ADataArray <> nil then
+        begin
+          LocalScreenObject.RemoveDataSet(ADataArray);
+        end;
       end;
 
-      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
-      Assert(ADataArray <> nil);
-      if LocalInterbed.InterbedType = itDelay then
+//      ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
+      if LocalInterbed.InitialDelayHeadOffset <> '' then
       begin
+        ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialDelayHeadOffset);
+      end
+      else
+      begin
+        ADataArray := nil;
+      end;
+      if (LocalInterbed.InterbedType = itDelay) {and (ADataArray <> nil)} then
+      begin
+        Assert(ADataArray <> nil);
         DataSetIndex := LocalScreenObject.AddDataSet(ADataArray);
         LocalScreenObject.DataSetFormulas[DataSetIndex] := InitialDelayHeadOffset;
       end
       else
       begin
-        LocalScreenObject.RemoveDataSet(ADataArray);
+        if ADataArray <> nil then
+        begin
+          LocalScreenObject.RemoveDataSet(ADataArray);
+        end;
       end;
 
       ADataArray := DataArrayManager.GetDataSetByName(LocalInterbed.InitialElasticSpecificStorage);

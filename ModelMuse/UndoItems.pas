@@ -2341,6 +2341,7 @@ begin
         frmGoPhast.PhastModel.SideDataSet := nil;
       end;
     end;
+    
 
     if UpdateObjectDisplay and (frmShowHideObjects <> nil) then
     begin
@@ -2372,6 +2373,13 @@ begin
   begin
     frmGoPhast.PhastModel.ThreeDDataSet := nil;
   end;
+  
+  if (frmGoPhast.PhastModel.ThreeDDataSet <> nil) and
+    (frmGoPhast.PhastModel.ThreeDDataSet.Orientation <> dso3D) then
+  begin
+    frmGoPhast.PhastModel.ThreeDDataSet := nil;
+  end;
+  
   UpdateFrmDisplayData;
 //  UpdateFrmContourData;
   UpdateFrmGridValue;

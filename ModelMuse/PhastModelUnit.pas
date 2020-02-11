@@ -8950,6 +8950,8 @@ const
 
   //               Bug fix: Fixed export of grid lines for the active area
   //                to a Shapefile.
+  //               Bug fix: Fixed display of active cells in MODFLOW 6 to
+  //                IDOMAIN > 0.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.28';

@@ -1254,20 +1254,22 @@ begin
   begin
     GetDataSetMeshValue(DataArray, SelectedLayer, ElementNumber,
       StringValues, ShowColor, Fraction, MinMax);
-    if ShowColor then
+    if DataArray.Limits.ActiveOnly and
+      (IDomainDataArray.IntegerData[SelectedLayer,0,ElementNumber] <= 0) then
     begin
-      if DataArray.Limits.ActiveOnly and
-        (IDomainDataArray.IntegerData[SelectedLayer,0,ElementNumber] <= 0) then
-      begin
-        AColor := InactiveGridColor;
-      end
-      else
+      AColor := InactiveGridColor;
+      DrawBigPolygon32(BitMap, Color32(AColor), Color32(AColor),
+        0, Points, Dummy, False, True);
+    end
+    else
+    begin
+      if ShowColor then
       begin
         AColor := frmGoPhast.PhastModel.GridColorParameters.
           FracToColor(Fraction);
+        DrawBigPolygon32(BitMap, Color32(AColor), Color32(AColor),
+          0, Points, Dummy, False, True);
       end;
-      DrawBigPolygon32(BitMap, Color32(AColor), Color32(AColor),
-        0, Points, Dummy, False, True);
     end;
   end;
   if DrawCellEdge then
@@ -2753,13 +2755,13 @@ begin
         end;
       gldcActive:
         begin
-          DrawCellEdge := IDomainDataArray.IntegerData[CellLayer, 0, CellIndex] > 0;
-          DrawCellLabel := DrawCellNumbers and (IDomainDataArray.IntegerData[CellLayer, 0, CellIndex] > 0);
+          DrawCellEdge := IDomainDataArray.IntegerData[SelectedLayer, 0, CellIndex] > 0;
+          DrawCellLabel := DrawCellNumbers and (IDomainDataArray.IntegerData[SelectedLayer, 0, CellIndex] > 0);
         end;
       gldcActiveEdge:
         begin
           DrawCellEdge := False;
-          DrawCellLabel := DrawCellNumbers and (IDomainDataArray.IntegerData[CellLayer, 0, CellIndex] > 0);
+          DrawCellLabel := DrawCellNumbers and (IDomainDataArray.IntegerData[SelectedLayer, 0, CellIndex] > 0);
         end;
       else Assert(False)
     end;

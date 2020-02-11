@@ -92,7 +92,7 @@ const
   KThickness = 'Thickness';
   KInitialPreconsolidat = 'InitialPreconsolidationStress';
   KCellThicknessFractio = 'CellThicknessFraction';
-  KInitialInelasticComp = 'InitialInelasticCompressionIndex';
+  KInitialInelasticComp = 'InitialInelasticRecompressionIndex';
   KInitialElasticCompre = 'InitialElasticCompressionIndex';
   KInitialDelayHead = 'InitialDelayHead';
   
@@ -174,9 +174,16 @@ begin
     begin
       CreateOrRenameDataArray(FThickness, rdtDouble, KCellThicknessFractio, StrCellThicknessFractio, NewInterbedName, Model);
     end;
-    
-    CreateOrRenameDataArray(FEquivInterbedNumberName, rdtDouble, KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
-    
+
+    if InterbedType = itDelay then
+    begin
+      CreateOrRenameDataArray(FEquivInterbedNumberName, rdtDouble, KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
+    end
+    else
+    begin
+      FEquivInterbedNumberName := '';
+    end;
+
     if CSubPackage.CompressionMethod = coRecompression then
     begin
       CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble, KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model);
@@ -194,19 +201,34 @@ begin
     begin
       CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble, KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model);
     end;
-    
+
     CreateOrRenameDataArray(FInitialPorosity, rdtDouble, KInitialPorosity, StrInitialPorosity, NewInterbedName, Model);
-    CreateOrRenameDataArray(FDelayKvName, rdtDouble, KDelayKv, StrDelayKv, NewInterbedName, Model);
-    
-    if CSubPackage.SpecifyInitialDelayHead then
+
+    if InterbedType = itDelay then
     begin
-      CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
+      CreateOrRenameDataArray(FDelayKvName, rdtDouble, KDelayKv, StrDelayKv, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
+      FDelayKvName := '';
     end;
-    
+
+    if InterbedType = itDelay then
+    begin
+      if CSubPackage.SpecifyInitialDelayHead then
+      begin
+        CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
+      end
+      else
+      begin
+        CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
+      end;
+    end
+    else
+    begin
+      FInitialDelayHeadOffset := '';
+    end;
+
     CreateOrRenameDataArray(FCSubBoundName, rdtString, KCSubBoundName, StrCSubBoundName, NewInterbedName, Model);
   end;
 end;
@@ -302,15 +324,21 @@ var
 begin
   Assert(ADataArray <> nil);
   AName := ADataArray.name;
-  result := (AName = FDelayKvName)
-    or (AName = FEquivInterbedNumberName)
-    or (AName = FInitialDelayHeadOffset)
-    or (AName = FInitialElasticSpecificStorage)
+//  result := (AName = FDelayKvName)
+//    or (AName = FEquivInterbedNumberName)
+//    or (AName = FInitialDelayHeadOffset)
+  result := (AName = FInitialElasticSpecificStorage)
     or (AName = FInitialInelasticSpecificStorage)
     or (AName = FInitialOffset)
     or (AName = FInitialPorosity)
     or (AName = FThickness)
     or (AName = FCSubBoundName);
+  if not result and (InterbedType = itDelay) then
+  begin
+    result := (AName = FDelayKvName)
+      or (AName = FEquivInterbedNumberName)
+      or (AName = FInitialDelayHeadOffset)
+  end;
 end;
 
 destructor TCSubInterbed.Destroy;
@@ -329,9 +357,12 @@ begin
   begin
     FDataSetNames.Clear;
   end;
-  FDataSetNames.Add(FDelayKvName);
-  FDataSetNames.Add(FEquivInterbedNumberName);
-  FDataSetNames.Add(FInitialDelayHeadOffset);
+  if InterbedType = itDelay then
+  begin
+    FDataSetNames.Add(FDelayKvName);
+    FDataSetNames.Add(FEquivInterbedNumberName);
+    FDataSetNames.Add(FInitialDelayHeadOffset);
+  end;
   FDataSetNames.Add(FInitialElasticSpecificStorage);
   FDataSetNames.Add(FInitialInelasticSpecificStorage);
   FDataSetNames.Add(FInitialOffset);
@@ -346,6 +377,7 @@ begin
   if FInterbedType <> Value then
   begin
     FInterbedType := Value;
+    RenameInterbed(Name);
     InvalidateModel;
   end;
 end;
