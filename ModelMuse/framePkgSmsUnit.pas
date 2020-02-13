@@ -56,7 +56,7 @@ type
 //    FXmdLinearAccPickList: TStringList;
     procedure InitializeGrids;
     function SmsOrdToRow(SmsOrdinal: TSmsOverride): Integer;
-    function NonlinearRowToToSmsOrd(Row: Integer): TSmsOverride;
+    function LinearRowToToSmsOrd(Row: Integer): TSmsOverride;
 
     { Private declarations }
   public
@@ -372,7 +372,7 @@ begin
   end;
 end;
 
-function TframePkgSms.NonlinearRowToToSmsOrd(Row: Integer): TSmsOverride;
+function TframePkgSms.LinearRowToToSmsOrd(Row: Integer): TSmsOverride;
 begin
   Result := TSmsOverride(Row - 1 + Ord(soInnerMaxIterations));
   Assert(Result in [soInnerMaxIterations..soReorderingMethod]);
@@ -422,7 +422,7 @@ begin
 
   if (ARow >= 1) and (ACol >= 1) then
   begin
-    SmsOverride := NonlinearRowToToSmsOrd(ARow);
+    SmsOverride := LinearRowToToSmsOrd(ARow);
     SmsColumn := TSmsColumns(ACol);
     case SmsColumn of
       scOverride:
@@ -670,7 +670,7 @@ begin
   inherited;
   if (ARow >= 1) and (ACol = Ord(scValue)) then
   begin
-    SmsOverride := NonlinearRowToToSmsOrd(ARow);
+    SmsOverride := LinearRowToToSmsOrd(ARow);
     if SmsOverride in [{soUnderRelaxTheta, soUnderRelaxKappa, soUnderRelaxGamma,
         soUnderRelaxMomentum, soBacktrackingTolerance,
         soBacktrackingReductionFactor,} soRelaxationFactor] then
@@ -1013,7 +1013,7 @@ begin
   inherited;
   if (ARow >= 1) and (ACol = Ord(scValue)) then
   begin
-    SmsOverride := NonlinearRowToToSmsOrd(ARow);
+    SmsOverride := TSmsOverride(ARow - 1);
     if SmsOverride in [soUnderRelaxTheta, soUnderRelaxKappa, soUnderRelaxGamma,
         soUnderRelaxMomentum, soBacktrackingTolerance,
         soBacktrackingReductionFactor, soRelaxationFactor] then

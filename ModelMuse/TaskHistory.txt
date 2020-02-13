@@ -26,7 +26,7 @@ object TTaskHistory
     end
     item
       Name = 'Grid/ Geologic Units'
-      Display = True
+      Display = False
     end
     item
       Name = 'Testing'
@@ -122,7 +122,7 @@ object TTaskHistory
     end
     item
       Name = 'LAK'
-      Display = True
+      Display = False
     end
     item
       Name = 'OC'
@@ -138,7 +138,7 @@ object TTaskHistory
     end
     item
       Name = 'UZF'
-      Display = True
+      Display = False
     end
     item
       Name = 'Solvers'
@@ -258,7 +258,7 @@ object TTaskHistory
     end
     item
       Name = 'List File Analyzer'
-      Display = True
+      Display = False
     end
     item
       Name = 'Mesh Generation'
@@ -270,7 +270,7 @@ object TTaskHistory
     end
     item
       Name = 'MT3DMS'
-      Display = True
+      Display = False
     end
     item
       Name = 'SUTRA Model'
@@ -342,7 +342,7 @@ object TTaskHistory
     end
     item
       Name = 'NPF'
-      Display = True
+      Display = False
     end
     item
       Name = 'STO'
@@ -350,11 +350,11 @@ object TTaskHistory
     end
     item
       Name = 'SMS'
-      Display = True
+      Display = False
     end
     item
       Name = 'SimulationNameFile'
-      Display = True
+      Display = False
     end
     item
       Name = 'SWI Observaton Interpolation'
@@ -378,7 +378,7 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS UZT'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS SSM'
@@ -390,7 +390,7 @@ object TTaskHistory
     end
     item
       Name = 'MAW'
-      Display = True
+      Display = False
     end
     item
       Name = 'DISV'
@@ -410,11 +410,11 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS LKT'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS SFT'
-      Display = True
+      Display = False
     end
     item
       Name = 'Simplify Objects'
@@ -422,7 +422,7 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS CTS'
-      Display = True
+      Display = False
     end
     item
       Name = 'GW_Chart'
@@ -24916,5 +24916,14 @@ object TTaskHistory
         'Bug fix'
         'MF-2015'
         'CSUB')
+    end
+    item
+      Date = 43873.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix'
+        'CSUB'
+        'MF6 Observation Utility'
+        'MF-2015')
     end>
 end

@@ -477,7 +477,8 @@ begin
     for ObsIndex := 0 to FObservations.Count - 1 do
     begin
       CSubObs := FObservations[ObsIndex];
-      IbObsTypes := [coTheta, coDelayFlowTop, coDelayFlowBot, coDelayHead,
+      IbObsTypes := [coCSub, coInelastCSub, coElastCSub, coSk, coSke, coIntbedComp,
+            coInelastComp, coElastComp, coThickness, coTheta, coDelayFlowTop, coDelayFlowBot, coDelayHead,
         coDelayGStress, coDelayEStress, coDelayPreConStress, coDelayComp,
         coDelayThickness, coDelayTheta]
         * CSubObs.FObsTypes;
@@ -871,7 +872,7 @@ begin
             end
             else
             begin
-              rnb := 0;
+              rnb := 1;
             end;
             ssv_cc := ssv_ccDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             sse_cr := sse_crDataArray.RealData[LayerIndex, RowIndex, ColIndex];
@@ -882,7 +883,7 @@ begin
             end
             else
             begin
-              kv := 0;
+              kv := 999;
             end;
             if h0DataArray <> nil then
             begin
@@ -890,7 +891,7 @@ begin
             end
             else
             begin
-              h0 := 0;
+              h0 := 999;
             end;
             boundname := ' ' + CSubDataArray.StringData[LayerIndex, RowIndex, ColIndex];
 //            boundname := Format(' "%s"', [boundname]);

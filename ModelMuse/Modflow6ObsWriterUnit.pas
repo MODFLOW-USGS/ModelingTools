@@ -2464,13 +2464,13 @@ begin
                 end
                 else
                 begin
-                  for CellIndex := 0 to Length(AnObs.FCells) - 1 do
+                  for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
                   begin
-                    ACell := AnObs.FCells[CellIndex];
-                    obsname := ' ''' + Root + WriteCellName(ACell) + ''' ';
+                    icsubno := AnObs.FInterbedNumbers[IBIndex];
+                    obsname := Format(' ''%0:s_%1:d_%2:d'' ', [Root, icsubno, idcellno]);
                     WriteString(obsname);
                     WriteString(ObservationType);
-                    WriteCell(ACell);
+                    WriteInteger(icsubno);
                     NewLine;
                   end;
                 end;
