@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Custom Basin</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Custom Basin</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This dialog box is used for editing the outline of a custom basin. The first three of the buttons are used to start editing operations. The rest are for changing the magnification or position of the basin. The scales on the left and right show X and Y coordinates. The status bar shows X and Y coordinates of the cursor. The main part of the dialog box shows the basin itself. When you are done, click OK to close the dialog box and save your custom basin. Click Cancel to to close the dialog box without saving your custom basin. </text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="DrawCustom" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Draw Custom Basin </text><image src="DrawBasin.bmp" scale="100.00%" styleclass="Heading2_atoc_"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click on this button and then click where you want the basin to be. The first time you click on the view of the basin, the current basin outline will be erased and a new one started at the location where you clicked. Click again to add new vertices to the basin outline.</text></para>
+    <para styleclass="Heading1"><anchor id="SelectPoints" styleclass="Heading1"></anchor><text styleclass="Heading1" translate="true">Select Points </text><image src="SelectPoints.bmp" scale="100.00%" styleclass="Heading1"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click this button if you want to move or delete points on the basin outline. &#160;After clicking the button, you can click on a point to select it and then drag it to a new location. You can also press the delete key on the keyboard to delete the selected point. If you want to select more than one points, you can drag to select points in a rectangle outlined by the points where you pressed and released the mouse button. You can also hold down the Shift key while selecting points to add points to the selected points rather than replacing the currently selected points with a new set of selected points.</text></para>
+    <para styleclass="Heading1"><anchor id="InsertPoint" styleclass="Heading1"></anchor><text styleclass="Heading1" translate="true">Insert Point </text><image src="InsertPoint.bmp" scale="100.00%" styleclass="Heading1"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click this button if you want to insert a new point into the basin outline. &#160;Then click somewhere on the outline to insert the new point. </text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="Zoom" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Zoom </text><image src="Zoom.bmp" scale="100.00%" styleclass="Heading2_atoc_"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To zoom into a specific area, click this button and then drag with the mouse to select a region to zoom into.</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="ZoomIn" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Zoom In </text><image src="ZoomIn.bmp" scale="100.00%" styleclass="Heading2_atoc_"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click this button and then click on the basin outline to zoom in on the location you clicked by a factor of 2.</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="ZoomOut" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Zoom Out </text><image src="ZoomOut.bmp" scale="100.00%" styleclass="Heading2_atoc_"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click this button and then click on the basin outline to zoom out from the location you clicked by a factor of 2.</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="MoveView" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Move View </text><image src="Pan.bmp" scale="100.00%" styleclass="Heading2_atoc_"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click this button and then drag with the mouse to move the location that is in view in the dialog box.</text></para>
+    <para styleclass="Heading2_atoc_"><anchor id="DefaultView" styleclass="Heading2_atoc_"></anchor><text styleclass="Heading2_atoc_" translate="true">Default View </text><image src="ZoomDefault.bmp" scale="100.00%" styleclass="Heading2_atoc_"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click this button to return to a default view of the basin.</text></para>
+  </body>
+</topic>

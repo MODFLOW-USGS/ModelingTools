@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="1.5" isskin="false" isrepository="false">
+  <config>
+    <namespaces/>
+    <helpwindows>
+      <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
+        <caption translate="true">&lt;%TITLE%&gt;</caption>
+        <window-options-hlp autosize="true" maximize="false" posabsolute="false" keepontop="false" buttons="0" headercolor="#F0F0F0" textcolor="#FFFFFF"/>
+        <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
+          <user-button name="jump1">
+            <caption translate="true">jump1</caption>
+          </user-button>
+          <user-button name="jump2">
+            <caption translate="true">jump2</caption>
+          </user-button>
+        </window-options-chm>
+      </helpwindow>
+    </helpwindows>
+    <styleclasses>
+      <styleclass name="Code Example" shortcut="0">
+        <style-set media="screen" type="para">white-space:nowrap; page-break-inside:avoid;</style-set>
+        <style-set media="screen" type="text">font-family:'Courier New'; font-size:8pt;</style-set>
+      </styleclass>
+      <styleclass name="Normal" shortcut="0">
+        <style-set media="screen" type="para">margin-top:3px;</style-set>
+        <style-set media="screen" type="text">font-family:Arial; font-size:10pt;</style-set>
+      </styleclass>
+      <styleclass name="Comment" parentclass="Normal" shortcut="0"/>
+      <styleclass name="Heading1" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="text">font-size:14pt; font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Heading2_atoc_" parentclass="Heading1" shortcut="0">
+        <style-set media="screen" type="para">margin-top:12px;</style-set>
+        <style-set media="screen" type="text">font-size:12pt;</style-set>
+      </styleclass>
+      <styleclass name="Heading3_atocs_" parentclass="Heading1" shortcut="0">
+        <style-set media="screen" type="para">margin-top:6px;</style-set>
+        <style-set media="screen" type="text">font-size:12pt; font-weight:normal; font-style:italic;</style-set>
+      </styleclass>
+      <styleclass name="Image Caption" parentclass="Normal" shortcut="0">
+        <style-set media="screen" type="text">font-size:8pt; font-weight:bold;</style-set>
+      </styleclass>
+      <styleclass name="Notes" parentclass="Normal" shortcut="0"/>
+      <tablestyleclass name="Default">
+        <style-set media="screen">width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;</style-set>
+      </tablestyleclass>
+    </styleclasses>
+    <config-group name="project">
+      <config-value name="title" translate="true">GwMounding</config-value>
+      <config-value name="author" translate="true">United States Geological Survey</config-value>
+      <config-value name="copyright" translate="true">© &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
+      <config-value name="versionmajor">1</config-value>
+      <config-value name="versionminor">0</config-value>
+      <config-value name="versionbuild">0</config-value>
+      <config-value name="lcid">en-us</config-value>
+      <config-value name="charset">ANSI_CHARSET</config-value>
+      <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
+      <config-value name="autohelpstart">0</config-value>
+      <config-value name="autohelpincrement">1</config-value>
+      <config-value name="autohelpanchor">0</config-value>
+      <config-value name="searchpath">.\;.\Images\</config-value>
+      <config-group name="custombuilds">
+        <config-value name="CALCULATEVOLUME">CALCULATEVOLUME</config-value>
+        <config-value name="CUSTOMBASINSHAPE">CustomBasinShape</config-value>
+        <config-value name="CUSTOMTEMPLATE">CustomTemplate</config-value>
+        <config-value name="DEMO">Demo Build</config-value>
+        <config-value name="USER1">User defined 1</config-value>
+        <config-value name="USER2">User defined 2</config-value>
+        <config-value name="USER3">User defined 3</config-value>
+        <config-value name="UNSAT">UNSAT</config-value>
+      </config-group>
+      <config-value name="imageshortcuts_includebaggage">1</config-value>
+      <config-value name="make0include">CHM,OPT_ATOC,OPT_FB,OPT_PRINT,OPT_TOGTOC</config-value>
+      <config-value name="make0status">*</config-value>
+      <config-value name="make3include">HTML,CUSTOMBASINSHAPE</config-value>
+      <config-value name="make3status">*</config-value>
+    </config-group>
+    <config-group name="user">
+      <config-group name="rbwinst-pr">
+        <config-group name="project">
+          <config-value name="lastexport">3</config-value>
+        </config-group>
+      </config-group>
+      <config-group name="rbwinst">
+        <config-group name="project">
+          <config-value name="lastexport">3</config-value>
+        </config-group>
+      </config-group>
+    </config-group>
+    <config-group name="chm">
+      <config-value name="outputfile">GwMounding.chm</config-value>
+      <config-value name="deletetemp">1</config-value>
+      <config-value name="skin">simple_grey_vert.hmskin</config-value>
+    </config-group>
+    <config-group name="html">
+      <config-value name="outputfile">.\HTML\index.html</config-value>
+      <config-value name="topiceditor">0</config-value>
+      <config-value name="topicsimpleheadercolor">#D0D0D0</config-value>
+      <config-value name="topicsimpletextcolor">#FFFFFF</config-value>
+      <config-value name="topicsimplebuttons">0</config-value>
+      <config-group name="TOPICSIMPLEBUTTON1">
+        <config-value name="CAPTION" translate="true"></config-value>
+      </config-group>
+      <config-group name="TOPICSIMPLEBUTTON2">
+        <config-value name="CAPTION" translate="true"></config-value>
+      </config-group>
+      <config-group name="TOPICSIMPLEBUTTON3">
+        <config-value name="CAPTION" translate="true"></config-value>
+      </config-group>
+      <config-group name="TOPICTEMPLATES">
+        <config-value name="Default" translate="true"><![CDATA[<%DOCTYPE%>
+<html>
+<head>
+   <title><%TOPIC_TITLE%></title>
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="<%TOPIC_KEYWORDS%>" />
+   <meta http-equiv="Content-Type" content="text/html; charset=<%DOCCHARSET%>" />
+   <meta http-equiv="Content-Style-Type" content="text/css" />
+   <link type="text/css" href="<%STYLESHEET%>" rel="stylesheet" />
+</head>
+<body style="margin: 0px 0px 0px 0px; background: #FFFFFF;">
+
+<IF_TOPIC_HEADER>
+<table width="100%" border="0" cellspacing="0" cellpadding="5" bgcolor="#D0D0D0">
+  <tr valign="middle">
+    <td align="left">
+      <%TOPIC_HEADER%>
+    </td>
+  </tr>
+</table>
+</IF_TOPIC_HEADER>
+
+<!-- Placeholder for topic body. -->
+<table width="100%" border="0" cellspacing="0" cellpadding="5"><tr valign="top"><td align="left">
+<%TOPIC_TEXT%>
+</td></tr></table>
+
+</body>
+</html>]]></config-value>
+      </config-group>
+      <config-value name="toceditor">0</config-value>
+      <config-value name="tocsimpletext1" translate="true"><![CDATA[<p class="navtitle"><%TITLE%></p>
+<p class="navbar">
+<b>Contents</b>
+<IF_INDEX_PAGE> | <a href="<%HREF_INDEX_PAGE%>">Index</a></IF_INDEX_PAGE>
+<IF_SEARCH_PAGE> | <a href="<%HREF_SEARCH_PAGE%>">Search</a></IF_SEARCH_PAGE>
+</p><hr size="1" />]]></config-value>
+      <config-value name="tocsimpletext2" translate="true"><![CDATA[<hr size="1" /><p style="font-size: 8pt"><%COPYRIGHT%></p>]]></config-value>
+      <config-value name="tocsimplefont1">font-family:Arial,Helvetica; font-size:10pt; font-weight:normal; font-style:normal; text-decoration:none;</config-value>
+      <config-value name="tocsimplefont2">font-family:Arial,Helvetica; font-size:9pt; font-weight:normal; font-style:normal; text-decoration:none;</config-value>
+      <config-value name="tocsimplefont3">font-family:Arial,Helvetica; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none;</config-value>
+      <config-value name="tocsimplefont4">font-family:Arial,Helvetica; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none;</config-value>
+      <config-value name="tocsimplefont5">font-family:Arial,Helvetica; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none;</config-value>
+      <config-value name="tocsimplefont6">font-family:Arial,Helvetica; font-size:8pt; font-weight:normal; font-style:normal; text-decoration:none;</config-value>
+      <config-value name="contenttemplate" translate="true"><![CDATA[<%DOCTYPE%>
+<html><head>
+   <title><%TITLE%></title>
+   <meta http-equiv="Content-Type" content="text/html; charset=<%DOCCHARSET%>" />
+
+   <!-- This line includes the general project style sheet (not required) -->
+   <meta http-equiv="Content-Style-Type" content="text/css" />
+   <link type="text/css" href="<%STYLESHEET%>" rel="stylesheet" />
+
+   <!-- This block defines the styles of the TOC headings, change them as needed -->
+   <style type="text/css">
+       .navtitle { font-size: 14pt; font-weight: bold; margin-bottom: 16px; }
+       .navbar   { font-size: 10pt; }
+
+       .heading1 { font-family: Arial,Helvetica; font-weight: normal; font-size: 10pt; color: #000000; text-decoration: none; }
+       .heading2 { font-family: Arial,Helvetica; font-weight: normal; font-size: 9pt; color: #000000; text-decoration: none; }
+       .heading3 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #000000; text-decoration: none; }
+       .heading4 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #000000; text-decoration: none; }
+       .heading5 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #000000; text-decoration: none; }
+       .heading6 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #000000; text-decoration: none; }
+
+       .hilight1 { font-family: Arial,Helvetica; font-weight: normal; font-size: 10pt; color: #FFFFFF; background: #002682; text-decoration: none; }
+       .hilight2 { font-family: Arial,Helvetica; font-weight: normal; font-size: 9pt; color: #FFFFFF; background: #002682; text-decoration: none; }
+       .hilight3 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #FFFFFF; background: #002682; text-decoration: none; }
+       .hilight4 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #FFFFFF; background: #002682; text-decoration: none; }
+       .hilight5 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #FFFFFF; background: #002682; text-decoration: none; }
+       .hilight6 { font-family: Arial,Helvetica; font-weight: normal; font-size: 8pt; color: #FFFFFF; background: #002682; text-decoration: none; }
+
+       TD.toc { padding-bottom: 2px; padding-right: 4px }
+   </style>
+</head>
+<body style="background: #FFFFFF; url(null) fixed no-repeat">
+<p class="navtitle"><%TITLE%></p>
+<p class="navbar">
+<b>Contents</b>
+<IF_INDEX_PAGE> | <a href="<%HREF_INDEX_PAGE%>">Index</a></IF_INDEX_PAGE>
+<IF_SEARCH_PAGE> | <a href="<%HREF_SEARCH_PAGE%>">Search</a></IF_SEARCH_PAGE>
+</p><hr size="1" />
+
+<!-- Place holder for the TOC - this variable is REQUIRED! -->
+<%TABLE_OF_CONTENTS%>
+
+<hr size="1" /><p style="font-size: 8pt"><%COPYRIGHT%></p>
+</body>
+</html>]]></config-value>
+      <config-value name="navigationstyle">0</config-value>
+      <config-value name="frameeditor">0</config-value>
+      <config-value name="layoutthreeframe">0</config-value>
+      <config-value name="contentwidth">30</config-value>
+      <config-value name="headframeheight">100</config-value>
+      <config-value name="contentborder">1</config-value>
+      <config-value name="headframescroll">0</config-value>
+      <config-value name="frametemplate" translate="true"><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+  "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+<title><%TITLE%></title>
+<meta http-equiv="Content-Type" content="text/html; charset=<%DOCCHARSET%>">
+<script type="text/javascript" src="<%NAVIGATION_SCRIPT%>"></script>
+<script type="text/javascript">
+<!--
+var defaulttopic="<%HREF_DEFAULT_PAGE%>";
+if (location.href.lastIndexOf("?") > 0) defaulttopic=location.href.substring(location.href.lastIndexOf("?")+1,location.href.length).replace(/:/g,"");
+document.write('<frameset cols="30%,*" frameborder="1" framespacing="1">');
+if (document.getElementById) {
+  document.write('<frame name="hmnavigation" src="<%HREF_CONTENT_PAGE_DYN%>" title="Navigation frame">'); }
+else {
+  document.write('<frame name="hmnavigation" src="<%HREF_CONTENT_PAGE_STATIC%>" title="Navigation frame">'); }
+document.write('<frame name="hmcontent" src="' + defaulttopic + '" title="Content frame">');
+document.write('</frameset>');
+//-->
+</script>
+</head>
+<noscript>
+  <frameset cols="30%,*" frameborder="1" framespacing="1">
+    <frame name="hmnavigation" src="<%HREF_CONTENT_PAGE_STATIC%>" title="Navigation frame">
+    <frame name="hmcontent" src="<%HREF_DEFAULT_PAGE%>" title="Content frame">
+    <noframes>
+      This page requires frames<br><a href="<%HREF_CONTENT_PAGE_STATIC%>">Click here to view the table of contents without frames</a>
+    </noframes>
+  </frameset>
+</noscript>
+</html>]]></config-value>
+      <config-value name="hasindex">0</config-value>
+      <config-value name="hassearch">0</config-value>
+      <config-value name="contentnumbers">0</config-value>
+      <config-value name="contentlazysync">0</config-value>
+      <config-value name="contentsingleclick">0</config-value>
+      <config-value name="contentautocollapse">0</config-value>
+      <config-value name="contentexpand">0</config-value>
+      <config-value name="contentindent">20</config-value>
+      <config-value name="defaulticons">1</config-value>
+      <config-value name="htmlpopup">0</config-value>
+    </config-group>
+    <variables/>
+    <helpcontext-numbers/>
+  </config>
+  <xi:include parse="xml" href="Maps/table_of_contents.xml"/>
+  <project-files>
+    <file href="Topics/*.xml" build="ALL" filetype="topic">
+      <file-mod href="Calculate_Volume.xml" build="CALCULATEVOLUME"/>
+      <file-mod href="Custom_Basin.xml" build="CUSTOMBASINSHAPE"/>
+    </file>
+    <file href="Baggage/*.*" build="ALL" filetype="baggage"/>
+  </project-files>
+</helpproject>
