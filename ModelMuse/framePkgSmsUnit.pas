@@ -779,10 +779,6 @@ begin
               begin
                 CanSelect := BackTrackingNumber > 0;
               end;
-//            soLinearSolver:
-//              begin
-//                CanSelect := True;
-//              end;
             soInnerMaxIterations, soInnerHclose:
               begin
                 CanSelect := True;
@@ -829,50 +825,13 @@ begin
                 // the default linear solver.
                 CanSelect := True;// Solver = slsDefault
               end;
-//            soXmdLinearAcceleration:
-//              begin
-//                // The user must specify LINEAR_ACCELERATION
-//                // for the XMD solver
-//                // if the Complexity is specified
-//                // LINEAR_ACCELERATION is specified by a different variable
-//                // for the linear solver.
-//                CanSelect := True; // (Solver = slsXMD);
-//              end;
-//            soRedBlackOrder:
-//              begin
-//                // RED_BLACK_ORDERING is only used with the XMD solver.
-//                CanSelect := True; //(Solver = slsXMD)
-//              end;
             else
               Assert(False);
           end;
         end;
       scValue:
         begin
-//          if Complexity = scoSpecified then
-//          begin
-//            if SmsOverride in [soOuterHclose, soOuterMaxIt, soUnderRelax,
-//              soInnerMaxIterations, soInnerHclose] then
-//            begin
-//              CanSelect := true;
-//            end
-//            else if SmsOverride in [soInnerRclose, soLinLinearAcceleration] then
-//            begin
-//              CanSelect := (Solver = slsDefault)
-//            end
-//            else if SmsOverride in [soXmdLinearAcceleration, soPreconditionerLevel, soNumberOfOrthoganalizations] then
-//            begin
-//              CanSelect := (Solver = slsXMD)
-//            end
-//            else
-//            begin
-//              rdgOptionsSelectCell(Sender, Ord(scOverride), ARow, CanSelect);
-//            end;
-//          end
-//          else
-//          begin
-            rdgNonlinearOptionsSelectCell(Sender, Ord(scOverride), ARow, CanSelect);
-//          end;
+          rdgNonlinearOptionsSelectCell(Sender, Ord(scOverride), ARow, CanSelect);
 
           if CanSelect then
           begin
@@ -935,11 +894,6 @@ begin
           begin
             AColumn.ComboUsed := False;
           end;
-//        soLinearSolver:
-//          begin
-//            AColumn.ComboUsed := True;
-//            AColumn.PickList := FLinearSolverPickList;
-//          end;
         soInnerMaxIterations:
           begin
             AColumn.ComboUsed := False;
@@ -988,15 +942,6 @@ begin
             AColumn.ComboUsed := True;
             AColumn.PickList := FScalingMethodPickList;
           end;
-//        soXmdLinearAcceleration:
-//          begin
-//            AColumn.ComboUsed := True;
-//            AColumn.PickList := FXmdLinearAccPickList;
-//          end;
-//        soRedBlackOrder:
-//          begin
-//            AColumn.ComboUsed := False;
-//          end;
         else
           Assert(False);
       end;
@@ -1015,7 +960,7 @@ begin
   begin
     SmsOverride := TSmsOverride(ARow - 1);
     if SmsOverride in [soUnderRelaxTheta, soUnderRelaxKappa, soUnderRelaxGamma,
-        soUnderRelaxMomentum, soBacktrackingTolerance,
+        soUnderRelaxMomentum,
         soBacktrackingReductionFactor, soRelaxationFactor] then
     begin
       if TryStrToFloat(Value, FloatValue) then
@@ -1027,6 +972,18 @@ begin
         end;
       end;
     end;
+    if SmsOverride = soBacktrackingTolerance then
+    begin
+      if TryStrToFloat(Value, FloatValue) then
+      begin
+        if FloatValue < 1 then
+        begin
+          Beep;
+          rdgNonlinearOptions.Cells[ACol,ARow] := '1';
+        end;
+      end;
+    end;
+
 //    if SmsOverride = soLinearSolver then
 //    begin
 //      comboComplexityChange(Sender);

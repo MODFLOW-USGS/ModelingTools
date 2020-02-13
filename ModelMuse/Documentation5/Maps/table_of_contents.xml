@@ -2506,6 +2506,9 @@
           <caption translate="true">Evaluating the Effects of the LKT and SFT Packages</caption>
         </topicref>
       </topicref>
+      <topicref type="topic" id="438746993904795" build="ALL" modified="2020-02-13T15:59:59.305Z" icon="0" href="MODFLOW_6_Subsidence_Example">
+        <caption translate="true">MODFLOW 6 Subsidence Example</caption>
+      </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">
       <caption translate="true">SUTRA Examples</caption>

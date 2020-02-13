@@ -8947,16 +8947,17 @@ const
   //               Bug fix: ModelMuse will now generate an error message
   //                instead of sending a bug report if no valid times have
   //                been defined in the HFB package in MODFLOW 6.
-
   //    '4.1.0.29' Bug fix: Fixed export of grid lines for the active area
   //                to a Shapefile.
   //               Bug fix: Fixed display of active cells in MODFLOW 6 to
   //                IDOMAIN > 0.
   //               Bug fix: Fixed specifying overirdes of nonlinear variables
   //                in IMS package in MODFLOW Packages and Programs dialog box.
+  //    '4.1.0.30' Bug fix: Fixed bugs in specifying backtracking_tolerance
+  //                and outer_rclosebnd in the IMS package.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.29';
+  IModelVersion = '4.1.0.30';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

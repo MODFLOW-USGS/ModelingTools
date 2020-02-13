@@ -990,6 +990,7 @@ Type
     soUnderRelaxKappa, soUnderRelaxGamma, soUnderRelaxMomentum,
     soBacktrackingNumber, soBacktrackingTolerance,
     soBacktrackingReductionFactor, soBacktrackingResidualLimit,
+    // The following are for linear options
     soInnerMaxIterations, soInnerHclose, soInnerRclose, soRcloseOption,
     soLinLinearAcceleration,  soPreconditionerLevel,
     soPreconditionerDropTolerance,
@@ -18129,6 +18130,7 @@ begin
   begin
     SourceSms := TSmsPackageSelection(Source);
     OuterHclose := SourceSms.OuterHclose;
+    OuterRClose := SourceSms.OuterRClose;
     UnderRelaxTheta := SourceSms.UnderRelaxTheta;
     UnderRelaxKappa := SourceSms.UnderRelaxKappa;
     UnderRelaxGamma := SourceSms.UnderRelaxGamma;

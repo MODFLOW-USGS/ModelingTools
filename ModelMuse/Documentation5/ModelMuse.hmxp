@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4105</config-value>
+      <config-value name="autohelpstart">4106</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1165,6 +1165,7 @@ document.write('</frameset>');
       <helpcontext-number href="Modflow_6_Example_Specify_Slop" value="4039"/>
       <helpcontext-number href="MODFLOW_6_Example_Specifying_M" value="4053"/>
       <helpcontext-number href="MODFLOW_6_Example_ZONEBUDGET" value="4051"/>
+      <helpcontext-number href="MODFLOW_6_Subsidence_Example" value="4106"/>
       <helpcontext-number href="MODFLOW_and_PHAST_Models" value="3459"/>
       <helpcontext-number href="MODFLOW_Features_Tab" value="1940"/>
       <helpcontext-number href="MODFLOW_Features_Tab#Times" value="4026"/>

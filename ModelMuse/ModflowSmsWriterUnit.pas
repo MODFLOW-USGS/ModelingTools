@@ -252,26 +252,7 @@ end;
 procedure TImsWriter.WriteNonLinearBlock;
 var
   BacktrackingNumber: integer;
-//var
-//  UseNonLinear: Boolean;
 begin
-//  UseNonLinear := False;
-//  if [soOuterHclose, soOuterMaxIt, soUnderRelax, soBacktrackingNumber]
-//    * FSmsPackage.SmsOverrides <> []  then
-//  begin
-//    UseNonLinear := True;
-//  end
-//  else if (soLinearSolver in FSmsPackage.SmsOverrides)
-//    and (FSmsPackage.LinearSolver = slsXMD) then
-//  begin
-//    UseNonLinear := True;
-//  end;
-//
-//  if not UseNonLinear then
-//  begin
-//    Exit;
-//  end;
-
 
   WriteString('BEGIN NONLINEAR');
   NewLine;
