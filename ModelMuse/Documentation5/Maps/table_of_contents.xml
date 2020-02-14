@@ -2508,6 +2508,18 @@
       </topicref>
       <topicref type="topic" id="438746993904795" build="ALL" modified="2020-02-13T15:59:59.305Z" icon="0" href="MODFLOW_6_Subsidence_Example">
         <caption translate="true">MODFLOW 6 Subsidence Example</caption>
+        <topicref type="topic" id="438755404929282" build="ALL" modified="2020-02-14T13:39:35.504Z" icon="0" href="CSUB_Creating_the_Model_Grid">
+          <caption translate="true">CSUB Example: Creating the Model Grid</caption>
+        </topicref>
+        <topicref type="topic" id="438755202697400" build="ALL" modified="2020-02-14T13:39:20.734Z" icon="0" href="CSUB_Example_Stress_Periods">
+          <caption translate="true">CSUB Example: Specifying Stress Periods</caption>
+        </topicref>
+        <topicref type="topic" id="438755298248041" build="ALL" modified="2020-02-14T14:09:56.712Z" icon="0" href="CSUB_Example_Newton_Formulatio">
+          <caption translate="true">CSUB Example: Newton Formulation</caption>
+        </topicref>
+        <topicref type="topic" id="438757224660291" build="ALL" modified="2020-02-14T14:40:15.876Z" icon="0" href="CSUB_Example_Convertible_Cells">
+          <caption translate="true">CSUB Example: Convertible Cells</caption>
+        </topicref>
       </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">

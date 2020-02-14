@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">CSUB Example: Specifying Stress Periods</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: Specifying Stress Periods</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has three stress periods. The first is a steady-state stress period. It is followed by two transient stress periods each lasting 60 years with time steps lasting 1 year. (365.25 days).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select &quot;Model|MODFLOW Time&quot; and set the number of stress periods to 3. Then select the two cells in the table that represent the maximum time step length for the second and third stress periods. To select them, click on one of the cells, hold down the shift key and click on the other cell. Then enter &quot;365.25&quot; in the edit box above the table to set the values of the selected cells.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleTimeStepLength.png" scale="60.00%" width="454" height="215" styleclass="Image Caption"><title translate="true">Setting time-step length</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Next, we will set the length of stress periods 2 and 3 to 60 years. However, the time unit of the model is days, so we need to convert 60 years to days. ModelMuse provides a Time Units Converter to do this. Click the &quot;Convert time units&quot; button to display it. Enter the input and output units and the value &quot;60&quot;. Copy the output to the clipboard and then specify the stress period lengths (21915) in the same way you specified the time step lengths.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleStressPeriodLength.png" scale="60.00%" width="454" height="222" styleclass="Image Caption"><title translate="true">Convert time units and specify stress period lengths</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Click the OK button to close the MODFLOW Time dialog box. (Because your model has some transient stress periods, the MODFLOW 6 storage package will be automatically activated.)</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

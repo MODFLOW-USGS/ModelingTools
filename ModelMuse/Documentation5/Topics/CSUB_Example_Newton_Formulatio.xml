@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CSUB Example: Newton Formulation</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: Newton Formulation</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example uses the Newton formulation of the groundwater flow equation. To activate it, select &quot;Model|MODFLOW Options&quot;, go to the &quot;Wetting&quot; tab, and check the check box for the Newton formulation. Then click OK to close the dialog box.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleNewton.png" scale="60.00%" width="327" height="325" styleclass="Image Caption"><title translate="true">Newton formulation</title></image></para>
+  </body>
+</topic>

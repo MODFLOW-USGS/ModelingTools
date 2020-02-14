@@ -97,6 +97,7 @@ type
     FNewTimes: TList<Double>;
     FOldScreenObjects: TObjectList<TScreenObject>;
     FExistingScreenObjects: TList<TScreenObject>;
+    FStoragePackageIsSelected: Boolean;
   protected
     function Description: string; override;
   public
@@ -162,8 +163,8 @@ resourcestring
   StrTimeUnitsOfSWil = 'Time units of %s will be used throughout the model. '
     + 'Be sure that hydraulic conductivity and any other affected variables '
     + 'use the correct units.';
-  StrYouWillNeedToAct = 'You will need to activate the Storage package to us' +
-  'e transient stress periods.';
+  StoragePackageActivated = 'The Storage package has been activated because ' +
+  'your model has one or more transient stress periods.';
   StrThereAreTooManyS = 'There are too many stress periods to save heads or ' +
   'drawdowns to text files. Save them in binary files instead using the "Mod' +
   'el|MODFLOW Output Control" dialog box.';
@@ -221,13 +222,6 @@ begin
       Beep;
       MessageDlg(StrThereAreTooManyS, mtWarning, [mbOK], 0);
     end;
-  end;
-
-  if (frmGoPhast.ModelSelection = msModflow2015) and StressPeriods.TransientModel
-    and not frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected then
-  begin
-    Beep;
-    MessageDlg(StrYouWillNeedToAct, mtWarning, [mbOK], 0);
   end;
 
   Steps := 0;
@@ -841,6 +835,13 @@ begin
 
     if FModflowStressPeriods.Count > 0 then
     begin
+      if (frmGoPhast.ModelSelection = msModflow2015) and FModflowStressPeriods.TransientModel
+        and not frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected then
+      begin
+        Beep;
+        MessageDlg(StoragePackageActivated, mtInformation, [mbOK], 0);
+      end;
+
       Undo:= TUndoModflowStressPeriods.Create(FModflowStressPeriods,
         comboTimeUnit.ItemIndex, Mt3dmsTimes);
       frmGoPhast.UndoStack.Submit(Undo);
@@ -1096,6 +1097,8 @@ var
   NewScreenObject: TScreenObject;
 begin
   inherited Create;
+  FStoragePackageIsSelected := frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected;
+
   FNewStressPeriods := NewStressPeriods;
   NewStressPeriods := nil;
   FOldStressPeriods:= TModflowStressPeriods.Create(nil);
@@ -1183,6 +1186,13 @@ begin
   frmGoPhast.PhastModel.ModflowStressPeriods := FNewStressPeriods;
   frmGoPhast.PhastModel.ModflowOptions.TimeUnit := FNewTimeUnit;
   frmGoPhast.PhastModel.Mt3dmsTimes := FNewMt3dmsTimes;
+
+  if (frmGoPhast.ModelSelection = msModflow2015)
+    and frmGoPhast.PhastModel.ModflowStressPeriods.TransientModel then
+  begin
+    frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected := True;
+  end;
+
   UpdatedRequiredDataSets;
 
   if OldCount = frmGoPhast.PhastModel.ModflowStressPeriods.Count then
@@ -1214,6 +1224,7 @@ var
   AScreenObject: TScreenObject;
 begin
   inherited;
+  frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected := FStoragePackageIsSelected;
   frmGoPhast.PhastModel.ModflowStressPeriods.Assign(FOldStressPeriods);
   frmGoPhast.PhastModel.ModflowOptions.TimeUnit := FOldTimeUnit;
   frmGoPhast.PhastModel.Mt3dmsTimes := FOldMt3dmsTimes;

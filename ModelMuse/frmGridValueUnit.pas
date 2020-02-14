@@ -934,13 +934,11 @@ var
   ASegment: TCellElementSegment;
   LocalModel: TCustomModel;
   temp: TFloat;
-//  LocalAnisotropy: double;
   Segments: TCellElementSegmentList;
   SegmentIndex: Integer;
   procedure GetDirectionVariables(var VarIndex, MaxCount: Integer;
     var VarLabel: string);
   var
-    Grid: TCustomModelGrid;
     Mesh: TSutraMesh3D;
   begin
     VarIndex := -1;
@@ -950,25 +948,23 @@ var
       msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
         msModflowFmp, msModflowCfp, msModflow2015, msFootPrint:
         begin
-          Grid := frmGoPhast.Grid;
-
           case FSelectedScreenObject.ViewDirection of
             vdTop:
               begin
                 VarIndex := 0;
-                MaxCount := Grid.LayerCount;
+                MaxCount := frmGoPhast.PhastModel.LayerCount;
                 VarLabel := StrLayer;
               end;
             vdFront:
               begin
                 VarIndex := 1;
-                MaxCount := Grid.RowCount;
+                MaxCount := frmGoPhast.PhastModel.RowCount;
                 VarLabel := StrRow;
               end;
             vdSide:
               begin
                 VarIndex := 2;
-                MaxCount := Grid.ColumnCount;
+                MaxCount := frmGoPhast.PhastModel.ColumnCount;
                 VarLabel := StrColumn1;
               end;
             else
@@ -1030,69 +1026,6 @@ var
         Indices[1] := Row;
         Indices[2] := Column;
         GetDirectionVariables(VarIndex, MaxCount, VarLabel);
-//        VarIndex := -1;
-//        MaxCount := 0;
-//        VarLabel := '';
-//        case frmGoPhast.ModelSelection of
-//          msPhast, msModflow, msModflowLGR, msModflowNWT:
-//            begin
-//              Grid := frmGoPhast.Grid;
-//
-//              case FSelectedScreenObject.ViewDirection of
-//                vdTop:
-//                  begin
-//                    VarIndex := 0;
-//                    MaxCount := Grid.LayerCount;
-//                    VarLabel := StrLayer;
-//                  end;
-//                vdFront:
-//                  begin
-//                    VarIndex := 1;
-//                    MaxCount := Grid.RowCount;
-//                    VarLabel := StrRow;
-//                  end;
-//                vdSide:
-//                  begin
-//                    VarIndex := 2;
-//                    MaxCount := Grid.ColumnCount;
-//                    VarLabel := StrColumn1;
-//                  end;
-//                else
-//                  Assert(False);
-//              end;
-//            end;
-//          {$IFDEF SUTRA}
-//          msSutra:
-//            begin
-//              Mesh := frmGoPhast.PhastModel.SutraMesh;
-//              case FSelectedScreenObject.ViewDirection of
-//                vdTop:
-//                  begin
-//                    VarIndex := 0;
-//                    MaxCount := Mesh.LayerCount;
-//                    VarLabel := StrLayer;
-//                  end;
-//                vdFront:
-//                  begin
-//                    VarIndex := 1;
-//                    MaxCount := 1;
-//                    VarLabel := StrRow;
-//                  end;
-//                vdSide:
-//                  begin
-//                    VarIndex := 2;
-//                    MaxCount := Mesh.Mesh2D.Nodes.Count;
-//                    VarLabel := StrColumn1;
-//                  end;
-//              else
-//                Assert(False);
-//              end;
-//            end;
-//          {$ENDIF}
-//        else
-//          Assert(False);
-//        end;
-
 
         FoundValue := False;
         for LayRowColIndex := 0 to MaxCount do

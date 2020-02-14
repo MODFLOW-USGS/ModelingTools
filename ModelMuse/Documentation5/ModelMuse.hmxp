@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4106</config-value>
+      <config-value name="autohelpstart">4110</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -761,6 +761,10 @@ document.write('</frameset>');
       <helpcontext-number href="Cross_Sectional_Model_Specifie" value="3621"/>
       <helpcontext-number href="Cross_Sectional_Model_Specifyi" value="3618"/>
       <helpcontext-number href="Cross_Sections_Pane" value="3838"/>
+      <helpcontext-number href="CSUB_Creating_the_Model_Grid" value="4107"/>
+      <helpcontext-number href="CSUB_Example_Convertible_Cells" value="4110"/>
+      <helpcontext-number href="CSUB_Example_Newton_Formulatio" value="4109"/>
+      <helpcontext-number href="CSUB_Example_Stress_Periods" value="4108"/>
       <helpcontext-number href="CSUB_Skeletal_Storage__Compac2" value="4105"/>
       <helpcontext-number href="CSUB_Skeletal_Storage__Compact" value="4104"/>
       <helpcontext-number href="CTS_Contaminant_Treatment_Syst" value="4066"/>

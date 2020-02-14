@@ -39,5 +39,8 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Z displacement for every time step for which head is saved in binary format.</text></li>
     </list>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can import data from the binary files in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Select_Results_to_Import_Dialog_Box" styleclass="Normal" translate="true">Select Model Results to Import</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">See also:</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="CSUB_Skeletal_Storage__Compac2" styleclass="Normal" translate="true">CSUB: Skeletal Storage, Compaction, and Susidence Package Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="OBS_Observation_Utility_Pane" styleclass="Normal" translate="true">OBS: Observation Utility Pane</link><text styleclass="Normal" translate="true"> on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
   </body>
 </topic>

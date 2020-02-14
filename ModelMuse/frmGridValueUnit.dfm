@@ -338,12 +338,8 @@ inherited frmGridValue: TfrmGridValue
         Tree.Width = 304
         Tree.Height = 201
         Tree.Align = alClient
+        Tree.DefaultNodeHeight = 20
         Tree.Header.AutoSizeIndex = 0
-        Tree.Header.Font.Charset = DEFAULT_CHARSET
-        Tree.Header.Font.Color = clWindowText
-        Tree.Header.Font.Height = -11
-        Tree.Header.Font.Name = 'Tahoma'
-        Tree.Header.Font.Style = []
         Tree.Header.MainColumn = -1
         Tree.TabOrder = 0
         Tree.TreeOptions.SelectionOptions = [toFullRowSelect]

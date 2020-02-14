@@ -77,6 +77,7 @@ type
     FDe4Selected: Boolean;
     FSmsSelected: Boolean;
     FHeadOutputFileType: TOutputFileType;
+    FStoragePackageIsSelected: Boolean;
   protected
     function Description: string; override;
     procedure UpdateCellTypeMf6;
@@ -259,6 +260,7 @@ begin
   FOldModelSelection := frmGoPhast.ModelSelection;
   FNewModelSelection := NewModelSelection;
   FHeadOutputFileType := frmGoPhast.PhastModel.ModflowOutputControl.HeadOC.OutputFileType;
+  FStoragePackageIsSelected := frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected;
 
   Packages := frmGoPhast.PhastModel.ModflowPackages;
   FUpwSelected := Packages.UpwPackage.IsSelected;
@@ -323,6 +325,11 @@ begin
   frmGoPhast.tbSelectClick(frmGoPhast.tbSelect);
   frmGoPhast.ModelSelection := FNewModelSelection;
   frmGoPhast.PhastModel.ChildModels.Assign(FNewChildModels);
+  if (frmGoPhast.ModelSelection = msModflow2015)
+    and frmGoPhast.PhastModel.ModflowStressPeriods.TransientModel then
+  begin
+    frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected := True;
+  end;
   UpdatedRequiredDataSets;
   UpdateCellTypeMf6;
 end;
@@ -335,6 +342,7 @@ begin
   frmGoPhast.tbSelectClick(frmGoPhast.tbSelect);
   frmGoPhast.ModelSelection := FOldModelSelection;
   frmGoPhast.PhastModel.ModflowOutputControl.HeadOC.OutputFileType := FHeadOutputFileType;
+  frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected := FStoragePackageIsSelected;
 
   frmGoPhast.PhastModel.ChildModels.Assign(FOldChildModels);
   Packages := frmGoPhast.PhastModel.ModflowPackages;

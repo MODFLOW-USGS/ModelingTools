@@ -8955,9 +8955,15 @@ const
   //                in IMS package in MODFLOW Packages and Programs dialog box.
   //    '4.1.0.30' Bug fix: Fixed bugs in specifying backtracking_tolerance
   //                and outer_rclosebnd in the IMS package.
+  //    '4.1.0.31' Bug fix: Fixed bug in the "Show Grid or Mesh Values" dialog
+  //                box that could cause an access violation.
+
+  //               Bug fix: when converting to a MODFLOW 6 model, the Storage
+  //                package is now automatically activated if the model is
+  //                transient.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.30';
+  IModelVersion = '4.1.0.31';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

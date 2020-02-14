@@ -120,10 +120,10 @@ in the examples described in the ModelMuse documentation or help are in the
 E. COMPILING
 
 The 32 and 64-bit version of ModelMuse and ModelMonitor are compiled with 
-Delphi 10.2 from Embarcadero.
+Delphi 10.3.3 from Embarcadero.
 http://www.embarcadero.com/ 
 The 32-bit version can also be compiled using the free community edition
-of Delphi 10.3.1 from Embarcadero.
+of Delphi from Embarcadero.
 https://www.embarcadero.com/products/delphi/starter
 
 The help system for ModelMuse is compiled with Help and Manual version 5
@@ -132,12 +132,12 @@ from EC Software. http://www.helpandmanual.com/
 MF2005_Importer is compiled with the Intel Fortran compiler.
 
 ModelMuse uses a number of custom components that must be installed 
-in Delphi 10.2 before compiling ModelMuse.  Some are included  
+in Delphi 10.3.3 before compiling ModelMuse.  Some are included  
 with the ModelMuse source code.  Additional required files or components are 
 listed below.  In some cases, the files must be altered before they 
 can be used with ModelMuse.  The required changes are listed below.
 
-General instructions for installing packages in Delphi 10.2 and the
+General instructions for installing packages in Delphi 10.3.3 and the
 Delphi Community Edition.
 1. If the component can be installed with the "Tools|GetIt Package Manager", 
 do so.
