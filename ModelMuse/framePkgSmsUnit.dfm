@@ -15,12 +15,16 @@ inherited framePkgSms: TframePkgSms
     Top = 157
     Width = 495
     Height = 324
-    ActivePage = tabNonLinear
+    ActivePage = tabLinear
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
@@ -251,6 +255,10 @@ inherited framePkgSms: TframePkgSms
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgNonlinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0

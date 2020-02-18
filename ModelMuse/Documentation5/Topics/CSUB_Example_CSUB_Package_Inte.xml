@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CSUB Example: CSUB Package Interbed Properties</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: CSUB Package Interbed Properties</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The following properties are defined for individual interbeds. Except for the </text><text styleclass="Strong" translate="true">Interbed Thickness</text><text styleclass="Normal" translate="true">, all the properties are the same in all the layers. We will use objects to define these properties.</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="10" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Interbed System</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Initial Stress Offset (pcs0)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Interbed Thickness (thick_frac)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Equivalent Interbed Number (rnb)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Initial Inelastic Compression Index (ssv_cc)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Initial Elastic Recompression Index (sse_cr)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Initial Porosity (theta)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Delay Kv (kv)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Initial Delay Head Offset (h0)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Layer 1</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Upper Aquifer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">45</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.25</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.01</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.45054945</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">2.5E-6 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0 (not used)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Layer 2</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Upper Aquifer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">70</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.25</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.01</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.45054945</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">2.5E-6 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0 (not used)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Layer 3</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Confining Bed</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">50</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.25</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.01</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.45054945</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">2.5E-6 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0 (not used)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Layer 4</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Lower Aquifer</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">15</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">90</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">1 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.25</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.01</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0.45054945</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">2.5E-6 (not used)</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">0 (not used)</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Strong" translate="true">Selection Cube</link><text styleclass="Normal" translate="true"> to make layer 1 the selected layer. Then create a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Polygons" styleclass="Normal" translate="true">polygon</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rectangles" styleclass="Normal" translate="true">rectangle</link><text styleclass="Normal" translate="true"> object covering all the active cells in the top view of the model </text><text styleclass="Normal" style="font-style:italic;" translate="true">except</text><text styleclass="Normal" translate="true"> the ones in the last row where the specified head boundaries are located.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleCSubCells.png" scale="60.00%" width="457" height="356" styleclass="Image Caption"><title translate="true">CSUB Example: Specifying CSUB cells</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box, make sure the Z-formulas are specified so that the top to layers are included.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleCSubCellLayers1and2.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">CSUB Example: CSUB cell Z-Formulas</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Go to </text><text styleclass="Strong" translate="true">MODFLOW Features</text><text styleclass="Normal" translate="true"> and check the checkbox for the </text><text styleclass="Strong" translate="true">CSUB</text><text styleclass="Normal" translate="true"> package. Then, on the </text><text styleclass="Strong" translate="true">Interbed systems</text><text styleclass="Normal" translate="true"> tab of the </text><text styleclass="Strong" translate="true">CSUB</text><text styleclass="Normal" translate="true"> pane, check the </text><text styleclass="Strong" translate="true">Used</text><text styleclass="Normal" translate="true"> checkbox for the Upper Aquifer Interbed system. Then enter the values for the top two layers. For Interbed Thickness, an appropriate formula would be &quot;If((Layer = 1.), 45, 70)&quot;. You don&apos;t need to specify anything on the </text><text styleclass="Strong" translate="true">Transient</text><text styleclass="Normal" translate="true"> tab. Click </text><text styleclass="Strong" translate="true">OK</text><text styleclass="Normal" translate="true"> to close the Object Properties dialog box.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleCSubCellValues.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">CSUB Example: Interbed properties</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To assign values for the other interbeds in layers 3 and 4, use the &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Strong" translate="true">Selection Cube</link><text styleclass="Normal" translate="true"> to make the appropriate layers active and then create objects covering the same cells on the top view of the model as before. For each object, assign the Interbed properties in the same way as before except use values appropriate to the selected layer.</text></para>
+  </body>
+</topic>

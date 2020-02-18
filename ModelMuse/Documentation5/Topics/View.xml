@@ -120,10 +120,10 @@
         <td style="vertical-align:top; width:465px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Control how the grid lines are displayed. The choices are to </text></para>
           <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Table Cell" style="font-family:Symbol; font-size:12pt; color:#000000;">
-            <li styleclass="Table Cell"><image src="ShowGridLines.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Cell" translate="true"> show all the grid lines, </text></li>
-            <li styleclass="Table Cell"><image src="ShowGridOutline.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Cell" translate="true"> show only the outline of the grid, </text></li>
-            <li styleclass="Table Cell"><image src="ShowActiveGridLines.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Cell" translate="true"> show only the grid lines for the active part of the grid, or </text></li>
-            <li styleclass="Table Cell"><image src="ShowActiveGridOutline.bmp" scale="100.00%" styleclass="Image Caption"></image><text styleclass="Table Cell" translate="true"> show only the outline of the active part of the grid.</text></li>
+            <li styleclass="Table Cell"><image src="ShowGridLines.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show all grid lines or element outlines</title></image><text styleclass="Table Cell" translate="true"> show all the grid lines or mesh elements, </text></li>
+            <li styleclass="Table Cell"><image src="ShowGridOutline.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show only the outline of the grid or mesh</title></image><text styleclass="Table Cell" translate="true"> show only the outline of the grid or mesh, </text></li>
+            <li styleclass="Table Cell"><image src="ShowActiveGridLines.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show only the active cells or elements</title></image><text styleclass="Table Cell" translate="true"> show only the grid lines for the active part of the grid or mesh, or </text></li>
+            <li styleclass="Table Cell"><image src="ShowActiveGridOutline.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Show only the outline of the active part of the grid or mesh</title></image><text styleclass="Table Cell" translate="true"> show only the outline of the active part of the grid or mesh.</text></li>
           </list>
         </td>
       </tr>

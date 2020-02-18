@@ -2517,8 +2517,38 @@
         <topicref type="topic" id="438755298248041" build="ALL" modified="2020-02-14T14:09:56.712Z" icon="0" href="CSUB_Example_Newton_Formulatio">
           <caption translate="true">CSUB Example: Newton Formulation</caption>
         </topicref>
+        <topicref type="topic" id="43878419923449" build="ALL" modified="2020-02-18T13:34:04.256Z" icon="0" href="CSUB_Example_Solver_Options">
+          <caption translate="true">CSUB Example: Solver Options</caption>
+        </topicref>
+        <topicref type="topic" id="438795579714057" build="ALL" modified="2020-02-18T14:18:01.146Z" icon="0" href="CSUB_Example_Aquifer_Propertie">
+          <caption translate="true">CSUB Example: Aquifer Properties</caption>
+        </topicref>
         <topicref type="topic" id="438757224660291" build="ALL" modified="2020-02-14T14:40:15.876Z" icon="0" href="CSUB_Example_Convertible_Cells">
           <caption translate="true">CSUB Example: Convertible Cells</caption>
+        </topicref>
+        <topicref type="topic" id="438795082236133" build="ALL" modified="2020-02-18T11:50:57.339Z" icon="0" href="CSUB_Example_Specified_Head_Bo">
+          <caption translate="true">CSUB Example: Specified Head Boundary</caption>
+        </topicref>
+        <topicref type="topic" id="438793434419040" build="ALL" modified="2020-02-18T12:31:36.189Z" icon="0" href="CSUB_Example_Recharge">
+          <caption translate="true">CSUB Example: Recharge</caption>
+        </topicref>
+        <topicref type="topic" id="438795292382717" build="ALL" modified="2020-02-18T12:59:25.039Z" icon="0" href="CSUB_Example_Wells">
+          <caption translate="true">CSUB Example: Wells</caption>
+        </topicref>
+        <topicref type="topic" id="438794145963072" build="ALL" modified="2020-02-18T13:28:46.170Z" icon="0" href="CSUB_Example_Activating_CSUB_P">
+          <caption translate="true">CSUB Example: Activating CSUB Package and Specifying CSUB Options</caption>
+        </topicref>
+        <topicref type="topic" id="438796452005219" build="ALL" modified="2020-02-18T14:45:08.239Z" icon="0" href="CSUB_Example_CSUB_Package_Aqui">
+          <caption translate="true">CSUB Example: CSUB Package Aquifer Properties</caption>
+        </topicref>
+        <topicref type="topic" id="438795660693080" build="ALL" modified="2020-02-18T15:02:44.918Z" icon="0" href="CSUB_Example_CSUB_Package_Inte">
+          <caption translate="true">CSUB Example: CSUB Package Interbed Properties</caption>
+        </topicref>
+        <topicref type="topic" id="438796934478243" build="ALL" modified="2020-02-18T16:06:32.722Z" icon="0" href="CSUB_Example_CSUB_Package_Tran">
+          <caption translate="true">CSUB Example: CSUB Package Transient Data</caption>
+        </topicref>
+        <topicref type="topic" id="438797204877535" build="ALL" modified="2020-02-18T16:24:44.203Z" icon="0" href="CSUB_Example_Head_Observation">
+          <caption translate="true">CSUB Example: Head Observation</caption>
         </topicref>
       </topicref>
     </topicref>

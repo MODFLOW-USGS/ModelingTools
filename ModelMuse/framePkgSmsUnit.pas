@@ -270,6 +270,7 @@ begin
   rdgNonlinearOptions.RowCount := Ord(soBacktrackingResidualLimit) + 2;
   rdgNonlinearOptions.BeginUpdate;
   try
+    rdgNonlinearOptions.FixedCols := 1;
     rdgNonlinearOptions.Columns[Ord(scValue)].PickList := FReorderingPickList;
 
     rdgNonlinearOptions.Cells[Ord(scName), 0] := StrOption;
@@ -306,6 +307,7 @@ begin
   rdgLinearOptions.RowCount := SmsOrdToRow(soReorderingMethod) + 1;
   rdgLinearOptions.BeginUpdate;
   try
+    rdgLinearOptions.FixedCols := 1;
     rdgLinearOptions.Columns[Ord(scValue)].PickList := FReorderingPickList;
 
     rdgLinearOptions.Cells[Ord(scName), 0] := StrOption;

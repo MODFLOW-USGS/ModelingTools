@@ -59,7 +59,7 @@ uses
   ModflowCSubInterbed, PhastModelUnit, DataSetUnit;
 
 resourcestring
-  StrInterbed = 'Interbed';
+  StrInterbed = 'Interbed system';
   StrUsed = 'Used';
   StrInitialOffset = 'Initial Stress Offset (pcs0)';
   StrThickness = 'Interbed Thickness (thick_frac)';

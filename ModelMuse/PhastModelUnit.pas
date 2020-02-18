@@ -8957,13 +8957,14 @@ const
   //                and outer_rclosebnd in the IMS package.
   //    '4.1.0.31' Bug fix: Fixed bug in the "Show Grid or Mesh Values" dialog
   //                box that could cause an access violation.
-
-  //               Bug fix: when converting to a MODFLOW 6 model, the Storage
+  //    '4.1.0.32' Bug fix: when converting to a MODFLOW 6 model, the Storage
   //                package is now automatically activated if the model is
   //                transient.
+  //               Bug fix: Fixed bug that could cause an error when exporting
+  //                the UZF input file.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.31';
+  IModelVersion = '4.1.0.32';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -35669,8 +35670,9 @@ end;
 
 function TCustomModel.UzfSurfKUsed(Sender: TObject): boolean;
 begin
-  result := UzfPackageUsed(Sender) and (NWT_Format = nf1_1)
-    and ModflowPackages.UzfPackage.SpecifySurfaceK;
+  result := UzfPackageUsed(Sender) and
+    ModflowPackages.UzfPackage.SpecifySurfaceK { (NWT_Format = nf1_1)
+    and ModflowPackages.UzfPackage.SpecifySurfaceK;}
 end;
 
 function TCustomModel.UzfUnsatVertKUsed(Sender: TObject): boolean;

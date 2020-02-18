@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4110</config-value>
+      <config-value name="autohelpstart">4120</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -762,9 +762,19 @@ document.write('</frameset>');
       <helpcontext-number href="Cross_Sectional_Model_Specifyi" value="3618"/>
       <helpcontext-number href="Cross_Sections_Pane" value="3838"/>
       <helpcontext-number href="CSUB_Creating_the_Model_Grid" value="4107"/>
+      <helpcontext-number href="CSUB_Example_Activating_CSUB_P" value="4114"/>
+      <helpcontext-number href="CSUB_Example_Aquifer_Propertie" value="4116"/>
       <helpcontext-number href="CSUB_Example_Convertible_Cells" value="4110"/>
+      <helpcontext-number href="CSUB_Example_CSUB_Package_Aqui" value="4117"/>
+      <helpcontext-number href="CSUB_Example_CSUB_Package_Inte" value="4118"/>
+      <helpcontext-number href="CSUB_Example_CSUB_Package_Tran" value="4119"/>
+      <helpcontext-number href="CSUB_Example_Head_Observation" value="4120"/>
       <helpcontext-number href="CSUB_Example_Newton_Formulatio" value="4109"/>
+      <helpcontext-number href="CSUB_Example_Recharge" value="4112"/>
+      <helpcontext-number href="CSUB_Example_Solver_Options" value="4115"/>
+      <helpcontext-number href="CSUB_Example_Specified_Head_Bo" value="4111"/>
       <helpcontext-number href="CSUB_Example_Stress_Periods" value="4108"/>
+      <helpcontext-number href="CSUB_Example_Wells" value="4113"/>
       <helpcontext-number href="CSUB_Skeletal_Storage__Compac2" value="4105"/>
       <helpcontext-number href="CSUB_Skeletal_Storage__Compact" value="4104"/>
       <helpcontext-number href="CTS_Contaminant_Treatment_Syst" value="4066"/>

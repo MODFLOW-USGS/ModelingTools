@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CSUB Example: Wells</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: Wells</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are two wells in the model. Each well withdraws water at a rate of 72,000 m</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">3</text><text styleclass="Normal" translate="true">/day during stress period 2. The wells are not included in stress periods 1 and 3. One well is in layer 2, row 9, column 10. The other is in layer 4, row 12, column 7.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Just as before, you must first activate the Well package in the &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleWellPackage.png" scale="60.00%" width="470" height="353" styleclass="Image Caption"><title translate="true">CSUB Example: Activating the Well package</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Then use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="The_Selection_Cube" styleclass="Normal" translate="true">Selection Cube</link><text styleclass="Normal" translate="true"> to make layer 2 the selected layer. Create a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Points" styleclass="Normal" translate="true">point</link><text styleclass="Normal" translate="true"> object in row 9, column 10. Note that row and column numbers are displayed on the status bar.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleWellObject.png" scale="60.00%" width="457" height="356" styleclass="Image Caption"><title translate="true">CSUB Example: Create a point object for well #1.</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, make sure that the formulas for the Z-coordinates will make the object apply to layer 2.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleWellBasic.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Then, on the MODFLOW Features tab, specify the extraction rate. Be sure to specify the starting and ending times to include only the second stress period and be sure the extraction rate is set to a negative values.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleWellValue.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">CSUB Example: Well extraction rate</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Change the selected layer to layer 4 and create the other well at row 12, column 7.</text></para>
+  </body>
+</topic>
