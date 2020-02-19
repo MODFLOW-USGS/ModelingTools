@@ -739,11 +739,11 @@ type
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     // See @link(ParentModel).
     FModel: TBaseModel;
+    // See @link(ScreenObject).
+    FScreenObject: TObject;
   protected
     // @name is a TObjectList;
     FObserverList: TObserverObjectList;
-    // See @link(ScreenObject).
-    FScreenObject: TObject;
     procedure InvalidateModel;
     procedure UpdateFormulaDependencies(OldFormula: string;
       var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
@@ -3332,6 +3332,8 @@ begin
   begin
     Exit;
   end;
+  Assert(ScreenObject <> nil);
+  Assert(AModel <> nil);
   if not (ScreenObject as TScreenObject).UsedModels.UsesModel(AModel) then
   begin
     Exit;

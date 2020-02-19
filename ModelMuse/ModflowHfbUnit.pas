@@ -481,14 +481,14 @@ end;
 
 procedure THfbBoundary.SetAdjustmentMethod(const Value: TAdjustmentMethod);
 var
-  ScreenObject: TScreenObject;
+  LocalScreenObject: TScreenObject;
 begin
   if FAdjustmentMethod <> Value then
   begin
-    if FScreenObject <> nil then
+    if ScreenObject <> nil then
     begin
-      ScreenObject := FScreenObject as TScreenObject;
-      if ScreenObject.CanInvalidateModel then
+      LocalScreenObject := ScreenObject as TScreenObject;
+      if LocalScreenObject.CanInvalidateModel then
       begin
         HandleChangedValue(AdjustmentMethodObserver);
       end;
@@ -510,14 +510,14 @@ end;
 
 procedure THfbBoundary.SetParameterName(const Value: string);
 var
-  ScreenObject: TScreenObject;
+  LocalScreenObject: TScreenObject;
 begin
   if FParameterName <> Value then
   begin
-    ScreenObject := FScreenObject as TScreenObject;
-    if FScreenObject <> nil then
+    LocalScreenObject := ScreenObject as TScreenObject;
+    if ScreenObject <> nil then
     begin
-      if ScreenObject.CanInvalidateModel then
+      if LocalScreenObject.CanInvalidateModel then
       begin
         HandleChangedValue(ParameterNameObserver);
       end;
@@ -588,12 +588,12 @@ end;
 procedure THfbBoundary.CreateObserver(ObserverNameRoot: string;
   var Observer: TObserver; Displayer: TObserver);
 var
-  ScreenObject: TScreenObject;
+  LocalScreenObject: TScreenObject;
   Model: TPhastModel;
 begin
   inherited;
-  ScreenObject := FScreenObject as TScreenObject;
-  if ScreenObject.CanInvalidateModel then
+  LocalScreenObject := ScreenObject as TScreenObject;
+  if LocalScreenObject.CanInvalidateModel then
   begin
     Model := ParentModel as TPhastModel;
     Assert(Model <> nil);
@@ -614,10 +614,10 @@ end;
 
 procedure THfbBoundary.HandleChangedParameterValue;
 var
-  ScreenObject: TScreenObject;
+  LocalScreenObject: TScreenObject;
 begin
-  ScreenObject := FScreenObject as TScreenObject;
-  if ScreenObject.CanInvalidateModel then
+  LocalScreenObject := ScreenObject as TScreenObject;
+  if LocalScreenObject.CanInvalidateModel then
   begin
     HandleChangedValue(ParameterNameObserver);
   end;

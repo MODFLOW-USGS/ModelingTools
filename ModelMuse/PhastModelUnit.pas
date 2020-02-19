@@ -22699,8 +22699,7 @@ end;
 
 procedure TCustomModel.InvalidateCSubStressOffset(Sender: TObject);
 begin
- { TODO : complete this. }
-//  Assert(False);
+  ModflowPackages.CSubPackage.StressOffset.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateEtsDepthFractions(Sender: TObject);

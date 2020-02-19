@@ -1449,6 +1449,7 @@ view. }
     FMt3dLktConcBoundary: TMt3dLktConcBoundary;
     FMt3dSftConcBoundary: TMt3dSftBoundary;
     FModflowCSub: TCSubBoundary;
+    FScreenObject: TObject;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1565,6 +1566,7 @@ view. }
     property Model: TBaseModel read FModel write FModel;
     procedure Invalidate;
     procedure FreeUnusedBoundaries;
+    constructor Create(ScreenObject: TObject);
     Destructor Destroy; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name removes a link between a @link(TPhastModel) or @link(TChildModel)
@@ -32096,7 +32098,7 @@ function TScreenObject.GetModflowBoundaries: TModflowBoundaries;
 begin
   if FModflowBoundaries = nil then
   begin
-    FModflowBoundaries := TModflowBoundaries.Create;
+    FModflowBoundaries := TModflowBoundaries.Create(self);
   end;
   result := FModflowBoundaries
 end;
@@ -39418,7 +39420,7 @@ begin
   begin
     if FModflowChdBoundary = nil then
     begin
-      FModflowChdBoundary := TChdBoundary.Create(Model, nil);
+      FModflowChdBoundary := TChdBoundary.Create(Model, FScreenObject);
     end;
     FModflowChdBoundary.Assign(Source.FModflowChdBoundary);
   end;
@@ -39431,7 +39433,7 @@ begin
   begin
     if FModflowGhbBoundary = nil then
     begin
-      FModflowGhbBoundary := TGhbBoundary.Create(Model, nil);
+      FModflowGhbBoundary := TGhbBoundary.Create(Model, FScreenObject);
     end;
     FModflowGhbBoundary.Assign(Source.FModflowGhbBoundary);
   end;
@@ -39444,7 +39446,7 @@ begin
   begin
     if FModflowWellBoundary = nil then
     begin
-      FModflowWellBoundary := TMfWellBoundary.Create(Model, nil);
+      FModflowWellBoundary := TMfWellBoundary.Create(Model, FScreenObject);
     end;
     FModflowWellBoundary.Assign(Source.FModflowWellBoundary);
   end;
@@ -39457,7 +39459,7 @@ begin
   begin
     if FModflowRivBoundary = nil then
     begin
-      FModflowRivBoundary := TRivBoundary.Create(Model, nil);
+      FModflowRivBoundary := TRivBoundary.Create(Model, FScreenObject);
     end;
     FModflowRivBoundary.Assign(Source.FModflowRivBoundary);
   end;
@@ -39470,7 +39472,7 @@ begin
   begin
     if FModflowDrnBoundary = nil then
     begin
-      FModflowDrnBoundary := TDrnBoundary.Create(Model, nil);
+      FModflowDrnBoundary := TDrnBoundary.Create(Model, FScreenObject);
     end;
     FModflowDrnBoundary.Assign(Source.FModflowDrnBoundary);
   end;
@@ -39483,7 +39485,7 @@ begin
   begin
     if FModflowDrtBoundary = nil then
     begin
-      FModflowDrtBoundary := TDrtBoundary.Create(Model, nil);
+      FModflowDrtBoundary := TDrtBoundary.Create(Model, FScreenObject);
     end;
     FModflowDrtBoundary.Assign(Source.FModflowDrtBoundary);
   end;
@@ -39496,7 +39498,7 @@ begin
   begin
     if FModflowRchBoundary = nil then
     begin
-      FModflowRchBoundary := TRchBoundary.Create(Model, nil);
+      FModflowRchBoundary := TRchBoundary.Create(Model, FScreenObject);
     end;
     FModflowRchBoundary.Assign(Source.FModflowRchBoundary);
   end;
@@ -39509,7 +39511,7 @@ begin
   begin
     if FModflowEvtBoundary = nil then
     begin
-      FModflowEvtBoundary := TEvtBoundary.Create(Model, nil);
+      FModflowEvtBoundary := TEvtBoundary.Create(Model, FScreenObject);
     end;
     FModflowEvtBoundary.Assign(Source.FModflowEvtBoundary);
   end;
@@ -39522,7 +39524,7 @@ begin
   begin
     if FModflowEtsBoundary = nil then
     begin
-      FModflowEtsBoundary := TEtsBoundary.Create(Model, nil);
+      FModflowEtsBoundary := TEtsBoundary.Create(Model, FScreenObject);
     end;
     FModflowEtsBoundary.Assign(Source.FModflowEtsBoundary);
   end;
@@ -39535,7 +39537,7 @@ begin
   begin
     if FModflowResBoundary = nil then
     begin
-      FModflowResBoundary := TResBoundary.Create(Model, nil);
+      FModflowResBoundary := TResBoundary.Create(Model, FScreenObject);
     end;
     FModflowResBoundary.Assign(Source.FModflowResBoundary);
   end;
@@ -39548,7 +39550,7 @@ begin
   begin
     if FModflowLakBoundary = nil then
     begin
-      FModflowLakBoundary := TLakBoundary.Create(Model, nil);
+      FModflowLakBoundary := TLakBoundary.Create(Model, FScreenObject);
     end;
     FModflowLakBoundary.Assign(Source.FModflowLakBoundary);
   end;
@@ -39561,7 +39563,7 @@ begin
   begin
     if FModflowSfrBoundary = nil then
     begin
-      FModflowSfrBoundary := TSfrBoundary.Create(Model, nil);
+      FModflowSfrBoundary := TSfrBoundary.Create(Model, FScreenObject);
     end;
     FModflowSfrBoundary.Assign(Source.FModflowSfrBoundary);
   end;
@@ -39574,7 +39576,7 @@ begin
   begin
     if FModflowStrBoundary = nil then
     begin
-      FModflowStrBoundary := TStrBoundary.Create(Model, nil);
+      FModflowStrBoundary := TStrBoundary.Create(Model, FScreenObject);
     end;
     FModflowStrBoundary.Assign(Source.FModflowStrBoundary);
   end;
@@ -39587,7 +39589,7 @@ begin
   begin
     if FModflowUzfBoundary = nil then
     begin
-      FModflowUzfBoundary := TUzfBoundary.Create(Model, nil);
+      FModflowUzfBoundary := TUzfBoundary.Create(Model, FScreenObject);
     end;
     FModflowUzfBoundary.Assign(Source.FModflowUzfBoundary);
   end;
@@ -39600,7 +39602,7 @@ begin
   begin
     if FModflowHeadObservations = nil then
     begin
-      FModflowHeadObservations := THobBoundary.Create(Model, nil);
+      FModflowHeadObservations := THobBoundary.Create(Model, FScreenObject);
     end;
     FModflowHeadObservations.Assign(Source.FModflowHeadObservations);
   end;
@@ -39613,7 +39615,7 @@ begin
   begin
     if FModflowHfbBoundary = nil then
     begin
-      FModflowHfbBoundary := THfbBoundary.Create(Model, nil);
+      FModflowHfbBoundary := THfbBoundary.Create(Model, FScreenObject);
     end;
     FModflowHfbBoundary.Assign(Source.FModflowHfbBoundary);
   end;
@@ -39626,7 +39628,7 @@ begin
   begin
     if FModflowGage = nil then
     begin
-      FModflowGage := TStreamGage.Create(InvalidateEvent, nil);
+      FModflowGage := TStreamGage.Create(InvalidateEvent, FScreenObject);
     end;
     FModflowGage.Assign(Source.FModflowGage);
   end;
@@ -39639,12 +39641,12 @@ begin
   begin
     if FModflowMnw2Boundary = nil then
     begin
-      FModflowMnw2Boundary := TMnw2Boundary.Create(Model, nil);
+      FModflowMnw2Boundary := TMnw2Boundary.Create(Model, FScreenObject);
     end;
     FModflowMnw2Boundary.Assign(Source.FModflowMnw2Boundary);
   end;
 
-{$IFDEF SWR}
+{ $IFDEF SWR}
   if Source.FModflowMnw1Boundary = nil then
   begin
     FreeAndNil(FModflowMnw1Boundary);
@@ -39653,11 +39655,11 @@ begin
   begin
     if FModflowMnw1Boundary = nil then
     begin
-      FModflowMnw1Boundary := TMnw1Boundary.Create(Model, nil);
+      FModflowMnw1Boundary := TMnw1Boundary.Create(Model, FScreenObject);
     end;
     FModflowMnw1Boundary.Assign(Source.FModflowMnw1Boundary);
   end;
-{$ENDIF}
+{ $ENDIF}
 
   if Source.FModflowHydmodData = nil then
   begin
@@ -39667,7 +39669,7 @@ begin
   begin
     if FModflowHydmodData = nil then
     begin
-      FModflowHydmodData := THydmodData.Create(Model, nil);
+      FModflowHydmodData := THydmodData.Create(Model, FScreenObject);
     end;
     FModflowHydmodData.Assign(Source.FModflowHydmodData);
   end;
@@ -39680,7 +39682,7 @@ begin
   begin
     if FMt3dmsConcBoundary = nil then
     begin
-      FMt3dmsConcBoundary := TMt3dmsConcBoundary.Create(Model, nil);
+      FMt3dmsConcBoundary := TMt3dmsConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dmsConcBoundary.Assign(Source.FMt3dmsConcBoundary);
   end;
@@ -39693,7 +39695,7 @@ begin
   begin
     if FMt3dmsTransObservations = nil then
     begin
-      FMt3dmsTransObservations := TMt3dmsTransObservations.Create(Model, nil);
+      FMt3dmsTransObservations := TMt3dmsTransObservations.Create(Model, FScreenObject);
     end;
     FMt3dmsTransObservations.Assign(Source.FMt3dmsTransObservations);
   end;
@@ -39706,7 +39708,7 @@ begin
   begin
     if FMt3dUztRechConc = nil then
     begin
-      FMt3dUztRechConc := TMt3dUztRchConcBoundary.Create(Model, nil);
+      FMt3dUztRechConc := TMt3dUztRchConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUztRechConc.Assign(Source.FMt3dUztRechConc);
   end;
@@ -39719,7 +39721,7 @@ begin
   begin
     if FMt3dUztSatEtConcBoundary = nil then
     begin
-      FMt3dUztSatEtConcBoundary := TMt3dUztSatEtConcBoundary.Create(Model, nil);
+      FMt3dUztSatEtConcBoundary := TMt3dUztSatEtConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUztSatEtConcBoundary.Assign(Source.FMt3dUztSatEtConcBoundary);
   end;
@@ -39732,7 +39734,7 @@ begin
   begin
     if FMt3dUztUnsatEtConcBoundary = nil then
     begin
-      FMt3dUztUnsatEtConcBoundary := TMt3dUztUnsatEtConcBoundary.Create(Model, nil);
+      FMt3dUztUnsatEtConcBoundary := TMt3dUztUnsatEtConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUztUnsatEtConcBoundary.Assign(Source.FMt3dUztUnsatEtConcBoundary);
   end;
@@ -39745,7 +39747,7 @@ begin
   begin
     if FMt3dUzSsmSinkConcBoundary = nil then
     begin
-      FMt3dUzSsmSinkConcBoundary := TMt3dUzSsmSinkConcBoundary.Create(Model, nil);
+      FMt3dUzSsmSinkConcBoundary := TMt3dUzSsmSinkConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUzSsmSinkConcBoundary.Assign(Source.FMt3dUzSsmSinkConcBoundary);
   end;
@@ -39758,7 +39760,7 @@ begin
   begin
     if FMt3dLktConcBoundary = nil then
     begin
-      FMt3dLktConcBoundary := TMt3dLktConcBoundary.Create(Model, nil);
+      FMt3dLktConcBoundary := TMt3dLktConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dLktConcBoundary.Assign(Source.FMt3dLktConcBoundary);
   end;
@@ -39771,7 +39773,7 @@ begin
   begin
     if FMt3dSftConcBoundary = nil then
     begin
-      FMt3dSftConcBoundary := TMt3dSftBoundary.Create(Model, nil);
+      FMt3dSftConcBoundary := TMt3dSftBoundary.Create(Model, FScreenObject);
     end;
     FMt3dSftConcBoundary.Assign(Source.FMt3dSftConcBoundary);
   end;
@@ -39784,7 +39786,7 @@ begin
   begin
     if FModflowFhbHeadBoundary = nil then
     begin
-      FModflowFhbHeadBoundary := TFhbHeadBoundary.Create(Model, nil);
+      FModflowFhbHeadBoundary := TFhbHeadBoundary.Create(Model, FScreenObject);
     end;
     FModflowFhbHeadBoundary.Assign(Source.FModflowFhbHeadBoundary);
   end;
@@ -39797,7 +39799,7 @@ begin
   begin
     if FModflowFhbFlowBoundary = nil then
     begin
-      FModflowFhbFlowBoundary := TFhbFlowBoundary.Create(Model, nil);
+      FModflowFhbFlowBoundary := TFhbFlowBoundary.Create(Model, FScreenObject);
     end;
     FModflowFhbFlowBoundary.Assign(Source.FModflowFhbFlowBoundary);
   end;
@@ -39810,7 +39812,7 @@ begin
   begin
     if FFmpWellBoundary = nil then
     begin
-      FFmpWellBoundary := TFmpWellBoundary.Create(Model, nil);
+      FFmpWellBoundary := TFmpWellBoundary.Create(Model, FScreenObject);
     end;
     FFmpWellBoundary.Assign(Source.FFmpWellBoundary);
   end;
@@ -39823,7 +39825,7 @@ begin
   begin
     if FFmpPrecipBoundary = nil then
     begin
-      FFmpPrecipBoundary := TFmpPrecipBoundary.Create(Model, nil);
+      FFmpPrecipBoundary := TFmpPrecipBoundary.Create(Model, FScreenObject);
     end;
     FFmpPrecipBoundary.Assign(Source.FFmpPrecipBoundary);
   end;
@@ -39836,7 +39838,7 @@ begin
   begin
     if FFmpRefEvapBoundary = nil then
     begin
-      FFmpRefEvapBoundary := TFmpRefEvapBoundary.Create(Model, nil);
+      FFmpRefEvapBoundary := TFmpRefEvapBoundary.Create(Model, FScreenObject);
     end;
     FFmpRefEvapBoundary.Assign(Source.FFmpRefEvapBoundary);
   end;
@@ -39849,7 +39851,7 @@ begin
   begin
     if FFmpCropIDBoundary = nil then
     begin
-      FFmpCropIDBoundary := TFmpCropIDBoundary.Create(Model, nil);
+      FFmpCropIDBoundary := TFmpCropIDBoundary.Create(Model, FScreenObject);
     end;
     FFmpCropIDBoundary.Assign(Source.FFmpCropIDBoundary);
   end;
@@ -39862,7 +39864,7 @@ begin
   begin
     if FFmpFarmIDBoundary = nil then
     begin
-      FFmpFarmIDBoundary := TFmpFarmIDBoundary.Create(Model, nil);
+      FFmpFarmIDBoundary := TFmpFarmIDBoundary.Create(Model, FScreenObject);
     end;
     FFmpFarmIDBoundary.Assign(Source.FFmpFarmIDBoundary);
   end;
@@ -39875,7 +39877,7 @@ begin
   begin
     if FCfpPipes = nil then
     begin
-      FCfpPipes := TCfpPipeBoundary.Create(Model, nil);
+      FCfpPipes := TCfpPipeBoundary.Create(Model, FScreenObject);
     end;
     FCfpPipes.Assign(Source.FCfpPipes);
   end;
@@ -39888,7 +39890,7 @@ begin
   begin
     if FCfpFixedHeads = nil then
     begin
-      FCfpFixedHeads := TCfpFixedBoundary.Create(Model, nil);
+      FCfpFixedHeads := TCfpFixedBoundary.Create(Model, FScreenObject);
     end;
     FCfpFixedHeads.Assign(Source.FCfpFixedHeads);
   end;
@@ -39901,7 +39903,7 @@ begin
   begin
     if FCfpRchFraction = nil then
     begin
-      FCfpRchFraction := TCfpRchFractionBoundary.Create(Model, nil);
+      FCfpRchFraction := TCfpRchFractionBoundary.Create(Model, FScreenObject);
     end;
     FCfpRchFraction.Assign(Source.FCfpRchFraction);
   end;
@@ -39914,7 +39916,7 @@ begin
   begin
     if FSwrRain = nil then
     begin
-      FSwrRain := TSwrRainBoundary.Create(Model, nil);
+      FSwrRain := TSwrRainBoundary.Create(Model, FScreenObject);
     end;
     FSwrRain.Assign(Source.FSwrRain);
   end;
@@ -39927,7 +39929,7 @@ begin
   begin
     if FSwrEvap = nil then
     begin
-      FSwrEvap := TSwrEvapBoundary.Create(Model, nil);
+      FSwrEvap := TSwrEvapBoundary.Create(Model, FScreenObject);
     end;
     FSwrEvap.Assign(Source.FSwrEvap);
   end;
@@ -39940,7 +39942,7 @@ begin
   begin
     if FSwrLatInflow = nil then
     begin
-      FSwrLatInflow := TSwrLatInflowBoundary.Create(Model, nil);
+      FSwrLatInflow := TSwrLatInflowBoundary.Create(Model, FScreenObject);
     end;
     FSwrLatInflow.Assign(Source.FSwrLatInflow);
   end;
@@ -39953,7 +39955,7 @@ begin
   begin
     if FSwrStage = nil then
     begin
-      FSwrStage := TSwrStageBoundary.Create(Model, nil);
+      FSwrStage := TSwrStageBoundary.Create(Model, FScreenObject);
     end;
     FSwrStage.Assign(Source.FSwrStage);
   end;
@@ -39966,7 +39968,7 @@ begin
   begin
     if FSwrDirectRunoff = nil then
     begin
-      FSwrDirectRunoff := TSwrDirectRunoffBoundary.Create(Model, nil);
+      FSwrDirectRunoff := TSwrDirectRunoffBoundary.Create(Model, FScreenObject);
     end;
     FSwrDirectRunoff.Assign(Source.FSwrDirectRunoff);
   end;
@@ -39979,7 +39981,7 @@ begin
   begin
     if FSwrReaches = nil then
     begin
-      FSwrReaches := TSwrReachBoundary.Create(Model, nil);
+      FSwrReaches := TSwrReachBoundary.Create(Model, FScreenObject);
     end;
     FSwrReaches.Assign(Source.FSwrReaches);
   end;
@@ -39992,7 +39994,7 @@ begin
   begin
     if FModflowSwiObsBoundary = nil then
     begin
-      FModflowSwiObsBoundary := TSwiObsBoundary.Create(Model, nil);
+      FModflowSwiObsBoundary := TSwiObsBoundary.Create(Model, FScreenObject);
     end;
     FModflowSwiObsBoundary.Assign(Source.FModflowSwiObsBoundary);
   end;
@@ -40005,7 +40007,7 @@ begin
   begin
     if FModflowRipBoundary = nil then
     begin
-      FModflowRipBoundary := TRipBoundary.Create(Model, nil);
+      FModflowRipBoundary := TRipBoundary.Create(Model, FScreenObject);
     end;
     FModflowRipBoundary.Assign(Source.FModflowRipBoundary);
   end;
@@ -40018,7 +40020,7 @@ begin
   begin
     if FMt3dUztRechConc = nil then
     begin
-      FMt3dUztRechConc := TMt3dUztRchConcBoundary.Create(Model, nil);
+      FMt3dUztRechConc := TMt3dUztRchConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUztRechConc.Assign(Source.FMt3dUztRechConc);
   end;
@@ -40031,7 +40033,7 @@ begin
   begin
     if FMt3dUztSatEtConcBoundary = nil then
     begin
-      FMt3dUztSatEtConcBoundary := TMt3dUztSatEtConcBoundary.Create(Model, nil);
+      FMt3dUztSatEtConcBoundary := TMt3dUztSatEtConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUztSatEtConcBoundary.Assign(Source.FMt3dUztSatEtConcBoundary);
   end;
@@ -40044,7 +40046,7 @@ begin
   begin
     if FMt3dUztUnsatEtConcBoundary = nil then
     begin
-      FMt3dUztUnsatEtConcBoundary := TMt3dUztUnsatEtConcBoundary.Create(Model, nil);
+      FMt3dUztUnsatEtConcBoundary := TMt3dUztUnsatEtConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUztUnsatEtConcBoundary.Assign(Source.FMt3dUztUnsatEtConcBoundary);
   end;
@@ -40057,7 +40059,7 @@ begin
   begin
     if FMt3dUzSsmSinkConcBoundary = nil then
     begin
-      FMt3dUzSsmSinkConcBoundary := TMt3dUzSsmSinkConcBoundary.Create(Model, nil);
+      FMt3dUzSsmSinkConcBoundary := TMt3dUzSsmSinkConcBoundary.Create(Model, FScreenObject);
     end;
     FMt3dUzSsmSinkConcBoundary.Assign(Source.FMt3dUzSsmSinkConcBoundary);
   end;
@@ -40070,7 +40072,7 @@ begin
   begin
     if FModflowSfr6Boundary = nil then
     begin
-      FModflowSfr6Boundary := TSfrMf6Boundary.Create(Model, nil);
+      FModflowSfr6Boundary := TSfrMf6Boundary.Create(Model, FScreenObject);
     end;
     FModflowSfr6Boundary.Assign(Source.FModflowSfr6Boundary);
   end;
@@ -40083,7 +40085,7 @@ begin
   begin
     if FModflowMawBoundary = nil then
     begin
-      FModflowMawBoundary := TMawBoundary.Create(Model, nil);
+      FModflowMawBoundary := TMawBoundary.Create(Model, FScreenObject);
     end;
     FModflowMawBoundary.Assign(Source.FModflowMawBoundary);
   end;
@@ -40109,7 +40111,7 @@ begin
   begin
     if FModflowLak6 = nil then
     begin
-      FModflowLak6 := TLakeMf6.Create(Model, nil);
+      FModflowLak6 := TLakeMf6.Create(Model, FScreenObject);
     end;
     FModflowLak6.Assign(Source.FModflowLak6);
   end;
@@ -40122,7 +40124,7 @@ begin
   begin
     if FModflowMvr = nil then
     begin
-      FModflowMvr := TMvrBoundary.Create(Model, nil);
+      FModflowMvr := TMvrBoundary.Create(Model, FScreenObject);
     end;
     FModflowMvr.Assign(Source.FModflowMvr);
   end;
@@ -40135,7 +40137,7 @@ begin
   begin
     if FModflowUzfMf6Boundary = nil then
     begin
-      FModflowUzfMf6Boundary := TUzfMf6Boundary.Create(Model, nil);
+      FModflowUzfMf6Boundary := TUzfMf6Boundary.Create(Model, FScreenObject);
     end;
     FModflowUzfMf6Boundary.Assign(Source.FModflowUzfMf6Boundary);
   end;
@@ -40148,12 +40150,17 @@ begin
   begin
     if FModflowCSub = nil then
     begin
-      FModflowCSub := TCSubBoundary.Create(Model, nil);
+      FModflowCSub := TCSubBoundary.Create(Model, FScreenObject);
     end;
     FModflowCSub.Assign(Source.FModflowCSub);
   end;
 
   FreeUnusedBoundaries;
+end;
+
+constructor TModflowBoundaries.Create(ScreenObject: TObject);
+begin
+  FScreenObject := ScreenObject;
 end;
 
 destructor TModflowBoundaries.Destroy;

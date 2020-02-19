@@ -6,7 +6,7 @@ uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
   PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed,
   System.Classes, ModflowCellUnit, ModflowCsubUnit, GoPhastTypes,
-  System.Generics.Collections, ScreenObjectUnit;
+  System.Generics.Collections, ScreenObjectUnit, ModflowBoundaryDisplayUnit;
 
 type
   TCSubObservation = record
@@ -57,6 +57,7 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
+    procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
 
 implementation
@@ -225,6 +226,107 @@ end;
 function TCSubWriter.Package: TModflowPackageSelection;
 begin
   Result := Model.ModflowPackages.CsubPackage;
+end;
+
+procedure TCSubWriter.UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
+var
+  DataArrayList: TList;
+  TimeListIndex: Integer;
+  DisplayTimeList: TModflowBoundaryDisplayTimeList;
+  TimeIndex: Integer;
+  CellList: TValueCellList;
+  DataArray: TModflowBoundaryDisplayDataArray;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Boundary: TCSubBoundary;
+begin
+  // Quit if the package isn't used.
+  if not Package.IsSelected then
+  begin
+    UpdateNotUsedDisplay(TimeLists);
+    Exit;
+  end;
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    DataArrayList := TList.Create;
+    try
+      // evaluate all the data used in the package.
+      Evaluate;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+
+      end;
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if ScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        if not ScreenObject.UsedModels.UsesModel(Model) then
+        begin
+          Continue;
+        end;
+        Boundary := ScreenObject.ModflowCSub;
+        if Boundary <> nil then
+        begin
+          Boundary.ClearTimeLists(Model);
+        end;
+      end;
+
+      for TimeListIndex := 0 to TimeLists.Count - 1 do
+      begin
+        DisplayTimeList := TimeLists[TimeListIndex];
+        // Values.Count can be zero if no objects define the boundary condition.
+        if (Values.Count <> 0) or (DisplayTimeList.Count = 0) then
+        begin
+          Assert(Values.Count = DisplayTimeList.Count);
+        end;
+      end;
+
+      // For each stress period, transfer values from
+      // the cells lists to the data arrays.
+      for TimeIndex := 0 to Values.Count - 1 do
+      begin
+        CellList := Values[TimeIndex];
+        if CellList.Count > 0 then
+        begin
+          DataArrayList.Clear;
+          for TimeListIndex := 0 to TimeLists.Count - 1 do
+          begin
+            DisplayTimeList := TimeLists[TimeListIndex];
+            DataArray := DisplayTimeList[TimeIndex]
+              as TModflowBoundaryDisplayDataArray;
+            DataArrayList.Add(DataArray);
+          end;
+          UpdateCellDisplay(CellList, DataArrayList, []);
+        end;
+      end;
+
+      // Mark all the data arrays and time lists as up to date.
+      for TimeListIndex := 0 to TimeLists.Count - 1 do
+      begin
+        DisplayTimeList := TimeLists[TimeListIndex];
+        for TimeIndex := 0 to DisplayTimeList.Count - 1 do
+        begin
+          DataArray := DisplayTimeList[TimeIndex]
+            as TModflowBoundaryDisplayDataArray;
+          DataArray.UpToDate := True;
+        end;
+        DisplayTimeList.SetUpToDate(True);
+      end;
+
+      
+      
+    finally
+      DataArrayList.Free;
+    end;
+  
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+
 end;
 
 procedure TCSubWriter.WriteAndCheckCells(List: TValueCellList;

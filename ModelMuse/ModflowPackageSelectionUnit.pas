@@ -3213,7 +3213,7 @@ Type
     FSpecifyInitialDelayHead: Boolean;
     FOutputTypes: TCsubOutputTypes;
     FInterbeds: TCSubInterbeds;
-//    FInterbedNames: TStrings;
+    FStressOffset: TModflowBoundaryDisplayTimeList;
     procedure SetHeadBased(const Value: Boolean);
     procedure SetInterbedThicknessMethod(const Value: TInterbedThicknessMethod);
     procedure SetNumberOfDelayCells(const Value: Integer);
@@ -3231,6 +3231,9 @@ Type
     procedure SetSpecifyInitialPreconsolidationStress(const Value: Boolean);
     procedure SetOutputTypes(const Value: TCsubOutputTypes);
     procedure SetInterbeds(const Value: TCSubInterbeds);
+    procedure InitializeStressOffsetDisplay(Sender: TObject);
+    procedure GetStressOffsetUseList(Sender: TObject;
+      NewUseList: TStringList);
 //    procedure SetInterbedNames(const Value: TStrings);
   public
     procedure Assign(Source: TPersistent); override;
@@ -3243,6 +3246,7 @@ Type
     // BETA <beta>
     property Beta: double read GetBeta write SetBeta;
     procedure InitializeVariables; override;
+    property StressOffset: TModflowBoundaryDisplayTimeList read FStressOffset;
   published
      {GAMMAW <gammaw>
      unit weight of water. For freshwater, GAMMAW is 9806.65
@@ -5526,7 +5530,8 @@ uses Math, Contnrs , PhastModelUnit, ModflowOptionsUnit,
   Mt3dUztRchUnit, Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, ModelMuseUtilities,
   Mt3dUztWriterUnit, Mt3dUzfSeepageUnit, ModflowPackagesUnit, ModflowSfr6WriterUnit,
   ModflowSfr6Unit, ModflowMawWriterUnit, ModflowMawUnit, ModflowUzfMf6WriterUnit,
-  ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit;
+  ModflowUzfMf6Unit, ModflowMvrUnit, ModflowMvrWriterUnit, Mt3dSftWriterUnit, ModflowCsubUnit,
+  ModflowCSubWriterUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -5647,6 +5652,7 @@ resourcestring
   StrSFTPrecipConcd = 'SFT_Precip_Conc_%d';
   StrSFTRunoffConcd = 'SFT_Runoff_Conc_%d';
   StrSFTConstantConcd = 'SFT_Constant_Conc_%d';
+  StrCSUBStressOffset = 'CSUB Stress Offset';
 
 
 
@@ -19539,9 +19545,7 @@ procedure TMawPackage.GetMawUseList(DataIndex: integer;
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
-//  Item: TSfrItem;
   ValueIndex: Integer;
-//  Boundary: TSfrBoundary;
   LocalModel: TCustomModel;
   Boundary: TMawBoundary;
   Item: TMawItem;
@@ -20925,11 +20929,19 @@ begin
 
   FInterbeds := TCSubInterbeds.Create(Model);
 
+  FStressOffset := TModflowBoundaryDisplayTimeList.Create(Model);
+  StressOffset.OnInitialize := InitializeStressOffsetDisplay;
+  StressOffset.OnGetUseList := GetStressOffsetUseList;
+  StressOffset.OnTimeListUsed := PackageUsed;
+  StressOffset.Name := StrCSUBStressOffset;
+  AddTimeList(StressOffset);
+
   InitializeVariables;
 end;
 
 destructor TCSubPackageSelection.Destroy;
 begin
+  FStressOffset.Free;
   FInterbeds.Free;
   FStoredBeta.Free;
   FStoredGamma.Free;
@@ -20944,6 +20956,56 @@ end;
 function TCSubPackageSelection.GetGamma: double;
 begin
   result := StoredGamma.Value;
+end;
+
+procedure TCSubPackageSelection.GetStressOffsetUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  Boundary: TCSubBoundary;
+  Item: TCSubItem;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    Boundary := ScreenObject.ModflowCSub;
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      begin
+        Item := Boundary.Values[ValueIndex] as TCSubItem;
+        UpdateUseList(0, NewUseList, Item, StrCSUBStressOffset);
+      end;
+    end;
+  end;
+end;
+
+procedure TCSubPackageSelection.InitializeStressOffsetDisplay(Sender: TObject);
+var
+  CSubWriter: TCSubWriter;
+  List: TModflowBoundListOfTimeLists;
+begin
+  StressOffset.CreateDataSets;
+
+  List := TModflowBoundListOfTimeLists.Create;
+  { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
+  CSubWriter := TCSubWriter.Create(FModel as TCustomModel, etDisplay);
+  try
+    List.Add(StressOffset);
+    CSubWriter.UpdateDisplay(List);
+  finally
+    CSubWriter.Free;
+    List.Free;
+  end;
+  StressOffset.LabelAsSum;
 end;
 
 procedure TCSubPackageSelection.InitializeVariables;

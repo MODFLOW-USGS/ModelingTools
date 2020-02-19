@@ -1615,14 +1615,14 @@ end;
 
 procedure TSutraLake.SetUsed(const Value: boolean);
 var
-  ScreenObject: TScreenObject;
+  LocalScreenObject: TScreenObject;
 begin
   if FUsed <> Value then
   begin
-    ScreenObject := FScreenObject as TScreenObject;
-    if FScreenObject <> nil then
+    LocalScreenObject := ScreenObject as TScreenObject;
+    if ScreenObject <> nil then
     begin
-      if ScreenObject.CanInvalidateModel then
+      if LocalScreenObject.CanInvalidateModel then
       begin
         HandleChangedValue(UsedObserver);
       end;
