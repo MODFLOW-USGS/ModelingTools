@@ -28,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspCSUB
+    ActivePage = jvspSWT
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -4426,18 +4426,17 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 78
           Height = 52
           ExplicitTop = 78
-          ExplicitWidth = 564
           ExplicitHeight = 52
         end
         inherited pcSWT: TPageControl
-          Height = 405
-          ExplicitWidth = 595
-          ExplicitHeight = 405
+          Top = 136
+          Height = 380
+          ExplicitTop = 136
+          ExplicitHeight = 380
           inherited tabControls: TTabSheet
-            ExplicitLeft = 4
-            ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 370
+            ExplicitLeft = 6
+            ExplicitTop = 27
+            ExplicitHeight = 372
             inherited lblIvoid: TLabel
               Top = 92
               Width = 209
@@ -4519,9 +4518,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited tabPrintSave: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 587
             ExplicitHeight = 372
             inherited sbAdd: TSpeedButton
               Top = 156
@@ -9970,25 +9967,25 @@ inherited frmModflowPackages: TfrmModflowPackages
           inherited tabNonLinear: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 326
+            ExplicitWidth = 487
+            ExplicitHeight = 291
             inherited rdgNonlinearOptions: TRbwDataGrid4
-              Width = 587
-              Height = 326
+              Height = 291
               FixedCols = 0
-              ExplicitWidth = 587
-              ExplicitHeight = 326
+              ExplicitHeight = 291
             end
           end
           inherited tabLinear: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 487
-            ExplicitHeight = 291
+            ExplicitWidth = 587
+            ExplicitHeight = 326
             inherited rdgLinearOptions: TRbwDataGrid4
-              Height = 291
+              Width = 587
+              Height = 326
               FixedCols = 0
-              ExplicitHeight = 291
+              ExplicitWidth = 587
+              ExplicitHeight = 326
             end
           end
         end

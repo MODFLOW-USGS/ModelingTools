@@ -909,6 +909,18 @@ type
     procedure Redo; override;
   end;
 
+  TUndoConvertSubAndSwtToCSub = class(TCustomImportMultipleScreenObjects)
+    FCSubPackage: TCSubPackageSelection;
+  protected
+    function Description: string; override;
+  public
+    constructor Create;
+    Destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
+    procedure Redo; override;
+  end;
+
 
 
 implementation
@@ -917,7 +929,9 @@ uses Math, frmGoPhastUnit, frmSelectedObjectsUnit, frmShowHideObjectsUnit,
   InteractiveTools, PhastDataSets, DataSetUnit, CountObjectsUnit, 
   ModflowSfrReachUnit, frmErrorsAndWarningsUnit, IntListUnit,
   frmSelectResultToImportUnit, SutraMeshUnit, DisplaySettingsUnit,
-  ModflowHfbUnit, ModflowTimeUnit, FluxObservationUnit;
+  ModflowHfbUnit, ModflowTimeUnit, FluxObservationUnit, 
+  LayerStructureUnit, ModflowCSubInterbed, ModflowSubsidenceDefUnit,
+  ModflowCsubUnit;
 
 resourcestring
   StrChangeSelection = 'change selection';
@@ -5129,6 +5143,307 @@ begin
   end;
   inherited;
   UpdateDisplay;
+end;
+
+{ TUndoConvertSubAndSwtToCSub }
+
+constructor TUndoConvertSubAndSwtToCSub.Create;
+begin
+  inherited;
+  FShouldUpdateShowHideObjects := True;
+  FCSubPackage := TCSubPackageSelection.Create(nil);
+  FCSubPackage.Assign(frmGoPhast.PhastModel.ModflowPackages.CSubPackage);
+//  FScreenObjectList := TScreenObjectList.Create;
+end;
+
+function TUndoConvertSubAndSwtToCSub.Description: string;
+begin
+  result := 'convert SUB and/or SWT to CSUB';
+end;
+
+destructor TUndoConvertSubAndSwtToCSub.Destroy;
+begin
+//  FScreenObjectList.Free;
+  FCSubPackage.Free;
+  inherited;
+end;
+
+procedure TUndoConvertSubAndSwtToCSub.DoCommand;
+var
+  SubPackage: TSubPackageSelection;
+  SwtPackage: TSwtPackageSelection;
+  CSubPackage: TCSubPackageSelection;
+  LocalModel: TPhastModel;
+  LayerStructure: TLayerStructure;
+  LayerGroupIndex: Integer;
+  ALayerGroup: TLayerGroup;
+  ANoDelayItem: TSubNoDelayBedLayerItem;
+  Interbed: TCSubInterbed;
+  AScreenObject: TScreenObject;
+  DummyUndoCreateScreenObject: TCustomUndo;
+  Grid: TCustomModelGrid;
+  ModflowCSub: TCSubBoundary;
+  CSubPackageData: TCSubPackageData;
+  SelectedPackageData: TCSubPackageData;
+  NoDelayIndex: Integer;
+  IB_Index: Integer;
+  DelayIndex: Integer;
+  ADelayItem: TSubDelayBedLayerItem;
+  EquivNumberDataArray: TDataArray;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  WT_Index: Integer;
+  WT_Item: TSwtWaterTableItem;
+  function GetInterbedItem(ModflowCSub: TCSubBoundary; Interbed: TCSubInterbed): TCSubPackageData;
+  var
+    IB_Index: Integer;
+  begin
+    result := nil;
+    for IB_Index := 0 to ModflowCSub.CSubPackageData.Count - 1 do
+    begin
+      CSubPackageData := ModflowCSub.CSubPackageData[IB_Index];
+      if CSubPackageData.Interbed = Interbed then
+      begin
+        result := CSubPackageData;
+        break;
+      end;
+    end;
+    if result = nil then
+    begin
+      result := ModflowCSub.CSubPackageData.Add;
+      result.Interbed := Interbed;
+    end;
+  end;
+begin
+  inherited;
+  LocalModel := frmGoPhast.PhastModel;
+  Grid := LocalModel.ModflowGrid;
+  if (Grid.RowCount = 0) or (Grid.ColumnCount = 0) then
+  begin
+    Exit;
+  end;
+  CSubPackage := LocalModel.ModflowPackages.CSubPackage;
+  CSubPackage.IsSelected := True;
+  SubPackage := LocalModel.ModflowPackages.SubPackage;
+  SwtPackage := LocalModel.ModflowPackages.SwtPackage;
+  LayerStructure := LocalModel.LayerStructure;
+  if SubPackage.IsSelected then
+  begin
+    CSubPackage.NumberOfDelayCells := SubPackage.NumberOfNodes;
+
+    for LayerGroupIndex := 1 to LayerStructure.Count - 1 do
+    begin
+      ALayerGroup := LayerStructure[LayerGroupIndex];
+
+      if ALayerGroup.SubNoDelayBedLayers.Count > 0 then
+      begin
+        AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
+          vdTop, DummyUndoCreateScreenObject, False);
+        AScreenObject.ElevationCount := ecTwo;
+        AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+        AScreenObject.HigherElevationFormula :=
+          LayerStructure[LayerGroupIndex-1].DataArrayName;
+        AScreenObject.Name := GenerateNewName(
+          Format('NoDelayInterbeds_%s', [ALayerGroup.AquiferName]));
+
+        AScreenObject.Capacity := 5;
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,Grid.RowCount), False);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,Grid.RowCount), False);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,0), False);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), False);
+
+        AScreenObject.CreateCSubBoundary;
+        ModflowCSub := AScreenObject.ModflowCSub;
+
+        for NoDelayIndex := 0 to ALayerGroup.SubNoDelayBedLayers.Count - 1 do
+        begin
+          ANoDelayItem := ALayerGroup.SubNoDelayBedLayers[NoDelayIndex];
+
+          Interbed := CSubPackage.Interbeds.Add;
+          Interbed.Name := ANoDelayItem.Name;
+          Interbed.InterbedType := itNoDelay;
+
+          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+          SelectedPackageData.Used := True;
+          SelectedPackageData.InitialOffset :=
+            ANoDelayItem.PreconsolidationHeadDataArrayName;
+//          SelectedPackageData.Thickness :=
+//            ANoDelayItem.InterbedEquivalentThicknessDataArrayName;
+//          SelectedPackageData.EquivInterbedNumber :=
+//            ANoDelayItem.EquivNumberDataArrayName;
+          SelectedPackageData.InitialInelasticSpecificStorage :=
+            ANoDelayItem.InelasticSkeletalStorageCoefficientDataArrayName;
+          SelectedPackageData.InitialElasticSpecificStorage :=
+            ANoDelayItem.ElasticSkeletalStorageCoefficientDataArrayName;
+//          SelectedPackageData.InitialPorosity :=
+//            ANoDelayItem.PreconsolidationHeadDataArrayName;
+//          SelectedPackageData.DelayKv :=
+//            ANoDelayItem.VerticalHydraulicConductivityDataArrayName;
+//          SelectedPackageData.InitialDelayHeadOffset :=
+//            ANoDelayItem.InterbedStartingHeadDataArrayName;
+        end;
+      end;
+
+      if ALayerGroup.SubDelayBedLayers.Count > 0 then
+      begin
+        for DelayIndex := 0 to ALayerGroup.SubDelayBedLayers.Count - 1 do
+        begin
+          ADelayItem := ALayerGroup.SubDelayBedLayers[DelayIndex];
+
+          AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
+            vdTop, DummyUndoCreateScreenObject, False);
+          AScreenObject.ElevationCount := ecTwo;
+          AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+          AScreenObject.HigherElevationFormula :=
+            LayerStructure[LayerGroupIndex-1].DataArrayName;
+          AScreenObject.Name := GenerateNewName(
+            Format('DelayInterbed_%0:s_%1:s', [ALayerGroup.AquiferName, ADelayItem.Name]));
+
+          EquivNumberDataArray := LocalModel.DataArrayManager.
+            GetDataSetByName(ADelayItem.EquivNumberDataArrayName);
+          AScreenObject.Capacity := Grid.RowCount * Grid.ColumnCount;
+          for RowIndex := 0 to Grid.RowCount - 1 do
+          begin
+            for ColIndex := 0 to Grid.ColumnCount - 1 do
+            begin
+              if EquivNumberDataArray.RealData[0, RowIndex, ColIndex] >= 1 then
+              begin
+                AScreenObject.AddPoint(Grid.TwoDElementCenter(ColIndex,RowIndex), True);
+              end;
+            end;
+          end;
+
+          AScreenObject.CreateCSubBoundary;
+          ModflowCSub := AScreenObject.ModflowCSub;
+
+          Interbed := CSubPackage.Interbeds.Add;
+          Interbed.Name := ADelayItem.Name;
+          Interbed.InterbedType := itNoDelay;
+
+          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+          SelectedPackageData.Used := True;
+
+//          SelectedPackageData.InitialOffset :=
+//            ADelayItem.PreconsolidationHeadDataArrayName;
+          SelectedPackageData.Thickness :=
+            ADelayItem.InterbedEquivalentThicknessDataArrayName;
+          SelectedPackageData.EquivInterbedNumber :=
+            ADelayItem.EquivNumberDataArrayName;
+          SelectedPackageData.InitialInelasticSpecificStorage :=
+            ADelayItem.InelasticSpecificStorageDataArrayName;
+          SelectedPackageData.InitialElasticSpecificStorage :=
+            ADelayItem.ElasticSpecificStorageDataArrayName;
+//          SelectedPackageData.InitialPorosity :=
+//            ADelayItem.PreconsolidationHeadDataArrayName;
+          SelectedPackageData.DelayKv :=
+            ADelayItem.VerticalHydraulicConductivityDataArrayName;
+          SelectedPackageData.InitialDelayHeadOffset :=
+            ADelayItem.InterbedStartingHeadDataArrayName;
+        end;
+      end;
+    end;
+  end;
+
+  if SwtPackage.IsSelected then
+  begin
+    CSubPackage.UpdateMaterialProperties := SwtPackage.ThickResponse = trVariable;
+    CSubPackage.HeadBased := SwtPackage.PreconsolidationSource = pcSpecified;
+    if CSubPackage.HeadBased then
+    begin
+      CSubPackage.PreconsolidationHeadUsed := True;
+    end;
+    case SwtPackage.CompressionSource of
+      csCompressionReComp:
+        begin
+          CSubPackage.CompressionMethod  := coRecompression;
+        end;
+      csSpecificStorage:
+        begin
+          CSubPackage.CompressionMethod  := coElasticSpecificStorage;
+        end;
+      else
+        Assert(False);
+    end;
+    CSubPackage.InterbedThicknessMethod := itmThickness;
+    CSubPackage.SpecifyInitialPreconsolidationStress := True;
+//
+
+    for LayerGroupIndex := 1 to LayerStructure.Count - 1 do
+    begin
+      ALayerGroup := LayerStructure[LayerGroupIndex];
+      if ALayerGroup.WaterTableLayers.Count > 0 then
+      begin
+        AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
+          vdTop, DummyUndoCreateScreenObject, False);
+        AScreenObject.ElevationCount := ecTwo;
+        AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+        AScreenObject.HigherElevationFormula :=
+          LayerStructure[LayerGroupIndex-1].DataArrayName;
+        AScreenObject.Name := GenerateNewName(
+          Format('WaterTableInterbeds_%s', [ALayerGroup.AquiferName]));
+
+        AScreenObject.Capacity := 5;
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,Grid.RowCount), False);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,Grid.RowCount), False);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,0), False);
+        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), False);
+
+        AScreenObject.CreateCSubBoundary;
+        ModflowCSub := AScreenObject.ModflowCSub;
+
+        for WT_Index := 0 to ALayerGroup.WaterTableLayers.Count - 1 do
+        begin
+          WT_Item :=  ALayerGroup.WaterTableLayers[WT_Index];
+
+          Interbed := CSubPackage.Interbeds.Add;
+          Interbed.Name := WT_Item.Name;
+          Interbed.InterbedType := itNoDelay;
+
+          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+          SelectedPackageData.Used := True;
+
+          if SwtPackage.PreconsolidationSource = pcSpecified then
+          begin
+            SelectedPackageData.InitialOffset := StrInitialPreconsolida;
+          end
+          else
+          begin
+            SelectedPackageData.InitialOffset := StrInitialPreOffsets;
+          end;
+
+//          SelectedPackageData.Thickness :=
+//            WT_Item.InterbedEquivalentThicknessDataArrayName;
+//          SelectedPackageData.EquivInterbedNumber :=
+//            WT_Item.EquivNumberDataArrayName;
+//          SelectedPackageData.InitialInelasticSpecificStorage :=
+//            WT_Item.InelasticSpecificStorageDataArrayName;
+//          SelectedPackageData.InitialElasticSpecificStorage :=
+//            WT_Item.ElasticSpecificStorageDataArrayName;
+//          SelectedPackageData.InitialPorosity :=
+//            WT_Item.PreconsolidationHeadDataArrayName;
+//          SelectedPackageData.DelayKv :=
+//            WT_Item.VerticalHydraulicConductivityDataArrayName;
+//          SelectedPackageData.InitialDelayHeadOffset :=
+//            WT_Item.InterbedStartingHeadDataArrayName;
+        end;
+      end;
+    end;
+  end;
+
+end;
+
+procedure TUndoConvertSubAndSwtToCSub.Redo;
+begin
+  inherited;
+
+end;
+
+procedure TUndoConvertSubAndSwtToCSub.Undo;
+begin
+  inherited;
+  frmGoPhast.PhastModel.ModflowPackages.CSubPackage := FCSubPackage;
 end;
 
 end.

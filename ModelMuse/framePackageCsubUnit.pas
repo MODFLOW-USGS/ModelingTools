@@ -68,6 +68,10 @@ begin
   inherited;
   cbPreconsolidationHeadUsed.Enabled := rcSelectionController.Enabled
     and not cbHeadBased.Checked;
+  if cbHeadBased.Checked and rcSelectionController.Enabled then
+  begin
+    cbPreconsolidationHeadUsed.Checked := True;
+  end;
 end;
 
 procedure TframePackageCsub.GetData(Package: TModflowPackageSelection);

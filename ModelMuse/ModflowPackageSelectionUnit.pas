@@ -3307,19 +3307,23 @@ Type
     the PACKAGEDATA block are relative to simulated values if the first stress
     period is steady-state or initial stresses (heads) if the first stress
     period is transient.}
-    property SpecifyInitialPreconsolidationStress: Boolean read FSpecifyInitialPreconsolidationStress write SetSpecifyInitialPreconsolidationStress;
+    property SpecifyInitialPreconsolidationStress: Boolean
+      read FSpecifyInitialPreconsolidationStress
+      write SetSpecifyInitialPreconsolidationStress Stored True;
     {SPECIFIED_INITIAL_DELAY_HEAD—keyword to indicate that absolute initial delay bed
     head will be specified for interbeds defined in the PACKAGEDATA block. If SPECIFIED
     INITIAL DELAY HEAD and SPECIFIED INITIAL INTERBED STATE are not specified
     then delay bed head values specified in the PACKAGEDATA block are relative to simulated values
     if the first stress period is steady-state or initial GWF heads if the first stress period is transient.}
-    property SpecifyInitialDelayHead: Boolean read FSpecifyInitialDelayHead write SetSpecifyInitialDelayHead;
+    property SpecifyInitialDelayHead: Boolean read FSpecifyInitialDelayHead
+      write SetSpecifyInitialDelayHead Stored True;
     {EFFECTIVE_STRESS_LAG—keyword to indicate the effective stress from the previous time step will be
     used to calculate specific storage values. This option can 1) help with convergence in models with
     thin cells and water table elevations close to land surface; 2) is identical to the approach used in the
     SUBWT package for MODFLOW-2005; and 3) is only used if the effective-stress formulation is
     being used. By default, current effective stress values are used to calculate specific storage values.}
-    property EffectiveStressLag: Boolean read FEffectiveStressLag write SetEffectiveStressLag;
+    property EffectiveStressLag: Boolean read FEffectiveStressLag
+      write SetEffectiveStressLag Stored True;
     {[STRAIN_CSV_INTERBED FILEOUT <interbedstrain_filename>]
     [STRAIN_CSV_COARSE FILEOUT <coarsestrain_filename>]
     [COMPACTION FILEOUT <compaction_filename>]
@@ -3328,7 +3332,8 @@ Type
     [COMPACTION_INTERBED FILEOUT <interbed_compaction_filename>]
     [COMPACTION_COARSE FILEOUT <coarse_compaction_filename>]
     [ZDISPLACEMENT FILEOUT <zdisplacement_filename>]}
-    property OutputTypes: TCsubOutputTypes read FOutputTypes write SetOutputTypes;
+    property OutputTypes: TCsubOutputTypes read FOutputTypes
+      write SetOutputTypes Stored True;
     // cdelay
     property Interbeds: TCSubInterbeds read FInterbeds write SetInterbeds;
   end;
@@ -5661,8 +5666,10 @@ resourcestring
 procedure TModflowPackageSelection.AddTimeList(TimeList: TCustomTimeList);
 begin
   { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
-  Assert(FModel <> nil);
-  (FModel as TCustomModel).AddTimeList(TimeList);
+  if (FModel <> nil) then
+  begin
+    (FModel as TCustomModel).AddTimeList(TimeList);
+  end;
 end;
 
 procedure TModflowPackageSelection.Assign(Source: TPersistent);

@@ -10,7 +10,7 @@ inherited framePackageSwt: TframePackageSwt
   inherited memoComments: TMemo
     Width = 564
     Height = 43
-    ExplicitWidth = 528
+    ExplicitWidth = 564
     ExplicitHeight = 43
   end
   object pcSWT: TPageControl [3]
@@ -18,16 +18,13 @@ inherited framePackageSwt: TframePackageSwt
     Top = 111
     Width = 595
     Height = 403
-    ActivePage = tabPrintSave
+    ActivePage = tabControls
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    ExplicitWidth = 559
-    ExplicitHeight = 364
     object tabControls: TTabSheet
       Caption = 'Controls'
-      ExplicitWidth = 551
-      ExplicitHeight = 336
+      ExplicitLeft = 8
       DesignSize = (
         587
         375)
@@ -62,7 +59,7 @@ inherited framePackageSwt: TframePackageSwt
         Caption = 'Binary output choice'
       end
       object gbIthk: TGroupBox
-        Left = 12
+        Left = 20
         Top = 3
         Width = 564
         Height = 94
@@ -125,7 +122,7 @@ inherited framePackageSwt: TframePackageSwt
       end
       object comboIvoid: TJvImageComboBox
         Left = 12
-        Top = 125
+        Top = 122
         Width = 561
         Height = 23
         Style = csOwnerDrawVariable
@@ -210,8 +207,6 @@ inherited framePackageSwt: TframePackageSwt
     object tabPrintSave: TTabSheet
       Caption = 'Print/Save'
       ImageIndex = 1
-      ExplicitWidth = 551
-      ExplicitHeight = 336
       DesignSize = (
         587
         375)

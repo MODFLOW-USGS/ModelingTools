@@ -15,16 +15,12 @@ inherited framePackageCsub: TframePackageCsub
     Top = 157
     Width = 589
     Height = 357
-    ActivePage = tabOutputTypes
+    ActivePage = tabOptions
     Align = alBottom
     TabOrder = 1
     object tabInterbeds: TTabSheet
       Caption = 'Interbeds'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameInterbeds: TframeGrid
         Left = 0
         Top = 0
@@ -122,10 +118,6 @@ inherited framePackageCsub: TframePackageCsub
     end
     object tabOptions: TTabSheet
       Caption = 'Options'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblGamma: TLabel
         Left = 155
         Top = 6
