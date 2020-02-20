@@ -1,0 +1,7 @@
+1. Select and display DEM
+2. Determine inactive area thorugh combination of a shape indicating active area and no-data symbol in DEM. Allow the shape to be created interactively. 
+3. Determine starting points for streams along edges.
+4. Display pits and allow the user to select some pits as starting points.
+5. Create pitless DEM.
+7. Allow user to determine minumum area for stream
+8. Generate streams. 

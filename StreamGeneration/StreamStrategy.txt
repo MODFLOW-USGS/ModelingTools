@@ -1,0 +1,7 @@
+strategy for faster stream generation
+1. Coarsen DEM
+2. Generate pitless raster from DEM without going on diagonals.
+3. Extract coarse stream from coarse pitless raster with a minimum number of grid points equal to 1.
+4. For every point in the coarse raster, go to the fine raster and extract streams for the square represented by that point.
+5. Use streams from coarse raster to determine order in which squares from previous step are added. 
+6. Link in squares to form pitless raster, flow direction raster, watershed ID raster, and streams for fine scale grid using carving and filling to link outlets of the new square to squares that have already been added. If any of the square that have already been added have outlets facing the new square, link those too.
