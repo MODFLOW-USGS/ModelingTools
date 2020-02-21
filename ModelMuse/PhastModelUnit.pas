@@ -8966,6 +8966,8 @@ const
   //               Bug fix: When converting MNW2 wells to MAW wells, the SKIN
   //                option in MNW2 is now converted to the CUMULATIVE option
   //                in MAW instead of the SKIN option in MAW.
+  //               Bug fix: Fixed a bug that could cause issues with evaluating
+  //                formulas that involve only integers.
 
   // version number of ModelMuse.
   IModelVersion = '4.1.0.32';
