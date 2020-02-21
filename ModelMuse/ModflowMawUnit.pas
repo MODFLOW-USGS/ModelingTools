@@ -1299,7 +1299,7 @@ begin
         end;
       mltSkin:
         begin
-          ConductanceMethod := mcmSkin;
+          ConductanceMethod := mcmCumulative;
         end;
       mltEquation:
         begin

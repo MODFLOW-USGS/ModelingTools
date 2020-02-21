@@ -8963,6 +8963,10 @@ const
   //               Bug fix: Fixed bug that could cause an error when exporting
   //                the UZF input file.
 
+  //               Bug fix: When converting MNW2 wells to MAW wells, the SKIN
+  //                option in MNW2 is now converted to the CUMULATIVE option
+  //                in MAW instead of the SKIN option in MAW.
+
   // version number of ModelMuse.
   IModelVersion = '4.1.0.32';
   StrPvalExt = '.pval';
