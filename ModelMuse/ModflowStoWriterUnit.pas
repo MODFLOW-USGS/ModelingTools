@@ -146,21 +146,28 @@ var
   DataArray: TDataArray;
 begin
   frmProgressMM.AddMessage('  Writing SS');
-  DataArray:= nil;
-  case (Package as TStoPackage).StorageChoice of
-    scSpecificStorage:
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(rsSpecific_Storage);
-      end;
-    scStorageCoefficient:
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(StrConfinedStorageCoe);
-      end;
-    else
-      Assert(False);
+  if not Model.ModflowPackages.CSubPackage.IsSelected then
+  begin
+    DataArray:= nil;
+    case (Package as TStoPackage).StorageChoice of
+      scSpecificStorage:
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(rsSpecific_Storage);
+        end;
+      scStorageCoefficient:
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(StrConfinedStorageCoe);
+        end;
+      else
+        Assert(False);
+    end;
+    Assert(DataArray <> nil);
+    WriteMf6_DataSet(DataArray, 'SS');
+  end
+  else
+  begin
+    WriteConstantU2DREL('', 0, matUnstructured, 'SS');
   end;
-  Assert(DataArray <> nil);
-  WriteMf6_DataSet(DataArray, 'SS');
 end;
 
 procedure TStoPackageWriter.WriteStressPeriods;

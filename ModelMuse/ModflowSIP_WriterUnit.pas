@@ -18,7 +18,7 @@ Type
 
 implementation
 
-uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit;
+uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit, GoPhastTypes;
 
 resourcestring
   StrWritingSIPPackage = 'Writing SIP Package input.';
@@ -64,6 +64,10 @@ procedure TSipWriter.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
 begin
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
   if not Package.IsSelected then
   begin
     Exit

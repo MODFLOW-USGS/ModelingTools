@@ -36,6 +36,7 @@ type
     FBoundaryIndex: Integer;
     FObservations: TCSubObservationList;
     FInterBedNumbers: array of array of array of array of Integer;
+    ninterbeds: Integer;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WriteGridData;
@@ -421,7 +422,6 @@ var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
-  ninterbeds: Integer;
   IDomain: TDataArray;
 begin
   WriteBeginDimensions;
@@ -533,7 +533,6 @@ begin
       if MAXBOUND = 0 then
       begin
         frmErrorsAndWarnings.AddWarning(Model,  'No Transient CSUB data defined', 'No transient data is defined for the CSUB package. The CSUB package does not require transient data.');
-        Exit;
       end;
     end;
 
@@ -876,6 +875,10 @@ var
   IbIndex: Integer;
   boundname: string;
 begin
+  if ninterbeds = 0 then
+  begin
+    Exit;
+  end;
   SetLength(FInterBedNumbers, Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
   WriteBeginPackageData;

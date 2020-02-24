@@ -910,7 +910,8 @@ type
   end;
 
   TUndoConvertSubAndSwtToCSub = class(TCustomImportMultipleScreenObjects)
-    FCSubPackage: TCSubPackageSelection;
+    FOldCSubPackage: TCSubPackageSelection;
+    FNewCSubPackage: TCSubPackageSelection;
   protected
     function Description: string; override;
   public
@@ -969,6 +970,9 @@ resourcestring
   'FLOW-6 observation locations';
   StrConvertUZFToUZF6 = 'convert UZF to UZF6';
   StrConvertMNW2WellsT = 'convert MNW2 wells to MAW wells';
+  StrNoDelayInterbedss = 'NoDelayInterbeds_%s';
+  StrDelayInterbed0s = 'DelayInterbed_%0:s_%1:s';
+  StrWaterTableInterbeds = 'WaterTableInterbeds_%s';
 
 { TCustomUpdateScreenObjectDisplayUndo }
 
@@ -5151,8 +5155,8 @@ constructor TUndoConvertSubAndSwtToCSub.Create;
 begin
   inherited;
   FShouldUpdateShowHideObjects := True;
-  FCSubPackage := TCSubPackageSelection.Create(nil);
-  FCSubPackage.Assign(frmGoPhast.PhastModel.ModflowPackages.CSubPackage);
+  FOldCSubPackage := TCSubPackageSelection.Create(nil);
+  FOldCSubPackage.Assign(frmGoPhast.PhastModel.ModflowPackages.CSubPackage);
 //  FScreenObjectList := TScreenObjectList.Create;
 end;
 
@@ -5164,7 +5168,8 @@ end;
 destructor TUndoConvertSubAndSwtToCSub.Destroy;
 begin
 //  FScreenObjectList.Free;
-  FCSubPackage.Free;
+  FOldCSubPackage.Free;
+  FNewCSubPackage.Free;
   inherited;
 end;
 
@@ -5194,6 +5199,9 @@ var
   ColIndex: Integer;
   WT_Index: Integer;
   WT_Item: TSwtWaterTableItem;
+  CSubItem: TCSubItem;
+  StressPeriod: TModflowStressPeriod;
+  ScreenObjectIndex: Integer;
   function GetInterbedItem(ModflowCSub: TCSubBoundary; Interbed: TCSubInterbed): TCSubPackageData;
   var
     IB_Index: Integer;
@@ -5239,12 +5247,15 @@ begin
       begin
         AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
           vdTop, DummyUndoCreateScreenObject, False);
+        LocalModel.AddScreenObject(AScreenObject);
+        FScreenObjectsToDelete.Add(AScreenObject);
         AScreenObject.ElevationCount := ecTwo;
         AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
         AScreenObject.HigherElevationFormula :=
           LayerStructure[LayerGroupIndex-1].DataArrayName;
         AScreenObject.Name := GenerateNewName(
-          Format('NoDelayInterbeds_%s', [ALayerGroup.AquiferName]));
+          Format(StrNoDelayInterbedss, [ALayerGroup.AquiferName]));
+        AScreenObject.SetValuesOfEnclosedCells := True;
 
         AScreenObject.Capacity := 5;
         AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
@@ -5261,7 +5272,7 @@ begin
           ANoDelayItem := ALayerGroup.SubNoDelayBedLayers[NoDelayIndex];
 
           Interbed := CSubPackage.Interbeds.Add;
-          Interbed.Name := ANoDelayItem.Name;
+          Interbed.Name := 'CSUB_' + ANoDelayItem.Name;
           Interbed.InterbedType := itNoDelay;
 
           SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
@@ -5293,12 +5304,15 @@ begin
 
           AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
             vdTop, DummyUndoCreateScreenObject, False);
+          LocalModel.AddScreenObject(AScreenObject);
+          FScreenObjectsToDelete.Add(AScreenObject);
           AScreenObject.ElevationCount := ecTwo;
           AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
           AScreenObject.HigherElevationFormula :=
             LayerStructure[LayerGroupIndex-1].DataArrayName;
           AScreenObject.Name := GenerateNewName(
-            Format('DelayInterbed_%0:s_%1:s', [ALayerGroup.AquiferName, ADelayItem.Name]));
+            Format(StrDelayInterbed0s, [ALayerGroup.AquiferName, ADelayItem.Name]));
+          AScreenObject.SetValuesOfIntersectedCells := True;
 
           EquivNumberDataArray := LocalModel.DataArrayManager.
             GetDataSetByName(ADelayItem.EquivNumberDataArrayName);
@@ -5318,7 +5332,7 @@ begin
           ModflowCSub := AScreenObject.ModflowCSub;
 
           Interbed := CSubPackage.Interbeds.Add;
-          Interbed.Name := ADelayItem.Name;
+          Interbed.Name := 'CSUB_' + ADelayItem.Name;
           Interbed.InterbedType := itNoDelay;
 
           SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
@@ -5376,12 +5390,15 @@ begin
       begin
         AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
           vdTop, DummyUndoCreateScreenObject, False);
+        LocalModel.AddScreenObject(AScreenObject);
+        FScreenObjectsToDelete.Add(AScreenObject);
         AScreenObject.ElevationCount := ecTwo;
         AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
         AScreenObject.HigherElevationFormula :=
           LayerStructure[LayerGroupIndex-1].DataArrayName;
         AScreenObject.Name := GenerateNewName(
-          Format('WaterTableInterbeds_%s', [ALayerGroup.AquiferName]));
+          Format(StrWaterTableInterbeds, [ALayerGroup.AquiferName]));
+        AScreenObject.SetValuesOfEnclosedCells := True;
 
         AScreenObject.Capacity := 5;
         AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
@@ -5398,7 +5415,7 @@ begin
           WT_Item :=  ALayerGroup.WaterTableLayers[WT_Index];
 
           Interbed := CSubPackage.Interbeds.Add;
-          Interbed.Name := WT_Item.Name;
+          Interbed.Name := 'CSUB_' + WT_Item.Name;
           Interbed.InterbedType := itNoDelay;
 
           SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
@@ -5413,37 +5430,81 @@ begin
             SelectedPackageData.InitialOffset := StrInitialPreOffsets;
           end;
 
-//          SelectedPackageData.Thickness :=
-//            WT_Item.InterbedEquivalentThicknessDataArrayName;
+          SelectedPackageData.Thickness :=
+            WT_Item.WaterTableCompressibleThicknessDataArrayName;
 //          SelectedPackageData.EquivInterbedNumber :=
 //            WT_Item.EquivNumberDataArrayName;
-//          SelectedPackageData.InitialInelasticSpecificStorage :=
-//            WT_Item.InelasticSpecificStorageDataArrayName;
-//          SelectedPackageData.InitialElasticSpecificStorage :=
-//            WT_Item.ElasticSpecificStorageDataArrayName;
-//          SelectedPackageData.InitialPorosity :=
-//            WT_Item.PreconsolidationHeadDataArrayName;
+          case SwtPackage.CompressionSource of
+            csCompressionReComp:
+              begin
+                SelectedPackageData.InitialInelasticSpecificStorage :=
+                  WT_Item.WaterTableRecompressionIndexDataArrayName;
+                SelectedPackageData.InitialElasticSpecificStorage :=
+                  WT_Item.WaterTableCompressionIndexDataArrayName;
+              end;
+            csSpecificStorage:
+              begin
+                SelectedPackageData.InitialInelasticSpecificStorage :=
+                  WT_Item.WaterTableInitialInelasticSkeletalSpecificStorageDataArrayName;
+                SelectedPackageData.InitialElasticSpecificStorage :=
+                  WT_Item.WaterTableInitialElasticSkeletalSpecificStorageDataArrayName;
+              end;
+          end;
+          SelectedPackageData.InitialPorosity :=
+            WT_Item.WaterTableInitialVoidRatioDataArrayName;
 //          SelectedPackageData.DelayKv :=
 //            WT_Item.VerticalHydraulicConductivityDataArrayName;
 //          SelectedPackageData.InitialDelayHeadOffset :=
 //            WT_Item.InterbedStartingHeadDataArrayName;
         end;
+
+        CSubItem  := ModflowCSub.Values.Add as TCSubItem;
+        StressPeriod := LocalModel.ModflowStressPeriods.First;
+        CSubItem.StartTime := StressPeriod.StartTime;
+        CSubItem.EndTime := StressPeriod.EndTime;
+        if SwtPackage.PreconsolidationSource = pcOffsets then
+        begin
+          CSubItem.StressOffset := StrInitialPreOffsets
+        end
+        else
+        begin
+          CSubItem.StressOffset := StrInitialPreconsolida
+        end;
       end;
     end;
   end;
 
+  for ScreenObjectIndex := 0 to FScreenObjectsToDelete.Count - 1 do
+  begin
+    AScreenObject := FScreenObjectsToDelete[ScreenObjectIndex];
+    AScreenObject.ModflowCSub.Loaded;
+  end;
+  
+  LocalModel.DataArrayManager.CreateInitialDataSets;
+
+  FNewCSubPackage := TCSubPackageSelection.Create(nil);
+  FNewCSubPackage.Assign(LocalModel.ModflowPackages.CSubPackage);
+
+  FShouldUpdateShowHideObjects := True;
+  UpdateShowHideObjects;
 end;
 
 procedure TUndoConvertSubAndSwtToCSub.Redo;
 begin
   inherited;
-
+  frmGoPhast.PhastModel.ModflowPackages.CSubPackage := FNewCSubPackage;
+  FShouldUpdateShowHideObjects := True;
+  ApplyDeletedStatus(False);
+  UpdateShowHideObjects;
 end;
 
 procedure TUndoConvertSubAndSwtToCSub.Undo;
 begin
   inherited;
-  frmGoPhast.PhastModel.ModflowPackages.CSubPackage := FCSubPackage;
+  frmGoPhast.PhastModel.ModflowPackages.CSubPackage := FOldCSubPackage;
+  FShouldUpdateShowHideObjects := True;
+  ApplyDeletedStatus(True);
+  UpdateShowHideObjects;
 end;
 
 end.

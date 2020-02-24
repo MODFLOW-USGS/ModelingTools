@@ -24980,5 +24980,18 @@ object TTaskHistory
         'Components'
         'Testing'
         'Documentation')
+    end
+    item
+      Date = 43883.000000000000000000
+    end
+    item
+      Date = 43884.000000000000000000
+    end
+    item
+      Date = 43885.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'CSUB'
+        'MF-2015')
     end>
 end
