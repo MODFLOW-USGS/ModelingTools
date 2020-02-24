@@ -8962,15 +8962,14 @@ const
   //                transient.
   //               Bug fix: Fixed bug that could cause an error when exporting
   //                the UZF input file.
-
-  //               Bug fix: When converting MNW2 wells to MAW wells, the SKIN
+  //    '4.2.0.0'  Bug fix: When converting MNW2 wells to MAW wells, the SKIN
   //                option in MNW2 is now converted to the CUMULATIVE option
   //                in MAW instead of the SKIN option in MAW.
   //               Bug fix: Fixed a bug that could cause issues with evaluating
   //                formulas that involve only integers.
 
   // version number of ModelMuse.
-  IModelVersion = '4.1.0.32';
+  IModelVersion = '4.2.0.0';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

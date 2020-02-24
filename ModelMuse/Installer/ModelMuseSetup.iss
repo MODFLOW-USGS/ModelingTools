@@ -6,7 +6,7 @@
 #define MMVersion "4" 
 ;MMCurrentVersion is updated for each version released
 #define MMCurrentVersion "4_2" 
-AppVerName=ModelMuse 4.1.0.25
+AppVerName=ModelMuse 4.2.0.0
 
 ;enable or disable the following to install in 32-bit or 64-bit mode
 #define Win64

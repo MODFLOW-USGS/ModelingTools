@@ -410,15 +410,6 @@ begin
   // This can be helpful in identifying when used with PEST.
   WriteString(CSubCell.StressOffsetAnnotation);
   NewLine;
-
-//  if CSubCell.MvrUsed and (MvrWriter <> nil) then
-//  begin
-//    MvrKey.StressPeriod := FStressPeriod;
-//    MvrKey.Index := FBoundaryIndex;
-//    MvrKey.SourceKey.MvrIndex := CSubCell.MvrIndex;
-//    MvrKey.SourceKey.ScreenObject := CSubCell.ScreenObject;
-//    TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
-//  end;
 end;
 
 procedure TCSubWriter.WriteDimensions;

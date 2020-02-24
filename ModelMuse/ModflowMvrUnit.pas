@@ -791,8 +791,8 @@ var
   IndIndex: Integer;
   IndItem: TIndividualMvrItem;
   CellIndex: Integer;
+  AMvrRecord: TMvrRecord;
 begin
-//  inherited;
   MvrItem := AnItem as TMvrItem;
   MvrStorage := BoundaryStorage as TMvrSourceStorage;
   for IndIndex := 0 to MvrItem.Items.Count - 1 do
@@ -800,10 +800,11 @@ begin
     IndItem := MvrItem.Items[IndIndex];
     for CellIndex := 0 to MvrStorage.Count - 1 do
     begin
-      MvrStorage.MvrRecordArray[CellIndex].MvrTypes[IndIndex]
+      AMvrRecord := MvrStorage.MvrRecordArray[CellIndex];
+      AMvrRecord.MvrTypes[IndIndex]
         := IndItem.MvrType;
+      MvrStorage.MvrRecordArray[CellIndex] := AMvrRecord;
     end;
-//    MvrStorage
   end;
 end;
 

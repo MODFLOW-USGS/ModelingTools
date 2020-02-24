@@ -87,9 +87,9 @@ const
   KInitialDelayHeadOffs = 'InitialDelayHeadOffset';
   KInitialElasticSpecif = 'InitialElasticSpecificStorage';
   KInitialInelasticSpec = 'InitialInelasticSpecificStorage';
-  KInitialOffset = 'InitialHeadOffset';
+  KInitialOffset = 'InitialStressOffset';
   KInitialPorosity = 'InitialPorosity';
-  KThickness = 'Thickness';
+  KThickness = 'InterbedThickness';
   KInitialPreconsolidat = 'InitialPreconsolidationStress';
   KCellThicknessFractio = 'CellThicknessFraction';
   KInitialInelasticComp = 'InitialInelasticRecompressionIndex';

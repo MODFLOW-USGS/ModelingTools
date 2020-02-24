@@ -4997,7 +4997,11 @@ end;
 function TDataArray.ValueOK(const Layer, Row, Col: Integer;
   LocalLimits: TColoringLimits): Boolean;
 begin
-  result := True;
+  result := IsValue[Layer, Row, Col];
+  if not result then
+  begin
+    Exit;
+  end;
   case Datatype of
     rdtDouble:
       begin

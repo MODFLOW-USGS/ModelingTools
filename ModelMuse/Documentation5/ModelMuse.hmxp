@@ -496,7 +496,7 @@ document.write('</frameset>');
       <config-value name="jpgquality">90</config-value>
       <config-value name="imagehint">1</config-value>
       <config-value name="outputfile">.\HTML\index.html</config-value>
-      <config-value name="skin">..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\forest_green_horiz.hmskin</config-value>
       <config-value name="layoutthreeframe">0</config-value>
     </config-group>
     <config-group name="pdf">
@@ -596,7 +596,7 @@ document.write('</frameset>');
       </config-group>
       <config-group name="rbwinst">
         <config-group name="project">
-          <config-value name="lastexport">0</config-value>
+          <config-value name="lastexport">3</config-value>
         </config-group>
       </config-group>
     </config-group>

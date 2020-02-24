@@ -529,7 +529,6 @@ begin
     end
     else
     begin
-
       Assert(ValueSource <> nil);
       if (ValueSource is TDataArray) then
       begin

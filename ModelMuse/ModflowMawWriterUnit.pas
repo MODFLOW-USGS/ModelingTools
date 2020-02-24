@@ -1128,12 +1128,12 @@ begin
         NewLine;
       end;
 
-      if ACell.MvrUsed and (MvrWriter <> nil) then
+      if ACell.MvrUsed and (MvrWriter <> nil) and (ACell.MawStatus <> mwInactive) then
       begin
         MvrSource.Index := ACell.WellNumber;
         MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
         MvrSource.SourceKey.ScreenObject := ACell.MawBoundary.ScreenObject;
-        TModflowMvrWriter(MvrWriter).AddMvrSource(MvrSource);
+        MoverWriter.AddMvrSource(MvrSource);
       end;
     end;
 
