@@ -2550,6 +2550,12 @@
         <topicref type="topic" id="438797204877535" build="ALL" modified="2020-02-25T11:38:57.844Z" icon="0" href="CSUB_Example_Head_Observation">
           <caption translate="true">CSUB Example: Head Observations</caption>
         </topicref>
+        <topicref type="topic" id="438864402477839" build="ALL" modified="2020-02-25T14:32:48.879Z" icon="0" href="CSUB_Example_CSUB_ObsAtWells">
+          <caption translate="true">CSUB Example: CSUB Observations at Wells</caption>
+        </topicref>
+        <topicref type="topic" id="438864595249896" build="ALL" modified="2020-02-25T14:58:06.685Z" icon="0" href="CSUB_Example_CSUB_Cell_Observa">
+          <caption translate="true">CSUB Example: CSUB Cell Observations at Wells</caption>
+        </topicref>
       </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">

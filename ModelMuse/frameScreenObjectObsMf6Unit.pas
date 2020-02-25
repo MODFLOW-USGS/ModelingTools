@@ -419,28 +419,28 @@ begin
   cbGroundwaterFlowObservation.Checked := False;
   for GWChoice := Low(TGwFlowOb) to HIgh(TGwFlowOb) do
   begin
-    chklstFlowObs.Checked[Ord(GWChoice)] := False;
+    chklstFlowObs.State[Ord(GWChoice)] := cbUnchecked;
   end;
   chklstFlowObs.Checked[Ord(gfoNearestNeighbor)] := True;
 
   for MawIndex := 0 to chklstMAW.Items.Count - 1 do
   begin
-    chklstMAW.Checked[MawIndex] := False;
+    chklstMAW.State[MawIndex] := cbUnchecked;
   end;
 
   for SfrIndex := 0 to chklstSFR.Items.Count - 1 do
   begin
-    chklstSFR.Checked[SfrIndex] := False;
+    chklstSFR.State[SfrIndex] := cbUnchecked;
   end;
 
   for UzfIndex := 0 to chklstUZF.Items.Count - 1 do
   begin
-    chklstUZF.Checked[UzfIndex] := False;
+    chklstUZF.State[UzfIndex] := cbUnchecked;
   end;
 
   for CSubIndex := 0 to chklstCSUB.Items.Count - 1 do
   begin
-    chklstCSUB.Checked[CSubIndex] := False;
+    chklstCSUB.State[CSubIndex] := cbUnchecked;
   end;
   
   chklstDelayBeds.Items.Clear;

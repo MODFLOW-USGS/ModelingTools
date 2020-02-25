@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4120</config-value>
+      <config-value name="autohelpstart">4122</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -765,6 +765,8 @@ document.write('</frameset>');
       <helpcontext-number href="CSUB_Example_Activating_CSUB_P" value="4114"/>
       <helpcontext-number href="CSUB_Example_Aquifer_Propertie" value="4116"/>
       <helpcontext-number href="CSUB_Example_Convertible_Cells" value="4110"/>
+      <helpcontext-number href="CSUB_Example_CSUB_Cell_Observa" value="4122"/>
+      <helpcontext-number href="CSUB_Example_CSUB_ObsAtWells" value="4121"/>
       <helpcontext-number href="CSUB_Example_CSUB_Package_Aqui" value="4117"/>
       <helpcontext-number href="CSUB_Example_CSUB_Package_Inte" value="4118"/>
       <helpcontext-number href="CSUB_Example_CSUB_Package_Tran" value="4119"/>

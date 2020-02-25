@@ -23,6 +23,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblTypesOfFlowObservation: TLabel
         Left = 3
         Top = 74
@@ -101,6 +105,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabMAW: TTabSheet
       Caption = 'MAW'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstMAW: TCheckListBox
         Left = 3
         Top = 3
@@ -128,6 +136,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabSFR: TTabSheet
       Caption = 'SFR'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstSFR: TCheckListBox
         Left = 3
         Top = 83
@@ -169,6 +181,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabLAK: TTabSheet
       Caption = 'LAK'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstLAK: TCheckListBox
         Left = 3
         Top = 3
@@ -202,6 +218,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabUZF: TTabSheet
       Caption = 'UZF'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblDepthFraction: TLabel
         Left = 159
         Top = 299
@@ -318,8 +338,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             'econstress-cell)')
         TabOrder = 0
         OnClick = chklstCSUBClick
-        ExplicitLeft = 3
-        ExplicitTop = 102
       end
       object pnlDelayBeds: TPanel
         Left = 0
