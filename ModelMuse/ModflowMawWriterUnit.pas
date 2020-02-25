@@ -328,7 +328,7 @@ var
   MfObs: TModflow6Obs;
 begin
   MfObs := AScreenObject.Modflow6Obs;
-  Result := (MfObs <> nil) and MfObs.Used and (MfObs.LakObs <> []);
+  Result := (MfObs <> nil) and MfObs.Used and (MfObs.MawObs <> []);
 end;
 
 class function TModflowMAW_Writer.ObservationExtension: string;
