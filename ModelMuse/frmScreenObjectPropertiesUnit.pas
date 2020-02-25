@@ -1498,14 +1498,12 @@ type
     FFhbHead_Node: TJvPageIndexNode;
     FFhbFlow_Node: TJvPageIndexNode;
     FMt3dmsSsm_Node: TJvPageIndexNode;
-  {$IFDEF Mt3dUSGS}
     FMt3d_UZT_Rech_Node: TJvPageIndexNode;
     FMt3d_UZT_Sat_Node: TJvPageIndexNode;
     FMt3d_UZT_Unsat_Node: TJvPageIndexNode;
     FMt3d_Uzf_Seep_Node: TJvPageIndexNode;
     FMt3d_LKT_Node: TJvPageIndexNode;
     FMt3d_SFT_Node: TJvPageIndexNode;
-  {$ENDIF}
     FMt3dmsTobConc_Node: TJvPageIndexNode;
     FMt3dmsTobFlux_Node: TJvPageIndexNode;
 //    FFmpFarm_Node: TJvPageIndexNode;
@@ -2027,11 +2025,9 @@ type
     procedure GetMt3dmsChemBoundaryCollection(DataGrid: TRbwDataGrid4;
       ColumnOffset: Integer; ScreenObjectList: TList;
       TimeList: TParameterTimeList);
-  {$IFDEF Mt3dUSGS}
     procedure GetMt3dmsUztRechBoundaryCollection(DataGrid: TRbwDataGrid4;
       ColumnOffset: Integer; ScreenObjectList: TList;
       TimeList: TParameterTimeList);
-  {$ENDIF}
     procedure StoreMt3dmsChemBoundary;
     procedure CreateMt3dmsTobConcNode(AScreenObject: TScreenObject);
     procedure GetMt3dConcObservations(const ScreenObjectList: TList);
@@ -2097,7 +2093,6 @@ type
     procedure RemoveLayerDataArraysFrom3DObject(AScreenObject: TScreenObject;
       DataSetList: TList<TDataArray>);
     procedure CreateSfr6Node(AScreenObject: TScreenObject);
-  {$IFDEF Mt3dUSGS}
     procedure CreateMt3d_UztRechNode;
     procedure GetMt3d_UztRechBoundary(ScreenObjectList: TList);
     procedure StoreMt3d_UztRechBoundary;
@@ -2123,7 +2118,6 @@ type
     procedure GetMt3dLktBoundary(ScreenObjectList: TList);
     procedure CreateMt3d_SftNode;
     procedure GetMt3dSftBoundary(ScreenObjectList: TList);
-  {$ENDIF}
     procedure GetSfr6Boundary(const ScreenObjectList: TList);
     procedure UpdateSfr6Node(Sender: TObject);
     procedure GetMawBoundary(const ScreenObjectList: TList);
@@ -3078,7 +3072,6 @@ begin
       Beep;
       MessageDlg(StrYouCanOnlyDefineMAW, mtInformation, [mbOK], 0);
     end;
-  {$IFDEF Mt3dUSGS}
     if ANode = FMt3d_LKT_Node then
     begin
       Beep;
@@ -3089,7 +3082,7 @@ begin
       Beep;
       MessageDlg(StrYouCanOnlyDefineSft, mtInformation, [mbOK], 0);
     end;
-  {$ENDIF}
+
     Exit;
   end;
   if htOnStateIcon in jvtlModflowBoundaryNavigator.GetHitTestInfoAt(X, Y) then
@@ -3261,7 +3254,6 @@ begin
     begin
       StoreMt3dmsChemBoundary;
     end
-  {$IFDEF Mt3dUSGS}
     else if jvtlModflowBoundaryNavigator.Selected = FMt3d_UZT_Rech_Node then
     begin
       StoreMt3d_UztRechBoundary;
@@ -3278,7 +3270,6 @@ begin
     begin
       StoreMt3dUzfSeepageConcBoundary;
     end
-  {$ENDIF}
     else if jvtlModflowBoundaryNavigator.Selected = FMt3dmsTobConc_Node then
     begin
       if jvtlModflowBoundaryNavigator.Selected.StateIndex <= 1 then
@@ -3379,7 +3370,6 @@ begin
     begin
       // do nothing
     end
-  {$IFDEF Mt3dUSGS}
     else if jvtlModflowBoundaryNavigator.Selected = FMt3d_LKT_Node then
     begin
       // do nothing
@@ -3388,7 +3378,6 @@ begin
     begin
       // do nothing
     end
-  {$ENDIF}
     else if jvtlModflowBoundaryNavigator.Selected = FCSUB_Node then
     begin
       // do nothing
@@ -3546,19 +3535,15 @@ begin
   CreateSWR_Stage_Node(AScreenObject);
   CreateSWR_DirectRunoff_Node(AScreenObject);
   CreateModpathNode;
-{$IFDEF Mt3dUSGS}
   CreateMt3d_LktNode;
   CreateMt3d_SftNode;
-{$ENDIF}
   CreateMt3dmsSsmNode;
   CreateMt3dmsTobConcNode(AScreenObject);
   CreateMt3dmsTobFluxNode;
-{$IFDEF Mt3dUSGS}
   CreateMt3d_Uzf_Seep_Node;
   CreateMt3d_UztRechNode;
   CreateMt3d_UztSatNode;
   CreateMt3d_UztUnsatNode;
-{$ENDIF}
 
   CreateSutraFeatureNodes;
 
@@ -4215,14 +4200,12 @@ begin
         BoundaryNodeList.Add(FGage_Node);
         BoundaryNodeList.Add(FSWiObs_Node);
         BoundaryNodeList.Add(FMt3dmsSsm_Node);
-      {$IFDEF Mt3dUSGS}
         BoundaryNodeList.Add(FMt3d_UZT_Rech_Node);
         BoundaryNodeList.Add(FMt3d_UZT_Sat_Node);
         BoundaryNodeList.Add(FMt3d_UZT_Unsat_Node);
         BoundaryNodeList.Add(FMt3d_Uzf_Seep_Node);
         BoundaryNodeList.Add(FMt3d_LKT_Node);
         BoundaryNodeList.Add(FMt3d_SFT_Node);
-      {$ENDIF}
         BoundaryNodeList.Add(FMt3dmsTobConc_Node);
         BoundaryNodeList.Add(FMt3dmsTobFlux_Node);
         BoundaryNodeList.Add(FHOB_Node);
@@ -6049,7 +6032,6 @@ begin
     begin
       AllowChange := True;
     end
-  {$IFDEF Mt3dUSGS}
     else if (FMt3d_UZT_Rech_Node <> nil) and (FMt3d_UZT_Rech_Node.StateIndex <> 1) then
     begin
       AllowChange := True;
@@ -6087,16 +6069,11 @@ begin
       begin
         AllowChange := True;
       end
-//      else if (FLAKMf6_Node <> nil) and (FLAKMf6_Node.StateIndex <> 1) then
-//      begin
-//        AllowChange := True;
-//      end
       else
       begin
         AllowChange := False;
       end;
     end
-  {$ENDIF}
     else if (FRES_Node <> nil) and (FRES_Node.StateIndex <> 1) then
     begin
       AllowChange := True;
@@ -6980,7 +6957,6 @@ begin
       (FUZF_Mf6_Node.StateIndex = 1) and frmGoPhast.PhastModel.UzfMf6IsSelected);
   end;
 
-{$IFDEF Mt3dUSGS}
   if (FMt3d_LKT_Node <> nil) then
   begin
     frameMT3D_LKT.SetData(FNewProperties,
@@ -6994,7 +6970,6 @@ begin
       (FMt3d_SFT_Node.StateIndex = 2),
       (FMt3d_SFT_Node.StateIndex = 1) and frmGoPhast.PhastModel.Mt3d_SFtIsSelected);
   end;
-{$ENDIF}
 
   if (FCfpPipe_Node <> nil) then
   begin
@@ -12234,7 +12209,6 @@ begin
     frameStob, jvspSTOB, frmGoPhast.PhastModel.StreamObservations);
 end;
 
-{$IFDEF Mt3dUSGS}
 procedure TfrmScreenObjectProperties.CreateMt3d_LktNode;
 var
   Node: TJvPageIndexNode;
@@ -12243,27 +12217,19 @@ begin
   FMt3d_LKT_Node := nil;
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-  {$IFDEF Mt3dUSGS}
     //LKT is not currently supported with MF6.
 //    Used := frmGoPhast.PhastModel.LakMf6IsSelected and
 //      frmGoPhast.PhastModel.Mt3d_LktIsSelected
     Used := False
-  {$ELSE}
-    Used := False
-  {$ENDIF}
   end
   else
   begin
-  {$IFDEF Mt3dUSGS}
     Used := frmGoPhast.PhastModel.LakIsSelected and
       frmGoPhast.PhastModel.Mt3d_LktIsSelected(nil);
-  {$ELSE}
-    Used := False
-  {$ENDIF}
   end;
   if Used then
   begin
-    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil, 
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
       frmGoPhast.PhastModel.ModflowPackages.Mt3dLkt.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspMTD_Lkt.PageIndex;
@@ -12272,9 +12238,7 @@ begin
     FMt3d_LKT_Node := Node;
   end;
 end;
-{$ENDIF}
 
-{$IFDEF Mt3dUSGS}
 procedure TfrmScreenObjectProperties.CreateMt3d_SftNode;
 var
   Node: TJvPageIndexNode;
@@ -12302,9 +12266,7 @@ begin
     FMt3d_SFT_Node := Node;
   end;
 end;
-{$ENDIF}
 
-{$IFDEF Mt3dUSGS}
 procedure TfrmScreenObjectProperties.CreateMt3d_UztRechNode;
 var
   Node: TJvPageIndexNode;
@@ -12313,15 +12275,11 @@ begin
   FMt3d_UZT_Rech_Node := nil;
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-  {$IFDEF Mt3dUSGS}
   // UZT is not currently supported with MODFLOW 6.
 //    Used := frmGoPhast.PhastModel.UzfMf6IsSelected and
 //      (frmGoPhast.PhastModel.Mt3d_UztIsSelected
 //      or frmGoPhast.PhastModel.Mt3dmsIsSelected)
     Used := False
-  {$ELSE}
-    Used := False
-  {$ENDIF}
   end
   else
   begin
@@ -12399,18 +12357,13 @@ begin
     FMt3d_UZT_Unsat_Node := Node;
   end;
 end;
-{$ENDIF}
 
 procedure TfrmScreenObjectProperties.CreateMt3dmsSsmNode;
 var
   Node: TJvPageIndexNode;
 begin
   FMt3dmsSsm_Node := nil;
-  if frmGoPhast.PhastModel.Mt3dmsSsmIsSelected
-    {$IFNDEF Mt3dUSGS}
-    and (frmGoPhast.ModelSelection <> msModflow2015)
-    {$ENDIF}
-    then
+  if frmGoPhast.PhastModel.Mt3dmsSsmIsSelected then
   begin
     Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
       frmGoPhast.PhastModel.ModflowPackages.Mt3dmsSourceSink.PackageIdentifier)
@@ -13959,7 +13912,6 @@ begin
   end;
 end;
 
-{$IFDEF Mt3dUSGS}
 procedure TfrmScreenObjectProperties.GetMt3dmsUztRechBoundaryCollection(
   DataGrid: TRbwDataGrid4; ColumnOffset: Integer; ScreenObjectList: TList;
   TimeList: TParameterTimeList);
@@ -14267,7 +14219,6 @@ begin
     end;
   end;
 end;
-{$ENDIF}
 
 procedure TfrmScreenObjectProperties.GetLakeBoundaryCollection(
   DataGrid: TRbwDataGrid4; ColumnOffset: Integer; ScreenObjectList: TList;
@@ -15160,14 +15111,12 @@ begin
   GetMt3dmsChemBoundary(AScreenObjectList);
   GetMt3dConcObservations(AScreenObjectList);
   GetMt3dmsFluxObservations(AScreenObjectList);
-{$IFDEF Mt3dUSGS}
   GetMt3d_UztRechBoundary(AScreenObjectList);
   GetMt3d_UztSatBoundary(AScreenObjectList);
   GetMt3d_UztUnsatBoundary(AScreenObjectList);
   GetMt3dUzfSeepageConcBoundary(AScreenObjectList);
   GetMt3dLktBoundary(AScreenObjectList);
   GetMt3dSftBoundary(AScreenObjectList);
-{$ENDIF}
   GetSwrReaches(AScreenObjectList);
   GetSwrRainBoundary(AScreenObjectList);
   GetSwrEvapBoundary(AScreenObjectList);
@@ -17225,7 +17174,6 @@ begin
   end;
 end;
 
-{$IFDEF Mt3dUSGS}
 procedure TfrmScreenObjectProperties.GetMt3d_UztRechBoundary(ScreenObjectList: TList);
 var
   TimeList: TParameterTimeList;
@@ -17627,7 +17575,6 @@ begin
     TimeList.Free;
   end;
 end;
-{$ENDIF}
 
 procedure TfrmScreenObjectProperties.GetLakBoundary(ScreenObjectList: TList);
 var
@@ -22380,7 +22327,6 @@ begin
   end;
 end;
 
-{$IFDEF Mt3dUSGS}
 procedure TfrmScreenObjectProperties.StoreMt3d_UztRechBoundary;
 var
   Frame: TframeScreenObjectNoParam;
@@ -22500,7 +22446,6 @@ begin
     end;
   end;
 end;
-{$ENDIF}
 
 procedure TfrmScreenObjectProperties.StoreLakBoundary;
 var
@@ -24661,74 +24606,56 @@ procedure TfrmScreenObjectProperties.frameMT3D_LKTrdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   frameMT3D_LKT.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_LKT_Node);
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_LKTrdgRunoffConcSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   frameMT3D_LKT.rdgRunoffConcSetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_LKT_Node);
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgConstConcSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   frameMT3D_SFT.rdgConstConcSetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_SFT_Node);
-{$ENDIF}
-
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   frameMT3D_SFT.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_SFT_Node);
-{$ENDIF}
-
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgPrecipSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   frameMT3D_SFT.rdgPrecipSetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_SFT_Node);
-{$ENDIF}
-
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgRunoffSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   frameMT3D_SFT.rdgRunoffSetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_SFT_Node);
-{$ENDIF}
-
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgSftInitConcAndDispSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
 //  frameMT3D_SFT.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_SFT_Node);
-{$ENDIF}
 
 end;
 
@@ -24736,7 +24663,6 @@ procedure TfrmScreenObjectProperties.frameMT3D_Uzf_SeepagedgModflowBoundarySetEd
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
 //  frameMT3D_Uzf_Seepage.rdgModflowBoundarySetEditText(Sender, ACol, ARow,
 //  Value);
   UpdateNodeState(FMt3d_Uzf_Seep_Node);
@@ -24745,49 +24671,42 @@ begin
   begin
     StoreMt3dUzfSeepageConcBoundary;
   end;
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.frameMt3d_UZTdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   UpdateNodeState(FMt3d_UZT_Rech_Node);
   frameMt3d_UZT_Rech.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
     if not frameMt3d_UZT_Rech.rdgModflowBoundary.DistributingText then
   begin
     StoreMt3d_UztRechBoundary;
   end;
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.frameMt3d_UZT_SatdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   UpdateNodeState(FMt3d_UZT_Sat_Node);
   frameMt3d_UZT_Sat.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
     if not frameMt3d_UZT_Sat.rdgModflowBoundary.DistributingText then
   begin
     StoreMt3d_UztSatBoundary;
   end;
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.frameMt3d_UZT_UnsatdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
-{$IFDEF Mt3dUSGS}
   UpdateNodeState(FMt3d_UZT_Unsat_Node);
   frameMt3d_UZT_Unsat.rdgModflowBoundarySetEditText(Sender, ACol, ARow, Value);
     if not frameMt3d_UZT_Unsat.rdgModflowBoundary.DistributingText then
   begin
     StoreMt3d_UztUnsatBoundary;
   end;
-{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.frameMVRrdgModflowBoundaryButtonClick(

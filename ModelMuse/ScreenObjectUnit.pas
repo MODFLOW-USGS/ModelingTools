@@ -31559,12 +31559,8 @@ end;
 
 function TScreenObject.StoreMt3dLktConcBoundary: Boolean;
 begin
-{$IFDEF Mt3dUSGS}
   result := (FModflowBoundaries <> nil)
     and (Mt3dLktConcBoundary <> nil) and Mt3dLktConcBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreMt3dmsConcBoundary: Boolean;
@@ -31581,52 +31577,32 @@ end;
 
 function TScreenObject.StoreMt3dSftConcBoundary: Boolean;
 begin
-{$IFDEF Mt3dUSGS}
   result := (FModflowBoundaries <> nil)
     and (Mt3dSftConcBoundary <> nil) and Mt3dSftConcBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreMt3dUzfRechConc: Boolean;
 begin
-{$IFDEF Mt3dUSGS}
   result := (FModflowBoundaries <> nil)
     and (Mt3dUzfRechConc <> nil) and Mt3dUzfRechConc.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreMt3dUzSsmSinkConcBoundary: Boolean;
 begin
-{$IFDEF Mt3dUSGS}
   result := (FModflowBoundaries <> nil)
     and (Mt3dUzSsmSinkConcBoundary <> nil) and Mt3dUzSsmSinkConcBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreMt3dUztSatEtConcBoundary: Boolean;
 begin
-{$IFDEF Mt3dUSGS}
   result := (FModflowBoundaries <> nil)
     and (Mt3dUztSatEtConcBoundary <> nil) and Mt3dUztSatEtConcBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreMt3dUztUnSatEtConcBoundary: Boolean;
 begin
-{$IFDEF Mt3dUSGS}
   result := (FModflowBoundaries <> nil)
     and (Mt3dUztUnsatEtConcBoundary <> nil) and Mt3dUztUnsatEtConcBoundary.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreSpecifiedHead: boolean;

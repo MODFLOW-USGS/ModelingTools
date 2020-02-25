@@ -233,11 +233,10 @@ type
     property Mt3dmsTransObs: TMt3dmsTransportObservations read FMt3dmsTransObs
       write SetMt3dmsTransObs;
     property Mt3dUnsatTransport: TMt3dUztPackage read FMt3dUnsatTransport
-      write SetMt3dUnsatTransport {$IFNDEF Mt3dUSGS} stored False {$ENDIF};
+      write SetMt3dUnsatTransport;
     property Mt3dLkt: TMt3dLktPackage read FMt3dLkt
-      write SetMt3dLkt {$IFNDEF Mt3dUSGS} stored False {$ENDIF};
-    property Mt3dSft: TMt3dSftPackageSelection read FMt3dSft write SetMt3dSft
-      {$IFNDEF Mt3dUSGS} stored False {$ENDIF};
+      write SetMt3dLkt;
+    property Mt3dSft: TMt3dSftPackageSelection read FMt3dSft write SetMt3dSft;
     property StrPackage: TStrPackageSelection read FStrPackage
       write SetStrPackage;
     property FhbPackage: TFhbPackageSelection read FFhbPackage
@@ -265,11 +264,7 @@ type
     property MvrPackage: TMvrPackage read FMvrPackage write SetMvrPackage;
     property UzfMf6Package: TUzfMf6PackageSelection read FUzfMf6Package
       write SetUzfMf6Package;
-    property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts
-    {$IFNDEF Mt3dUSGS}
-      stored False
-    {$ENDIF}
-      ;
+    property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage
     {$IFNDEF CSUB}

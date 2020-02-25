@@ -1101,12 +1101,6 @@ begin
       for BoundaryIndex := 0 to ACell.BoundaryTypes.Count - 1 do
       begin
         BoundaryID := ACell.BoundaryTypes[BoundaryIndex];
-        {$IFNDEF Mt3dUSGS}
-        if BoundaryID in [ISSTYPE_RCH, ISSTYPE_EVT, ISSTYPE_ETS] then
-        begin
-          Continue;
-        end;
-        {$ENDIF}
         if (BoundaryID = ISSTYPE_MNW) and (ACell.Mnw2Layers.Count > 0) then
         begin
           for ScreenIndex := 0 to ACell.Mnw2Layers.Count-1 do

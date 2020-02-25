@@ -2164,13 +2164,8 @@ begin
     end;
 
     AddNode(StrPostProcessors, StrPostProcessors, PriorNode);
+    AddNode(StrMT3DMS_Classificaton, StrMT3DMS_Classificaton, PriorNode);
 
-  {$IFNDEF Mt3dUSGS}
-    if frmGoPhast.ModelSelection <> msModflow2015 then
-  {$ENDIF}
-    begin
-      AddNode(StrMT3DMS_Classificaton, StrMT3DMS_Classificaton, PriorNode);
-    end;
     NilNodes;
 
     FFrameNodeLinks.Clear;
@@ -2468,13 +2463,11 @@ procedure TfrmModflowPackages.EnableUnsatTransport;
 begin
   if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
-  {$IFDEF Mt3dUSGS}
     // UZT is not currently supported with MODFLOW 6
 //    framePkgMt3dUZT.CanSelect := framePackageUzfMf6.rcSelectionController.Enabled
 //      and framePkgMt3dBasic.rcSelectionController.Enabled
 //      and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
     framePkgMt3dUZT.CanSelect := False;
-  {$ENDIF}
   end
   else
   begin
@@ -3675,74 +3668,38 @@ begin
     framePkgHydmod.NilNode;
   end;
 
-  {$IFNDEF Mt3dUSGS}
-  if frmGoPhast.ModelSelection <> msModflow2015 then
-  {$ENDIF}
-  begin
-    Packages.Mt3dBasic.Frame := framePkgMt3dBasic;
-    FPackageList.Add(Packages.Mt3dBasic);
+  Packages.Mt3dBasic.Frame := framePkgMt3dBasic;
+  FPackageList.Add(Packages.Mt3dBasic);
 
-    Packages.Mt3dmsAdvection.Frame := frameMt3dmsAdvPkg;
-    FPackageList.Add(Packages.Mt3dmsAdvection);
+  Packages.Mt3dmsAdvection.Frame := frameMt3dmsAdvPkg;
+  FPackageList.Add(Packages.Mt3dmsAdvection);
 
-    Packages.Mt3dmsDispersion.Frame := frameMt3dmsDispersionPkg;
-    FPackageList.Add(Packages.Mt3dmsDispersion);
+  Packages.Mt3dmsDispersion.Frame := frameMt3dmsDispersionPkg;
+  FPackageList.Add(Packages.Mt3dmsDispersion);
 
-    Packages.Mt3dmsSourceSink.Frame := framePkgSSM;
-    FPackageList.Add(Packages.Mt3dmsSourceSink);
+  Packages.Mt3dmsSourceSink.Frame := framePkgSSM;
+  FPackageList.Add(Packages.Mt3dmsSourceSink);
 
-    Packages.Mt3dmsChemReact.Frame := framePkgMt3dmsRct;
-    FPackageList.Add(Packages.Mt3dmsChemReact);
+  Packages.Mt3dmsChemReact.Frame := framePkgMt3dmsRct;
+  FPackageList.Add(Packages.Mt3dmsChemReact);
 
-    Packages.Mt3dmsGCGSolver.Frame := frameMt3dmsGcgPackage;
-    FPackageList.Add(Packages.Mt3dmsGCGSolver);
+  Packages.Mt3dmsGCGSolver.Frame := frameMt3dmsGcgPackage;
+  FPackageList.Add(Packages.Mt3dmsGCGSolver);
 
-    Packages.Mt3dmsTransObs.Frame := framePkgMt3dmsTob;
-    FPackageList.Add(Packages.Mt3dmsTransObs);
+  Packages.Mt3dmsTransObs.Frame := framePkgMt3dmsTob;
+  FPackageList.Add(Packages.Mt3dmsTransObs);
 
-  {$IFNDEF Mt3dUSGS}
-  end
-  else
-  begin
-    framePkgMt3dBasic.NilNode;
-    frameMt3dmsAdvPkg.NilNode;
-    frameMt3dmsDispersionPkg.NilNode;
-    framePkgSSM.NilNode;
-    framePkgMt3dmsRct.NilNode;
-    frameMt3dmsGcgPackage.NilNode;
-    framePkgMt3dmsTob.NilNode;
-  {$ENDIF}
-  end;
+  Packages.Mt3dCts.Frame := frameMt3dCtsPkg;
+  FPackageList.Add(Packages.Mt3dCts);
 
-//  if frmGoPhast.ModelSelection <> msModflow2015 then
-  begin
-  {$IFDEF Mt3dUSGS}
-    Packages.Mt3dCts.Frame := frameMt3dCtsPkg;
-    FPackageList.Add(Packages.Mt3dCts);
+  Packages.Mt3dLkt.Frame := frameMt3dLktPkg;
+  FPackageList.Add(Packages.Mt3dLkt);
 
-    Packages.Mt3dLkt.Frame := frameMt3dLktPkg;
-    FPackageList.Add(Packages.Mt3dLkt);
+  Packages.Mt3dSft.Frame := frameMt3dSftPkg;
+  FPackageList.Add(Packages.Mt3dSft);
 
-    Packages.Mt3dSft.Frame := frameMt3dSftPkg;
-    FPackageList.Add(Packages.Mt3dSft);
-
-    Packages.Mt3dUnsatTransport.Frame := framePkgMt3dUzt;
-    FPackageList.Add(Packages.Mt3dUnsatTransport);
-  {$ELSE}
-    framePkgMt3dUzt.NilNode;
-    frameMt3dLktPkg.NilNode;
-    frameMt3dSftPkg.NilNode;
-    frameMt3dCtsPkg.NilNode;
-  {$ENDIF}
-//  end
-//  else
-//  begin
-//    framePkgMt3dUzt.NilNode;
-//    frameMt3dLktPkg.NilNode;
-//    frameMt3dSftPkg.NilNode;
-//    frameMt3dCtsPkg.NilNode;
-  end;
-
+  Packages.Mt3dUnsatTransport.Frame := framePkgMt3dUzt;
+  FPackageList.Add(Packages.Mt3dUnsatTransport);
 
   if frmGoPhast.ModelSelection <> msModflow2015 then
   begin

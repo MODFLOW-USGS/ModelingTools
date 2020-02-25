@@ -118,7 +118,6 @@ begin
     end;
     NewLine;
 
-    {$IFDEF Mt3dUSGS}
     Packages := Model.ModflowPackages;
     if Packages.Mt3dUnsatTransport.IsSelected
       or Packages.Mt3dLkt.IsSelected
@@ -139,7 +138,6 @@ begin
       end;
       NewLine;
     end;
-    {$ENDIF}
   finally
     CloseFile;
   end;

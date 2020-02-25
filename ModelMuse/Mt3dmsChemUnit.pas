@@ -997,21 +997,6 @@ var
   TestLayer: Integer;
 begin
   result := FBoundaryTypes.Count;
-  {$IFNDEF Mt3dUSGS}
-  if BoundaryTypes.IndexOf(ISSTYPE_RCH) >= 0 then
-  begin
-    Dec(result);
-  end;
-  if BoundaryTypes.IndexOf(ISSTYPE_EVT) >= 0 then
-  begin
-    Dec(result);
-  end;
-  if BoundaryTypes.IndexOf(ISSTYPE_ETS) >= 0 then
-  begin
-    Dec(result);
-//    Inc(result, ModflowLayerCount-1);
-  end;
-  {$ENDIF}
   if BoundaryTypes.IndexOf(ISSTYPE_MNW) >= 0 then
   begin
     if Mnw2Layers.Count > 0 then

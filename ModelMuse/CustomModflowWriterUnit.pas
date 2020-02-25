@@ -7073,11 +7073,9 @@ procedure TMt3dmsNameWriter.InitilizeNameFile(const FileName: string;
   out OutputListFileName: string);
 var
   FtlFileName: string;
-    {$IFDEF Mt3DUsgs}
   CbcFileName: string;
   BhdFileName: string;
   DisGrbFileName: string;
-    {$ENDIF}
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMissingFtlFile);
   ClearNameFile;
@@ -7096,7 +7094,6 @@ begin
   begin
     if Model.ModelSelection = msModflow2015 then
     begin
-    {$IFDEF Mt3DUsgs}
       CbcFileName := ChangeFileExt(OutputListFileName, StrCbcExt);
       WriteToMt3dMsNameFile(StrFt6CBC, Mt3dFL6Cbc, CbcFileName, foInput, Model,
         False, 'FREE');
@@ -7106,7 +7103,6 @@ begin
       DisGrbFileName := ChangeFileExt(OutputListFileName, StrDisgrb);
       WriteToMt3dMsNameFile(StrFt6DisGrb, Mt3dDisGrb, DisGrbFileName, foInput,
         Model, False, 'FREE');
-    {$ENDIF}
     end
     else
     begin
@@ -7118,7 +7114,6 @@ begin
   begin
     if Model.ModelSelection = msModflow2015 then
     begin
-    {$IFDEF Mt3DUsgs}
       CbcFileName := ChangeFileExt(OutputListFileName, StrCbcExt);
       WriteToMt3dMsNameFile(StrFt6CBC, Mt3dFL6Cbc, CbcFileName, foInput, Model);
       BhdFileName := ChangeFileExt(OutputListFileName, StrBhd);
@@ -7126,7 +7121,6 @@ begin
       DisGrbFileName := ChangeFileExt(OutputListFileName, StrDisgrb);
       WriteToMt3dMsNameFile(StrFt6DisGrb, Mt3dDisGrb, DisGrbFileName, foInput,
         Model);
-    {$ENDIF}
     end
     else
     begin

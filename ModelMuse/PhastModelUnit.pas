@@ -3408,11 +3408,8 @@ that affects the model output should also have a comment. }
     property FootprintProperties: TFootprintProperties
       read GetFootprintProperties write SetFootprintProperties;
 
-    property CtsSystems: TCtsSystemCollection read GetCtsSystems write SetCtsSystems
-      {$IFNDEF Mt3dUSGS}
-      stored False
-      {$ENDIF}
-      ;
+    property CtsSystems: TCtsSystemCollection read GetCtsSystems
+      write SetCtsSystems;
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
   end;
 
@@ -40220,12 +40217,10 @@ var
   ListFileName: string;
   BatchFileLocation: string;
   GeoRefWriter: TGeoRefWriter;
-  {$IFDEF Mt3dUSGS}
   UztWriter: TMt3dUztWriter;
   LktWriter: TMt3dLktWriter;
   SftWriter: TMt3dmsSftWriter;
   CtsWriter: TMt3dCtsWriter;
-  {$ENDIF}
 begin
   // Note: MT3DMS can not read Unicode text files.
 
@@ -40270,7 +40265,6 @@ begin
       try
         SetCurrentDir(ExtractFileDir(FileName));
 
-        {$IFDEF Mt3dUSGS}
         UztWriter := TMt3dUztWriter.Create(self, etExport);
         try
           UztWriter.WriteFile(FileName);
@@ -40298,8 +40292,6 @@ begin
         finally
           SftWriter.Free;
         end;
-
-        {$ENDIF}
 
         GeoRefWriter := TGeoRefWriter.Create(self, etExport);
         try
