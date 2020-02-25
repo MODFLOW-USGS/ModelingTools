@@ -24,6 +24,7 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_evt</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_gbob</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_gw</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_maw</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_rch</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_rvob</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Input">MF6_TestSfrMawLak.ob_sfr</FileName>
@@ -49,7 +50,15 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lk_stg</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lst</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_bud</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_cell_conductance_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_cell_flow_rate_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_flow_rate_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_flowing_well_conductance_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_from_mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_head</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_head_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_pump_rate_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.maw_pump_rate_to_mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.mvr_budget</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_evt_out_evt.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_drawdown.csv</FileName>

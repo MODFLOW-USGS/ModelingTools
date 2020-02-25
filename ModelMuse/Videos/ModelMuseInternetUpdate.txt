@@ -1,4 +1,4 @@
-4.1.0.0
+4.2.0.0
 https://water.usgs.gov/nrp/gwsoftware/ModelMuse/IntroductoryVideo/IntroductoryVideo.html
 https://water.usgs.gov/nrp/gwsoftware/ModelMuse/LearningModelMuse/LearningModelMuse.html
 https://water.usgs.gov/nrp/gwsoftware/ModelMuse/GridTip1/GridTip1.html

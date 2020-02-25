@@ -5657,7 +5657,6 @@ resourcestring
   StrSFTPrecipConcd = 'SFT_Precip_Conc_%d';
   StrSFTRunoffConcd = 'SFT_Runoff_Conc_%d';
   StrSFTConstantConcd = 'SFT_Constant_Conc_%d';
-  StrCSUBStressOffset = 'CSUB Stress Offset';
 
 
 

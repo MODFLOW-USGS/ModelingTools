@@ -1,29 +1,27 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">MODFLOW 6 Subsidence Example</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MODFLOW 6 Subsidence Example</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example illustrates how to use the Skeletal Storage, Compaction, and Subsidence (CSUB) Package. It reproduces example 4 from csubexamples.pdf distributed with MODFLOW 6 version 6.1. There is a more complete description of the model in csubexamples.pdf. The model is an adaptation of one in Leake and Galloway (2007).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example illustrates how to use the Skeletal Storage, Compaction, and Subsidence (CSUB) Package. It reproduces example 4 from csubexamples.pdf distributed with MODFLOW 6 version 6.1. There is a more complete description of the model in csubexamples.pdf. The model is loosely based on an example from Leake and Galloway (2007).</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The model has 15 columns, 20 rows, and 4 layers. </text></para>
     <para styleclass="Normal"><image src="CSUB_Example.bmp" scale="60.00%" width="364" height="499" styleclass="Image Caption"><title translate="true">Plan view of model domain showing active and inactive areas, and locations of recharge cells, constant-head cells, and wells.</title><caption translate="true"><![CDATA[Plan view of model domain showing active and inactive areas, and locations of recharge cells, constant-head cells, and wells.(from Leake and Galloway, 2007)]]></caption></image></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Properties and conditions represented in the CSUB Package: </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">1. Interbed systems 1–4 are in layers 1–4 respectively </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">2. Specific gravity of moist sediments is 1.7 and of saturated sediments is 2.0 </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">3. Thicknesses of compressible sediments in systems 1–4 is 45, 70, 50, and 90 meters, respectively </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">4. Recompression index for all systems of interbeds is 0.01 </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">5. Compression index for all systems of interbeds is 0.25</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true"> 6. Void ratio for all systems of interbeds is 0.82 </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">7. Starting preconsolidation stress is 15 meters above starting effective stress for all active cells </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">1. Interbed systems are present in all four layers.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">2. Specific gravity of moist sediments is 1.7 and of saturated sediments is 2.0.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">3. Thicknesses of compressible sediments in systems 1–4 is 45, 70, 50, and 90 meters, respectively. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">4. Recompression index for all systems of interbeds is 0.01. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">5. Compression index for all systems of interbeds is 0.25.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> 6. Void ratio for all systems of interbeds is 0.82.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">7. Starting preconsolidation stress is 15 meters above starting effective stress for all active cells.</text></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Properties and conditions represented in the Node-Property Flow Package: </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">8. Horizontal hydraulic conductivity for layers 1–4 is 4, 4, 0.01, and 4 meters per day, respectively </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">8. Horizontal hydraulic conductivity for layers 1–4 is 4, 4, 0.01, and 4 meters per day, respectively.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">9. Vertical hydraulic conductivity for layers 1–4 is 0.4, 0.4, 0.01, and 0.4 meters per day, respectively </text></para>
     <para styleclass="Strong"><text styleclass="Strong" translate="true">Properties and conditions represented in the Storage Package: </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">10. Specific yield for layer 1 is 0.3 </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">11. Specific storage from compressibility of water for layers 1–4 is 1×10</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">-6</text><text styleclass="Normal" translate="true"> per meter </text></para>
-    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">10. Specific yield for layer 1 is 0.3.</text></para>
     <para styleclass="Normal"><image src="CSUB_Example_CrossSection.bmp" scale="60.00%" width="351" height="347" styleclass="Image Caption"><title translate="true">Generalized section along model row 9 showing types of fine-grained sediments, model layering, and properties and conditions used in the example simulation. Aquifer-system properties and other conditions are listed in figure 5. For simplicity, all material and hydraulic properties and conditions are constant within each model layer or interbed system.</title><caption translate="true"><![CDATA[Generalized section along model row 9 showing types of fine-grained sediments, model layering, and properties and conditions used in the example simulation. Aquifer-system properties and other conditions are listed in figure 5. For simplicity, all material and hydraulic properties and conditions are constant within each model layer or interbed system. (from Leake and Galloway, 2007)]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the model, there are three geologic units but the upper geologic unit is divided into two layers. The model has a top elevation of 150 meters and layer bottom elevations of 50, -100, -150, and -350 meters for layers 1, 2, 3, and 4, respectively. The top layer is unconfined. The cells are square with an edge length of 2000 meters. There are 15 rows and 20 columns. Recharge is from rivers that flow into the valley from either side. There are two wells. One is is layer 2 and the other is in layer 4. The third layer is composed entirely of fine-grained compressible sediments. The other layers have interbeds of fine-grained compressible sediments.</text></para>
     <para styleclass="Normal"></para>

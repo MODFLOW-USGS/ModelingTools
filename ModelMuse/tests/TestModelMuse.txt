@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4134
+4136
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -3991,6 +3991,7 @@ MF6_TestSfrMawLak.gpt
 	Archive\MF6_TestSfrMawLak.ob_evt
 	Archive\MF6_TestSfrMawLak.ob_gbob
 	Archive\MF6_TestSfrMawLak.ob_gw
+	Archive\MF6_TestSfrMawLak.ob_maw
 	Archive\MF6_TestSfrMawLak.ob_rch
 	Archive\MF6_TestSfrMawLak.ob_rvob
 	Archive\MF6_TestSfrMawLak.ob_sfr
@@ -4023,6 +4024,7 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.ob_gbob
 	Archive\MF6_TestSfrMawLakMvrUzf.ob_gw
 	Archive\MF6_TestSfrMawLakMvrUzf.ob_lak
+	Archive\MF6_TestSfrMawLakMvrUzf.ob_maw
 	Archive\MF6_TestSfrMawLakMvrUzf.ob_rch
 	Archive\MF6_TestSfrMawLakMvrUzf.ob_rvob
 	Archive\MF6_TestSfrMawLakMvrUzf.ob_sfr

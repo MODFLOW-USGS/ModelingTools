@@ -42,7 +42,8 @@ type
     btMfMnw, btMt3dSsm, btMfHfb, btSutraSpecifiedPressure, btSutraSpecifiedHead,
     btSutraSpecConcTemp, btSutraFluidFlux, btMassEnergyFlux, btSutraGeneralFlow,
     btSutraGenTransp, btMfFhb, btCFP, btMfFarm, btSWR, btMnw1, btMtmsObs, btRIP,
-    btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6, mtSft);
+    btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6,
+    mtSft, btCSub);
 
   TBoundaryTypes = set of TBoundaryType;
 
@@ -1675,6 +1676,7 @@ resourcestring
   'data set %s. ModelMuse will attempt to skip the cached values and recalcu' +
   'late them.';
   StrSFT = 'SFT_';
+  StrMODFLOW6CSUB = 'MODFLOW 6 CSUB';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -7312,6 +7314,10 @@ begin
   begin
     result := btUzfMf6;
   end
+  else if (Name = StrCSUBStressOffset) then
+  begin
+    result := btCSub;
+  end
   else if Pos(StrSFT, Name) = 1 then
   begin
     result := mtSft;
@@ -7497,6 +7503,10 @@ begin
         begin
           Result := StrStreamTransport;
         end;
+      btCSub:
+        begin
+          result := StrMODFLOW6CSUB
+        end
 
       else
         Assert(False);

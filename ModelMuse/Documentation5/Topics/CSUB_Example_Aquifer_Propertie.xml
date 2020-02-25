@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CSUB Example: Aquifer Properties</title>
   <body>
     <header>
@@ -108,7 +108,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this case, an easy way to do this is to use default formulas for the data sets. You can do that by selecting </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Strong" translate="true">Data|Edit Data Sets...</link><text styleclass="Normal" translate="true"> Then select one of the data sets and set its default formula. For the more complicated formulas, you can use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Strong" translate="true">Formula Editor</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this case, an easy way to do this is to use default formulas for the data sets. You can do that by selecting </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Strong" translate="true">Data|Edit Data Sets...</link><text styleclass="Normal" translate="true"> Then select one of the data sets and set its default formula. For the more complicated formulas, you can use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Formula_Editor" styleclass="Strong" translate="true">Formula Editor</link><text styleclass="Normal" translate="true">. To open the Formula Editor, click the </text><text styleclass="Strong" translate="true">Edit formula</text><text styleclass="Normal" translate="true"> button in the </text><text styleclass="Strong" translate="true">Edit Data Sets</text><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
         <td>

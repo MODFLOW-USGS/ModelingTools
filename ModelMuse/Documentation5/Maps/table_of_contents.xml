@@ -2547,8 +2547,8 @@
         <topicref type="topic" id="438796934478243" build="ALL" modified="2020-02-18T16:06:32.722Z" icon="0" href="CSUB_Example_CSUB_Package_Tran">
           <caption translate="true">CSUB Example: CSUB Package Transient Data</caption>
         </topicref>
-        <topicref type="topic" id="438797204877535" build="ALL" modified="2020-02-18T16:24:44.203Z" icon="0" href="CSUB_Example_Head_Observation">
-          <caption translate="true">CSUB Example: Head Observation</caption>
+        <topicref type="topic" id="438797204877535" build="ALL" modified="2020-02-25T11:38:57.844Z" icon="0" href="CSUB_Example_Head_Observation">
+          <caption translate="true">CSUB Example: Head Observations</caption>
         </topicref>
       </topicref>
     </topicref>

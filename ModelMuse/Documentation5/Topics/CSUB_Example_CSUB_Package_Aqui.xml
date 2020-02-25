@@ -94,7 +94,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this case, we will use default formulas in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box to set the values of the data sets. The following formulas can be used.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In this case, we will use default formulas in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets</link><text styleclass="Normal" translate="true"> dialog box to set the values of the data sets. The following formulas can be used. For a reminder how to do this, see </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CSUB_Example_Aquifer_Propertie" styleclass="Normal" translate="true">CSUB Example: Aquifer Properties</link><text styleclass="Normal" translate="true">. (The porosity in layer 3 is derived from the void ratio (VOID) of 0.82 originally specified in Leake and Galloway (2007). Porosity = VOID/(1+VOID).</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
         <td>

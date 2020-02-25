@@ -5188,10 +5188,8 @@ var
   DummyUndoCreateScreenObject: TCustomUndo;
   Grid: TCustomModelGrid;
   ModflowCSub: TCSubBoundary;
-  CSubPackageData: TCSubPackageData;
   SelectedPackageData: TCSubPackageData;
   NoDelayIndex: Integer;
-  IB_Index: Integer;
   DelayIndex: Integer;
   ADelayItem: TSubDelayBedLayerItem;
   EquivNumberDataArray: TDataArray;
@@ -5205,6 +5203,7 @@ var
   function GetInterbedItem(ModflowCSub: TCSubBoundary; Interbed: TCSubInterbed): TCSubPackageData;
   var
     IB_Index: Integer;
+    CSubPackageData: TCSubPackageData;
   begin
     result := nil;
     for IB_Index := 0 to ModflowCSub.CSubPackageData.Count - 1 do
@@ -5450,8 +5449,8 @@ begin
                   WT_Item.WaterTableInitialElasticSkeletalSpecificStorageDataArrayName;
               end;
           end;
-          SelectedPackageData.InitialPorosity :=
-            WT_Item.WaterTableInitialVoidRatioDataArrayName;
+          SelectedPackageData.InitialPorosity := Format('%0:s / (%0:s + 1)', [
+            WT_Item.WaterTableInitialVoidRatioDataArrayName]);
 //          SelectedPackageData.DelayKv :=
 //            WT_Item.VerticalHydraulicConductivityDataArrayName;
 //          SelectedPackageData.InitialDelayHeadOffset :=
@@ -5462,14 +5461,7 @@ begin
         StressPeriod := LocalModel.ModflowStressPeriods.First;
         CSubItem.StartTime := StressPeriod.StartTime;
         CSubItem.EndTime := StressPeriod.EndTime;
-        if SwtPackage.PreconsolidationSource = pcOffsets then
-        begin
-          CSubItem.StressOffset := StrInitialPreOffsets
-        end
-        else
-        begin
-          CSubItem.StressOffset := StrInitialPreconsolida
-        end;
+        CSubItem.StressOffset := '0';
       end;
     end;
   end;

@@ -1,4 +1,4 @@
-# MAW: Multi-Aquifer Well package file created on 2/10/2020 by ModelMuse version 4.1.0.27.
+# MAW: Multi-Aquifer Well package file created on 2/25/2020 by ModelMuse version 4.2.0.0.
 BEGIN OPTIONS
     BOUNDNAMES
     PRINT_INPUT
@@ -8,6 +8,7 @@ BEGIN OPTIONS
   BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.maw_bud
   SHUTDOWN_THETA  7.000000000000E-001 
   SHUTDOWN_KAPPA  1.000000000000E-004 
+    OBS6 FILEIN MF6_TestSfrMawLakMvrUzf.ob_maw
   MOVER
 END OPTIONS
 

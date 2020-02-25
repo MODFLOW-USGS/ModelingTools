@@ -40,7 +40,7 @@ inherited framePackageMf6Obs: TframePackageMf6Obs
     Height = 21
     MaxValue = 30.000000000000000000
     MinValue = 1.000000000000000000
-    Value = 1.000000000000000000
+    Value = 10.000000000000000000
     Enabled = False
     TabOrder = 2
   end

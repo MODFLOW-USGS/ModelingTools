@@ -435,6 +435,8 @@ const
   StrUzfMf6RootPotential = 'UZF Mf6 Root Potential';
   StrUzfMf6RootActivity = 'UZF Mf6 Root Activity';
 
+  StrCSUBStressOffset = 'CSUB Stress Offset';
+
   StrWellRadius = 'Well Radius';
   StrSkinRadius = 'Skin Radius';
   StrSkinK = 'Skin K';
@@ -9136,9 +9138,9 @@ resourcestring
   strModflowOwhmDefaultPath = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe';
   StrMFOwhmDefaultPath64 = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe';
 {$IFDEF WIN64}
-  StrDefaultGmshPath = 'C:\gmsh-4.4.1-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows64\gmsh.exe';
 {$ELSE}
-  StrDefaultGmshPath = 'C:\gmsh-4.4.1-Windows32\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows32\gmsh.exe';
 {$ENDIF}
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0\bin\WellFootprint.exe';
