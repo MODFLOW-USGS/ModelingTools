@@ -775,8 +775,16 @@ begin
         AScreenObject := FSelectedScreenObjects[ObjectIndex];
         DefineShapeGeometry(AScreenObject,
           FBreakScreenObjects[ObjectIndex].BreakObject);
-        AssignFieldValues(AScreenObject,
-          FBreakScreenObjects[ObjectIndex].BreakObject);
+        try
+          AssignFieldValues(AScreenObject,
+            FBreakScreenObjects[ObjectIndex].BreakObject);
+        except on E: EXBaseException do
+          begin
+            Beep;
+            MessageDlg(E.Message, mtError, [mbOK], 0);
+            Exit;
+          end;
+        end;
       end;
       FShapeFileWriter.WriteToFile(sdShapefile.FileName,
         ChangeFileExt(sdShapefile.FileName, '.shx'));

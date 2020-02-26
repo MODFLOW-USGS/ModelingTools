@@ -5,6 +5,7 @@ inherited frmLayers: TfrmLayers
   ClientHeight = 424
   ClientWidth = 583
   OnResize = FormResize
+  ExplicitTop = -51
   ExplicitWidth = 599
   ExplicitHeight = 463
   PixelsPerInch = 96
@@ -29,10 +30,6 @@ inherited frmLayers: TfrmLayers
       HelpType = htKeyword
       HelpKeyword = 'Basics_Tab'
       Caption = 'Basics'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         433
         350)
@@ -214,8 +211,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Discretization_Tab'
       Caption = 'Discretization'
       ImageIndex = 1
-      ExplicitWidth = 154
-      ExplicitHeight = 127
       inline frameDiscretization: TframeDiscretization
         Left = 0
         Top = 0
@@ -223,8 +218,7 @@ inherited frmLayers: TfrmLayers
         Height = 350
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 154
-        ExplicitHeight = 127
+        ExplicitHeight = 350
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -255,8 +249,8 @@ inherited frmLayers: TfrmLayers
           end
           inherited pnl1: TPanel
             inherited lbl3: TLabel
-              Width = 179
-              Height = 36
+              Width = 185
+              Height = 41
               ExplicitWidth = 179
               ExplicitHeight = 36
             end
@@ -300,16 +294,16 @@ inherited frmLayers: TfrmLayers
           ExplicitHeight = 18
         end
         inherited sbAdd: TSpeedButton
-          Left = 431
-          ExplicitLeft = 431
+          Left = 349
+          ExplicitLeft = 349
         end
         inherited sbInsert: TSpeedButton
-          Left = 460
-          ExplicitLeft = 460
+          Left = 378
+          ExplicitLeft = 378
         end
         inherited sbDelete: TSpeedButton
-          Left = 489
-          ExplicitLeft = 489
+          Left = 407
+          ExplicitLeft = 407
         end
         inherited rdgSubBed: TRbwDataGrid4
           Width = 433
@@ -336,10 +330,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Delay_Beds_Tab'
       Caption = 'Delay Beds'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameSubDelayBeds: TframeSubBeds
         Left = 0
         Top = 0
@@ -392,10 +382,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'SWT_Tab'
       Caption = 'SWT'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameSwt: TframeSubBeds
         Left = 0
         Top = 0
@@ -448,10 +434,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Dispersion_Tab'
       Caption = 'Dispersion'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgDispersion: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -608,10 +590,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Conduit_Layers_Tab'
       Caption = 'Conduit Layers'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgConduitLayers: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -849,13 +827,13 @@ inherited frmLayers: TfrmLayers
       Align = alBottom
       ColumnCollection = <
         item
-          Value = 33.333333333333340000
+          Value = 33.333333333333330000
         end
         item
-          Value = 33.333333333333340000
+          Value = 33.333333333333330000
         end
         item
-          Value = 33.333333333333340000
+          Value = 33.333333333333330000
         end>
       ControlCollection = <
         item

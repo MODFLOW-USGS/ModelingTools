@@ -252,7 +252,7 @@ begin
     begin
       rdgSubGroups.Columns[ColIndex].AutoAdjustColWidths := True;
     end;
-    rdgSubGroups.RowCount := Interbeds.Count + 1;
+    rdgSubGroups.RowCount := Max(Interbeds.Count + 1, 2);
     for RowIndex := 1 to Interbeds.Count do
     begin
       rdgSubGroups.Cells[Ord(icName), RowIndex] :=

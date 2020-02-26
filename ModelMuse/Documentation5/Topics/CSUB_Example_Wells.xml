@@ -13,7 +13,7 @@
     <para styleclass="Normal"><image src="CSubExampleWellObject.png" scale="60.00%" width="457" height="356" styleclass="Image Caption"><title translate="true">CSUB Example: Create a point object for well #1.</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the Object Properties dialog box, make sure that the formulas for the Z-coordinates will make the object apply to layer 2.</text></para>
     <para styleclass="Normal"><image src="CSubExampleWellBasic.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Then, on the MODFLOW Features tab, specify the extraction rate. Be sure to specify the starting and ending times to include only the second stress period and be sure the extraction rate is set to a negative values.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Then, on the MODFLOW Features tab, specify the extraction rate. Be sure to specify the starting and ending times to include only the second stress period and be sure the extraction rate is set to a negative values. Click OK to close the dialog box when you are done.</text></para>
     <para styleclass="Normal"><image src="CSubExampleWellValue.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">CSUB Example: Well extraction rate</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Change the selected layer to layer 4 and create the other well at row 12, column 7.</text></para>
   </body>

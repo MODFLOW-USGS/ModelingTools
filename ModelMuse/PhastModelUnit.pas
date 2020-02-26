@@ -8966,9 +8966,18 @@ const
   //                in MAW instead of the SKIN option in MAW.
   //               Bug fix: Fixed a bug that could cause issues with evaluating
   //                formulas that involve only integers.
+  //    '4.2.0.1'  Bug fix: Fixed a bug that caused an assertion failure if
+  //                MODFLOW 6 SFR streams were not assigned for every stress
+  //                period.
+  //               Bug fix: Fixed position of buttons for no-delay beds in the
+  //                MODFLOW Layers dialog box.
+  //               Bug fix: Fixed position of buttons for the SF6, MAW,
+  //                and MT3D SSM packages in the Object Properties dialog box.
+  //               Bug fix: Fixed a bug that could cause a bug report to create
+  //                when attempting to export an object to a Shapefile.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.0';
+  IModelVersion = '4.2.0.1';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

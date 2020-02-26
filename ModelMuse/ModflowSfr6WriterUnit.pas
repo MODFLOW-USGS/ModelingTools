@@ -155,6 +155,12 @@ resourcestring
   StrStreamTimeExtended = 'Stream time extended';
   StrIn0sTheLastDe = 'In %0:s, the last defined time was %1:g which was befo' +
   're the end of the model. It has been extended to %2:g';
+  StrInactiveStreamPeri = 'Inactive stream period added';
+  StrInSTheStarting = 'In %s, the starting time for the stream was after the' +
+  ' start of the model. An inactive stream period has been added to cover th' +
+  'at time.';
+  StrIn0sThereWasA = 'In %0:s, there was a gap in time from %1:g to %2:g. An' +
+  ' inactive period has been inserted to fill that time.';
 
 { TModflowSFR_MF6_Writer }
 
@@ -738,7 +744,12 @@ var
   Obs: TSfr6Observation;
   ReachStart: Integer;
   EndTime: Double;
+  StartTime: Double;
   SfrMf6Item: TSfrMf6Item;
+  NewItem: TSfrMf6Item;
+  ItemIndex: Integer;
+  Item1: TSfrMf6Item;
+  Item2: TSfrMf6Item;
 //  StreambedThickness: Double;
 begin
 //  Grid := Model.Grid;
@@ -750,7 +761,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrStreambedTopElevat);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrDownstreamSFRSegme);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrStreamTimeExtended);
-
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInactiveStreamPeri);
 
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingPairO);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObject);
@@ -759,6 +770,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorAssigningDive);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheStreambedMinusThe);
 
+  StartTime := Model.ModflowFullStressPeriods.First.StartTime;
   EndTime := Model.ModflowFullStressPeriods.Last.Endtime;
 
   NextReachNumber := 1;
@@ -784,6 +796,19 @@ begin
       Continue;
     end;
     frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
+    
+    SfrMf6Item := Boundary.Values.First as TSfrMf6Item;
+    if SfrMf6Item.StartTime > Starttime then
+    begin
+      NewItem := Boundary.Values.Add as TSfrMf6Item;
+      NewItem.Assign(SfrMf6Item);
+      NewItem.StreamStatus := ssInactive;
+      NewItem.Starttime := Starttime;
+      NewItem.Endtime := SfrMf6Item.Starttime;
+      NewItem.Index := 0;
+      frmErrorsAndWarnings.AddWarning(Model, StrInactiveStreamPeri,
+        Format(StrInSTheStarting, [ScreenObject.Name]), ScreenObject);
+    end;
 
     SfrMf6Item := Boundary.Values.Last as TSfrMf6Item;
     if SfrMf6Item.Endtime < Endtime then
@@ -794,6 +819,23 @@ begin
       SfrMf6Item.Endtime := Endtime;
     end;
 
+    for ItemIndex := Boundary.Values.Count - 2 downto 0 do
+    begin
+      Item1 := Boundary.Values[ItemIndex] as TSfrMf6Item;
+      Item2 := Boundary.Values[ItemIndex+1] as TSfrMf6Item;
+      if Item1.EndTime < Item2.StartTime then
+      begin
+        NewItem := Boundary.Values.Add as TSfrMf6Item;
+        NewItem.Assign(Item1);
+        NewItem.StreamStatus := ssInactive;
+        NewItem.Starttime := Item1.EndTime;
+        NewItem.Endtime := Item2.Starttime;
+        NewItem.Index := ItemIndex+1;
+        frmErrorsAndWarnings.AddWarning(Model, StrInactiveStreamPeri,
+          Format(StrIn0sThereWasA,
+          [ScreenObject.Name, NewItem.Starttime, NewItem.Endtime]), ScreenObject);
+      end;
+    end;
 
     Dummy := TStringList.Create;
     try
