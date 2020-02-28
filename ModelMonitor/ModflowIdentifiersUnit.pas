@@ -19,6 +19,7 @@ const
   StressPeriodID2 = 'LENGTH =';
   TransportStep = 'TRANSPORT STEP NO.';
   StartNewTimeStep = 'SOLVING FOR HEAD';
+  StrINNERITERATIONSUMM = 'INNER ITERATION SUMMARY';
   IterationID1 = 'ITERATIONS FOR TIME STEP';
   IterationID2 = 'IN STRESS PERIOD';
   ArrayID1 = ' IN LAYER ';
@@ -128,7 +129,7 @@ begin
   PackageIdentifiers.Add('EVT   -- EVT PACKAGE');
   PackageIdentifiers.Add('STO -- STORAGE PACKAGE');
   PackageIdentifiers.Add('GHB   -- GHB PACKAGE');
-//  PackageIdentifiers.Add('MODFLOW 6');
+  PackageIdentifiers.Add('CSUB -- COMPACTION PACKAGE');
 //  PackageIdentifiers.Add('READING SIMULATION');
 //  PackageIdentifiers.Add('TDIS -- TEMPORAL DISCRETIZATION PACKAGE');
 //  PackageIdentifiers.Add('READING SOLUTIONGROUP');
@@ -151,6 +152,8 @@ begin
   PackageIdentifiers.Add('SFR UPSTREAM CONNECTIONS');
   PackageIdentifiers.Add('SFR GEOMETRY DATA');
   PackageIdentifiers.Add('PROCESSING UZF CELLS PACKAGEDATA');
+  PackageIdentifiers.Add('INTERBED STRAIN SUMMARY');
+  PackageIdentifiers.Add('COARSE-GRAINED STRAIN SUMMARY');
 
 //  PackageIdentifiers.Add('DIS -- STRUCTURED GRID DISCRETIZATION PACKAGE');
 //  PackageIdentifiers.Add('NPF -- NODE PROPERTY FLOW PACKAGE');
@@ -164,7 +167,6 @@ begin
 //  PackageIdentifiers.Add('DRN NO.');
 //  PackageIdentifiers.Add('CHD NO.');
 //  PackageIdentifiers.Add('REUSING');
-  PackageIdentifiers.Add('The observation utility is active for');
 //  PackageIdentifiers.Add('EVT   -- EVT PACKAGE');
 //  PackageIdentifiers.Add('STO -- STORAGE PACKAGE');
 //  PackageIdentifiers.Add('RIV NO.');
@@ -172,7 +174,7 @@ begin
 //  PackageIdentifiers.Add('UPDATING STORAGE VALUES');
 //  PackageIdentifiers.Add('GHB   -- GHB PACKAGE');
   PackageIdentifiers.Add('RIV   -- RIV PACKAGE');
-//  PackageIdentifiers.Add('RCH NO.');
+  PackageIdentifiers.Add('The observation utility is active for "MODFLOW"');
 //  PackageIdentifiers.Add('Time-series controlled values');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -212,7 +214,7 @@ begin
   BoundaryIdentifiers.Add('REACH NO.  LAYER   ROW   COL');
   BoundaryIdentifiers.Add('EVTR array defined by the following parameters:');
   BoundaryIdentifiers.Add('MULT. ARRAY:');
-//  BoundaryIdentifiers.Add(' MULT. ARRAY:');
+  BoundaryIdentifiers.Add('CSUB NO.');
 //  BoundaryIdentifiers.Add(' HK ');
 //  BoundaryIdentifiers.Add(' HANI ');
 //  BoundaryIdentifiers.Add(' SS ');
@@ -494,7 +496,7 @@ begin
   BoundaryIdentifiers.Add('PROCESSING GNC OPTIONS');
   BoundaryIdentifiers.Add('PROCESSING GNC DIMENSIONS');
   BoundaryIdentifiers.Add('PROCESSING GNCDATA');
-//  BoundaryIdentifiers.Add('PROCESSING OC OPTIONS');
+  BoundaryIdentifiers.Add('IDOMAIN FOR LAYER');
   BoundaryIdentifiers.Add('WEL NO.');
   BoundaryIdentifiers.Add('DRN NO.');
   BoundaryIdentifiers.Add('CHD NO.');
@@ -514,7 +516,7 @@ begin
   BoundaryIdentifiers.Add('PROCESSING IMS OPTIONS');
   BoundaryIdentifiers.Add('PROCESSING IMS NONLINEAR');
   BoundaryIdentifiers.Add('PROCESSING LINEAR DATA');
-  BoundaryIdentifiers.Add('INNER ITERATION SUMMARY');
+  BoundaryIdentifiers.Add(StrINNERITERATIONSUMM);
   BoundaryIdentifiers.Add('OUTER ITERATION SUMMARY');
   BoundaryIdentifiers.Add('GHOST NODES WILL BE READ');
   BoundaryIdentifiers.Add('PROCESSING DISCRETIZATION OPTIONS');
@@ -539,15 +541,26 @@ begin
   BoundaryIdentifiers.Add('PROCESSING GHB OPTIONS');
   BoundaryIdentifiers.Add('PROCESSING GHB DIMENSIONS');
   BoundaryIdentifiers.Add('PROCESSING RCH DIMENSIONS');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('CG_SKE_CR');
+  BoundaryIdentifiers.Add('CG_THETA');
+  BoundaryIdentifiers.Add('SGM');
+  BoundaryIdentifiers.Add('SGS');
+  BoundaryIdentifiers.Add('INTERBED DATA');
+  BoundaryIdentifiers.Add('The observation utility is active for');
+  BoundaryIdentifiers.Add('INTERBED     GEOSTATIC       EFFECTIVE    PRECONSOLIDATION');
+  BoundaryIdentifiers.Add('ICELLTYPE');
+  BoundaryIdentifiers.Add('K ');
+  BoundaryIdentifiers.Add('K33');
+  BoundaryIdentifiers.Add('K22');
+  BoundaryIdentifiers.Add('ANGLE1');
+  BoundaryIdentifiers.Add('ANGLE2');
+  BoundaryIdentifiers.Add('ANGLE3');
+  BoundaryIdentifiers.Add('ICONVERT');
+  BoundaryIdentifiers.Add('PROCESSING CSUB OPTIONS');
+  BoundaryIdentifiers.Add('CSUB PACKAGE SETTINGS');
+  BoundaryIdentifiers.Add('PROCESSING CSUB DIMENSIONS');
+  BoundaryIdentifiers.Add('CALCULATED INITIAL INTERBED GEOSTATIC, EFFECTIVE');
+  BoundaryIdentifiers.Add('CALCULATED COMPRESSION INDICES');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');

@@ -2556,6 +2556,15 @@
         <topicref type="topic" id="438864595249896" build="ALL" modified="2020-02-25T14:58:06.685Z" icon="0" href="CSUB_Example_CSUB_Cell_Observa">
           <caption translate="true">CSUB Example: CSUB Cell Observations at Wells</caption>
         </topicref>
+        <topicref type="topic" id="438894444629232" build="ALL" modified="2020-02-28T09:57:43.462Z" icon="0" href="CSUB_Example_Run_Model">
+          <caption translate="true">CSUB Example: Run Model</caption>
+        </topicref>
+        <topicref type="topic" id="43889086072037" build="ALL" modified="2020-02-28T12:25:26.324Z" icon="0" href="CSUB_Example_View_Z_Displaceme">
+          <caption translate="true">CSUB Example: View Z Displacement</caption>
+        </topicref>
+        <topicref type="topic" id="438894996980385" build="ALL" modified="2020-02-28T12:45:35.878Z" icon="0" href="CSUB_Example_CSUB_Observation_">
+          <caption translate="true">CSUB Example: CSUB Observation Results</caption>
+        </topicref>
       </topicref>
     </topicref>
     <topicref type="topic" id="415135178584954" build="ALL" modified="2013-08-27T07:52:07.196Z" icon="0" href="SUTRA_Examples">

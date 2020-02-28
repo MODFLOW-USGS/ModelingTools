@@ -25867,6 +25867,20 @@ procedure TfrmScreenObjectProperties.pageMainChange(Sender: TObject);
 begin
   inherited;
   HelpKeyWord := pageMain.ActivePage.HelpKeyword;
+  if pageMain.ActivePage = tabModflowBoundaryConditions then
+  begin
+    if jvplModflowBoundaries.ActivePage.HelpKeyword <> '' then
+    begin
+      HelpKeyword := jvplModflowBoundaries.ActivePage.HelpKeyword
+    end;
+  end;
+  if pageMain.ActivePage = tabSutraFeatures then
+  begin
+    if jvplSutraFeatures.ActivePage.HelpKeyword <> '' then
+    begin
+      HelpKeyword := jvplSutraFeatures.ActivePage.HelpKeyword
+    end;
+  end;
   btnHelp.HelpKeyword := HelpKeyWord;
 
   btnCopyVertices.Visible := pageMain.ActivePage = tabNodes;

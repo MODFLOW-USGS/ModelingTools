@@ -15,6 +15,7 @@
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_6_Example" styleclass="Normal" translate="true">MODFLOW 6 Example</link></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3D_USGS_Contaminant_Treatmen" styleclass="Normal" translate="true">MT3D-USGS Contaminant Treatment System Example</link></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3D_USGS_Stream_and_Lake_Tran" styleclass="Normal" translate="true">MT3D-USGS Stream and Lake Transport</link></li>
+      <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_6_Subsidence_Example" styleclass="Normal" translate="true">MODFLOW 6 Subsidence Example</link></li>
     </list>
   </body>
 </topic>

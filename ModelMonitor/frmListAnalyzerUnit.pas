@@ -490,6 +490,7 @@ begin
   AddKey(StressPeriodID1, itStressPeriod);
   AddKey(StressPeriodID2, itStressPeriod2);
   AddKey(StartNewTimeStep, itStartTimeStep);
+  AddKey(StrINNERITERATIONSUMM, itStartTimeStep);
   AddKey(StrParameterName, itNoIndentChange);
   AddKey(StrINSTANCE, itIndent3);
 //  AddKey(StrParameter, itNoIndentChange);
@@ -2161,6 +2162,38 @@ var
 //  Key: string;
   UseKey: Boolean;
   FoundKey: string;
+  SP_Start: Integer;
+  AnsiLine: AnsiString;
+  TS_Start: Integer;
+  StepLine: string;
+  PriorStepString: String;
+  StressPeriod: string;
+  TimeStep: string;
+  function ExtractStringBetween(const AString, BeforeString: string; AfterStrings: array of string): string;
+  var
+    BeforePosition: Integer;
+    AfterPosition: Integer;
+    AfterIndex: Integer;
+    AfterString: string;
+  begin
+    BeforePosition := Pos(BeforeString, AString);
+    Assert(BeforePosition >= 1);
+    Result := Copy(AString, BeforePosition + Length(BeforeString));
+    if Length(AfterStrings) <> 0 then
+    begin
+      for AfterIndex := 0 to Length(AfterStrings)- 1 do
+      begin
+        AfterString := AfterStrings[AfterIndex];
+        AfterPosition := Pos(AfterString, Result);
+        if (AfterPosition >= 1) then
+        begin
+          Result := copy(Result, 1, AfterPosition-1);
+          break;
+        end;
+      end;
+    end;
+    result := Trim(Result);
+  end;
 //  SpacePos: Integer;
 begin
   AnsiMultipleLines := AnsiString(MultipleLines);
@@ -2185,6 +2218,7 @@ begin
     end;
   end;
 
+  PriorStepString := '';
   SomeLines := TStringList.Create;
   try
     SomeLines.Text := MultipleLines;
@@ -2285,6 +2319,37 @@ begin
         if UseKey then
         begin
           frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+          AnsiLine := AnsiString(ALine);
+          SP_Start := BMPos('STRESS PERIOD', AnsiLine);
+          if SP_Start > 0 then
+          begin
+            TS_Start := BMPos('TIME STEP', AnsiLine);
+            if TS_Start > 0 then
+            begin
+              if TS_Start > SP_Start then
+              begin
+                StepLine := Copy(ALine, SP_Start, MAXINT);
+              end
+              else
+              begin
+                StepLine := Copy(ALine, TS_Start, MAXINT);
+                StressPeriod := ExtractStringBetween(ALine,'STRESS PERIOD', []);
+                TimeStep := ExtractStringBetween(ALine,'TIME STEP', [',', 'IN']);
+                StepLine := Format('Stress Period %0:s, Time Step %1:s', [StressPeriod, TimeStep]);
+              end;
+              if PriorStepString <> StepLine then
+              begin
+//                NewTimeStepPostion := frameListing.AddLine(
+//                  LineIndex + InnerLineIndex, ALine, 1);
+//                Indent := 2;
+                NewTimeStepLines.Add(LineIndex + InnerLineIndex);
+                NewTimeStepPostions.Add(NewTimeStepPostion);
+                FParameterDefined := False;
+                PriorStepString := StepLine;
+              end;
+            end;
+          end;
+
         end;
 
 

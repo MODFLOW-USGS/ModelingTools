@@ -158,7 +158,7 @@ object TTaskHistory
     end
     item
       Name = 'Video'
-      Display = True
+      Display = False
     end
     item
       Name = 'Running MODFLOW ModelMonitor'
@@ -170,7 +170,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Shapefile'
-      Display = True
+      Display = False
     end
     item
       Name = 'MODPATH'
@@ -186,7 +186,7 @@ object TTaskHistory
     end
     item
       Name = 'Installer'
-      Display = True
+      Display = False
     end
     item
       Name = 'Renaming Data Sets and Variables'
@@ -258,7 +258,7 @@ object TTaskHistory
     end
     item
       Name = 'List File Analyzer'
-      Display = False
+      Display = True
     end
     item
       Name = 'Mesh Generation'
@@ -430,11 +430,11 @@ object TTaskHistory
     end
     item
       Name = 'Head obs for MF6'
-      Display = True
+      Display = False
     end
     item
       Name = 'MF6 Obs Extractor'
-      Display = True
+      Display = False
     end
     item
       Name = 'CSUB'
@@ -442,7 +442,7 @@ object TTaskHistory
     end
     item
       Name = 'GwMounding'
-      Display = True
+      Display = False
     end>
   History = <
     item
@@ -25005,5 +25005,14 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Documentation')
+    end
+    item
+      Date = 43888.000000000000000000
+    end
+    item
+      Date = 43889.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'List File Analyzer')
     end>
 end

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CSUB Example: CSUB Observation Results</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: CSUB Observation Results</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">We specified a number of CSUB observations in the Observation Utilities option in MODFLOW 6. The simulated value for each observation type are saved in text files with the extension .csv. These files can be opened in text editors or spreadsheet programs. If opened in spreadsheet programs, the data can easily be separated into separate columns in the spreadsheet and easily plotted. For example, in csubexamples.pdf, figure 15 shows the preconsolidation sterss, effective stress, and geostatic stress in two cells. The data for those cell in included in files with the extensions .preconstress-cell_ob.csv (preconsolidations stress) .estress-cell_ob.csv (effective stress), and .gstress-cell_ob.csv (geostatic stress). You can plot the values at specific cells versus time using the spreadsheet plotting capability. Note that the label for each observation can help identify the location of the observation. In this case. the &quot;1_9_10&quot; in the name indicates that the observation is in layer 1, row 9, column 10. </text></para>
+    <para styleclass="Normal"><image src="CSubExampleStressPlot.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Plot of effective stress</title></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

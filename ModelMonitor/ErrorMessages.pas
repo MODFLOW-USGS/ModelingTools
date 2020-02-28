@@ -819,15 +819,15 @@ begin
     ErrorValues.Add('Error: No time-series data contained in file');
     ErrorValues.Add('Found duplicate time-series file name');
     ErrorValues.Add('Error in list input. Expected numeric value or');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
-//    ErrorValues.Add('aaa');
+    ErrorValues.Add('CONVERGENCE FAILED AS A RESULT OF CSUB PACKAGE');
+    ErrorValues.Add('ERROR: INFORMATION FOR INTERBED');
+    ErrorValues.Add('ERROR: INFORMATION SPECIFIED');
+    ErrorValues.Add('ERROR: NDELAYCELLS');
+    ErrorValues.Add('*ERROR');
+    ErrorValues.Add('ERROR.');
+    ErrorValues.Add('ERROR:  ninterbeds WAS NOT SPECIFIED OR WAS SPECIFIED INCORRECTLY');
+    ErrorValues.Add('ERROR:  Only the first and last');
+    ErrorValues.Add('ERROR:');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 
@@ -1005,6 +1005,12 @@ begin
     WarningValues.Add('did not converge for stress period');
     WarningValues.Add('SIMULATION WILL CONTINUE EVEN IF THERE IS NONCONVERGENCE.');
     WarningValues.Add('K22 not provided.  Assuming K22 = K.');
+    WarningValues.Add('PERCENT COMPACTION IS GREATER THAN OR EQUAL TO 1 PERCENT IN');
+    WarningValues.Add('COARSE-GRAINED STORAGE PERCENT COMPACTION IS GREATER THAN');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');

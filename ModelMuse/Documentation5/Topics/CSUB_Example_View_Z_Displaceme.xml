@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CSUB Example: View Z Displacement</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: View Z Displacement</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The CSUB package stored the Z displacement for each time step of the model. We can plot the Z displacement in ModelMuse. To do this, select </text><text styleclass="Strong" translate="true">File|Import|Model Results</text><text styleclass="Normal" translate="true"> and change </text><text styleclass="Strong" translate="true">Files of Type</text><text styleclass="Normal" translate="true"> to &quot;Subsidence files.&quot; Then select the .csub_z_dis file and click the &quot;Open&quot; button.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleZDis.png" scale="80.00%" width="446" height="334" styleclass="Image Caption"><title translate="true">Select Z Displacement file</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The times at which the Z displacement have been saved will be listed in the </text><text styleclass="Strong" translate="true">Select Model Results to Import</text><text styleclass="Normal" translate="true"> dialog box. For this example, select the Z displacements for the last time steps in stress periods 2 and 3 and then click the OK button.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleZDisTimeSteps.png" scale="60.00%" width="389" height="275" styleclass="Image Caption"><title translate="true">Select time steps for Z displacement</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The grid will be colored with the Z displacement value. If you move the cursor over a cell, the value in that cell will be displayed on the third panel of the status bar.</text></para>
+    <para styleclass="Normal"><image src="CSubExampleZDisValue.png" scale="60.00%" width="457" height="356" styleclass="Image Caption"><title translate="true">Z displacement value on status bar</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Visualization_Dialog_Box" styleclass="Normal" translate="true">Data Visualization Dialog Box</link><text styleclass="Normal" translate="true"> and display a legend for the color values on the third tab.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>
