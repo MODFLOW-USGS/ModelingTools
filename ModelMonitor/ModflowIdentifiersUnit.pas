@@ -20,6 +20,7 @@ const
   TransportStep = 'TRANSPORT STEP NO.';
   StartNewTimeStep = 'SOLVING FOR HEAD';
   StrINNERITERATIONSUMM = 'INNER ITERATION SUMMARY';
+  StrTimeseriesControll = 'Time-series controlled values';
   IterationID1 = 'ITERATIONS FOR TIME STEP';
   IterationID2 = 'IN STRESS PERIOD';
   ArrayID1 = ' IN LAYER ';
@@ -507,7 +508,7 @@ begin
 //  BoundaryIdentifiers.Add('UPDATING STORAGE VALUES');
 //  BoundaryIdentifiers.Add('RIV   -- RIV PACKAGE');
   BoundaryIdentifiers.Add('RCH NO.');
-  BoundaryIdentifiers.Add('Time-series controlled values');
+  BoundaryIdentifiers.Add(StrTimeseriesControll);
 
   // MODFLOW 6
   BoundaryIdentifiers.Add('PROCESSING TDIS OPTIONS');
@@ -561,7 +562,7 @@ begin
   BoundaryIdentifiers.Add('PROCESSING CSUB DIMENSIONS');
   BoundaryIdentifiers.Add('CALCULATED INITIAL INTERBED GEOSTATIC, EFFECTIVE');
   BoundaryIdentifiers.Add('CALCULATED COMPRESSION INDICES');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('AT TIME STEP');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');

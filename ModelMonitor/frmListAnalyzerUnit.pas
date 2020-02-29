@@ -105,6 +105,10 @@ type
     FParameterDefined: Boolean;
     FFileDate: Extended;
     FIdling: Boolean;
+    PriorStepString: String;
+    NextIndent: Integer;
+    PriorSP: string;
+    PriorIndent: Integer;
     procedure ListFileProgress(Sender: TObject; PerMil: integer);
     function DisplayObservations: boolean;
     function DisplayArray: Boolean;
@@ -491,6 +495,8 @@ begin
   AddKey(StressPeriodID2, itStressPeriod2);
   AddKey(StartNewTimeStep, itStartTimeStep);
   AddKey(StrINNERITERATIONSUMM, itStartTimeStep);
+//  AddKey(StrTimeseriesControll, itStartTimeStep);
+
   AddKey(StrParameterName, itNoIndentChange);
   AddKey(StrINSTANCE, itIndent3);
 //  AddKey(StrParameter, itNoIndentChange);
@@ -1613,6 +1619,10 @@ begin
   frameErrors.Initialize;
   frameListing.Initialize;
   frameSorted.Initialize;
+  PriorStepString := '';
+  PriorSP := '';
+  NextIndent := 0;
+  PriorIndent := 2;
   if FShowIndexFile = ifcYes then
   begin
 //    LinesCritSect.Enter;
@@ -2166,9 +2176,10 @@ var
   AnsiLine: AnsiString;
   TS_Start: Integer;
   StepLine: string;
-  PriorStepString: String;
   StressPeriod: string;
   TimeStep: string;
+  PeriodSearchTerm: string;
+  StepSearchTerm: string;
   function ExtractStringBetween(const AString, BeforeString: string; AfterStrings: array of string): string;
   var
     BeforePosition: Integer;
@@ -2184,11 +2195,14 @@ var
       for AfterIndex := 0 to Length(AfterStrings)- 1 do
       begin
         AfterString := AfterStrings[AfterIndex];
-        AfterPosition := Pos(AfterString, Result);
-        if (AfterPosition >= 1) then
+        if AfterString <> '' then
         begin
-          Result := copy(Result, 1, AfterPosition-1);
-          break;
+          AfterPosition := Pos(AfterString, Result);
+          if (AfterPosition >= 1) then
+          begin
+            Result := copy(Result, 1, AfterPosition-1);
+            break;
+          end;
         end;
       end;
     end;
@@ -2218,7 +2232,7 @@ begin
     end;
   end;
 
-  PriorStepString := '';
+//  PriorStepString := '';
   SomeLines := TStringList.Create;
   try
     SomeLines.Text := MultipleLines;
@@ -2296,7 +2310,7 @@ begin
         UseKey := False;
         if IndexTypes[0] in [itPackage, itObservation, itBoundary,
           itNumberBoundary, itIndent1, itIndent3, itNoIndentChange,
-          itStartTimeStep, itArray3, itEndModel, itParameter] then
+          itStartTimeStep, itArray2, itArray3, itEndModel, itParameter] then
         begin
           UseKey := True;
         end
@@ -2318,40 +2332,99 @@ begin
 
         if UseKey then
         begin
-          frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
-          AnsiLine := AnsiString(ALine);
-          SP_Start := BMPos('STRESS PERIOD', AnsiLine);
-          if SP_Start > 0 then
+          if NextIndent <> 0 then
           begin
-            TS_Start := BMPos('TIME STEP', AnsiLine);
-            if TS_Start > 0 then
+            Indent := NextIndent;
+//            NextIndent := 0;
+          end;
+          frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+          if (IndexTypes[0] <> itStartTimeStep) then
+          begin
+            AnsiLine := AnsiString(ALine);
+            SP_Start := BMPos('STRESS PERIOD', AnsiLine);
+            if SP_Start <= 0 then
             begin
-              if TS_Start > SP_Start then
+              SP_Start := BMPos('PERIOD', AnsiLine);
+              PeriodSearchTerm := 'PERIOD';
+              if SP_Start <= 0 then
               begin
-                StepLine := Copy(ALine, SP_Start, MAXINT);
+                SP_Start := BMPos('stress period:', AnsiLine);
+                PeriodSearchTerm := 'stress period:'
+              end;
+            end
+            else
+            begin
+              PeriodSearchTerm := 'STRESS PERIOD'
+            end;
+            if SP_Start > 0 then
+            begin
+              TS_Start := BMPos('TIME STEP', AnsiLine);
+              if TS_Start <= 0 then
+              begin
+                TS_Start := BMPos('time step', AnsiLine);
+                StepSearchTerm := 'time step'
               end
               else
               begin
-                StepLine := Copy(ALine, TS_Start, MAXINT);
-                StressPeriod := ExtractStringBetween(ALine,'STRESS PERIOD', []);
-                TimeStep := ExtractStringBetween(ALine,'TIME STEP', [',', 'IN']);
-                StepLine := Format('Stress Period %0:s, Time Step %1:s', [StressPeriod, TimeStep]);
+                StepSearchTerm := 'TIME STEP'
               end;
-              if PriorStepString <> StepLine then
+
+              if TS_Start > 0 then
               begin
-//                NewTimeStepPostion := frameListing.AddLine(
-//                  LineIndex + InnerLineIndex, ALine, 1);
-//                Indent := 2;
-                NewTimeStepLines.Add(LineIndex + InnerLineIndex);
-                NewTimeStepPostions.Add(NewTimeStepPostion);
-                FParameterDefined := False;
-                PriorStepString := StepLine;
+                if TS_Start > SP_Start then
+                begin
+//                  StepLine := Copy(ALine, SP_Start, MAXINT);
+                  StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'STEP', ',']);
+                  TimeStep := ExtractStringBetween(ALine,StepSearchTerm, [',', 'IN', ':']);
+                  StepLine := Format('Stress Period %0:s, Time Step %1:s', [StressPeriod, TimeStep]);
+                end
+                else
+                begin
+//                  StepLine := Copy(ALine, TS_Start, MAXINT);
+                  StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'STEP']);
+                  TimeStep := ExtractStringBetween(ALine,'TIME STEP', [',', 'IN']);
+                  StepLine := Format('Stress Period %0:s, Time Step %1:s', [StressPeriod, TimeStep]);
+                end;
+                if PriorStepString <> StepLine then
+                begin
+                  NewTimeStepPostion := frameListing.NodeCount;
+                  if NextIndent = 0 then
+                  begin
+                    NextIndent := 2;
+//                    Indent := 1;
+//                    Indent := 1;
+//                    PriorIndent := NextIndent;
+                  end
+                  else
+                  begin
+                    NextIndent := 1;
+                  end;
+                  PriorSP := StressPeriod;
+                  NewTimeStepLines.Add(LineIndex + InnerLineIndex);
+                  NewTimeStepPostions.Add(NewTimeStepPostion);
+                  FParameterDefined := False;
+                  PriorStepString := StepLine;
+                end
+                else
+                begin
+                  NextIndent := 2;
+                end;
+              end
+              else
+              begin
+                NextIndent := 0;
               end;
+            end
+            else
+            begin
+              NextIndent := 0;
             end;
+          end
+          else
+          begin
+            NextIndent := 0;
           end;
-
         end;
-
 
         case IndexTypes[0] of
           itNone:
@@ -2448,6 +2521,7 @@ begin
           itArray2:
             begin
               // do nothing
+                frameListing.AddLine(LineIndex + InnerLineIndex, ALine, Indent);
             end;
           itArray3:
             begin
@@ -2510,9 +2584,21 @@ begin
           ALine := TempLines[Local_LineIndex];
           AnsiLine := AnsiString(ALine);
           SP_Start := BMPos('STRESS PERIOD', AnsiLine);
+          if SP_Start <= 0 then
+          begin
+            SP_Start := BMPos('PERIOD', AnsiLine);
+          end;
+          if SP_Start <= 0 then
+          begin
+            SP_Start := BMPos('stress period:', AnsiLine);
+          end;
           if SP_Start > 0 then
           begin
             TS_Start := BMPos('TIME STEP', AnsiLine);
+            if TS_Start <= 0 then
+            begin
+              TS_Start := BMPos('time step', AnsiLine);
+            end;
             if TS_Start > 0 then
             begin
               if TS_Start > SP_Start then

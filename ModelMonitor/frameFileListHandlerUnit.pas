@@ -63,6 +63,7 @@ type
     property SelectedNode: PVirtualNode read FSelectedNode
       write SetSelectedNode;
     procedure AddToDictionary(Key: string; LineNumber: integer; ALine: string);
+    function NodeCount: Integer;
     { Public declarations }
   end;
 
@@ -248,7 +249,10 @@ var
 begin
   ANode := AllNodes[LineIndex];
   NodeData := vstIndexLines.GetNodeData(ANode);
-  NodeData.Text := NodeData.Text + ' ' + ALine;
+  if Pos(ALine, NodeData.Text) <= 0 then
+  begin
+    NodeData.Text := NodeData.Text + ' ' + ALine;
+  end;
 end;
 
 procedure TframeFileListHandler.BeginUpdate;
@@ -379,6 +383,11 @@ begin
   begin
     Memo.SetFocus;
   end;
+end;
+
+function TframeFileListHandler.NodeCount: Integer;
+begin
+  result := AllNodes.Count;
 end;
 
 procedure TframeFileListHandler.SetSelectedNode(const Value: PVirtualNode);

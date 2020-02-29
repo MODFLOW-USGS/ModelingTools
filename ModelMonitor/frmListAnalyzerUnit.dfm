@@ -66,6 +66,10 @@ object frmMain: TfrmMain
     object tabSorted: TTabSheet
       Caption = 'Index'
       ImageIndex = -1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameSorted: TframeFileListHandler
         Left = 0
         Top = 0
@@ -89,6 +93,10 @@ object frmMain: TfrmMain
       Caption = 'Errors'
       ImageIndex = 3
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameErrors: TframeFileListHandler
         Left = 0
         Top = 0
@@ -111,6 +119,10 @@ object frmMain: TfrmMain
       Caption = 'Warnings'
       ImageIndex = 2
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameWarning: TframeFileListHandler
         Left = 0
         Top = 0
@@ -346,6 +358,10 @@ object frmMain: TfrmMain
       Caption = 'Table'
       ImageIndex = 1
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgTable: TRbwDataGrid4
         Left = 0
         Top = 0
