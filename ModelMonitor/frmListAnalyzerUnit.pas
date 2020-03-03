@@ -110,6 +110,7 @@ type
     PriorSP: string;
     PriorIndent: Integer;
     PriorStressPeriod: string;
+    FModflow6: Boolean;
     procedure ListFileProgress(Sender: TObject; PerMil: integer);
     function DisplayObservations: boolean;
     function DisplayArray: Boolean;
@@ -1333,6 +1334,7 @@ begin
       begin
         NodeData := frame.vstIndexLines.GetNodeData(ANode);
         SearchTerm2 := '';
+        SearchTerm3 := '';
         case Key of
           L:
             begin
@@ -1630,6 +1632,7 @@ begin
   NextIndent := 0;
   PriorIndent := 2;
   PriorStressPeriod := '';
+  FModflow6 := False;
   if FShowIndexFile = ifcYes then
   begin
 //    LinesCritSect.Enter;
@@ -1701,6 +1704,12 @@ end;
 procedure TfrmMain.tmrOpenFileTimer(Sender: TObject);
 var
   AFileName: string;
+  Option: string;
+  OutputFileName: string;
+  ContentsLines: TStringList;
+  ANode: PVirtualNode;
+  NodeData: PIndexDataNode;
+  CellText: string;
 begin
   tmrOpenFile.Enabled := False;
   Assert(ParamCount > 0);
@@ -1708,6 +1717,36 @@ begin
   if FileExists(AFileName) then
   begin
     OpenAFile(AFileName);
+    if (ParamCount > 1) then
+    begin
+      Option := ParamStr(2);
+      if Option = '-e' then
+      begin
+        if (ParamCount > 2) then
+        begin
+          OutputFileName := ParamStr(3);
+        end
+        else
+        begin
+          OutputFileName := ChangeFileExt(AFileName, '.txt')
+        end;
+        ContentsLines := TStringList.Create;
+        try
+          ANode := frameListing.vstIndexLines.GetFirst();
+          while ANode <> nil do
+          begin
+            NodeData := frameListing.vstIndexLines.GetNodeData(ANode);
+            CellText := NodeData.Text;
+            ContentsLines.Add(NodeData.LineNumber.ToString + #9 + CellText);
+            ANode := frameListing.vstIndexLines.GetNext(ANode, False)
+          end;
+          ContentsLines.SaveToFile(OutputFileName);
+        finally
+          ContentsLines.Free;
+        end;
+        Close;
+      end;
+    end;
   end;
 end;
 
@@ -2294,6 +2333,10 @@ begin
       begin
         Continue;
       end;
+      if (LineIndex + InnerLineIndex = 0)  and (TrimmedLine = 'MODFLOW 6') then
+      begin
+        FModflow6 := True;
+      end;
       // There are only a few cases where a line containing a key
       // starts with a number so skip most lines that start with a number.
       InnerLine := AnsiString(ALine);
@@ -2382,7 +2425,7 @@ begin
             Indent := NextIndent;
 //            NextIndent := 0;
           end;
-//          if (IndexTypes[0] <> itStartTimeStep) then
+          if FModflow6 {and (IndexTypes[0] <> itStartTimeStep)} then
           begin
             AnsiLine := AnsiString(ALine);
             SP_Start := GetSP_Pos(AnsiLine, PeriodSearchTerm);

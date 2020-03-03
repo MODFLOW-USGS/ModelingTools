@@ -118,6 +118,13 @@ begin
   PackageIdentifiers.Add('UPW1 -- UPSTREAM WEIGHTING FLOW PACKAGE');
   PackageIdentifiers.Add('RIP-ET -- RIPARIAN PACKAGE');
   PackageIdentifiers.Add('CFP1AR READING FROM UNIT');
+  PackageIdentifiers.Add('AG -- AG PACKAGE FOR NWT VERSION');
+  PackageIdentifiers.Add('PROCESSING TIME SERIES');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 
 //// MODFLOW 6
   PackageIdentifiers.Add('DIS -- STRUCTURED GRID DISCRETIZATION PACKAGE');
@@ -186,7 +193,6 @@ begin
   PackageIdentifiers.Add('UZF   -- UZF CELLS PACKAGE');
   PackageIdentifiers.Add('PROCESSING SFR DIVERSIONS');
   PackageIdentifiers.Add('STAGE/VOLUME RELATION');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -480,6 +486,11 @@ begin
   BoundaryIdentifiers.Add('CONSTANT STAGE/INACTIVE REACH GROUPS');
   BoundaryIdentifiers.Add('SWR LEAKAGE   PERIOD');
   BoundaryIdentifiers.Add('FROUDE NUMBER SUMMARY');
+  // AG
+  BoundaryIdentifiers.Add('PROCESSING AG OPTIONS');
+  BoundaryIdentifiers.Add('TIME KPER KSTP');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
 
 
 // MODFLOW 6
@@ -509,6 +520,28 @@ begin
 //  BoundaryIdentifiers.Add('RIV   -- RIV PACKAGE');
   BoundaryIdentifiers.Add('RCH NO.');
   BoundaryIdentifiers.Add(StrTimeseriesControll);
+  BoundaryIdentifiers.Add('AIR ENTRY PRESSURE');
+  BoundaryIdentifiers.Add('ROOT PRESSURE');
+  BoundaryIdentifiers.Add('ROOT ACTIVITY');
+  BoundaryIdentifiers.Add('PROCESSING SEGMENT LIST');
+  BoundaryIdentifiers.Add('PROCESSING WELL LIST');
+  BoundaryIdentifiers.Add('PROCESSING AG STRESS PERIOD DATA');
+  BoundaryIdentifiers.Add('READING AG STRESS PERIOD DATA');
+  BoundaryIdentifiers.Add('READING IRRIGATION SEGMENT');
+  BoundaryIdentifiers.Add('READING IRRIGATION WELL');
+  BoundaryIdentifiers.Add('READING SUPPLEMENTAL WELL');
+  BoundaryIdentifiers.Add('AG WELLS      PERIOD');
+  BoundaryIdentifiers.Add('DIVERSION SEGMENTS     PERIOD');
+  BoundaryIdentifiers.Add('SW IRRIGATION     PERIOD');
+  BoundaryIdentifiers.Add('GW IRRIGATION     PERIOD');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+
+
 
   // MODFLOW 6
   BoundaryIdentifiers.Add('PROCESSING TDIS OPTIONS');
@@ -650,9 +683,9 @@ begin
   NonIdentifiers.Add('END UPDATING STORAGE VALUES');
   NonIdentifiers.Add('RECHARGE value from');
   NonIdentifiers.Add('LAK =');
-//  NonIdentifiers.Add('StrRECHARGE');
-//  NonIdentifiers.Add('StrRECHARGE');
-//  NonIdentifiers.Add('StrRECHARGE');
+  NonIdentifiers.Add('UZF RECHARGE     =');
+  NonIdentifiers.Add('END PROCESSING AG OPTIONS');
+  NonIdentifiers.Add('END PROCESSING AG STRESS PERIOD DATA');
 //  NonIdentifiers.Add('StrRECHARGE');
 //  NonIdentifiers.Add('StrRECHARGE');
 //  NonIdentifiers.Add('StrRECHARGE');

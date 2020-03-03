@@ -828,6 +828,34 @@ begin
     ErrorValues.Add('ERROR:  ninterbeds WAS NOT SPECIFIED OR WAS SPECIFIED INCORRECTLY');
     ErrorValues.Add('ERROR:  Only the first and last');
     ErrorValues.Add('ERROR:');
+    ErrorValues.Add('PRMS or SFR2 must be active for this option');
+    ErrorValues.Add('SUP or IRR wells required');
+    ErrorValues.Add('SFR2 or PRMS must be active for this option');
+    ErrorValues.Add('PRMS or UZF1 must be active for this option');
+    ErrorValues.Add('UZF1 IETFLG must not be zero for this option');
+    ErrorValues.Add('cannot be used for SS only models');
+    ErrorValues.Add('Invalid');
+    ErrorValues.Add('ETDEMAND AND ETTRIGGER: ARE BOTH ACTIVE.');
+    ErrorValues.Add('ERROR: INVALID SEGMENT VALUE');
+    ErrorValues.Add('ERROR: MAX AG PUMPING RATE IN');
+    ErrorValues.Add('UNIT NUMBER FOR TABULAR INPUT FILE SPECIFIED AS ZERO');
+    ErrorValues.Add('MODEL STOPPING');
+    ErrorValues.Add('Invalid AG Input:');
+    ErrorValues.Add('INCORRECT PERIOD FOR');
+    ErrorValues.Add('specified with no additional input');
+    ErrorValues.Add('found without key word');
+    ErrorValues.Add('SEGMENT NUMBER FOR SUPPLEMENTAL WELL');
+    ErrorValues.Add('***Error in IRR WEL***');
+    ErrorValues.Add('***ERROR IN AG PACKAGE***');
+    ErrorValues.Add('***Error in AG***');
+    ErrorValues.Add('Bad segment number for AG time series.');
+    ErrorValues.Add('Bad well number for AG time series.');
+    ErrorValues.Add('Bad well number for AG ET time series.');
+//    ErrorValues.Add('aaa');
+//    ErrorValues.Add('aaa');
+//    ErrorValues.Add('aaa');
+//    ErrorValues.Add('aaa');
+//    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 
@@ -969,6 +997,12 @@ begin
     WarningValues.Add('SHOULD BE SET TO ZERO IF OBSERVATION PACKAGES');
     WarningValues.Add('ARE ACTIVE.');
     WarningValues.Add('is not possible.');
+    WarningValues.Add('No wells active in the AG Package');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
+//    WarningValues.Add('aaa');
 
 //    FMP
     WarningValues.Add('CORRECTION FOR');
@@ -1007,7 +1041,7 @@ begin
 //    WarningValues.Add('K22 not provided.  Assuming K22 = K.');
     WarningValues.Add('PERCENT COMPACTION IS GREATER THAN OR EQUAL TO 1 PERCENT IN');
     WarningValues.Add('COARSE-GRAINED STORAGE PERCENT COMPACTION IS GREATER THAN');
-//    WarningValues.Add('aaa');
+    WarningValues.Add('***Warning in AG***');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');

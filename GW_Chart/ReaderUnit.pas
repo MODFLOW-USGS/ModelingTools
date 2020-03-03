@@ -2884,6 +2884,7 @@ const
   UnsatBudTerm = 'UNSATURATED ZONE PACKAGE VOLUMETRIC BUDGET FOR  TIME STEP';
   StreamUnsatBudTerm = 'VOLUMETRIC BUDGET FOR UNSATURATED ZONE BENEATH STREAMS AT END OF TIME STEP';
   SWI_BudgetTerm = 'VOLUMETRIC SWI ZONE BUDGET FOR ENTIRE MODEL';
+  AgBudgetTerm = 'VOLUMETRIC BUDGET FOR AGRICULTURAL FIELDS AT TIME STEP';
   StreamStartSearchTerm =
         'LAYER      ROW     COLUMN     STREAM    REACH      FLOW INTO    FLOW INTO      FLOW OUT OF';
 begin
@@ -2904,6 +2905,7 @@ begin
           or (Pos(StreamUnsatBudTerm, S) > 0)
           or (Pos(StreamStartSearchTerm, S) > 0)
           or (Pos(SWI_BudgetTerm, S) > 0)
+          or (Pos(AgBudgetTerm, S) > 0)
           or (Pos(SeawatComponent, S) > 0)
           then
         begin
@@ -3284,6 +3286,12 @@ begin
   LineIndex := GetNextLine(SearchTerm, LineIndex);
   ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
     UnsatBudTerm, 'UZF Cumulative Budget', 'UZF Budget Rates');
+
+  LineIndex := 0;
+  SearchTerm := AgBudgetTerm;
+  LineIndex := GetNextLine(SearchTerm, LineIndex);
+  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+    AgBudgetTerm, 'AG Cumulative Budget', 'AG Budget Rates');
 
 
   ZoneIndex := 1;

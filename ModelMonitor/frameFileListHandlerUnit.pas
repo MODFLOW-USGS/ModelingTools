@@ -5,7 +5,7 @@ interface
 uses
   Types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ComCtrls, FileIndexUnit, JvSpin, VirtualTrees,
-  System.Generics.Collections, IntListUnit, JvRichEdit;
+  System.Generics.Collections, IntListUnit, JvRichEdit, System.UITypes;
 
 type
   PIndexDataNode = ^TIndexDataNode;
@@ -398,6 +398,7 @@ var
   X: Integer;
 begin
   FSelectedNode := Value;
+  vstIndexLines.Selected[FSelectedNode] := True;
   NodeData := vstIndexLines.GetNodeData(FSelectedNode);
   Assert(Memo <> nil);
   Assert(ListFile <> nil);
