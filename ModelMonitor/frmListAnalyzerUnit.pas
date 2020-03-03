@@ -8,7 +8,7 @@ uses
   frameFileListHandlerUnit, ExtCtrls, Buttons, ImgList, Grids, RbwDataGrid4,
   ArgusDataEntry, JvExExtCtrls, JvNetscapeSplitter, JvExStdCtrls, VirtualTrees,
   JvComponentBase, JvDragDrop, JvRichEdit, frmIndexFileUnit, SearchTrie,
-  Generics.Collections, Vcl.AppEvnts, System.ImageList;
+  Generics.Collections, Vcl.AppEvnts, System.ImageList, System.UITypes;
 
 type
   TIndexType = (itNone, itPackage, itObservation, itBoundary, itNumberBoundary,
@@ -109,6 +109,7 @@ type
     NextIndent: Integer;
     PriorSP: string;
     PriorIndent: Integer;
+    PriorStressPeriod: string;
     procedure ListFileProgress(Sender: TObject; PerMil: integer);
     function DisplayObservations: boolean;
     function DisplayArray: Boolean;
@@ -493,6 +494,7 @@ begin
 
   AddKey(StressPeriodID1, itStressPeriod);
   AddKey(StressPeriodID2, itStressPeriod2);
+
   AddKey(StartNewTimeStep, itStartTimeStep);
   AddKey(StrINNERITERATIONSUMM, itStartTimeStep);
 //  AddKey(StrTimeseriesControll, itStartTimeStep);
@@ -524,8 +526,12 @@ begin
 
   // MODFLOW 6
   AddKey(StressPeriodMf6ID1, itStressPeriod);
+  AddKey(StrOUTPUTCONTROLFORS, itStressPeriod);
+
   AddKey(StressPeriodMf6ID2A, itStressPeriod2);
   AddKey(StressPeriodMf6ID2B, itStressPeriod2);
+
+
 
 
 //  for index := 0 to KeyWords.Count - 1 do
@@ -1623,6 +1629,7 @@ begin
   PriorSP := '';
   NextIndent := 0;
   PriorIndent := 2;
+  PriorStressPeriod := '';
   if FShowIndexFile = ifcYes then
   begin
 //    LinesCritSect.Enter;
@@ -2178,18 +2185,49 @@ var
   StepLine: string;
   StressPeriod: string;
   TimeStep: string;
-  PeriodSearchTerm: string;
-  StepSearchTerm: string;
-  function ExtractStringBetween(const AString, BeforeString: string; AfterStrings: array of string): string;
+  PeriodSearchTerm: Ansistring;
+  StepSearchTerm: Ansistring;
+  AddToDictionaryCount: Integer;
+  AddLineCount: Integer;
+  function GetSP_Pos(const AnsiLine: AnsiString; out PeriodSearchTerm: AnsiString): Integer;
+  begin
+    PeriodSearchTerm := '';
+    result := BMPos('STRESS PERIOD NO.', AnsiLine);
+    if result > 0 then
+    begin
+      PeriodSearchTerm := 'STRESS PERIOD NO.';
+      Exit;
+    end;
+    result := BMPos('STRESS PERIOD', AnsiLine);
+    if result > 0 then
+    begin
+      PeriodSearchTerm := 'STRESS PERIOD';
+      Exit;
+    end;
+    result := BMPos('PERIOD', AnsiLine);
+    if result > 0 then
+    begin
+      PeriodSearchTerm := 'PERIOD';
+      Exit;
+    end;
+    result := BMPos('stress period:', AnsiLine);
+    if result > 0 then
+    begin
+      PeriodSearchTerm := 'stress period:';
+      Exit;
+    end;
+  end;
+  function ExtractStringBetween(const AString: string; BeforeString: AnsiString; AfterStrings: array of AnsiString): string;
   var
     BeforePosition: Integer;
     AfterPosition: Integer;
     AfterIndex: Integer;
-    AfterString: string;
+    AfterString: AnsiString;
   begin
-    BeforePosition := Pos(BeforeString, AString);
+    BeforePosition := BMPos(AnsiString(BeforeString), AnsiString(AString));
     Assert(BeforePosition >= 1);
-    Result := Copy(AString, BeforePosition + Length(BeforeString));
+
+    Result := Trim(Copy(AString, BeforePosition + Length(BeforeString)));
     if Length(AfterStrings) <> 0 then
     begin
       for AfterIndex := 0 to Length(AfterStrings)- 1 do
@@ -2197,7 +2235,7 @@ var
         AfterString := AfterStrings[AfterIndex];
         if AfterString <> '' then
         begin
-          AfterPosition := Pos(AfterString, Result);
+          AfterPosition := BMPos(AfterString, AnsiString(Result));
           if (AfterPosition >= 1) then
           begin
             Result := copy(Result, 1, AfterPosition-1);
@@ -2210,6 +2248,9 @@ var
   end;
 //  SpacePos: Integer;
 begin
+  AddToDictionaryCount := 0;
+  AddLineCount := 0;
+
   AnsiMultipleLines := AnsiString(MultipleLines);
   CheckNumLines := False;
   for IdIndex := 0 to NumberErrorValues.Count - 1 do
@@ -2246,6 +2287,10 @@ begin
 
       TrimmedLine := Trim(ALine);
       if TrimmedLine = '' then
+      begin
+        Continue;
+      end;
+      if TrimmedLine[1] = '#' then
       begin
         Continue;
       end;
@@ -2337,36 +2382,34 @@ begin
             Indent := NextIndent;
 //            NextIndent := 0;
           end;
-          frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
-          if (IndexTypes[0] <> itStartTimeStep) then
+//          if (IndexTypes[0] <> itStartTimeStep) then
           begin
             AnsiLine := AnsiString(ALine);
-            SP_Start := BMPos('STRESS PERIOD', AnsiLine);
-            if SP_Start <= 0 then
-            begin
-              SP_Start := BMPos('PERIOD', AnsiLine);
-              PeriodSearchTerm := 'PERIOD';
-              if SP_Start <= 0 then
-              begin
-                SP_Start := BMPos('stress period:', AnsiLine);
-                PeriodSearchTerm := 'stress period:'
-              end;
-            end
-            else
-            begin
-              PeriodSearchTerm := 'STRESS PERIOD'
-            end;
+            SP_Start := GetSP_Pos(AnsiLine, PeriodSearchTerm);
             if SP_Start > 0 then
             begin
               TS_Start := BMPos('TIME STEP', AnsiLine);
+              if TS_Start > 0 then
+              begin
+                StepSearchTerm := 'TIME STEP'
+              end;
+
               if TS_Start <= 0 then
               begin
                 TS_Start := BMPos('time step', AnsiLine);
-                StepSearchTerm := 'time step'
-              end
-              else
+                if TS_Start > 0 then
+                begin
+                  StepSearchTerm := 'time step'
+                end;
+              end;
+
+              if TS_Start <= 0 then
               begin
-                StepSearchTerm := 'TIME STEP'
+                TS_Start := BMPos('STEP', AnsiLine);
+                if TS_Start > 0 then
+                begin
+                  StepSearchTerm := 'STEP'
+                end;
               end;
 
               if TS_Start > 0 then
@@ -2387,6 +2430,11 @@ begin
                 end;
                 if PriorStepString <> StepLine then
                 begin
+                  frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, StepLine);
+                  Inc(AddToDictionaryCount);
+                  frameListing.AddLine(LineIndex + InnerLineIndex, StepLine, 1);
+                  Inc(AddLineCount);
+                  Indent := 2;
                   NewTimeStepPostion := frameListing.NodeCount;
                   if NextIndent = 0 then
                   begin
@@ -2397,9 +2445,10 @@ begin
                   end
                   else
                   begin
-                    NextIndent := 1;
+                    NextIndent := 2;
                   end;
                   PriorSP := StressPeriod;
+                  PriorStressPeriod := StressPeriod;
                   NewTimeStepLines.Add(LineIndex + InnerLineIndex);
                   NewTimeStepPostions.Add(NewTimeStepPostion);
                   FParameterDefined := False;
@@ -2412,17 +2461,17 @@ begin
               end
               else
               begin
-                NextIndent := 0;
+                NextIndent := 2;
               end;
             end
             else
             begin
               NextIndent := 0;
             end;
-          end
-          else
-          begin
-            NextIndent := 0;
+//          end
+//          else
+//          begin
+//            NextIndent := 0;
           end;
         end;
 
@@ -2431,18 +2480,27 @@ begin
             Assert(False);
           itPackage:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 0);
+              Inc(AddLineCount);
               Indent := 1;
               FParameterDefined := False;
             end;
           itObservation:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 0);
+              Inc(AddLineCount);
               FParameterDefined := False;
             end;
           itBoundary, itNumberBoundary:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, Indent);
+              Inc(AddLineCount);
               if FParameterDefined then
               begin
                 Indent := 1;
@@ -2451,37 +2509,91 @@ begin
             end;
           itWarning:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameWarning.AddLine(LineIndex + InnerLineIndex, ALine, 0);
+              Inc(AddLineCount);
               FParameterDefined := False;
             end;
           itError:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameErrors.AddLine(LineIndex + InnerLineIndex, ALine, 0);
+              Inc(AddLineCount);
               FParameterDefined := False;
             end;
           itIndent1:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
+              Inc(AddLineCount);
               Indent := 1;
               FParameterDefined := False;
             end;
           itIndent3:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               // This may be an Instance so don't change FParameterDefined
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 2);
+              Inc(AddLineCount);
               Indent := 3;
             end;
           itNoIndentChange:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
+              Inc(AddLineCount);
               FParameterDefined := False;
             end;
           itStressPeriod:
             begin
-              if (itStressPeriod2 = IndexTypes[1]) then
+              if (IndexTypes[1] in [itStressPeriod, itStressPeriod2]) then
               begin
-                frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 0);
-                Indent := 1;
+                AnsiLine := AnsiString(ALine);
+                SP_Start := GetSP_Pos(AnsiLine, PeriodSearchTerm);
+//                SP_Start := BMPos('STRESS PERIOD', AnsiLine);
+//                if SP_Start <= 0 then
+//                begin
+//                  SP_Start := BMPos('PERIOD', AnsiLine);
+//                  PeriodSearchTerm := 'PERIOD';
+//                  if SP_Start <= 0 then
+//                  begin
+//                    SP_Start := BMPos('stress period:', AnsiLine);
+//                    PeriodSearchTerm := 'stress period:'
+//                  end;
+//                end
+//                else
+//                begin
+//                  PeriodSearchTerm := 'STRESS PERIOD'
+//                end;
+                Assert(SP_Start > 0);
+                StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'TIME', 'STEP', ',', 'IS', ' ']);
+                if PriorStressPeriod <> StressPeriod then
+                begin
+                  StepLine := Format('Stress Period %0:s', [StressPeriod]);
+                  frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, StepLine);
+                  Inc(AddToDictionaryCount);
+                  frameListing.AddLine(LineIndex + InnerLineIndex, StepLine, 0);
+                  Inc(AddLineCount);
+                  frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+                  Inc(AddToDictionaryCount);
+                  frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
+                  Inc(AddLineCount);
+                  Indent := 1;
+                end
+                else
+                begin
+                  frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+                  Inc(AddToDictionaryCount);
+                  frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 2);
+                  Inc(AddLineCount);
+                  Indent := 2;
+                end;
+                PriorStressPeriod := StressPeriod;
               end;
               FParameterDefined := False;
             end;
@@ -2491,8 +2603,11 @@ begin
             end;
           itStartTimeStep:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               NewTimeStepPostion := frameListing.AddLine(
                 LineIndex + InnerLineIndex, ALine, 1);
+              Inc(AddLineCount);
               Indent := 2;
               NewTimeStepLines.Add(LineIndex + InnerLineIndex);
               NewTimeStepPostions.Add(NewTimeStepPostion);
@@ -2502,7 +2617,10 @@ begin
             begin
               if (itIteration2 = IndexTypes[1]) then
               begin
+                frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+                Inc(AddToDictionaryCount);
                 frameListing.AddLine(LineIndex + InnerLineIndex, ALine, Indent);
+                Inc(AddLineCount);
               end;
               FParameterDefined := False;
             end;
@@ -2514,28 +2632,42 @@ begin
             begin
               if (itArray2 = IndexTypes[1]) then
               begin
+                frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+                Inc(AddToDictionaryCount);
                 frameListing.AddLine(LineIndex + InnerLineIndex, ALine, Indent);
+                Inc(AddLineCount);
               end;
               FParameterDefined := False;
             end;
           itArray2:
             begin
-              // do nothing
+                frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+                Inc(AddToDictionaryCount);
                 frameListing.AddLine(LineIndex + InnerLineIndex, ALine, Indent);
+                Inc(AddLineCount);
             end;
           itArray3:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, Indent);
+              Inc(AddLineCount);
               FParameterDefined := False;
             end;
           itEndModel:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 0);
+              Inc(AddLineCount);
               FParameterDefined := False;
             end;
           itParameter:
             begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
+              Inc(AddLineCount);
               FParameterDefined := True;
             end;
           itNonID:
@@ -2546,6 +2678,7 @@ begin
           Assert(False);
         end;
       end;
+      Assert(AddToDictionaryCount = AddLineCount);
     end;
     Inc(LineIndex, SomeLines.Count);
 //    if (MultipleLines[Length(MultipleLines)] = #10)
@@ -2777,784 +2910,5 @@ begin
     FIdling := False;
   end;
 end;
-
-//procedure TfrmMain.IndexFile;
-//const
-//  LinesToRead = 100;
-////  BoundaryIndent = 1;
-//var
-//  AString: AnsiString;
-//  LineIndex: Integer;
-//  InnerLine: string;
-//  Lines: TStringList;
-//  StringB: TStringBuilder;
-//  InnerIndex: Integer;
-//  FoundID: Boolean;
-//  ALine: string;
-//  KeyLineFound: Boolean;
-//  IdIndex: Integer;
-//  StartIndex: Integer;
-//  Indent: Integer;
-//  LineMergeCount: Integer;
-//  NotFoundCount: Integer;
-//  FoundCount: Integer;
-//  NotKeyLine: Boolean;
-//  NewTimeStepLines: TListInt64;
-//  NewTimeStepPostions: TListInt64;
-//  NewTimeStepPostion: Integer;
-//  StepIndex: Integer;
-//  StartLine: Int64;
-//  TempLines: TStringList;
-//  SP_Start: Integer;
-//  TS_Start: Integer;
-//  SPFound: Boolean;
-//  NumErrorPresent: Boolean;
-//  RechBudPos: Integer;
-//begin
-//  FAborting := False;
-//  LineMergeCount := LineConcatCount;
-//  sbLines.Enabled := False;
-//  btnGoTo.Enabled := False;
-//  btnFind.Enabled := False;
-//  FListFile.GoToStart;
-//  frameListing.BeginUpdate;
-//  frameWarning.BeginUpdate;
-//  frameErrors.BeginUpdate;
-//  NewTimeStepLines := TListInt64.Create;
-//  NewTimeStepPostions := TListInt64.Create;
-//  StringB := TStringBuilder.Create;
-//  Lines := TStringList.Create;
-//  try
-//    ProgressBar1.Position := 0;
-//    StringB.Capacity := 200000;
-//    StartIndex := 0;
-//    Indent := 0;
-//    try
-//      NotFoundCount := 0;
-//      FoundCount := 0;
-//      for LineIndex := 0 to FListFile.LineCount - 1 do
-//      begin
-//        if (LineIndex mod 1000) = 0 then
-//        begin
-//          ProgressBar1.StepIt;
-//          Application.ProcessMessages;
-//        end;
-//        if FAborting then
-//        begin
-//          Exit;
-//        end;
-//        ALine := FListFile.ReadLine;
-//        StringB.Append(ALine);
-//        StringB.Append(sLineBreak);
-//        if ((LineIndex <> 0) and ((LineIndex mod LineMergeCount) = 0)) or
-//          (LineIndex = FListFile.LineCount - 1) then
-//        begin
-//          AString := AnsiString(StringB.ToString);
-//          KeyLineFound := False;
-//          for IdIndex := 0 to KeyWords.Count - 1 do
-//          begin
-//            if BmPosSimple(KeyWords[IdIndex], AString) >= 1 then
-//            begin
-//              KeyLineFound := True;
-//              if IdIndex > 0 then
-//              begin
-//                KeyWords.Exchange(IdIndex, IdIndex-1);
-//              end;
-//              break;
-//            end;
-//          end;
-//
-//          if KeyLineFound then
-//          begin
-//            Inc(FoundCount);
-//            NotFoundCount := 0;
-//          end
-//          else
-//          begin
-//            FoundCount := 0;
-//            Inc(NotFoundCount);
-//          end;
-//          if FoundCount >= 3 then
-//          begin
-//            LineMergeCount := Max(LineMergeCount div 2, MinLines);
-//            FoundCount := 0;
-//          end;
-//          if NotFoundCount >= 3 then
-//          begin
-////            LineMergeCount := Min(LineMergeCount * 2, MaxLines);
-//            LineMergeCount := LineMergeCount * 2;
-//            NotFoundCount := 0;
-//          end;
-//          if KeyLineFound then
-//          begin
-//            NumErrorPresent := False;
-//            for IdIndex := 0 to NumberErrorValues.Count - 1 do
-//            begin
-//              if BmPosSimple(NumberErrorValues[IdIndex], AString) >= 1 then
-//              begin
-//                NumErrorPresent := True;
-//                break;
-//              end;
-//
-//            end;
-//            Lines.Text := string(AString);
-//            for InnerIndex := 0 to Lines.Count - 1 do
-//            begin
-//              InnerLine := Lines[InnerIndex];
-//              if Trim(InnerLine) = '' then
-//              begin
-//                Continue;
-//              end;
-//              if CharInSet(Trim(InnerLine)[1], ['0' .. '9']) then
-//              begin
-//                if NumErrorPresent then
-//                begin
-//                  for IdIndex := 0 to NumberErrorValues.Count - 1 do
-//                  begin
-//                    if Pos(string(NumberErrorValues[IdIndex]), InnerLine) >= 1 then
-//                    begin
-//                      frameErrors.AddLine(StartIndex + InnerIndex,
-//                        InnerLine, 0);
-//                      break;
-//                    end;
-//                  end;
-//                end;
-//                Continue;
-//
-//              end;
-//              NotKeyLine := False;
-//              // Skip "RECHARGE" when it is in the volumetric budget.
-//              // "RECHARGE" is repeated twice in the volumetric budget
-//              // which allows it to be identified
-//              RechBudPos := Pos(StrRECHARGE, InnerLine);
-//              if RechBudPos >= 1 then
-//              begin
-//                RechBudPos := PosEx(StrRECHARGE, InnerLine, RechBudPos+1);
-//                if RechBudPos >= 1 then
-//                begin
-//                  Continue;
-//                end;
-//              end;
-//              for IdIndex := 0 to NonIdentifiers.Count - 1 do
-//              begin
-//                if Pos(string(NonIdentifiers[IdIndex]), InnerLine) >= 1 then
-//                begin
-//                  NotKeyLine := True;
-//                  // consider uncommenting the following lines
-//                  // if NonIdentifiers.Count is greater than 1.
-//
-////                  if IdIndex > 0 then
-////                  begin
-////                    NonIdentifiers.Exchange(IdIndex, IdIndex-1);
-////                  end;
-//                  break;
-//                end;
-//              end;
-//              if NotKeyLine then
-//              begin
-//                Continue;
-//              end;
-//
-//              for IdIndex := 0 to ErrorValues.Count - 1 do
-//              begin
-//                if Pos(string(ErrorValues[IdIndex]), InnerLine) >= 1 then
-//                begin
-//                  frameErrors.AddLine(StartIndex + InnerIndex,
-//                    InnerLine, 0);
-//                  if IdIndex > 0 then
-//                  begin
-//                    ErrorValues.Exchange(IdIndex, IdIndex-1);
-//                  end;
-//                  break;
-//                end;
-//              end;
-//
-//              for IdIndex := 0 to WarningValues.Count - 1 do
-//              begin
-//                if Pos(string(WarningValues[IdIndex]), InnerLine) >= 1 then
-//                begin
-//                  frameWarning.AddLine(StartIndex + InnerIndex,
-//                    InnerLine, 0);
-//                  if IdIndex > 0 then
-//                  begin
-//                    WarningValues.Exchange(IdIndex, IdIndex-1);
-//                  end;
-//                  break;
-//                end;
-//              end;
-//
-//              if ((Pos(StressPeriodID1, InnerLine) >= 1) and
-//                (Pos(StressPeriodID2, InnerLine) >= 1)) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 0);
-//                Indent := 1;
-//                Continue;
-//              end;
-//
-//              if (Pos(StartNewTimeStep, InnerLine) >= 1) then
-//              begin
-//                NewTimeStepPostion := frameListing.AddLine
-//                  (StartIndex + InnerIndex, InnerLine, 1);
-//                Indent := 2;
-//                NewTimeStepLines.Add(StartIndex + InnerIndex);
-//                NewTimeStepPostions.Add(NewTimeStepPostion);
-//                Continue;
-//              end;
-//
-//              FoundID := False;
-//              for IdIndex := 0 to PackageIdentifiers.Count - 1 do
-//              begin
-//                if Pos(string(PackageIdentifiers[IdIndex]), InnerLine) >= 1 then
-//                begin
-//                  frameListing.AddLine(StartIndex + InnerIndex,
-//                    InnerLine, 0);
-//                  Indent := 1;
-//                  FoundID := True;
-//                  break;
-//                end;
-//              end;
-//              if FoundID then
-//              begin
-//                Continue;
-//              end;
-//
-//              if (Pos(StrParameterName, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 1);
-////                Indent := 2;
-//                Continue;
-//              end;
-//
-//              if (Pos(StrINSTANCE, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 2);
-//                Indent := 3;
-//                Continue;
-//              end;
-//
-//              if (Pos(StrParameter, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 1);
-////                Indent := 2;
-//                Continue;
-//              end;
-//
-//              if (Pos(TransportStep, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 2);
-//                Indent := 3;
-//                Continue;
-//              end;
-//
-//              if (Pos(StrINSTANCE2, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 2);
-//                Indent := 3;
-//                Continue;
-//              end;
-//
-//
-//              if (Pos(StrCLASSIFICATIONCOU, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 1);
-//                Indent := 1;
-//                Continue;
-//              end;
-//
-//              FoundID := False;
-//              for IdIndex := 0 to BoundaryIdentifiers.Count - 1 do
-//              begin
-//                if Pos(string(BoundaryIdentifiers[IdIndex]), InnerLine) >= 1
-//                then
-//                begin
-//                  frameListing.AddLine(StartIndex + InnerIndex,
-//                    InnerLine, Indent);
-//                  if IdIndex > 0 then
-//                  begin
-//                    BoundaryIdentifiers.Exchange(IdIndex, IdIndex-1);
-//                  end;
-//                  FoundID := True;
-////                  Indent := 1;
-//                  break;
-//                end;
-//              end;
-//              if FoundID then
-//              begin
-//                Continue;
-//              end;
-//
-//              if ((Pos(IterationID1, InnerLine) >= 1) and
-//                (Pos(IterationID2, InnerLine) >= 1)) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, Indent);
-//                Continue;
-//              end;
-//
-//              if ((Pos(ArrayID1, InnerLine) >= 1) and
-//                (Pos(ArrayID2, InnerLine) >= 1)) then
-//              begin
-////                Indent := 2;
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, Indent);
-//                Continue;
-//              end;
-//
-//              if (Pos(ArrayID3, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, Indent);
-//                Continue;
-//              end;
-//
-//              if (Pos(ArrayID4, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, Indent);
-//                Continue;
-//              end;
-//
-//              if (Pos(BudgetID, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, Indent);
-//                Continue;
-//              end;
-//
-//              if (Pos(TimeSummary, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, Indent);
-//                Continue;
-//              end;
-//
-//              if (Pos(EndModel, InnerLine) >= 1) then
-//              begin
-//                frameListing.AddLine(StartIndex + InnerIndex,
-//                  InnerLine, 0);
-//                Continue;
-//              end;
-//
-//              for IdIndex := 0 to ObsIdentifiers.Count - 1 do
-//              begin
-//                if Pos(string(ObsIdentifiers[IdIndex]), InnerLine) >= 1 then
-//                begin
-//                  frameListing.AddLine(StartIndex + InnerIndex,
-//                    InnerLine, 0);
-//                  FoundID := True;
-//                  break;
-//                end;
-//              end;
-//              if FoundID then
-//              begin
-//                Continue;
-//              end;
-//            end;
-//          end;
-//          StringB.Clear;
-//          StringB.Capacity := 200000;
-//          // StartIndex := LineIndex*LineConcatCount;
-//          StartIndex := LineIndex + 1;
-//        end;
-//      end;
-//    finally
-//      pgcIndex.ActivePage := tabIndex;
-//      tabWarnings.TabVisible := frameWarning.HasContent;
-//      if tabWarnings.TabVisible then
-//      begin
-//        pgcIndex.ActivePage := tabWarnings;
-//      end;
-//      tabErrors.TabVisible := frameErrors.HasContent;
-//      if tabErrors.TabVisible then
-//      begin
-//        pgcIndex.ActivePage := tabErrors;
-//      end;
-//    end;
-//    TempLines := TStringList.Create;
-//    try
-//      for StepIndex := 0 to NewTimeStepPostions.Count - 1 do
-//      begin
-//        StartLine := NewTimeStepLines[StepIndex];
-//        SPFound := False;
-//        repeat
-//          FListFile.ReadLines(TempLines, StartLine, LinesToRead);
-//          for LineIndex := 0 to TempLines.Count - 1 do
-//          begin
-//            ALine := TempLines[LineIndex];
-//            SP_Start := Pos('STRESS PERIOD', ALine);
-//            if SP_Start > 0 then
-//            begin
-//              TS_Start := Pos('TIME STEP', ALine);
-//              if TS_Start > 0 then
-//              begin
-//                if TS_Start > SP_Start then
-//                begin
-//                  ALine := Copy(ALine, SP_Start, MAXINT);
-//                end
-//                else
-//                begin
-//                  ALine := Copy(ALine, TS_Start, MAXINT);
-//                end;
-//                frameListing.AddToLine
-//                  (NewTimeStepPostions[StepIndex], ALine);
-//                SPFound := True;
-//                break;
-//              end;
-//            end;
-//          end;
-//          Inc(StartLine, LinesToRead);
-//        until SPFound or (TempLines.Count = 0);
-//      end;
-//    finally
-//      TempLines.Free;
-//    end;
-//  finally
-//    frameListing.EndUpdate;
-//    frameWarning.EndUpdate;
-//    frameErrors.EndUpdate;
-//    NewTimeStepPostions.Free;
-//    NewTimeStepLines.Free;
-//    StringB.Free;
-//    Lines.Free;
-//    sbLines.Enabled := True;
-//    btnGoTo.Enabled := True;
-//    btnFind.Enabled := True;
-////    ShowMessage('Found ' + IntToStr(FoundCount) + sLineBreak
-////      + 'Not Found ' + IntToStr(NotFoundCount));
-//  end;
-//end;
-
-{procedure TfrmMain.AlternateIndexFile;
-const
-  LinesToRead = 100;
-var
-  LineIndex: Integer;
-  InnerLine: string;
-  Lines: TStringList;
-  StringB: TStringBuilder;
-  InnerIndex: Integer;
-  FoundID: Boolean;
-  ALine: string;
-  KeyLineFound: Boolean;
-  IdIndex: Integer;
-  StartIndex: Integer;
-  Indent: Integer;
-  LineMergeCount: Integer;
-  NotFoundCount: Integer;
-  FoundCount: Integer;
-  NotKeyLine: Boolean;
-  NewTimeStepLines: TList<Int64>;
-  NewTimeStepPostions: TList<Int64>;
-  NewTimeStepPostion: Integer;
-  StepIndex: Integer;
-  StartLine: Int64;
-  TempLines: TStringList;
-  SP_Start: Integer;
-  TS_Start: Integer;
-  SPFound: Boolean;
-  ABuffer: TCharArray;
-  StartChar: PChar;
-  FoundChar: PChar;
-  NewPosition: Integer;
-begin
-  // This procedure is slower than IndexFile.
-  FAborting := False;
-  LineMergeCount := LineConcatCount;
-  sbLines.Enabled := False;
-  btnGoTo.Enabled := False;
-  btnFind.Enabled := False;
-  FListFile.GoToStart;
-  frameListing.BeginUpdate;
-  frameWarning.BeginUpdate;
-  frameErrors.BeginUpdate;
-  NewTimeStepLines := TList<Int64>.Create;
-  NewTimeStepPostions := TList<Int64>.Create;
-  StringB := TStringBuilder.Create;
-  Lines := TStringList.Create;
-  try
-    ProgressBar1.Position := 0;
-    StringB.Capacity := 200000;
-    StartIndex := 0;
-    Indent := 0;
-    try
-      NotFoundCount := 0;
-      FoundCount := 0;
-      LineIndex := 0;
-      NewPosition := 0;
-      While LineIndex < FListFile.LineCount do
-      begin
-//        if (LineIndex mod 1000) = 0 then
-//        begin
-//          ProgressBar1.StepIt;
-//          Application.ProcessMessages;
-//        end;
-        if FAborting then
-        begin
-          Exit;
-        end;
-        FListFile.ReadLines(ABuffer, LineIndex, LineMergeCount);
-        Inc(LineIndex, LineMergeCount);
-        NewPosition := LineIndex div 1000;
-        if ProgressBar1.Position <> NewPosition then
-        begin
-          ProgressBar1.Position := NewPosition
-        end;
-//        ALine := FListFile.ReadLine;
-//        StringB.Append(ALine);
-//        StringB.Append(sLineBreak);
-//        if ((LineIndex <> 0) and ((LineIndex mod LineMergeCount) = 0)) or
-//          (LineIndex = FListFile.LineCount - 1) then
-        begin
-//          AString := AnsiString(StringB.ToString);
-          KeyLineFound := False;
-          StartChar := Addr(ABuffer[0]);
-          for IdIndex := 0 to KeyWords.Count - 1 do
-          begin
-            FoundChar := SearchBuf(StartChar, Length(ABuffer), 0, 0, KeyWords[IdIndex]);
-            if FoundChar <> nil then
-            begin
-              KeyLineFound := True;
-              break;
-            end;
-          end;
-          if KeyLineFound then
-          begin
-            Inc(FoundCount);
-            NotFoundCount := 0;
-          end
-          else
-          begin
-            FoundCount := 0;
-            Inc(NotFoundCount);
-          end;
-          if FoundCount >= 3 then
-          begin
-            LineMergeCount := Max(LineMergeCount div 2, MinLines);
-            FoundCount := 0;
-          end;
-          if NotFoundCount >= 3 then
-          begin
-            LineMergeCount := Min(LineMergeCount * 2, MaxLines);
-            NotFoundCount := 0;
-          end;
-          if KeyLineFound then
-          begin
-            StringB.Clear;
-            StringB.Append(ABuffer);
-            Lines.Text := StringB.ToString;
-            for InnerIndex := 0 to Lines.Count - 1 do
-            begin
-              InnerLine := Lines[InnerIndex];
-              if Trim(InnerLine) = '' then
-              begin
-                Continue;
-              end;
-              if CharInSet(Trim(InnerLine)[1], ['0' .. '9']) then
-              begin
-                Continue;
-              end;
-              NotKeyLine := False;
-              for IdIndex := 0 to NonIdentifiers.Count - 1 do
-              begin
-                if Pos(string(NonIdentifiers[IdIndex]), InnerLine) >= 1 then
-                begin
-                  NotKeyLine := True;
-                  break;
-                end;
-              end;
-              if NotKeyLine then
-              begin
-                Continue;
-              end;
-              for IdIndex := 0 to ErrorValues.Count - 1 do
-              begin
-                if Pos(string(ErrorValues[IdIndex]), InnerLine) >= 1 then
-                begin
-                  frameErrors.AddLine(StartIndex + InnerIndex,
-                    InnerLine, 0);
-                  break;
-                end;
-              end;
-              for IdIndex := 0 to WarningValues.Count - 1 do
-              begin
-                if Pos(string(WarningValues[IdIndex]), InnerLine) >= 1 then
-                begin
-                  frameWarning.AddLine(StartIndex + InnerIndex,
-                    InnerLine, 0);
-                  break;
-                end;
-              end;
-              if ((Pos(StressPeriodID1, InnerLine) >= 1) and
-                (Pos(StressPeriodID2, InnerLine) >= 1)) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, 0);
-                Indent := 1;
-                Continue;
-              end;
-              if (Pos(StartNewTimeStep, InnerLine) >= 1) then
-              begin
-                NewTimeStepPostion := frameListing.AddLine
-                  (StartIndex + InnerIndex, InnerLine, 1);
-                Indent := 2;
-                NewTimeStepLines.Add(StartIndex + InnerIndex);
-                NewTimeStepPostions.Add(NewTimeStepPostion);
-                Continue;
-              end;
-              if ((Pos(IterationID1, InnerLine) >= 1) and
-                (Pos(IterationID2, InnerLine) >= 1)) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, Indent);
-                Continue;
-              end;
-              if ((Pos(ArrayID1, InnerLine) >= 1) and
-                (Pos(ArrayID2, InnerLine) >= 1)) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, Indent);
-                Continue;
-              end;
-              if (Pos(ArrayID3, InnerLine) >= 1) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, Indent);
-                Continue;
-              end;
-              if (Pos(BudgetID, InnerLine) >= 1) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, Indent);
-                Continue;
-              end;
-              if (Pos(TimeSummary, InnerLine) >= 1) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, Indent);
-                Continue;
-              end;
-              if (Pos(EndModel, InnerLine) >= 1) then
-              begin
-                frameListing.AddLine(StartIndex + InnerIndex,
-                  InnerLine, 0);
-                Continue;
-              end;
-              FoundID := False;
-              for IdIndex := 0 to PackageIdentifiers.Count - 1 do
-              begin
-                if Pos(string(PackageIdentifiers[IdIndex]), InnerLine) >= 1 then
-                begin
-                  frameListing.AddLine(StartIndex + InnerIndex,
-                    InnerLine, Indent);
-                  FoundID := True;
-                  break;
-                end;
-              end;
-              if FoundID then
-              begin
-                Continue;
-              end;
-              for IdIndex := 0 to ObsIdentifiers.Count - 1 do
-              begin
-                if Pos(string(ObsIdentifiers[IdIndex]), InnerLine) >= 1 then
-                begin
-                  frameListing.AddLine(StartIndex + InnerIndex,
-                    InnerLine, 0);
-                  FoundID := True;
-                  break;
-                end;
-              end;
-              if FoundID then
-              begin
-                Continue;
-              end;
-              for IdIndex := 0 to BoundaryIdentifiers.Count - 1 do
-              begin
-                if Pos(string(BoundaryIdentifiers[IdIndex]), InnerLine) >= 1
-                then
-                begin
-                  frameListing.AddLine(StartIndex + InnerIndex,
-                    InnerLine, Indent);
-                  FoundID := True;
-                  break;
-                end;
-              end;
-              if FoundID then
-              begin
-                Continue;
-              end;
-            end;
-          end;
-          StringB.Clear;
-          StringB.Capacity := 200000;
-          // StartIndex := LineIndex*LineConcatCount;
-          StartIndex := LineIndex + 1;
-        end;
-      end;
-    finally
-      pgcIndex.ActivePage := tabIndex;
-      tabWarnings.TabVisible := frameWarning.HasContent;
-      if tabWarnings.TabVisible then
-      begin
-        pgcIndex.ActivePage := tabWarnings;
-      end;
-      tabErrors.TabVisible := frameErrors.HasContent;
-      if tabErrors.TabVisible then
-      begin
-        pgcIndex.ActivePage := tabErrors;
-      end;
-    end;
-    TempLines := TStringList.Create;
-    try
-      for StepIndex := 0 to NewTimeStepPostions.Count - 1 do
-      begin
-        StartLine := NewTimeStepLines[StepIndex];
-        SPFound := False;
-        repeat
-          FListFile.ReadLines(TempLines, StartLine, LinesToRead);
-          for LineIndex := 0 to TempLines.Count - 1 do
-          begin
-            ALine := TempLines[LineIndex];
-            SP_Start := Pos('STRESS PERIOD', ALine);
-            if SP_Start > 0 then
-            begin
-              TS_Start := Pos('TIME STEP', ALine);
-              if TS_Start > SP_Start then
-              begin
-                ALine := Copy(ALine, SP_Start, MAXINT);
-                frameListing.AddToLine
-                  (NewTimeStepPostions[StepIndex], ALine);
-                SPFound := True;
-                break;
-              end;
-            end;
-          end;
-          Inc(StartLine, LinesToRead);
-        until SPFound or (TempLines.Count = 0);
-      end;
-    finally
-      TempLines.Free;
-    end;
-  finally
-    frameListing.EndUpdate;
-    frameWarning.EndUpdate;
-    frameErrors.EndUpdate;
-    NewTimeStepPostions.Free;
-    NewTimeStepLines.Free;
-    StringB.Free;
-    Lines.Free;
-    sbLines.Enabled := True;
-    btnGoTo.Enabled := True;
-    btnFind.Enabled := True;
-  end;
-end;
-}
 
 end.

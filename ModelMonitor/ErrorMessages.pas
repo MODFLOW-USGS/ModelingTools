@@ -1004,7 +1004,7 @@ begin
     WarningValues.Add('UZF PACKAGE FAILED CONVERGENCE CRITERIA');
     WarningValues.Add('did not converge for stress period');
     WarningValues.Add('SIMULATION WILL CONTINUE EVEN IF THERE IS NONCONVERGENCE.');
-    WarningValues.Add('K22 not provided.  Assuming K22 = K.');
+//    WarningValues.Add('K22 not provided.  Assuming K22 = K.');
     WarningValues.Add('PERCENT COMPACTION IS GREATER THAN OR EQUAL TO 1 PERCENT IN');
     WarningValues.Add('COARSE-GRAINED STORAGE PERCENT COMPACTION IS GREATER THAN');
 //    WarningValues.Add('aaa');
