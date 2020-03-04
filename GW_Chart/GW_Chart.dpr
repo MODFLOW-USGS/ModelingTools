@@ -30,7 +30,8 @@ uses
   frmBudgetPrecisionQueryUnit in 'frmBudgetPrecisionQueryUnit.pas' {frmBudgetPrecisionQuery},
   frmFarmUnit in 'frmFarmUnit.pas' {frmFarm},
   frmFarmFileTypeUnit in 'frmFarmFileTypeUnit.pas' {frmFarmFileType},
-  DisclaimerTextUnit in 'DisclaimerTextUnit.pas';
+  DisclaimerTextUnit in 'DisclaimerTextUnit.pas',
+  Mf6ObsUtilOutputReaderUnit in 'Mf6ObsUtilOutputReaderUnit.pas';
 
 {$R *.RES}
 

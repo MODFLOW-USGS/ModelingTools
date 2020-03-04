@@ -1,6 +1,6 @@
 object frmZoneBdgtReader: TfrmZoneBdgtReader
-  Left = 1248
-  Top = 355
+  Left = 100
+  Top = 100
   Width = 622
   Height = 575
   HelpContext = 300

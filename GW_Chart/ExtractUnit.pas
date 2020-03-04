@@ -18,7 +18,7 @@ type
   TSutraCoordType = (sct2D, sct3D);
 
   TProgramChoice = (pcModflow, pcMt3dObs, pcMt3dConc, pcGwtObs, pcSutra1,
-    pcsutra2, pcSutra2_1, pcHydMode);
+    pcsutra2, pcSutra2_1, pcHydMode, pcMf6Obs);
 //MODFLOW head or drawdown file
 //MT3D Observations
 //GWT and MOC3D Observations
@@ -138,6 +138,7 @@ type
     procedure SetAllPlots(Value: Boolean);
     procedure GetSutraCoord(ALine: string; var Coord: TSutraCoordArray);
     procedure ReadMt3dConcFile;
+    procedure ReadMf6Obs;
     { Private declarations }
   public
     CancelProcess: boolean;
@@ -162,7 +163,7 @@ var
 implementation
 
 uses {HelpUnit,} frmFormatUnit, frmAboutUnit, frmModChartUnit, 
-  ReadModflowArrayUnit;
+  ReadModflowArrayUnit, Mf6ObsUtilOutputReaderUnit;
 
 {$R *.DFM}
 
@@ -852,11 +853,146 @@ begin
       begin
         ReadHydmodFile;
       end;
+    pcMf6Obs:
+      begin
+        ReadMf6Obs;
+      end;
   else
     begin
       Assert(False);
     end;
   end;
+end;
+
+procedure TfrmExtract.ReadMf6Obs;
+var
+  OutputFile: TMf6ObsOutputFile;
+  FileType: TFileType;
+  ColorIndex: integer;
+  Time: Double;
+  Values: TDoubleArray;
+  ASeries: TLineSeries;
+  Lines: TStringlist;
+  ALine: string;
+  ObsIndex: Integer;
+  CaptionString: String;
+  PlotText: String;
+begin
+  Caption := 'GW_Chart: ' + OpenDialog1.FileName;
+  if cbPlot.Checked then
+  begin
+    PlotText := 'Yes';
+  end
+  else
+  begin
+    PlotText := 'No';
+  end;
+
+  // disable thing that shouldn't be changed while reading the file.
+  btnSave.Enabled := True;
+  btnCancel.Enabled := True;
+  btnRead.Enabled := False;
+  adeCellCount.Enabled := False;
+  dgDataPoints.Enabled := False;
+  Lines := TStringList.Create;
+  try
+    if LowerCase(ExtractFileExt(OpenDialog1.FileName))= '.csv' then
+    begin
+      FileType := ftText;
+    end
+    else
+    begin
+      FileType := ftBinary;
+    end;
+
+    OutputFile := TMf6ObsOutputFile.Create(OpenDialog1.FileName, FileType);
+    try
+      ClearSeriesList;
+      // initialize the memo
+      RichEdit1.Clear;
+      ALine := 'Time';
+      for ObsIndex := 0 to OutputFile.NumberOfObservations -1 do
+      begin
+        ALine := ALine + #9 + OutputFile.ObsName[ObsIndex];
+      end;
+      Lines.Add(ALine);
+
+      ColorIndex := -1;
+      dgDataNodes.RowCount := OutputFile.NumberOfObservations + 1;
+      try
+        for ObsIndex := 0 to OutputFile.NumberOfObservations -1 do
+        begin
+          Inc(ColorIndex);
+          if ColorIndex >= Length(ColorPalette) then
+          begin
+            ColorIndex := 0;
+          end;
+          CaptionString := OutputFile.ObsName[ObsIndex];
+          dgDataNodes.Cells[0, ObsIndex+1] := CaptionString;
+          dgDataNodes.Cells[1, ObsIndex+1] := PlotText;
+  //        AString := AString + Chr(9) + CaptionString;
+
+          ASeries := TLineSeries.Create(ChartHydExtractor);
+          ASeries.XValues.Order := loNone;
+          ASeries.SeriesColor := ColorPalette[ColorIndex];
+          ASeries.ParentChart := ChartHydExtractor;
+          MySeriesList.Add(ASeries);
+          ASeries.Title := CaptionString;
+          ASeries.Pointer.Visible := True;
+          ASeries.Active := cbPlot.Checked {and (dgDataPoints.Cells[3, RowIndex]
+            = dgDataPoints.Columns[3].PickList.Strings[1])};
+          ASeries.BeginUpdate;
+        end;
+      finally
+
+      end;                      
+
+      Screen.Cursor := crHourGlass;
+      try
+        while True do
+        begin
+          if OutputFile.ReadNextData(Time, Values) then
+          begin
+            ALine := FloatToStr(Time);
+            Assert(Length(Values) = MySeriesList.Count);
+            for ObsIndex := 0 to OutputFile.NumberOfObservations - 1 do
+            begin
+              ASeries := MySeriesList[ObsIndex];
+              ASeries.AddXY(Time, Values[ObsIndex], '', clTeeColor);
+              ALine := ALine + #9 + FloatToStr(Values[ObsIndex]);
+            end;
+            Lines.Add(ALine);
+          end
+          else
+          begin
+            RichEdit1.Lines.AddStrings(Lines);
+            FLinesToSave.Assign(Lines);
+            Break;
+          end;
+
+        end;
+      finally
+        for ObsIndex := 0 to OutputFile.NumberOfObservations -1 do
+        begin
+          ASeries := MySeriesList[ObsIndex];
+          ASeries.EndUpdate;
+        end;
+        Screen.Cursor := crDefault;
+      end;
+
+
+    finally
+      OutputFile.Free;
+    end;
+
+  finally
+    btnCancel.Enabled := False;
+    btnRead.Enabled := True;
+    adeCellCount.Enabled := True;
+    Lines.Free;
+  end;
+
+
 end;
 
 procedure TfrmExtract.ClearNodeSelection;
@@ -1357,6 +1493,28 @@ begin
         rgMOC3D.Enabled := False;
         rgSutra.Enabled := False;
         lblCount.Caption := 'Number of Observation Points';
+        comboUnits.Enabled := False;
+        comboUnits.Color := clBtnFace;
+        adeDensity.Enabled := False;
+        adeG.Enabled := False;
+      end;
+    pcMf6Obs:
+      begin
+        OpenDialog1.Filter :=
+          'CSV files (*.csv)|*.csv|'
+          + 'Binary file (*.bin)|*.bin|'
+          + 'Any file (*.*)|*.*';
+
+        ChartHydExtractor.LeftAxis.Title.Caption :=
+          UpperCase('Value');
+        ChartHydExtractor.BottomAxis.Title.Caption := 'time';
+        dgDataPoints.Visible := False;
+        dgDataNodes.Visible := True;
+        dgDataNodes.Columns[0].Title.Caption := 'Series Name';
+        dgDataNodes.ColCount := 2;
+        rgMOC3D.Enabled := False;
+        rgSutra.Enabled := False;
+        lblCount.Caption := 'Number of Observation Series';
         comboUnits.Enabled := False;
         comboUnits.Color := clBtnFace;
         adeDensity.Enabled := False;

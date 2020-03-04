@@ -67,6 +67,12 @@ procedure ReadModflowAsciiRealArray(F: TFileVariable;
   var DESC: TModflowDesc2; var NCOL, NROW, ILAY: Integer;
   var AnArray: TModflowDoubleArray);
 
+procedure ReadSinglePrecisionMt3dmsBinaryRealArray(AFile: TFileStream;
+  var NTRANS, KSTP, KPER: Integer;
+  var TOTIM: TModflowDouble; var DESC: TModflowDesc;
+  var NCOL, NROW, ILAY: Integer; var AnArray: TModflowDoubleArray;
+  ReadArray: Boolean = True);
+
 procedure ReadModflowSinglePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer; var PERTIM, TOTIM: TModflowDouble;
   var DESC: TModflowDesc; var NCOL, NROW, NLAY: Integer;
@@ -76,13 +82,8 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
+  const AltNLay, AltNRow, AltNCol: integer;
   var IRESULT: integer);
-
-procedure ReadSinglePrecisionMt3dmsBinaryRealArray(AFile: TFileStream;
-  var NTRANS, KSTP, KPER: Integer;
-  var TOTIM: TModflowDouble; var DESC: TModflowDesc;
-  var NCOL, NROW, ILAY: Integer; var AnArray: TModflowDoubleArray;
-  ReadArray: Boolean = True);
 
 function CheckArrayPrecision(AFile: TFileStream): TModflowPrecision;
 function CheckBudgetPrecision(AFile: TFileStream): TModflowPrecision;
@@ -638,6 +639,11 @@ begin
         begin
           result := mpDouble;
         end
+        else if (FirstDescription = '          STO-SS')
+          and (SecondDescription = '          STO-SY') then
+        begin
+          result := mpDouble;
+        end
         else if (FirstDescription = '    FLOW-JA-FACE')
           {and (SecondDescription = '      DATA-SPDIS')} then
         begin
@@ -1003,6 +1009,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
+  const AltNLay, AltNRow, AltNCol: integer;
   var IRESULT: integer);
 var
   ITYPE: integer;
@@ -1034,6 +1041,8 @@ var
   N2: integer;
   Value: TModflowDouble;
   AuxValue: TModflowDouble;
+  NeedToUpdateDimensions: Boolean;
+  Mf6Description: String;
   procedure ReadModflow6Name(var AName: string);
   var
     NameArray: TModflowDesc;
@@ -1054,14 +1063,38 @@ begin
   AFile.Read(NCOL, SizeOf(NCOL));
   AFile.Read(NROW, SizeOf(NROW));
   AFile.Read(NLAY, SizeOf(NLAY));
-  SetLength(AnArray, Abs(NLAY), NROW, NCOL);
-  for LayerIndex := 0 to Abs(NLAY) - 1 do
+  NeedToUpdateDimensions := False;
+//  if ReadArray then
   begin
-    for RowIndex := 0 to NROW - 1 do
+    Mf6Description := Trim(string(DESC));
+    if (Mf6Description = 'CSUB-ELASTIC')
+      or (Mf6Description = 'CSUB-INELASTIC') then
     begin
-      for ColIndex := 0 to NCOL - 1 do
+      NeedToUpdateDimensions := True;
+      SetLength(AnArray, Abs(AltNLay), AltNRow, AltNCol);
+      for LayerIndex := 0 to Abs(AltNLay) - 1 do
       begin
-        AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+        for RowIndex := 0 to AltNRow - 1 do
+        begin
+          for ColIndex := 0 to AltNCol - 1 do
+          begin
+            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+          end;
+        end;
+      end;
+    end
+    else
+    begin
+      SetLength(AnArray, Abs(NLAY), NROW, NCOL);
+      for LayerIndex := 0 to Abs(NLAY) - 1 do
+      begin
+        for RowIndex := 0 to NROW - 1 do
+        begin
+          for ColIndex := 0 to NCOL - 1 do
+          begin
+            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+          end;
+        end;
       end;
     end;
   end;
@@ -1208,6 +1241,16 @@ begin
         end;
         AFile.Read(NLIST, SizeOf(NLIST));
 
+        if NeedToUpdateDimensions then
+        begin
+          Assert(AltNRow >= 1);
+          Assert(AltNCol >= 1);
+          Assert(AltNLay >= 1);
+          Assert(NROW * NCOL <= AltNRow * AltNCol * AltNLay);
+          NROW := AltNRow;;
+          NCOL := AltNCol;
+          NLAY := AltNLay;
+        end;
 //        if ReadArray then
         begin
           NRC := NROW*NCOL;

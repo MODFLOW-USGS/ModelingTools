@@ -18,23 +18,23 @@ object frmConvertFlows: TfrmConvertFlows
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 13
   object spl1: TSplitter
-    Left = 264
+    Left = 266
     Top = 72
-    Height = 302
+    Height = 313
     Align = alRight
   end
   object Panel3: TPanel
     Left = 0
     Top = 0
-    Width = 480
+    Width = 482
     Height = 72
     Align = alTop
     TabOrder = 0
     DesignSize = (
-      480
+      482
       72)
     object lblFlowFile: TLabel
       Left = 8
@@ -59,8 +59,8 @@ object frmConvertFlows: TfrmConvertFlows
   end
   object Panel4: TPanel
     Left = 0
-    Top = 374
-    Width = 480
+    Top = 385
+    Width = 482
     Height = 41
     Align = alBottom
     TabOrder = 3
@@ -85,8 +85,8 @@ object frmConvertFlows: TfrmConvertFlows
   object rdgExportFiles: TRbwDataGrid4
     Left = 0
     Top = 72
-    Width = 264
-    Height = 302
+    Width = 266
+    Height = 313
     Align = alClient
     ColCount = 2
     FixedCols = 0
@@ -94,6 +94,8 @@ object frmConvertFlows: TfrmConvertFlows
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
     TabOrder = 1
     OnSelectCell = rdgExportFilesSelectCell
+    ExtendedAutoDistributeText = False
+    AutoMultiEdit = False
     AutoDistributeText = False
     AutoIncreaseColCount = False
     AutoIncreaseRowCount = False
@@ -102,7 +104,6 @@ object frmConvertFlows: TfrmConvertFlows
     OnBeforeDrawCell = rdgExportFilesBeforeDrawCell
     OnStateChange = rdgExportFilesStateChange
     ColorRangeSelection = False
-    ColorSelectedRow = True
     Columns = <
       item
         AutoAdjustRowHeights = False
@@ -123,6 +124,8 @@ object frmConvertFlows: TfrmConvertFlows
         ParentButtonFont = False
         WordWrapCaptions = False
         WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end
       item
@@ -144,14 +147,17 @@ object frmConvertFlows: TfrmConvertFlows
         ParentButtonFont = False
         WordWrapCaptions = False
         WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end>
+    WordWrapRowCaptions = False
   end
   object pnlCellsToExport: TPanel
-    Left = 267
+    Left = 269
     Top = 72
     Width = 213
-    Height = 302
+    Height = 313
     Align = alRight
     TabOrder = 2
     object lblCellCount: TLabel
@@ -163,7 +169,7 @@ object frmConvertFlows: TfrmConvertFlows
     end
     object rdgCellsToExport: TRbwDataGrid4
       Left = 1
-      Top = 96
+      Top = 107
       Width = 211
       Height = 205
       Align = alBottom
@@ -174,13 +180,14 @@ object frmConvertFlows: TfrmConvertFlows
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
       TabOrder = 2
+      ExtendedAutoDistributeText = False
+      AutoMultiEdit = False
       AutoDistributeText = True
       AutoIncreaseColCount = False
       AutoIncreaseRowCount = True
       SelectedRowOrColumnColor = clAqua
       UnselectableColor = clBtnFace
       ColorRangeSelection = False
-      ColorSelectedRow = True
       Columns = <
         item
           AutoAdjustRowHeights = False
@@ -203,6 +210,8 @@ object frmConvertFlows: TfrmConvertFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = True
         end
         item
@@ -226,6 +235,8 @@ object frmConvertFlows: TfrmConvertFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = True
         end
         item
@@ -249,9 +260,12 @@ object frmConvertFlows: TfrmConvertFlows
           ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
       OnEndUpdate = rdgCellsToExportEndUpdate
+      WordWrapRowCaptions = False
     end
     object rgCellsToExport: TRadioGroup
       Left = 1

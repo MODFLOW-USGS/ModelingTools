@@ -50,6 +50,9 @@ type
   private
     FMessageHidden: boolean;
     FlowNames: TStringList;
+    FNLay: Integer;
+    FNRow: Integer;
+    FNCol: Integer;
     procedure GetFlowNames(const FileName: string);
     procedure WriteArrayLabel(KSTP,KPER: Integer; PERTIM, TOTIM: TModflowDouble;
       TEXT: TModflowDesc; NCOL, NROW,ILAY: Integer; AFile: TFileStream);
@@ -141,7 +144,9 @@ begin
           mpDouble:
             begin
               ReadModflowDoublePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
-                TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT);
+                TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
+                Abs(NLAY), NROW, NCOL,
+                IRESULT);
             end;
         else Assert(False);
         end;
@@ -162,6 +167,9 @@ begin
       end;
     finally
       BudgetFile.Free;
+      FNLay := NLAY;
+      FNRow := NROW;
+      FNCol := NCOL;
     end;
   end;
 end;
@@ -497,7 +505,9 @@ begin
                   mpDouble:
                     begin
                       ReadModflowDoublePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
-                        TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT);
+                        TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
+                        Abs(FNLay), FNRow, FNCol,
+                        IRESULT);
                     end;
                 else Assert(False);
                 end;

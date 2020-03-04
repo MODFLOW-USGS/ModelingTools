@@ -1,6 +1,6 @@
 object frmModChart: TfrmModChart
-  Left = 344
-  Top = 421
+  Left = 301
+  Top = 127
   Width = 720
   Height = 556
   HelpContext = 100
@@ -22,13 +22,13 @@ object frmModChart: TfrmModChart
   OnDockOver = Panel1DockOver
   OnResize = FormResize
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 21
   object chartModflow: TChart
     Left = 0
     Top = 41
-    Width = 470
-    Height = 426
+    Width = 472
+    Height = 437
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Legend.ColorWidth = 50
@@ -46,6 +46,8 @@ object frmModChart: TfrmModChart
       ' ')
     OnGetLegendPos = chartModflowGetLegendPos
     OnGetLegendRect = chartModflowGetLegendRect
+    OnDrawAxisLabel = chartModflowDrawAxisLabel
+    OnGetSymbolSize = chartModflowGetSymbolSize
     BottomAxis.AxisValuesFormat = '#,##0.###,###'
     BottomAxis.ExactDateTime = False
     BottomAxis.Grid.Color = -1
@@ -92,22 +94,18 @@ object frmModChart: TfrmModChart
     OnAfterDraw = chartModflowAfterDraw
     OnGetAxisLabel = chartModflowGetAxisLabel
     OnGetNextAxisLabel = chartModflowGetNextAxisLabel
-    OnGetSymbolSize = chartModflowGetSymbolSize
     Align = alClient
     Color = clWindow
     TabOrder = 1
     OnClick = chartModflowClick
-    OnDrawAxisLabel = chartModflowDrawAxisLabel
     OnMouseDown = chartModflowMouseDown
     OnMouseMove = chartModflowMouseMove
     OnMouseUp = chartModflowMouseUp
     object SerDataPoints: TPointSeries
       OnGetPointerStyle = SerDataPointsGetPointerStyle
-      Marks.ArrowLength = 8
       Marks.Callout.Brush.Color = clBlack
       Marks.Callout.Length = 8
       Marks.Visible = True
-      SeriesColor = clRed
       ShowInLegend = False
       Title = 'data points'
       OnGetMarkText = SerDataPointsGetMarkText
@@ -118,12 +116,11 @@ object frmModChart: TfrmModChart
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Y'
+      YValues.Order = loNone
       OnClickPointer = SerDataPointsClickPointer
     end
     object ser1to1: TLineSeries
-      Marks.ArrowLength = 8
       Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Length = 8
       Marks.Visible = False
       SeriesColor = clBlack
       ShowInLegend = False
@@ -134,11 +131,10 @@ object frmModChart: TfrmModChart
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Y'
+      YValues.Order = loNone
     end
     object serBarChart: TBarSeries
-      Marks.ArrowLength = 20
       Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Length = 20
       Marks.Visible = False
       SeriesColor = clYellow
       ShowInLegend = False
@@ -148,13 +144,11 @@ object frmModChart: TfrmModChart
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Bar'
+      YValues.Order = loNone
     end
     object LineAt1: TLineSeries
-      Marks.ArrowLength = 8
       Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Length = 8
       Marks.Visible = False
-      SeriesColor = clGreen
       ShowInLegend = False
       Title = 'LineAt1'
       Pointer.InflateMargins = True
@@ -163,12 +157,11 @@ object frmModChart: TfrmModChart
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Y'
+      YValues.Order = loNone
     end
     object serBubbleLegend: TBubbleSeries
       Active = False
-      Marks.ArrowLength = 0
       Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Length = 0
       Marks.Frame.Visible = False
       Marks.Transparent = True
       Marks.Visible = False
@@ -183,13 +176,13 @@ object frmModChart: TfrmModChart
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Y'
+      YValues.Order = loNone
       RadiusValues.Name = 'Radius'
+      RadiusValues.Order = loNone
     end
     object serBarChart2: TBarSeries
       Active = False
-      Marks.ArrowLength = 20
       Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Length = 20
       Marks.Visible = True
       SeriesColor = clGray
       ShowInLegend = False
@@ -199,6 +192,7 @@ object frmModChart: TfrmModChart
       XValues.Name = 'X'
       XValues.Order = loAscending
       YValues.Name = 'Bar'
+      YValues.Order = loNone
     end
     object TMarksTipTool
       MouseAction = mtmClick
@@ -206,8 +200,8 @@ object frmModChart: TfrmModChart
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 467
-    Width = 702
+    Top = 478
+    Width = 704
     Height = 19
     Panels = <
       item
@@ -221,7 +215,7 @@ object frmModChart: TfrmModChart
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 702
+    Width = 704
     Height = 41
     ButtonHeight = 29
     Caption = 'Toolbar'
@@ -231,7 +225,7 @@ object frmModChart: TfrmModChart
     OnEndDock = ToolBar1EndDock
     OnMouseMove = ToolBar1MouseMove
     DesignSize = (
-      702
+      704
       39)
     object sbZoomIn: TSpeedButton
       Left = 0
@@ -558,10 +552,10 @@ object frmModChart: TfrmModChart
     end
   end
   object jvplChartControls: TJvPageList
-    Left = 470
+    Left = 472
     Top = 41
     Width = 232
-    Height = 426
+    Height = 437
     ActivePage = jvsp_nm
     PropagateEnable = False
     Align = alRight
@@ -570,12 +564,12 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       object pcPPR: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabGroups
         Align = alClient
         TabOrder = 0
@@ -583,7 +577,7 @@ object frmModChart: TfrmModChart
           Caption = 'Controls'
           DesignSize = (
             224
-            390)
+            401)
           object lblN_PPR: TLabel
             Left = 72
             Top = 364
@@ -670,7 +664,7 @@ object frmModChart: TfrmModChart
             Left = 0
             Top = 0
             Width = 224
-            Height = 390
+            Height = 401
             Align = alClient
             Indent = 23
             TabOrder = 0
@@ -682,12 +676,12 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       object pc_NM: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabSeries
         Align = alClient
         TabOrder = 0
@@ -813,7 +807,7 @@ object frmModChart: TfrmModChart
           end
           object clbSeriesToPlot: TCheckListBox
             Left = 0
-            Top = 152
+            Top = 163
             Width = 224
             Height = 238
             OnClickCheck = clbSeriesToPlotClickCheck
@@ -830,7 +824,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_b_pa'
       object cbDivideParameterValues: TCheckBox95
         Left = 16
@@ -867,11 +861,11 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_os'
       DesignSize = (
         232
-        426)
+        437)
       object Label1: TLabel
         Left = 8
         Top = 80
@@ -957,13 +951,14 @@ object frmModChart: TfrmModChart
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 5
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
         AutoDistributeText = True
         AutoIncreaseColCount = False
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         ColorRangeSelection = False
-        ColorSelectedRow = True
         Columns = <
           item
             AutoAdjustRowHeights = False
@@ -984,9 +979,12 @@ object frmModChart: TfrmModChart
             ParentButtonFont = False
             WordWrapCaptions = False
             WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
             AutoAdjustColWidths = False
           end>
         OnEndUpdate = rdgIgnoreValueOSEndUpdate
+        WordWrapRowCaptions = False
         ColWidths = (
           184)
       end
@@ -1005,13 +1003,13 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_pc'
       object pgc_PC: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabWhatToPlot
         Align = alClient
         TabOrder = 0
@@ -1154,7 +1152,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_rdrg'
       object cbPlot_NmFile: TCheckBox95
         Left = 8
@@ -1184,13 +1182,13 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_linp'
       object pcLinp: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabLinpControls
         Align = alClient
         TabOrder = 0
@@ -1321,13 +1319,13 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_intconf'
       object pcIntConf: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabIntconfControls
         Align = alClient
         TabOrder = 0
@@ -1431,13 +1429,13 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_xyztwr'
       object pcXyzt: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabOptions
         Align = alClient
         TabOrder = 0
@@ -1503,7 +1501,7 @@ object frmModChart: TfrmModChart
           ImageIndex = 1
           DesignSize = (
             224
-            390)
+            401)
           object lblPlotSymbolsToPlot: TLabel
             Left = 8
             Top = 0
@@ -1623,7 +1621,7 @@ object frmModChart: TfrmModChart
           ImageIndex = 2
           DesignSize = (
             224
-            390)
+            401)
           object lblXyztLegendCount: TLabel
             Left = 0
             Top = 298
@@ -1646,6 +1644,8 @@ object frmModChart: TfrmModChart
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
             TabOrder = 1
             OnSetEditText = rdgXyztLegendSetEditText
+            ExtendedAutoDistributeText = False
+            AutoMultiEdit = False
             AutoDistributeText = True
             AutoIncreaseColCount = False
             AutoIncreaseRowCount = True
@@ -1673,9 +1673,12 @@ object frmModChart: TfrmModChart
                 ParentButtonFont = False
                 WordWrapCaptions = False
                 WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
             OnEndUpdate = rdgXyztLegendEndUpdate
+            WordWrapRowCaptions = False
           end
           object cbXyztLegend: TCheckBox
             Left = 0
@@ -1704,7 +1707,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvspScSo'
       object lblN_so: TLabel
         Left = 72
@@ -1767,7 +1770,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvspPcc'
       object lblDescription: TLabel
         Left = 8
@@ -1782,13 +1785,13 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvspPpaAbschg'
       object pgcParameters: TPageControl
         Left = 0
         Top = 0
         Width = 232
-        Height = 426
+        Height = 437
         ActivePage = tabParameters
         Align = alClient
         TabOrder = 0
@@ -1869,7 +1872,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvspRc'
       object lblN_Rc: TLabel
         Left = 72
@@ -1923,7 +1926,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_nm'
       object lblPlotSymbolsNM: TLabel
         Left = 8
@@ -1941,7 +1944,7 @@ object frmModChart: TfrmModChart
       end
       object clbNM: TCheckListBox
         Left = 0
-        Top = 152
+        Top = 163
         Width = 232
         Height = 274
         Align = alBottom
@@ -1970,13 +1973,14 @@ object frmModChart: TfrmModChart
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 1
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
         AutoDistributeText = True
         AutoIncreaseColCount = False
         AutoIncreaseRowCount = True
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         ColorRangeSelection = False
-        ColorSelectedRow = True
         Columns = <
           item
             AutoAdjustRowHeights = False
@@ -1997,9 +2001,12 @@ object frmModChart: TfrmModChart
             ParentButtonFont = False
             WordWrapCaptions = False
             WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
             AutoAdjustColWidths = False
           end>
         OnEndUpdate = rdgValuesToIgnoreNMEndUpdate
+        WordWrapRowCaptions = False
         ColWidths = (
           184)
       end
@@ -2008,7 +2015,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_mcmc_par'
       object lblParameter: TLabel
         Left = 16
@@ -2046,7 +2053,7 @@ object frmModChart: TfrmModChart
       end
       object lst_mcmcParameters: TJvxCheckListBox
         Left = 0
-        Top = 236
+        Top = 247
         Width = 232
         Height = 190
         CheckKind = ckRadioButtons
@@ -2085,7 +2092,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_mcmc_grr'
       object lblRThreshold: TLabel
         Left = 16
@@ -2114,7 +2121,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_mcmc_pred'
       object rgMcmc_predGraphType: TRadioGroup
         Left = 8
@@ -2131,7 +2138,7 @@ object frmModChart: TfrmModChart
       end
       object jvpl_mcmc_pred: TJvPageList
         Left = 0
-        Top = 120
+        Top = 131
         Width = 232
         Height = 306
         ActivePage = jvsp_mcmc_predProbability
@@ -2219,7 +2226,7 @@ object frmModChart: TfrmModChart
       Left = 0
       Top = 0
       Width = 232
-      Height = 426
+      Height = 437
       Caption = 'jvsp_svd'
       object rgWhatToPlot_svd: TRadioGroup
         Left = 16

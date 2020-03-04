@@ -24,7 +24,7 @@ object frmExtract: TfrmExtract
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 345
+    Top = 265
     Width = 835
     Height = 4
     Cursor = crVSplit
@@ -34,26 +34,26 @@ object frmExtract: TfrmExtract
     Left = 0
     Top = 0
     Width = 835
-    Height = 345
+    Height = 265
     Align = alTop
     TabOrder = 0
     object Splitter2: TSplitter
       Left = 397
-      Top = 1
+      Top = 153
       Width = 4
-      Height = 343
+      Height = 111
     end
     object Panel2: TPanel
-      Left = 564
+      Left = 1
       Top = 1
-      Width = 270
-      Height = 343
-      Align = alRight
+      Width = 833
+      Height = 152
+      Align = alTop
       BevelOuter = bvNone
       TabOrder = 3
       DesignSize = (
-        270
-        343)
+        833
+        152)
       object lblCount: TLabel
         Left = 5
         Top = 3
@@ -63,7 +63,7 @@ object frmExtract: TfrmExtract
         Caption = 'Number of Cells'
       end
       object sbFormat: TSpeedButton
-        Left = 221
+        Left = 216
         Top = 20
         Width = 19
         Height = 21
@@ -90,9 +90,9 @@ object frmExtract: TfrmExtract
         OnMouseMove = ToolBar1MouseMove
       end
       object sbImage: TSpeedButton
-        Left = 241
+        Left = 239
         Top = 20
-        Width = 18
+        Width = 19
         Height = 21
         Hint = 'Save as image'
         Enabled = False
@@ -115,22 +115,22 @@ object frmExtract: TfrmExtract
         OnClick = sbImageClick
       end
       object lblLegend: TLabel
-        Left = 111
-        Top = 309
+        Left = 631
+        Top = 85
         Width = 60
         Height = 13
         Caption = 'Legend Text'
       end
       object Label1: TLabel
-        Left = 182
-        Top = 270
+        Left = 702
+        Top = 46
         Width = 79
         Height = 13
         Caption = 'Density of Water'
       end
       object Label2: TLabel
-        Left = 182
-        Top = 290
+        Left = 702
+        Top = 66
         Width = 33
         Height = 13
         Caption = 'Gravity'
@@ -189,10 +189,10 @@ object frmExtract: TfrmExtract
         ChangeDisabledColor = True
       end
       object rgProgramChoice: TRadioGroup
-        Left = 5
-        Top = 104
+        Left = 261
+        Top = 8
         Width = 260
-        Height = 121
+        Height = 137
         Caption = 'Data'
         ItemIndex = 0
         Items.Strings = (
@@ -203,13 +203,14 @@ object frmExtract: TfrmExtract
           'SUTRA 09.97'
           'SUTRA 2D/3D'
           'SUTRA 2.1, SUTRA 2.2'
-          'MODFLOW Hydmod package')
+          'MODFLOW Hydmod package'
+          'MODFLOW 6 Obs Utility output')
         TabOrder = 9
         OnClick = rgProgramChoiceClick
       end
       object rgMOC3D: TRadioGroup
-        Left = 130
-        Top = 229
+        Left = 650
+        Top = 5
         Width = 135
         Height = 39
         Caption = 'MOC3D Data'
@@ -222,8 +223,8 @@ object frmExtract: TfrmExtract
         OnClick = rgMOC3DClick
       end
       object rgSutra: TRadioGroup
-        Left = 5
-        Top = 229
+        Left = 525
+        Top = 5
         Width = 119
         Height = 71
         Caption = 'SUTRA Data'
@@ -251,9 +252,9 @@ object frmExtract: TfrmExtract
         VerticalAlignment = vaTop
       end
       object comboUnits: TComboBox
-        Left = 150
+        Left = 168
         Top = 20
-        Width = 65
+        Width = 47
         Height = 21
         Hint = 'Time Units'
         Style = csDropDownList
@@ -274,17 +275,17 @@ object frmExtract: TfrmExtract
           'year')
       end
       object edExplanation: TEdit
-        Left = 7
-        Top = 306
+        Left = 527
+        Top = 82
         Width = 98
-        Height = 24
+        Height = 21
         TabOrder = 14
         Text = 'EXPLANATION'
         OnChange = edExplanationChange
       end
       object adeDensity: TArgusDataEntry
-        Left = 130
-        Top = 268
+        Left = 650
+        Top = 44
         Width = 46
         Height = 18
         Color = clBtnFace
@@ -299,8 +300,8 @@ object frmExtract: TfrmExtract
         ChangeDisabledColor = True
       end
       object adeG: TArgusDataEntry
-        Left = 130
-        Top = 287
+        Left = 650
+        Top = 63
         Width = 46
         Height = 18
         Color = clBtnFace
@@ -335,9 +336,9 @@ object frmExtract: TfrmExtract
     end
     object dgDataPoints: TDataGrid
       Left = 1
-      Top = 1
+      Top = 153
       Width = 227
-      Height = 343
+      Height = 111
       Align = alLeft
       ColCount = 4
       DefaultRowHeight = 20
@@ -373,9 +374,9 @@ object frmExtract: TfrmExtract
     end
     object dgDataNodes: TDataGrid
       Left = 228
-      Top = 1
+      Top = 153
       Width = 169
-      Height = 343
+      Height = 111
       Align = alLeft
       ColCount = 3
       DefaultRowHeight = 20
@@ -414,9 +415,9 @@ object frmExtract: TfrmExtract
     end
     object RichEdit1: TJvRichEdit
       Left = 401
-      Top = 1
-      Width = 163
-      Height = 343
+      Top = 153
+      Width = 433
+      Height = 111
       Align = alClient
       MaxLength = 2147483632
       ReadOnly = True
@@ -426,9 +427,9 @@ object frmExtract: TfrmExtract
   end
   object ChartHydExtractor: TChart
     Left = 0
-    Top = 349
+    Top = 269
     Width = 835
-    Height = 193
+    Height = 272
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Legend.LegendStyle = lsSeries

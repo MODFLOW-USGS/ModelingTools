@@ -61,6 +61,9 @@ type
     procedure btnPlotNoneClick(Sender: TObject);
   private
     SeriesList: TObjectList;
+    FNLay: Integer;
+    FNRow: Integer;
+    FNCol: Integer;
     procedure ClearList;
     function ReadDataSetNames(FileName: string; const Names: TStrings;
       out NCOL, NROW, NLAY: Integer): boolean;
@@ -211,7 +214,9 @@ begin
                 PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT);
             mpDouble:
               ReadModflowDoublePrecFluxArray(FileStream, KSTP, KPER,
-                PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT);
+                PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray,
+                Abs(NLAY), NROW, NCOL,
+                IRESULT);
           else Assert(False);
           end;
           TEXT := DESC;
@@ -241,7 +246,6 @@ begin
         end
         else
         begin
-          Inc(DataIndex);
           for CharIndex := 1 to 15 do
           begin
             if Text[CharIndex - 1] <> ' ' then
@@ -251,6 +255,12 @@ begin
           end;
 
           AName := Trim(TEXT);
+          if AName = 'Flow-ja-face' then
+          begin
+            Continue;
+          end;
+          Inc(DataIndex);
+
           NamePosition := Names.IndexOf(AName);
           if NamePosition < 0 then
           begin
@@ -291,6 +301,9 @@ begin
       begin
         CloseBudgetFile96;
       end;
+      FNLay := NLAY;
+      FNRow := NRow;
+      FNCol := NCol
     end;
   finally
     SetCurrentDir(Dir);
@@ -498,10 +511,17 @@ begin
               PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT);
           mpDouble:
             ReadModflowDoublePrecFluxArray(FileStream, KSTP, KPER,
-              PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT);
+              PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray,
+              Abs(FNLay), FNRow, FNCol,
+              IRESULT);
         else Assert(False);
         end;
         TEXT := DESC;
+        if Trim(String(TEXT)) = 'FLOW-JA-FACE' then
+        begin
+          Continue;
+        end;
+
         TOTIM := TOTIMD;
         NLAY := Abs(NLAY);
 //        ReadArray(TOTIM, KSTP, KPER, IRESULT, TEXT, Length(Text));
