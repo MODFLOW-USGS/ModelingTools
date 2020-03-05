@@ -653,7 +653,7 @@ begin
   BoundaryIdentifiers.Add('UZF-GWET (');
   BoundaryIdentifiers.Add('LAKE (');
   BoundaryIdentifiers.Add('UZF (');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
@@ -686,7 +686,7 @@ begin
   NonIdentifiers.Add('UZF RECHARGE     =');
   NonIdentifiers.Add('END PROCESSING AG OPTIONS');
   NonIdentifiers.Add('END PROCESSING AG STRESS PERIOD DATA');
-//  NonIdentifiers.Add('StrRECHARGE');
+  NonIdentifiers.Add('RECHARGE     =');
 //  NonIdentifiers.Add('StrRECHARGE');
 //  NonIdentifiers.Add('StrRECHARGE');
 //  NonIdentifiers.Add('StrRECHARGE');

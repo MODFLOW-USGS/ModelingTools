@@ -3118,8 +3118,8 @@ begin
   begin
     Exit;
   end;
-  RecordExpandedNodes;
   FSettingData := True;
+  RecordExpandedNodes;
   try
     DataSetList := TStringList.Create;
     SortedDataSetList := TStringList.Create;

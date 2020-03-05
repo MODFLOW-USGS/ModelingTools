@@ -38,9 +38,6 @@ inherited frmShowHideObjects: TfrmShowHideObjects
       Align = alLeft
       Caption = 'Show or select objects'
       TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitTop = -2
-      ExplicitHeight = 155
       object rgShowOrSelect: TRadioGroup
         Left = 8
         Top = 16

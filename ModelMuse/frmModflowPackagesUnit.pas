@@ -4117,8 +4117,8 @@ var
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
   CSub: TCSubBoundary;
-  InterbedIndex: Integer;
-  CSubPkgData: TCSubPackageData;
+//  InterbedIndex: Integer;
+//  CSubPkgData: TCSubPackageData;
 begin
   LocalModel := frmGoPhast.PhastModel;
   Interbeds := LocalModel.ModflowPackages.CSubPackage.Interbeds;

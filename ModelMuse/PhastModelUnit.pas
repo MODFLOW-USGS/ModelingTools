@@ -8975,9 +8975,15 @@ const
   //                and MT3D SSM packages in the Object Properties dialog box.
   //               Bug fix: Fixed a bug that could cause a bug report to create
   //                when attempting to export an object to a Shapefile.
+  //    '4.2.0.2'  Bug fix: When importing a Shapefile, ModelMuse gives the
+  //                option to convert from decimal degrees to UTM coordinates.
+  //                However, this may result in an invalid operation if the
+  //                actual coordinates are not in decimal degrees. ModelMuse
+  //                now displays an error message rather than sending a bug
+  //                report in such cases.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.1';
+  IModelVersion = '4.2.0.2';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

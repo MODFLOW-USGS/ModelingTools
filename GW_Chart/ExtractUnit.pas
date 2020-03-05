@@ -1497,6 +1497,7 @@ begin
         comboUnits.Color := clBtnFace;
         adeDensity.Enabled := False;
         adeG.Enabled := False;
+        Splitter2.Left := dgDataNodes.Left + dgDataNodes.Width;
       end;
     pcMf6Obs:
       begin
@@ -1511,6 +1512,7 @@ begin
         dgDataPoints.Visible := False;
         dgDataNodes.Visible := True;
         dgDataNodes.Columns[0].Title.Caption := 'Series Name';
+        dgDataNodes.ColWidths[0] := 70;
         dgDataNodes.ColCount := 2;
         rgMOC3D.Enabled := False;
         rgSutra.Enabled := False;
@@ -1519,6 +1521,7 @@ begin
         comboUnits.Color := clBtnFace;
         adeDensity.Enabled := False;
         adeG.Enabled := False;
+        Splitter2.Left := dgDataNodes.Left + dgDataNodes.Width;
       end;
   else
     begin
@@ -3156,7 +3159,7 @@ var
     end;
   end;
 begin
-  if TProgramChoice(rgProgramChoice.ItemIndex) = pcHydMode then
+  if TProgramChoice(rgProgramChoice.ItemIndex) in [pcHydMode, pcMf6Obs] then
   begin
     ChartIndex := (ARow - 1);
     PlotChart;

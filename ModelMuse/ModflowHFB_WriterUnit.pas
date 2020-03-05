@@ -568,8 +568,8 @@ var
   StartTime: Double;
   EndTime: Double;
   IDomainDataSet: TDataArray;
-  UsedFunction: string;
-  UsedExpression: TExpression;
+//  UsedFunction: string;
+//  UsedExpression: TExpression;
   procedure GetBarrierIndicies(ABarrier: TTransientBarrier; out X,Y : Integer);
   begin
     X := ABarrier.Layer * Model.RowCount * Model.ColumnCount

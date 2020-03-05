@@ -992,7 +992,7 @@ resourcestring
   StrShapeNS = 'Shape%d';
   StrOneOrMoreOfYour = 'One or more of your data points appear to has invali' +
   'd coordinates. Coordinate conversion can not be performed on this shape f' +
-  'ile.';
+  'ile. Coordinates must be in decimal degrees to be converted.';
   StrHead = 'Head';
   StrSolution = 'Solution';
   StrFlux = 'Flux';
@@ -10429,55 +10429,63 @@ begin
 
   if cbCoordinateConversion.Checked and (FGeometryFile.Count > 0) then
   begin
-    ShapeObject := FGeometryFile[0];
-    if ShapeObject.FNumPoints > 0 then
-    begin
-      lblCoordinates.Caption := Format(StrCoordinatesOfFirst,
-        [ShapeObject.FPoints[0].X, ShapeObject.FPoints[0].Y]);
-      Zone := LatLongToUTM_Zone(ShapeObject.FPoints[0].X,
-        ShapeObject.FPoints[0].Y);
-      seZoneNumber.Value := Zone;
-    end;
-
-    for Index := 1 to 10 do
-    begin
-      AName := Format(StrShapeNS, [Index]);
-      Component := self.FindComponent(AName);
-      Shape := Component as TShape;
-      ShapeObject := FGeometryFile[Random(FGeometryFile.Count)];
+    try
+      ShapeObject := FGeometryFile[0];
       if ShapeObject.FNumPoints > 0 then
       begin
-        ShapePoint := ShapeObject.FPoints[0];
-        if (ShapePoint.X < -360) or (ShapePoint.X > 360)
-          or (ShapePoint.Y > 84) or (ShapePoint.Y < -80) then
+        lblCoordinates.Caption := Format(StrCoordinatesOfFirst,
+          [ShapeObject.FPoints[0].X, ShapeObject.FPoints[0].Y]);
+        Zone := LatLongToUTM_Zone(ShapeObject.FPoints[0].X,
+          ShapeObject.FPoints[0].Y);
+        seZoneNumber.Value := Zone;
+      end;
+
+      for Index := 1 to 10 do
+      begin
+        AName := Format(StrShapeNS, [Index]);
+        Component := self.FindComponent(AName);
+        Shape := Component as TShape;
+        ShapeObject := FGeometryFile[Random(FGeometryFile.Count)];
+        if ShapeObject.FNumPoints > 0 then
         begin
-          Shape.Visible := False;
-          Error := True;
+          ShapePoint := ShapeObject.FPoints[0];
+          if (ShapePoint.X < -360) or (ShapePoint.X > 360)
+            or (ShapePoint.Y > 84) or (ShapePoint.Y < -80) then
+          begin
+            Shape.Visible := False;
+            Error := True;
+          end
+          else
+          begin
+            Point := LatLongToPoint(ShapePoint.X, ShapePoint.Y);
+            // X is from 29 to 708.
+            // Y is from 43 to 382.
+            Error := Error or
+              (Point.X < 29) or (Point.X > 708) or
+              (Point.Y < 43) or (Point.Y > 382);
+
+            Shape.Left := Point.x - (Shape.Width div 2) + imageUtmZones.Left;
+            Shape.Top := Point.Y - (Shape.Height div 2) + imageUtmZones.Top;
+            Shape.Visible := True;
+          end;
         end
         else
         begin
-          Point := LatLongToPoint(ShapePoint.X, ShapePoint.Y);
-          // X is from 29 to 708.
-          // Y is from 43 to 382.
-          Error := Error or
-            (Point.X < 29) or (Point.X > 708) or
-            (Point.Y < 43) or (Point.Y > 382);
-
-          Shape.Left := Point.x - (Shape.Width div 2) + imageUtmZones.Left;
-          Shape.Top := Point.Y - (Shape.Height div 2) + imageUtmZones.Top;
-          Shape.Visible := True;
+          Shape.Visible := False;
         end;
-      end
-      else
-      begin
-        Shape.Visible := False;
       end;
-    end;
-    if Error then
-    begin
-      Beep;
-      MessageDlg(StrOneOrMoreOfYour, mtWarning, [mbOK], 0);
-      cbCoordinateConversion.Checked := False;
+      if Error then
+      begin
+        Beep;
+        MessageDlg(StrOneOrMoreOfYour, mtWarning, [mbOK], 0);
+        cbCoordinateConversion.Checked := False;
+      end;
+    except on EInvalidOp do
+      begin
+        Beep;
+        MessageDlg(StrOneOrMoreOfYour, mtWarning, [mbOK], 0);
+        cbCoordinateConversion.Checked := False;
+      end;
     end;
 
   end

@@ -269,6 +269,10 @@ end;
 procedure TfrmShowHideObjects.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
+  if FSettingData then
+  begin
+    Exit;
+  end;
   Action := caFree;
   frmShowHideObjects := nil;
 

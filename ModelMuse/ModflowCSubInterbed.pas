@@ -31,7 +31,7 @@ type
       AModel: TBaseModel);
     function GetDataSetNames: TStringList;
     procedure UpdataInterbedDataSetNames;
-    procedure UpdatePackageDataFormulas;
+//    procedure UpdatePackageDataFormulas;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -396,25 +396,25 @@ begin
   RenameInterbed(Name);
 end;
 
-procedure TCSubInterbed.UpdatePackageDataFormulas;
-var
-  LocalModel: TCustomModel;
-  ObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-begin
-  if Model <> nil then
-  begin
-    LocalModel := Model as TCustomModel;
-    for ObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
-    begin
-      ScreenObject := LocalModel.ScreenObjects[ObjectIndex];
-      if (ScreenObject.ModflowCSub <> nil) and ScreenObject.ModflowCSub.CSubPackageData.Used then
-      begin
-        ScreenObject.ModflowCSub.CSubPackageData.Loaded;
-      end;
-    end;
-  end;
-end;
+//procedure TCSubInterbed.UpdatePackageDataFormulas;
+//var
+//  LocalModel: TCustomModel;
+//  ObjectIndex: Integer;
+//  ScreenObject: TScreenObject;
+//begin
+//  if Model <> nil then
+//  begin
+//    LocalModel := Model as TCustomModel;
+//    for ObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+//    begin
+//      ScreenObject := LocalModel.ScreenObjects[ObjectIndex];
+//      if (ScreenObject.ModflowCSub <> nil) and ScreenObject.ModflowCSub.CSubPackageData.Used then
+//      begin
+//        ScreenObject.ModflowCSub.CSubPackageData.Loaded;
+//      end;
+//    end;
+//  end;
+//end;
 
 { TCSubInterbeds }
 
