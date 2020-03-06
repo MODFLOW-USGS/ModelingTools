@@ -488,6 +488,10 @@ begin
   begin
     AddKey((NumberBoundaryIdentifiers[index]), itNumberBoundary);
   end;
+  for index := 0 to NumberPackageIdentifiers.Count - 1 do
+  begin
+    AddKey((NumberPackageIdentifiers[index]), itPackage);
+  end;
   for index := 0 to NonIdentifiers.Count - 1 do
   begin
     AddKey((NonIdentifiers[index]), itNonID);
@@ -2311,6 +2315,17 @@ begin
       end;
     end;
   end;
+  if not CheckNumLines then
+  begin
+    for IdIndex := 0 to NumberPackageIdentifiers.Count - 1 do
+    begin
+      if BMPos(NumberPackageIdentifiers[IdIndex], AnsiMultipleLines) >= 1 then
+      begin
+        CheckNumLines := True;
+        Break;
+      end;
+    end;
+  end;
 
 //  PriorStepString := '';
   SomeLines := TStringList.Create;
@@ -2358,6 +2373,17 @@ begin
             for IdIndex := 0 to NumberBoundaryIdentifiers.Count - 1 do
             begin
               if BMPos(NumberBoundaryIdentifiers[IdIndex], InnerLine) >= 1 then
+              begin
+                NumOK := True;
+                Break;
+              end;
+            end;
+          end;
+          if not NumOK then
+          begin
+            for IdIndex := 0 to NumberPackageIdentifiers.Count - 1 do
+            begin
+              if BMPos(NumberPackageIdentifiers[IdIndex], InnerLine) >= 1 then
               begin
                 NumOK := True;
                 Break;

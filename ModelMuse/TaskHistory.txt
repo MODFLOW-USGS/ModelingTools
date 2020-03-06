@@ -25044,5 +25044,11 @@ object TTaskHistory
         'List File Analyzer'
         'GW_Chart'
         'Bug fix')
+    end
+    item
+      Date = 43896.000000000000000000
+      Categories.Strings = (
+        'List File Analyzer'
+        'GW_Chart')
     end>
 end

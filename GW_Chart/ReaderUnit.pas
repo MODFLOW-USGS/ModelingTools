@@ -2903,6 +2903,7 @@ const
   MvfMf6BudTerm = 'WATER MOVER BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
   MawMf6BudTerm = 'MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
   UzfMf6BudTerm = 'UZF-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
+  SwrBudTerm = 'VOLUMETRIC SURFACE WATER BUDGET FOR ENTIRE MODEL';
 begin
   TempList:= TStringList.Create;
   try
@@ -2928,6 +2929,7 @@ begin
           or (Pos(MvfMf6BudTerm, S) > 0)
           or (Pos(MawMf6BudTerm, S) > 0)
           or (Pos(UzfMf6BudTerm, S) > 0)
+          or (Pos(SwrBudTerm, S) > 0)
           then
         begin
           ShouldStoreFile := True;
@@ -3351,6 +3353,12 @@ begin
   LineIndex := GetNextLine(SearchTerm, LineIndex);
   ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
     UzfMf6BudTerm, 'UZF Cumulative Budget', 'UZF Budget Rates', True);
+
+  LineIndex := 0;
+  SearchTerm := SwrBudTerm;
+  LineIndex := GetNextLine(SearchTerm, LineIndex);
+  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+    SwrBudTerm, 'SWR Cumulative Budget', 'SWR Budget Rates', True);
 
 
   ZoneIndex := 1;

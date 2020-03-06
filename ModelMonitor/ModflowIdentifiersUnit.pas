@@ -7,6 +7,7 @@ uses
 
 var
   PackageIdentifiers: TAnsiStringList;
+  NumberPackageIdentifiers: TAnsiStringList;
   ObsIdentifiers: TAnsiStringList;
   BoundaryIdentifiers: TAnsiStringList;
   NumberBoundaryIdentifiers: TAnsiStringList;
@@ -65,6 +66,9 @@ resourcestring
 
 Procedure InitializePackageIdentifiers;
 begin
+  NumberPackageIdentifiers := TAnsiStringList.Create;
+  NumberPackageIdentifiers.Add('0IBS -- INTERBED STORAGE PACKAGE');
+
   PackageIdentifiers := TAnsiStringList.Create;
   PackageIdentifiers.Add('BAS -- BASIC PACKAGE');
   PackageIdentifiers.Add('BAS6 -- BASIC PACKAGE, VERSION');
@@ -120,6 +124,7 @@ begin
   PackageIdentifiers.Add('CFP1AR READING FROM UNIT');
   PackageIdentifiers.Add('AG -- AG PACKAGE FOR NWT VERSION');
   PackageIdentifiers.Add('PROCESSING TIME SERIES');
+  PackageIdentifiers.Add('Stream Gages:');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -398,7 +403,6 @@ begin
   BoundaryIdentifiers.Add('SFR UPSTREAM FRACTIONS');
 
   BoundaryIdentifiers.Add('INPUT DATA FOR EACH STREAM SEGMENT');
-  BoundaryIdentifiers.Add('Stream Gages:');
   BoundaryIdentifiers.Add('Lake Gages:');
   BoundaryIdentifiers.Add('OPTION HAS BEEN SELECTED');
   BoundaryIdentifiers.Add('When solver convergence criteria are not met');
@@ -489,6 +493,13 @@ begin
   // AG
   BoundaryIdentifiers.Add('PROCESSING AG OPTIONS');
   BoundaryIdentifiers.Add('TIME KPER KSTP');
+  BoundaryIdentifiers.Add('INFILTRATION WILL BE REJECTED USING');
+  BoundaryIdentifiers.Add('HYDRAULIC CONDUCTIVITY OF LAND SURFACE');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 
@@ -884,6 +895,7 @@ initialization
 
 finalization;
   PackageIdentifiers.Free;
+  NumberPackageIdentifiers.Free;
   ObsIdentifiers.Free;
   BoundaryIdentifiers.Free;
   NumberBoundaryIdentifiers.Free;
