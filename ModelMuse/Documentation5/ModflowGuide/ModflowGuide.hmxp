@@ -134,7 +134,7 @@
       <config-value name="usesecondarywindows">1</config-value>
       <config-value name="outputfile">ModflowGuide.chm</config-value>
       <config-value name="deletetemp">1</config-value>
-      <config-value name="skin">..\..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
+      <config-value name="skin">..\..\..\..\Program Files (x86)\EC Software\HelpAndManual5\Templates\HTML Skins\Premium Pack 1.53 Skins\Skins Horizontal Tabs\sky_blue_horiz.hmskin</config-value>
     </config-group>
     <config-group name="hxs">
       <config-value name="namespace"></config-value>

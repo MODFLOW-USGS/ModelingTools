@@ -226,7 +226,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><table rowcount="40" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+    <para styleclass="Normal"><table rowcount="42" colcount="2" style="width:auto; cell-padding:2px; cell-spacing:2px; page-break-inside:auto; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td colspan="2">
           <para styleclass="Normal"><text styleclass="Normal" translate="true">FOR EACH SIMULATION</text></para>
@@ -1154,12 +1154,25 @@
       </tr>
       <tr style="vertical-align:top">
         <td colspan="2">
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">If Groundwater Transport (GWT) Process is active (Ftype “GWT” exists), then read Part 4g NSOL times (where NSOL is the number of solutes being simulated, see note 17):</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If keyword TABFILES has been specified, repeat Item 4g NUMTAB times for the first stress period only: </text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4g</text></para>
+          <para styleclass="Heading2_atoc_"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-LGR,MODFLOW-NWT"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-LGR"/><text styleclass="Heading2_atoc_" translate="true">MODFLOW-2005, MODFLOW-NWT, MODFLOW-LGR Version 2: </text><conditional-text type="END"/><text styleclass="Heading2_atoc_" translate="true">Data Set 4g</text><conditional-text type="END"/></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><snippet src="SfrExternalFlowFiles"/></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td colspan="2">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If Groundwater Transport (GWT) Process is active (Ftype “GWT” exists), then read Part 4h NSOL times (where NSOL is the number of solutes being simulated, see note 17):</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 4h</text></para>
         </td>
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[CONCQ(NSOL)] CONCRUN(NSOL) CONCPPT(NSOL)</text></para>
