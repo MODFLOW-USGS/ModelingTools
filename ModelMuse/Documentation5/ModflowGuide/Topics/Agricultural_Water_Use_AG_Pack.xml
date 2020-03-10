@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">AG - Agricultural Water Use Package</title>
   <body>
     <header>
@@ -12,7 +12,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Abbreviations in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Table Header" translate="true">Name file</link></para>
         </td>
         <td>
-          <list id="96" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="134" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">AG</text></li>
           </list>
         </td>
@@ -30,7 +30,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
         </td>
         <td>
-          <list id="97" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="135" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Citation"><text styleclass="Citation" translate="true">Niswonger, R.G., 2020. An Agricultural Water Use Package for MODFLOW and GSFLOW. Environmental Modelling &amp; Software, p.104617.</text></li>
             <li styleclass="Citation"><text styleclass="Normal" translate="true">Input_instructions_AG.pdf</text></li>
           </list>
@@ -41,7 +41,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
         </td>
         <td>
-          <list id="98" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="136" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">Streamflow-Routing (SFR)</link></li>
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_-_Unsaturated_Zone_Flow_Pa_3" styleclass="Normal" translate="true">UZF - Unsaturated Zone Flow Package</link></li>
           </list>
@@ -60,7 +60,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
         </td>
         <td>
-          <list id="99" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="137" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">The AG was developed for GSFLOW to simulate irrigation and water use by cultivated and natural plants. The AG Package works with the Streamflow-Routing (SFR2) and the Unsaturated Flow (UZF1) Packages and includes capabilities for simulating pumping wells like the WELL Package. Input required for simulating agricultural diversions, supplementary pumping, irrigation, and demand calculations are all specified within the AG Package input file. All exchanges between different packages (SFR2, UZF1, and AG) are calculated within the AG Package; however, the SFR2 and UZF1 Packages must be active to use their capabilities in conjunction with the AG Package. Diversion segments must be specified within the SFR2 Package to apply diverted water as irrigation. All data for supplementary and irrigation wells is specified within the AG Package input file; the AG Package calculates and applies its own boundary conditions to the groundwater flow equation for representing irrigation and/or supplementary wells.</text></li>
           </list>
         </td>
@@ -71,32 +71,124 @@
     <para styleclass="Normal"><table styleclass="Default" rowcount="30" colcount="2" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:raised-color;">
       <tr style="vertical-align:top">
         <td colspan="2">
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">Block 1: Simulation options</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">AG Package character variables can be specified in any order and must be proceeded and followed by the character variables OPTIONS and END, respectively. </text></para>
+          <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Block 1: Simulation options</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">AG Package character variables can be specified in any order and must be proceeded and followed by the character variables </text><text styleclass="Keywords" translate="true">OPTIONS</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">END</text><text styleclass="Normal" translate="true">, respectively. </text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 1</text></para>
         </td>
-        <td>
-          <para styleclass="Keywords"><text styleclass="Keywords" translate="true">OPTIONS</text></para>
+        <td style="width:768px;">
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Keywords"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[OPTIONS]]></caption></toggle></para>
+          <para styleclass="Keywords" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Character variable specified to indicate the beginning of the key word options.</text></para>
+              </td>
+            </tr>
+          </table></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 2</text></para>
         </td>
-        <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">NOPRINT</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> Numirrdiversions  Maxcellsdiversion]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true">  Numirrwells  Maxcellswell]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> Numsupwells  Maxdiversions]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true">Nummaxwell]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true">NumtabMaxval]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">PHIRAMP</text><text styleclass="Normal" translate="true">]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> Accel]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TRIGGER</text><text styleclass="Normal" translate="true">]</text></para>
+        <td style="width:768px;">
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[[NOPRINT]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Character variable that suppresses the printing of well lists.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRIGATION_DIVERSION]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numirrdiversions  Maxcellsdiversion]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="138" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true">: An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the option to use surface water (SW) for irrigation is activated.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Numirrdiversions: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numirrdiversions also is specified. Numirrdiversions is the maximum number of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR2</link><text styleclass="Normal" translate="true"> diversion segments in any stress period that will be used for irrigation.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxcellsdiversion: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxcellsdiversion also is specified. Maxcellsdiversion is the maximum number of MODFLOW cells or PRMS HRUs that will receive irrigation from a single </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR2</link><text styleclass="Normal" translate="true"> diversion segment in any stress period.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[IRRIGATION_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[  Numirrwells  Maxcellswell]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="139" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true">&#32;</text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to use groundwater for irrigation is activate. &#160;</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Numirrwells: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numirrwells also is specified. Numirrwells is the maximum number of AG wells in any stress period that will be used for irrigation.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxcellswell: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxellswell also is specified. Maxcellswell is the maximum number of MODFLOW cells or PRMS HRUs that will receive irrigation from a single AG well in any stress period.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[SUPPLEMENTAL_WELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numsupwells  Maxdiversions]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="140" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true">&#32;</text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to simulate supplemental groundwater for irrigation is active. The AG Package calculates supplemental GW pumping using the difference between the irrigation demand and the surface water diversion. &#160; </text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Numsupwells: An optional integer variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numsupwells also is specified. Numsupwells is the maximum number of supplemental wells in any stress period that will pump groundwater.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxdiversions: An optional integer variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxdiversions also is specified. Maxdiversions is the maximum number of SFR2 diversion segments that are supplemented by a well.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[MAXWELL]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Nummaxwell]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="141" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true">: An optional character variable. If </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified then &#160;</text><text styleclass="Keywords" translate="true">MAXWELL </text><text styleclass="Normal" translate="true">also is specified. </text><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true"> is included to indicate that the maximum number of unique supplemental and irrigation wells used during a simulation (Nummaxwell) also will be read.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Nummaxwell: The maximum number of unique supplemental and irrigation wells used during a simulation.</text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TABFILES]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Numtab Maxval]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="142" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true"> is included in order set pumping rates using time series input files.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Numtab: </text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxval: An integer variable equal to the maximum number of values specified for any TABFILE. </text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[PHIRAMP]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">An optional character variable. </text><text styleclass="Keywords" translate="true">PHIRAMP</text><text styleclass="Normal" translate="true"> is included to specify the smoothing interval used to change negative pumping rates to zero when the groundwater cell dewaters. This variable only is used when the Newton Solver is active.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[ETDEMAND]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[ Accel]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <list id="143" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                  <li styleclass="Normal"><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> is included in order to activate automatic calculation of the net irrigation water requirement. </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">TRIGGER</text><text styleclass="Normal" translate="true"> cannot be used in the same simulation.</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Accel: An real variable that controls the maximum change in the irrigation diversion or pumped amount between iterations. Values between 0.5 and 10 work well. </text></li>
+                </list>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[[]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Keywords"><caption translate="true"><![CDATA[TRIGGER]]></caption></toggle><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[]]]></caption></toggle></para>
+          <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">An optional character variable. </text><text styleclass="Keywords" translate="true">TRIGGER</text><text styleclass="Normal" translate="true"> is included to activate the irrigation trigger option. </text><text styleclass="Keywords" translate="true">TRIGGER</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> cannot be used in the same simulation.</text></para>
+              </td>
+            </tr>
+          </table></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TIMESERIES_DIVERSION</text><text styleclass="Normal" translate="true">]</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TIMESERIES_WELL</text><text styleclass="Normal" translate="true">]</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">TIMESERIES_DIVERSIONET</text><text styleclass="Normal" translate="true">]</text></para>
@@ -104,7 +196,7 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSIONLIST</text><text styleclass="Normal" translate="true"> Unit_diversionlist] </text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLLIST</text><text styleclass="Normal" translate="true"> Unit_welllist]</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLIRRLIST</text><text styleclass="Normal" translate="true"> Unit_wellirrlist]</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSIONIRRLIST</text><text styleclass="Normal" translate="true">  Unit_diversionirrlist]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">DIVERSIONIRRLIST</text><text styleclass="Normal" translate="true"> &#160;Unit_diversionirrlist]</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">[</text><text styleclass="Keywords" translate="true">WELLCBC</text><text styleclass="Normal" translate="true"> Unitcbc]</text></para>
         </td>
       </tr>
@@ -112,164 +204,164 @@
         <td>
           <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Data Set 3</text></para>
         </td>
-        <td>
+        <td style="width:768px;">
           <para styleclass="Keywords"><text styleclass="Keywords" translate="true">END</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td>
         </td>
-        <td>
+        <td style="width:768px;">
         </td>
       </tr>
     </table></para>
