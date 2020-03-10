@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CSUB Example: CSUB Observations at Wells</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: CSUB Observations at Wells</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The next step is to specify some CUSG observations at the well locations. We will add the following types of CSUB observations.</text></para>
-    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">inelastic-csub</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">elastic-csub</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">coarse-csub</text></li>

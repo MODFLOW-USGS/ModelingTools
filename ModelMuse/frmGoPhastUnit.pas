@@ -14320,7 +14320,7 @@ initialization
   Mf2005Date := EncodeDate(2017,2,2);
   MfNwtDateVersion1_0_9 := EncodeDate(2014,6,23);
   MfNwtDateVersion1_1_0 := EncodeDate(2016,7,21);
-  MfNwtDate := EncodeDate(2018,4,10);
+  MfNwtDate := EncodeDate(2020,3,3);
   Modpath6Date := EncodeDate(2012,8,28);
   Modpath7Date := EncodeDate(2017,12,22);
   MfLgr2Date := EncodeDate(2013, 9, 19);

@@ -3,6 +3,7 @@ object frmFormat: TfrmFormat
   Top = 182
   Width = 561
   Height = 642
+  HelpContext = 20
   Caption = 'Format Chart'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -15,7 +16,7 @@ object frmFormat: TfrmFormat
   Scaled = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 19
   object BitBtn1: TBitBtn
     Left = 336
@@ -37,9 +38,9 @@ object frmFormat: TfrmFormat
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 543
+    Width = 545
     Height = 553
-    ActivePage = tabLineSeries
+    ActivePage = tabGeneral
     Align = alTop
     TabOrder = 0
     object tabGeneral: TTabSheet
@@ -481,7 +482,7 @@ object frmFormat: TfrmFormat
       object dgLineSeries: TDataGrid
         Left = 0
         Top = 41
-        Width = 535
+        Width = 537
         Height = 478
         Align = alClient
         ColCount = 9
@@ -565,7 +566,7 @@ object frmFormat: TfrmFormat
       object Panel1: TPanel
         Left = 0
         Top = 0
-        Width = 535
+        Width = 537
         Height = 41
         Align = alTop
         TabOrder = 0

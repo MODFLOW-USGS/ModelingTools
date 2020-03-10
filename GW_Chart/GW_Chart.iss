@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GW_Chart"
-#define MyAppVersion "1.29.0"
+#define MyAppVersion "1.30.0"
 #define MyAppPublisher "U. S. Geological Survey"
-#define MyAppURL "http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html"
+#define MyAppURL "https://www.usgs.gov/software/gwchart-a-program-creating-specialized-graphs-used-groundwater-studies"
 #define MyAppExeName "Gw_chart.exe"
 
 [Setup]
@@ -19,12 +19,13 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\USGS\{#MyAppName}
+DefaultDirName={commonpf}\USGS\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputBaseFilename=setup_GW_Chart_{#MyAppVersion}
-SetupIconFile=D:\Program Files\Borland\Delphi7\Projects\GWChart\Gw_chart.ico
+SetupIconFile=C:\ModelingTools\GW_Chart\Gw_chart.ico
 Compression=lzma
 SolidCompression=yes
+InfoAfterFile=C:\ModelingTools\GW_Chart\ReadMe.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -34,13 +35,14 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\Gw_chart.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\Gw_chart.chm"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\lf90wiod.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\ReadFlow.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\ReadFlow96.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\TeeUser6.chm"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Program Files\Borland\Delphi7\Projects\GWChart\lf90.eer"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\Gw_chart.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\Help\Gw_chart.chm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\lf90wiod.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\ReadFlow.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\ReadFlow96.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\TeeUser6.chm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\lf90.eer"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\ModelingTools\GW_Chart\ReadMe.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -48,7 +50,6 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

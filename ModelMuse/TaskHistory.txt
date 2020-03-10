@@ -186,7 +186,7 @@ object TTaskHistory
     end
     item
       Name = 'Installer'
-      Display = False
+      Display = True
     end
     item
       Name = 'Renaming Data Sets and Variables'
@@ -25063,5 +25063,13 @@ object TTaskHistory
       Categories.Strings = (
         'List File Analyzer'
         'Documentation')
+    end
+    item
+      Date = 43900.000000000000000000
+      Categories.Strings = (
+        'Installer'
+        'Documentation'
+        'GW_Chart'
+        'List File Analyzer')
     end>
 end

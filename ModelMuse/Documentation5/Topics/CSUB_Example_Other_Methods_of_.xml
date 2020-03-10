@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">CSUB Example: Other Methods of Viewing Output</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: Other Methods of Viewing Output</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are some other tools that can be helpful for viewing the CSUB output. First of all, there are other way of using GW_Chart. For example, select </text><text styleclass="Strong" translate="true">Chart Type/Convert|Water Budgets</text><text styleclass="Normal" translate="true">, set </text><text styleclass="Strong" translate="true">Read Data From</text><text styleclass="Normal" translate="true"> to MODFLOW 6, and click the Open File button </text><image src="GW_ChartOpenFile.png" scale="100.00%" styleclass="Image Caption"><title translate="true">GW_Chart Open File button</title></image><text styleclass="Normal" translate="true">. Select the MODFLOW 6 Listing file. GW_Chart will initially plot all the CUMULATIVE amounts. You can change CUMULATIVE to RATES and select the budget terms that are of most interest to you.</text></para>
+    <para styleclass="Normal"><image src="GW_ChartCSubBudget.png" scale="60.00%" width="365" height="341" styleclass="Image Caption"><title translate="true">Plot of Budget Terms over Time in CSUB example mode.</title></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Another tool you can use in ListingAnalyst. It produces what is essentially a table of contents and index of the MODFLOW listing file. Just click the </text><text styleclass="Strong" translate="true">Open file</text><text styleclass="Normal" translate="true"> button and select the listing file.</text></para>
+    <para styleclass="Normal"><image src="ListingAnalystCSubExample.png" scale="60.00%" width="722" height="421" styleclass="Image Caption"><title translate="true">ListingAnalyst with CSUB example.</title></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

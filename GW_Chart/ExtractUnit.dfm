@@ -202,7 +202,7 @@ object frmExtract: TfrmExtract
           'GWT and MOC3D Observations'
           'SUTRA 09.97'
           'SUTRA 2D/3D'
-          'SUTRA 2.1, SUTRA 2.2'
+          'SUTRA 2.1, 2.2, or 3.0'
           'MODFLOW Hydmod package'
           'MODFLOW 6 Obs Utility output')
         TabOrder = 9

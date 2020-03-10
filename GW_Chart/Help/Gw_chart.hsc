@@ -68,7 +68,7 @@ FALSE
 \par \cf2\strike Hydrographs\cf3\strike0\{linkID=400\}\cf0 
 \par \cf2\strike Lake and Gage Plots\cf3\strike0\{linkID=500\}\cf0 
 \par \cf2\strike Piper Diagrams\cf3\strike0\{linkID=600\}
-\par \cf2\strike Cell Water Budgets\cf3\strike0\{linkID=635\}
+\par \cf2\strike Cell Water Budgets\f2  or Zeta\cf3\strike0\f1\{linkID=635\}
 \par \cf2\strike Farm Budgets\cf3\strike0\{linkID=645\}
 \par \cf4\f3 
 \par To converting MODFLOW cell-by-cell budgets, select "Chart Type/Convert|\cf2\strike Convert Cell Water Budgets\cf3\strike0\{linkID=640\}\cf4 ".\cf0\f1 
@@ -1297,9 +1297,9 @@ FALSE
 {\colortbl ;\red0\green0\blue255;\red0\green128\blue0;\red128\green0\blue0;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs32 Water Budget Plots\cf0\b0\f1\fs24 
 \par 
-\par GW_Chart can read the output files from \cf2\strike ZONEBDGT (Harbaugh, 1990)\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike MODFLOW (McDonald and Harbaugh, 1988; Harbaugh and McDonald, 1996)\cf3\strike0\{linkID=1000\}\cf0 ,  \cf2\strike MOC3D (Konikow, and others 1996)\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike SUTRA (Voss, 1984\f2 ; Voss and Provost, 2002\f1 )\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike MT3D (Zheng,1990)\cf3\strike0\{linkID=1000\}\cf4\f2 ,\cf0  \cf2\strike HST3D (Kipp, 1997)\cf3\strike0\{linkID=1000\} \cf0 and \cf2\strike SEAWAT-2000 (Langevin dn others, 2000)\cf3\strike0\{linkID=1000\}\cf0\f1 .  It plots the results, and saves the data in a form that can be readily imported into spreadsheet programs.  It can also save the chart in the form of bitmaps, Windows metafiles and Enhanced Windows metafiles.  
+\par GW_Chart can read the output files from\f2  a variety of programs including\f1  \cf2\strike ZONEBDGT (Harbaugh, 1990)\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike MODFLOW (McDonald and Harbaugh, 1988; Harbaugh and McDonald, 1996)\cf3\strike0\{linkID=1000\}\cf0 ,  \cf2\strike MOC3D (Konikow, and others 1996)\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike SUTRA (Voss, 1984\f2 ; Voss and Provost, 2002, Provost and Voss, 2019\f1 )\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike MT3D (Zheng,1990)\cf3\strike0\{linkID=1000\}\cf4\f2 ,\cf0  \cf2\strike HST3D (Kipp, 1997)\cf3\strike0\{linkID=1000\} \cf0 and \cf2\strike SEAWAT-2000 (Langevin dn others, 2000)\cf3\strike0\{linkID=1000\}\cf0\f1 .  It plots the results, and saves the data in a form that can be readily imported into spreadsheet programs.  It can also save the chart in the form of bitmaps, Windows metafiles and Enhanced Windows metafiles.  
 \par 
-\par To run extract water budgets, choose the Chart Type|Water Budget menu item.  Then select the radio-button corresponding to the type of file you wish to read. Next select File|Open or click the Open button.  A dialog box will appear.  Select an output file from ZONEBDGT, MODFLOW, MOC3D, SUTRA, MT3D\f2 , HST3D, or SEAWAT-2000\f1  and click on the Open button.  The results will be plotted.  It is possible to control the \cf2\strike format of the plot\cf3\strike0\{linkID=20\}\cf0  in a number of ways.  There is a pair of radio buttons that allow the user to plot the results for either a single zone in a single time step or for all the time steps or a single zone.  If the user chooses to plot a single time step, the data will be plotted as a bar graph.  otherwise, it will be plotted as a line graph.  There are check-boxes that can be used to select which budget items will be plotted and combo-boxes in which it is possible to select the type of budget and time step to plot.  The latter is enabled only if the user chooses to plot data for a single time step.  If the user selects File|Save or clicks on the Save Data button, the data will be saved as a tab-delimited text file.  Such files can be readily imported into most commercial spreadsheets.  The program is designed to provide rapid analysis of budget data and a method of exporting the data in a form that other programs can readily utilize.
+\par To run extract water budgets, choose the Chart Type|Water Budget menu item.  Then select the radio-button corresponding to the type of file you wish to read. Next select File|Open or click the Open button.  A dialog box will appear.  Select an output file from ZONEBDGT, MODFLOW,\f2  MODFLOW 6,\f1  MOC3D\f2  or GWT\f1 , SUTRA\f2  09.97, SUTRA\f1 , MT3D\f2 , HST3D, SEAWAT-2000, or GSFLOW\f1  and click on the Open button.  The results will be plotted.  It is possible to control the \cf2\strike format of the plot\cf3\strike0\{linkID=20\}\cf0  in a number of ways.  There is a pair of radio buttons that allow the user to plot the results for either a single zone in a single time step or for all the time steps or a single zone.  If the user chooses to plot a single time step, the data will be plotted as a bar graph.  otherwise, it will be plotted as a line graph.  There are check-boxes that can be used to select which budget items will be plotted and combo-boxes in which it is possible to select the type of budget and time step to plot.  The latter is enabled only if the user chooses to plot data for a single time step.  If the user selects File|Save or clicks on the Save Data button, the data will be saved as a tab-delimited text file.  Such files can be readily imported into most commercial spreadsheets.  The program is designed to provide rapid analysis of budget data and a method of exporting the data in a form that other programs can readily utilize.
 \par 
 \par \f2 For all the plots except for SUTRA, the user can click on a data point on the graph to show the stress period and time step of the data point.\f1 
 \par }
@@ -1315,14 +1315,13 @@ Writing
 
 
 FALSE
-35
+34
 {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss Arial;}{\f1\froman Times New Roman;}{\f2\froman\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue255;\red0\green128\blue0;\red128\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs32 Hydrographs\cf0\b0\f1\fs24 
+\par \f2 First choose the type of \b Data \b0 that you wish to plot. For some types of data, you will need to a\f1 ssign the row, column, and layer of each cell for which you wish to create a hydrograph. (This is not an option for MT3D\f2  Observations\f1 , \f2 GWT and \f1 MOC3D\f2  Observations,\f1  or SUTRA.) \f2  For the MODFLOW Hydmod package or MODFLOW 6 Obs Utility output, you select the data to plot after the file has been read.\f1 
 \par 
-\par Assign the row, column, and layer of each cell for which you wish to create a hydrograph. (This is not an option for MT3D, MOC3D or SUTRA.) 
-\par 
-\par Next, Click on the "Read" button to read a MODFLOW formatted head or drawdown file, MT3D observation file, MOC3D observation file, or SUTRA observation file. For MT3D, MOC3D, and SUTRA, you must have specified the observation cells or nodes in the input to the model prior to running the model. \f2 Be sure that the data file you wish to read has been written so that there is at least one space between each of the data values in the file.\f1 
+\par Next, Click on the "Read" button to read a MODFLOW formatted head or drawdown file, MT3D observation file, MOC3D observation file, or SUTRA observation file. For MT3D, MOC3D, SUTRA,\f2  MODFLOW Hydmod package \f1 and \f2 MODFLOW 6 Obs Utility\f1  you must have specified the observation cells or nodes in the input to the model prior to running the model. \f2 Be sure that the data file you wish to read has been written so that there is at least one space between each of the data values in the file.\f1 
 \par 
 \par The data will be graphed and also written to the memo in a tab-delimited format. 
 \par 
@@ -1522,13 +1521,13 @@ Writing
 
 FALSE
 20
-{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil Arial;}{\f1\fnil Times New Roman;}{\f2\fnil\fcharset0 Times New Roman;}}
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil Arial;}{\f1\fnil\fcharset0 Arial;}{\f2\fnil Times New Roman;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue255;\red0\green0\blue0;\red0\green128\blue0;\red128\green0\blue0;}
-\viewkind4\uc1\pard\cf1\b\f0\fs32 Cell Water Budgets\cf2\b0\f1\fs24 
+\viewkind4\uc1\pard\cf1\b\f0\fs32 Cell Water Budgets\f1  or Zeta\cf2\b0\f2\fs24 
 \par 
-\par \f2 GW_Chart can plot the water budget flow terms for individual cells in MODFLOW models using the information in the budget file created by MODFLOW.  If the budget file is saved in the compact format, the time at which the data were saved is included in the budget file and this information is used on the X-axis.  Otherwise, just the stored time step is used.
+\par \f3 GW_Chart can plot the water budget flow terms for individual cells in MODFLOW models using the information in the budget file created by MODFLOW.  If the budget file is saved in the compact format, the time at which the data were saved is included in the budget file and this information is used on the X-axis. Otherwise, just the stored time step is used. Zeta files created by the Seawater Intrusion package use the same format as cell water budgets and can be read in the same way
 \par 
-\par To use this option, first select "Chart Type|Cell Water Budgets"  Next select the type of budget file you will open: either one from MODFLOW-2000 version 1.1 or earlier or one from MODFLOW-2000 version 1.2 or later.  Then, select "File|Open Budget File" and select the budget file.  Next, select the budget terms you want to plot by checking the check box next to their name.  Select the cells for which you wish to plot data by entering the columns, rows, and layers for the cells in the table in the upper right.  You can change the number of rows in the table by changing "Cells to Plot" in the lower part of the dialog box.  The "Plot All" and "Plot None" buttons while check or uncheck respectively all the check boxes in the table of cells. Finally select "File|Update Plot" to plot the data. You can configure or print the plot by selecting the "Format Chart" menu item.
+\par To use this option, first select "Chart Type|Cell Water Budgets or Zeta"  Next select the type of budget file you will open: either one from MODFLOW-2000 version 1.1 or earlier or one from MODFLOW-2000 version 1.2 or later.  Then, select "File|Open Budget File" and select the budget file.  Next, select the budget terms you want to plot by checking the check box next to their name.  Select the cells for which you wish to plot data by entering the columns, rows, and layers for the cells in the table in the upper right.  You can change the number of rows in the table by changing "Cells to Plot" in the lower part of the dialog box.  The "Plot All" and "Plot None" buttons while check or uncheck respectively all the check boxes in the table of cells. Finally select "File|Update Plot" to plot the data. You can configure or print the plot by selecting the "Format Chart" menu item.
 \par 
 \par For Flow Right Face, positive values represent flows out of the cell toward the cell with a higher column number.
 \par For Flow Left Face, positive values represent flows out of the cell toward the cell with a lower column number.
@@ -1540,7 +1539,7 @@ FALSE
 \par 
 \par To export the data from the current plot to a text file, select "File|Export Data."
 \par 
-\par See also: \cf3\strike Convert Cell Water Budgets\cf4\strike0\{linkID=640\}\cf2 .\f1 
+\par See also: \cf3\strike Convert Cell Water Budgets\cf4\strike0\{linkID=640\}\cf2 .\f2 
 \par }
 640
 Scribble640
@@ -1602,7 +1601,7 @@ Writing
 
 
 FALSE
-40
+42
 {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\froman\fcharset0 Times New Roman;}{\f2\froman Times New Roman;}{\f3\fnil\fcharset0 Times New Roman;}{\f4\froman\fprq2\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue255;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs32 References\cf0\b0\f1\fs24 
@@ -1634,6 +1633,8 @@ FALSE
 \par Niswonger, R.G., Prudic, D.E., and Regan, R.S., 2006, Documentation of the Unsaturated-Zone Flow (UZF1) Package for modeling unsaturated flow between the land surface and the water table with MODFLOW-2005: U.S. Geological Techniques and Methods Book 6, Chapter A19, 62 p.
 \par 
 \par Poeter, E.P., Hill, M.C., Banta, E.R., Mehl, Steffen, and Christensen, Steen, 2005, UCODE_2005 and Six Other Computer Codes for Universal Sensitivity Analysis, Calibration, and Uncertainty Evaluation: U.S. Geological Survey Techniques and Methods 6-A11, 283 p.
+\par 
+\par Provost, A.M., and Voss, C.I., 2019, SUTRA, a model for saturated-unsaturated, variable-density groundwater flow with solute or energy transport\emdash Documentation of generalized boundary conditions, a modified implementation of specified pressures and concentrations or temperatures, and the lake capability: U.S. Geological Survey Techniques and Methods, book 6, chap. A52, 62 p., https://doi.org/10.3133/tm6A52.
 \par 
 \par Tonkin, M.J., Tiedeman C. R., Ely D.M., and Hill M.C., 2007, OPR-PPR, a Computer Program for Assessing Data Importance to Model Predictions Using Linear Statistics: Reston Virginia, U.S. Geological Survey Techniques and Methods Report TM-6E2, 115 p.
 \par 
@@ -1744,7 +1745,7 @@ FALSE
 2 Data Tab=Scribble610
 2 Plot Tab=Scribble620
 2 Formatting Piper diagrams=Scribble630
-1 Cell Water Budgets
+1 Cell Water Budgets or Zeta
 2 Cell Water Budgets=Scribble635
 1 Farm Budgets
 2 Farm Budgets=Scribble645

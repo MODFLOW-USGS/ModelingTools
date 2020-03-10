@@ -8982,6 +8982,8 @@ const
   //                now displays an error message rather than sending a bug
   //                report in such cases.
 
+  //               Enhancement: Added support for CSUB package in MODFLOW 6.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.2';
   StrPvalExt = '.pval';
@@ -9142,7 +9144,7 @@ resourcestring
   StrModelMateDefaultPath = 'C:\WRDAPP\ModelMate_1_0_3\Bin\ModelMate.exe';
   strModflowLgrDefaultPath = 'C:\WRDAPP\mflgr.1_2\bin\mflgr.exe';
   strModflowLgr2DefaultPath = 'C:\WRDAPP\mflgr.2_0\bin\mflgr.exe';
-  strModflowNwtDefaultPath = 'C:\WRDAPP\MODFLOW-NWT_1.1.4\bin\MODFLOW-NWT.exe';
+  strModflowNwtDefaultPath = 'C:\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe';
   strMt3dmsDefaultPath = 'C:\mt3dms5\bin\mt3dms5b.exe';
   strMt3dUsgsDefaultPath = 'C:\WRDAPP\mt3dusgs1.0.1\bin\mt3d-usgs_1.0.1_32.exe';
   strModflowCfpDefaultPath = 'C:\WRDAPP\CFP\mf2005cfp.exe';

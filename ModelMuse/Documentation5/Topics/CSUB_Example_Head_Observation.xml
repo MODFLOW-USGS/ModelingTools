@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CSUB Example: Head Observations</title>
   <body>
     <header>
@@ -13,7 +13,7 @@
     <para styleclass="Normal"><image src="CSubExampleHeadObsBasic.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Elevations for Head Observation</title></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">On the MODFLOW Features tab, specify that the object will define a head observation and specify a name for the observations.</text></para>
     <para styleclass="Normal"><image src="CSubExampleHeadObsSelect.png" scale="60.00%" width="472" height="352" styleclass="Image Caption"><title translate="true">Specifying Head Observations</title></image></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking OK to close the dialog box, add a new section to the object at the location of the other well using the </text><text styleclass="Strong" translate="true">Add point sections</text><text styleclass="Normal" translate="true">&#32;</text><image src="AddPoints.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Point Sections button</title></image><text styleclass="Image Caption" translate="true"> button</text><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After clicking OK to close the dialog box, add a new section to the object at the location of the other well using the </text><text styleclass="Strong" translate="true">Add point sections</text><text styleclass="Normal" translate="true"> </text><image src="AddPoints.bmp" scale="100.00%" styleclass="Image Caption"><title translate="true">Add Point Sections button</title></image><text styleclass="Image Caption" translate="true"> button</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

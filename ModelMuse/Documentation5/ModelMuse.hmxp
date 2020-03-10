@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4125</config-value>
+      <config-value name="autohelpstart">4126</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -773,6 +773,7 @@ document.write('</frameset>');
       <helpcontext-number href="CSUB_Example_CSUB_Package_Tran" value="4119"/>
       <helpcontext-number href="CSUB_Example_Head_Observation" value="4120"/>
       <helpcontext-number href="CSUB_Example_Newton_Formulatio" value="4109"/>
+      <helpcontext-number href="CSUB_Example_Other_Methods_of_" value="4126"/>
       <helpcontext-number href="CSUB_Example_Recharge" value="4112"/>
       <helpcontext-number href="CSUB_Example_Run_Model" value="4123"/>
       <helpcontext-number href="CSUB_Example_Solver_Options" value="4115"/>

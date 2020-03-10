@@ -3,7 +3,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
   Top = 137
   Width = 622
   Height = 575
-  HelpContext = 300
+  HelpContext = 350
   Caption = 
     'GW_Chart Water Budgets: Water and solute budgets for numerical m' +
     'odels'
