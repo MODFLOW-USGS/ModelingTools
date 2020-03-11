@@ -9589,6 +9589,10 @@ resourcestring
   StrExportingMT3DUSGS = 'Exporting MT3D-USGS input files';
   StrExportingMT3DMSInp = 'Exporting MT3DMS input files';
   StrLakeTransportConce = KLakeTransportConce;
+  StrMF2005ImporterexeIsNot = 'MF2005_Importer.exe is not MODFLOW. You need ' +
+  'to download MODFLOW from the USGS web site and unzip the MODFLOW distribu' +
+  'tion file. Once you have done that, select "Model|MODFLOW Program Locatio' +
+  'ns" and enter the location of MODFLOW in the dialog box.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -38434,6 +38438,13 @@ var
   ListFileName: string;
   ListFileNames: TStringList;
 begin
+  if ExtractFileName(ModflowLocation) = 'MF2005_Importer.exe' then
+  begin
+    Beep;
+    MessageDlg(StrMF2005ImporterexeIsNot, mtError, [mbOK], 0);
+    Exit;
+  end;
+
   ClearMnw1FileNames;
   if frmProgressMM = nil then
   begin
