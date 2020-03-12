@@ -745,7 +745,7 @@ begin
       end;
       on E: EXBaseException do
       begin
-        MessageDlg(E.Message, mtError, [mbOK], 0);
+        MessageDlg(Format(StrThereWasAnErrorI, [E.message]), mtError, [mbOK], 0);
         Exit;
       end;
     end;

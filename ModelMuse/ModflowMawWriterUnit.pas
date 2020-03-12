@@ -112,10 +112,10 @@ resourcestring
   StrThereWasAnErrorI = 'There was an error in a MAW formula in %s.';
   StrMAWWellScreenInva = 'MAW Well screen invalid';
   StrWellScreen0dOf = 'Well screen %0:d of the MAW boundary defined by %1:s ' +
-  'does not intersect any cells.';
+  'does not intersect any active cells.';
   StrMAWWellScreensInv = 'MAW Well screens invalid';
   StrNoneOfTheWellScr = 'None of the well screens of the MAW boundary define' +
-  'd by %0:s intersect any cells.';
+  'd by %0:s intersect any active cells.';
 
 { TModflowMAW_Writer }
 
@@ -1167,6 +1167,7 @@ var
   Obs: TMawObservation;
   ConnectionFound: Boolean;
   ValidScreensFound: Boolean;
+  IDomainArray: TDataArray;
   procedure CompileFormula(Formula: string; const FormulaName: string;
     var OutFormula: string; SpecifiedLayer: Integer = 0);
   var
@@ -1298,6 +1299,7 @@ begin
   FWellConnections.Capacity := FMawObjects.Count;
   Grid := Model.Grid;
   Mesh := Model.Mesh3D;
+  IDomainArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
 
   UsedVariables := TStringList.Create;
   try
@@ -1373,34 +1375,37 @@ begin
             if (Min(CellTop, AWellConnection.ScreenTop)
               - Max(CellBottom, AWellConnection.ScreenBottom) > 0) then
             begin
-              Cell.Layer := LayerIndex;
-              AWellConnection.Cell := Cell;
-
-              CompileFormula(AWellScreen.SkinK, StrMAWSkinK, Formula, LayerIndex);
-              Expression.Evaluate;
-              AWellConnection.SkinK := Expression.DoubleResult;
-              AWellConnection.SkinKAnnotation := Format(
-                StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
-
-              CompileFormula(AWellScreen.SkinRadius, StrMAWSkinRadius, Formula, LayerIndex);
-              Expression.Evaluate;
-              AWellConnection.SkinRadius := Expression.DoubleResult;
-              AWellConnection.SkinRadiusAnnotation := Format(
-                StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
-
-              if (AWellConnection.SkinRadius <= AWellRecord.Radius)
-                and not (Boundary.ConductanceMethod in [mcmSpecified, mcmThiem]) then
+              if IDomainArray.IntegerData[LayerIndex, Cell.Row, Cell.Column] > 0 then
               begin
-                frmErrorsAndWarnings.AddError(Model, StrMAWSkinRadiusLess,
-                  Format(StrInSTheMAWSkin, [AScreenObject.Name]), AScreenObject);
+                Cell.Layer := LayerIndex;
+                AWellConnection.Cell := Cell;
+
+                CompileFormula(AWellScreen.SkinK, StrMAWSkinK, Formula, LayerIndex);
+                Expression.Evaluate;
+                AWellConnection.SkinK := Expression.DoubleResult;
+                AWellConnection.SkinKAnnotation := Format(
+                  StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+
+                CompileFormula(AWellScreen.SkinRadius, StrMAWSkinRadius, Formula, LayerIndex);
+                Expression.Evaluate;
+                AWellConnection.SkinRadius := Expression.DoubleResult;
+                AWellConnection.SkinRadiusAnnotation := Format(
+                  StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+
+                if (AWellConnection.SkinRadius <= AWellRecord.Radius)
+                  and not (Boundary.ConductanceMethod in [mcmSpecified, mcmThiem]) then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrMAWSkinRadiusLess,
+                    Format(StrInSTheMAWSkin, [AScreenObject.Name]), AScreenObject);
+                end;
+
+                Inc(AWellRecord.CellCount);
+                AWellConnection.ConnectionNumber := AWellRecord.CellCount;
+
+                FWellConnections.Add(AWellConnection);
+                ConnectionFound := True;
+                ValidScreensFound := True;
               end;
-
-              Inc(AWellRecord.CellCount);
-              AWellConnection.ConnectionNumber := AWellRecord.CellCount;
-
-              FWellConnections.Add(AWellConnection);
-              ConnectionFound := True;
-              ValidScreensFound := True;
             end;
           end;
           if not ConnectionFound then
@@ -1411,7 +1416,7 @@ begin
         end;
         if not ValidScreensFound then
         begin
-          frmErrorsAndWarnings.AddWarning(Model, StrMAWWellScreensInv,
+          frmErrorsAndWarnings.AddError(Model, StrMAWWellScreensInv,
             Format(StrNoneOfTheWellScr, [AScreenObject.Name]), AScreenObject);
         end;
 

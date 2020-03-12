@@ -185,6 +185,9 @@ resourcestring
   'ted more than once';
   StrTheFollowingUZFOb = 'The following UZF observation name "%0:s" is repea' +
   'ted more than once';
+  StrErrorInDefiningHe = 'Error in defining head observation';
+  StrSDoesNotDefineA = '%s does not define a head observation because it doe' +
+  's not intersect any active cell.';
 
 
 { TModflow6Obs_Writer }
@@ -736,6 +739,7 @@ var
 {$ENDIF}
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrErrorInDefiningHe);
   if not Package.IsSelected then
   begin
     Exit
@@ -799,23 +803,31 @@ begin
             AScreenObject.GetCellsToAssign('', nil, nil, CellList, alAll, Model);
             if Model.DisvUsed then
             begin
-              ACell := CellList[0];
-              DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
-              GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
-              WriteString(AScreenObject.Name);
-              WriteInteger(DisvCell.DisplayNumber);
-              WriteFloat(AScreenObject.Points[0].x);
-              WriteFloat(AScreenObject.Points[0].y);
-              NewLine;
-              for index := 0 to Length(ObsCells) - 1 do
+              if CellList.Count > 0 then
               begin
-                AnotherDisvCell := ObsCells[index];
-                WriteInteger(AnotherDisvCell.DisplayNumber);
-                WriteFloat(AnotherDisvCell.Location.x);
-                WriteFloat(AnotherDisvCell.Location.y);
+                ACell := CellList[0];
+                DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
+                GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
+                WriteString(AScreenObject.Name);
+                WriteInteger(DisvCell.DisplayNumber);
+                WriteFloat(AScreenObject.Points[0].x);
+                WriteFloat(AScreenObject.Points[0].y);
                 NewLine;
+                for index := 0 to Length(ObsCells) - 1 do
+                begin
+                  AnotherDisvCell := ObsCells[index];
+                  WriteInteger(AnotherDisvCell.DisplayNumber);
+                  WriteFloat(AnotherDisvCell.Location.x);
+                  WriteFloat(AnotherDisvCell.Location.y);
+                  NewLine;
+                end;
+                NewLine;
+              end
+              else
+              begin
+                frmErrorsAndWarnings.AddWarning(Model, StrErrorInDefiningHe,
+                  Format(StrSDoesNotDefineA, [AScreenObject.Name]), AScreenObject);
               end;
-              NewLine;
             end;
           finally
             CellList.Free;
@@ -2464,14 +2476,18 @@ begin
                 end
                 else
                 begin
-                  for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                  for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
                   begin
-                    icsubno := AnObs.FInterbedNumbers[IBIndex];
-                    obsname := Format(' ''%0:s_%1:d_%2:d'' ', [Root, icsubno, idcellno]);
-                    WriteString(obsname);
-                    WriteString(ObservationType);
-                    WriteInteger(icsubno);
-                    NewLine;
+                    idcellno := AnObs.FDelayCellNumbers[DelayBedIndex];
+                    for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                    begin
+                      icsubno := AnObs.FInterbedNumbers[IBIndex];
+                      obsname := Format(' ''%0:s_%1:d_%2:d'' ', [Root, icsubno, idcellno]);
+                      WriteString(obsname);
+                      WriteString(ObservationType);
+                      WriteInteger(icsubno);
+                      NewLine;
+                    end;
                   end;
                 end;
               end;

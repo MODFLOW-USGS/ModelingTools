@@ -528,6 +528,7 @@ type
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       virtual; abstract;
+    function AllowInactiveMf6Cells: boolean; virtual;
   public
     // @name is set to @True in @link(TSwrReachCollection),
     // @link(TStrCollection), @link(TSfrMf6Collection),
@@ -3207,6 +3208,11 @@ begin
 end;
 { TCustomListArrayBoundColl }
 
+function TCustomListArrayBoundColl.AllowInactiveMf6Cells: boolean;
+begin
+  result := False;
+end;
+
 procedure TCustomListArrayBoundColl.AssignArrayCellsWithItem(
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; DataSets,
   ListOfTimeLists: TList; AModel: TBaseModel);
@@ -3575,6 +3581,7 @@ begin
               EliminateIndicies.Add(CellIndex);
             end
             else if (LocalModel.ModelSelection = msModflow2015)
+              and not AllowInactiveMf6Cells
               and (IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] <= 0) then
             begin
               EliminateIndicies.Add(CellIndex);

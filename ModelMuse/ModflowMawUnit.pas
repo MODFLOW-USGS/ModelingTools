@@ -204,6 +204,7 @@ type
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
+    function AllowInactiveMf6Cells: boolean; override;
   end;
 
   TMawBoundary = class;
@@ -2494,6 +2495,11 @@ var
 begin
   Item := Items[ItemIndex] as TMawItem;
   result := Item.BoundaryFormula[FormulaIndex];
+end;
+
+function TMawWellCollection.AllowInactiveMf6Cells: boolean;
+begin
+  result := True;
 end;
 
 procedure TMawWellCollection.AssignCellList(Expression: TExpression;

@@ -198,6 +198,7 @@ begin
   PackageIdentifiers.Add('UZF   -- UZF CELLS PACKAGE');
   PackageIdentifiers.Add('PROCESSING SFR DIVERSIONS');
   PackageIdentifiers.Add('STAGE/VOLUME RELATION');
+  PackageIdentifiers.Add('IMS -- ITERATIVE MODEL SOLUTION PACKAGE');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -509,7 +510,6 @@ begin
   BoundaryIdentifiers.Add('READING SIMULATION');
   BoundaryIdentifiers.Add('TDIS -- TEMPORAL DISCRETIZATION PACKAGE');
   BoundaryIdentifiers.Add('READING SOLUTIONGROUP');
-  BoundaryIdentifiers.Add('IMS -- ITERATIVE MODEL SOLUTION PACKAGE');
   BoundaryIdentifiers.Add('IMSLINEAR -- UNSTRUCTURED LINEAR SOLUTION PACKAGE');
   BoundaryIdentifiers.Add('CALLS TO NUMERICAL SOLUTION IN TIME STEP');
   BoundaryIdentifiers.Add('INFORMATION ON VARIABLES STORED IN THE MEMORY MANAGER');

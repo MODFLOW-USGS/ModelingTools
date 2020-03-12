@@ -8981,11 +8981,13 @@ const
   //                actual coordinates are not in decimal degrees. ModelMuse
   //                now displays an error message rather than sending a bug
   //                report in such cases.
-
-  //               Enhancement: Added support for CSUB package in MODFLOW 6.
+  //    '4.2.0.3'  Enhancement: Added support for CSUB package in MODFLOW 6.
+  //               Bug fix: Fixed bug that could cause an assertion failure if
+  //                an object that defined a MAW well was in a cell that was
+  //                inactive in the top layer.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.2';
+  IModelVersion = '4.2.0.3';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
