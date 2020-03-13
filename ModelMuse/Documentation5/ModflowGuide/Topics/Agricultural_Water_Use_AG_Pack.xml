@@ -12,7 +12,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Abbreviations in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Table Header" translate="true">Name file</link></para>
         </td>
         <td>
-          <list id="537" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="32" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">AG</text></li>
           </list>
         </td>
@@ -30,7 +30,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
         </td>
         <td>
-          <list id="538" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="33" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Citation"><text styleclass="Citation" translate="true">Niswonger, R.G., 2020. An Agricultural Water Use Package for MODFLOW and GSFLOW. Environmental Modelling &amp; Software, p.104617.</text></li>
             <li styleclass="Citation"><text styleclass="Normal" translate="true">Input_instructions_AG.pdf</text></li>
           </list>
@@ -41,7 +41,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
         </td>
         <td>
-          <list id="539" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="34" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">Streamflow-Routing (SFR)</link></li>
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="UZF_-_Unsaturated_Zone_Flow_Pa_3" styleclass="Normal" translate="true">UZF - Unsaturated Zone Flow Package</link></li>
           </list>
@@ -60,7 +60,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Other Notes</text></para>
         </td>
         <td>
-          <list id="540" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="35" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">The AG was developed for GSFLOW to simulate irrigation and water use by cultivated and natural plants. The AG Package works with the Streamflow-Routing (SFR2) and the Unsaturated Flow (UZF1) Packages and includes capabilities for simulating pumping wells like the WELL Package. Input required for simulating agricultural diversions, supplementary pumping, irrigation, and demand calculations are all specified within the AG Package input file. All exchanges between different packages (SFR2, UZF1, and AG) are calculated within the AG Package; however, the SFR2 and UZF1 Packages must be active to use their capabilities in conjunction with the AG Package. Diversion segments must be specified within the SFR2 Package to apply diverted water as irrigation. All data for supplementary and irrigation wells is specified within the AG Package input file; the AG Package calculates and applies its own boundary conditions to the groundwater flow equation for representing irrigation and/or supplementary wells.</text></li>
           </list>
         </td>
@@ -107,7 +107,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="541" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="36" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true">: An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the option to use surface water (SW) for irrigation is activated.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numirrdiversions: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numirrdiversions also is specified. Numirrdiversions is the maximum number of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR2</link><text styleclass="Normal" translate="true"> diversion segments in any stress period that will be used for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxcellsdiversion: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_DIVERSION</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxcellsdiversion also is specified. Maxcellsdiversion is the maximum number of MODFLOW cells or PRMS HRUs that will receive irrigation from a single </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">SFR2</link><text styleclass="Normal" translate="true"> diversion segment in any stress period.</text></li>
@@ -119,7 +119,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="542" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="37" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true">&#32;</text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to use groundwater for irrigation is activate. &#160;</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numirrwells: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numirrwells also is specified. Numirrwells is the maximum number of AG wells in any stress period that will be used for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxcellswell: An optional integer variable. When </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxellswell also is specified. Maxcellswell is the maximum number of MODFLOW cells or PRMS HRUs that will receive irrigation from a single AG well in any stress period.</text></li>
@@ -131,7 +131,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="543" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="38" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true">:</text><text styleclass="Keywords" translate="true">&#32;</text><text styleclass="Normal" translate="true">An optional character variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the option to simulate supplemental groundwater for irrigation is active. The AG Package calculates supplemental GW pumping using the difference between the irrigation demand and the surface water diversion. &#160; </text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numsupwells: An optional integer variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Numsupwells also is specified. Numsupwells is the maximum number of supplemental wells in any stress period that will pump groundwater.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxdiversions: An optional integer variable. When </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified, the integer variable Maxdiversions also is specified. Maxdiversions is the maximum number of SFR2 diversion segments that are supplemented by a well.</text></li>
@@ -143,7 +143,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="544" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="39" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true">: An optional character variable. If </text><text styleclass="Keywords" translate="true">IRRIGATION_WELL</text><text styleclass="Normal" translate="true"> or </text><text styleclass="Keywords" translate="true">SUPPLEMENTAL_WELL</text><text styleclass="Normal" translate="true"> is specified then &#160;</text><text styleclass="Keywords" translate="true">MAXWELL </text><text styleclass="Normal" translate="true">also is specified. </text><text styleclass="Keywords" translate="true">MAXWELL</text><text styleclass="Normal" translate="true"> is included to indicate that the maximum number of unique supplemental and irrigation wells used during a simulation (Nummaxwell) also will be read.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Nummaxwell: The maximum number of unique supplemental and irrigation wells used during a simulation.</text></li>
                 </list>
@@ -154,7 +154,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="545" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="40" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><anchor id="TABFILES" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true"> is included in order set pumping rates using time series input files.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Numtab: </text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxval: An integer variable equal to the maximum number of values specified for any TABFILE. </text></li>
@@ -174,7 +174,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="546" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="41" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> is included in order to activate automatic calculation of the net irrigation water requirement. </text><text styleclass="Keywords" translate="true">ETDEMAND</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Keywords" translate="true">TRIGGER</text><text styleclass="Normal" translate="true"> cannot be used in the same simulation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Accel: An real variable that controls the maximum change in the irrigation diversion or pumped amount between iterations. Values between 0.5 and 10 work well. </text></li>
                 </list>
@@ -225,7 +225,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="547" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="42" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSIONLIST</text><text styleclass="Normal" translate="true">: An optional character variable for outputting a list of all diversion segments and diversion amounts used for irrigation in the AG Package when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_diversionlist: An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">DIVERSIONLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
@@ -236,7 +236,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="548" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="43" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLLIST</text><text styleclass="Normal" translate="true"> An optional character variable for outputting a list of all active wells in the AG Package and pumped amounts when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_welllist An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">WELLLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
@@ -247,7 +247,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="549" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="44" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLIRRLIST</text><text styleclass="Normal" translate="true">: An optional character variable for outputting a list of MODFLOW cells or PRMS HRUs that are irrigated by AG wells and the irrigated amounts when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_wellirrlist: An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">WELLIRRLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
@@ -258,7 +258,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="550" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="45" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSIONIRRLIST</text><text styleclass="Normal" translate="true">: An optional character variable for outputting a list of MODFLOW cells or PRMS HRUs irrigated by irrigation segments and the irrigated amounts when &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="SaveBudget" styleclass="Keywords" translate="true">SAVE BUDGET</link><text styleclass="Normal" translate="true">&quot; or a non-zero value for </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" anchor="ICBCFL" styleclass="Normal" translate="true">ICBCFL</link><text styleclass="Normal" translate="true"> is specified in </text><link displaytype="text" defaultstyle="true" type="topiclink" href="OC" styleclass="Normal" translate="true">Output Control</link><text styleclass="Normal" translate="true">.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unit_diversionirrlist: An optional integer variable that is the file unit number to which </text><text styleclass="Keywords" translate="true">DIVERSIONIRRLIST</text><text styleclass="Normal" translate="true"> output is written. This unit number must correspond to a file of type </text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true"> specified in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">. A negative value indicates output will be written to the LIST file.</text></li>
                 </list>
@@ -326,7 +326,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="551" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="46" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSION</text><text styleclass="Normal" translate="true"> Character variable indicating that irrigation information for a diversion will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Segmentnum Integer variable that is the SFR2 segment number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitdiversion Integer variable that is the formatted output file unit number.</text></li>
@@ -350,7 +350,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="552" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="47" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">DIVERSIONET</text><text styleclass="Normal" translate="true"> Character variable indicating that crop ET for all cells/HRUs irrigated by a diversion will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Segmentnum Integer variable that is the SFR2 segment number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitdiversionet Integer variable that is the formatted output file unit number.</text></li>
@@ -374,7 +374,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="553" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="48" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELL</text><text styleclass="Normal" translate="true"> Character variable indicating that irrigation information for a well will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Wellnum Integer variable that is the AG well number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwell Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
@@ -398,7 +398,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="554" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="49" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLET</text><text styleclass="Normal" translate="true"> Character variable indicating that evapotranspiration information for a well will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Welletnum Integer variable that is the AG well number.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwellet Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
@@ -418,7 +418,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="555" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="50" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLETALL</text><text styleclass="Normal" translate="true"> Character variable indicating that evapotranspiration information summed for all wells will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwelletall Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
                 </list>
@@ -437,7 +437,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td style="height:23px;">
-                <list id="556" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="51" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Keywords" translate="true">WELLALL</text><text styleclass="Normal" translate="true"> Character variable indicating that irrigation information summed for all wells will be written to a time series output file.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Unitwellall Integer variable that is the formatted output file unit number. This file is of type ‚Äú</text><text styleclass="Keywords" translate="true">Data</text><text styleclass="Normal" translate="true">‚Äù and is included in the MODFLOW </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Name_File" styleclass="Normal" translate="true">Name file</link><text styleclass="Normal" translate="true">.</text></li>
                 </list>
@@ -500,7 +500,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="557" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="52" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGMENTNUMBER</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">1 </text><text styleclass="Normal" translate="true">Integer value equal to the first irrigation segment used in a simulation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGMENTNUMBER</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">MAXNUMSEGS</text><text styleclass="Normal" translate="true"> Integer value equal to the last irrigation segment used in a simulation.</text></li>
                 </list>
@@ -564,7 +564,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="558" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="53" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">TABUNIT Integer variable equal to the unit number for the TABFILE used to specify pumping rates for a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">TABVAL Integer variable equal to the maximum number of rows to be read from a TABFILE.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLLAY Integer variable equal to the layer number of the cell containing a well.</text></li>
@@ -590,12 +590,12 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">.</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">[WELLLAY</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> WELLROW</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true">&#32;</text><text styleclass="Normal" translate="true">WELLCOL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true">]</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">[WELLLAY</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> WELLROW</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> WELLCOL</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true"> Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:sub;" translate="true">Maxwell</text><text styleclass="Normal" translate="true">]</text></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[<%EXPLANATIONOFVARIABLES%>]]></caption></toggle></para>
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="559" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="54" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLLAY Integer variable equal to the layer number of the cell containing a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLROW Integer variable equal to the row number of the cell containing a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">WELLCOL Integer variable equal to the column number of the cell containing a well.</text></li>
@@ -679,7 +679,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="560" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="55" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGID An integer variable equal to the SFR2 segment number for the diversion used for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">NUMCELLSEG An integer variable equal to the total number of MODFLOW cells or PRMS HRUs that will be irrigated by SFR2 diversion segment SEGID.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRPERIODSEG A real variable equal to the length of time water will be diverted for a single irrigation event. Although this variable is specified for each SEGID, it only is used if the character variable TRIGGER is specified in the options block. Units for this variable are determined from the DIS file input variable ITMUNI. Values should be greater than or equal to the length of the largest model time step during irrigation periods.</text></li>
@@ -704,11 +704,9 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="561" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="56" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRROW_DIVERSION An integer variable equal to the cell row number that will be irrigated by segment SEGID. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRCOL_ DIVERSION An integer variable equal to the cell column number that will be irrigated by segment SEGID. This variable only is specified for MODFLOW-only simulations.</text></li>
-                  <li styleclass="Normal"><text styleclass="Normal" translate="true">HRU_ID_ DIVERSION An integer variable equal to the HRU ID number that will be irrigated by segment SEGID. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
-                  <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_ DIVERSION An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_ DIVERSION A real variable equal to the fraction of surface water applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_ DIVERSION to zero.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">FIELD_FACT_ DIVERSION A real variable equal to the fraction of the diverted water applied to a cell that is used to distribute a diversion among multiple cells. The sum of all FIELD_FACT_ DIVERSION values for a diversion should sum to 1.</text></li>
                 </list>
@@ -731,7 +729,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="562" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="57" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">HRU_ID_ WELL An integer variable equal to the HRU ID to which pumped water will be applied as irrigation. An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_ DIVERSION An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>
@@ -782,7 +780,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="563" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="58" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRWELLID An integer variable equal to the well identification number used to pump groundwater for irrigation.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">NUMCELLWELL An integer variable equal to the total number of MODFLOW cells or PRMS HRUs that receive water from a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRPERIODWELL A real variable equal to the length of time water will be pumped for a single irrigation event. Although this variable is specified for each WELL, it only is used if the character variable TRIGGER is specified in the options block and for wells that are not SUP wells. Units for this variable are determined from the DIS file input variable ITMUNI. Values should be greater than or equal to the length of the largest model time step during irrigation periods.</text></li>
@@ -807,7 +805,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="564" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="59" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRROW_WELL An integer variable equal to the cell row number to which pumped water will be applied as irrigation. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">IRRCOL_WELL An integer variable equal to the cell column number to which pumped water will be applied as irrigation. This variable only is specified for MODFLOW-only simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>
@@ -833,11 +831,11 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="565" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="60" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">HRU_ID_ WELL An integer variable equal to the HRU ID to which pumped water will be applied as irrigation. An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_WELL</text></li>
                 </list>
-                <list id="566" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="61" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">FIELD_FACT_WELL A real variable equal to the fraction of the groundwater applied to a cell that is used to distribute water pumped from a well among multiple cells. The sum of all FIELD_FACT_WELL values for a well should sum to 1.</text></li>
                 </list>
@@ -886,7 +884,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="567" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="62" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SUPWELLNUM An integer variable equal to the AG well number that supplements one or more surface water diversions.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">NUMSEGWELL An integer variable equal to the number of SFR2 segments that will be supplemented by a well.</text></li>
                 </list>
@@ -909,7 +907,7 @@
           <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
             <tr style="vertical-align:top">
               <td>
-                <list id="568" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                <list id="63" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">SEGWELLID An integer variable equal to the SFR2 segment number that will be supplemented by a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">FRACSUP A real variable between 0 and 1 that is equal to the fraction of the surface water shortfall for segment SEGWELLID that will be supplemented by a well.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">FRACSUPMAX A real variable between 0 and 1 that is equal to the fraction of the surface water demand that is used to calculate the net irrigation water requirement with supplemental groundwater pumping. Supplemental groundwater pumping (Ì†µÌ±ÑÌ†µÌ±†Ì†µÌ±¢Ì†µÌ±ù) will be calculated as Ì†µÌ±ÑÌ†µÌ±†Ì†µÌ±¢Ì†µÌ±ù=Ì†µÌ∞πÌ†µÌ±ÖÌ†µÌ∞¥Ì†µÌ∞∂Ì†µÌ±ÜÌ†µÌ±àÌ†µÌ±É‚àó[FRACSUPMAX‚àóÌ†µÌ±ÑÌ†µÌ±ëÌ†µÌ±íÌ†µÌ±öÌ†µÌ±éÌ†µÌ±õÌ†µÌ±ë‚àíÌ†µÌ±ÑÌ†µÌ±ëÌ†µÌ±ñÌ†µÌ±£], where Ì†µÌ±ÑÌ†µÌ±ëÌ†µÌ±íÌ†µÌ±öÌ†µÌ±éÌ†µÌ±õÌ†µÌ±ë is the specified surface water diversion rate for irrigation.</text></li>
