@@ -8986,6 +8986,9 @@ const
   //                an object that defined a MAW well was in a cell that was
   //                inactive in the top layer.
 
+  //               Bug fix: Fixed display of pump capacity table in the MNW2
+  //                package.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.3';
   StrPvalExt = '.pval';

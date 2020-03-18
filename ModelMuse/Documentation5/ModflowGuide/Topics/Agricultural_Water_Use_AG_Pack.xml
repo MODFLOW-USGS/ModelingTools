@@ -156,7 +156,7 @@
               <td>
                 <list id="40" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><anchor id="TABFILES" styleclass="Keywords"></anchor><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true">: An optional character variable. </text><text styleclass="Keywords" translate="true">TABFILES</text><text styleclass="Normal" translate="true"> is included in order set pumping rates using time series input files.</text></li>
-                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Numtab: </text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">Numtab: An integer variable equal to the total number of tabular input files for setting the maximum pumping rate for AG irrigation and supplemental wells.</text></li>
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">Maxval: An integer variable equal to the maximum number of values specified for any TABFILE. </text></li>
                 </list>
               </td>
@@ -833,7 +833,7 @@
               <td>
                 <list id="60" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">HRU_ID_ WELL An integer variable equal to the HRU ID to which pumped water will be applied as irrigation. An integer variable that must be specified but is not used and can be set to zero. This variable only is specified for PRMS-only and GSFLOW simulations.</text></li>
-                  <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_WELL</text></li>
+                  <li styleclass="Normal"><text styleclass="Normal" translate="true">DUM_WELL An integer variable that must be specified but is not used. This variable only is specified for PRMS-only and GSFLOW simulations. Any 4-byte integer values can be specified as a dummy value that is not used in the simulation.</text></li>
                 </list>
                 <list id="61" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                   <li styleclass="Normal"><text styleclass="Normal" translate="true">EFF_FACT_WELL A real variable equal to the fraction of groundwater applied to a cell that can be used to represent crop evapotranspiration and other field losses. If evapotranspiration is being simulated explicitly then set EFF_FACT_WELL to zero.</text></li>

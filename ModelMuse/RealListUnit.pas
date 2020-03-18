@@ -1,6 +1,10 @@
 {@abstract(@name defines @link(TRealList) which is used to store
  a series of doubles.)}
 
+{$IFDEF FPC}
+  {$mode Delphi}
+{$ENDIF}
+
 unit RealListUnit;
 
 interface

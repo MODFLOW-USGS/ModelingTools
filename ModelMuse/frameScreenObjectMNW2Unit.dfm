@@ -1,13 +1,13 @@
 inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
   Width = 609
-  Height = 448
+  Height = 476
   Font.Charset = ANSI_CHARSET
   Font.Height = -16
   Font.Name = 'Arial'
   ParentFont = False
   TabStop = True
   ExplicitWidth = 609
-  ExplicitHeight = 448
+  ExplicitHeight = 476
   object pnlCaption: TPanel
     Left = 0
     Top = 0
@@ -22,17 +22,19 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
     Left = 0
     Top = 22
     Width = 609
-    Height = 426
-    ActivePage = tabLossControls
+    Height = 454
+    ActivePage = tabDischargeAdjustment
     Align = alClient
     TabOrder = 1
+    ExplicitHeight = 426
     object tabBasic: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'MNW2_Basic_Tab'
       Caption = 'Basic'
+      ExplicitHeight = 393
       DesignSize = (
         601
-        393)
+        421)
       object lblWellId: TLabel
         Left = 3
         Top = 9
@@ -295,6 +297,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Loss_Controls_Tab'
       Caption = 'Loss Controls'
       ImageIndex = 1
+      ExplicitHeight = 393
       object lblWellRadius: TLabel
         Left = 3
         Top = 3
@@ -560,9 +563,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Discharge_Adjustment_Tab'
       Caption = 'Discharge Adjustment'
       ImageIndex = 2
+      ExplicitHeight = 393
       DesignSize = (
         601
-        393)
+        421)
       object lblReferenceHead: TLabel
         Left = 8
         Top = 6
@@ -655,9 +659,9 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       end
       object rdgLiftTable: TRbwDataGrid4
         Left = 232
-        Top = 152
-        Width = 366
-        Height = 238
+        Top = 155
+        Width = 334
+        Height = 254
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColCount = 2
         FixedCols = 0
@@ -758,11 +762,12 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Pumping_Rate_Tab'
       Caption = 'Pumping Rate'
       ImageIndex = 3
+      ExplicitHeight = 393
       object rdgTimeTable: TRbwDataGrid4
         Left = 0
         Top = 65
         Width = 601
-        Height = 287
+        Height = 315
         Align = alClient
         ColCount = 8
         FixedCols = 0
@@ -973,6 +978,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           end>
         OnEndUpdate = rdgTimeTableEndUpdate
         WordWrapRowCaptions = False
+        ExplicitHeight = 287
         ColWidths = (
           64
           64
@@ -985,12 +991,13 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       end
       object Panel1: TPanel
         Left = 0
-        Top = 352
+        Top = 380
         Width = 601
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 2
+        ExplicitTop = 352
         object lblTimeTableRows: TLabel
           Left = 79
           Top = 9
@@ -1090,14 +1097,16 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'Well_Screens'
       Caption = 'Well Screens'
       ImageIndex = 4
+      ExplicitHeight = 393
       object Panel3: TPanel
         Left = 0
-        Top = 352
+        Top = 380
         Width = 601
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 2
+        ExplicitTop = 352
         object Label1: TLabel
           Left = 79
           Top = 9
@@ -1138,7 +1147,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         Left = 0
         Top = 97
         Width = 601
-        Height = 255
+        Height = 283
         Align = alClient
         ColCount = 9
         FixedCols = 0
@@ -1367,6 +1376,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           end>
         OnEndUpdate = rdgVerticalScreensEndUpdate
         WordWrapRowCaptions = False
+        ExplicitHeight = 255
       end
       object Panel4: TPanel
         Left = 0

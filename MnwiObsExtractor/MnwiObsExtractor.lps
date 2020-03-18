@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="6">
+      <Unit0>
+        <Filename Value="MnwiObsExtractor.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <TopLine Value="47"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="readmnwioutput.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ReadMnwiOutput"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="19"/>
+        <CursorPos X="19" Y="30"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\ModelMuse\RealListUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="9" Y="6"/>
+        <UsageCount Value="27"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ReadMnwiInstructions"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="145"/>
+        <CursorPos X="22" Y="155"/>
+        <UsageCount Value="25"/>
+        <Bookmarks Count="1">
+          <Item0 Y="173"/>
+        </Bookmarks>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\sysutils.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="15"/>
+        <UsageCount Value="10"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\fgl.pp"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="304"/>
+        <CursorPos X="14" Y="310"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit5>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="77" Column="13" TopLine="72"/>
+      </Position1>
+      <Position2>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="78" Column="13" TopLine="72"/>
+      </Position2>
+      <Position3>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="132" Column="64" TopLine="125"/>
+      </Position3>
+      <Position4>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="15" TopLine="13"/>
+      </Position4>
+      <Position5>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="154" Column="12" TopLine="143"/>
+      </Position5>
+      <Position6>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="40" TopLine="14"/>
+      </Position6>
+      <Position7>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="143" Column="54" TopLine="131"/>
+      </Position7>
+      <Position8>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="196" Column="46" TopLine="187"/>
+      </Position8>
+      <Position9>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="97" Column="58" TopLine="86"/>
+      </Position9>
+      <Position10>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="25" Column="15" TopLine="13"/>
+      </Position10>
+      <Position11>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="199" Column="22" TopLine="190"/>
+      </Position11>
+      <Position12>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="28" TopLine="20"/>
+      </Position12>
+      <Position13>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="121" Column="66" TopLine="113"/>
+      </Position13>
+      <Position14>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="15" TopLine="13"/>
+      </Position14>
+      <Position15>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="159" Column="5" TopLine="146"/>
+      </Position15>
+      <Position16>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="20" Column="15" TopLine="14"/>
+      </Position16>
+      <Position17>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="84" TopLine="72"/>
+      </Position17>
+      <Position18>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="15" TopLine="13"/>
+      </Position18>
+      <Position19>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="32" Column="17" TopLine="29"/>
+      </Position19>
+      <Position20>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="174" Column="30" TopLine="162"/>
+      </Position20>
+      <Position21>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="20" Column="24" TopLine="14"/>
+      </Position21>
+      <Position22>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="131" Column="24" TopLine="121"/>
+      </Position22>
+      <Position23>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="22" TopLine="13"/>
+      </Position23>
+      <Position24>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="177" Column="9" TopLine="168"/>
+      </Position24>
+      <Position25>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="27" TopLine="14"/>
+      </Position25>
+      <Position26>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="184" Column="22" TopLine="174"/>
+      </Position26>
+      <Position27>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="178" Column="32" TopLine="171"/>
+      </Position27>
+      <Position28>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="21" Column="24" TopLine="12"/>
+      </Position28>
+      <Position29>
+        <Filename Value="readmnwiinstructions.pas"/>
+        <Caret Line="198" Column="15" TopLine="192"/>
+      </Position29>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

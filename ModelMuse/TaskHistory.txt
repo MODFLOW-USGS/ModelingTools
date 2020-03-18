@@ -443,6 +443,10 @@ object TTaskHistory
     item
       Name = 'GwMounding'
       Display = False
+    end
+    item
+      Name = 'PEST Observations'
+      Display = True
     end>
   History = <
     item
@@ -25092,5 +25096,22 @@ object TTaskHistory
       Date = 43904.000000000000000000
       Categories.Strings = (
         'PEST')
+    end
+    item
+      Date = 43905.000000000000000000
+    end
+    item
+      Date = 43906.000000000000000000
+    end
+    item
+      Date = 43907.000000000000000000
+      Categories.Strings = (
+        'Documentation')
+    end
+    item
+      Date = 43908.000000000000000000
+      Categories.Strings = (
+        'PEST Observations'
+        'Bug fix')
     end>
 end
