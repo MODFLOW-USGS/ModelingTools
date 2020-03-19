@@ -119,6 +119,9 @@ resourcestring
   'ew file?';
   StrImportPathline = 'import pathline';
   StrConfigurePathline = 'configure pathline';
+  StrThereWasAnErrorR = 'There was an error reading the pathline file. It ma' +
+  'y have been locked or there might have been some other error. The error m' +
+  'essage was "%s".';
 
 {$R *.dfm}
 
@@ -569,10 +572,18 @@ begin
         begin
           try
             PathLine.ReadFile;
-          except  on E: EInvalidLayer do
+          except  
+            on E: EInvalidLayer do
             begin
               Beep;
               MessageDlg(E.message, mtError, [mbOK], 0);
+              PathLine.FileName := '';
+              Exit;
+            end;
+            on E: EInOutError do
+            begin
+              Beep;
+              MessageDlg(Format(StrThereWasAnErrorR, [E.message]), mtError, [mbOK], 0);
               PathLine.FileName := '';
               Exit;
             end;

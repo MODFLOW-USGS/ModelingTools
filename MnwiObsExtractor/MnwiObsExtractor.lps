@@ -4,12 +4,13 @@
     <PathDelim Value="\"/>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="6">
+    <Units Count="10">
       <Unit0>
         <Filename Value="MnwiObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="47"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="36"/>
+        <CursorPos X="72" Y="41"/>
+        <UsageCount Value="67"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -17,9 +18,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ReadMnwiOutput"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="19"/>
-        <CursorPos X="19" Y="30"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="275"/>
+        <CursorPos Y="288"/>
+        <UsageCount Value="67"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -27,19 +28,19 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="9" Y="6"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="64"/>
       </Unit2>
       <Unit3>
         <Filename Value="readmnwiinstructions.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ReadMnwiInstructions"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="145"/>
-        <CursorPos X="22" Y="155"/>
-        <UsageCount Value="25"/>
-        <Bookmarks Count="1">
-          <Item0 Y="173"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="544"/>
+        <CursorPos Y="552"/>
+        <UsageCount Value="62"/>
+        <Bookmarks Count="2">
+          <Item0 Y="237"/>
+          <Item1 Y="360" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
       </Unit3>
@@ -47,138 +48,249 @@
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\sysutils.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="15"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="6"/>
       </Unit4>
       <Unit5>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\fgl.pp"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="304"/>
-        <CursorPos X="14" Y="310"/>
-        <UsageCount Value="11"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="1333"/>
+        <CursorPos X="5" Y="1336"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit5>
+      <Unit6>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\types.pp"/>
+        <UnitName Value="Types"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="613"/>
+        <CursorPos X="17" Y="613"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\generics.collections.pas"/>
+        <UnitName Value="Generics.Collections"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="551"/>
+        <CursorPos X="12" Y="558"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionariesh.inc"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="614"/>
+        <CursorPos X="20" Y="240"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="2072"/>
+        <CursorPos X="68" Y="2084"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit9>
     </Units>
     <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="77" Column="13" TopLine="72"/>
+        <Caret Line="139" TopLine="133"/>
       </Position1>
       <Position2>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="78" Column="13" TopLine="72"/>
+        <Caret Line="290" TopLine="284"/>
       </Position2>
       <Position3>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="132" Column="64" TopLine="125"/>
+        <Filename Value="readmnwioutput.pas"/>
+        <Caret Line="288" TopLine="275"/>
       </Position3>
       <Position4>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="15" TopLine="13"/>
+        <Caret Line="290" TopLine="284"/>
       </Position4>
       <Position5>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="154" Column="12" TopLine="143"/>
+        <Caret Line="295" TopLine="284"/>
       </Position5>
       <Position6>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="40" TopLine="14"/>
+        <Filename Value="readmnwioutput.pas"/>
+        <Caret Line="288" TopLine="275"/>
       </Position6>
       <Position7>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="143" Column="54" TopLine="131"/>
+        <Caret Line="295" TopLine="284"/>
       </Position7>
       <Position8>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="196" Column="46" TopLine="187"/>
+        <Caret Line="300" TopLine="294"/>
       </Position8>
       <Position9>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="97" Column="58" TopLine="86"/>
+        <Caret Line="302" TopLine="294"/>
       </Position9>
       <Position10>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="25" Column="15" TopLine="13"/>
+        <Caret Line="290" TopLine="284"/>
       </Position10>
       <Position11>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="199" Column="22" TopLine="190"/>
+        <Filename Value="readmnwioutput.pas"/>
+        <Caret Line="288" TopLine="275"/>
       </Position11>
       <Position12>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="28" TopLine="20"/>
+        <Caret Line="524" TopLine="518"/>
       </Position12>
       <Position13>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="121" Column="66" TopLine="113"/>
+        <Caret Line="550" TopLine="544"/>
       </Position13>
       <Position14>
         <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="15" TopLine="13"/>
+        <Caret Line="551" TopLine="544"/>
       </Position14>
       <Position15>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="159" Column="5" TopLine="146"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="359" Column="62" TopLine="355"/>
       </Position15>
       <Position16>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="20" Column="15" TopLine="14"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
       </Position16>
       <Position17>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="84" TopLine="72"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="604" Column="22" TopLine="594"/>
       </Position17>
       <Position18>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="15" TopLine="13"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="630" Column="68" TopLine="618"/>
       </Position18>
       <Position19>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="32" Column="17" TopLine="29"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="744" Column="24" TopLine="733"/>
       </Position19>
       <Position20>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="174" Column="30" TopLine="162"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1031" Column="60" TopLine="1019"/>
       </Position20>
       <Position21>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="20" Column="24" TopLine="14"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1036" Column="62" TopLine="1024"/>
       </Position21>
       <Position22>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="131" Column="24" TopLine="121"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1042" Column="62" TopLine="1030"/>
       </Position22>
       <Position23>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="22" TopLine="13"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1049" Column="43" TopLine="1037"/>
       </Position23>
       <Position24>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="177" Column="9" TopLine="168"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1470" Column="60" TopLine="1458"/>
       </Position24>
       <Position25>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="27" TopLine="14"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1475" Column="62" TopLine="1463"/>
       </Position25>
       <Position26>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="184" Column="22" TopLine="174"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1481" Column="62" TopLine="1469"/>
       </Position26>
       <Position27>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="178" Column="32" TopLine="171"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1767" Column="26" TopLine="1756"/>
       </Position27>
       <Position28>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="21" Column="24" TopLine="12"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="1806" Column="17" TopLine="1794"/>
       </Position28>
       <Position29>
-        <Filename Value="readmnwiinstructions.pas"/>
-        <Caret Line="198" Column="15" TopLine="192"/>
+        <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
+        <Caret Line="2046" Column="24" TopLine="2035"/>
       </Position29>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes Count="0" ActiveMode=""/>
+      <Modes Count="1" ActiveMode="default">
+        <Mode0 Name="default">
+          <local>
+            <CommandLineParams Value="input.txt"/>
+          </local>
+        </Mode0>
+      </Modes>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="8">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="375"/>
+      </Item1>
+      <Item2>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="380"/>
+      </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="549"/>
+      </Item3>
+      <Item4>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="532"/>
+      </Item4>
+      <Item5>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="89"/>
+      </Item5>
+      <Item6>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="514"/>
+      </Item6>
+      <Item7>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="174"/>
+      </Item7>
+      <Item8>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readmnwiinstructions.pas"/>
+        <Line Value="290"/>
+      </Item8>
+    </BreakPoints>
+    <Watches Count="3">
+      <Item1>
+        <Expression Value="ObservationsFound"/>
+      </Item1>
+      <Item2>
+        <Expression Value="ALine"/>
+      </Item2>
+      <Item3>
+        <Expression Value="FLineIndex"/>
+      </Item3>
+    </Watches>
+  </Debugging>
 </CONFIG>

@@ -14,10 +14,6 @@ object frameModpathDisplay: TframeModpathDisplay
     TabOrder = 0
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         457
         458)

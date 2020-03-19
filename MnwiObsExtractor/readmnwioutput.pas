@@ -5,7 +5,7 @@ unit ReadMnwiOutput;
 interface
 
 uses
-  Classes, SysUtils, fgl;
+  Classes, SysUtils, Generics.Collections, Generics.Defaults;
 
 type
   TDoubleArray = array of double;
@@ -31,9 +31,9 @@ type
     Print: Boolean;
   end;
 
-  TMnwiObsValueList = specialize TFPGList<TMnwiObsValue>;
-  TMnwiObsValueObjectList = specialize TFPGObjectList<TMnwiObsValue>;
-  TMnwiObsValueDictionary = specialize TFPGMap<string, TMnwiObsValue>;
+  TMnwiObsValueList = specialize TList<TMnwiObsValue>;
+  TMnwiObsValueObjectList = specialize TObjectList<TMnwiObsValue>;
+  TMnwiObsValueDictionary = specialize TDictionary<string, TMnwiObsValue>;
 
   { TObsExtractor }
 
@@ -267,7 +267,14 @@ begin
         end
         else
         begin
-          Obs.SimulatedValue := Value(ObsRecord, Ord(Obs.ObsType));
+          if (Obs.ObsTime > ObsRecord.TOTIM) then
+          begin
+            Obs.SimulatedValue := MissingValue;
+          end
+          else
+          begin
+            Obs.SimulatedValue := Value(ObsRecord, Ord(Obs.ObsType));
+          end;
         end;
       end;
     end;

@@ -1,0 +1,26 @@
+# start file names
+begin  filenames
+  LISTINg_FILE "Listing file.txt"
+  OBSERVATIONs_FILE Obs.txt
+end  filenames
+#end filenames
+
+#start observations
+Begin  ObSERVATIONS
+  FILENAME Mnw2Import_Well-A.mnwi_out
+  OBSERVATION  "Obs1 a" hwell 10.5 print
+  OBSERVATION  Obs2 hwell 100 no_print
+  OBSERVATION  ObsTooEarly hwell 0
+  OBSERVATION  ObsTooLate hwell 1000
+  Observation Cum10 QCumu 10 print
+  Observation Cum100 QCumu 100 print
+  
+end  OBsERVATIONS
+#end observations
+
+#start derived observations
+begin DERIvED_OBSERVATIONS
+  DIFFERENCE obs3 "Obs1 a" obs2
+  DIFFERENCE "Cum10 to 100" Cum100 Cum10
+end DeRIVED_OBSERVATIONS
+#end derived observations
