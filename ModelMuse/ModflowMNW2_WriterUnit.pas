@@ -2,7 +2,7 @@ unit ModflowMNW2_WriterUnit;
 
 interface
 
-uses System.Types, System.UITypes,
+uses System.Types, System.UITypes, Generics.Collections,
   Winapi.Windows, CustomModflowWriterUnit, ModflowPackageSelectionUnit, Classes, Contnrs,
   PhastModelUnit, ScreenObjectUnit, ModflowCellUnit, ModflowMnw2Unit, SysUtils,
   ModflowBoundaryDisplayUnit, RbwParser, Vcl.Dialogs;
@@ -25,6 +25,14 @@ type
     class function IsScreenObjectVertical(
       AScreenObject: TScreenObject): Boolean;
   end;
+  
+  TObsFileLink = class(TObject)
+  private
+    FileName: string;
+    WellBoundary: TMnw2Boundary;
+  end;
+  
+  TObsFileLinks = TObjectList<TObsFileLink>;
 
   TModflowMNW2_Writer = class(TCustomPackageWriter)
   private
@@ -35,6 +43,7 @@ type
     NNODES: Integer;
     FMnwiWells: TList;
     FMnwPackage: TMultinodeWellSelection;
+    FObsLinks: TObsFileLinks;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSet2A(WellBoundary: TMnw2Boundary; Well: TMultinodeWell);
@@ -63,6 +72,7 @@ type
       const ADataName: string; var Formula: string; Compiler: TRbwParser; WellBoundary: TMnw2Boundary);
     procedure CheckWells;
     function CountNodes: integer;
+    procedure WriteObsScriptAndPestInstructions(const AFileName: string);
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -145,10 +155,12 @@ begin
   FWellNames.CaseSensitive := False;
   FWellNames.Sorted := True;
   FMnwiWells := TList.Create;
+  FObsLinks := TObsFileLinks.Create;
 end;
 
 destructor TModflowMNW2_Writer.Destroy;
 begin
+  FObsLinks.Free;
   FMnwiWells.Free;
   FWellNames.Free;
   FWells.Free;
@@ -180,6 +192,10 @@ begin
       Continue;
     end;
     frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
+    if Boundary.Observations.Count > 0 then
+    begin
+      Boundary.SaveMnwiInfo := True;
+    end;
     if Boundary.SaveMnwiInfo
       or Boundary.SaveExternalFlows
       or Boundary.SaveInternalFlows then
@@ -725,6 +741,205 @@ begin
       CloseFile;
     end;
 
+    WriteObsScriptAndPestInstructions(AFileName);
+
+  end;
+end;
+
+procedure TModflowMNW2_Writer.WriteObsScriptAndPestInstructions(
+  const AFileName: string);
+const
+  MarkerDelimiter = '@';
+var
+  ScriptFileName: string;
+  ExtractorListFileName: string;
+  ExtractorObsFileName: string;
+  ObjectIndex: Integer;
+  Link: TObsFileLink;
+  Boundary: TMnw2Boundary;
+  ObsIndex: Integer;
+  Obs: TMnw2ObsItem;
+  ComparisonsUsed: Boolean;
+  CompIndex: Integer;
+  CompItem: TMnw2ObsCompareItem;
+  InstructionFileName: string;
+  function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  begin
+    Result := Format('Ob%0:d_%1:s', [ObjectIndex+1, Obs.Name]);
+  end;
+begin
+{$IFNDEF PEST}
+  Exit;
+{$ENDIF}
+  if FObsLinks.Count = 0 then
+  begin
+    Exit;
+  end;
+
+  ScriptFileName := ChangeFileExt(AFileName, '.mnw_script');
+
+  OpenFile(ScriptFileName);
+  try
+    ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
+    ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs');
+
+    // FILENAMES block
+    WriteString('BEGIN FILENAMES');
+    NewLine;
+    WriteString('  LISTING_FILE ');
+    WriteString(ExtractFileName(ExtractorListFileName));
+    NewLine;
+    WriteString('  OBSERVATIONS_FILE ');
+    WriteString(ExtractFileName(ExtractorObsFileName));
+    NewLine;
+    WriteString('END FILENAMES');
+    NewLine;
+    NewLine;
+
+    ComparisonsUsed := False;
+    // OBSERVATIONS block
+    WriteString('BEGIN OBSERVATIONS');
+    NewLine;
+    for ObjectIndex := 0 to FObsLinks.Count - 1 do
+    begin
+      Link := FObsLinks[ObjectIndex];
+      Boundary := Link.WellBoundary;
+      WriteString('  # ');
+      WriteString('Observations defined in ');
+      WriteString((Boundary.ScreenObject as TScreenObject).Name);
+      NewLine;
+
+      WriteString('  FILENAME ');
+      WriteString(Link.FileName);
+      NewLine;
+      for ObsIndex := 0 to Boundary.Observations.Count - 1 do
+      begin
+        Obs := Boundary.Observations[ObsIndex];
+        WriteString('  OBSERVATION ');
+        WriteString(GetObName(ObjectIndex, Obs));
+        case Obs.ObsType of
+          motQin: WriteString(' Qin ');
+          motQout: WriteString(' Qout ');
+          motQnet: WriteString(' Qnet ');
+          motQCumu: WriteString(' QCumu ');
+          motHwell: WriteString(' Hwell ');
+          else Assert(False);
+        end;
+        WriteFloat(Obs.Time);
+        WriteString(' PRINT');
+        NewLine;
+      end;
+
+      if Boundary.Observations.Comparisons.Count > 0 then
+      begin
+        ComparisonsUsed := True;
+      end;
+    end;
+    WriteString('END OBSERVATIONS');
+
+    // DERIVED_OBSERVATIONS block
+    if ComparisonsUsed then
+    begin
+      NewLine;
+      NewLine;
+      WriteString('BEGIN DERIVED_OBSERVATIONS');
+      NewLine;
+
+      for ObjectIndex := 0 to FObsLinks.Count - 1 do
+      begin
+        Link := FObsLinks[ObjectIndex];
+        Boundary := Link.WellBoundary;
+        if Boundary.Observations.Comparisons.Count > 0 then
+        begin
+          WriteString('  # ');
+          WriteString('Observation comparisons defined in ');
+          WriteString((Boundary.ScreenObject as TScreenObject).Name);
+          NewLine;
+
+          for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
+          begin
+            WriteString('  DIFFERENCE ');
+            CompItem := Boundary.Observations.Comparisons[CompIndex];
+            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString(' ');
+            Obs := Boundary.Observations[CompItem.Index1];
+            WriteString(GetObName(ObjectIndex, Obs));
+            WriteString(' ');
+            Obs := Boundary.Observations[CompItem.Index2];
+            WriteString(GetObName(ObjectIndex, Obs));
+            WriteString(' PRINT');
+            NewLine;
+          end;
+        end;
+      END;
+      WriteString('END DERIVED_OBSERVATIONS');
+    end;
+
+  finally
+    CloseFile;
+  end;
+
+  InstructionFileName := ExtractorObsFileName + '.ins';
+  OpenFile(InstructionFileName);
+  try
+    WriteString('pif ');
+    WriteString(MarkerDelimiter);
+    NewLine;
+
+    for ObjectIndex := 0 to FObsLinks.Count - 1 do
+    begin
+      Link := FObsLinks[ObjectIndex];
+      Boundary := Link.WellBoundary;
+
+      for ObsIndex := 0 to Boundary.Observations.Count - 1 do
+      begin
+        Obs := Boundary.Observations[ObsIndex];
+        WriteString('l1 ');
+        WriteString(MarkerDelimiter);
+        WriteString('"');
+        WriteString(GetObName(ObjectIndex, Obs));
+        WriteString('"');
+        WriteString(MarkerDelimiter);
+        WriteString(' !');
+        WriteString(GetObName(ObjectIndex, Obs));
+        WriteString('!');
+        NewLine;
+      end;
+
+      if Boundary.Observations.Comparisons.Count > 0 then
+      begin
+        ComparisonsUsed := True;
+      end;
+    end;
+
+    if ComparisonsUsed then
+    begin
+      for ObjectIndex := 0 to FObsLinks.Count - 1 do
+      begin
+        Link := FObsLinks[ObjectIndex];
+        Boundary := Link.WellBoundary;
+        if Boundary.Observations.Comparisons.Count > 0 then
+        begin
+          for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
+          begin
+            CompItem := Boundary.Observations.Comparisons[CompIndex];
+            WriteString('l1 ');
+            WriteString(MarkerDelimiter);
+            WriteString('"');
+            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString('"');
+            WriteString(MarkerDelimiter);
+            WriteString(' !');
+            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString('!');
+            NewLine;
+          end;
+        end;
+      END;
+    end
+
+  finally
+    CloseFile;
   end;
 end;
 
@@ -739,6 +954,7 @@ var
   WellIndex: Integer;
 
   OutputFileName: string;
+  ObsFileLink: TObsFileLink;
 begin
   AFileName := ExtractFileName(AFileName);
   AFileName := ChangeFileExt(AFileName, '');
@@ -783,6 +999,16 @@ begin
 
     WriteToNameFile(StrDATA, UNIT_Number,
       OutputFileName, foOutput, Model);
+
+  {$IFDEF PEST}
+    if Boundary.Observations.Count > 0 then
+    begin
+      ObsFileLink := TObsFileLink.Create;
+      FObsLinks.Add(ObsFileLink);
+      ObsFileLink.FileName := OutputFileName;
+      ObsFileLink.WellBoundary := Boundary;
+    end;
+  {$ENDIF}
   end;
 end;
 

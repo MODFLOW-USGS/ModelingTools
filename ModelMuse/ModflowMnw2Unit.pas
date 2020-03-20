@@ -9,6 +9,7 @@ uses Classes, ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit,
 type
   TMnwLimitMethod = (mlmNoMinimum, mlmRate, mlmFraction);
   TMnwLossType = (mltNone, mltThiem, mltSkin, mltEquation, mtlSpecify);
+  TMnwObsType = (motQin, motQout, motQnet, motQCumu, motHwell);
 
   TMnw2Record = record
     Cell: TCellLocation;
@@ -470,6 +471,59 @@ type
     property Items[index: integer]: TVerticalScreen read GetItem write SetItem; default;
   end;
 
+  // Compare two @link(TMnw2ObsItem)s in the same object.
+  TMnw2ObsCompareItem = class(TCustomObservationItem)
+  private
+    FIndex2: Integer;
+    FIndex1: Integer;
+    procedure SetIndex1(const Value: Integer);
+    procedure SetIndex2(const Value: Integer);
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property Index1: Integer read FIndex1 write SetIndex1;
+    property Index2: Integer read FIndex2 write SetIndex2;
+  end;
+
+  TMnw2Comparisons = class(TPhastCollection)
+  private
+    function GetItem(Index: Integer): TMnw2ObsCompareItem;
+    procedure SetItem(Index: Integer; const Value: TMnw2ObsCompareItem);
+  public
+    procedure Assign(Source: TPersistent); override;
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]: TMnw2ObsCompareItem read GetItem
+      write SetItem; default;
+    function Add: TMnw2ObsCompareItem;
+   end;
+  
+  TMnw2ObsItem = class(TCustomTimeObservationItem)
+  private
+    FObsType: TMnwObsType;
+    procedure SetObsType(const Value: TMnwObsType);
+  public  
+    procedure Assign(Source: TPersistent); override;
+  published
+    property ObsType: TMnwObsType read FObsType write SetObsType stored True;
+  end;
+
+  TMnw2Observations = class(TPhastCollection)
+  private
+    FComparisons: TMnw2Comparisons;
+    function GetMnw2Item(Index: Integer): TMnw2ObsItem;
+    procedure SetMnw2Item(Index: Integer; const Value: TMnw2ObsItem);
+    procedure SetComparisons(const Value: TMnw2Comparisons);
+  public
+    procedure Assign(Source: TPersistent); override;
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Destructor Destroy; override;
+    property Items[Index: Integer]: TMnw2ObsItem read GetMnw2Item
+      write SetMnw2Item; default;
+    function Add: TMnw2ObsItem;
+  published
+    property Comparisons: TMnw2Comparisons read FComparisons write SetComparisons;
+  end;
+
   TMnw2Boundary = class(TModflowBoundary)
   private
     FTimeValues: TMnw2TimeCollection;
@@ -490,6 +544,7 @@ type
     FSaveInternalFlows: boolean;
     FVerticalScreens: TVerticalScreenCollection;
     FSaveMnwiInfo: boolean;
+    FObservations: TMnw2Observations;
     procedure SetTimeValues(const Value: TMnw2TimeCollection);
     procedure SetAdjustPumping(const Value: boolean);
     procedure SetConstrainPumping(const Value: boolean);
@@ -509,6 +564,7 @@ type
     procedure SetSaveInternalFlows(const Value: boolean);
     procedure SetVerticalScreens(const Value: TVerticalScreenCollection);
     procedure SetSaveMnwiInfo(const Value: boolean);
+    procedure SetObservations(const Value: TMnw2Observations);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -567,6 +623,12 @@ type
       write SetSaveInternalFlows;
     property VerticalScreens: TVerticalScreenCollection read FVerticalScreens
       write SetVerticalScreens;
+    property Observations: TMnw2Observations read FObservations
+      write SetObservations
+      {$IFNDEF PEST}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
 const
@@ -1843,6 +1905,7 @@ begin
     SaveExternalFlows := SourceMnw2.SaveExternalFlows;
     SaveInternalFlows := SourceMnw2.SaveInternalFlows;
     VerticalScreens := SourceMnw2.VerticalScreens;
+    Observations := SourceMnw2.Observations;
   end;
   inherited;
 end;
@@ -1903,6 +1966,7 @@ begin
   TimeValues.Clear;
   LiftValues.Clear;
   VerticalScreens.Clear;
+  Observations.Clear;
 end;
 
 function TMnw2Boundary.DataTypeUsed(DataIndex: integer): boolean;
@@ -1984,10 +2048,12 @@ begin
   FLiftValues := TLiftCollection.Create(Model);
   FPumpCellTarget := TTarget.Create(OnInvalidateModelEvent);
   FVerticalScreens := TVerticalScreenCollection.Create(self, Model, ScreenObject);
+  FObservations := TMnw2Observations.Create(OnInvalidateModelEvent);
 end;
 
 destructor TMnw2Boundary.Destroy;
 begin
+  FObservations.Free;
   FVerticalScreens.Free;
   FPumpCellTarget.Free;
   FLiftValues.Free;
@@ -2088,9 +2154,14 @@ procedure TMnw2Boundary.SetMaximumLift(const Value: double);
 begin
   if FMaximumLift <> Value then
   begin
-    FMaximumLift := Value;
     InvalidateModel;
+    FMaximumLift := Value;
   end;
+end;
+
+procedure TMnw2Boundary.SetObservations(const Value: TMnw2Observations);
+begin
+  FObservations.Assign(Value);
 end;
 
 procedure TMnw2Boundary.SetPartialPenetrationCorrection(const Value: boolean);
@@ -3618,6 +3689,160 @@ begin
   FCellToWellConductanceData.Free;
   FPartialPenetrationData.Free;
   inherited;
+end;
+
+{ TMnw2ObsItem }
+
+procedure TMnw2ObsItem.Assign(Source: TPersistent);
+var
+  ObsSource: TMnw2ObsItem;
+begin
+  if Source is TMnw2ObsItem then
+  begin
+    ObsSource := TMnw2ObsItem(Source);
+    ObsType := ObsSource.ObsType;
+  end;
+  inherited;
+
+end;
+
+procedure TMnw2ObsItem.SetObsType(const Value: TMnwObsType);
+begin
+  if FObsType <> Value then
+  begin
+    BeginUpdate;
+    try
+      FObsType := Value;
+      InvalidateModel;
+    finally
+      EndUpdate;
+    end;
+  end;
+end;
+
+{ TMnw2Observations }
+
+function TMnw2Observations.Add: TMnw2ObsItem;
+begin
+  result := inherited Add as TMnw2ObsItem; 
+end;
+
+procedure TMnw2Observations.Assign(Source: TPersistent);
+var
+  Mnw2Source: TMnw2Observations;
+  ItemIndex: Integer;
+begin
+  if Source is TMnw2Observations then
+  begin
+    Mnw2Source := TMnw2Observations(Source);
+    Comparisons := Mnw2Source.Comparisons;
+    Count :=  Mnw2Source.Count;
+    for ItemIndex := 0 to Mnw2Source.Count - 1 do
+    begin
+      Items[ItemIndex].Assign(Mnw2Source.Items[ItemIndex]);
+    end;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TMnw2Observations.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TMnw2ObsItem, InvalidateModelEvent);
+  FComparisons := TMnw2Comparisons.Create(InvalidateModelEvent);
+end;
+
+destructor TMnw2Observations.Destroy;
+begin
+  FComparisons.Free;
+  inherited;
+end;
+
+function TMnw2Observations.GetMnw2Item(Index: Integer): TMnw2ObsItem;
+begin
+  result := inherited Items[Index] as TMnw2ObsItem;
+end;
+
+procedure TMnw2Observations.SetComparisons(const Value: TMnw2Comparisons);
+begin
+  FComparisons.Assign(Value);
+end;
+
+procedure TMnw2Observations.SetMnw2Item(Index: Integer;
+  const Value: TMnw2ObsItem);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TMnw2ObsCompareItem }
+
+procedure TMnw2ObsCompareItem.Assign(Source: TPersistent);
+var
+  MnwCompare: TMnw2ObsCompareItem;
+begin
+  if Source is TMnw2ObsCompareItem then
+  begin
+    MnwCompare := TMnw2ObsCompareItem(Source);
+    Index1 := MnwCompare.Index1;
+    Index2 := MnwCompare.Index2;
+  end;
+  inherited;
+
+end;
+
+procedure TMnw2ObsCompareItem.SetIndex1(const Value: Integer);
+begin
+  SetIntegerProperty(FIndex1, Value);
+end;
+
+procedure TMnw2ObsCompareItem.SetIndex2(const Value: Integer);
+begin
+  SetIntegerProperty(FIndex2, Value);
+end;
+
+{ TMnw2Comparisons }
+
+function TMnw2Comparisons.Add: TMnw2ObsCompareItem;
+begin
+  result := inherited Add as TMnw2ObsCompareItem;
+end;
+
+procedure TMnw2Comparisons.Assign(Source: TPersistent);
+var
+  Mnw2Source: TMnw2Comparisons;
+  ItemIndex: Integer;
+begin
+  if Source is TMnw2Comparisons then
+  begin
+    Mnw2Source := TMnw2Comparisons(Source);
+    Count :=  Mnw2Source.Count;
+    for ItemIndex := 0 to Mnw2Source.Count - 1 do
+    begin
+      Items[ItemIndex].Assign(Mnw2Source.Items[ItemIndex]);
+    end;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TMnw2Comparisons.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TMnw2ObsCompareItem, InvalidateModelEvent);
+end;
+
+function TMnw2Comparisons.GetItem(Index: Integer): TMnw2ObsCompareItem;
+begin
+  result := inherited Items[Index] as TMnw2ObsCompareItem
+end;
+
+procedure TMnw2Comparisons.SetItem(Index: Integer;
+  const Value: TMnw2ObsCompareItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

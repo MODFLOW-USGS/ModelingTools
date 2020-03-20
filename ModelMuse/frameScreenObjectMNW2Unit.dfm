@@ -23,15 +23,13 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
     Top = 22
     Width = 609
     Height = 454
-    ActivePage = tabDischargeAdjustment
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 1
-    ExplicitHeight = 426
     object tabBasic: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'MNW2_Basic_Tab'
       Caption = 'Basic'
-      ExplicitHeight = 393
       DesignSize = (
         601
         421)
@@ -236,6 +234,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
+          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -297,7 +296,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Loss_Controls_Tab'
       Caption = 'Loss Controls'
       ImageIndex = 1
-      ExplicitHeight = 393
       object lblWellRadius: TLabel
         Left = 3
         Top = 3
@@ -563,7 +561,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Discharge_Adjustment_Tab'
       Caption = 'Discharge Adjustment'
       ImageIndex = 2
-      ExplicitHeight = 393
       DesignSize = (
         601
         421)
@@ -762,7 +759,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Pumping_Rate_Tab'
       Caption = 'Pumping Rate'
       ImageIndex = 3
-      ExplicitHeight = 393
+      ExplicitLeft = 8
       object rdgTimeTable: TRbwDataGrid4
         Left = 0
         Top = 65
@@ -978,7 +975,8 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           end>
         OnEndUpdate = rdgTimeTableEndUpdate
         WordWrapRowCaptions = False
-        ExplicitHeight = 287
+        ExplicitTop = 66
+        ExplicitHeight = 138
         ColWidths = (
           64
           64
@@ -997,7 +995,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitTop = 352
         object lblTimeTableRows: TLabel
           Left = 79
           Top = 9
@@ -1097,7 +1094,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'Well_Screens'
       Caption = 'Well Screens'
       ImageIndex = 4
-      ExplicitHeight = 393
       object Panel3: TPanel
         Left = 0
         Top = 380
@@ -1106,7 +1102,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitTop = 352
         object Label1: TLabel
           Left = 79
           Top = 9
@@ -1376,7 +1371,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           end>
         OnEndUpdate = rdgVerticalScreensEndUpdate
         WordWrapRowCaptions = False
-        ExplicitHeight = 255
       end
       object Panel4: TPanel
         Left = 0
@@ -1420,6 +1414,418 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           OnChange = rdeWellScreenFormulaChange
           Max = 1.000000000000000000
           ChangeDisabledColor = True
+        end
+      end
+    end
+    object tabObservations: TTabSheet
+      Caption = 'Observations'
+      ImageIndex = 5
+      object splObservations: TSplitter
+        Left = 0
+        Top = 243
+        Width = 601
+        Height = 5
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 247
+      end
+      object grpDirectObs: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 601
+        Height = 243
+        Align = alClient
+        Caption = 'Direct observations'
+        TabOrder = 0
+        ExplicitLeft = 256
+        ExplicitTop = 256
+        ExplicitWidth = 185
+        ExplicitHeight = 105
+        inline frameObservations: TframeGrid
+          Left = 2
+          Top = 20
+          Width = 597
+          Height = 200
+          Align = alTop
+          TabOrder = 0
+          ExplicitWidth = 601
+          ExplicitHeight = 200
+          inherited Panel: TPanel
+            Top = 159
+            Width = 597
+            ExplicitTop = 159
+            ExplicitWidth = 601
+            inherited lbNumber: TLabel
+              Width = 55
+              Height = 18
+              ExplicitWidth = 55
+              ExplicitHeight = 18
+            end
+            inherited sbAdd: TSpeedButton
+              Left = 312
+              ExplicitLeft = 314
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 369
+              ExplicitLeft = 372
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 427
+              ExplicitLeft = 430
+            end
+            inherited seNumber: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 597
+            Height = 159
+            ColCount = 6
+            OnSelectCell = frameObservationsGridSelectCell
+            OnSetEditText = frameObservationsGridSetEditText
+            Columns = <
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                PickList.Strings = (
+                  'Qin'
+                  'Qout'
+                  'Qnet'
+                  'QCumu'
+                  'hwell')
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end>
+            ExplicitWidth = 601
+            ExplicitHeight = 159
+            ColWidths = (
+              64
+              75
+              64
+              64
+              64
+              64)
+          end
+        end
+      end
+      object grpObsComparisons: TGroupBox
+        Left = 0
+        Top = 248
+        Width = 601
+        Height = 173
+        Align = alBottom
+        Caption = 'Observation comparisons'
+        TabOrder = 1
+        inline frameObsComparisons: TframeGrid
+          Left = 2
+          Top = 20
+          Width = 597
+          Height = 151
+          Align = alClient
+          TabOrder = 0
+          ExplicitLeft = 300
+          ExplicitTop = 56
+          inherited Panel: TPanel
+            Top = 110
+            Width = 597
+            inherited lbNumber: TLabel
+              Width = 55
+              Height = 18
+              ExplicitWidth = 55
+              ExplicitHeight = 18
+            end
+            inherited sbAdd: TSpeedButton
+              Left = 312
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 370
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 427
+            end
+            inherited seNumber: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 597
+            Height = 110
+            ColCount = 6
+            OnEnter = frameObsComparisonsGridEnter
+            Columns = <
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4String
+                LimitToList = True
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = True
+                Format = rcf4String
+                LimitToList = True
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = True
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4String
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end>
+          end
         end
       end
     end

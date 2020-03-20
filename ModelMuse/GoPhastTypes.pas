@@ -467,6 +467,41 @@ type
     procedure InvalidateModel;
   end;
 
+  TCustomObservationItem = class(TPhastCollectionItem)
+  private
+    FName: string;
+    FComment: string;
+    FObservedValue: double;
+    FWeight: Double;
+    FGUID: string;
+    procedure SetComment(const Value: string);
+    procedure SetName(const Value: string);
+    procedure SetObservedValue(const Value: double);
+    procedure SetWeight(const Value: Double);
+  public
+    procedure Assign(Source: TPersistent); override;
+    constructor Create(Collection: TCollection); override;
+  published
+    property Name: string read FName write SetName;
+    property ObservedValue: double read FObservedValue write SetObservedValue;
+    property Weight: Double read FWeight write SetWeight;
+    property Comment: string read FComment write SetComment;
+    // @name is a globally unique identifier used to store and extract
+    // @classname in a dictionary. This helps with calculating derived
+    // observations.
+    property GUID: string read FGUID write FGUID;
+  end;
+
+  TCustomTimeObservationItem = class(TCustomObservationItem)
+  private
+    FTime: double;
+    procedure SetTime(const Value: double);
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property Time: double read FTime write SetTime;
+  end;
+
   // @name adds the required functions of IInterface.
   TInterfacedPhastCollectionItem = class(TPhastCollectionItem, IInterface)
   protected
@@ -1992,6 +2027,79 @@ end;
 procedure TElementOutline.SetPoint(Index: Integer; const Value: TPoint2D);
 begin
   FOutline[Index] := Value;
+end;
+
+{ TCustomObservationItem }
+
+procedure TCustomObservationItem.Assign(Source: TPersistent);
+var
+  ObsSource: TCustomObservationItem;
+begin
+  if Source is TCustomObservationItem then
+  begin
+    ObsSource := TCustomObservationItem(Source);
+    Name := ObsSource.Name;
+    ObservedValue := ObsSource.ObservedValue;
+    Weight := ObsSource.Weight;
+    Comment := ObsSource.Comment;
+    GUID := ObsSource.GUID;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+constructor TCustomObservationItem.Create(Collection: TCollection);
+var
+  MyGuid : TGUID;
+begin
+  inherited;
+  if CreateGUID(MyGuid) = 0 then
+  begin
+    FGUID := GUIDToString(MyGuid);
+  end;
+end;
+
+procedure TCustomObservationItem.SetComment(const Value: string);
+begin
+  SetStringProperty(FComment, Value);
+end;
+
+procedure TCustomObservationItem.SetName(const Value: string);
+begin
+  SetStringProperty(FName, Value);
+end;
+
+procedure TCustomObservationItem.SetObservedValue(const Value: double);
+begin
+  SetRealProperty(FObservedValue, Value);
+end;
+
+procedure TCustomObservationItem.SetWeight(const Value: Double);
+begin
+  SetRealProperty(FWeight, Value);
+end;
+
+{ TCustomTimeObservationItem }
+
+procedure TCustomTimeObservationItem.Assign(Source: TPersistent);
+var
+  ObsSource: TCustomTimeObservationItem;
+begin
+  if Source is TCustomTimeObservationItem then
+  begin
+    ObsSource := TCustomTimeObservationItem(Source);
+    Time := ObsSource.Time;
+  end;
+  inherited;
+
+end;
+
+procedure TCustomTimeObservationItem.SetTime(const Value: double);
+begin
+  SetRealProperty(FTime, Value);
 end;
 
 initialization
