@@ -696,7 +696,8 @@ uses
   frameScreenObjectTabbedUnit in 'frameScreenObjectTabbedUnit.pas' {frameScreenObjectTabbed: TFrame},
   frameScreenObjectCSubUnit in 'frameScreenObjectCSubUnit.pas' {frameScreenObjectCSub: TFrame},
   ModflowCSubWriterUnit in 'ModflowCSubWriterUnit.pas',
-  ModflowCSubInterbed in 'ModflowCSubInterbed.pas';
+  ModflowCSubInterbed in 'ModflowCSubInterbed.pas',
+  ObservationComparisonsUnit in 'ObservationComparisonsUnit.pas';
 
 {$R *.res}
 

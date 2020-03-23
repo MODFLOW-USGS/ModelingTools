@@ -481,6 +481,8 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
+    function ObservationType: string; virtual;
+    function Units: string; virtual;
   published
     property Name: string read FName write SetName;
     property ObservedValue: double read FObservedValue write SetObservedValue;
@@ -491,6 +493,8 @@ type
     // observations.
     property GUID: string read FGUID write FGUID;
   end;
+
+  TObservationList = TList<TCustomObservationItem>;
 
   TCustomTimeObservationItem = class(TCustomObservationItem)
   private
@@ -2062,6 +2066,11 @@ begin
   end;
 end;
 
+function TCustomObservationItem.ObservationType: string;
+begin
+  result := ClassName;
+end;
+
 procedure TCustomObservationItem.SetComment(const Value: string);
 begin
   SetStringProperty(FComment, Value);
@@ -2080,6 +2089,11 @@ end;
 procedure TCustomObservationItem.SetWeight(const Value: Double);
 begin
   SetRealProperty(FWeight, Value);
+end;
+
+function TCustomObservationItem.Units: string;
+begin
+  result := 'unknown';
 end;
 
 { TCustomTimeObservationItem }

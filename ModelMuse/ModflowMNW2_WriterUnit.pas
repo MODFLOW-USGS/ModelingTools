@@ -764,8 +764,14 @@ var
   CompItem: TMnw2ObsCompareItem;
   InstructionFileName: string;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  var
+    MaxPrefixLength: Integer;
+    Prefix: string;
   begin
-    Result := Format('Ob%0:d_%1:s', [ObjectIndex+1, Obs.Name]);
+  // The maximum allowed length of an observation name in PEST is 20.
+    MaxPrefixLength := 19 - Length((ObjectIndex+1).ToString + Obs.Name);
+    Prefix := Copy('Mnw2', MaxPrefixLength);
+    Result := Format('%0:s_%1:d%2:s', [Prefix, ObjectIndex+1, Obs.Name]);
   end;
 begin
 {$IFNDEF PEST}

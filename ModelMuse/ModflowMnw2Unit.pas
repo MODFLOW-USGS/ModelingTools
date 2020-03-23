@@ -496,13 +496,15 @@ type
       write SetItem; default;
     function Add: TMnw2ObsCompareItem;
    end;
-  
+
   TMnw2ObsItem = class(TCustomTimeObservationItem)
   private
     FObsType: TMnwObsType;
     procedure SetObsType(const Value: TMnwObsType);
-  public  
+  public
     procedure Assign(Source: TPersistent); override;
+    function ObservationType: string; override;
+    function Units: string; override;
   published
     property ObsType: TMnwObsType read FObsType write SetObsType stored True;
   end;
@@ -3706,6 +3708,34 @@ begin
 
 end;
 
+function TMnw2ObsItem.ObservationType: string;
+begin
+  case ObsType of
+    motQin:
+      begin
+        result := 'MNW2_Qin';
+      end;
+    motQout:
+      begin
+        result := 'MNW2_Qout';
+      end;
+    motQnet:
+      begin
+        result := 'MNW2_Qnet';
+      end;
+    motQCumu:
+      begin
+        result := 'MNW2_QCumu';
+      end;
+    motHwell:
+      begin
+        result := 'MNW2_Hwell';
+      end;
+     else
+       Assert(False);
+  end;
+end;
+
 procedure TMnw2ObsItem.SetObsType(const Value: TMnwObsType);
 begin
   if FObsType <> Value then
@@ -3717,6 +3747,26 @@ begin
     finally
       EndUpdate;
     end;
+  end;
+end;
+
+function TMnw2ObsItem.Units: string;
+begin
+  case ObsType of
+    motQin, motQout, motQnet:
+      begin
+        result := 'L3/T';
+      end;
+    motQCumu:
+      begin
+        result := 'L3';
+      end;
+    motHwell:
+      begin
+        result := 'L';
+      end;
+    else
+       Assert(False);
   end;
 end;
 

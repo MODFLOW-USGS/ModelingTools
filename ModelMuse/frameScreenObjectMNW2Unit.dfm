@@ -234,7 +234,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
-          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -759,7 +758,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Pumping_Rate_Tab'
       Caption = 'Pumping Rate'
       ImageIndex = 3
-      ExplicitLeft = 8
       object rdgTimeTable: TRbwDataGrid4
         Left = 0
         Top = 65
@@ -975,8 +973,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           end>
         OnEndUpdate = rdgTimeTableEndUpdate
         WordWrapRowCaptions = False
-        ExplicitTop = 66
-        ExplicitHeight = 138
         ColWidths = (
           64
           64
@@ -1437,10 +1433,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         Align = alClient
         Caption = 'Direct observations'
         TabOrder = 0
-        ExplicitLeft = 256
-        ExplicitTop = 256
-        ExplicitWidth = 185
-        ExplicitHeight = 105
         inline frameObservations: TframeGrid
           Left = 2
           Top = 20
@@ -1448,13 +1440,15 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           Height = 200
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 601
+          ExplicitLeft = 2
+          ExplicitTop = 20
+          ExplicitWidth = 597
           ExplicitHeight = 200
           inherited Panel: TPanel
             Top = 159
             Width = 597
             ExplicitTop = 159
-            ExplicitWidth = 601
+            ExplicitWidth = 597
             inherited lbNumber: TLabel
               Width = 55
               Height = 18
@@ -1463,14 +1457,17 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             end
             inherited sbAdd: TSpeedButton
               Left = 312
+              OnClick = frameObservationssbAddClick
               ExplicitLeft = 314
             end
             inherited sbInsert: TSpeedButton
               Left = 369
+              OnClick = frameObservationssbInsertClick
               ExplicitLeft = 372
             end
             inherited sbDelete: TSpeedButton
               Left = 427
+              OnClick = frameObservationssbDeleteClick
               ExplicitLeft = 430
             end
             inherited seNumber: TJvSpinEdit
@@ -1500,7 +1497,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
                 ComboUsed = False
                 Format = rcf4String
                 LimitToList = False
-                MaxLength = 0
+                MaxLength = 14
                 ParentButtonFont = False
                 WordWrapCaptions = True
                 WordWrapCells = False
@@ -1629,7 +1626,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitWidth = 601
+            ExplicitWidth = 597
             ExplicitHeight = 159
             ColWidths = (
               64
@@ -1656,11 +1653,15 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           Height = 151
           Align = alClient
           TabOrder = 0
-          ExplicitLeft = 300
-          ExplicitTop = 56
+          ExplicitLeft = 2
+          ExplicitTop = 20
+          ExplicitWidth = 597
+          ExplicitHeight = 151
           inherited Panel: TPanel
             Top = 110
             Width = 597
+            ExplicitTop = 110
+            ExplicitWidth = 597
             inherited lbNumber: TLabel
               Width = 55
               Height = 18
@@ -1669,12 +1670,15 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             end
             inherited sbAdd: TSpeedButton
               Left = 312
+              ExplicitLeft = 312
             end
             inherited sbInsert: TSpeedButton
               Left = 370
+              ExplicitLeft = 370
             end
             inherited sbDelete: TSpeedButton
               Left = 427
+              ExplicitLeft = 427
             end
             inherited seNumber: TJvSpinEdit
               Height = 26
@@ -1825,6 +1829,8 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
+            ExplicitWidth = 597
+            ExplicitHeight = 110
           end
         end
       end

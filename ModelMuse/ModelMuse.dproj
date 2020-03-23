@@ -1676,6 +1676,7 @@
         </DCCReference>
         <DCCReference Include="ModflowCSubWriterUnit.pas"/>
         <DCCReference Include="ModflowCSubInterbed.pas"/>
+        <DCCReference Include="ObservationComparisonsUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

@@ -1090,6 +1090,9 @@ resourcestring
   StrStartingAndEnding = 'Starting and ending times are the same.';
   StrAnModelFeatureIn = 'A model feature in %0:s has identical starting and' +
   ' ending times of %1:g';
+  StrItLooksLikeNoStr = 'It looks like no stress periods have been defined f' +
+  'or this model. If this is not true, please contact the ModelMuse develope' +
+  'r for assistance.';
 
 function SortBoundaryItems(Item1, Item2: pointer): integer;
 var
@@ -3503,6 +3506,13 @@ begin
   end;
 
   LocalModel := AModel as TCustomModel;
+
+  if LocalModel.ModflowFullStressPeriods.Count = 0 then
+  begin
+    Beep;
+    MessageDlg(StrItLooksLikeNoStr, mtError, [mbOK], 0);
+    Exit;
+  end;
 
   FirstUsedTime := LocalModel.ModflowFullStressPeriods.First.StartTime;
   LastUsedTime := LocalModel.ModflowFullStressPeriods.Last.EndTime;

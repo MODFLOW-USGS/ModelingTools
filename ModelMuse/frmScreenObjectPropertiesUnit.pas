@@ -2525,6 +2525,8 @@ resourcestring
   StrSatETConcIn = 'Sat ET conc in ';
   StrUnsatETConcIn = 'Unsat ET conc in ';
   StrUZFSinkConcIn = 'UZF sink conc in ';
+  StrSomethingWentWrong = 'Something went wrong in the Object Properties dia' +
+  'log box. Please save your work and restart ModelMuse.';
 //  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
@@ -14954,6 +14956,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     for Index := 0 to FNewProperties.Count - 1 do
     begin
       Item := FNewProperties[Index];
@@ -15329,6 +15338,13 @@ var
   Item: TScreenObjectEditItem;
   Boundary: TModflowParamBoundary;
 begin
+  if (Node = nil) then
+  begin
+    Beep;
+    MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+    Exit;
+  end;
+
   Assert(Node <> nil);
   GetMF_BoundaryTimes(Times, Frame);
   for Index := 0 to FNewProperties.Count - 1 do
@@ -22242,6 +22258,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FGHB_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FGHB_Node <> nil);
     Frame := frameGhbParam;
     ParamType := ptGHB;
@@ -22266,6 +22289,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FRES_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
+    Assert(FRES_Node <> nil);
     Frame := frameRes;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22295,6 +22326,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FMt3dmsSsm_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FMt3dmsSsm_Node <> nil);
+
     Frame := frameMT3DMS_SSM;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22337,6 +22376,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FMt3d_UZT_Rech_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FMt3d_UZT_Rech_Node <> nil);
+
     Frame := frameMt3d_UZT_Rech;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22367,6 +22414,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FMt3d_Uzf_Seep_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FMt3d_Uzf_Seep_Node <> nil);
+
     Frame := frameMT3D_Uzf_Ssm_Conc;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22397,6 +22452,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FMt3d_UZT_Sat_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FMt3d_UZT_Sat_Node <> nil);
+
     Frame := frameMt3d_UZT_Sat;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22427,6 +22490,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FMt3d_UZT_Unsat_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FMt3d_UZT_Unsat_Node <> nil);
+
     Frame := frameMt3d_UZT_Unsat;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22659,6 +22730,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FDRN_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FDRN_Node <> nil);
     Frame := frameDrnParam;
     ParamType := ptDRN;
@@ -22686,6 +22764,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FRCH_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FRCH_Node <> nil);
     Frame := frameRchParam;
     ParamType := ptRCH;
@@ -22740,6 +22825,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FEVT_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FEVT_Node <> nil);
     Frame := frameEvtParam;
     ParamType := ptEVT;
@@ -22809,6 +22901,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FETS_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FETS_Node <> nil);
     Frame := frameEtsParam;
     ParamType := ptETS;
@@ -22883,6 +22982,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FDRT_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FDRT_Node <> nil);
     for Index := 0 to FNewProperties.Count - 1 do
     begin
@@ -22959,6 +23065,13 @@ begin
   if IsLoaded then
   begin
     Assert(FWEL_Node <> nil);
+    if (FWEL_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Frame := frameWellParam;
     ParamType := ptQ;
     for Index := 0 to FNewProperties.Count - 1 do
@@ -22987,6 +23100,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FFarmWell_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FFarmWell_Node <> nil);
     Frame := frameFarmWell;
     ParamType := ptQMAX;
@@ -23009,6 +23129,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FRIV_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FRIV_Node <> nil);
     Frame := frameRivParam;
     ParamType := ptRiv;
@@ -23033,6 +23160,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FSWR_Evap_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
+    Assert(FSWR_Evap_Node <> nil);
     Frame := frameSWR_Evap;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -23062,6 +23197,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FSWR_LatInflow_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
+    Assert(FSWR_LatInflow_Node <> nil);
     Frame := frameSWR_LatInfl;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -23096,6 +23239,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FSWR_Rain_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
+    Assert(FSWR_Rain_Node <> nil);
     Frame := frameSWR_Rain;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -23125,6 +23276,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FSWR_Stage_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FSWR_Stage_Node <> nil);
+
     Frame := frameSWR_Stage;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -23154,6 +23313,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FSWR_DirectRunoff_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FSWR_DirectRunoff_Node <> nil);
+
     Frame := frameSWR_DirectRunoff;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -23183,6 +23350,14 @@ var
 begin
   if IsLoaded then
   begin
+    if (FCRCH_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+    Assert(FCRCH_Node <> nil);
+
     Frame := frameCfpRechargeFraction;
     GetMF_BoundaryTimes(Times, Frame);
     for Index := 0 to FNewProperties.Count - 1 do
@@ -23277,6 +23452,13 @@ var
 begin
   if IsLoaded then
   begin
+    if (FCHD_Node = nil) then
+    begin
+      Beep;
+      MessageDlg(StrSomethingWentWrong, mtError, [mbOK], 0);
+      Exit;
+    end;
+
     Assert(FCHD_Node <> nil);
     Frame := frameChdParam;
     ParamType := ptCHD;
