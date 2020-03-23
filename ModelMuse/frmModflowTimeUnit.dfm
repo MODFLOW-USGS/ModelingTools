@@ -52,10 +52,10 @@ inherited frmModflowTime: TfrmModflowTime
       OnClick = btnHelpClick
     end
     object btnConvertTimeUnits: TButton
-      Left = 8
-      Top = 6
+      Left = 12
+      Top = 2
       Width = 161
-      Height = 25
+      Height = 27
       Caption = 'Convert time units'
       TabOrder = 3
       OnClick = btnConvertTimeUnitsClick

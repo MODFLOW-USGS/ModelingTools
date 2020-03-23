@@ -1608,6 +1608,8 @@ view. }
   private
     FUsedWithAllModels: boolean;
     procedure SetUsedWithAllModels(const Value: boolean);
+    function GetItem(Index: Integer): TUsedWithModelItem;
+    procedure SetItem(Index: Integer; const Value: TUsedWithModelItem);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1622,6 +1624,7 @@ view. }
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure RemoveModel(AModel: TBaseModel);
+    property Items[Index: Integer]: TUsedWithModelItem read GetItem write SetItem; default;
   published
     property UsedWithAllModels: boolean read FUsedWithAllModels
       write SetUsedWithAllModels default True;
@@ -43236,6 +43239,11 @@ begin
   FUsedWithAllModels := True;
 end;
 
+function TUsedWithModelCollection.GetItem(Index: Integer): TUsedWithModelItem;
+begin
+  result := inherited Items[Index] as TUsedWithModelItem;
+end;
+
 procedure TUsedWithModelCollection.RemoveModel(AModel: TBaseModel);
 var
   Index: Integer;
@@ -43251,6 +43259,12 @@ begin
       Exit;
     end;
   end;
+end;
+
+procedure TUsedWithModelCollection.SetItem(Index: Integer;
+  const Value: TUsedWithModelItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 procedure TUsedWithModelCollection.SetUsedWithAllModels(const Value: boolean);

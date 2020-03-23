@@ -7,7 +7,8 @@ interface
 
 uses SubscriptionUnit, PhastModelUnit, Types, SysUtils, Classes, Graphics,
   Contnrs, QuadTreeClass, UndoItems, AbstractGridUnit, ScreenObjectUnit,
-  FastGEO, GoPhastTypes, ValueArrayStorageUnit, ModflowPackageSelectionUnit;
+  FastGEO, GoPhastTypes, ValueArrayStorageUnit, ModflowPackageSelectionUnit,
+  System.Generics.Collections;
 
 type
   EIllegalMerge = class(Exception);
@@ -415,6 +416,31 @@ type
     // @name reverses the movement of the selected
     // @link(TScreenObject)s or the selected points in the
     // selected @link(TScreenObject).
+    procedure Undo; override;
+  end;
+
+  TPointStorage = class(TObject)
+    OldLocations: TRealPointArray;
+    NewLocations: TRealPointArray;
+    ScreenObject: TScreenObject;
+  end;
+
+  TUndoAnonymizeScreenObject = class(TCustomUpdateScreenObjectUndo)
+  private
+    FOldPositions: TObjectList<TPointStorage>;
+  protected
+    // @name describes what this @classname does.  It is used in menu captions
+    // and hints.
+    function Description: string; override;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    // @name moves each vertex of the selected screen object to the center
+    // of the cell or element.
+    procedure DoCommand; override;
+    // @name calls @link(DoCommand).
+    procedure Redo; override;
+    // @name reverses the movement of the nodes
     procedure Undo; override;
   end;
 
@@ -932,7 +958,7 @@ uses Math, frmGoPhastUnit, frmSelectedObjectsUnit, frmShowHideObjectsUnit,
   frmSelectResultToImportUnit, SutraMeshUnit, DisplaySettingsUnit,
   ModflowHfbUnit, ModflowTimeUnit, FluxObservationUnit, 
   LayerStructureUnit, ModflowCSubInterbed, ModflowSubsidenceDefUnit,
-  ModflowCsubUnit;
+  ModflowCsubUnit, MeshRenumberingTypes;
 
 resourcestring
   StrChangeSelection = 'change selection';
@@ -5497,6 +5523,218 @@ begin
   FShouldUpdateShowHideObjects := True;
   ApplyDeletedStatus(True);
   UpdateShowHideObjects;
+end;
+
+{ TUndoAnonymizeScreenObject }
+
+constructor TUndoAnonymizeScreenObject.Create;
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  PointStorage: TPointStorage;
+begin
+  inherited;
+  SetPriorSelection;
+  SetPostSelection;
+  FOldPositions := TObjectList<TPointStorage>.Create;
+  for ObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ObjectIndex];
+    if (AScreenObject.ViewDirection = vdTop) and AScreenObject.Selected
+      and (AScreenObject.Count = AScreenObject.SectionCount) then
+    begin
+      if frmGoPhast.PhastModel.ModelSelection in  SutraSelection + [msPhast] then
+      begin
+        if AScreenObject.EvaluatedAt = eaBlocks then
+        begin
+          Continue;
+        end;
+      end
+      else
+      begin
+        if AScreenObject.EvaluatedAt = eaNodes then
+        begin
+          Continue;
+        end;
+      end;
+      PointStorage := TPointStorage.Create;
+      FOldPositions.Add(PointStorage);
+      PointStorage.ScreenObject := AScreenObject;
+      AScreenObject.MovePoints(PointStorage.OldLocations);
+      PointStorage.NewLocations := PointStorage.OldLocations;
+      SetLength(PointStorage.NewLocations, Length(PointStorage.NewLocations));
+    end;
+  end;
+end;
+
+function TUndoAnonymizeScreenObject.Description: string;
+begin
+  result := 'anonymize selected point objects';
+end;
+
+destructor TUndoAnonymizeScreenObject.Destroy;
+begin
+  FOldPositions.Free;
+  inherited;
+end;
+
+procedure TUndoAnonymizeScreenObject.DoCommand;
+var
+  index: Integer;
+  PointStorage: TPointStorage;
+  AScreenObject: TScreenObject;
+  LocalModel: TCustomModel;
+  LgrUsed: Boolean;
+  ModelIndex: Integer;
+  Grid: TCustomModelGrid;
+  Mesh: IMesh2D;
+  PointIndex: Integer;
+  APoint: TPoint2D;
+  ACell: T2DTopCell;
+  MeshElement: IElement2D;
+  MeshNode: INode2D;
+  GridIndex: Integer;
+  Grids: TList;
+begin
+  inherited;
+  Grids := TList.Create;
+  try
+    LgrUsed := frmGoPhast.PhastModel.LgrUsed;
+
+    for index := 0 to FOldPositions.Count - 1 do
+    begin
+      PointStorage := FOldPositions[index];
+      AScreenObject := PointStorage.ScreenObject;
+      if LgrUsed then
+      begin
+        Grids.Clear;
+        Grids.Add(frmGoPhast.PhastModel.Grid);
+        for GridIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count -1 do
+        begin
+          LocalModel := frmGoPhast.PhastModel.ChildModels[GridIndex].ChildModel as TCustomModel;
+          if AScreenObject.UsedModels.UsesModel(LocalModel) then
+          begin
+            Grids.Add(LocalModel.Grid);
+          end;
+        end;
+      end;
+
+      LocalModel := frmGoPhast.PhastModel;
+
+      if LocalModel <> nil then
+      begin
+        Grid := LocalModel.Grid;
+        if Grid <> nil then
+        begin
+          for PointIndex := 0 to Length(PointStorage.NewLocations) - 1 do
+          begin
+            APoint := PointStorage.NewLocations[PointIndex];
+            if LgrUsed then
+            begin
+              //for GridIndex := frmGoPhast.PhastModel.LgrModel
+              for GridIndex := Grids.Count-1 downto 0 do
+              begin
+                Grid := Grids[GridIndex];
+                if Grid.InsideGrid (APoint, True) then
+                begin
+                  ACell := Grid.TopContainingCell(APoint, eaBlocks, True);
+                  APoint := Grid.TwoDElementCenter(ACell.Col, ACell.Row);
+                  PointStorage.NewLocations[PointIndex] := APoint;
+                  break;
+                end;
+              end;
+            end
+            else
+            begin
+              APoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(APoint);
+              if Grid.InsideGrid (APoint, False) then
+              begin
+                if LocalModel.ModelSelection = msPhast then
+                begin
+                  ACell := Grid.TopContainingCell(APoint, eaNodes, False);
+                  APoint := Grid.TwoDElementCorner(ACell.Col, ACell.Row);
+                end
+                else
+                begin
+                  ACell := Grid.TopContainingCell(APoint, eaBlocks, False);
+                  APoint := Grid.TwoDElementCenter(ACell.Col, ACell.Row);
+                end;
+                PointStorage.NewLocations[PointIndex] := APoint;
+              end;
+            end;
+          end;
+        end
+        else
+        begin
+          Mesh := LocalModel.Mesh3D.Mesh2DI;
+          for PointIndex := 0 to Length(PointStorage.NewLocations) - 1 do
+          begin
+            APoint := PointStorage.NewLocations[PointIndex];
+            if LocalModel.ModelSelection in SutraSelection then
+            begin
+              ACell := Mesh.TopContainingCellOrElement(APoint, eaNodes);
+              if ACell.Col >= 0 then
+              begin
+                MeshNode := Mesh.NodesI2D[ACell.Col];
+                APoint := MeshNode.Location;
+                PointStorage.NewLocations[PointIndex] := APoint;
+              end;
+            end
+            else
+            begin
+              ACell := Mesh.TopContainingCellOrElement(APoint, eaBlocks);
+              if ACell.Col >= 0 then
+              begin
+                MeshElement := Mesh.ElementsI2D[ACell.Col];
+                APoint := MeshElement.Center;
+                PointStorage.NewLocations[PointIndex] := APoint;
+              end;
+            end;
+          end;
+        end;
+
+        AScreenObject.MoveToPoints(PointStorage.NewLocations);
+        UpdateScreenObject(AScreenObject);
+      end;
+    end;
+    UpdateSelectionRectangle;
+  finally
+    Grids.Free;
+  end;
+end;
+
+procedure TUndoAnonymizeScreenObject.Redo;
+var
+  index: Integer;
+  PointStorage: TPointStorage;
+  AScreenObject: TScreenObject;
+begin
+  for index := 0 to FOldPositions.Count - 1 do
+  begin
+    PointStorage := FOldPositions[index];
+    AScreenObject := PointStorage.ScreenObject;
+      AScreenObject.MoveToPoints(PointStorage.NewLocations);
+    UpdateScreenObject(AScreenObject);
+  end;
+  UpdateSelectionRectangle;
+  inherited;
+end;
+
+procedure TUndoAnonymizeScreenObject.Undo;
+var
+  index: Integer;
+  PointStorage: TPointStorage;
+  AScreenObject: TScreenObject;
+begin
+  inherited;
+  for index := 0 to FOldPositions.Count - 1 do
+  begin
+    PointStorage := FOldPositions[index];
+    AScreenObject := PointStorage.ScreenObject;
+      AScreenObject.MoveToPoints(PointStorage.OldLocations);
+    UpdateScreenObject(AScreenObject);
+  end;
+  UpdateSelectionRectangle
 end;
 
 end.

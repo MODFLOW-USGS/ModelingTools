@@ -1018,6 +1018,7 @@ side views of the model.}
       CellList: TCellLocationList);
     function UniformColumns(out MaxWidth, MinWidth: Double): boolean;
     function UniformRows(out MaxWidth, MinWidth: Double): boolean;
+    function InsideGrid(APoint: TPoint2D; NeedToRotatePointToGridCoordinates: Boolean = True): Boolean;
   published
     { @name is the number of columns in the grid.
       Each column has a width that is greater than or equal to 0.}
@@ -8410,6 +8411,48 @@ begin
   begin
     FDisplayLayer := 0;
   end;
+end;
+
+function TCustomModelGrid.InsideGrid(APoint: TPoint2D;
+  NeedToRotatePointToGridCoordinates: Boolean): Boolean;
+var
+  TestValue: Double;
+begin
+  result := False;
+  if NeedToRotatePointToGridCoordinates then
+  begin
+    APoint := RotateFromRealWorldCoordinatesToGridCoordinates(APoint);
+  end;
+  if (ColumnCount <= 0) or (RowCount <= 0) then
+  begin
+    Exit;
+  end;
+  TestValue := Min(FColumnPositions[0],
+    FColumnPositions[Length(FColumnPositions)-1]);
+  if (APoint.x < TestValue) then
+  begin
+    Exit;
+  end;
+  TestValue := Max(FColumnPositions[0],
+    FColumnPositions[Length(FColumnPositions)-1]);
+  if (APoint.x > TestValue) then
+  begin
+    Exit;
+  end;
+  TestValue := Min(FRowPositions[0],
+    FRowPositions[Length(FRowPositions)-1]);
+  if (APoint.y < TestValue) then
+  begin
+    Exit;
+  end;
+  TestValue := Max(FRowPositions[0],
+    FRowPositions[Length(FRowPositions)-1]);
+  if (APoint.y > TestValue) then
+  begin
+    Exit;
+  end;
+
+  result := True;
 end;
 
 function TCustomModelGrid.LayerCenter(Column, Row, Layer: integer): real;

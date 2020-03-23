@@ -8986,11 +8986,13 @@ const
   //                an object that defined a MAW well was in a cell that was
   //                inactive in the top layer.
 
-  //               Bug fix: Fixed display of pump capacity table in the MNW2
+  //    '4.2.0.4'  Bug fix: Fixed display of pump capacity table in the MNW2
   //                package.
+  //               Enhancement: Added "Object|Edit|Anonymize Selected Point
+  //                Objects command.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.3';
+  IModelVersion = '4.2.0.4';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

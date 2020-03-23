@@ -697,7 +697,8 @@ uses
   frameScreenObjectCSubUnit in 'frameScreenObjectCSubUnit.pas' {frameScreenObjectCSub: TFrame},
   ModflowCSubWriterUnit in 'ModflowCSubWriterUnit.pas',
   ModflowCSubInterbed in 'ModflowCSubInterbed.pas',
-  ObservationComparisonsUnit in 'ObservationComparisonsUnit.pas';
+  ObservationComparisonsUnit in 'ObservationComparisonsUnit.pas',
+  frmObservationComparisonsUnit in 'frmObservationComparisonsUnit.pas' {frmObservationComparisons};
 
 {$R *.res}
 

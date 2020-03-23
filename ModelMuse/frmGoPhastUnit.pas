@@ -505,6 +505,10 @@ type
     acEditCTS: TAction;
     EditContaminantTreatmentSystems1: TMenuItem;
     ModelSelection1: TMenuItem;
+    acEditObservationComparisons: TAction;
+    miEditObservationComparisons: TMenuItem;
+    acAnonymizeObjects: TAction;
+    miAnonymizeObjects: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -687,6 +691,8 @@ type
       Y: Integer);
     procedure acSimplifyScreenObjectsExecute(Sender: TObject);
     procedure acEditCTSExecute(Sender: TObject);
+    procedure acEditObservationComparisonsExecute(Sender: TObject);
+    procedure acAnonymizeObjectsExecute(Sender: TObject);
   private
     FCreateArchive: Boolean;
     CreateArchiveSet: boolean;
@@ -2055,7 +2061,7 @@ uses
   SutraGeneralFlowWriterUnit, SutraGeneralTransportWriterUnit, frmFileTypesUnit,
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
-  frmContaminantTreatmentSystemsUnit;
+  frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3213,6 +3219,10 @@ var
   HelpFileName: string;
 begin
   inherited;
+  {$IFNDEF PEST}
+  acEditObservationComparisons.Visible := False;
+  {$ENDIF}
+  
   tbarEditScreenObjects.Width := 227;
   tbarView.Width := 162;
   tbarCreateScreenObject.Width := 231;
@@ -5370,6 +5380,12 @@ begin
   ShowAForm(TfrmSwrTabfiles);
 end;
 
+procedure TfrmGoPhast.acEditObservationComparisonsExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmObservationComparisons);
+end;
+
 procedure TfrmGoPhast.acSimplifyScreenObjectsExecute(Sender: TObject);
 var
   SelectedScreenObjects: TScreenObjectList;
@@ -7504,6 +7520,12 @@ begin
     tbAddPartsToObject.Down := False;
   end;
   SelectDefaultButton;
+end;
+
+procedure TfrmGoPhast.acAnonymizeObjectsExecute(Sender: TObject);
+begin
+  inherited;
+  UndoStack.Submit(TUndoAnonymizeScreenObject.Create);
 end;
 
 procedure TfrmGoPhast.acColorExecute(Sender: TObject);

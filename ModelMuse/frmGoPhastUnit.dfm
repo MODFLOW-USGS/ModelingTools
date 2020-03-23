@@ -39,19 +39,17 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object pnlTop: TPanel
     Left = 0
-    Top = 100
+    Top = 196
     Width = 759
-    Height = 284
+    Height = 188
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 196
-    ExplicitHeight = 188
     object splitVertTop: TJvNetscapeSplitter
       Left = 520
       Top = 0
-      Height = 284
+      Height = 188
       Hint = 'Click and drag to resize the windows.'
       Align = alRight
       MinSize = 1
@@ -67,14 +65,14 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 0
       Top = 0
       Width = 520
-      Height = 284
+      Height = 188
       Align = alClient
       TabOrder = 0
       TabStop = True
       ExplicitWidth = 520
       ExplicitHeight = 188
       inherited rulVertical: TRbwRuler
-        Height = 230
+        Height = 134
         ExplicitTop = 39
         ExplicitHeight = 173
       end
@@ -90,15 +88,16 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited ZoomBox: TQRbwZoomBox2
         Width = 471
-        Height = 230
+        Height = 134
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 469
-        Image32.Height = 228
+        Image32.Height = 132
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 469
-        Image32.ExplicitHeight = 228
+        Image32.ExplicitHeight = 132
         ExplicitWidth = 471
         ExplicitHeight = 134
       end
@@ -111,7 +110,7 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 530
       Top = 0
       Width = 229
-      Height = 284
+      Height = 188
       Align = alRight
       TabOrder = 1
       TabStop = True
@@ -120,7 +119,7 @@ inherited frmGoPhast: TfrmGoPhast
       ExplicitHeight = 188
       inherited rulVertical: TRbwRuler
         Left = 180
-        Height = 230
+        Height = 134
         Align = alRight
         RulerPosition = rpRight
         ExplicitLeft = 194
@@ -154,17 +153,18 @@ inherited frmGoPhast: TfrmGoPhast
       inherited ZoomBox: TQRbwZoomBox2
         Left = 0
         Width = 180
-        Height = 230
+        Height = 134
         ExaggerationDirection = edHorizontal
         HorizontalDirection = hdLeft
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 178
-        Image32.Height = 228
+        Image32.Height = 132
         Image32.Align = alClient
+        Image32.ExplicitLeft = 1
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
-        Image32.ExplicitHeight = 228
+        Image32.ExplicitHeight = 132
         ExplicitLeft = 0
         ExplicitWidth = 180
         ExplicitHeight = 134
@@ -314,7 +314,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 0
     Top = 0
     Width = 759
-    Height = 100
+    Height = 196
     Align = alTop
     AutoSize = True
     ParentShowHint = False
@@ -323,8 +323,8 @@ inherited frmGoPhast: TfrmGoPhast
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
     object tbarEdit: TToolBar
-      Left = 183
-      Top = 2
+      Left = 152
+      Top = 34
       Width = 146
       Height = 28
       ButtonHeight = 23
@@ -336,44 +336,44 @@ inherited frmGoPhast: TfrmGoPhast
       TabOrder = 1
       Wrapable = False
       OnMouseMove = pnlLowerRightMouseMove
-      object tbRedo: TToolButton
+      object tbUndo: TToolButton
         Left = 0
+        Top = 0
+        Action = acUndo
+        OnMouseMove = pnlLowerRightMouseMove
+      end
+      object tbRedo: TToolButton
+        Left = 23
         Top = 0
         Action = acRedo
         OnMouseMove = pnlLowerRightMouseMove
       end
       object tbCut: TToolButton
-        Left = 23
+        Left = 46
         Top = 0
         Action = acCut
         OnMouseMove = pnlLowerRightMouseMove
       end
       object tbCopy: TToolButton
-        Left = 46
+        Left = 69
         Top = 0
         Action = acCopy
         OnMouseMove = pnlLowerRightMouseMove
       end
       object tbPaste: TToolButton
-        Left = 69
+        Left = 92
         Top = 0
         Action = acPaste
         OnMouseMove = pnlLowerRightMouseMove
       end
       object tbMeasure: TToolButton
-        Left = 92
+        Left = 115
         Top = 0
         Action = acMeasure
         AllowAllUp = True
         Grouped = True
         Style = tbsCheck
         OnMouseDown = tbPointMouseDown
-        OnMouseMove = pnlLowerRightMouseMove
-      end
-      object tbUndo: TToolButton
-        Left = 115
-        Top = 0
-        Action = acUndo
         OnMouseMove = pnlLowerRightMouseMove
       end
     end
@@ -480,8 +480,8 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditScreenObjects: TToolBar
-      Left = 342
-      Top = 2
+      Left = 73
+      Top = 66
       Width = 225
       Height = 28
       ButtonHeight = 23
@@ -596,8 +596,8 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView: TToolBar
-      Left = 580
-      Top = 2
+      Left = 135
+      Top = 98
       Width = 163
       Height = 28
       ButtonHeight = 23
@@ -673,7 +673,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tbarEditGrid: TToolBar
       Left = 268
-      Top = 34
+      Top = 130
       Width = 212
       Height = 28
       ButtonHeight = 23
@@ -775,7 +775,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tbarCreateScreenObject: TToolBar
       Left = 11
-      Top = 34
+      Top = 130
       Width = 244
       Height = 28
       ButtonHeight = 26
@@ -890,7 +890,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tbarView3D: TToolBar
       Left = 377
-      Top = 66
+      Top = 162
       Width = 141
       Height = 28
       ButtonHeight = 26
@@ -952,7 +952,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tlbMesh: TToolBar
       Left = 226
-      Top = 66
+      Top = 162
       Width = 138
       Height = 28
       Caption = 'tlbMesh'
@@ -1022,7 +1022,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tlb3dViewMesh: TToolBar
       Left = 164
-      Top = 66
+      Top = 162
       Width = 49
       Height = 28
       Caption = 'tlb3dViewMesh'
@@ -1058,7 +1058,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tbarEditDisv: TToolBar
       Left = 54
-      Top = 66
+      Top = 162
       Width = 97
       Height = 28
       Caption = 'tbarEditDisv'
@@ -1089,7 +1089,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object tbarShowGrid: TToolBar
       Left = 11
-      Top = 66
+      Top = 162
       Width = 30
       Height = 28
       ButtonHeight = 26
@@ -1737,6 +1737,9 @@ inherited frmGoPhast: TfrmGoPhast
         object SimplifySelectedObjects1: TMenuItem
           Action = acSimplifyScreenObjects
         end
+        object miAnonymizeObjects: TMenuItem
+          Action = acAnonymizeObjects
+        end
       end
       object N1: TMenuItem
         Caption = '-'
@@ -2225,6 +2228,10 @@ inherited frmGoPhast: TfrmGoPhast
       end
       object miFootprintProgramLocation: TMenuItem
         Action = acFootprintProgramLocation
+        GroupIndex = 1
+      end
+      object miEditObservationComparisons: TMenuItem
+        Action = acEditObservationComparisons
         GroupIndex = 1
       end
     end
@@ -3543,6 +3550,16 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Contaminant Treatment Systems...'
       Hint = 'Display the Contaminant Treatment Systems dialog box'
       OnExecute = acEditCTSExecute
+    end
+    object acEditObservationComparisons: TAction
+      Category = 'Model'
+      Caption = 'Edit Observation Comparisons...'
+      OnExecute = acEditObservationComparisonsExecute
+    end
+    object acAnonymizeObjects: TAction
+      Category = 'Object'
+      Caption = 'Anonymize Selected Point Objects'
+      OnExecute = acAnonymizeObjectsExecute
     end
   end
   object ilDisabledImageList: TImageList
