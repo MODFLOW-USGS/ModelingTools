@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Anonymize Selected Point Objects</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Anonymize Selected Point Objects</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The purpose of </text><text styleclass="Strong" translate="true">Edit|Object|Anonymize Selected Point Objects</text><text styleclass="Normal" translate="true"> is to move point objects away from their current locations to either node locations of cell centers. One reason to do this would be to disguise the precise location of some features such as public water supply wells. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Edit|Object|Anonymize Selected Point Objects</text><text styleclass="Normal" translate="true"> only works for point objects on the top view of the model. It works somewhat differently depending on the model selection.</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW models that do not use local grid refinement, point objects evaluated at blocks are moved to the centers of the cells that contain them. This applies to both structured grids and discretization wtih vertices in MODFLOW 6.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">For MODFLOW models that employ local grid refinement., point objects evaluated at blocks are moved to the centers of the cells that contain them. However, if an object applies to both the parent model and the child model, the grid that will be used will be the child model grid if the point is inside the child model grid, Otherwise, it will be the parent model grid.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">For SUTRA and PHAST models, point objects evaluated at nodes are moved to the node locations of the cells that contain them. </text></li>
+    </list>
+  </body>
+</topic>

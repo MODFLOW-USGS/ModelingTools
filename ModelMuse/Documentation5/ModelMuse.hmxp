@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4126</config-value>
+      <config-value name="autohelpstart">4127</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -640,6 +640,7 @@ document.write('</frameset>');
       <helpcontext-number href="ADV_Advection_Package_Pane#NPLANE" value="3657"/>
       <helpcontext-number href="ADV_Advection_Package_Pane#PERCEL" value="3654"/>
       <helpcontext-number href="ADV_Advection_Package_Pane#TVD" value="3655"/>
+      <helpcontext-number href="Anonymize_Selected_Point_Objec" value="4127"/>
       <helpcontext-number href="Appendix_1_ModelMonitor" value="3487"/>
       <helpcontext-number href="ArcCos" value="1310"/>
       <helpcontext-number href="ArcCosh" value="1320"/>
