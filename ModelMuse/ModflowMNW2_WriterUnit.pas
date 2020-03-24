@@ -102,7 +102,7 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit, GoPhastTypes,
   ModflowTimeUnit, ModflowBoundaryUnit, frmFormulaErrorsUnit, Math, Forms,
-  DataSetUnit;
+  DataSetUnit, ObservationComparisonsUnit;
 
 resourcestring
   SignError = 'The deactivation pumping rate and reactivation pumping rate '
@@ -763,6 +763,11 @@ var
   CompIndex: Integer;
   CompItem: TMnw2ObsCompareItem;
   InstructionFileName: string;
+  ComparisonIndex: Integer;
+  GloCompItem: TGlobalObsComparisonItem;
+  FObsItemDictionary: TDictionary<string, TCustomObservationItem>;
+  PriorItem1: TCustomObservationItem;
+  PriorItem2: TCustomObservationItem;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
   var
     MaxPrefixLength: Integer;
@@ -770,8 +775,9 @@ var
   begin
   // The maximum allowed length of an observation name in PEST is 20.
     MaxPrefixLength := 19 - Length((ObjectIndex+1).ToString + Obs.Name);
-    Prefix := Copy('Mnw2', MaxPrefixLength);
+    Prefix := Copy('Mnw2', 1, MaxPrefixLength);
     Result := Format('%0:s_%1:d%2:s', [Prefix, ObjectIndex+1, Obs.Name]);
+    Obs.ExportedName := Result;
   end;
 begin
 {$IFNDEF PEST}
@@ -784,168 +790,219 @@ begin
 
   ScriptFileName := ChangeFileExt(AFileName, '.mnw_script');
 
-  OpenFile(ScriptFileName);
+  FObsItemDictionary := TDictionary<string, TCustomObservationItem>.Create;
   try
-    ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
-    ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs');
+    OpenFile(ScriptFileName);
+    try
+      ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
+      ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs');
 
-    // FILENAMES block
-    WriteString('BEGIN FILENAMES');
-    NewLine;
-    WriteString('  LISTING_FILE ');
-    WriteString(ExtractFileName(ExtractorListFileName));
-    NewLine;
-    WriteString('  OBSERVATIONS_FILE ');
-    WriteString(ExtractFileName(ExtractorObsFileName));
-    NewLine;
-    WriteString('END FILENAMES');
-    NewLine;
-    NewLine;
-
-    ComparisonsUsed := False;
-    // OBSERVATIONS block
-    WriteString('BEGIN OBSERVATIONS');
-    NewLine;
-    for ObjectIndex := 0 to FObsLinks.Count - 1 do
-    begin
-      Link := FObsLinks[ObjectIndex];
-      Boundary := Link.WellBoundary;
-      WriteString('  # ');
-      WriteString('Observations defined in ');
-      WriteString((Boundary.ScreenObject as TScreenObject).Name);
+      // FILENAMES block
+      WriteString('BEGIN FILENAMES');
       NewLine;
-
-      WriteString('  FILENAME ');
-      WriteString(Link.FileName);
+      WriteString('  LISTING_FILE ');
+      WriteString(ExtractFileName(ExtractorListFileName));
       NewLine;
-      for ObsIndex := 0 to Boundary.Observations.Count - 1 do
-      begin
-        Obs := Boundary.Observations[ObsIndex];
-        WriteString('  OBSERVATION ');
-        WriteString(GetObName(ObjectIndex, Obs));
-        case Obs.ObsType of
-          motQin: WriteString(' Qin ');
-          motQout: WriteString(' Qout ');
-          motQnet: WriteString(' Qnet ');
-          motQCumu: WriteString(' QCumu ');
-          motHwell: WriteString(' Hwell ');
-          else Assert(False);
-        end;
-        WriteFloat(Obs.Time);
-        WriteString(' PRINT');
-        NewLine;
-      end;
-
-      if Boundary.Observations.Comparisons.Count > 0 then
-      begin
-        ComparisonsUsed := True;
-      end;
-    end;
-    WriteString('END OBSERVATIONS');
-
-    // DERIVED_OBSERVATIONS block
-    if ComparisonsUsed then
-    begin
+      WriteString('  OBSERVATIONS_FILE ');
+      WriteString(ExtractFileName(ExtractorObsFileName));
+      NewLine;
+      WriteString('END FILENAMES');
       NewLine;
       NewLine;
-      WriteString('BEGIN DERIVED_OBSERVATIONS');
-      NewLine;
 
+      ComparisonsUsed := Model.GlobalObservationComparisons.Count > 0;
+      // OBSERVATIONS block
+      WriteString('BEGIN OBSERVATIONS');
+      NewLine;
       for ObjectIndex := 0 to FObsLinks.Count - 1 do
       begin
         Link := FObsLinks[ObjectIndex];
         Boundary := Link.WellBoundary;
+        WriteString('  # ');
+        WriteString('Observations defined in ');
+        WriteString((Boundary.ScreenObject as TScreenObject).Name);
+        NewLine;
+
+        WriteString('  FILENAME ');
+        WriteString(Link.FileName);
+        NewLine;
+        for ObsIndex := 0 to Boundary.Observations.Count - 1 do
+        begin
+          Obs := Boundary.Observations[ObsIndex];
+          FObsItemDictionary.Add(Obs.GUID, Obs);
+          WriteString('  OBSERVATION ');
+          WriteString(GetObName(ObjectIndex, Obs));
+          case Obs.ObsType of
+            motQin: WriteString(' Qin ');
+            motQout: WriteString(' Qout ');
+            motQnet: WriteString(' Qnet ');
+            motQCumu: WriteString(' QCumu ');
+            motHwell: WriteString(' Hwell ');
+            else Assert(False);
+          end;
+          WriteFloat(Obs.Time);
+          WriteString(' PRINT');
+          NewLine;
+        end;
+
         if Boundary.Observations.Comparisons.Count > 0 then
         begin
-          WriteString('  # ');
-          WriteString('Observation comparisons defined in ');
-          WriteString((Boundary.ScreenObject as TScreenObject).Name);
-          NewLine;
+          ComparisonsUsed := True;
+        end;
+      end;
+      WriteString('END OBSERVATIONS');
 
-          for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
+      // DERIVED_OBSERVATIONS block
+      if ComparisonsUsed then
+      begin
+        NewLine;
+        NewLine;
+        WriteString('BEGIN DERIVED_OBSERVATIONS');
+        NewLine;
+
+        for ObjectIndex := 0 to FObsLinks.Count - 1 do
+        begin
+          Link := FObsLinks[ObjectIndex];
+          Boundary := Link.WellBoundary;
+          if Boundary.Observations.Comparisons.Count > 0 then
+          begin
+            WriteString('  # ');
+            WriteString('Observation comparisons defined in ');
+            WriteString((Boundary.ScreenObject as TScreenObject).Name);
+            NewLine;
+
+            for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
+            begin
+              WriteString('  DIFFERENCE ');
+              CompItem := Boundary.Observations.Comparisons[CompIndex];
+              WriteString(GetObName(ObjectIndex, CompItem));
+              WriteString(' ');
+              Obs := Boundary.Observations[CompItem.Index1];
+              WriteString(GetObName(ObjectIndex, Obs));
+              WriteString(' ');
+              Obs := Boundary.Observations[CompItem.Index2];
+              WriteString(GetObName(ObjectIndex, Obs));
+              WriteString(' PRINT');
+              NewLine;
+            end;
+          end;
+        END;
+
+        if Model.GlobalObservationComparisons.Count > 0 then
+        begin
+          WriteString('  # ');
+          WriteString('Global observation comparisons');
+          NewLine;
+        end;
+        for ComparisonIndex := 0 to Model.GlobalObservationComparisons.Count - 1 do
+        begin
+          GloCompItem := Model.GlobalObservationComparisons[ComparisonIndex];
+          if FObsItemDictionary.TryGetValue(GloCompItem.GUID1, PriorItem1)
+            and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
           begin
             WriteString('  DIFFERENCE ');
-            CompItem := Boundary.Observations.Comparisons[CompIndex];
-            WriteString(GetObName(ObjectIndex, CompItem));
+//            CompItem := Boundary.Observations.Comparisons[CompIndex];
+            WriteString(GloCompItem.Name);
             WriteString(' ');
-            Obs := Boundary.Observations[CompItem.Index1];
-            WriteString(GetObName(ObjectIndex, Obs));
+            WriteString(PriorItem1.ExportedName);
             WriteString(' ');
-            Obs := Boundary.Observations[CompItem.Index2];
-            WriteString(GetObName(ObjectIndex, Obs));
+            WriteString(PriorItem2.ExportedName);
             WriteString(' PRINT');
             NewLine;
           end;
         end;
-      END;
-      WriteString('END DERIVED_OBSERVATIONS');
-    end;
 
-  finally
-    CloseFile;
-  end;
-
-  InstructionFileName := ExtractorObsFileName + '.ins';
-  OpenFile(InstructionFileName);
-  try
-    WriteString('pif ');
-    WriteString(MarkerDelimiter);
-    NewLine;
-
-    for ObjectIndex := 0 to FObsLinks.Count - 1 do
-    begin
-      Link := FObsLinks[ObjectIndex];
-      Boundary := Link.WellBoundary;
-
-      for ObsIndex := 0 to Boundary.Observations.Count - 1 do
-      begin
-        Obs := Boundary.Observations[ObsIndex];
-        WriteString('l1 ');
-        WriteString(MarkerDelimiter);
-        WriteString('"');
-        WriteString(GetObName(ObjectIndex, Obs));
-        WriteString('"');
-        WriteString(MarkerDelimiter);
-        WriteString(' !');
-        WriteString(GetObName(ObjectIndex, Obs));
-        WriteString('!');
-        NewLine;
+        WriteString('END DERIVED_OBSERVATIONS');
       end;
 
-      if Boundary.Observations.Comparisons.Count > 0 then
-      begin
-        ComparisonsUsed := True;
-      end;
+    finally
+      CloseFile;
     end;
 
-    if ComparisonsUsed then
-    begin
+    InstructionFileName := ExtractorObsFileName + '.ins';
+    OpenFile(InstructionFileName);
+    try
+      WriteString('pif ');
+      WriteString(MarkerDelimiter);
+      NewLine;
+
       for ObjectIndex := 0 to FObsLinks.Count - 1 do
       begin
         Link := FObsLinks[ObjectIndex];
         Boundary := Link.WellBoundary;
+
+        for ObsIndex := 0 to Boundary.Observations.Count - 1 do
+        begin
+          Obs := Boundary.Observations[ObsIndex];
+          WriteString('l1 ');
+          WriteString(MarkerDelimiter);
+          WriteString('"');
+          WriteString(GetObName(ObjectIndex, Obs));
+          WriteString('"');
+          WriteString(MarkerDelimiter);
+          WriteString(' !');
+          WriteString(GetObName(ObjectIndex, Obs));
+          WriteString('!');
+          NewLine;
+        end;
+
         if Boundary.Observations.Comparisons.Count > 0 then
         begin
-          for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
+          ComparisonsUsed := True;
+        end;
+      end;
+
+      if ComparisonsUsed then
+      begin
+        for ObjectIndex := 0 to FObsLinks.Count - 1 do
+        begin
+          Link := FObsLinks[ObjectIndex];
+          Boundary := Link.WellBoundary;
+          if Boundary.Observations.Comparisons.Count > 0 then
           begin
-            CompItem := Boundary.Observations.Comparisons[CompIndex];
+            for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
+            begin
+              CompItem := Boundary.Observations.Comparisons[CompIndex];
+              WriteString('l1 ');
+              WriteString(MarkerDelimiter);
+              WriteString('"');
+              WriteString(GetObName(ObjectIndex, CompItem));
+              WriteString('"');
+              WriteString(MarkerDelimiter);
+              WriteString(' !');
+              WriteString(GetObName(ObjectIndex, CompItem));
+              WriteString('!');
+              NewLine;
+            end;
+          end;
+        END;
+
+        for ComparisonIndex := 0 to Model.GlobalObservationComparisons.Count - 1 do
+        begin
+          GloCompItem := Model.GlobalObservationComparisons[ComparisonIndex];
+          if FObsItemDictionary.TryGetValue(GloCompItem.GUID1, PriorItem1)
+            and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
+          begin
             WriteString('l1 ');
             WriteString(MarkerDelimiter);
             WriteString('"');
-            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString(GloCompItem.Name);
             WriteString('"');
             WriteString(MarkerDelimiter);
             WriteString(' !');
-            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString(GloCompItem.Name);
             WriteString('!');
             NewLine;
           end;
         end;
-      END;
-    end
 
+      end
+
+    finally
+      CloseFile;
+    end;
   finally
-    CloseFile;
+    FObsItemDictionary.Free;
   end;
 end;
 

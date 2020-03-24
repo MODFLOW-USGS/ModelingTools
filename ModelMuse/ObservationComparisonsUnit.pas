@@ -7,7 +7,7 @@ uses
 
 type
   // Compare two @link(TCustomObservationItem)s in different objects.
-  TGlobalComparisonItem = class(TCustomObservationItem)
+  TGlobalObsComparisonItem = class(TCustomObservationItem)
   private
     FGuid2: string;
     FGuid1: string;
@@ -20,30 +20,29 @@ type
     property Guid2: string read FGuid2 write SetGuid2;
   end;
 
-  TGlobalComparisons = class(TPhastCollection)
+  TGlobalObservationComparisons = class(TScreenObjectOwnerCollection)
   private
-    function GetItem(Index: Integer): TGlobalComparisonItem;
-    procedure SetItem(Index: Integer; const Value: TGlobalComparisonItem);
+    function GetItem(Index: Integer): TGlobalObsComparisonItem;
+    procedure SetItem(Index: Integer; const Value: TGlobalObsComparisonItem);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
-    property Items[Index: Integer]: TGlobalComparisonItem read GetItem
+    property Items[Index: Integer]: TGlobalObsComparisonItem read GetItem
       write SetItem; default;
-    function Add: TGlobalComparisonItem;
+    function Add: TGlobalObsComparisonItem;
    end;
-
 
 implementation
 
-{ TGlobalComparisonItem }
+{ TGlobalObsComparisonItem }
 
-procedure TGlobalComparisonItem.Assign(Source: TPersistent);
+procedure TGlobalObsComparisonItem.Assign(Source: TPersistent);
 var
-  CompareItem: TGlobalComparisonItem;
+  CompareItem: TGlobalObsComparisonItem;
 begin
-  if Source is TGlobalComparisonItem then
+  if Source is TGlobalObsComparisonItem then
   begin
-    CompareItem := TGlobalComparisonItem(Source);
+    CompareItem := TGlobalObsComparisonItem(Source);
     Guid1 := CompareItem.Guid1;
     Guid2 := CompareItem.Guid2;
   end;
@@ -51,31 +50,31 @@ begin
 
 end;
 
-procedure TGlobalComparisonItem.SetGuid1(const Value: string);
+procedure TGlobalObsComparisonItem.SetGuid1(const Value: string);
 begin
   SetStringProperty(FGuid1, Value);
 end;
 
-procedure TGlobalComparisonItem.SetGuid2(const Value: string);
+procedure TGlobalObsComparisonItem.SetGuid2(const Value: string);
 begin
   SetStringProperty(FGuid2, Value);
 end;
 
-{ TGlobalComparisons }
+{ TGlobalObservationComparisons }
 
-function TGlobalComparisons.Add: TGlobalComparisonItem;
+function TGlobalObservationComparisons.Add: TGlobalObsComparisonItem;
 begin
-  result := inherited Add as TGlobalComparisonItem;
+  result := inherited Add as TGlobalObsComparisonItem;
 end;
 
-procedure TGlobalComparisons.Assign(Source: TPersistent);
+procedure TGlobalObservationComparisons.Assign(Source: TPersistent);
 var
-  ComparisonsSource: TGlobalComparisons;
+  ComparisonsSource: TGlobalObservationComparisons;
   ItemIndex: Integer;
 begin
-  if Source is TGlobalComparisons then
+  if Source is TGlobalObservationComparisons then
   begin
-    ComparisonsSource := TGlobalComparisons(Source);
+    ComparisonsSource := TGlobalObservationComparisons(Source);
     Count :=  ComparisonsSource.Count;
     for ItemIndex := 0 to ComparisonsSource.Count - 1 do
     begin
@@ -88,18 +87,18 @@ begin
   end;
 end;
 
-constructor TGlobalComparisons.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TGlobalObservationComparisons.Create(InvalidateModelEvent: TNotifyEvent);
 begin
-  inherited Create(TGlobalComparisonItem, InvalidateModelEvent);
+  inherited Create(TGlobalObsComparisonItem, InvalidateModelEvent, nil);
 end;
 
-function TGlobalComparisons.GetItem(Index: Integer): TGlobalComparisonItem;
+function TGlobalObservationComparisons.GetItem(Index: Integer): TGlobalObsComparisonItem;
 begin
-  result := inherited Items[Index] as TGlobalComparisonItem;
+  result := inherited Items[Index] as TGlobalObsComparisonItem;
 end;
 
-procedure TGlobalComparisons.SetItem(Index: Integer;
-  const Value: TGlobalComparisonItem);
+procedure TGlobalObservationComparisons.SetItem(Index: Integer;
+  const Value: TGlobalObsComparisonItem);
 begin
   inherited Items[Index] := Value;
 end;

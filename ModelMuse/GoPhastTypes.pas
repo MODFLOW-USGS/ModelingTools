@@ -467,6 +467,15 @@ type
     procedure InvalidateModel;
   end;
 
+  TScreenObjectOwnerCollection = class(TPhastCollection)
+  private
+    FScreenObject: TObject;
+  public
+    constructor Create(ItemClass: TCollectionItemClass;
+      InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    property ScreenObject: TObject read FScreenObject;
+  end;
+
   TCustomObservationItem = class(TPhastCollectionItem)
   private
     FName: string;
@@ -474,24 +483,28 @@ type
     FObservedValue: double;
     FWeight: Double;
     FGUID: string;
+    FExportedName: string;
     procedure SetComment(const Value: string);
     procedure SetName(const Value: string);
     procedure SetObservedValue(const Value: double);
     procedure SetWeight(const Value: Double);
+    function GetScreenObject: TObject;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     function ObservationType: string; virtual;
     function Units: string; virtual;
+    property ScreenObject: TObject read GetScreenObject;
+    // @name is a globally unique identifier used to store and extract
+    // @classname in a dictionary. This helps with calculating derived
+    // observations.
+    property GUID: string read FGUID write FGUID;
+    property ExportedName: string read FExportedName write FExportedName;
   published
     property Name: string read FName write SetName;
     property ObservedValue: double read FObservedValue write SetObservedValue;
     property Weight: Double read FWeight write SetWeight;
     property Comment: string read FComment write SetComment;
-    // @name is a globally unique identifier used to store and extract
-    // @classname in a dictionary. This helps with calculating derived
-    // observations.
-    property GUID: string read FGUID write FGUID;
   end;
 
   TObservationList = TList<TCustomObservationItem>;
@@ -515,8 +528,6 @@ type
     function QueryInterface(const IID: TGUID; out Obj): HRESULT;
       virtual; stdcall;
   end;
-
-
 
   TIntegerItem = class(TPhastCollectionItem)
   private
@@ -956,7 +967,7 @@ implementation
 
 
 {$IFNDEF Testing}
-uses PhastModelUnit, Math, ModelMuseUtilities;
+uses PhastModelUnit, Math, ModelMuseUtilities, ScreenObjectUnit;
 {$ENDIF}
 
 function SortLayerSorts(Item1, Item2: Pointer): Integer;
@@ -2059,10 +2070,23 @@ constructor TCustomObservationItem.Create(Collection: TCollection);
 var
   MyGuid : TGUID;
 begin
+  if Collection <> nil then
+  begin
+    Assert(Collection is TScreenObjectOwnerCollection);
+  end;
   inherited;
   if CreateGUID(MyGuid) = 0 then
   begin
     FGUID := GUIDToString(MyGuid);
+  end;
+end;
+
+function TCustomObservationItem.GetScreenObject: TObject;
+begin
+  result := nil;
+  if Collection <> nil then
+  begin
+    Result := (Collection as TScreenObjectOwnerCollection).ScreenObject;
   end;
 end;
 
@@ -2114,6 +2138,19 @@ end;
 procedure TCustomTimeObservationItem.SetTime(const Value: double);
 begin
   SetRealProperty(FTime, Value);
+end;
+
+{ TScreenObjectOwnerCollection }
+
+constructor TScreenObjectOwnerCollection.Create(ItemClass: TCollectionItemClass;
+  InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+begin
+  inherited Create(ItemClass, InvalidateModelEvent);
+  if ScreenObject <> nil then
+  begin
+    Assert(ScreenObject is TScreenObject);
+  end;
+  FScreenObject := ScreenObject;
 end;
 
 initialization

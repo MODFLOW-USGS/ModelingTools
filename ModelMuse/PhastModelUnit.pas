@@ -40,7 +40,7 @@ uses System.UITypes,
   FootprintPropertiesUnit, ModflowSwiObsUnit, ModflowRipPlantGroupsUnit,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
-  Mt3dCtsSystemUnit;
+  Mt3dCtsSystemUnit, ObservationComparisonsUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2185,6 +2185,7 @@ that affects the model output should also have a comment. }
     FTopContoursUpToDate: Boolean;
     FSideContoursUpToDate: Boolean;
     FFrontContoursUpToDate: Boolean;
+    FGlobalObservationComparisons: TGlobalObservationComparisons;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2395,6 +2396,8 @@ that affects the model output should also have a comment. }
     function MawSelected(Sender: TObject): Boolean;
     function LakMf6Selected(Sender: TObject): Boolean;
     function GetMt3dSpecesName(const Index: Integer): string;
+    procedure SetGlobalObservationComparisons(
+      const Value: TGlobalObservationComparisons);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3410,6 +3413,12 @@ that affects the model output should also have a comment. }
 
     property CtsSystems: TCtsSystemCollection read GetCtsSystems
       write SetCtsSystems;
+    property GlobalObservationComparisons: TGlobalObservationComparisons
+      read FGlobalObservationComparisons write SetGlobalObservationComparisons
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
   end;
 
@@ -27959,6 +27968,7 @@ begin
   FFootPrintGrid := TFootprintGrid.Create(self);
 
   FDisvGrid := TModflowDisvGrid.Create(self);
+  FGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
 
 end;
 
@@ -28385,6 +28395,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FGlobalObservationComparisons.Free;
   FLakScreenObjects.Free;
   FMawScreenObjects.Free;
   FSfrScreenObjects.Free;
@@ -28989,6 +29000,12 @@ end;
 procedure TCustomModel.SetGhbObservations(const Value: TFluxObservationGroups);
 begin
   FGhbObservations.Assign(Value);
+end;
+
+procedure TCustomModel.SetGlobalObservationComparisons(
+  const Value: TGlobalObservationComparisons);
+begin
+  FGlobalObservationComparisons.Assign(Value);
 end;
 
 procedure TCustomModel.SetHydrogeologicUnits(const Value: THydrogeologicUnits);
@@ -29600,7 +29617,8 @@ begin
   FreeAndNil(FPathline);
   FreeAndNil(FTimeSeries);
   FreeAndNil(FEndPoints);
-  FreeAndNil(FHeadObsResults)
+  FreeAndNil(FHeadObsResults);
+  GlobalObservationComparisons.Clear;
 end;
 
 procedure TCustomModel.GenerateIrregularMesh(var ErrorMessage: string);
@@ -35298,6 +35316,7 @@ begin
     SwrReachGeometry := SourceModel.SwrReachGeometry;
     SwrStructures := SourceModel.SwrStructures;
     SwrObservations := SourceModel.SwrObservations;
+    GlobalObservationComparisons := SourceModel.GlobalObservationComparisons;
 //    GeoRefFileName := SourceModel.GeoRefFileName;
 
     OnCrossSectionChanged := SourceModel.OnCrossSectionChanged;

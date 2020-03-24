@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ExtCtrls, SsButtonEd, RbwStringTreeCombo,
-  System.Generics.Collections, VirtualTrees;
+  System.Generics.Collections, VirtualTrees, frameGridUnit, GoPhastTypes,
+  ObservationComparisonsUnit, UndoItems;
 
 type
   TfrmObservationComparisons = class(TfrmCustomGoPhast)
@@ -16,6 +17,7 @@ type
     btnOK: TBitBtn;
     btnHelp: TBitBtn;
     treecomboInPlaceEditor: TRbwStringTreeCombo;
+    frameObsComparisons: TframeGrid;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure treecomboInPlaceEditorTreeFreeNode(Sender: TBaseVirtualTree;
@@ -28,13 +30,43 @@ type
     procedure treecomboInPlaceEditorTreeInitNode(Sender: TBaseVirtualTree;
       ParentNode, Node: PVirtualNode;
       var InitialStates: TVirtualNodeInitStates);
+    procedure treecomboInPlaceEditorTreeChange(Sender: TBaseVirtualTree;
+      Node: PVirtualNode);
+    procedure frameObsComparisonsGridColSize(Sender: TObject; ACol,
+      PriorWidth: Integer);
+    procedure frameObsComparisonsGridSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure frameObsComparisonsGridExit(Sender: TObject);
+    procedure btnOKClick(Sender: TObject);
   private
     { Private declarations }
     FObsDictionary: TDictionary<string, PVirtualNode>;
+    FObsItemDictionary: TDictionary<string, TCustomObservationItem>;
+
+    FCol: Integer;
+    FRow: Integer;
     procedure GetData;
+    procedure SetData;
     procedure InitializeInPlaceEditor;
+    procedure InitializeGrid;
+    procedure InitializeObsItemDictionary;
   public
     { Public declarations }
+  end;
+
+  TUndoGlobalObsComparisons = class(TCustomUndo)
+  private
+    FOldComparisons: TGlobalObservationComparisons;
+    FExistingComparisons: TGlobalObservationComparisons;
+    FNewComparisons: TGlobalObservationComparisons;
+  protected
+    function Description: string; override;
+  public
+    constructor Create(const ExistingComparisons: TGlobalObservationComparisons;
+      var NewComparisons: TGlobalObservationComparisons);
+    destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
   end;
 
 var
@@ -46,13 +78,21 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, ModflowMnw2Unit, frmErrorsAndWarningsUnit;
 
 resourcestring
-  StrTheFollowingObject = 'The following objects contain duplicate observati' +
-  'on names';
+//  StrTheFollowingObject = 'The following objects contain duplicate observati' +
+//  'on names';
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';
+  StrObservationName = 'Observation Name';
+  StrObservationValue = 'Observation Value';
+  StrObservationWeight = 'Observation Weight';
+  StrComment = 'Comment';
+  StrFirstObservation = 'First Observation';
+  StrSecondObservation = 'Second Observation';
 
 {$R *.dfm}
 
 type
+  TObsCompColumns = (occName, occObs1, occObs2, occValue, occWeight, occComment);
+
   TObsTreeItem = class(TObject)
     ObsTypeName: string;
     ScreenObject: TScreenObject;
@@ -66,26 +106,198 @@ type
 
 { TfrmObservationComparisons }
 
+procedure TfrmObservationComparisons.btnOKClick(Sender: TObject);
+begin
+  inherited;
+  SetData;
+end;
+
 procedure TfrmObservationComparisons.FormCreate(Sender: TObject);
 begin
   inherited;
   FObsDictionary := TDictionary<string, PVirtualNode>.Create;
+  FObsItemDictionary := TDictionary<string, TCustomObservationItem>.Create;
 
   GetData;
 end;
 
 procedure TfrmObservationComparisons.FormDestroy(Sender: TObject);
 begin
+  FObsItemDictionary.Free;
   FObsDictionary.Free;
   inherited;
 end;
 
+procedure TfrmObservationComparisons.frameObsComparisonsGridColSize(
+  Sender: TObject; ACol, PriorWidth: Integer);
+var
+  CanSelect: Boolean;
+begin
+  inherited;
+  CanSelect := True;
+  frameObsComparisonsGridSelectCell(nil, FCol, FRow, CanSelect);
+end;
+
+procedure TfrmObservationComparisons.frameObsComparisonsGridExit(
+  Sender: TObject);
+begin
+  inherited;
+  treecomboInPlaceEditor.Visible := False;
+end;
+
+procedure TfrmObservationComparisons.frameObsComparisonsGridSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  CellRect: TRect;
+  ANode: PVirtualNode;
+  MyObject: PObsTreeItem;
+  ObItem : TCustomObservationItem;
+  NodeParent: PVirtualNode;
+begin
+  inherited;
+  if frameObsComparisons.Grid.Drawing then
+  begin
+    Exit;
+  end;
+  if (ACol < frameObsComparisons.Grid.FixedCols)
+    or (ARow < frameObsComparisons.Grid.FixedRows) then
+  begin
+    Exit;
+  end;
+  CanSelect := True;
+
+  if ACol in [Ord(occObs1),Ord(occObs2)] then
+  begin
+    CanSelect := False;
+    FCol := ACol;
+    FRow := ARow;
+    treecomboInPlaceEditor.Visible := True;
+    CellRect := frameObsComparisons.Grid.CellRect(ACol, ARow);
+    treecomboInPlaceEditor.Width := CellRect.Right - CellRect.Left;
+    treecomboInPlaceEditor.Parent := frameObsComparisons.Grid;
+    treecomboInPlaceEditor.Left := CellRect.Left;
+    treecomboInPlaceEditor.Top := CellRect.Top;
+    if treecomboInPlaceEditor.Tree.FocusedNode <> nil then
+    begin
+      NodeParent := treecomboInPlaceEditor.Tree.NodeParent[
+        treecomboInPlaceEditor.Tree.FocusedNode];
+      if NodeParent <> nil then
+      begin
+        treecomboInPlaceEditor.Tree.Expanded[NodeParent]:= False;
+        NodeParent := treecomboInPlaceEditor.Tree.NodeParent[NodeParent];
+        if NodeParent <> nil then
+        begin
+          treecomboInPlaceEditor.Tree.Expanded[NodeParent]:= False;
+        end;
+      end;
+    end;
+//    treecomboInPlaceEditor.Tree.;
+    if frameObsComparisons.Grid.Objects[FCol, FRow] <> nil then
+    begin
+      ObItem := frameObsComparisons.Grid.Objects[FCol, FRow] as TCustomObservationItem;
+      if FObsDictionary.TryGetValue(ObItem.GUID, ANode) then
+      begin
+        treecomboInPlaceEditor.Tree.Selected[ANode] := True;
+        treecomboInPlaceEditor.Tree.FocusedNode := ANode;
+        treecomboInPlaceEditor.Text := frameObsComparisons.Grid.Cells[FCol, FRow];
+      end;
+    end;
+  end
+  else
+  begin
+    treecomboInPlaceEditor.Visible := False;
+  end;
+end;
+
 procedure TfrmObservationComparisons.GetData;
+var
+  ItemIndex: Integer;
+  ObsComparisons: TGlobalObservationComparisons;
+  ObsItem: TGlobalObsComparisonItem;
+  RowIndex: Integer;
+  Item: TCustomObservationItem;
+  ScreenObject: TObject;
 begin
   InitializeInPlaceEditor;
-  if ModalResult = mrNone then
-  begin
+  InitializeGrid;
+  InitializeObsItemDictionary;
 
+  ObsComparisons := frmGoPhast.PhastModel.GlobalObservationComparisons;
+  frameObsComparisons.seNumber.AsInteger := ObsComparisons.Count;
+  for ItemIndex := 0 to ObsComparisons.Count - 1 do
+  begin
+    ObsItem := ObsComparisons[ItemIndex];
+    RowIndex := ItemIndex+1;
+    frameObsComparisons.Grid.Cells[Ord(occName), RowIndex] := ObsItem.Name;
+    if FObsItemDictionary.TryGetValue(ObsItem.Guid1, Item) then
+    begin
+      ScreenObject := Item.ScreenObject;
+      if ScreenObject <> nil then
+      begin
+        frameObsComparisons.Grid.Cells[Ord(occObs1), RowIndex] :=
+          Format('%0:s.%1:s', [(ScreenObject as TScreenObject).Name, Item.Name]);
+      end
+      else
+      begin
+        frameObsComparisons.Grid.Cells[Ord(occObs1), RowIndex] := Item.Name
+      end;
+      frameObsComparisons.Grid.Objects[Ord(occObs1), RowIndex] := Item;
+    end
+    else
+    begin
+      frameObsComparisons.Grid.Cells[Ord(occObs1), RowIndex] := '';
+      frameObsComparisons.Grid.Objects[Ord(occObs1), RowIndex] := nil;
+    end;
+
+    if FObsItemDictionary.TryGetValue(ObsItem.Guid2, Item) then
+    begin
+      ScreenObject := Item.ScreenObject;
+      if ScreenObject <> nil then
+      begin
+        frameObsComparisons.Grid.Cells[Ord(occObs2), RowIndex] :=
+          Format('%0:s.%1:s', [(ScreenObject as TScreenObject).Name, Item.Name]);
+      end
+      else
+      begin
+        frameObsComparisons.Grid.Cells[Ord(occObs2), RowIndex] := Item.Name
+      end;
+      frameObsComparisons.Grid.Objects[Ord(occObs2), RowIndex] := Item;
+    end
+    else
+    begin
+      frameObsComparisons.Grid.Cells[Ord(occObs2), RowIndex] := '';
+      frameObsComparisons.Grid.Objects[Ord(occObs2), RowIndex] := nil;
+    end;
+
+    frameObsComparisons.Grid.RealValue[Ord(occValue), RowIndex] := ObsItem.ObservedValue;
+    frameObsComparisons.Grid.RealValue[Ord(occWeight), RowIndex] := ObsItem.Weight;
+    frameObsComparisons.Grid.Cells[Ord(occComment), RowIndex] := ObsItem.Comment;
+  end;
+//   TObsCompColumns = (occName, occObs1, occObs2, occValue, occWeight, occComment);
+
+end;
+
+procedure TfrmObservationComparisons.InitializeGrid;
+var
+  ColIndex: Integer;
+begin
+  ClearGrid(frameObsComparisons.Grid);
+  frameObsComparisons.Grid.ColWidths[Ord(occObs1)] := 200;
+  frameObsComparisons.Grid.ColWidths[Ord(occObs2)] := 200;
+  frameObsComparisons.Grid.BeginUpdate;
+  try
+    frameObsComparisons.Grid.Cells[Ord(occName), 0] := StrObservationName;
+    frameObsComparisons.Grid.Cells[Ord(occObs1), 0] := StrFirstObservation;
+    frameObsComparisons.Grid.Cells[Ord(occObs2), 0] := StrSecondObservation;
+    frameObsComparisons.Grid.Cells[Ord(occValue), 0] := StrObservationValue;
+    frameObsComparisons.Grid.Cells[Ord(occWeight), 0] := StrObservationWeight;
+    frameObsComparisons.Grid.Cells[Ord(occComment), 0] := StrComment;
+  finally
+    frameObsComparisons.Grid.EndUpdate;
+  end;
+  for ColIndex := 0 to frameObsComparisons.Grid.ColCount - 1 do
+  begin
+    frameObsComparisons.Grid.Columns[ColIndex].AutoAdjustColWidths := False;
   end;
 end;
 
@@ -106,11 +318,11 @@ var
   ParentNode: PVirtualNode;
   NodeCaption: string;
   ObsNode: PVirtualNode;
-  ErrorsAdded: Boolean;
+//  ErrorsAdded: Boolean;
 begin
-  ErrorsAdded := False;
-  frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel,
-    StrTheFollowingObject);
+//  ErrorsAdded := False;
+//  frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel,
+//    StrTheFollowingObject);
   treecomboInPlaceEditor.Tree.BeginUpdate;
   UsedTypes := TStringList.Create;
   try
@@ -140,7 +352,6 @@ begin
     begin
       ObsTypeName := UsedTypes[TIndex];
       ObsTreeItem := TObsTreeItem.Create;
-//      ObsTreeItem.Caption := ObsTypeName;
       ObsTreeItem.Obs := nil;
       ObsTreeItem.ObsTypeName := ObsTypeName;
       ObsTreeItem.ScreenObject := nil;
@@ -171,7 +382,6 @@ begin
             ObsTypeNode := FObsDictionary[AnObs.ObservationType];
 
             ObsTreeItem := TObsTreeItem.Create;
-//            ObsTreeItem.Caption := ParentNodeKey;
             ObsTreeItem.Obs := nil;
             ObsTreeItem.ObsTypeName := ObsTypeName;
             ObsTreeItem.ScreenObject := AScreenObject;
@@ -181,23 +391,18 @@ begin
 
           NodeCaption := TObsTreeItem.Key(AnObs.ObservationType, AScreenObject, AnObs);
 
-          if FObsDictionary.TryGetValue(NodeCaption, ObsNode) then
+          if FObsDictionary.TryGetValue(AnObs.GUID, ObsNode) then
           begin
-            frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
-              StrTheFollowingObject,
-              Format(StrObject0sObse, [AScreenObject.Name, AnObs.Name]),
-              AScreenObject);
-            ErrorsAdded := True;
+            Assert(False);
           end
           else
           begin
             ObsTreeItem := TObsTreeItem.Create;
-//            ObsTreeItem.Caption := NodeCaption;
             ObsTreeItem.Obs := AnObs;
             ObsTreeItem.ObsTypeName := ObsTypeName;
             ObsTreeItem.ScreenObject := AScreenObject;
             ANode := treecomboInPlaceEditor.Tree.AddChild(ParentNode, ObsTreeItem);
-            FObsDictionary.Add(NodeCaption, ANode);
+            FObsDictionary.Add(AnObs.GUID, ANode);
           end;
 
         end;
@@ -208,12 +413,110 @@ begin
     UsedTypes.Free;
     treecomboInPlaceEditor.Tree.EndUpdate;
   end;
+end;
 
-  if ErrorsAdded then
+procedure TfrmObservationComparisons.InitializeObsItemDictionary;
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  Mnw2Observations: TMnw2Observations;
+  ObsIndex: Integer;
+  AnObs: TMnw2ObsItem;
+begin
+  for ObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
   begin
-    ModalResult := mrCancel;
-    frmErrorsAndWarnings.ShowAfterDelay;
+    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ObjectIndex];
+    if AScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    if (AScreenObject.ModflowMnw2Boundary <> nil)
+      and AScreenObject.ModflowMnw2Boundary.Used
+      and (AScreenObject.ModflowMnw2Boundary.Observations.Count > 0) then
+    begin
+      Mnw2Observations := AScreenObject.ModflowMnw2Boundary.Observations;
+      for ObsIndex := 0 to Mnw2Observations.Count - 1 do
+      begin
+        AnObs := Mnw2Observations[ObsIndex];
+        FObsItemDictionary.Add(AnObs.GUID, AnObs);
+      end;
+    end;
   end;
+end;
+
+procedure TfrmObservationComparisons.SetData;
+var
+  ObsComparisons: TGlobalObservationComparisons;
+  ObsCount: Integer;
+  RowIndex: Integer;
+  RowOK: Boolean;
+  ColumnIndex: Integer;
+  ObsComp: TGlobalObsComparisonItem;
+  Item: TCustomObservationItem;
+  Undo: TUndoGlobalObsComparisons;
+  InvalidateEvent: TNotifyEvent;
+begin
+  InvalidateEvent := nil;
+  ObsComparisons := TGlobalObservationComparisons.Create(InvalidateEvent);
+  try
+    ObsCount := 0;
+    for RowIndex := 1 to frameObsComparisons.seNumber.AsInteger do
+    begin
+      RowOK := True;
+      for ColumnIndex := 0 to frameObsComparisons.Grid.ColCount - 1 do
+      begin
+        if frameObsComparisons.Grid.Cells[ColumnIndex,RowIndex] = ''  then
+        begin
+          RowOK := False;
+          break;
+        end;
+      end;
+      RowOK := RowOK
+        and (frameObsComparisons.Grid.Objects[Ord(occObs1),RowIndex] <> nil)
+        and (frameObsComparisons.Grid.Objects[Ord(occObs2),RowIndex] <> nil);
+      if RowOK then
+      begin
+        ObsComp := ObsComparisons.Add;
+        Inc(ObsCount);
+
+        ObsComp.Name := frameObsComparisons.Grid.Cells[Ord(occName),RowIndex];
+        Item := frameObsComparisons.Grid.Objects[Ord(occObs1),RowIndex] as TCustomObservationItem;
+        ObsComp.Guid1 := Item.GUID;
+        Item := frameObsComparisons.Grid.Objects[Ord(occObs2),RowIndex] as TCustomObservationItem;
+        ObsComp.Guid2 := Item.GUID;
+        ObsComp.ObservedValue := frameObsComparisons.Grid.RealValue[Ord(occValue),RowIndex];
+        ObsComp.Weight := frameObsComparisons.Grid.RealValue[Ord(occWeight),RowIndex];
+        ObsComp.Comment := frameObsComparisons.Grid.Cells[Ord(occComment),RowIndex];
+      end;
+    end;
+    frmGoPhast.UndoStack.Submit(TUndoGlobalObsComparisons.Create(
+      frmGoPhast.PhastModel.GlobalObservationComparisons, ObsComparisons));
+  finally
+    ObsComparisons.Free;
+  end;
+end;
+
+procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeChange(
+  Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  MyObject: PObsTreeItem;
+begin
+  MyObject := Sender.GetNodeData(Node);
+  if MyObject <> nil then
+  begin
+    if MyObject^.Obs <> nil then
+    begin
+      frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
+        [MyObject^.ScreenObject.Name, MyObject^.Obs.Name]);
+      frameObsComparisons.Grid.Objects[FCol, FRow] := MyObject^.Obs;
+    end
+    else
+    begin
+      frameObsComparisons.Grid.Cells[FCol, FRow] := '';
+      frameObsComparisons.Grid.Objects[FCol, FRow] := nil;
+    end;
+  end;
+
 end;
 
 procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeFreeNode(
@@ -252,18 +555,6 @@ begin
   if ObsTreeItem^.Obs <> nil then
   begin
     Assert(ObsTreeItem^.ScreenObject <> nil);
-//    ObsTreeItem^.Caption := Format('%0:s.%1:s.%2:s',
-//      [ObsTreeItem^.ObsTypeName, ObsTreeItem^.ScreenObject.Name,
-//      ObsTreeItem^.Obs.Name]);
-  end
-  else if ObsTreeItem^.ScreenObject <> nil then
-  begin
-//    ObsTreeItem^.Caption := Format('%0:s.%1:s',
-//      [ObsTreeItem^.ObsTypeName, ObsTreeItem^.ScreenObject.Name]);
-  end
-  else
-  begin
-//    ObsTreeItem^.Caption := ObsTreeItem^.ObsTypeName;
   end;
 end;
 
@@ -310,6 +601,48 @@ begin
       result := result + '.' + Obs.Name;
     end;
   end;
+end;
+
+{ TUndoGlobalObsComparisons }
+
+constructor TUndoGlobalObsComparisons.Create(
+  const ExistingComparisons: TGlobalObservationComparisons;
+  var NewComparisons: TGlobalObservationComparisons);
+
+var
+  InvalidateEvent: TNotifyEvent;
+begin
+  InvalidateEvent := nil;
+  FOldComparisons := TGlobalObservationComparisons.Create(InvalidateEvent);
+  FOldComparisons.Assign(ExistingComparisons);
+  FExistingComparisons := ExistingComparisons;
+  FNewComparisons := NewComparisons;
+  NewComparisons := nil;
+end;
+
+function TUndoGlobalObsComparisons.Description: string;
+begin
+  result := 'edit observation comparisons';
+end;
+
+destructor TUndoGlobalObsComparisons.Destroy;
+begin
+  FOldComparisons.Free;
+  FNewComparisons.Free;
+
+  inherited;
+end;
+
+procedure TUndoGlobalObsComparisons.DoCommand;
+begin
+  inherited;
+  FExistingComparisons.Assign(FNewComparisons);
+end;
+
+procedure TUndoGlobalObsComparisons.Undo;
+begin
+  inherited;
+  FExistingComparisons.Assign(FOldComparisons);
 end;
 
 end.

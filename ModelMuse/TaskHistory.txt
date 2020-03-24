@@ -25144,5 +25144,11 @@ object TTaskHistory
         'PEST Observations'
         'Anonymize Objects'
         'Documentation')
+    end
+    item
+      Date = 43914.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'PEST Observations')
     end>
 end

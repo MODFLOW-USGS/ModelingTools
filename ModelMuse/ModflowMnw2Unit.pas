@@ -485,13 +485,13 @@ type
     property Index2: Integer read FIndex2 write SetIndex2;
   end;
 
-  TMnw2Comparisons = class(TPhastCollection)
+  TMnw2Comparisons = class(TScreenObjectOwnerCollection)
   private
     function GetItem(Index: Integer): TMnw2ObsCompareItem;
     procedure SetItem(Index: Integer; const Value: TMnw2ObsCompareItem);
   public
     procedure Assign(Source: TPersistent); override;
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     property Items[Index: Integer]: TMnw2ObsCompareItem read GetItem
       write SetItem; default;
     function Add: TMnw2ObsCompareItem;
@@ -507,9 +507,10 @@ type
     function Units: string; override;
   published
     property ObsType: TMnwObsType read FObsType write SetObsType stored True;
+    property GUID;
   end;
 
-  TMnw2Observations = class(TPhastCollection)
+  TMnw2Observations = class(TScreenObjectOwnerCollection)
   private
     FComparisons: TMnw2Comparisons;
     function GetMnw2Item(Index: Integer): TMnw2ObsItem;
@@ -517,7 +518,7 @@ type
     procedure SetComparisons(const Value: TMnw2Comparisons);
   public
     procedure Assign(Source: TPersistent); override;
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     Destructor Destroy; override;
     property Items[Index: Integer]: TMnw2ObsItem read GetMnw2Item
       write SetMnw2Item; default;
@@ -2050,7 +2051,7 @@ begin
   FLiftValues := TLiftCollection.Create(Model);
   FPumpCellTarget := TTarget.Create(OnInvalidateModelEvent);
   FVerticalScreens := TVerticalScreenCollection.Create(self, Model, ScreenObject);
-  FObservations := TMnw2Observations.Create(OnInvalidateModelEvent);
+  FObservations := TMnw2Observations.Create(OnInvalidateModelEvent, ScreenObject);
 end;
 
 destructor TMnw2Boundary.Destroy;
@@ -3798,10 +3799,10 @@ begin
   end;
 end;
 
-constructor TMnw2Observations.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TMnw2Observations.Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
 begin
-  inherited Create(TMnw2ObsItem, InvalidateModelEvent);
-  FComparisons := TMnw2Comparisons.Create(InvalidateModelEvent);
+  inherited Create(TMnw2ObsItem, InvalidateModelEvent, ScreenObject);
+  FComparisons := TMnw2Comparisons.Create(InvalidateModelEvent, ScreenObject);
 end;
 
 destructor TMnw2Observations.Destroy;
@@ -3879,9 +3880,9 @@ begin
   end;
 end;
 
-constructor TMnw2Comparisons.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TMnw2Comparisons.Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
 begin
-  inherited Create(TMnw2ObsCompareItem, InvalidateModelEvent);
+  inherited Create(TMnw2ObsCompareItem, InvalidateModelEvent, ScreenObject);
 end;
 
 function TMnw2Comparisons.GetItem(Index: Integer): TMnw2ObsCompareItem;
