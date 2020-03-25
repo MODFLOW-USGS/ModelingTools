@@ -101,6 +101,8 @@ function PointInConcavePolygon(const Point:TPoint2D; const Polygon:TPolygon2D):B
 
 procedure MM_ObjectBinaryToText(const Input, Output: TStream);
 
+function PestObsName(const ObsName: string): string;
+
 implementation
 
 uses AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
@@ -1149,6 +1151,18 @@ begin
   end;
 end;
 
+
+function PestObsName(const ObsName: string): string;
+begin
+  result := ObsName;
+  result := StringReplace(result, ' ', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, '[', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, ']', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, '(', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, ')', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, '!', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, '!', '_', [rfReplaceAll, rfIgnoreCase]);
+end;
 initialization
   ColorParameters := TColorParameters.Create;
 

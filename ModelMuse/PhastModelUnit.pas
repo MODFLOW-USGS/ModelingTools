@@ -8994,11 +8994,13 @@ const
   //               Bug fix: Fixed bug that could cause an assertion failure if
   //                an object that defined a MAW well was in a cell that was
   //                inactive in the top layer.
-
   //    '4.2.0.4'  Bug fix: Fixed display of pump capacity table in the MNW2
   //                package.
   //               Enhancement: Added "Object|Edit|Anonymize Selected Point
   //                Objects command.
+
+  //               Bug fix: Fixed bug that could cause a range check error
+  //                when using the UZF package in MODFLOW 6.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.4';

@@ -5,7 +5,7 @@ unit ReadMnwiInstructions;
 interface
 
 uses
-  Classes, SysUtils, ReadMnwiOutput;
+  Classes, SysUtils, ReadMnwiOutput, ObExtractorTypes;
 
 type
 
@@ -15,8 +15,8 @@ type
   private
     FLineIndex: integer;
     FInputFile: TStringList;
-    FObsList: TMnwiObsValueObjectList;
-    FObsDictionary: TMnwiObsValueDictionary;
+    FObsList: TCustomObsValueObjectList;
+    FObsDictionary: TCustomObsValueDictionary;
     FListingFileName: string;
     FObservationsFileName: string;
     FListingFile: TStringList;
@@ -44,29 +44,14 @@ resourcestring
   rsOnLine0D1SIs = 'On line %0:d, "%1:s" is a duplicate of a previous '
     +'observation.';
 
-function RemoveQuotes(AString: string): string;
-begin
-  Assert(Length(AString) > 0);
-  if (AString[1] = '"') and (AString[Length(AString)] = '"') then
-  begin
-    AString := Copy(AString, 2, Length(AString)-2);
-  end
-  else if (AString[1] = '''') and (AString[Length(AString)] = '''') then
-  begin
-    AString := Copy(AString, 2, Length(AString)-2);
-  end;
-  result := AString;
-end;
-
-
   { TMnwiObsProcessor }
 
 procedure TMnwiObsProcessor.HandleSimpleObservations;
 var
   ALine: string;
   Splitter: TStringList;
-  MnwiOutputFileName: string;
-  ObsExtractor: TObsExtractor;
+  OutputFileName: string;
+  ObsExtractor: TMnwiObsExtractor;
   ObsName: String;
   ObsTypeIndex: Integer;
   ObsTime: double;
@@ -74,6 +59,9 @@ var
   Obs: TMnwiObsValue;
   PrintString: string;
   ErrorMessage: string;
+  ObservedValue: double;
+  Weight: double;
+  PackageType: String;
   procedure ProcessObsFile;
   begin
     if ObsExtractor <> nil then
@@ -125,16 +113,39 @@ begin
         else if UpperCase(Splitter[0]) = 'FILENAME' then
         begin
           ProcessObsFile;
-          MnwiOutputFileName := RemoveQuotes(Splitter[1]);
-          Assert(FileExists(MnwiOutputFileName), Format('The MNWI output file "%0:s" specified on line %1:d does not exist', [MnwiOutputFileName, FLineIndex]));
+          OutputFileName := RemoveQuotes(Splitter[1]);
+          Assert(FileExists(OutputFileName), Format('The MNWI output file "%0:s" specified on line %1:d does not exist', [OutputFileName, FLineIndex]));
           FListingFile.Add(Format('Observations will be read from "%s"',
-            [MnwiOutputFileName]));
-          FListingFile.Add(UpperCase('Observation_Name, Observation_Type, Observation_Time, Observation_Print'));
-          ObsExtractor := TObsExtractor.Create;
-          ObsExtractor.MnwiOutputFileName := MnwiOutputFileName;
+            [OutputFileName]));
+          FListingFile.Add(UpperCase('Observation_Name, Observation_Type, Observation_Time, Observed_Value, Weight, Observation_Print'));
+          ObsExtractor := TMnwiObsExtractor.Create;
+          ObsExtractor.OutputFileName := OutputFileName;
+        end
+        else
+        begin
+          Assert(False);
         end;
       end
-      else if Splitter.Count in [4,5] then
+      else if Splitter.Count = 3 then
+      begin
+        if UpperCase(Splitter[0]) = 'FILENAME' then
+        begin
+          ProcessObsFile;
+          PackageType := RemoveQuotes(Splitter[1]);
+          OutputFileName := RemoveQuotes(Splitter[2]);
+          Assert(FileExists(OutputFileName), Format('The MNWI output file "%0:s" specified on line %1:d does not exist', [OutputFileName, FLineIndex]));
+          FListingFile.Add(Format('Observations will be read from "%s"',
+            [OutputFileName]));
+          FListingFile.Add(UpperCase('Observation_Name, Observation_Type, Observation_Time, Observed_Value, Weight, Observation_Print'));
+          ObsExtractor := TMnwiObsExtractor.Create;
+          ObsExtractor.OutputFileName := OutputFileName;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end
+      else if Splitter.Count in [6,7] then
       begin
         Assert(UpperCase(Splitter[0]) = 'OBSERVATION');
         Assert(ObsExtractor <> nil, 'No MNWI output file has been specified for processing.');
@@ -142,18 +153,22 @@ begin
         ObsTypeIndex := ObsTypes.IndexOf(UpperCase(Splitter[2]));
         Assert(ObsTypeIndex >= 0);
         ObsTime := StrToFloat(Splitter[3]);
+        ObservedValue := StrToFloat(Splitter[4]);
+        Weight := StrToFloat(Splitter[5]);
         Obs := TMnwiObsValue.Create;
         FObsList.Add(Obs);
         Obs.ObsName := ObsName;
         Obs.ObsType := TMnwiObsType(ObsTypeIndex);
         Obs.ObsTime := ObsTime;
-        if (Splitter.Count = 5) then
+        Obs.ObservedValue := ObservedValue;
+        Obs.Weight := Weight;
+        if (Splitter.Count = 7) then
         begin
-          if (UpperCase(Splitter[4]) = 'PRINT') then
+          if (UpperCase(Splitter[6]) = 'PRINT') then
           begin
             Obs.Print := True;
           end
-          else if (UpperCase(Splitter[4]) = 'NO_PRINT') then
+          else if (UpperCase(Splitter[6]) = 'NO_PRINT') then
           begin
             Obs.Print := False;
           end
@@ -185,8 +200,9 @@ begin
           PrintString := 'Do not Print';
 
         end;
-        FListingFile.Add(Format('%0:s, %1:s, %2:g, %3:s',
-          [Obs.ObsName, ObsTypes[ObsTypeIndex], Obs.ObsTime, PrintString]));
+        FListingFile.Add(Format('%0:s, %1:s, %2:g, %3:g, %4:g %5:s,',
+          [Obs.ObsName, ObsTypes[ObsTypeIndex], Obs.ObsTime, Obs.ObservedValue,
+          Obs.Weight, PrintString]));
       end
       else
       begin
@@ -205,15 +221,15 @@ procedure TMnwiObsProcessor.HandleDerivedObservations;
 var
   ALine: string;
   Splitter: TStringList;
-  FirstValue: TMnwiObsValue;
-  SecondValue: TMnwiObsValue;
+  FirstValue: TCustomObsValue;
+  SecondValue: TCustomObsValue;
   Obs: TMnwiObsValue;
   ObsName: string;
   FirstName: string;
   SecondName: string;
   ErrorMessage: string;
 begin
-  FListingFile.Add(UpperCase('Derived_Observation_Name, Formula, Print'));
+  FListingFile.Add(UpperCase('Derived_Observation_Name, Formula, Observed_Value, Weight, Print'));
   Splitter := TStringList.Create;
   try
     Splitter.Delimiter := ' ';
@@ -239,7 +255,7 @@ begin
         FListingFile.Add('END READING DERIVED OBSERVATIONS');
         Exit;
       end
-      else if (Splitter.Count in [4,5]) and
+      else if (Splitter.Count in [6,7]) and
         ((UpperCase(Splitter[0]) = 'DIFFERENCE')
         or (UpperCase(Splitter[0]) = 'SUM'))
         then
@@ -256,13 +272,13 @@ begin
             Raise Exception.Create(ErrorMessage);
           end;
         end;
-        if (Splitter.Count = 5) then
+        if (Splitter.Count = 7) then
         begin
-          if (UpperCase(Splitter[4]) = 'PRINT') then
+          if (UpperCase(Splitter[6]) = 'PRINT') then
           begin
             Obs.Print := True;
           end
-          else if (UpperCase(Splitter[4]) = 'NO_PRINT') then
+          else if (UpperCase(Splitter[6]) = 'NO_PRINT') then
           begin
             Obs.Print := False;
           end
@@ -279,13 +295,15 @@ begin
         Obs.SimulatedValue := MissingValue;
         FirstName := Splitter[2];
         SecondName := Splitter[3];
+        Obs.ObservedValue := StrToFloat(Splitter[4]);
+        Obs.Weight := StrToFloat(Splitter[5]);
         if (UpperCase(Splitter[0]) = 'DIFFERENCE') then
         begin
-          FListingFile.Add(Format('%0:s, %1:s - %2:s, PRINT', [Obs.ObsName, FirstName, SecondName]));
+          FListingFile.Add(Format('%0:s, %1:s - %2:s, %3:g, %4:g, PRINT', [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
         end
         else
         begin
-          FListingFile.Add(Format('%0:s, %1:s + %2:s, PRINT', [Obs.ObsName, FirstName, SecondName]));
+          FListingFile.Add(Format('%0:s, %1:s + %2:s, %3:g, %4:g, PRINT', [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
         end;
         if not FObsDictionary.TryGetValue(UpperCase(FirstName), FirstValue) then
         begin
@@ -388,14 +406,15 @@ end;
 procedure TMnwiObsProcessor.WriteFiles;
 var
   Index: Integer;
-  Obs: TMnwiObsValue;
+  Obs: TCustomObsValue;// TMnwiObsValue;
   ErrorMessage: string;
   ObsPrinted: Boolean;
 begin
   Assert(FObsList.Count > 0, 'No observations specified');
   ObsPrinted := False;
   FListingFile.Add('');
-  FListingFile.Add('Observation name, Simulated Value');
+  FListingFile.Add('Observation_Name, Simulated_Value, Observed_Value, Weight');
+  FObservationsFile.Add('Observation_Name, Simulated_Value, Observed_Value, Weight');
   for Index := 0 to Pred(FObsList.Count) do
   begin
     Obs := FObsList[Index];
@@ -403,10 +422,10 @@ begin
     begin
       ObsPrinted := True;
       FObservationsFile.Add(
-        Format('"%0:s" %1:g', [Obs.ObsName, Obs.SimulatedValue]));
+        Format('"%0:s", %1:g, %2:g, %3:g', [Obs.ObsName, Obs.SimulatedValue, Obs.ObservedValue, Obs.Weight]));
     end;
     FListingFile.Add(
-      Format('"%0:s" %1:g', [Obs.ObsName, Obs.SimulatedValue]));
+      Format('"%0:s", %1:g, %2:g, %3:g', [Obs.ObsName, Obs.SimulatedValue, Obs.ObservedValue, Obs.Weight]));
   end;
   FListingFile.Add('');
   Assert(ObsPrinted, 'No observations printed');
@@ -447,8 +466,8 @@ end;
 
 constructor TMnwiObsProcessor.Create;
 begin
-  FObsList := TMnwiObsValueObjectList.Create;
-  FObsDictionary := TMnwiObsValueDictionary.Create;
+  FObsList := TCustomObsValueObjectList.Create;
+  FObsDictionary := TCustomObsValueDictionary.Create;
   //FObsDictionary.Duplicates := dupError;
   //FObsDictionary.Sorted := True;
   FListingFile := TStringList.Create;

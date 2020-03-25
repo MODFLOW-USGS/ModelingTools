@@ -7,11 +7,11 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit,
-  ReadMnwiInstructions;
+  ReadMnwiInstructions, readgageoutput, ObExtractorTypes;
 
 type
 
-  { TMnwiObsExtractor }
+  { TGageObsExtractor }
 
   TMnwiObsExtractor = class(TCustomApplication)
   protected

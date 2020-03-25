@@ -85,7 +85,7 @@ type
     procedure WriteMnwiFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
   end;
-
+  
 resourcestring
   StrInvalidMnwTable = 'The following objects define multinode wells in w' +
   'hich LIFTqmax is less than one or more values in the head capacity table.';
@@ -102,7 +102,7 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit, GoPhastTypes,
   ModflowTimeUnit, ModflowBoundaryUnit, frmFormulaErrorsUnit, Math, Forms,
-  DataSetUnit, ObservationComparisonsUnit;
+  DataSetUnit, ObservationComparisonsUnit, ModelMuseUtilities;
 
 resourcestring
   SignError = 'The deactivation pumping rate and reactivation pumping rate '
@@ -777,6 +777,7 @@ var
     MaxPrefixLength := 19 - Length((ObjectIndex+1).ToString + Obs.Name);
     Prefix := Copy('Mnw2', 1, MaxPrefixLength);
     Result := Format('%0:s_%1:d%2:s', [Prefix, ObjectIndex+1, Obs.Name]);
+    Result := PestObsName(Result);
     Obs.ExportedName := Result;
   end;
 begin
@@ -795,7 +796,7 @@ begin
     OpenFile(ScriptFileName);
     try
       ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
-      ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs');
+      ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs.csv');
 
       // FILENAMES block
       WriteString('BEGIN FILENAMES');
@@ -841,6 +842,8 @@ begin
             else Assert(False);
           end;
           WriteFloat(Obs.Time);
+          WriteFloat(Obs.ObservedValue);
+          WriteFloat(Obs.Weight);
           WriteString(' PRINT');
           NewLine;
         end;
@@ -882,6 +885,8 @@ begin
               WriteString(' ');
               Obs := Boundary.Observations[CompItem.Index2];
               WriteString(GetObName(ObjectIndex, Obs));
+              WriteFloat(CompItem.ObservedValue);
+              WriteFloat(CompItem.Weight);
               WriteString(' PRINT');
               NewLine;
             end;
@@ -907,6 +912,8 @@ begin
             WriteString(PriorItem1.ExportedName);
             WriteString(' ');
             WriteString(PriorItem2.ExportedName);
+            WriteFloat(GloCompItem.ObservedValue);
+            WriteFloat(GloCompItem.Weight);
             WriteString(' PRINT');
             NewLine;
           end;
@@ -931,6 +938,8 @@ begin
         Link := FObsLinks[ObjectIndex];
         Boundary := Link.WellBoundary;
 
+        WriteString('l1');
+        NewLine;
         for ObsIndex := 0 to Boundary.Observations.Count - 1 do
         begin
           Obs := Boundary.Observations[ObsIndex];
@@ -938,11 +947,14 @@ begin
           WriteString(MarkerDelimiter);
           WriteString('"');
           WriteString(GetObName(ObjectIndex, Obs));
-          WriteString('"');
+          WriteString('",');
           WriteString(MarkerDelimiter);
           WriteString(' !');
           WriteString(GetObName(ObjectIndex, Obs));
-          WriteString('!');
+          WriteString('! ');
+          WriteString(MarkerDelimiter);
+          WriteString(',');
+          WriteString(MarkerDelimiter);
           NewLine;
         end;
 
@@ -967,11 +979,14 @@ begin
               WriteString(MarkerDelimiter);
               WriteString('"');
               WriteString(GetObName(ObjectIndex, CompItem));
-              WriteString('"');
+              WriteString('",');
               WriteString(MarkerDelimiter);
               WriteString(' !');
               WriteString(GetObName(ObjectIndex, CompItem));
-              WriteString('!');
+              WriteString('! ');
+              WriteString(MarkerDelimiter);
+              WriteString(',');
+              WriteString(MarkerDelimiter);
               NewLine;
             end;
           end;
@@ -987,11 +1002,14 @@ begin
             WriteString(MarkerDelimiter);
             WriteString('"');
             WriteString(GloCompItem.Name);
-            WriteString('"');
+            WriteString('",');
             WriteString(MarkerDelimiter);
             WriteString(' !');
             WriteString(GloCompItem.Name);
-            WriteString('!');
+            WriteString('! ');
+            WriteString(MarkerDelimiter);
+            WriteString(',');
+            WriteString(MarkerDelimiter);
             NewLine;
           end;
         end;

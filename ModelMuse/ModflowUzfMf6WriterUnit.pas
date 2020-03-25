@@ -730,7 +730,7 @@ begin
           end;
 
           ivertcon := 0;
-          for InnerLayerIndex := LayerIndex+1 downto IDOMAINDataArray.LayerCount -1 do
+          for InnerLayerIndex := LayerIndex+1 to IDOMAINDataArray.LayerCount -1 do
           begin
             if FUzfCellNumbers[InnerLayerIndex, RowIndex, ColumnIndex] > 0 then
             begin

@@ -33,7 +33,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="6">
       <Unit0>
         <Filename Value="MnwiObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -52,6 +52,15 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ReadMnwiInstructions"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="readgageoutput.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="obextractortypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ObExtractorTypes"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

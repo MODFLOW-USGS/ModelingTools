@@ -5,11 +5,9 @@ unit ReadMnwiOutput;
 interface
 
 uses
-  Classes, SysUtils, Generics.Collections, Generics.Defaults;
+  Classes, SysUtils, ObExtractorTypes;
 
 type
-  TDoubleArray = array of double;
-
   TMnwiObsType = (motQin, motQout, motQnet, motQCumu, motHwell);
 
   TMnwiOutRecord = record
@@ -23,41 +21,20 @@ type
     Additional: TDoubleArray;
   end;
 
-  TMnwiObsValue = class(TObject)
-    ObsName: string;
+  TMnwiObsValue = class(TCustomObsValue)
     ObsType: TMnwiObsType;
-    ObsTime: double;
-    SimulatedValue: double;
-    Print: Boolean;
   end;
 
-  TMnwiObsValueList = specialize TList<TMnwiObsValue>;
-  TMnwiObsValueObjectList = specialize TObjectList<TMnwiObsValue>;
-  TMnwiObsValueDictionary = specialize TDictionary<string, TMnwiObsValue>;
+  { TMnwiObsExtractor }
 
-  { TObsExtractor }
-
-  TObsExtractor = class(TObject)
+  TMnwiObsExtractor = class(TCustomObsExtractor)
   private
-    FMnwiObsValueList: TMnwiObsValueList;
-    FMnwiOutputFileName: string;
     function GetItem(Index: integer): TMnwiObsValue;
-    function GetObsCount: integer;
-    procedure SetMnwiOutputFileName(AValue: string);
     function Value(MnwiRecord: TMnwiOutRecord; Index: Integer): double;
-  public
-    Constructor Create;
-    destructor Destroy; override;
-    property MnwiOutputFileName: string read FMnwiOutputFileName
-      write SetMnwiOutputFileName;
-    procedure AddObs(Obs: TMnwiObsValue);
-    property ObsCount: integer read GetObsCount;
     property Items[Index: integer]: TMnwiObsValue read GetItem; default;
-    procedure ExtractSimulatedValues;
+  public
+    procedure ExtractSimulatedValues; override;
   end;
-
-const
-  MissingValue = -1e-31;
 
 implementation
 
@@ -109,15 +86,9 @@ begin
   end;
 end;
 
-{ TObsExtractor }
+{ TMnwiObsExtractor }
 
-procedure TObsExtractor.SetMnwiOutputFileName(AValue: string);
-begin
-  if FMnwiOutputFileName=AValue then Exit;
-  FMnwiOutputFileName:=AValue;
-end;
-
-function TObsExtractor.Value(MnwiRecord: TMnwiOutRecord; Index: Integer
+function TMnwiObsExtractor.Value(MnwiRecord: TMnwiOutRecord; Index: Integer
   ): double;
 var
   AddIndex: Integer;
@@ -164,34 +135,12 @@ begin
   end;
 end;
 
-function TObsExtractor.GetItem(Index: integer): TMnwiObsValue;
+function TMnwiObsExtractor.GetItem(Index: integer): TMnwiObsValue;
 begin
-  result := FMnwiObsValueList[Index];
+  result := FObsValueList[Index] as TMnwiObsValue;
 end;
 
-function TObsExtractor.GetObsCount: integer;
-begin
-  result := FMnwiObsValueList.Count;
-end;
-
-constructor TObsExtractor.Create;
-begin
-  FMnwiObsValueList := TMnwiObsValueList.Create;
-  FMnwiOutputFileName := '';
-end;
-
-destructor TObsExtractor.Destroy;
-begin
-  FMnwiObsValueList.Free;
-  inherited Destroy;
-end;
-
-procedure TObsExtractor.AddObs(Obs: TMnwiObsValue);
-begin
-  FMnwiObsValueList.Add(Obs);
-end;
-
-procedure TObsExtractor.ExtractSimulatedValues;
+procedure TMnwiObsExtractor.ExtractSimulatedValues;
 const
   Epsilon = 1e-6;
 var
@@ -225,12 +174,12 @@ var
     end;
   end;
 begin
-  Assert(FMnwiOutputFileName <> '');
+  Assert(OutputFileName <> '');
   Assert(ObsCount > 0);
   Times := TRealList.Create;
   ObsLines := TStringList.Create;
   try
-    ObsLines.LoadFromFile(FMnwiOutputFileName);
+    ObsLines.LoadFromFile(OutputFileName);
     Times.Capacity := ObsLines.Count-1;
     SetLength(ObsRecords, ObsLines.Count-1);
     for LineIndex := 1 to Pred(ObsLines.Count) do
