@@ -8,66 +8,107 @@ uses
   Classes, SysUtils, ObExtractorTypes;
 
 type
-  TLakeOutRecord = record
+  TGageOutRecord = record
     Time: double;
     Values: TDoubleArray;
   end;
 
-  TLakeGageObsValue = class(TCustomObsValue)
+  TGageObsValue = class(TCustomObsValue)
     ObsType: string;
   end;
 
-  { TGageObsExtractor }
+  { TCustomGageObsExtractor }
 
-  TGageObsExtractor = class(TCustomObsExtractor)
+  TCustomGageObsExtractor = class(TCustomObsExtractor)
   private
-    function GetItem(Index: integer): TLakeGageObsValue;
-    function Value(LakeGageRecord: TLakeOutRecord; Index: Integer): double;
-    property Items[Index: integer]: TLakeGageObsValue read GetItem; default;
+    FGageOutputTypes: TStringList;
+    function GetItem(Index: integer): TGageObsValue;
+    function Value(LakeGageRecord: TGageOutRecord; Index: Integer): double;
+    property Items[Index: integer]: TGageObsValue read GetItem; default;
   public
     procedure ExtractSimulatedValues; override;
   end;
+
+  { TLakeGageObsExtractor }
+
+  TLakeGageObsExtractor = class(TCustomGageObsExtractor)
+    Constructor Create;
+  end;
+
+  { TSfrGageObsExtractor }
+
+  TSfrGageObsExtractor = class(TCustomGageObsExtractor)
+    Constructor Create;
+  end;
+
+var
+  LakeGageOutputTypes: TStringList;
+  LakeGageUnits: TStringList;
+  StreamGageOutputTypes: TStringList;
 
 implementation
 
 uses RealListUnit;
 
-var
-  LakeGageOutputTypes: TStringList;
-
-
-
-
-procedure InitializeLakeGageOutputTypes;
+procedure InitializeGageOutputTypes;
 begin
   LakeGageOutputTypes := TStringList.Create;
-  LakeGageOutputTypes.Add('Stage(H)');
-  LakeGageOutputTypes.Add('Volume');
-  LakeGageOutputTypes.Add('Precip.');
-  LakeGageOutputTypes.Add('Evap.');
-  LakeGageOutputTypes.Add('Runoff');
-  LakeGageOutputTypes.Add('GW-Inflw');
-  LakeGageOutputTypes.Add('GW-Outflw');
-  LakeGageOutputTypes.Add('SW-Inflw');
-  LakeGageOutputTypes.Add('SW-Outflw');
-  LakeGageOutputTypes.Add('Withdrawal');
-  LakeGageOutputTypes.Add('Lake-Inflx');
-  LakeGageOutputTypes.Add('Total-Cond.');
-  LakeGageOutputTypes.Add('Del-H-TS');
-  LakeGageOutputTypes.Add('Del-V-TS');
-  LakeGageOutputTypes.Add('Del-H-Cum');
-  LakeGageOutputTypes.Add('Del-V-Cum');
+  LakeGageUnits := TStringList.Create;
+  LakeGageOutputTypes.Add('Stage(H)');    LakeGageUnits.Add('L');
+  LakeGageOutputTypes.Add('Volume');      LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Precip.');     LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Evap.');       LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Runoff');      LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('GW-Inflw');    LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('GW-Outflw');   LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('SW-Inflw');    LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('SW-Outflw');   LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Withdrawal');  LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Lake-Inflx');  LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Total-Cond.'); LakeGageUnits.Add('L2/T');
+  LakeGageOutputTypes.Add('Del-H-TS');    LakeGageUnits.Add('L/T');
+  LakeGageOutputTypes.Add('Del-V-TS');    LakeGageUnits.Add('L3/T');
+  LakeGageOutputTypes.Add('Del-H-Cum');   LakeGageUnits.Add('L');
+  LakeGageOutputTypes.Add('Del-V-Cum');   LakeGageUnits.Add('L3');
+
+  StreamGageOutputTypes := TStringList.Create;
+  StreamGageOutputTypes.Add('Stage');
+  StreamGageOutputTypes.Add('Flow');
+  StreamGageOutputTypes.Add('Depth');
+  StreamGageOutputTypes.Add('Width');
+  StreamGageOutputTypes.Add('Midpt-Flow');
+  StreamGageOutputTypes.Add('Precip.');
+  StreamGageOutputTypes.Add('ET');
+  StreamGageOutputTypes.Add('Runoff');
+  StreamGageOutputTypes.Add('Conductance');
+  StreamGageOutputTypes.Add('HeadDiff');
+  StreamGageOutputTypes.Add('Hyd.Grad.');
 
 end;
 
-{ TGageObsExtractor }
+{ TSfrGageObsExtractor }
 
-function TGageObsExtractor.GetItem(Index: integer): TLakeGageObsValue;
+constructor TSfrGageObsExtractor.Create;
 begin
-  result := FObsValueList[Index] as TLakeGageObsValue;
+  FGageOutputTypes := StreamGageOutputTypes;
 end;
 
-function TGageObsExtractor.Value(LakeGageRecord: TLakeOutRecord; Index: Integer
+{ TLakeGageObsExtractor }
+
+constructor TLakeGageObsExtractor.Create;
+begin
+  inherited;
+  FGageOutputTypes := LakeGageOutputTypes;
+end;
+
+{ TCustomGageObsExtractor }
+
+function TCustomGageObsExtractor.GetItem(Index: integer): TGageObsValue;
+begin
+  result := FObsValueList[Index] as TGageObsValue;
+end;
+
+function TCustomGageObsExtractor.Value(LakeGageRecord: TGageOutRecord; Index: Integer
   ): double;
 begin
   if Index >= 0 then
@@ -80,20 +121,20 @@ begin
   end;
 end;
 
-procedure TGageObsExtractor.ExtractSimulatedValues;
+procedure TCustomGageObsExtractor.ExtractSimulatedValues;
 const
   Epsilon = 1e-6;
 var
   ObsLines: TStringList;
-  ObsRecords: array of TLakeOutRecord;
+  ObsRecords: array of TGageOutRecord;
   LineIndex: Integer;
   ObsIndex: Integer;
   Times: TRealList;
-  Obs: TLakeGageObsValue;
+  Obs: TGageObsValue;
   RecordIndex: integer;
-  ObsRecord: TLakeOutRecord;
-  FirstRecord: TLakeOutRecord;
-  SecondRecord: TLakeOutRecord;
+  ObsRecord: TGageOutRecord;
+  FirstRecord: TGageOutRecord;
+  SecondRecord: TGageOutRecord;
   HeaderLine: string;
   Splitter: TStringList;
   ObsTypeIndex: Integer;
@@ -102,7 +143,7 @@ var
   LakePositions : array of Integer;
   function ObsTypeToIndex(const ObsType: string): integer;
   begin
-    result := LakeGageOutputTypes.IndexOf(ObsType);
+    result := FGageOutputTypes.IndexOf(ObsType);
     if result >= 0 then
     begin
       result := LakePositions[result];
@@ -140,13 +181,13 @@ begin
     SetLength(ObsRecords, ObsLines.Count-2);
     HeaderLine := RemoveQuotes(Trim(ObsLines[1]));
     Splitter.DelimitedText := HeaderLine;
-    SetLength(LakePositions, LakeGageOutputTypes.Count);
-    for ObsTypeIndex := 0 to Pred(LakeGageOutputTypes.Count) do
+    SetLength(LakePositions, FGageOutputTypes.Count);
+    for ObsTypeIndex := 0 to Pred(FGageOutputTypes.Count) do
     begin
-      ItemPosition := Splitter.IndexOf(LakeGageOutputTypes[ObsTypeIndex]);
+      ItemPosition := Splitter.IndexOf(FGageOutputTypes[ObsTypeIndex]);
       if ItemPosition >= 0 then
       begin
-        LakePositions[ObsTypeIndex] := ItemPosition-2;
+        LakePositions[ObsTypeIndex] := ItemPosition-1;
       end
       else
       begin
@@ -218,10 +259,12 @@ begin
 end;
 
 Initialization
-  InitializeLakeGageOutputTypes;
+  InitializeGageOutputTypes;
 
 Finalization
   LakeGageOutputTypes.Free;
+  LakeGageUnits.Free;
+  StreamGageOutputTypes.Free;
 
 end.
 

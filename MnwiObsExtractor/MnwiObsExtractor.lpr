@@ -7,11 +7,11 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit,
-  ReadMnwiInstructions, readgageoutput, ObExtractorTypes;
+  readinstructions, readgageoutput, ObExtractorTypes, ReadNameFile;
 
 type
 
-  { TGageObsExtractor }
+  { TCustomGageObsExtractor }
 
   TMnwiObsExtractor = class(TCustomApplication)
   protected
@@ -31,7 +31,8 @@ var
   P: PChar;
   Opts: TStringList;
   NonOpts: TStringList;
-  InputHandler: TMnwiObsProcessor;
+  //InputHandler: TObsProcessor;
+  NameFileReader: TNameFileReader;
 begin
   Opts := TStringList.Create;
   NonOpts := TStringList.Create;
@@ -75,10 +76,12 @@ begin
         Exit;
       end;
       WriteLn('Processing ', FileName);
-      InputHandler := TMnwiObsProcessor.Create;
+
+      NameFileReader := TNameFileReader.Create;
       try
         try
-          InputHandler.ProcessInstructionFile(FileName);
+          NameFileReader.ReadNameFile(FileName);
+          NameFileReader.RunScripts;
 
         Except on E: Exception do
           begin
@@ -86,7 +89,7 @@ begin
           end;
         end;
       finally
-        InputHandler.Free;
+        NameFileReader.Free;
       end;
     end
     else begin

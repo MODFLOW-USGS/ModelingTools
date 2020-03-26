@@ -4,13 +4,13 @@
     <PathDelim Value="\"/>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="12">
+    <Units Count="15">
       <Unit0>
         <Filename Value="MnwiObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="36"/>
-        <CursorPos X="72" Y="41"/>
-        <UsageCount Value="80"/>
+        <TopLine Value="78"/>
+        <CursorPos Y="84"/>
+        <UsageCount Value="131"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -18,214 +18,240 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ReadMnwiOutput"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="222"/>
-        <CursorPos Y="237"/>
-        <UsageCount Value="80"/>
+        <TopLine Value="17"/>
+        <CursorPos X="40" Y="24"/>
+        <UsageCount Value="131"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\ModelMuse\RealListUnit.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="9" Y="6"/>
-        <UsageCount Value="77"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="128"/>
+        <CursorPos Y="138"/>
+        <UsageCount Value="128"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="readmnwiinstructions.pas"/>
+        <Filename Value="readinstructions.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ReadMnwiInstructions"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="112"/>
-        <CursorPos X="14" Y="119"/>
-        <UsageCount Value="75"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="206"/>
+        <CursorPos Y="212"/>
+        <UsageCount Value="126"/>
         <Bookmarks Count="2">
-          <Item0 Y="253"/>
-          <Item1 Y="378" ID="1"/>
+          <Item0 Y="325"/>
+          <Item1 Y="451" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
+        <Filename Value="readgageoutput.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="39"/>
+        <CursorPos X="24" Y="47"/>
+        <UsageCount Value="82"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="obextractortypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ObExtractorTypes"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="11"/>
+        <CursorPos Y="23"/>
+        <UsageCount Value="78"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="readnamefile.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ReadNameFile"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="244"/>
+        <CursorPos X="50" Y="253"/>
+        <UsageCount Value="38"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\sysutils.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="15"/>
-        <UsageCount Value="5"/>
-      </Unit4>
-      <Unit5>
+        <UsageCount Value="10"/>
+      </Unit7>
+      <Unit8>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\fgl.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1333"/>
         <CursorPos X="5" Y="1336"/>
-        <UsageCount Value="28"/>
-      </Unit5>
-      <Unit6>
+        <UsageCount Value="23"/>
+      </Unit8>
+      <Unit9>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\types.pp"/>
         <UnitName Value="Types"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="613"/>
         <CursorPos X="17" Y="613"/>
-        <UsageCount Value="13"/>
-      </Unit6>
-      <Unit7>
+        <UsageCount Value="8"/>
+      </Unit9>
+      <Unit10>
         <Filename Value="C:\lazarus\components\sparta\generics\source\generics.collections.pas"/>
         <UnitName Value="Generics.Collections"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="551"/>
-        <CursorPos X="12" Y="558"/>
-        <UsageCount Value="9"/>
-      </Unit7>
-      <Unit8>
+        <TopLine Value="1385"/>
+        <CursorPos Y="1396"/>
+        <UsageCount Value="10"/>
+      </Unit10>
+      <Unit11>
         <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionariesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="612"/>
         <CursorPos X="20" Y="240"/>
-        <UsageCount Value="9"/>
-      </Unit8>
-      <Unit9>
+        <UsageCount Value="4"/>
+      </Unit11>
+      <Unit12>
         <Filename Value="C:\lazarus\components\sparta\generics\source\inc\generics.dictionaries.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2072"/>
         <CursorPos X="68" Y="2084"/>
+        <UsageCount Value="4"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\ModelMuse\Mnw2Import.pestnam1"/>
+        <EditorIndex Value="-1"/>
         <UsageCount Value="9"/>
-      </Unit9>
-      <Unit10>
-        <Filename Value="readgageoutput.pas"/>
-        <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <UsageCount Value="32"/>
-        <Loaded Value="True"/>
-      </Unit10>
-      <Unit11>
-        <Filename Value="obextractortypes.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="ObExtractorTypes"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="35"/>
-        <CursorPos X="5" Y="40"/>
-        <UsageCount Value="27"/>
-        <Loaded Value="True"/>
-      </Unit11>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="C:\WRDAPP\MF2005.1_12\src\gwf2gag7.f"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="541"/>
+        <CursorPos Y="541"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit14>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="readmnwioutput.pas"/>
-        <Caret Line="38" Column="24" TopLine="34"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="150" TopLine="139"/>
       </Position1>
       <Position2>
-        <Filename Value="obextractortypes.pas"/>
-        <Caret Line="33" TopLine="4"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="151" TopLine="140"/>
       </Position2>
       <Position3>
-        <Filename Value="readmnwioutput.pas"/>
-        <Caret Line="219" Column="10" TopLine="211"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="152" TopLine="141"/>
       </Position3>
       <Position4>
-        <Filename Value="readmnwioutput.pas"/>
-        <Caret Line="224" Column="27" TopLine="217"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="153" TopLine="142"/>
       </Position4>
       <Position5>
-        <Filename Value="readmnwioutput.pas"/>
-        <Caret Line="220" Column="10" TopLine="213"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="154" TopLine="143"/>
       </Position5>
       <Position6>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="126" Column="18" TopLine="120"/>
+        <Caret Line="155" Column="49" TopLine="146"/>
       </Position6>
       <Position7>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="32" Column="20" TopLine="27"/>
+        <Caret Line="156" TopLine="146"/>
       </Position7>
       <Position8>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="99" Column="3" TopLine="94"/>
+        <Caret Line="158" TopLine="153"/>
       </Position8>
       <Position9>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="28" Column="19" TopLine="24"/>
+        <Caret Line="165" Column="31" TopLine="156"/>
       </Position9>
       <Position10>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="150" Column="31" TopLine="138"/>
       </Position10>
       <Position11>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="185" Column="29" TopLine="173"/>
+        <Caret Line="239" TopLine="226"/>
       </Position11>
       <Position12>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="191" Column="23" TopLine="179"/>
+        <Caret Line="66" TopLine="43"/>
       </Position12>
       <Position13>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="195" Column="23" TopLine="183"/>
+        <Caret Line="58" Column="56" TopLine="54"/>
       </Position13>
       <Position14>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="28" Column="18" TopLine="19"/>
+        <Caret Line="242" Column="22" TopLine="231"/>
       </Position14>
       <Position15>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="40" Column="15" TopLine="27"/>
+        <Caret Line="10" Column="76" TopLine="8"/>
       </Position15>
       <Position16>
-        <Filename Value="readgageoutput.pas"/>
-        <Caret Line="145" TopLine="143"/>
+        <Filename Value="obextractortypes.pas"/>
+        <Caret Line="23" TopLine="11"/>
       </Position16>
       <Position17>
-        <Filename Value="obextractortypes.pas"/>
-        <Caret Line="31" Column="22" TopLine="28"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="47" Column="40" TopLine="34"/>
       </Position17>
       <Position18>
-        <Filename Value="obextractortypes.pas"/>
-        <Caret Line="42" Column="20" TopLine="28"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="68" Column="24" TopLine="64"/>
       </Position18>
       <Position19>
-        <Filename Value="obextractortypes.pas"/>
-        <Caret Line="85" Column="3" TopLine="83"/>
+        <Filename Value="readgageoutput.pas"/>
+        <Caret Line="238" Column="13" TopLine="232"/>
       </Position19>
       <Position20>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="29" Column="18" TopLine="17"/>
+        <Caret Line="78" Column="46" TopLine="73"/>
       </Position20>
       <Position21>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="84" Column="41" TopLine="84"/>
+        <Caret Line="42" TopLine="29"/>
       </Position21>
       <Position22>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="30" Column="26" TopLine="17"/>
+        <Caret Line="41" Column="20" TopLine="31"/>
       </Position22>
       <Position23>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="95" Column="35" TopLine="89"/>
+        <Caret Line="94" TopLine="91"/>
       </Position23>
       <Position24>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="35" Column="21" TopLine="23"/>
+        <Caret Line="91" Column="33" TopLine="91"/>
       </Position24>
       <Position25>
         <Filename Value="readgageoutput.pas"/>
-        <Caret Line="122" TopLine="108"/>
+        <Caret Line="34" Column="3" TopLine="27"/>
       </Position25>
       <Position26>
-        <Filename Value="readgageoutput.pas"/>
-        <Caret Line="39" Column="20" TopLine="32"/>
+        <Filename Value="readinstructions.pas"/>
+        <Caret Line="154" Column="21" TopLine="145"/>
       </Position26>
       <Position27>
-        <Filename Value="readgageoutput.pas"/>
-        <Caret Line="128" Column="21" TopLine="119"/>
+        <Filename Value="readinstructions.pas"/>
+        <Caret Line="105" TopLine="96"/>
       </Position27>
       <Position28>
-        <Filename Value="readgageoutput.pas"/>
-        <Caret Line="40" Column="48" TopLine="33"/>
+        <Filename Value="readinstructions.pas"/>
+        <Caret Line="104" Column="48" TopLine="96"/>
       </Position28>
       <Position29>
-        <Filename Value="readgageoutput.pas"/>
-        <Caret Line="38" Column="25" TopLine="30"/>
+        <Filename Value="readinstructions.pas"/>
+        <Caret Line="102" Column="7" TopLine="96"/>
       </Position29>
       <Position30>
-        <Filename Value="readgageoutput.pas"/>
-        <Caret Line="180" Column="27" TopLine="166"/>
+        <Filename Value="readinstructions.pas"/>
+        <Caret Line="154" Column="15" TopLine="148"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -233,72 +259,93 @@
       <Modes Count="1" ActiveMode="default">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="input.txt"/>
+            <CommandLineParams Value="C:\ModelingTools\ModelMuse\Mnw2Import.pestnam2"/>
           </local>
         </Mode0>
       </Modes>
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="8">
+    <BreakPoints Count="11">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="393"/>
+        <Line Value="470"/>
       </Item1>
       <Item2>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="398"/>
+        <Line Value="475"/>
       </Item2>
       <Item3>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="568"/>
+        <Line Value="662"/>
       </Item3>
       <Item4>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="551"/>
+        <Line Value="85"/>
       </Item4>
       <Item5>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="77"/>
+        <Line Value="629"/>
       </Item5>
       <Item6>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="533"/>
+        <Line Value="250"/>
       </Item6>
       <Item7>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="189"/>
+        <Line Value="385"/>
       </Item7>
       <Item8>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="readmnwiinstructions.pas"/>
-        <Line Value="308"/>
+        <Source Value="readinstructions.pas"/>
+        <Line Value="100"/>
       </Item8>
+      <Item9>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readinstructions.pas"/>
+        <Line Value="124"/>
+      </Item9>
+      <Item10>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readinstructions.pas"/>
+        <Line Value="196"/>
+      </Item10>
+      <Item11>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="readinstructions.pas"/>
+        <Line Value="75"/>
+      </Item11>
     </BreakPoints>
-    <Watches Count="3">
+    <Watches Count="4">
       <Item1>
         <Expression Value="ObservationsFound"/>
       </Item1>
@@ -308,6 +355,9 @@
       <Item3>
         <Expression Value="FLineIndex"/>
       </Item3>
+      <Item4>
+        <Expression Value="ObsTypeName"/>
+      </Item4>
     </Watches>
   </Debugging>
 </CONFIG>

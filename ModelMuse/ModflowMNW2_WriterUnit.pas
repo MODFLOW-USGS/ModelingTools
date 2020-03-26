@@ -768,6 +768,7 @@ var
   FObsItemDictionary: TDictionary<string, TCustomObservationItem>;
   PriorItem1: TCustomObservationItem;
   PriorItem2: TCustomObservationItem;
+  StartTime: Double;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
   var
     MaxPrefixLength: Integer;
@@ -788,6 +789,8 @@ begin
   begin
     Exit;
   end;
+
+  StartTime := Model.ModflowFullStressPeriods.First.StartTime;
 
   ScriptFileName := ChangeFileExt(AFileName, '.mnw_script');
 
@@ -841,7 +844,7 @@ begin
             motHwell: WriteString(' Hwell ');
             else Assert(False);
           end;
-          WriteFloat(Obs.Time);
+          WriteFloat(Obs.Time - StartTime);
           WriteFloat(Obs.ObservedValue);
           WriteFloat(Obs.Weight);
           WriteString(' PRINT');

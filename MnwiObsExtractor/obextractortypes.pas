@@ -17,9 +17,9 @@ type
     ObsName: string;
     ObsTime: double;
     SimulatedValue: double;
-    Print: Boolean;
     ObservedValue: double;
     Weight: double;
+    Print: Boolean;
   end;
 
   TObsValueList = specialize TList<TCustomObsValue>;
