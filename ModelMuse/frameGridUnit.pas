@@ -167,4 +167,7 @@ begin
   end;
 end;
 
+initialization
+  RegisterClass(TframeGrid);
+
 end.

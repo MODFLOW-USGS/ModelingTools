@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ExtCtrls, SsButtonEd, RbwStringTreeCombo,
   System.Generics.Collections, VirtualTrees, frameGridUnit, GoPhastTypes,
-  ObservationComparisonsUnit, UndoItems;
+  ObservationComparisonsUnit, UndoItems, PestObsUnit;
 
 type
   TfrmObservationComparisons = class(TfrmCustomGoPhast)

@@ -8,7 +8,7 @@ uses
   JvCombobox, JvListComb, ComCtrls, Mask, JvExMask, JvSpin, Grids, RbwDataGrid4,
   ModflowMnw2Unit, UndoItemsScreenObjects, JvToolEdit, JvExComCtrls, JvComCtrls,
   frameLocationMethodUnit, frameScreenObjectUnit, GrayTabs, frameGridUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, PestObsUnit, framePestObsUnit;
 
 type
   // This type is used in this unit and in frmImportShapefileUnit.
@@ -97,11 +97,7 @@ type
     lblWellScreenFormula: TLabel;
     cbSaveMnwiBasic: TCheckBox;
     tabObservations: TTabSheet;
-    frameObservations: TframeGrid;
-    grpDirectObs: TGroupBox;
-    grpObsComparisons: TGroupBox;
-    splObservations: TSplitter;
-    frameObsComparisons: TframeGrid;
+    framePestObsMnw2: TframePestObs;
     procedure edWellIdChange(Sender: TObject);
     procedure seLiftTableRowsChange(Sender: TObject);
     procedure rdgTimeTableEndUpdate(Sender: TObject);
@@ -144,21 +140,13 @@ type
     procedure rdgVerticalScreensMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure cbSaveMnwiBasicClick(Sender: TObject);
-    procedure frameObsComparisonsGridEnter(Sender: TObject);
-    procedure frameObservationsGridSelectCell(Sender: TObject; ACol,
-      ARow: Integer; var CanSelect: Boolean);
-    procedure frameObservationsGridSetEditText(Sender: TObject; ACol,
-      ARow: Integer; const Value: string);
-    procedure frameObservationssbAddClick(Sender: TObject);
-    procedure frameObservationssbInsertClick(Sender: TObject);
-    procedure frameObservationssbDeleteClick(Sender: TObject);
   private
     FOnChange: TNotifyEvent;
     FChanging: Boolean;
     FVerticalWell: TCheckBoxState;
-    FObservationsName: string;
-    FMatchedCells1: TList<Integer>;
-    FMatchedCells2: TList<Integer>;
+//    FObservationsName: string;
+//    FMatchedCells1: TList<Integer>;
+//    FMatchedCells2: TList<Integer>;
     procedure Changed;
     procedure SetVerticalWell(const Value: TCheckBoxState);
     procedure EnablePartialPenetration;
@@ -193,7 +181,7 @@ type
       write SetVerticalWell;
     property Changing: Boolean read FChanging write SetChanging;
     procedure UpdateVerticalScreenGridCell(ScreenIndex: Integer; VerticalScreen: TVerticalScreen; AValue: string; Column: TVerticalScreenColumns);
-    procedure UpdatedSelectedCell;
+//    procedure UpdatedSelectedCell;
     { Private declarations }
   public
     property OnChange: TNotifyEvent read FOnChange write SetOnChange;
@@ -201,8 +189,6 @@ type
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-
     { Public declarations }
   end;
 
@@ -409,26 +395,8 @@ constructor TframeScreenObjectMNW2.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   framePumpLocationMethod.OnChange := edWellIdChange;
-  FMatchedCells1 := TList<Integer>.Create;
-  FMatchedCells2 := TList<Integer>.Create;
 end;
 
-destructor TframeScreenObjectMNW2.Destroy;
-begin
-  FMatchedCells1.Free;
-  FMatchedCells2.Free;
-  inherited;
-end;
-
-procedure TframeScreenObjectMNW2.UpdatedSelectedCell;
-var
-  CanSelect: Boolean;
-  Selection: TGridRect;
-begin
-  CanSelect := True;
-  Selection := frameObservations.Grid.Selection;
-  frameObservationsGridSelectCell(frameObservations.Grid, Selection.Left, Selection.Top, CanSelect);
-end;
 
 procedure TframeScreenObjectMNW2.UpdateVerticalScreenGridCell(ScreenIndex: Integer; VerticalScreen: TVerticalScreen; AValue: string; Column: TVerticalScreenColumns);
 begin
@@ -475,98 +443,6 @@ begin
     and (cbPartialPenetrationFlag.State <> cbUnchecked);
 end;
 
-procedure TframeScreenObjectMNW2.frameObsComparisonsGridEnter(Sender: TObject);
-var
-  ObsNames: TStringList;
-begin
-  inherited;
-  ObsNames := TStringList.Create;
-  try
-    ObsNames.Assign(frameObservations.Grid.Cols[0]);
-    ObsNames.Delete(0);
-
-    frameObsComparisons.Grid.Columns[Ord(moccObs1)].Picklist := ObsNames;
-    frameObsComparisons.Grid.Columns[Ord(moccObs2)].Picklist := ObsNames;
-  finally
-    ObsNames.Free;
-  end;
-end;
-
-procedure TframeScreenObjectMNW2.frameObservationsGridSelectCell(
-  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
-var
-//  FObservationsName: string;
-  RowIndex: Integer;
-begin
-  inherited;
-  if not frameObservations.Grid.Drawing
-    and (Ord(mocName) = ACol) and (ARow >= 1) then
-  begin
-    FObservationsName := frameObservations.Grid.Cells[ACol, ARow];
-    FMatchedCells1.Clear;
-    FMatchedCells2.Clear;
-    for RowIndex := 1 to frameObsComparisons.Grid.RowCount - 1 do
-    begin
-      if frameObsComparisons.Grid.Cells[Ord(moccObs1), RowIndex] = FObservationsName then
-      begin
-        FMatchedCells1.Add(RowIndex);
-      end;
-      if frameObsComparisons.Grid.Cells[Ord(moccObs2), RowIndex] = FObservationsName then
-      begin
-        FMatchedCells2.Add(RowIndex);
-      end;
-    end;
-  end;
-end;
-
-procedure TframeScreenObjectMNW2.frameObservationsGridSetEditText(
-  Sender: TObject; ACol, ARow: Integer; const Value: string);
-var
-  Index: Integer;
-  RowIndex: Integer;
-begin
-  inherited;
-  if (Ord(mocName) = ACol) and (ARow >= 1) then
-  begin
-    if FObservationsName <> Value then
-    begin
-      for Index := 0 to FMatchedCells1.Count - 1 do
-      begin
-        RowIndex := FMatchedCells1[Index];
-        frameObsComparisons.Grid.Cells[Ord(moccObs1), RowIndex] := Value;
-      end;
-      for Index := 0 to FMatchedCells2.Count - 1 do
-      begin
-        RowIndex := FMatchedCells2[Index];
-        frameObsComparisons.Grid.Cells[Ord(moccObs2), RowIndex] := Value;
-      end;
-    end;
-  end;
-end;
-
-procedure TframeScreenObjectMNW2.frameObservationssbAddClick(Sender: TObject);
-begin
-  inherited;
-  frameObservations.sbAddClick(Sender);
-  UpdatedSelectedCell;
-end;
-
-procedure TframeScreenObjectMNW2.frameObservationssbDeleteClick(
-  Sender: TObject);
-begin
-  inherited;
-  frameObservations.sbDeleteClick(Sender);
-  UpdatedSelectedCell;
-end;
-
-procedure TframeScreenObjectMNW2.frameObservationssbInsertClick(
-  Sender: TObject);
-begin
-  inherited;
-  frameObservations.sbInsertClick(Sender);
-  UpdatedSelectedCell;
-end;
-
 procedure TframeScreenObjectMNW2.framePumpLocationMethodcomboLocationChoiceChange(
   Sender: TObject);
 begin
@@ -584,11 +460,11 @@ var
   Boundary: TMnw2Boundary;
   Item: TScreenObjectEditItem;
   VerticalState: TCheckBoxState;
-  Mnw2Observations: TMnw2Observations;
-  ItemIndex: Integer;
-  Mnw2Ob: TMnw2ObsItem;
-  Comparisons: TMnw2Comparisons;
-  Mnw2ObComp: TMnw2ObsCompareItem;
+//  Mnw2Observations: TMnw2Observations;
+//  ItemIndex: Integer;
+//  Mnw2Ob: TMnw2ObsItem;
+//  Comparisons: TObsComparisons;
+//  Mnw2ObComp: TObsCompareItem;
 begin
 {$IFNDEF PEST}
   tabObservations.TabVisible := False;
@@ -653,37 +529,8 @@ begin
       if (LocalList.Count = 1) and (ScreenObjectList.Count = 1) then
       begin
         Boundary := LocalList[0];
-        Mnw2Observations := Boundary.Observations;
-        frameObservations.seNumber.AsInteger := Mnw2Observations.Count;
-        for ItemIndex := 0 to Mnw2Observations.Count-1 do
-        begin
-          Mnw2Ob := Mnw2Observations[ItemIndex];
-          frameObservations.Grid.Cells[Ord(mocName), ItemIndex+1] := Mnw2Ob.Name;
-          frameObservations.Grid.Objects[Ord(mocName), ItemIndex+1] := Mnw2Ob;
-          frameObservations.Grid.ItemIndex[Ord(mocType), ItemIndex+1] := Ord(Mnw2Ob.ObsType);
-          frameObservations.Grid.RealValue[Ord(mocTime), ItemIndex+1] := Mnw2Ob.Time;
-          frameObservations.Grid.RealValue[Ord(mocValue), ItemIndex+1] := Mnw2Ob.ObservedValue;
-          frameObservations.Grid.RealValue[Ord(mocWeight), ItemIndex+1] := Mnw2Ob.Weight;
-          frameObservations.Grid.Cells[Ord(mocComment), ItemIndex+1] := Mnw2Ob.Comment;
-        end;
-
-        Comparisons := Mnw2Observations.Comparisons;
-        frameObsComparisons.seNumber.AsInteger := Comparisons.Count;
-        for ItemIndex := 0 to Comparisons.Count-1 do
-        begin
-          Mnw2ObComp := Comparisons[ItemIndex];
-          frameObsComparisons.Grid.Cells[Ord(moccName), ItemIndex+1] := Mnw2ObComp.Name;
-
-          Mnw2Ob := Mnw2Observations[Mnw2ObComp.Index1];
-          frameObsComparisons.Grid.Cells[Ord(moccObs1), ItemIndex+1] := Mnw2Ob.Name;
-
-          Mnw2Ob := Mnw2Observations[Mnw2ObComp.Index2];
-          frameObsComparisons.Grid.Cells[Ord(moccObs2), ItemIndex+1] := Mnw2Ob.Name;
-
-          frameObsComparisons.Grid.RealValue[Ord(moccValue), ItemIndex+1] := Mnw2ObComp.ObservedValue;
-          frameObsComparisons.Grid.RealValue[Ord(moccWeight), ItemIndex+1] := Mnw2ObComp.Weight;
-          frameObsComparisons.Grid.Cells[Ord(moccComment), ItemIndex+1] := Mnw2ObComp.Comment;
-        end;
+//        Mnw2Observations := Boundary.Observations;
+        framePestObsMnw2.GetData(Boundary.Observations);
       end
       else
       begin
@@ -1214,7 +1061,7 @@ var
 //  StressPeriod: TModflowStressPeriod;
   ItemIndex: Integer;
   RowIndex: Integer;
-  GridSel: TGridRect;
+//  GridSel: TGridRect;
 begin
   rdgVerticalScreens.BeginUpdate;
   try
@@ -1343,47 +1190,8 @@ begin
   cbSaveMnwiBasic.Checked := False;
   cbSaveExternal.Checked := False;
   cbSaveInternal.Checked := False;
-  
-  ClearGrid(frameObservations.Grid);
-  frameObservations.Grid.BeginUpdate;
-  try
-    frameObservations.Grid.Cells[Ord(mocName), 0] := StrObservationName;
-    frameObservations.Grid.Cells[Ord(mocType), 0] := StrObservationType;
-    frameObservations.Grid.Cells[Ord(mocTime), 0] := StrObservationTime;
-    frameObservations.Grid.Cells[Ord(mocValue), 0] := StrObservationValue;
-    frameObservations.Grid.Cells[Ord(mocWeight), 0] := StrObservationWeight;
-    frameObservations.Grid.Cells[Ord(mocComment), 0] := StrComment;
-  finally
-    frameObservations.Grid.EndUpdate;
-  end;
-  for ColIndex := 0 to frameObservations.Grid.ColCount - 1 do
-  begin
-    frameObservations.Grid.Columns[ColIndex].AutoAdjustColWidths := False;
-  end;
-  GridSel := frameObservations.Grid.Selection;
-  GridSel.Left := 1;
-  GridSel.Right := 1;
-  frameObservations.Grid.Selection := GridSel;
 
-  ClearGrid(frameObsComparisons.Grid);
-  frameObsComparisons.Grid.BeginUpdate;
-  try
-    frameObsComparisons.Grid.Cells[Ord(moccName), 0] := StrObservationName;
-    frameObsComparisons.Grid.Cells[Ord(moccObs1), 0] := StrFirstObservation;
-    frameObsComparisons.Grid.Cells[Ord(moccObs2), 0] := StrSecondObservation;
-    frameObsComparisons.Grid.Cells[Ord(moccValue), 0] := StrObservationValue;
-    frameObsComparisons.Grid.Cells[Ord(moccWeight), 0] := StrObservationWeight;
-    frameObsComparisons.Grid.Cells[Ord(moccComment), 0] := StrComment;
-  finally
-    frameObsComparisons.Grid.EndUpdate;
-  end;
-  for ColIndex := 0 to frameObsComparisons.Grid.ColCount - 1 do
-  begin
-    frameObsComparisons.Grid.Columns[ColIndex].AutoAdjustColWidths := False;
-  end;
-  //   TMnwiObsCompColumns = (moccName, moccObs1, moccObs2, moccValue, moccWeight, moccComment);
-
-
+  framePestObsMnw2.InitializeControls;
 end;
 
 
@@ -1693,21 +1501,21 @@ var
   LiftError1: Boolean;
   LiftError2: Boolean;
   ShowError: boolean;
-  Observations: TMnw2Observations;
-  RowOK: Boolean;
-  ColIndex: Integer;
+//  Observations: TMnw2Observations;
+//  RowOK: Boolean;
+//  ColIndex: Integer;
   ObsCount: Integer;
-  Mnw2Ob: TMnw2ObsItem;
-  ObNames: TStringList;
-  ObIndex: Integer;
-  Comparisons: TMnw2Comparisons;
-  CompCount: Integer;
-  ItemIndex: Integer;
-  Mnw2ObComp: TMnw2ObsCompareItem;
-  Index1: Integer;
-  Index2: Integer;
-  OtherMnw2Ob: TMnw2ObsItem;
-  MyGuid: TGUID;
+//  Mnw2Ob: TMnw2ObsItem;
+//  ObNames: TStringList;
+//  ObIndex: Integer;
+//  Comparisons: TObsComparisons;
+//  CompCount: Integer;
+//  ItemIndex: Integer;
+//  Mnw2ObComp: TObsCompareItem;
+//  Index1: Integer;
+//  Index2: Integer;
+//  OtherMnw2Ob: TMnw2ObsItem;
+//  MyGuid: TGUID;
 begin
   ShowError := False;
   for Index := 0 to List.Count - 1 do
@@ -1737,100 +1545,8 @@ begin
       if List.Count = 1 then
       begin
         // Observations
-        Observations := Boundary.Observations;
-        for RowIndex := 1 to frameObservations.seNumber.AsInteger do
-        begin
-          RowOK := True;
-          for ColIndex := 0 to Ord(mocWeight) do
-          begin
-            if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
-            begin
-              RowOK := False;
-              Break;
-            end;
-          end;
-          if RowOK then
-          begin
-            if ObsCount < Observations.Count then
-            begin
-              Mnw2Ob := Observations[ObsCount]
-            end
-            else
-            begin
-              Mnw2Ob := Observations.Add;
-            end;
-            Inc(ObsCount);
-            Mnw2Ob.Name := frameObservations.Grid.Cells[Ord(mocName), RowIndex];
-            if frameObservations.Grid.Objects[Ord(mocName), RowIndex] <> nil then
-            begin
-              OtherMnw2Ob := frameObservations.Grid.Objects[Ord(mocName), RowIndex] as TMnw2ObsItem;
-              Mnw2Ob.GUID  := OtherMnw2Ob.GUID;
-            end
-            else
-            begin
-              if CreateGUID(MyGuid) = 0 then
-              begin
-                Mnw2Ob.GUID := GUIDToString(MyGuid);
-              end;
-            end;
-            Mnw2Ob.ObsType := TMnwObsType(frameObservations.Grid.ItemIndex[Ord(mocType), RowIndex]);
-            Mnw2Ob.Time := frameObservations.Grid.RealValue[Ord(mocTime), RowIndex];
-            Mnw2Ob.ObservedValue := frameObservations.Grid.RealValue[Ord(mocValue), RowIndex];
-            Mnw2Ob.Weight := frameObservations.Grid.RealValue[Ord(mocWeight), RowIndex];
-            Mnw2Ob.Comment := frameObservations.Grid.Cells[Ord(mocComment), RowIndex];
-          end;
-        end;
-        Observations.Count := ObsCount;
-
-        ObNames := TStringList.Create;
-        try
-          for ObIndex := 0 to Observations.Count - 1 do
-          begin
-            Mnw2Ob := Observations[ObIndex];
-            ObNames.Add(Mnw2Ob.Name);
-          end;
-
-          CompCount := 0;
-          Comparisons := Observations.Comparisons;
-          Comparisons.Count := frameObsComparisons.seNumber.AsInteger;
-          for ItemIndex := 0 to frameObsComparisons.seNumber.AsInteger-1 do
-          begin
-            RowOk := True;
-            for ColIndex := 0 to Ord(moccWeight) do
-            begin
-              if frameObsComparisons.Grid.Cells[ColIndex, ItemIndex+1] = '' then
-              begin
-                RowOk := False;
-                Break;
-              end;
-            end;
-            Index1 := -1;
-            Index2 := -1;
-            if RowOk then
-            begin
-              Index1 := ObNames.IndexOf(frameObsComparisons.Grid.Cells[
-                  Ord(moccObs1), ItemIndex+1]);
-              Index2 := ObNames.IndexOf(frameObsComparisons.Grid.Cells[
-                  Ord(moccObs2), ItemIndex+1]);
-              RowOk := (Index1 >= 0) and (Index2 >= 0);
-            end;
-            if RowOk then
-            begin
-              Mnw2ObComp := Comparisons[CompCount];
-              Inc(CompCount);
-              Mnw2ObComp.Name := frameObsComparisons.Grid.Cells[Ord(moccName), ItemIndex+1];
-              Mnw2ObComp.Index1 := Index1;
-              Mnw2ObComp.Index2 := Index2;
-              Mnw2ObComp.ObservedValue := frameObsComparisons.Grid.RealValue[Ord(moccValue), ItemIndex+1];
-              Mnw2ObComp.Weight := frameObsComparisons.Grid.RealValue[Ord(moccWeight), ItemIndex+1];
-              Mnw2ObComp.Comment := frameObsComparisons.Grid.Cells[Ord(moccComment), ItemIndex+1];
-            end;
-          end;
-        finally
-          ObNames.Free
-        end;
-        Comparisons.Count := CompCount;
-
+//        Observations := Boundary.Observations;
+        framePestObsMnw2.SetData(Boundary.Observations);
       end;
 
       if Trim(edWellId.Text) <> '' then

@@ -1683,6 +1683,12 @@
             <Form>frmObservationComparisons</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="PestObsUnit.pas"/>
+        <DCCReference Include="framePestObsUnit.pas">
+            <Form>framePestObs</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

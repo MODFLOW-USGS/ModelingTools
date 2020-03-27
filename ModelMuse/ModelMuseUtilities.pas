@@ -1151,18 +1151,17 @@ begin
   end;
 end;
 
-
 function PestObsName(const ObsName: string): string;
 begin
-  result := ObsName;
-  result := StringReplace(result, ' ', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(ObsName, ' ', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, '[', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, ']', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, '(', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, ')', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, '!', '_', [rfReplaceAll, rfIgnoreCase]);
-  result := StringReplace(result, '!', '_', [rfReplaceAll, rfIgnoreCase]);
+  result := StringReplace(result, '@', '_', [rfReplaceAll, rfIgnoreCase]);
 end;
+
 initialization
   ColorParameters := TColorParameters.Create;
 

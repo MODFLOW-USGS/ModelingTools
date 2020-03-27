@@ -9001,6 +9001,9 @@ const
 
   //               Bug fix: Fixed bug that could cause a range check error
   //                when using the UZF package in MODFLOW 6.
+  //               Bug fix: If ModelMuse encounters and error when trying to
+  //                back up an initialization file, it no longer generates a
+  //                bug report.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.4';

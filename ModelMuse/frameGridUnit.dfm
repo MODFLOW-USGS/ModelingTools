@@ -17,8 +17,8 @@ object frameGrid: TframeGrid
     object lbNumber: TLabel
       Left = 79
       Top = 9
-      Width = 45
-      Height = 16
+      Width = 37
+      Height = 13
       Caption = 'Number'
     end
     object sbAdd: TSpeedButton

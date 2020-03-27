@@ -2451,7 +2451,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMNW2
+        ActivePage = jvspLAK
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -4999,8 +4999,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pnlBottom: TPanel
               Top = 219
               Width = 581
-              ExplicitTop = -135
-              ExplicitWidth = 101
+              ExplicitTop = 219
+              ExplicitWidth = 581
               DesignSize = (
                 581
                 257)
@@ -5124,7 +5124,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 193
               inherited pnlEditGrid: TPanel
                 Width = 579
-                ExplicitWidth = 99
+                ExplicitWidth = 579
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -5332,7 +5332,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     AutoAdjustColWidths = False
                   end>
                 OnEndUpdate = frameLakdgModflowBoundaryEndUpdate
-                ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 141
                 ColWidths = (
@@ -5357,15 +5356,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 1
               inherited tabLakeProperties: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 573
                 ExplicitHeight = 155
               end
               inherited tabBathymetry: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 455
                 ExplicitHeight = 155
                 inherited rdgLakeTable: TRbwDataGrid4
                   Height = 50
@@ -5537,6 +5532,119 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Height = 27
                     OnChange = frameLakfeLakeBathymetryChange
                     ExplicitHeight = 27
+                  end
+                end
+              end
+              inherited tabObservations: TTabSheet
+                ExplicitTop = 30
+                ExplicitWidth = 573
+                ExplicitHeight = 155
+                inherited framePestObsLak: TframePestObs
+                  Width = 573
+                  Height = 155
+                  ExplicitLeft = 0
+                  ExplicitTop = 0
+                  ExplicitWidth = 573
+                  ExplicitHeight = 155
+                  inherited splObservations: TSplitter
+                    Top = -23
+                    Width = 573
+                    ExplicitTop = -23
+                    ExplicitWidth = 455
+                  end
+                  inherited grpDirectObs: TGroupBox
+                    Width = 573
+                    ExplicitWidth = 573
+                    inherited frameObservations: TframeGrid
+                      Top = 21
+                      Width = 569
+                      Height = 219
+                      ExplicitTop = 21
+                      ExplicitWidth = 569
+                      ExplicitHeight = 219
+                      inherited Panel: TPanel
+                        Top = 178
+                        Width = 569
+                        ExplicitTop = 178
+                        ExplicitWidth = 569
+                        inherited lbNumber: TLabel
+                          Width = 57
+                          Height = 19
+                          ExplicitWidth = 57
+                          ExplicitHeight = 19
+                        end
+                        inherited sbAdd: TSpeedButton
+                          Left = 297
+                          ExplicitLeft = 233
+                        end
+                        inherited sbInsert: TSpeedButton
+                          Left = 352
+                          ExplicitLeft = 277
+                        end
+                        inherited sbDelete: TSpeedButton
+                          Left = 407
+                          ExplicitLeft = 320
+                        end
+                        inherited seNumber: TJvSpinEdit
+                          Height = 27
+                          ExplicitHeight = 27
+                        end
+                      end
+                      inherited Grid: TRbwDataGrid4
+                        Width = 569
+                        Height = 178
+                        ExplicitWidth = 569
+                        ExplicitHeight = 178
+                      end
+                    end
+                  end
+                  inherited grpObsComparisons: TGroupBox
+                    Top = -18
+                    Width = 573
+                    ExplicitTop = -18
+                    ExplicitWidth = 573
+                    inherited frameObsComparisons: TframeGrid
+                      Top = 21
+                      Width = 569
+                      Height = 150
+                      ExplicitTop = 21
+                      ExplicitWidth = 569
+                      ExplicitHeight = 150
+                      inherited Panel: TPanel
+                        Top = 109
+                        Width = 569
+                        ExplicitTop = 109
+                        ExplicitWidth = 569
+                        inherited lbNumber: TLabel
+                          Width = 57
+                          Height = 19
+                          ExplicitWidth = 57
+                          ExplicitHeight = 19
+                        end
+                        inherited sbAdd: TSpeedButton
+                          Left = 297
+                          ExplicitLeft = 233
+                        end
+                        inherited sbInsert: TSpeedButton
+                          Left = 352
+                          ExplicitLeft = 277
+                        end
+                        inherited sbDelete: TSpeedButton
+                          Left = 407
+                          ExplicitLeft = 320
+                        end
+                        inherited seNumber: TJvSpinEdit
+                          Height = 27
+                          ExplicitHeight = 27
+                        end
+                      end
+                      inherited Grid: TRbwDataGrid4
+                        Width = 569
+                        Height = 109
+                        ExplicitWidth = 569
+                        ExplicitHeight = 109
+                      end
+                    end
                   end
                 end
               end
@@ -6954,7 +7062,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitWidth = 573
                   inherited zbFlowDepthTable: TQRbwZoomBox2
                     Width = 279
-                    Image32.Top = 0
+                    Image32.Top = 108
                     Image32.Width = 279
                     Image32.ExplicitWidth = 279
                     ExplicitWidth = 279
@@ -6962,7 +7070,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited zbFlowWidthTable: TQRbwZoomBox2
                     Left = 289
                     Width = 280
-                    Image32.Top = 0
+                    Image32.Top = 108
                     Image32.Width = 280
                     Image32.ExplicitWidth = 280
                     ExplicitLeft = 289
@@ -8478,6 +8586,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           HelpType = htKeyword
           HelpKeyword = 'MNW2_Object_Pane'
           Caption = 'jvspMNW2'
+          ExplicitWidth = 101
+          ExplicitHeight = 122
           inline frameMNW2: TframeScreenObjectMNW2
             Left = 0
             Top = 0
@@ -8493,7 +8603,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ParentFont = False
             TabOrder = 0
             TabStop = True
-            ExplicitWidth = 581
+            ExplicitWidth = 101
+            ExplicitHeight = 122
             inherited pnlCaption: TPanel
               Width = 581
               ExplicitWidth = 581
@@ -8501,8 +8612,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcMnw2: TPageControl
               Width = 581
               OnChange = frameMNW2pcMnw2Change
-              ExplicitWidth = 581
+              ExplicitWidth = 101
+              ExplicitHeight = 100
               inherited tabBasic: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited comboLossType: TJvImageComboBox
                   ItemIndex = -1
                 end
@@ -8530,7 +8646,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited comboLocationChoice: TJvImageComboBox
                     Font.Pitch = fpVariable
-                    ItemIndex = -1
                   end
                 end
               end
@@ -8558,6 +8673,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabDischargeAdjustment: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited rdgLiftTable: TRbwDataGrid4
                   ColWidths = (
                     64
@@ -8568,19 +8687,26 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabPumpingRate: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited rdgTimeTable: TRbwDataGrid4
                   Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
-                  ExplicitWidth = 573
                   RowHeights = (
                     24
                     24)
                 end
-                inherited Panel1: TPanel
-                  ExplicitWidth = 573
-                end
               end
               inherited tabWellScreens: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
+                inherited Panel3: TPanel
+                  ExplicitWidth = 573
+                end
                 inherited rdgVerticalScreens: TRbwDataGrid4
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
                   ColWidths = (
@@ -8599,57 +8725,77 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
                 ExplicitWidth = 573
-                inherited splObservations: TSplitter
+                ExplicitHeight = 421
+                inherited framePestObsMnw2: TframePestObs
                   Width = 573
-                end
-                inherited grpDirectObs: TGroupBox
-                  Width = 573
+                  ExplicitLeft = 0
+                  ExplicitTop = 0
                   ExplicitWidth = 573
-                  inherited frameObservations: TframeGrid
-                    Width = 569
-                    ExplicitWidth = 569
-                    inherited Panel: TPanel
+                  inherited splObservations: TSplitter
+                    Width = 573
+                    ExplicitWidth = 573
+                  end
+                  inherited grpDirectObs: TGroupBox
+                    Width = 573
+                    ExplicitWidth = 573
+                    ExplicitHeight = 243
+                    inherited frameObservations: TframeGrid
                       Width = 569
                       ExplicitWidth = 569
-                      inherited sbAdd: TSpeedButton
-                        Left = 297
+                      ExplicitHeight = 221
+                      inherited Panel: TPanel
+                        Width = 569
+                        ExplicitTop = 180
+                        ExplicitWidth = 569
+                        inherited sbAdd: TSpeedButton
+                          Left = 298
+                          ExplicitLeft = 298
+                        end
+                        inherited sbInsert: TSpeedButton
+                          Left = 352
+                          ExplicitLeft = 352
+                        end
+                        inherited sbDelete: TSpeedButton
+                          Left = 407
+                          ExplicitLeft = 407
+                        end
                       end
-                      inherited sbInsert: TSpeedButton
-                        Left = 351
+                      inherited Grid: TRbwDataGrid4
+                        Width = 569
+                        ExplicitWidth = 569
+                        ExplicitHeight = 180
                       end
-                      inherited sbDelete: TSpeedButton
-                        Left = 406
-                      end
-                    end
-                    inherited Grid: TRbwDataGrid4
-                      Width = 569
-                      ExplicitWidth = 569
                     end
                   end
-                end
-                inherited grpObsComparisons: TGroupBox
-                  Width = 573
-                  ExplicitWidth = 573
-                  inherited frameObsComparisons: TframeGrid
-                    Width = 569
-                    ExplicitWidth = 569
-                    inherited Panel: TPanel
+                  inherited grpObsComparisons: TGroupBox
+                    Width = 573
+                    ExplicitWidth = 573
+                    inherited frameObsComparisons: TframeGrid
                       Width = 569
                       ExplicitWidth = 569
-                      inherited sbAdd: TSpeedButton
-                        Left = 297
+                      inherited Panel: TPanel
+                        Width = 569
+                        ExplicitWidth = 569
+                        inherited sbAdd: TSpeedButton
+                          Left = 298
+                          ExplicitLeft = 298
+                        end
+                        inherited sbInsert: TSpeedButton
+                          Left = 352
+                          ExplicitLeft = 352
+                        end
+                        inherited sbDelete: TSpeedButton
+                          Left = 407
+                          ExplicitLeft = 407
+                        end
                       end
-                      inherited sbInsert: TSpeedButton
-                        Left = 352
+                      inherited Grid: TRbwDataGrid4
+                        Width = 569
+                        ExplicitWidth = 569
                       end
-                      inherited sbDelete: TSpeedButton
-                        Left = 406
-                      end
-                    end
-                    inherited Grid: TRbwDataGrid4
-                      Width = 569
-                      ExplicitWidth = 569
                     end
                   end
                 end

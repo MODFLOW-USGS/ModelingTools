@@ -43,7 +43,7 @@ uses System.UITypes, Windows,
   frameScreenObjectHfbMf6Unit, ModflowHfbUnit, frameScreenObjectLakMf6Unit,
   frameScreenObjectMvrUnit, ModflowMvrUnit, frameScreenObjectUzfMf6Unit,
   frameScreenObjectLktUnit, frameScreenObjectMt3dSftUnit,
-  frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit;
+  frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit, framePestObsUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -14244,7 +14244,8 @@ var
 begin
   frameLak.tabBathymetry.TabVisible := (ScreenObjectList.Count = 1)
     and frmGoPhast.PhastModel.LakBathymetryUsed;
-  frameLak.tabLakeProperties.TabVisible := frameLak.tabBathymetry.TabVisible;
+  frameLak.tabLakeProperties.TabVisible :=
+    frameLak.tabBathymetry.TabVisible or frameLak.tabObservations.TabVisible;
   frameLak.pcLake.ActivePageIndex := 0;
   FirstIndex := -1;
   Boundary := nil;
@@ -14265,6 +14266,7 @@ begin
     begin
       frameLak.seNumberOfTimes.OnChange(frameLak.seNumberOfTimes);
     end;
+    frameLak.framePestObsLak.InitializeControls;
     frameLak.rdeLakeID.Text := '';
     frameLak.rdeInitialStage.Text := '';
     frameLak.rdeCenterLake.Text := '';
@@ -14292,6 +14294,10 @@ begin
   Assert(Boundary <> nil);
   Values := Boundary.Values;
   ValuesIdentical := True;
+  if ScreenObjectList.Count = 1 then
+  begin
+    frameLak.framePestObsLak.GetData(Boundary.Observations);
+  end;
   for ScreenObjectIndex := FirstIndex+1 to ScreenObjectList.Count - 1 do
   begin
     AScreenObject := ScreenObjectList[ScreenObjectIndex];
@@ -22565,6 +22571,10 @@ begin
         if frameLak.cbGage4.State <> cbGrayed then
         begin
           Boundary.Gage4 := frameLak.cbGage4.Checked;
+        end;
+        if FNewProperties.Count = 1 then
+        begin
+          frameLak.framePestObsLak.SetData(Boundary.Observations);
         end;
       end
       else if  FLAK_Node.StateIndex = 1 then

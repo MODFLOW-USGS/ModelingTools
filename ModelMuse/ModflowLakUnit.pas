@@ -4,7 +4,7 @@ interface
 
 uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowBoundaryUnit, ModflowCellUnit, DataSetUnit, FormulaManagerUnit,
-  SubscriptionUnit, GoPhastTypes;
+  SubscriptionUnit, GoPhastTypes, PestObsUnit;
 
 type
   TLakRecord = record
@@ -264,6 +264,32 @@ type
     property LakeTable: TLakeTable read FLakeTable write SetLakeTable;
   end;
 
+  TLakeObs = class(TCustomTimeObservationItem)
+  private
+    FObsType: Integer;
+    procedure SetObsType(const Value: Integer);
+  protected
+    function GetObsTypeIndex: Integer; override;
+    procedure SetObsTypeIndex(const Value: Integer); override;
+  public
+    function ObservationType: string; override;
+    function Units: string; override;
+  published
+    property ObsType: Integer read FObsType write SetObsType;
+    property GUID;
+  end;
+
+  TLakeObservations = class(TCustomComparisonCollection)
+  private
+    function GetLakeItem(Index: Integer): TLakeObs;
+    procedure SetLakeItem(Index: Integer; const Value: TLakeObs);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    property Items[Index: Integer]: TLakeObs read GetLakeItem
+      write SetLakeItem; default;
+    function Add: TLakeObs;
+  end;
+
   TLakBoundary = class(TModflowBoundary)
   private
     FSill: double;
@@ -277,6 +303,7 @@ type
     FDeltaGage: boolean;
     FGage4: boolean;
     FExternalLakeTable: TExternalLakeTable;
+    FObservations: TLakeObservations;
     procedure SetCenterLake(const Value: integer);
     procedure SetInitialStage(const Value: double);
     procedure SetSill(const Value: double);
@@ -289,6 +316,7 @@ type
     function GetOutType: integer;
     procedure SetGage4(const Value: boolean);
     procedure SetExternalLakeTable(const Value: TExternalLakeTable);
+    procedure SetObservations(const Value: TLakeObservations);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -318,6 +346,12 @@ type
     property DeltaGage: boolean read FDeltaGage write SetDeltaGage;
     property Gage4: boolean read FGage4 write SetGage4;
     property ExternalLakeTable: TExternalLakeTable read FExternalLakeTable write SetExternalLakeTable;
+    property Observations: TLakeObservations read FObservations
+      write SetObservations
+      {$IFNDEF PEST}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -347,6 +381,37 @@ const
   EvaporationPosition = 3;
   OverlandRunoffPosition = 4;
   WithdrawalPosition = 5;
+
+var
+  LakeGageOutputTypes: TStringList;
+  LakeGageUnits: TStringList;
+//  StreamGageOutputTypes: TStringList;
+
+procedure InitializeGageOutputTypes;
+begin
+  LakeGageOutputTypes := TStringList.Create;
+  LakeGageUnits := TStringList.Create;
+  
+  LakeGageOutputTypes.CaseSensitive := False;
+  
+  LakeGageOutputTypes.Add('Stage(H)');    LakeGageUnits.Add('L');
+  LakeGageOutputTypes.Add('Volume');      LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Precip.');     LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Evap.');       LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Runoff');      LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('GW-Inflw');    LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('GW-Outflw');   LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('SW-Inflw');    LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('SW-Outflw');   LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Withdrawal');  LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Lake-Inflx');  LakeGageUnits.Add('L3');
+  LakeGageOutputTypes.Add('Total-Cond.'); LakeGageUnits.Add('L2/T');
+  LakeGageOutputTypes.Add('Del-H-TS');    LakeGageUnits.Add('L/T');
+  LakeGageOutputTypes.Add('Del-V-TS');    LakeGageUnits.Add('L3/T');
+  LakeGageOutputTypes.Add('Del-H-Cum');   LakeGageUnits.Add('L');
+  LakeGageOutputTypes.Add('Del-V-Cum');   LakeGageUnits.Add('L3');
+end;
+
 
 { TLakItem }
 
@@ -1244,6 +1309,7 @@ begin
     DeltaGage := Lake.DeltaGage;
     Gage4 := Lake.Gage4;
     ExternalLakeTable := Lake.ExternalLakeTable;
+    Observations := Lake.Observations;
   end;
   inherited;
 end;
@@ -1312,10 +1378,21 @@ begin
 end;
 
 constructor TLakBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+var
+  OnInvalidateModelEvent: TNotifyEvent;
 begin
+  if Model = nil then
+  begin
+    OnInvalidateModelEvent := nil;
+  end
+  else
+  begin
+    OnInvalidateModelEvent := Model.Invalidate;
+  end;
   inherited;
   FSubLakes:= TList.Create;
   FExternalLakeTable := TExternalLakeTable.Create(Model);
+  FObservations := TLakeObservations.Create(OnInvalidateModelEvent, ScreenObject);
 end;
 
 procedure TLakBoundary.DeleteSubLake(Index: integer);
@@ -1325,6 +1402,7 @@ end;
 
 destructor TLakBoundary.Destroy;
 begin
+  FObservations.Free;
   FExternalLakeTable.Free;
   FSubLakes.Free;
   inherited;
@@ -1440,6 +1518,11 @@ begin
       (ParentModel as TPhastModel).DischargeRoutingUpdate;
     end;
   end;
+end;
+
+procedure TLakBoundary.SetObservations(const Value: TLakeObservations);
+begin
+  FObservations.Assign(Value);
 end;
 
 procedure TLakBoundary.SetSill(const Value: double);
@@ -1833,5 +1916,77 @@ procedure TExternalLakeTable.SetFullLakeTableFileName(const Value: string);
 begin
   SetStringProperty(FFullLakeTableFileName, Value);
 end;
+
+{ TLakeObs }
+
+function TLakeObs.GetObsTypeIndex: Integer;
+begin
+  result := ObsType;
+end;
+
+function TLakeObs.ObservationType: string;
+begin
+  if (FObsType >= 0) and (FObsType < LakeGageOutputTypes.Count) then
+  begin
+    result := LakeGageOutputTypes[FObsType]
+  end
+  else
+  begin
+    result := inherited;
+  end;
+end;
+
+procedure TLakeObs.SetObsType(const Value: Integer);
+begin
+  SetIntegerProperty(FObsType, Value);
+end;
+
+procedure TLakeObs.SetObsTypeIndex(const Value: Integer);
+begin
+  ObsType := Value;
+end;
+
+function TLakeObs.Units: string;
+begin
+  if (FObsType >= 0) and (FObsType < LakeGageUnits.Count) then
+  begin
+    result := LakeGageUnits[FObsType]
+  end
+  else
+  begin
+    result := inherited;
+  end;
+
+end;
+
+{ TLakeObservations }
+
+function TLakeObservations.Add: TLakeObs;
+begin
+  result := inherited Add as TLakeObs;
+end;
+
+constructor TLakeObservations.Create(InvalidateModelEvent: TNotifyEvent;
+  ScreenObject: TObject);
+begin
+  inherited Create(TLakeObs, InvalidateModelEvent, ScreenObject);
+end;
+
+function TLakeObservations.GetLakeItem(Index: Integer): TLakeObs;
+begin
+  result := inherited Items[Index] as TLakeObs;
+end;
+
+procedure TLakeObservations.SetLakeItem(Index: Integer; const Value: TLakeObs);
+begin
+  inherited Items[Index] := Value;
+end;
+
+Initialization
+  InitializeGageOutputTypes;
+
+Finalization
+  LakeGageOutputTypes.Free;
+  LakeGageUnits.Free;
 
 end.

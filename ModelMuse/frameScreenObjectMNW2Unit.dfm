@@ -234,6 +234,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
+          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -1416,421 +1417,105 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
     object tabObservations: TTabSheet
       Caption = 'Observations'
       ImageIndex = 5
-      object splObservations: TSplitter
-        Left = 0
-        Top = 243
-        Width = 601
-        Height = 5
-        Cursor = crVSplit
-        Align = alBottom
-        ExplicitTop = 247
-      end
-      object grpDirectObs: TGroupBox
+      inline framePestObsMnw2: TframePestObs
         Left = 0
         Top = 0
         Width = 601
-        Height = 243
+        Height = 421
         Align = alClient
-        Caption = 'Direct observations'
         TabOrder = 0
-        inline frameObservations: TframeGrid
-          Left = 2
-          Top = 20
-          Width = 597
-          Height = 200
-          Align = alTop
-          TabOrder = 0
-          ExplicitLeft = 2
-          ExplicitTop = 20
-          ExplicitWidth = 597
-          ExplicitHeight = 200
-          inherited Panel: TPanel
-            Top = 159
+        ExplicitLeft = 1
+        ExplicitTop = 1
+        inherited splObservations: TSplitter
+          Top = 243
+          Width = 601
+        end
+        inherited grpDirectObs: TGroupBox
+          Width = 601
+          Height = 243
+          ExplicitLeft = 0
+          ExplicitWidth = 600
+          ExplicitHeight = 242
+          inherited frameObservations: TframeGrid
+            Top = 20
             Width = 597
-            ExplicitTop = 159
-            ExplicitWidth = 597
-            inherited lbNumber: TLabel
-              Width = 55
-              Height = 18
-              ExplicitWidth = 55
-              ExplicitHeight = 18
-            end
-            inherited sbAdd: TSpeedButton
-              Left = 312
-              OnClick = frameObservationssbAddClick
-              ExplicitLeft = 314
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 369
-              OnClick = frameObservationssbInsertClick
-              ExplicitLeft = 372
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 427
-              OnClick = frameObservationssbDeleteClick
-              ExplicitLeft = 430
-            end
-            inherited seNumber: TJvSpinEdit
-              Height = 26
-              ExplicitHeight = 26
-            end
-          end
-          inherited Grid: TRbwDataGrid4
-            Width = 597
-            Height = 159
-            ColCount = 6
-            OnSelectCell = frameObservationsGridSelectCell
-            OnSetEditText = frameObservationsGridSetEditText
-            Columns = <
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4String
-                LimitToList = False
-                MaxLength = 14
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+            Height = 221
+            ExplicitWidth = 596
+            ExplicitHeight = 220
+            inherited Panel: TPanel
+              Top = 180
+              Width = 597
+              ExplicitTop = 179
+              ExplicitWidth = 596
+              inherited lbNumber: TLabel
+                Width = 55
+                Height = 18
+                ExplicitWidth = 55
+                ExplicitHeight = 18
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = True
-                Format = rcf4String
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                PickList.Strings = (
-                  'Qin'
-                  'Qout'
-                  'Qnet'
-                  'QCumu'
-                  'hwell')
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited sbAdd: TSpeedButton
+                Left = 313
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4Real
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited sbInsert: TSpeedButton
+                Left = 370
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4Real
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited sbDelete: TSpeedButton
+                Left = 428
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4Real
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited seNumber: TJvSpinEdit
+                Height = 26
+                ExplicitHeight = 26
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4String
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
-              end>
-            ExplicitWidth = 597
-            ExplicitHeight = 159
-            ColWidths = (
-              64
-              75
-              64
-              64
-              64
-              64)
+            end
+            inherited Grid: TRbwDataGrid4
+              Width = 597
+              Height = 180
+              ExplicitWidth = 596
+              ExplicitHeight = 179
+            end
           end
         end
-      end
-      object grpObsComparisons: TGroupBox
-        Left = 0
-        Top = 248
-        Width = 601
-        Height = 173
-        Align = alBottom
-        Caption = 'Observation comparisons'
-        TabOrder = 1
-        inline frameObsComparisons: TframeGrid
-          Left = 2
-          Top = 20
-          Width = 597
-          Height = 151
-          Align = alClient
-          TabOrder = 0
-          ExplicitLeft = 2
-          ExplicitTop = 20
-          ExplicitWidth = 597
-          ExplicitHeight = 151
-          inherited Panel: TPanel
-            Top = 110
+        inherited grpObsComparisons: TGroupBox
+          Top = 248
+          Width = 601
+          ExplicitLeft = 0
+          ExplicitWidth = 600
+          inherited frameObsComparisons: TframeGrid
+            Top = 20
             Width = 597
-            ExplicitTop = 110
-            ExplicitWidth = 597
-            inherited lbNumber: TLabel
-              Width = 55
-              Height = 18
-              ExplicitWidth = 55
-              ExplicitHeight = 18
-            end
-            inherited sbAdd: TSpeedButton
-              Left = 312
-              ExplicitLeft = 312
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 370
-              ExplicitLeft = 370
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 427
-              ExplicitLeft = 427
-            end
-            inherited seNumber: TJvSpinEdit
-              Height = 26
-              ExplicitHeight = 26
-            end
-          end
-          inherited Grid: TRbwDataGrid4
-            Width = 597
-            Height = 110
-            ColCount = 6
-            OnEnter = frameObsComparisonsGridEnter
-            Columns = <
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4String
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+            Height = 151
+            ExplicitWidth = 596
+            inherited Panel: TPanel
+              Top = 110
+              Width = 597
+              ExplicitTop = 110
+              ExplicitWidth = 596
+              inherited lbNumber: TLabel
+                Width = 55
+                Height = 18
+                ExplicitWidth = 55
+                ExplicitHeight = 18
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = True
-                Format = rcf4String
-                LimitToList = True
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited sbAdd: TSpeedButton
+                Left = 313
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = True
-                Format = rcf4String
-                LimitToList = True
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited sbInsert: TSpeedButton
+                Left = 370
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4Real
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited sbDelete: TSpeedButton
+                Left = 428
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4Real
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
+              inherited seNumber: TJvSpinEdit
+                Height = 26
+                ExplicitHeight = 26
               end
-              item
-                AutoAdjustRowHeights = True
-                ButtonCaption = '...'
-                ButtonFont.Charset = DEFAULT_CHARSET
-                ButtonFont.Color = clWindowText
-                ButtonFont.Height = -11
-                ButtonFont.Name = 'Tahoma'
-                ButtonFont.Style = []
-                ButtonUsed = False
-                ButtonWidth = 20
-                CheckMax = False
-                CheckMin = False
-                ComboUsed = False
-                Format = rcf4String
-                LimitToList = False
-                MaxLength = 0
-                ParentButtonFont = False
-                WordWrapCaptions = True
-                WordWrapCells = False
-                CaseSensitivePicklist = False
-                CheckStyle = csCheck
-                AutoAdjustColWidths = True
-              end>
-            ExplicitWidth = 597
-            ExplicitHeight = 110
+            end
+            inherited Grid: TRbwDataGrid4
+              Width = 597
+              Height = 110
+              ExplicitWidth = 596
+              ExplicitHeight = 110
+            end
           end
         end
       end

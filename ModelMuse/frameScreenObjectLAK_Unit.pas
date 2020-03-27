@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, frameScreenObjectNoParamUnit, Grids, RbwDataGrid4, StdCtrls,
   ArgusDataEntry, Buttons, Mask, JvExMask, JvSpin, ExtCtrls, ComCtrls,
-  JvToolEdit, GrayTabs;
+  JvToolEdit, GrayTabs, frameGridUnit, framePestObsUnit;
 
 type
   TBathColumn = (bcStage, bcVolume, bcSurfaceArea);
@@ -32,6 +32,8 @@ type
     pnlBathChoice: TPanel;
     rgBathChoice: TRadioGroup;
     feLakeBathymetry: TJvFilenameEdit;
+    tabObservations: TTabSheet;
+    framePestObsLak: TframePestObs;
     procedure rdeCenterLakeChange(Sender: TObject);
     procedure cbGagStandardClick(Sender: TObject);
     procedure cbGagFluxAndCondClick(Sender: TObject);
@@ -42,6 +44,7 @@ type
       var AAction: Boolean);
     procedure feLakeBathymetryKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+//    procedure FrameResize(Sender: TObject);
   protected
     procedure Loaded; override;
   private
@@ -100,6 +103,7 @@ begin
   SetFeLakeBathymetryColor(feLakeBathymetry.FileName);
 end;
 
+
 procedure TframeScreenObjectLAK.Loaded;
 begin
   inherited;
@@ -113,6 +117,7 @@ begin
     rdgLakeTable.Cells[Ord(bcStage), 0] := StrStage;
     rdgLakeTable.Cells[Ord(bcVolume), 0] := StrVolume;
     rdgLakeTable.Cells[Ord(bcSurfaceArea), 0] := StrSurfaceArea;
+    FrameResize(nil);
   end;
 
 end;

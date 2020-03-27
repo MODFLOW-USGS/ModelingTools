@@ -234,7 +234,13 @@ begin
 //  end;
   if TFile.Exists(FIniFile.FileName) then
   begin
-    TFile.Copy(FIniFile.FileName, BackupFilename, True);
+    try
+      TFile.Copy(FIniFile.FileName, BackupFilename, True);
+    except on EInOutError do
+      begin
+        Exit;
+      end;
+    end;
   end;
   try
     FIniFile.UpdateFile;

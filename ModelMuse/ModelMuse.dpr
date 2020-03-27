@@ -698,7 +698,9 @@ uses
   ModflowCSubWriterUnit in 'ModflowCSubWriterUnit.pas',
   ModflowCSubInterbed in 'ModflowCSubInterbed.pas',
   ObservationComparisonsUnit in 'ObservationComparisonsUnit.pas',
-  frmObservationComparisonsUnit in 'frmObservationComparisonsUnit.pas' {frmObservationComparisons};
+  frmObservationComparisonsUnit in 'frmObservationComparisonsUnit.pas' {frmObservationComparisons},
+  PestObsUnit in 'PestObsUnit.pas',
+  framePestObsUnit in 'framePestObsUnit.pas' {framePestObs: TFrame};
 
 {$R *.res}
 

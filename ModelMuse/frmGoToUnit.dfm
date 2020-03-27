@@ -280,10 +280,6 @@ inherited frmGoTo: TfrmGoTo
     object tabDISV: TTabSheet
       Caption = 'DISV'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         289
         205)

@@ -367,6 +367,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
+      ExplicitLeft = 1
       ExplicitWidth = 461
       ExplicitHeight = 44
     end
@@ -376,7 +377,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     Top = 121
     Width = 463
     Height = 189
-    ActivePage = tabLakeProperties
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 3
     object tabLakeProperties: TTabSheet
@@ -516,6 +517,84 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           TabOrder = 1
           Text = ''
           OnKeyUp = feLakeBathymetryKeyUp
+        end
+      end
+    end
+    object tabObservations: TTabSheet
+      Caption = 'Observations'
+      ImageIndex = 2
+      inline framePestObsLak: TframePestObs
+        Left = 0
+        Top = 0
+        Width = 455
+        Height = 161
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = -145
+        ExplicitTop = -259
+        inherited splObservations: TSplitter
+          Top = -17
+          Width = 455
+        end
+        inherited grpDirectObs: TGroupBox
+          Width = 455
+          ExplicitLeft = 0
+          ExplicitWidth = 600
+          ExplicitHeight = 242
+          inherited frameObservations: TframeGrid
+            Width = 451
+            ExplicitTop = 15
+            ExplicitWidth = 596
+            ExplicitHeight = 225
+            inherited Panel: TPanel
+              Width = 451
+              ExplicitTop = 184
+              ExplicitWidth = 596
+              inherited sbAdd: TSpeedButton
+                Left = 233
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 277
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 320
+              end
+            end
+            inherited Grid: TRbwDataGrid4
+              Width = 451
+              ExplicitWidth = 596
+              ExplicitHeight = 184
+            end
+          end
+        end
+        inherited grpObsComparisons: TGroupBox
+          Top = -12
+          Width = 455
+          ExplicitLeft = 0
+          ExplicitWidth = 600
+          inherited frameObsComparisons: TframeGrid
+            Width = 451
+            ExplicitTop = 15
+            ExplicitWidth = 596
+            ExplicitHeight = 156
+            inherited Panel: TPanel
+              Width = 451
+              ExplicitWidth = 596
+              inherited sbAdd: TSpeedButton
+                Left = 233
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 277
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 320
+              end
+            end
+            inherited Grid: TRbwDataGrid4
+              Width = 451
+              ExplicitWidth = 596
+            end
+          end
         end
       end
     end

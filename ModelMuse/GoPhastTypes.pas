@@ -476,7 +476,7 @@ type
     property ScreenObject: TObject read FScreenObject;
   end;
 
-  TCustomObservationItem = class(TPhastCollectionItem)
+{  TCustomObservationItem = class(TPhastCollectionItem)
   private
     FName: string;
     FComment: string;
@@ -517,7 +517,7 @@ type
     procedure Assign(Source: TPersistent); override;
   published
     property Time: double read FTime write SetTime;
-  end;
+  end;      }
 
   // @name adds the required functions of IInterface.
   TInterfacedPhastCollectionItem = class(TPhastCollectionItem, IInterface)
@@ -2046,99 +2046,99 @@ end;
 
 { TCustomObservationItem }
 
-procedure TCustomObservationItem.Assign(Source: TPersistent);
-var
-  ObsSource: TCustomObservationItem;
-begin
-  if Source is TCustomObservationItem then
-  begin
-    ObsSource := TCustomObservationItem(Source);
-    Name := ObsSource.Name;
-    ObservedValue := ObsSource.ObservedValue;
-    Weight := ObsSource.Weight;
-    Comment := ObsSource.Comment;
-    GUID := ObsSource.GUID;
-  end
-  else
-  begin
-    inherited;
-  end;
+//procedure TCustomObservationItem.Assign(Source: TPersistent);
+//var
+//  ObsSource: TCustomObservationItem;
+//begin
+//  if Source is TCustomObservationItem then
+//  begin
+//    ObsSource := TCustomObservationItem(Source);
+//    Name := ObsSource.Name;
+//    ObservedValue := ObsSource.ObservedValue;
+//    Weight := ObsSource.Weight;
+//    Comment := ObsSource.Comment;
+//    GUID := ObsSource.GUID;
+//  end
+//  else
+//  begin
+//    inherited;
+//  end;
+//
+//end;
 
-end;
-
-constructor TCustomObservationItem.Create(Collection: TCollection);
-var
-  MyGuid : TGUID;
-begin
-  if Collection <> nil then
-  begin
-    Assert(Collection is TScreenObjectOwnerCollection);
-  end;
-  inherited;
-  if CreateGUID(MyGuid) = 0 then
-  begin
-    FGUID := GUIDToString(MyGuid);
-  end;
-end;
-
-function TCustomObservationItem.GetScreenObject: TObject;
-begin
-  result := nil;
-  if Collection <> nil then
-  begin
-    Result := (Collection as TScreenObjectOwnerCollection).ScreenObject;
-  end;
-end;
-
-function TCustomObservationItem.ObservationType: string;
-begin
-  result := ClassName;
-end;
-
-procedure TCustomObservationItem.SetComment(const Value: string);
-begin
-  SetStringProperty(FComment, Value);
-end;
-
-procedure TCustomObservationItem.SetName(const Value: string);
-begin
-  SetStringProperty(FName, Value);
-end;
-
-procedure TCustomObservationItem.SetObservedValue(const Value: double);
-begin
-  SetRealProperty(FObservedValue, Value);
-end;
-
-procedure TCustomObservationItem.SetWeight(const Value: Double);
-begin
-  SetRealProperty(FWeight, Value);
-end;
-
-function TCustomObservationItem.Units: string;
-begin
-  result := 'unknown';
-end;
+//constructor TCustomObservationItem.Create(Collection: TCollection);
+//var
+//  MyGuid : TGUID;
+//begin
+//  if Collection <> nil then
+//  begin
+//    Assert(Collection is TScreenObjectOwnerCollection);
+//  end;
+//  inherited;
+//  if CreateGUID(MyGuid) = 0 then
+//  begin
+//    FGUID := GUIDToString(MyGuid);
+//  end;
+//end;
+//
+//function TCustomObservationItem.GetScreenObject: TObject;
+//begin
+//  result := nil;
+//  if Collection <> nil then
+//  begin
+//    Result := (Collection as TScreenObjectOwnerCollection).ScreenObject;
+//  end;
+//end;
+//
+//function TCustomObservationItem.ObservationType: string;
+//begin
+//  result := ClassName;
+//end;
+//
+//procedure TCustomObservationItem.SetComment(const Value: string);
+//begin
+//  SetStringProperty(FComment, Value);
+//end;
+//
+//procedure TCustomObservationItem.SetName(const Value: string);
+//begin
+//  SetStringProperty(FName, Value);
+//end;
+//
+//procedure TCustomObservationItem.SetObservedValue(const Value: double);
+//begin
+//  SetRealProperty(FObservedValue, Value);
+//end;
+//
+//procedure TCustomObservationItem.SetWeight(const Value: Double);
+//begin
+//  SetRealProperty(FWeight, Value);
+//end;
+//
+//function TCustomObservationItem.Units: string;
+//begin
+//  result := 'unknown';
+//end;
 
 { TCustomTimeObservationItem }
 
-procedure TCustomTimeObservationItem.Assign(Source: TPersistent);
-var
-  ObsSource: TCustomTimeObservationItem;
-begin
-  if Source is TCustomTimeObservationItem then
-  begin
-    ObsSource := TCustomTimeObservationItem(Source);
-    Time := ObsSource.Time;
-  end;
-  inherited;
-
-end;
-
-procedure TCustomTimeObservationItem.SetTime(const Value: double);
-begin
-  SetRealProperty(FTime, Value);
-end;
+//procedure TCustomTimeObservationItem.Assign(Source: TPersistent);
+//var
+//  ObsSource: TCustomTimeObservationItem;
+//begin
+//  if Source is TCustomTimeObservationItem then
+//  begin
+//    ObsSource := TCustomTimeObservationItem(Source);
+//    Time := ObsSource.Time;
+//  end;
+//  inherited;
+//
+//end;
+//
+//procedure TCustomTimeObservationItem.SetTime(const Value: double);
+//begin
+//  SetRealProperty(FTime, Value);
+//end;
 
 { TScreenObjectOwnerCollection }
 

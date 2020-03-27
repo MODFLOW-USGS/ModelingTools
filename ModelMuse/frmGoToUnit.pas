@@ -193,6 +193,8 @@ uses frmGoPhastUnit,
 resourcestring
   StrElement = 'Element';
   StrBlock = 'Block';
+  StrSDoesNotHaveAny = '%s does not have any vertices. Try editing it use "O' +
+  'bject|Edit|Select Objects to Edit or Delete".';
 
 {$R *.dfm}
 
@@ -773,23 +775,32 @@ procedure GoToObject(AScreenObject: TScreenObject);
 var
   XCoordinate, YCoordinate: double;
 begin
-  XCoordinate := AScreenObject.Points[0].X;
-  YCoordinate := AScreenObject.Points[0].Y;
-  case AScreenObject.ViewDirection of
-    vdTop:
-      begin
-        SetTopPosition(XCoordinate, YCoordinate);
-      end;
-    vdFront:
-      begin
-        SetFrontPosition(XCoordinate, YCoordinate);
-      end;
-    vdSide:
-      begin
-        SetSidePosition(YCoordinate, XCoordinate);
-      end;
+  if AScreenObject.Count > 0 then
+  begin
+    XCoordinate := AScreenObject.Points[0].X;
+    YCoordinate := AScreenObject.Points[0].Y;
+    case AScreenObject.ViewDirection of
+      vdTop:
+        begin
+          SetTopPosition(XCoordinate, YCoordinate);
+        end;
+      vdFront:
+        begin
+          SetFrontPosition(XCoordinate, YCoordinate);
+        end;
+      vdSide:
+        begin
+          SetSidePosition(YCoordinate, XCoordinate);
+        end;
+    else
+      Assert(False);
+    end;
+  end
   else
-    Assert(False);
+  begin
+    Beep;
+    MessageDlg(Format(StrSDoesNotHaveAny, [AScreenObject.Name]),
+      mtWarning, [mbOK], 0);
   end;
 end;
 
