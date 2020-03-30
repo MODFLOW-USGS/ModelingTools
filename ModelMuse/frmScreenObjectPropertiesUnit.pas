@@ -2334,6 +2334,7 @@ type
     procedure GetPotentialMvrSources(Sender: TObject;
       var PotentialSources: TSourcePackageChoices);
     procedure UpdateDrtReturnFlowLabels(Sender: TObject);
+    procedure LakePestObsChanged(Sender: TObject);
     { Private declarations }
   public
     procedure Initialize;
@@ -4662,6 +4663,11 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.LakePestObsChanged(Sender: TObject);
+begin
+  StoreLakBoundary;
+end;
+
 procedure TfrmScreenObjectProperties.MvrChanged(Sender: TObject);
 begin
   if (FMVR_Node <> nil) and (FMVR_Node.StateIndex <> 3) then
@@ -5192,6 +5198,10 @@ begin
 
   frameHeadObservations.InitializeControls;
   frameMt3dmsTobConc.InitializeControls;
+
+  frameLak.framePestObsLak.InitializeControls;
+  frameLak.framePestObsLak.SpecifyObservationTypes(LakeGageOutputTypes);
+  frameLak.framePestObsLak.OnControlsChange := LakePestObsChanged;
 
 end;
 
@@ -14266,7 +14276,6 @@ begin
     begin
       frameLak.seNumberOfTimes.OnChange(frameLak.seNumberOfTimes);
     end;
-    frameLak.framePestObsLak.InitializeControls;
     frameLak.rdeLakeID.Text := '';
     frameLak.rdeInitialStage.Text := '';
     frameLak.rdeCenterLake.Text := '';
@@ -14296,6 +14305,8 @@ begin
   ValuesIdentical := True;
   if ScreenObjectList.Count = 1 then
   begin
+    frameLak.framePestObsLak.InitializeControls;
+    frameLak.framePestObsLak.SpecifyObservationTypes(LakeGageOutputTypes);
     frameLak.framePestObsLak.GetData(Boundary.Observations);
   end;
   for ScreenObjectIndex := FirstIndex+1 to ScreenObjectList.Count - 1 do

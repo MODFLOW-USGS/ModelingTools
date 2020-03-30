@@ -700,7 +700,8 @@ uses
   ObservationComparisonsUnit in 'ObservationComparisonsUnit.pas',
   frmObservationComparisonsUnit in 'frmObservationComparisonsUnit.pas' {frmObservationComparisons},
   PestObsUnit in 'PestObsUnit.pas',
-  framePestObsUnit in 'framePestObsUnit.pas' {framePestObs: TFrame};
+  framePestObsUnit in 'framePestObsUnit.pas' {framePestObs: TFrame},
+  PestGlobalComparisonScriptWriterUnit in 'PestGlobalComparisonScriptWriterUnit.pas';
 
 {$R *.res}
 

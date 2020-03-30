@@ -26,18 +26,26 @@ type
     procedure frameObservationssbAddClick(Sender: TObject);
     procedure frameObservationssbInsertClick(Sender: TObject);
     procedure frameObservationssbDeleteClick(Sender: TObject);
+    procedure frameObsComparisonsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure frameObservationsseNumberChange(Sender: TObject);
+    procedure frameObsComparisonsseNumberChange(Sender: TObject);
   private
     FObservationsName: string;
     FMatchedCells1: TList<Integer>;
     FMatchedCells2: TList<Integer>;
+    FOnControlsChange: TNotifyEvent;
     procedure UpdatedSelectedCell;
     { Private declarations }
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure InitializeControls;
+    procedure SpecifyObservationTypes(ObsTypes: TStrings);
     procedure GetData(Observations: TCustomComparisonCollection);
     procedure SetData(Observations: TCustomComparisonCollection);
+    property OnControlsChange: TNotifyEvent read FOnControlsChange
+      write FOnControlsChange;
     { Public declarations }
   end;
 
@@ -92,6 +100,24 @@ begin
   end;
 end;
 
+procedure TframePestObs.frameObsComparisonsGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  if Assigned(OnControlsChange) then
+  begin
+    OnControlsChange(Self);
+  end;
+end;
+
+procedure TframePestObs.frameObsComparisonsseNumberChange(Sender: TObject);
+begin
+  frameObsComparisons.seNumberChange(Sender);
+  if Assigned(OnControlsChange) then
+  begin
+    OnControlsChange(Self);
+  end;
+end;
+
 procedure TframePestObs.frameObservationsGridSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 var
@@ -127,7 +153,7 @@ begin
   inherited;
   if (Ord(mocName) = ACol) and (ARow >= 1) then
   begin
-    if FObservationsName <> Value then
+    if (FObservationsName <> Value) and (FObservationsName <> '') then
     begin
       for Index := 0 to FMatchedCells1.Count - 1 do
       begin
@@ -140,6 +166,10 @@ begin
         frameObsComparisons.Grid.Cells[Ord(moccObs2), RowIndex] := Value;
       end;
     end;
+  end;
+  if Assigned(OnControlsChange) then
+  begin
+    OnControlsChange(Self);
   end;
 end;
 
@@ -159,6 +189,15 @@ procedure TframePestObs.frameObservationssbInsertClick(Sender: TObject);
 begin
   frameObservations.sbInsertClick(Sender);
   UpdatedSelectedCell;
+end;
+
+procedure TframePestObs.frameObservationsseNumberChange(Sender: TObject);
+begin
+  frameObservations.seNumberChange(Sender);
+  if Assigned(OnControlsChange) then
+  begin
+    OnControlsChange(Self);
+  end;
 end;
 
 procedure TframePestObs.GetData(Observations: TCustomComparisonCollection);
@@ -262,6 +301,7 @@ var
   Index2: Integer;
   Mnw2ObComp: TObsCompareItem;
 begin
+  ObsCount := 0;
   for RowIndex := 1 to frameObservations.seNumber.AsInteger do
   begin
     RowOK := True;
@@ -354,6 +394,11 @@ begin
     ObNames.Free
   end;
   Comparisons.Count := CompCount;
+end;
+
+procedure TframePestObs.SpecifyObservationTypes(ObsTypes: TStrings);
+begin
+  frameObservations.Grid.Columns[Ord(mocType)].PickList := ObsTypes;
 end;
 
 procedure TframePestObs.UpdatedSelectedCell;

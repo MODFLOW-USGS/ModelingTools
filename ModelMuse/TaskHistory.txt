@@ -25168,5 +25168,17 @@ object TTaskHistory
         'Bug fix'
         'PEST Observations'
         'Refactoring')
+    end
+    item
+      Date = 43918.000000000000000000
+    end
+    item
+      Date = 43919.000000000000000000
+    end
+    item
+      Date = 43920.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'PEST Observations')
     end>
 end

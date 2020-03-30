@@ -281,6 +281,7 @@ type
 
   TLakeObservations = class(TCustomComparisonCollection)
   private
+    FGageOutputName: string;
     function GetLakeItem(Index: Integer): TLakeObs;
     procedure SetLakeItem(Index: Integer; const Value: TLakeObs);
   public
@@ -288,6 +289,7 @@ type
     property Items[Index: Integer]: TLakeObs read GetLakeItem
       write SetLakeItem; default;
     function Add: TLakeObs;
+    property GageOutputName: string read FGageOutputName write FGageOutputName;
   end;
 
   TLakBoundary = class(TModflowBoundary)
@@ -354,10 +356,14 @@ type
       ;
   end;
 
+var
+  LakeGageOutputTypes: TStringList;
+  LakeGageUnits: TStringList;
+
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, TempFiles, 
+  ModflowTransientListParameterUnit, TempFiles,
   frmFormulaErrorsUnit, frmGoPhastUnit;
 
 resourcestring
@@ -382,9 +388,6 @@ const
   OverlandRunoffPosition = 4;
   WithdrawalPosition = 5;
 
-var
-  LakeGageOutputTypes: TStringList;
-  LakeGageUnits: TStringList;
 //  StreamGageOutputTypes: TStringList;
 
 procedure InitializeGageOutputTypes;

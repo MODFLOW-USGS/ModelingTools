@@ -748,12 +748,12 @@ end;
 
 procedure TModflowMNW2_Writer.WriteObsScript(
   const AFileName: string);
-const
-  MarkerDelimiter = '@';
+//const
+//  MarkerDelimiter = '@';
 var
   ScriptFileName: string;
-  ExtractorListFileName: string;
-  ExtractorObsFileName: string;
+//  ExtractorListFileName: string;
+//  ExtractorObsFileName: string;
   ObjectIndex: Integer;
   Link: TObsFileLink;
   Boundary: TMnw2Boundary;
@@ -770,17 +770,8 @@ var
 //  PriorItem2: TCustomObservationItem;
   StartTime: Double;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
-//  var
-//    MaxPrefixLength: Integer;
-//    Prefix: string;
   begin
     Result := PrefixedObsName('Mnw2', ObjectIndex, Obs);
-  // The maximum allowed length of an observation name in PEST is 20.
-//    MaxPrefixLength := 19 - Length((ObjectIndex+1).ToString + Obs.Name);
-//    Prefix := Copy('Mnw2', 1, MaxPrefixLength);
-//    Result := Format('%0:s_%1:d%2:s', [Prefix, ObjectIndex+1, Obs.Name]);
-//    Result := PestObsName(Result);
-//    Obs.ExportedName := Result;
   end;
 begin
 {$IFNDEF PEST}
@@ -792,28 +783,25 @@ begin
   end;
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
-
   ScriptFileName := ChangeFileExt(AFileName, '.mnw_script');
 
-//  FObsItemDictionary := TDictionary<string, TCustomObservationItem>.Create;
-//  try
   OpenFile(ScriptFileName);
   try
-    ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
-    ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs.csv');
-
-    // FILENAMES block
-    WriteString('BEGIN FILENAMES');
-    NewLine;
-    WriteString('  LISTING_FILE ');
-    WriteString(ExtractFileName(ExtractorListFileName));
-    NewLine;
-    WriteString('  OBSERVATIONS_FILE ');
-    WriteString(ExtractFileName(ExtractorObsFileName));
-    NewLine;
-    WriteString('END FILENAMES');
-    NewLine;
-    NewLine;
+//    ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
+//    ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs.csv');
+//
+//    // FILENAMES block
+//    WriteString('BEGIN FILENAMES');
+//    NewLine;
+//    WriteString('  LISTING_FILE ');
+//    WriteString(ExtractFileName(ExtractorListFileName));
+//    NewLine;
+//    WriteString('  OBSERVATIONS_FILE ');
+//    WriteString(ExtractFileName(ExtractorObsFileName));
+//    NewLine;
+//    WriteString('END FILENAMES');
+//    NewLine;
+//    NewLine;
 
     ComparisonsUsed := False;
     // OBSERVATIONS block
@@ -885,10 +873,10 @@ begin
             WriteString(GetObName(ObjectIndex, CompItem));
             WriteString(' ');
             Obs := Boundary.Observations[CompItem.Index1];
-            WriteString(GetObName(ObjectIndex, Obs));
+            WriteString(Obs.ExportedName);
             WriteString(' ');
             Obs := Boundary.Observations[CompItem.Index2];
-            WriteString(GetObName(ObjectIndex, Obs));
+            WriteString(Obs.ExportedName);
             WriteFloat(CompItem.ObservedValue);
             WriteFloat(CompItem.Weight);
             WriteString(' PRINT');

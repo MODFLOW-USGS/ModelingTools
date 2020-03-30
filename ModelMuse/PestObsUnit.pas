@@ -97,6 +97,9 @@ type
     property Comparisons: TObsComparisons read FComparisons write SetComparisons;
   end;
 
+  TObsItemDictionary = TDictionary<string, TCustomObservationItem>;
+
+
 function PrefixedObsName(Prefix: string; ObjectIndex: Integer; Obs: TCustomObservationItem): string;
 
 implementation

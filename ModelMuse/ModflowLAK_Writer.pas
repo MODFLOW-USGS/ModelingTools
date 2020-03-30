@@ -12,6 +12,7 @@ type
     FLakeList: TList;
     FNameOfFile: string;
     FPackage: TLakePackageSelection;
+    FLakeObservationsUsed: Boolean;
     procedure WriteDataSet1a;
     procedure WriteDataSet1b;
     procedure WriteDataSet2;
@@ -23,6 +24,7 @@ type
     procedure WriteDataSets7And8;
     procedure WriteDataSet9(StressPeriod: TModflowStressPeriod);
     procedure WriteGages(Lines: TStrings);
+    procedure WriteObsScript(const AFileName: string);
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -50,7 +52,7 @@ type
 implementation
 
 uses ModflowUnitNumbers, ScreenObjectUnit, frmErrorsAndWarningsUnit,
-  DataSetUnit, frmProgressUnit, Forms, GoPhastTypes;
+  DataSetUnit, frmProgressUnit, Forms, GoPhastTypes, PestObsUnit;
 
 resourcestring
   DupNameErrorMessage = 'The following Lakes have the same Lake ID.';
@@ -676,6 +678,7 @@ begin
     CloseFile;
   end;
   WriteGages(Lines);
+  WriteObsScript(AFileName);
 end;
 
 procedure TModflowLAK_Writer.WriteGages(
@@ -700,8 +703,10 @@ var
     OutputName := ChangeFileExt(FNameOfFile, '.lakg');
     OutputName := OutputName + IntToStr(Lines.Count);
     WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    ScreenObject.ModflowLakBoundary.Observations.GageOutputName := OutputName;
   end;
 begin
+  FLakeObservationsUsed := False;
   for ScreenObjectIndex := 0 to FLakeList.Count - 1 do
   begin
     ScreenObject := FLakeList[ScreenObjectIndex];
@@ -712,8 +717,10 @@ begin
     begin
       WriteGage;
     end;
-    if ScreenObject.ModflowLakBoundary.Gage4 then
+    if ScreenObject.ModflowLakBoundary.Gage4
+      or (ScreenObject.ModflowLakBoundary.Observations.Count > 0) then
     begin
+      FLakeObservationsUsed := True;
       OUTTYPE := 4;
       WriteGage;
     end;
@@ -725,6 +732,121 @@ begin
   WriteDataSet5;
   WriteDataSet6;
   WriteDataSets7And8;
+end;
+
+procedure TModflowLAK_Writer.WriteObsScript(const AFileName: string);
+var
+  StartTime: Double;
+  ScriptFileName: string;
+  ComparisonsUsed: Boolean;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Observations: TLakeObservations;
+  ObsIndex: Integer;
+  Obs: TLakeObs;
+  CompIndex: Integer;
+  CompItem: TObsCompareItem;
+  function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  begin
+    Result := PrefixedObsName('Lak', ObjectIndex, Obs);
+  end;
+begin
+{$IFNDEF PEST}
+  Exit;
+{$ENDIF}
+  if not FLakeObservationsUsed then
+  begin
+    Exit;
+  end;
+
+  StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+  ScriptFileName := ChangeFileExt(AFileName, '.Lake_script');
+
+  OpenFile(ScriptFileName);
+  try
+    ComparisonsUsed := False;
+    // OBSERVATIONS block
+    WriteString('BEGIN OBSERVATIONS');
+    NewLine;
+    for ScreenObjectIndex := 0 to FLakeList.Count - 1 do
+    begin
+      ScreenObject := FLakeList[ScreenObjectIndex];
+      Observations := ScreenObject.ModflowLakBoundary.Observations;
+      if Observations.Count > 0 then
+      begin
+        WriteString('  # ');
+        WriteString('Observations defined in ');
+        WriteString(ScreenObject.Name);
+        NewLine;
+        WriteString('  FILENAME ');
+        WriteString(Observations.GageOutputName);
+        NewLine;
+
+        for ObsIndex := 0 to Observations.Count - 1 do
+        begin
+          Obs := Observations[ObsIndex];
+  //          FObsItemDictionary.Add(Obs.GUID, Obs);
+          WriteString('  OBSERVATION ');
+          WriteString(GetObName(ScreenObjectIndex, Obs));
+          WriteString(' ');
+          WriteString(Obs.ObservationType);
+          WriteFloat(Obs.Time - StartTime);
+          WriteFloat(Obs.ObservedValue);
+          WriteFloat(Obs.Weight);
+          WriteString(' PRINT');
+          NewLine;
+        end;
+
+        if Observations.Comparisons.Count > 0 then
+        begin
+          ComparisonsUsed := True;
+        end;
+      end;
+    end;
+    WriteString('END OBSERVATIONS');
+
+    // DERIVED_OBSERVATIONS block
+    if ComparisonsUsed then
+    begin
+      NewLine;
+      NewLine;
+      WriteString('BEGIN DERIVED_OBSERVATIONS');
+      NewLine;
+
+      for ScreenObjectIndex := 0 to FLakeList.Count - 1 do
+      begin
+        ScreenObject := FLakeList[ScreenObjectIndex];
+        Observations := ScreenObject.ModflowLakBoundary.Observations;
+        if Observations.Comparisons.Count > 0 then
+        begin
+          WriteString('  # ');
+          WriteString('Observation comparisons defined in ');
+          WriteString(ScreenObject.Name);
+          NewLine;
+        end;
+
+        for CompIndex := 0 to Observations.Comparisons.Count - 1 do
+        begin
+          WriteString('  DIFFERENCE ');
+          CompItem := Observations.Comparisons[CompIndex];
+          WriteString(GetObName(ScreenObjectIndex, CompItem));
+          WriteString(' ');
+          Obs := Observations[CompItem.Index1];
+          WriteString(Obs.ExportedName);
+          WriteString(' ');
+          Obs := Observations[CompItem.Index2];
+          WriteString(Obs.ExportedName);
+          WriteFloat(CompItem.ObservedValue);
+          WriteFloat(CompItem.Weight);
+          WriteString(' PRINT');
+          NewLine;
+        end;
+      end;
+      WriteString('END DERIVED_OBSERVATIONS');
+    end;
+  finally
+    CloseFile;
+  end;
 end;
 
 { TExternalBathymetryFileWriter }

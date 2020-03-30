@@ -30,6 +30,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpType = htKeyword
       HelpKeyword = 'MNW2_Basic_Tab'
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         601
         421)
@@ -234,7 +238,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
-          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -561,6 +564,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Discharge_Adjustment_Tab'
       Caption = 'Discharge Adjustment'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         601
         421)
@@ -759,6 +766,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'MNW2_Pumping_Rate_Tab'
       Caption = 'Pumping Rate'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgTimeTable: TRbwDataGrid4
         Left = 0
         Top = 65
@@ -1091,6 +1102,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       HelpKeyword = 'Well_Screens'
       Caption = 'Well Screens'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel3: TPanel
         Left = 0
         Top = 380
@@ -1381,7 +1396,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 595
+          Width = 594
           Height = 36
           Align = alTop
           Caption = 
@@ -1389,7 +1404,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             ' and bottom of the object as defined by the higher and lower Z c' +
             'oordinates will define a well screen.'
           WordWrap = True
-          ExplicitWidth = 594
         end
         object lblWellScreenFormula: TLabel
           Left = 136
@@ -1424,8 +1438,8 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         Height = 421
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 1
-        ExplicitTop = 1
+        ExplicitWidth = 601
+        ExplicitHeight = 421
         inherited splObservations: TSplitter
           Top = 243
           Width = 601
@@ -1434,19 +1448,15 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           Width = 601
           Height = 243
           ExplicitLeft = 0
-          ExplicitWidth = 600
-          ExplicitHeight = 242
           inherited frameObservations: TframeGrid
             Top = 20
             Width = 597
             Height = 221
-            ExplicitWidth = 596
-            ExplicitHeight = 220
+            ExplicitHeight = 221
             inherited Panel: TPanel
               Top = 180
               Width = 597
-              ExplicitTop = 179
-              ExplicitWidth = 596
+              ExplicitTop = 180
               inherited lbNumber: TLabel
                 Width = 55
                 Height = 18
@@ -1455,12 +1465,15 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
               end
               inherited sbAdd: TSpeedButton
                 Left = 313
+                ExplicitLeft = 313
               end
               inherited sbInsert: TSpeedButton
                 Left = 370
+                ExplicitLeft = 370
               end
               inherited sbDelete: TSpeedButton
                 Left = 428
+                ExplicitLeft = 428
               end
               inherited seNumber: TJvSpinEdit
                 Height = 26
@@ -1470,8 +1483,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             inherited Grid: TRbwDataGrid4
               Width = 597
               Height = 180
-              ExplicitWidth = 596
-              ExplicitHeight = 179
+              ExplicitHeight = 180
             end
           end
         end
@@ -1479,17 +1491,15 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           Top = 248
           Width = 601
           ExplicitLeft = 0
-          ExplicitWidth = 600
+          ExplicitTop = 248
           inherited frameObsComparisons: TframeGrid
             Top = 20
             Width = 597
             Height = 151
-            ExplicitWidth = 596
             inherited Panel: TPanel
               Top = 110
               Width = 597
               ExplicitTop = 110
-              ExplicitWidth = 596
               inherited lbNumber: TLabel
                 Width = 55
                 Height = 18
@@ -1498,12 +1508,14 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
               end
               inherited sbAdd: TSpeedButton
                 Left = 313
+                ExplicitLeft = 313
               end
               inherited sbInsert: TSpeedButton
                 Left = 370
               end
               inherited sbDelete: TSpeedButton
                 Left = 428
+                ExplicitLeft = 428
               end
               inherited seNumber: TJvSpinEdit
                 Height = 26
@@ -1513,7 +1525,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             inherited Grid: TRbwDataGrid4
               Width = 597
               Height = 110
-              ExplicitWidth = 596
               ExplicitHeight = 110
             end
           end

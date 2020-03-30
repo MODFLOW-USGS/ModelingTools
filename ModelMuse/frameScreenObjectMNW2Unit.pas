@@ -228,6 +228,10 @@ resourcestring
 
 procedure TframeScreenObjectMNW2.btnDeleteLiftClick(Sender: TObject);
 begin
+  if rdgLiftTable.Row < 1 then
+  begin
+    Exit;
+  end;
   rdgLiftTable.DeleteRow(rdgLiftTable.Row);
   seLiftTableRows.AsInteger := rdgLiftTable.RowCount - 1;
   EnableDeleteLiftButton;
@@ -236,6 +240,10 @@ end;
 
 procedure TframeScreenObjectMNW2.btnDeleteTimeClick(Sender: TObject);
 begin
+  if rdgTimeTable.Row < 1 then
+  begin
+    Exit;
+  end;
   rdgTimeTable.DeleteRow(rdgTimeTable.Row);
   seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1;
   EnableDeleteTimeButton;
@@ -244,6 +252,10 @@ end;
 
 procedure TframeScreenObjectMNW2.btnDeleteVertialScreenClick(Sender: TObject);
 begin
+  if rdgVerticalScreens.Row < 1 then
+  begin
+    Exit;
+  end;
   rdgVerticalScreens.DeleteRow(rdgVerticalScreens.Row);
   seVerticalScreens.AsInteger := rdgVerticalScreens.RowCount - 1;
   EnableVerticalScreenButton;
@@ -252,6 +264,10 @@ end;
 
 procedure TframeScreenObjectMNW2.btnInsertLiftClick(Sender: TObject);
 begin
+  if rdgLiftTable.Row < 1 then
+  begin
+    Exit;
+  end;
   rdgLiftTable.InsertRow(rdgLiftTable.Row);
   seLiftTableRows.AsInteger := rdgLiftTable.RowCount - 1;
   Changed;
@@ -259,6 +275,10 @@ end;
 
 procedure TframeScreenObjectMNW2.btnInsertTimeClick(Sender: TObject);
 begin
+  if rdgTimeTable.Row < 1 then
+  begin
+    Exit;
+  end;
   rdgTimeTable.InsertRow(rdgTimeTable.Row);
   seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1;
   Changed;
@@ -266,6 +286,10 @@ end;
 
 procedure TframeScreenObjectMNW2.btnInsertVertialScreenClick(Sender: TObject);
 begin
+  if rdgVerticalScreens.Row < 1 then
+  begin
+    Exit;
+  end;
   rdgVerticalScreens.InsertRow(rdgVerticalScreens.Row);
   seVerticalScreens.AsInteger := rdgVerticalScreens.RowCount - 1;
   Changed;

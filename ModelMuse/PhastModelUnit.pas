@@ -9004,6 +9004,9 @@ const
   //               Bug fix: If ModelMuse encounters and error when trying to
   //                back up an initialization file, it no longer generates a
   //                bug report.
+  //               Bug fix: Fixed bug that could cause range check errors when
+  //                editing MNW2 wells.
+  //               Bug fix: Fixed bug importing an existing MODFLOW model.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.4';
@@ -9148,7 +9151,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
-  Mt3dCtsWriterUnit, ModflowCSubWriterUnit;
+  Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -38841,6 +38844,7 @@ var
   ModflowMvrWriter: TModflowMvrWriter;
   UzfMf6Writer: TModflowUzfMf6Writer;
   CSubWriter: TCSubWriter;
+  ObsScriptWriter: TGlobalComparisonScriptWriter;
 begin
   // Note: MODFLOW can not read Unicode text files.
 
@@ -40020,6 +40024,14 @@ begin
         begin
           Exit;
         end;
+        
+        ObsScriptWriter := TGlobalComparisonScriptWriter.Create(Self, etExport);
+        try
+          ObsScriptWriter.WriteFile(FileName);
+        finally
+          ObsScriptWriter.Free;
+        end;
+        
 
         FinalizePvalAndTemplate(FileName);
 

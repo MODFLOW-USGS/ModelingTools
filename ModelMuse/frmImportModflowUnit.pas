@@ -216,6 +216,14 @@ begin
     end;
 
     NameFileName := fedNameFile.FileName;
+    
+    if not FileExists(NameFileName) then
+    begin
+      Beep;
+      MessageDlg(Format(StrSWasNotFound, [NameFileName]), mtError, [mbOK], 0);
+      Exit;
+    end;
+    
     SetCurrentDir(ExtractFileDir(fedNameFile.FileName));
 
 
@@ -225,7 +233,15 @@ begin
     UnitNumbers := TList<Integer>.Create;
     try
       Splitter.Delimiter := ' ';
+      try
       NameFile.LoadFromFile(NameFileName);
+      except on ERangeError do
+        begin
+      Beep;
+      MessageDlg(Format('Error reading "%s". Check to make sure that it is the name file of a MODFLOW-2005 or MODFLOW-NWT model.', [NameFileName]), mtError, [mbOK], 0);
+      Exit;
+        end;
+      end;
       Modflow2000Model := False;
       for LineIndex := 0 to NameFile.Count - 1 do
       begin
