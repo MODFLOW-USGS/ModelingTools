@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabTable
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet
@@ -2870,6 +2870,71 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           TabOrder = 6
           WordWrap = True
           OnClick = cbSfrGagClick
+        end
+      end
+    end
+    object tabObservations: TTabSheet
+      Caption = 'Observations'
+      ImageIndex = 11
+      inline frameSfrPestObs: TframePestObs
+        Left = 0
+        Top = 0
+        Width = 553
+        Height = 478
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = -47
+        ExplicitTop = 24
+        inherited splObservations: TSplitter
+          Top = 300
+          Width = 553
+        end
+        inherited grpDirectObs: TGroupBox
+          Width = 553
+          Height = 300
+          inherited frameObservations: TframeGrid
+            Width = 549
+            Height = 283
+            inherited Panel: TPanel
+              Top = 242
+              Width = 549
+              inherited sbAdd: TSpeedButton
+                Left = 287
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 339
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 392
+              end
+            end
+            inherited Grid: TRbwDataGrid4
+              Width = 549
+              Height = 242
+            end
+          end
+        end
+        inherited grpObsComparisons: TGroupBox
+          Top = 305
+          Width = 553
+          inherited frameObsComparisons: TframeGrid
+            Width = 549
+            inherited Panel: TPanel
+              Width = 549
+              inherited sbAdd: TSpeedButton
+                Left = 287
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 339
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 392
+              end
+            end
+            inherited Grid: TRbwDataGrid4
+              Width = 549
+            end
+          end
         end
       end
     end

@@ -272,10 +272,11 @@ type
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(const Value: Integer); override;
   public
+    procedure Assign(Source: TPersistent); override;
     function ObservationType: string; override;
     function Units: string; override;
   published
-    property ObsType: Integer read FObsType write SetObsType;
+    property ObsType: Integer read FObsType write SetObsType stored True;
     property GUID;
   end;
 
@@ -1921,6 +1922,16 @@ begin
 end;
 
 { TLakeObs }
+
+procedure TLakeObs.Assign(Source: TPersistent);
+begin
+  if Source is TLakeObs then
+  begin
+    ObsType := TLakeObs(Source).ObsType;
+  end;
+  inherited;
+
+end;
 
 function TLakeObs.GetObsTypeIndex: Integer;
 begin

@@ -7,84 +7,73 @@ uses
 
 type
   TGlobalComparisonScriptWriter = class(TCustomFileWriter)
+  protected
+    class function Extension: string; override;
   public
-    procedure WriteFile(const FileName: string);
+    procedure WriteFile(const AFileName: string);
   end;
 
 implementation
 
 uses
-  PestObsUnit, ObservationComparisonsUnit, ScreenObjectUnit, GoPhastTypes;
+  PestObsUnit, ObservationComparisonsUnit, ScreenObjectUnit, GoPhastTypes,
+  frmErrorsAndWarningsUnit, ModelMuseUtilities;
+
+resourcestring
+  StrTheObservationComp = 'The observation comparison item "%s" could not be' +
+  ' exported. Check that it is defined correctly for this model.';
+  StrUnableToExportObs = 'Unable to export observations';
 
 { TGlobalComparisonScriptWriter }
 
-procedure TGlobalComparisonScriptWriter.WriteFile(const FileName: string);
+class function TGlobalComparisonScriptWriter.Extension: string;
+begin
+  result := '.der_script';
+end;
+
+procedure TGlobalComparisonScriptWriter.WriteFile(const AFileName: string);
 var
   ScriptFileName: string;
   ComparisonIndex: Integer;
   GloCompItem: TGlobalObsComparisonItem;
   FObsItemDictionary: TObsItemDictionary;
-  ScreenObjectIndex: Integer;
-  AScreenObject: TScreenObject;
-  ObsIndex: Integer;
-  ObsItem: TCustomTimeObservationItem;
+  ObsItem: TCustomObservationItem;
   PriorItem1: TCustomObservationItem;
   PriorItem2: TCustomObservationItem;
   ErrorMessage: string;
+  ObservationList: TObservationList;
+  ItemIndex: Integer;
+  function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  begin
+    Result := PrefixedObsName('Der', ObjectIndex, Obs);
+  end;
 begin
 {$IFNDEF PEST}
   Exit;
 {$ENDIF}
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUnableToExportObs);
 
   if Model.GlobalObservationComparisons.Count = 0 then
   begin
     Exit;
   end;
-  
-  ScriptFileName := ChangeFileExt(FileName, '.der_script');
 
+  ScriptFileName := FileName(AFileName);
+
+  ObservationList := TObservationList.Create;
   FObsItemDictionary := TObsItemDictionary.Create;
   try
-    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-    begin
-      AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-      if AScreenObject.Deleted then
-      begin
-        Continue;
-      end;
-      if Model.ModflowPackages.Mnw2Package.IsSelected
-        and (Model.ModelSelection <> msMODFLOW2015) then
-      begin
-        if (AScreenObject.ModflowMnw2Boundary <> nil)
-          and AScreenObject.ModflowMnw2Boundary.Used
-          and (AScreenObject.ModflowMnw2Boundary.Observations.Count > 0) then
-        begin
-          for ObsIndex := 0 to AScreenObject.ModflowMnw2Boundary.Observations.Count - 1 do
-          begin
-            ObsItem := AScreenObject.ModflowMnw2Boundary.Observations[ObsIndex];
-            FObsItemDictionary.Add(ObsItem.GUID, ObsItem);
-          end;
-        end;
-      end;
-      if Model.ModflowPackages.LakPackage.IsSelected
-        and (Model.ModelSelection <> msMODFLOW2015) then
-      begin
-        if (AScreenObject.ModflowLakBoundary <> nil)
-          and AScreenObject.ModflowLakBoundary.Used
-          and (AScreenObject.ModflowLakBoundary.Observations.Count > 0) then
-        begin
-          for ObsIndex := 0 to AScreenObject.ModflowLakBoundary.Observations.Count - 1 do
-          begin
-            ObsItem := AScreenObject.ModflowLakBoundary.Observations[ObsIndex];
-            FObsItemDictionary.Add(ObsItem.GUID, ObsItem);
-          end;
-        end;
-      end;
-    end;
-      
-    if FObsItemDictionary.Count = 0 then
+    Model.FileObsItemList(ObservationList);
+
+    if ObservationList.Count = 0 then
     begin
       Exit;
+    end;
+
+    for ItemIndex := 0 to ObservationList.Count - 1 do
+    begin
+      ObsItem := ObservationList[ItemIndex];
+      FObsItemDictionary.Add(ObsItem.GUID, ObsItem);
     end;
 
     OpenFile(ScriptFileName);
@@ -104,7 +93,7 @@ begin
           and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
         begin
           WriteString('  DIFFERENCE ');
-          WriteString(GloCompItem.Name);
+          WriteString(GetObName(ComparisonIndex, GloCompItem));
           WriteString(' ');
           WriteString(PriorItem1.ExportedName);
           WriteString(' ');
@@ -116,21 +105,19 @@ begin
         end
         else
         begin
-          ErrorMessage := Format('The observation comparison item "%s" could not be exported. Check that it is defined correctly for this model.', [GloCompItem.Name]);
+          ErrorMessage := Format(StrTheObservationComp, [GloCompItem.Name]);
+          frmErrorsAndWarnings.AddWarning(Model, StrUnableToExportObs, ErrorMessage)
         end;
-
-
-        WriteString('END DERIVED_OBSERVATIONS');
       end;
+      WriteString('END DERIVED_OBSERVATIONS');
 
     finally
       CloseFile;
     end;
   finally
     FObsItemDictionary.Free;
+    ObservationList.Free;
   end;
-
-
 end;
 
 end.

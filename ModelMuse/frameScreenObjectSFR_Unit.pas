@@ -11,7 +11,7 @@ uses System.UITypes,
   frameCrossSectionUnit, Buttons, ZoomBox2, JvExStdCtrls, JvCombobox,
   JvListComb, RbwParser, UndoItemsScreenObjects, ModflowSfrUnit, JvToolEdit,
   GoPhastTypes, JvPageListTreeView, frameScreenObjectUnit, frameGridUnit,
-  GrayTabs;
+  GrayTabs, framePestObsUnit;
 
 type
   TFrameClass = class of TFrame;
@@ -136,6 +136,8 @@ type
     lblExternalFileName: TLabel;
     frameCrossSection1: TframeCrossSection;
     frameFlowTable1: TframeFlowTable;
+    tabObservations: TTabSheet;
+    frameSfrPestObs: TframePestObs;
     procedure dgTableTimeSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure dgSfrRoughSelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -3436,6 +3438,11 @@ begin
         Boundary.Gage7 := cbGag7.Checked;
       end;
       Boundary.FixCollections;
+
+      if List.Count = 1 then
+      begin
+        frameSfrPestObs.SetData(Boundary.Observations);
+      end;
     end;
   end;
   frameCrossSection1.SetData(List, SetAll, ClearAll);
@@ -3828,6 +3835,9 @@ var
   NewState: TCheckBoxState;
   NewLocation : integer;
 begin
+{$IFNDEF PEST}
+  tabObservations.TabVisible := False;
+{$ENDIF}
   rdgParameters.BeginUpdate;
   dgFlowTimes.BeginUpdate;
   dgUp.BeginUpdate;
@@ -3839,6 +3849,8 @@ begin
   frameExternalFileValues.Grid.BeginUpdate;
   FGettingData := True;
   try
+    frameSfrPestObs.InitializeControls;
+    frameSfrPestObs.SpecifyObservationTypes(StreamGageOutputTypes);
     FoundFirst := False;
 
     rdeSegmentNumber.Text := '';
@@ -3884,6 +3896,7 @@ begin
     tabExternalFlowFile.TabVisible := List.Count = 1;
 
     rdeSegmentNumber.Enabled := True;
+
     for Index := 0 to List.Count - 1 do
     begin
       Item := List.Items[Index];
@@ -3909,6 +3922,10 @@ begin
         GetSfrFlowTable(Boundary, FoundFirst);
         GetUnsaturatedValues(Boundary, FoundFirst);
         GetExternalFlows(Boundary);
+        if List.Count = 1 then
+        begin
+          frameSfrPestObs.GetData(Boundary.Observations);
+        end;
 
         FoundFirst := True;
       end;

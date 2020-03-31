@@ -136,7 +136,7 @@ begin
         begin
           ProcessObsFile;
           OutputFileName := RemoveQuotes(Splitter[1]);
-          Assert(FileExists(OutputFileName), Format('The MNWI output file "%0:s" specified on line %1:d does not exist', [OutputFileName, FLineIndex]));
+          Assert(FileExists(OutputFileName), Format('The output file "%0:s" specified on line %1:d does not exist', [OutputFileName, FLineIndex]));
           FListingFile.Add(Format('Observations will be read from "%s"',
             [OutputFileName]));
           FListingFile.Add(UpperCase('Observation_Name, Observation_Type, Observation_Time, Observed_Value, Weight, Observation_Print'));

@@ -106,6 +106,7 @@ type
     MAXVAL: Integer;
     FSegDictionary: TDictionary<Integer, TSegment>;
     FLakDictionary: TDictionary<Integer, TScreenObject>;
+    FSfrObservationsUsed: Boolean;
     function NewFormat: boolean;
     procedure CheckParamInstances;
     procedure WriteDataSet1a;
@@ -169,6 +170,7 @@ type
     procedure CheckNonParamSegments;
     procedure CheckStreamBottomElevation(ScreenObject: TScreenObject;
       Grid: TModflowGrid; SfrReach: TSfr_Cell);
+    procedure WriteObsScript(const AFileName: string);
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -202,7 +204,8 @@ uses ModflowUnitNumbers, OrderedCollectionUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowSfrTable,
   ModflowSfrFlows, ModflowSfrChannelUnit, ModflowSfrEquationUnit,
   ModflowTimeUnit, frmProgressUnit, IntListUnit, Forms,
-  ModflowBoundaryUnit, Math, DataSetUnit;
+  ModflowBoundaryUnit, Math, DataSetUnit, ObservationComparisonsUnit,
+  PestObsUnit;
 
 resourcestring
   StrInvalidStartingTimeStep1 = 'Invalid starting time or missing data for the '
@@ -5215,6 +5218,7 @@ begin
     CloseFile;
   end;
   WriteGages(GageLines);
+  WriteObsScript(AFileName);
 end;
 
 procedure TModflowSFR_Writer.WriteGages(GageLines: TStrings);
@@ -5235,6 +5239,8 @@ var
   var
     Line: string;
     OutputName: string;
+//    ObsIndex: Integer;
+//    ObsItem: TSfrObs;
   begin
     UNIT_Number := Model.ParentModel.UnitNumbers.SequentialUnitNumber;
     Line := IntToStr(GAGESEG) + ' '
@@ -5246,8 +5252,18 @@ var
     OutputName := ChangeFileExt(FNameOfFile, '.sfrg');
     OutputName := OutputName + IntToStr(GageLines.Count);
     WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+
+    if OUTTYPE = 4 then
+    begin
+      Boundary.Observations.GageOutputName := OutputName;
+      if Boundary.Observations.Count > 0 then
+      begin
+        FSfrObservationsUsed := True;
+      end;
+    end;
   end;
 begin
+  FSfrObservationsUsed := False;
   for SegmentIndex := 0 to FSegments.Count - 1 do
   begin
     Segment := FSegments[SegmentIndex];
@@ -5312,6 +5328,129 @@ begin
         end;
       end;
     end;
+  end;
+end;
+
+procedure TModflowSFR_Writer.WriteObsScript(const AFileName: string);
+var
+  StartTime: Double;
+  ScriptFileName: string;
+  ComparisonsUsed: Boolean;
+  SegmentIndex: Integer;
+  ScreenObject: TScreenObject;
+//  Observations: TLakeObservations;
+  ObsIndex: Integer;
+//  Obs: TLakeObs;
+  CompIndex: Integer;
+  CompItem: TObsCompareItem;
+  Segment: TSegment;
+  Boundary: TSfrBoundary;
+  Observations: TSfrObservations;
+  Obs: TSfrObs;
+  function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  begin
+    Result := PrefixedObsName('SFR', ObjectIndex, Obs);
+  end;
+begin
+{$IFNDEF PEST}
+  Exit;
+{$ENDIF}
+  if not FSfrObservationsUsed then
+  begin
+    Exit;
+  end;
+
+  StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+  ScriptFileName := ChangeFileExt(AFileName, '.Sfr_script');
+
+  OpenFile(ScriptFileName);
+  try
+    ComparisonsUsed := False;
+    // OBSERVATIONS block
+    WriteString('BEGIN OBSERVATIONS');
+    NewLine;
+    for SegmentIndex := 0 to FSegments.Count - 1 do
+    begin
+      Segment := FSegments[SegmentIndex];
+      ScreenObject := Segment.FScreenObject;
+      Boundary := Segment.FScreenObject.ModflowSfrBoundary;
+      Observations := Boundary.Observations;
+      if Observations.Count > 0 then
+      begin
+        WriteString('  # ');
+        WriteString('Observations defined in ');
+        WriteString(ScreenObject.Name);
+        NewLine;
+        WriteString('  FILENAME ');
+        WriteString(Observations.GageOutputName);
+        NewLine;
+
+        for ObsIndex := 0 to Observations.Count - 1 do
+        begin
+          Obs := Observations[ObsIndex];
+  //          FObsItemDictionary.Add(Obs.GUID, Obs);
+          WriteString('  OBSERVATION ');
+          WriteString(GetObName(SegmentIndex, Obs));
+          WriteString(' ');
+          WriteString(Obs.ObservationType);
+          WriteFloat(Obs.Time - StartTime);
+          WriteFloat(Obs.ObservedValue);
+          WriteFloat(Obs.Weight);
+          WriteString(' PRINT');
+          NewLine;
+        end;
+
+        if Observations.Comparisons.Count > 0 then
+        begin
+          ComparisonsUsed := True;
+        end;
+      end;
+    end;
+    WriteString('END OBSERVATIONS');
+
+    // DERIVED_OBSERVATIONS block
+    if ComparisonsUsed then
+    begin
+      NewLine;
+      NewLine;
+      WriteString('BEGIN DERIVED_OBSERVATIONS');
+      NewLine;
+
+      for SegmentIndex := 0 to FSegments.Count - 1 do
+      begin
+        Segment := FSegments[SegmentIndex];
+        Boundary := Segment.FScreenObject.ModflowSfrBoundary;
+        ScreenObject := Segment.FScreenObject;
+        Observations := Boundary.Observations;
+        if Observations.Comparisons.Count > 0 then
+        begin
+          WriteString('  # ');
+          WriteString('Observation comparisons defined in ');
+          WriteString(ScreenObject.Name);
+          NewLine;
+        end;
+
+        for CompIndex := 0 to Observations.Comparisons.Count - 1 do
+        begin
+          WriteString('  DIFFERENCE ');
+          CompItem := Observations.Comparisons[CompIndex];
+          WriteString(GetObName(SegmentIndex, CompItem));
+          WriteString(' ');
+          Obs := Observations[CompItem.Index1];
+          WriteString(Obs.ExportedName);
+          WriteString(' ');
+          Obs := Observations[CompItem.Index2];
+          WriteString(Obs.ExportedName);
+          WriteFloat(CompItem.ObservedValue);
+          WriteFloat(CompItem.Weight);
+          WriteString(' PRINT');
+          NewLine;
+        end;
+      end;
+      WriteString('END DERIVED_OBSERVATIONS');
+    end;
+  finally
+    CloseFile;
   end;
 end;
 

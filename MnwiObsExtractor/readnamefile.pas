@@ -373,7 +373,7 @@ begin
       end;
     end;
 
-    for ItemIndex := 0 to Pred(SortedInputFileLinks.Count) do
+    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
     begin
       if FInputFileLinks[ItemIndex].FileType = iftDerived then
       begin
@@ -393,10 +393,6 @@ begin
 
     for ItemIndex := 0 to Pred(SortedInputFileLinks.Count) do
     begin
-      if SortedInputFileLinks[ItemIndex].FileType = iftDerived then
-      begin
-        break;
-      end;
       ObsProcessor := ObsProcessorList[ItemIndex];
       ObsProcessor.ProcessInstructionFile;
     end;

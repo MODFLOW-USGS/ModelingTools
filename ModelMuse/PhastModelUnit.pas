@@ -40,7 +40,7 @@ uses System.UITypes,
   FootprintPropertiesUnit, ModflowSwiObsUnit, ModflowRipPlantGroupsUnit,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
-  Mt3dCtsSystemUnit, ObservationComparisonsUnit;
+  Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -3239,6 +3239,7 @@ that affects the model output should also have a comment. }
     function NumberOfMt3dChemComponents: integer;
     property Mt3dSpecesName[const Index: Integer]: string read GetMt3dSpecesName;
     function Mt3dIsSelected: Boolean; virtual;
+    procedure FileObsItemList(List: TObservationList);
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -9151,7 +9152,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModpathGridMetaDataWriterUnit, ModflowLakMf6Unit, ModflowLakMf6WriterUnit,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
-  Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit;
+  Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
+  ModflowMnw2Unit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -30951,6 +30953,80 @@ end;
 function TCustomModel.FarmProcessUsed(Sender: TObject): boolean;
 begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
+end;
+
+procedure TCustomModel.FileObsItemList(List: TObservationList);
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  Mnw2Observations: TMnw2Observations;
+  ObsIndex: Integer;
+  AnObs: TCustomObservationItem;
+  LakObservations: TLakeObservations;
+  SfrObservations: TSfrObservations;
+begin
+  for ObjectIndex := 0 to ScreenObjectCount - 1 do
+  begin
+    AScreenObject := ScreenObjects[ObjectIndex];
+    if AScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+
+    if (ModelSelection in ModflowSelection) then
+    begin
+      if ModelSelection <> msModflow2015 then
+      begin
+        if ModflowPackages.Mnw2Package.IsSelected then
+        begin
+          if (AScreenObject.ModflowMnw2Boundary <> nil)
+            and AScreenObject.ModflowMnw2Boundary.Used
+            and (AScreenObject.ModflowMnw2Boundary.Observations.Count > 0) then
+          begin
+            Mnw2Observations := AScreenObject.ModflowMnw2Boundary.Observations;
+            for ObsIndex := 0 to Mnw2Observations.Count - 1 do
+            begin
+              AnObs := Mnw2Observations[ObsIndex];
+              List.Add(AnObs);
+            end;
+          end;
+        end;
+
+        if ModflowPackages.LakPackage.IsSelected then
+        begin
+          if (AScreenObject.ModflowLakBoundary <> nil)
+            and AScreenObject.ModflowLakBoundary.Used
+            and (AScreenObject.ModflowLakBoundary.Observations.Count > 0) then
+          begin
+            LakObservations := AScreenObject.ModflowLakBoundary.Observations;
+            for ObsIndex := 0 to LakObservations.Count - 1 do
+            begin
+              AnObs := LakObservations[ObsIndex];
+              List.Add(AnObs);
+            end;
+          end;
+        end;
+
+        if ModflowPackages.SfrPackage.IsSelected then
+        begin
+          if (AScreenObject.ModflowSfrBoundary <> nil)
+            and AScreenObject.ModflowSfrBoundary.Used
+            and (AScreenObject.ModflowSfrBoundary.Observations.Count > 0) then
+          begin
+            SfrObservations := AScreenObject.ModflowSfrBoundary.Observations;
+            for ObsIndex := 0 to SfrObservations.Count - 1 do
+            begin
+              AnObs := SfrObservations[ObsIndex];
+              List.Add(AnObs);
+            end;
+          end;
+        end;
+
+      end;
+    end;
+
+  end;
+
 end;
 
 procedure TCustomModel.FillCompilerList(CompilerList: TList);

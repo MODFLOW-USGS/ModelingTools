@@ -5,7 +5,7 @@ interface
 uses Classes, RbwParser, RealListUnit, OrderedCollectionUnit, ModflowCellUnit,
   ModflowBoundaryUnit, ModflowSfrReachUnit, ModflowSfrChannelUnit, GoPhastTypes,
   ModflowSfrSegment, ModflowSfrUnsatSegment, ModflowSfrTable, ModflowSfrFlows,
-  ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit;
+  ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit, PestObsUnit;
 
 type
   TGageLocation = (glNone, glFirst, glLast, glAll);
@@ -90,6 +90,35 @@ type
     property FlowFileName: string read GetFlowFileName write SetFlowFileName;
   end;
 
+  TSfrObs = class(TCustomTimeObservationItem)
+  private
+    FObsType: Integer;
+    procedure SetObsType(const Value: Integer);
+  protected
+    function GetObsTypeIndex: Integer; override;
+    procedure SetObsTypeIndex(const Value: Integer); override;
+  public
+    function ObservationType: string; override;
+    function Units: string; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property ObsType: Integer read FObsType write SetObsType stored True;
+    property GUID;
+  end;
+
+  TSfrObservations = class(TCustomComparisonCollection)
+  private
+    FGageOutputName: string;
+    function GetSfrItem(Index: Integer): TSfrObs;
+    procedure SetSfrItem(Index: Integer; const Value: TSfrObs);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    property Items[Index: Integer]: TSfrObs read GetSfrItem
+      write SetSfrItem; default;
+    function Add: TSfrObs;
+    property GageOutputName: string read FGageOutputName write FGageOutputName;
+  end;
+
   // @name represents the MODFLOW Stream Flow Routing boundaries associated with
   // a single @link(TScreenObject).
   //
@@ -119,6 +148,7 @@ type
     FGage7: boolean;
     FGageLocation: TGageLocation;
     FExternalFlow: TExternalFlowProperties;
+    FObservations: TSfrObservations;
     procedure SetSegmentNumber(const Value: integer);
     procedure SetChannelValues(const Value: TSfrChannelCollection);
     procedure SetUpstreamSegmentValues(const Value: TSfrSegmentCollection);
@@ -143,6 +173,7 @@ type
     function GetOutTypes: TByteSet;
     procedure SetGageLocation(const Value: TGageLocation);
     procedure SetExternalFlow(const Value: TExternalFlowProperties);
+    procedure SetObservations(const Value: TSfrObservations);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -214,10 +245,15 @@ type
       write SetGageLocation;
     property ExternalFlow: TExternalFlowProperties read FExternalFlow
       write SetExternalFlow;
+    property Observations: TSfrObservations read FObservations write SetObservations;
   end;
 
 resourcestring
   StrIncompleteSFRData = 'Incomplete SFR data';
+
+var
+  StreamGageOutputTypes: TStringList;
+  StreamGageOutputTypeUnits: TStringList;
 
 implementation
 
@@ -262,6 +298,7 @@ begin
     Gage7 := Sfr.Gage7;
     GageLocation := Sfr.GageLocation;
     ExternalFlow := Sfr.ExternalFlow;
+    Observations := Sfr.Observations;
   end;
   inherited;
 end;
@@ -331,7 +368,17 @@ begin
 end;
 
 constructor TSfrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+var
+  OnInvalidateModelEvent: TNotifyEvent;
 begin
+  if Model = nil then
+  begin
+    OnInvalidateModelEvent := nil;
+  end
+  else
+  begin
+    OnInvalidateModelEvent := Model.Invalidate;
+  end;
   inherited;
   if Model <> nil then
   begin
@@ -351,10 +398,13 @@ begin
   FSegmentFlows := TSfrSegmentFlowCollection.Create(self, Model, ScreenObject);
   FEquationValues := TSfrEquationCollection.Create(self, Model, ScreenObject);
   FExternalFlow := TExternalFlowProperties.Create(Model);
+
+  FObservations := TSfrObservations.Create(OnInvalidateModelEvent, ScreenObject);
 end;
 
 destructor TSfrBoundary.Destroy;
 begin
+  FreeAndNil(FObservations);
   FreeAndNil(FExternalFlow);
   FreeAndNil(FEquationValues);
   FreeAndNil(FSegmentFlows);
@@ -576,7 +626,8 @@ begin
     Include(result, 3);
     Exclude(result, 0);
   end;
-  if result = [1,2,3] then
+  if (result = [1,2,3])
+    or ((Observations.Count > 0)  and (GageLocation <> glAll)) then
   begin
     result := [4];
   end;
@@ -700,6 +751,11 @@ begin
     InvalidateModel;
     FGageLocation := Value;
   end;
+end;
+
+procedure TSfrBoundary.SetObservations(const Value: TSfrObservations);
+begin
+  FObservations.Assign(Value);
 end;
 
 procedure TSfrBoundary.SetParamIcalc(const Value: TSfrParamIcalcCollection);
@@ -1082,6 +1138,103 @@ begin
     FReferenceTimeChoice := Value;
   end;
 end;
+
+procedure InitializeStreamGageOutputTypes;
+begin
+  StreamGageOutputTypes := TStringList.Create;
+  StreamGageOutputTypeUnits := TStringList.Create;
+  StreamGageOutputTypes.Add('Stage');       StreamGageOutputTypeUnits.Add('L');
+  StreamGageOutputTypes.Add('Flow');        StreamGageOutputTypeUnits.Add('L3/T');
+  StreamGageOutputTypes.Add('Depth');       StreamGageOutputTypeUnits.Add('L');
+  StreamGageOutputTypes.Add('Width');       StreamGageOutputTypeUnits.Add('L');
+  StreamGageOutputTypes.Add('Midpt-Flow');  StreamGageOutputTypeUnits.Add('L3/T');
+  StreamGageOutputTypes.Add('Precip.');     StreamGageOutputTypeUnits.Add('L3/T');
+  StreamGageOutputTypes.Add('ET');          StreamGageOutputTypeUnits.Add('L3/T');
+  StreamGageOutputTypes.Add('Runoff');      StreamGageOutputTypeUnits.Add('L3/T');
+  StreamGageOutputTypes.Add('Conductance'); StreamGageOutputTypeUnits.Add('L2/T');
+  StreamGageOutputTypes.Add('HeadDiff');    StreamGageOutputTypeUnits.Add('L');
+  StreamGageOutputTypes.Add('Hyd.Grad.');   StreamGageOutputTypeUnits.Add('L/L');
+end;
+
+{ TSfrObs }
+
+procedure TSfrObs.Assign(Source: TPersistent);
+begin
+  if Source is TSfrObs then
+  begin
+    ObsType := TSfrObs(Source).ObsType;
+  end;
+  inherited;
+end;
+
+function TSfrObs.GetObsTypeIndex: Integer;
+begin
+  result := ObsType;
+end;
+
+function TSfrObs.ObservationType: string;
+begin
+  if (FObsType >= 0) and (FObsType < StreamGageOutputTypes.Count) then
+  begin
+    result := StreamGageOutputTypes[FObsType]
+  end
+  else
+  begin
+    result := inherited;
+  end;
+end;
+
+procedure TSfrObs.SetObsType(const Value: Integer);
+begin
+  SetIntegerProperty(FObsType, Value);
+end;
+
+procedure TSfrObs.SetObsTypeIndex(const Value: Integer);
+begin
+  ObsType := Value;
+end;
+
+function TSfrObs.Units: string;
+begin
+  if (FObsType >= 0) and (FObsType < StreamGageOutputTypeUnits.Count) then
+  begin
+    result := StreamGageOutputTypeUnits[FObsType]
+  end
+  else
+  begin
+    result := inherited;
+  end;
+end;
+
+{ TSfrObservations }
+
+function TSfrObservations.Add: TSfrObs;
+begin
+  result := inherited Add as TSfrObs;
+end;
+
+constructor TSfrObservations.Create(InvalidateModelEvent: TNotifyEvent;
+  ScreenObject: TObject);
+begin
+  inherited Create(TSfrObs, InvalidateModelEvent, ScreenObject);
+end;
+
+function TSfrObservations.GetSfrItem(Index: Integer): TSfrObs;
+begin
+  result := inherited Items[Index] as TSfrObs;
+end;
+
+procedure TSfrObservations.SetSfrItem(Index: Integer; const Value: TSfrObs);
+begin
+  inherited Items[Index] := Value;
+end;
+
+initialization
+  InitializeStreamGageOutputTypes;
+
+finalization
+  StreamGageOutputTypes.Free;
+  StreamGageOutputTypeUnits.Free;
 
 end.
 

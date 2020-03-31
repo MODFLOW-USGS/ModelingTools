@@ -90,6 +90,7 @@ end;
 
 constructor TSfrGageObsExtractor.Create;
 begin
+  inherited;
   FGageOutputTypes := StreamGageOutputTypes;
 end;
 

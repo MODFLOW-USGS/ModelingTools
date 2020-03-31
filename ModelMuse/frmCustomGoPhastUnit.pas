@@ -1706,6 +1706,7 @@ begin
       begin
         Grid.Cells[ColIndex,RowIndex] := '';
         Grid.Checked[ColIndex,RowIndex] := False;
+        Grid.Objects[ColIndex,RowIndex] := nil;
       end;
     end;
   finally
