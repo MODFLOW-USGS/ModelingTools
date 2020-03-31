@@ -284,7 +284,6 @@ begin
         raise;
       end;
     end;
-    Writeln('normal termination');
 
   finally
     FObsDictionary.Free;
@@ -403,6 +402,7 @@ begin
       ObsProcessor.HandleDerivedObservations;
       ObsProcessor.WriteFiles;
     end;
+    Writeln('normal termination');
 
   finally
     SortedInputFileLinks.Free;

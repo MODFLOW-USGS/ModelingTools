@@ -519,39 +519,6 @@ begin
   end;
   FListingFile.Add('');
   Assert(ObsPrinted, 'No observations printed');
-  //try
-  //  FObservationsFile.SaveToFile(FObservationsFileName);
-  //except on E: Exception do
-  //  begin
-  //    FListingFile.Add(E.Message);
-  //    if FObservationsFileName = '' then
-  //    begin
-  //      ErrorMessage := 'Error saving observations file because no file name specified.';
-  //    end
-  //    else
-  //    begin
-  //      ErrorMessage := Format('Error saving observation file "%s".', [FObservationsFileName])
-  //    end;
-  //    WriteLn(ErrorMessage);
-  //    FListingFile.Add(ErrorMessage);
-  //  end;
-  //end;
-  //try
-  //  FListingFile.Add('normal termination');
-  //  FListingFile.SaveToFile(FListingFileName);
-  //except  on E: Exception do
-  //  begin
-  //    if FListingFileName = '' then
-  //    begin
-  //      WriteLn('Error saving listing file because no file name specified.');
-  //    end
-  //    else
-  //    begin
-  //      WriteLn(Format('Error saving listing file "%s".', [FListingFileName]));
-  //    end;
-  //  end;
-  //end;
-  //Writeln('normal termination');
 end;
 
 constructor TObsProcessor.Create(FileLink: TInputFileLink;
