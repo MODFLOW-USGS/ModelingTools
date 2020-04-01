@@ -243,6 +243,7 @@ type
     FDeletingTime: Boolean;
     FTimeCount: integer;
     FInitializing: Boolean;
+    FListCount: Integer;
     procedure PaintCrossSection(Sender: TObject; Buffer: TBitmap32);
     procedure DrawCrossSection(ABitMap: TBitmap32);
     procedure dgCrossSectionSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -839,6 +840,12 @@ begin
   cbGag5.Enabled := rgGages.ItemIndex <> 0;
   cbGag6.Enabled := rgGages.ItemIndex <> 0;
   cbGag7.Enabled := rgGages.ItemIndex <> 0;
+
+{$IFDEF PEST}
+  tabObservations.TabVisible := (rgGages.ItemIndex in [1,2])
+    and (FListCount = 1);
+{$ENDIF}
+
 end;
 
 procedure TframeScreenObjectSFR.btnInserParametersClick(Sender: TObject);
@@ -3896,6 +3903,8 @@ begin
     tabExternalFlowFile.TabVisible := List.Count = 1;
 
     rdeSegmentNumber.Enabled := True;
+
+    FListCount := List.Count;
 
     for Index := 0 to List.Count - 1 do
     begin

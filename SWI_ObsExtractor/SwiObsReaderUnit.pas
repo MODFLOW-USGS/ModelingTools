@@ -1,14 +1,26 @@
 unit SwiObsReaderUnit;
 
+{$IFDEF FPC}
+{$mode Delphi}{$H+}
+{$ENDIF}
+
 interface
 
 uses
-  System.Classes, RealListUnit, System.Generics.Collections, System.SysUtils;
+{$IFDEF FPC}
+  streamex,
+{$ENDIF}
+  Classes,
+  RealListUnit, 
+  Generics.Collections,
+  SysUtils;
 
 type
   TDoubleArray = array of Double;
   TValues = TList<TDoubleArray>;
   TSwiFileFormat = (sffAscii, sffBinarySingle, sffBinaryDouble);
+
+  { TSwiObs }
 
   TSwiObs = class(TObject)
   private
@@ -56,7 +68,7 @@ begin
   FValues.Free;
   FNames.Free;
   FTimes.Free;
-  inherited;
+  inherited Destroy;
 end;
 
 function TSwiObs.GetObservationValue(TimeIndex, ObsIndex: Integer): double;

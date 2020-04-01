@@ -1,9 +1,19 @@
 unit SwiObsInputReader;
 
+{$IFDEF FPC}
+  {$mode Delphi}{$H+}
+{$ENDIF}  
+
 interface
 
 uses
-  System.Classes, System.SysUtils,  System.Generics.Collections,
+  Classes, 
+  SysUtils, 
+  Generics.Collections, 
+{$IFDEF FPC}
+  SimpleTextWriter,
+  streamex,
+{$ENDIF}  
   SwiObsReaderUnit;
 
 procedure ExtractSwiObservations;
@@ -22,6 +32,8 @@ type
 
   TSwiAsciiObsIDObjList = TObjectList<TSwiAsciiObsID>;
 
+  { TInterpolatedSwiObs }
+
   TInterpolatedSwiObs = class(TObject)
     Name: string;
     Time: double;
@@ -35,6 +47,8 @@ type
   end;
 
   TInterpolatedSwiObsObjList = TObjectList<TInterpolatedSwiObs>;
+
+  { TSwiObservationExtractor }
 
   TSwiObservationExtractor = class(TObject)
   private
@@ -50,7 +64,11 @@ type
     FCurrentObs: TInterpolatedSwiObs;
     FObservationCount: integer;
     FSwiObs: TSwiObs;
+{$IFDEF FPC}
+    FOutputFile: TSimpleTextWriter;
+{$ELSE}
     FOutputFile: TStreamWriter;
+{$ENDIF}
     FLinesToSkip: integer;
     procedure ReadInputOptions(Input: TStringList);
     procedure ReadFileOptions(Input: TStringList; var LineIndex: integer);
@@ -78,7 +96,13 @@ type
 implementation
 
 uses
-  System.IOUtils, SwiObsUtilities, System.StrUtils, InterpolatedObsResourceUnit,
+{$IFNDEF FPC}
+  System.IOUtils, 
+  System.StrUtils, 
+{$ENDIF}
+
+  SwiObsUtilities, 
+  InterpolatedObsResourceUnit,
   DisclaimerTextUnit;
 
 resourcestring
@@ -94,11 +118,11 @@ resourcestring
   'ng the observations';
   StrForBinaryFilesObsCount = 'For binary files, you must specify the total ' +
   'number of observations.';
-  StrZetaError = 'Error convertng "%0:s" to an integer in the observation wi' +
-  'th the name "%1:s"';
+  //StrZetaError = 'Error convertng "%0:s" to an integer in the observation wi' +
+  //'th the name "%1:s"';
   StrErrorConvertingtoNumber = 'Error converting "%s" to a number';
-  StrErrorConvertngFraction = 'Error convertng "%0:s" to an real number in t' +
-  'he observation with the name "%1:s"';
+  //StrErrorConvertngFraction = 'Error convertng "%0:s" to an real number in t' +
+  //'he observation with the name "%1:s"';
   StrUnrecognizedObsTab = 'Unrecognized tag in observations: "%S';
   StrSWIASCIIObservatio = 'SWI ASCII observations must include the observati' +
   'on name, zeta surface and Fraction. This was not found in %s';
@@ -126,7 +150,7 @@ begin
     WriteLn('What is the name of the input file?');
     Readln(InputFile);
   end;
-  if TFile.Exists(InputFile) then
+  if FileExists(InputFile) then
   begin
     Extractor := TSwiObservationExtractor.Create(InputFile);
     try
@@ -154,7 +178,7 @@ begin
   FOutputFile := nil;
   try
     FSwiObs := TSwiObs.Create;
-    Assert(TFile.Exists(InputFile));
+    Assert(FileExists(InputFile));
     AStringList := TStringList.Create;
     try
       AStringList.LoadFromFile(InputFile);
@@ -187,7 +211,7 @@ begin
   FSwiObs.Free;
   FOutputFile.Free;
   FObs.Free;
-  inherited;
+  inherited Destroy;
 end;
 
 procedure TSwiObservationExtractor.WriteObsDefinition;
@@ -229,7 +253,11 @@ var
   SwiObsFile: TStreamReader;
 begin
   Assert(FSwiObsFileName <> '');
+{$IFDEF FPC}
+  SwiObsFile := TSimpleStreamReader.Create(FSwiObsFileName);
+{$ELSE}
   SwiObsFile := TFile.OpenText(FSwiObsFileName);
+{$ENDIF}
   try
     FSwiObs.ReadAsciiSwiObs(SwiObsFile);
   finally
@@ -242,7 +270,11 @@ var
   SwiObsFile: TFileStream;
 begin
   Assert(FSwiObsFileName <> '');
+{$IFDEF FPC}
+  SwiObsFile := TFileStream.Create(FSwiObsFileName, fmOpenRead or fmShareDenyWrite);
+{$ELSE}
   SwiObsFile := TFile.OpenRead(FSwiObsFileName);
+{$ENDIF}
   try
     FSwiObs.ReadBinarySwiObs(SwiObsFile, FZoneCount*FObservationCount,
       FSwiFileFormat);
@@ -251,7 +283,8 @@ begin
   end;
 end;
 
-procedure TSwiObservationExtractor.ReadAsciiObservationIDs(InputLine: TStringList);
+procedure TSwiObservationExtractor.ReadAsciiObservationIDs(
+  InputLine: TStringList);
 var
   Tag: string;
   AValue: extended;
@@ -365,7 +398,8 @@ begin
   end;
 end;
 
-procedure TSwiObservationExtractor.ReadBinaryObservationIDs(InputLine: TStringList);
+procedure TSwiObservationExtractor.ReadBinaryObservationIDs(
+  InputLine: TStringList);
 var
   Tag: string;
   AValue: extended;
@@ -509,7 +543,11 @@ begin
         if Tag = StrOUTPUTFILE then
         begin
           FOutputFileName := Splitter[1];
+{$IFDEF FPC}
+          FOutputFile := TSimpleTextWriter.Create(FOutputFileName);
+{$ELSE}
           FOutputFile := TFile.CreateText(FOutputFileName);
+{$ENDIF}
           WriteLine('SWI Observation Interpolator Version ' + Version);
 
           WriteLine;
@@ -699,8 +737,13 @@ procedure TSwiObservationExtractor.WriteLine(Value: string);
 begin
   if FOutputFile <> nil then
   begin
+{$IFDEF FPC}
+    FOutputFile.Write(Value);
+    WriteLine;
+{$ELSE}
     FOutputFile.WriteLine(Value);
     Inc(FLinesToSkip);
+{$ENDIF}
   end;
 end;
 
@@ -709,8 +752,13 @@ begin
   if FOutputFile <> nil then
   begin
     FOutputFile.Write(' ');
+{$IFDEF FPC}
+    FOutputFile.Write(Value);
+    WriteLine;
+{$ELSE}
     FOutputFile.WriteLine(Value);
     Inc(FLinesToSkip);
+{$ENDIF}
   end;
 end;
 
@@ -718,7 +766,11 @@ procedure TSwiObservationExtractor.WriteLine;
 begin
   if FOutputFile <> nil then
   begin
+{$IFDEF FPC}
+    FOutputFile.Write(LineEnding);
+{$ELSE}
     FOutputFile.WriteLine;
+{$ENDIF}
     Inc(FLinesToSkip);
   end;
 end;
@@ -737,10 +789,18 @@ var
   ObsIndex: Integer;
   AnObs: TInterpolatedSwiObs;
   InstructionFileName: string;
+{$IFDEF FPC}
+  InstructionFile: TSimpleTextWriter;
+{$ELSE}
   InstructionFile: TStreamWriter;
+{$ENDIF}
 begin
   InstructionFileName := FOutputFileName + '.jif';
+{$IFDEF FPC}
+  InstructionFile := TSimpleTextWriter.Create(InstructionFileName);
+{$ELSE}
   InstructionFile := TFile.CreateText(InstructionFileName);
+{$ENDIF}
   try
     WriteLine('OBSERVATIONS');
     WriteLine('Simulated Value, Observed Value, Name');
@@ -790,7 +850,7 @@ destructor TInterpolatedSwiObs.Destroy;
 begin
   FBinaryObs.Free;
   FAsciiObs.Free;
-  inherited;
+  inherited Destroy;
 end;
 
 function TInterpolatedSwiObs.InterpolatedValue(SwiObs: TSwiObs;

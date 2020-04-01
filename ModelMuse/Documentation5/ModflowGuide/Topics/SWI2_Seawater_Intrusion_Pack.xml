@@ -116,7 +116,7 @@
                 <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
                   <tr style="vertical-align:top">
                     <td>
-                      <para styleclass="Normal"><anchor id="NOBS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of OBS observation locations.</text></para>
+                      <para styleclass="Normal"><anchor id="NOBS" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Number of OBS observation locations. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWI2_Seawater_Intrusion_Pack" anchor="DataSet8" styleclass="Normal" translate="true">Data Set 8.</link></para>
                     </td>
                   </tr>
                 </table></para>
@@ -520,7 +520,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Set 8</text></para>
+          <para styleclass="Normal"><anchor id="DataSet8" styleclass="Normal"></anchor><text styleclass="Normal" translate="true">Data Set 8</text></para>
         </td>
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">OBSNAM LAYER ROW COLUMN</text></para>

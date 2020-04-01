@@ -2,7 +2,7 @@ unit ModflowGageUnit;
 
 interface
 
-uses Classes, GoPhastTypes, ModflowBoundaryUnit, SysUtils;
+uses Classes, GoPhastTypes, ModflowBoundaryUnit, SysUtils, ModflowSfrUnit;
 
 Type
   TStreamGage = class(TGoPhastPersistent)
@@ -15,6 +15,7 @@ Type
     FGage7: boolean;
     FGage5: boolean;
     FScreenObject: TObject;
+    FObservations: TSfrObservations;
     procedure SetGage0(const Value: boolean);
     procedure SetGage1(const Value: boolean);
     procedure SetGage2(const Value: boolean);
@@ -22,10 +23,12 @@ Type
     procedure SetGage5(const Value: boolean);
     procedure SetGage6(const Value: boolean);
     procedure SetGage7(const Value: boolean);
+    procedure SetObservations(const Value: TSfrObservations);
   public
     procedure Assign(Source: TPersistent); override;
     function Used: boolean;
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    destructor Destroy; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure Evaluate(DataSets: TList; AModel: TBaseModel);
@@ -37,6 +40,11 @@ Type
     property Gage5: boolean read FGage5 write SetGage5;
     property Gage6: boolean read FGage6 write SetGage6;
     property Gage7: boolean read FGage7 write SetGage7;
+    property Observations: TSfrObservations read FObservations write SetObservations
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
 implementation
@@ -63,6 +71,7 @@ begin
     Gage5 := SourceGage.Gage5;
     Gage6 := SourceGage.Gage6;
     Gage7 := SourceGage.Gage7;
+    Observations := SourceGage.Observations;
   end
   else
   begin
@@ -74,6 +83,13 @@ constructor TStreamGage.Create(InvalidateModelEvent: TNotifyEvent; ScreenObject:
 begin
   inherited Create(InvalidateModelEvent);
   FScreenObject := ScreenObject;
+  FObservations := TSfrObservations.Create(InvalidateModelEvent, ScreenObject);
+end;
+
+destructor TStreamGage.Destroy;
+begin
+  FObservations.Free;
+  inherited;
 end;
 
 procedure TStreamGage.Evaluate(DataSets: TList; AModel: TBaseModel);
@@ -121,6 +137,15 @@ begin
         LocalModel.AdjustCellPosition(Cell);
       end;
       Annotation := Format(StrAssignedByS, [ScreenObject.Name]);
+      
+      if Observations.Count > 0 then
+      begin
+        Gage0 := True;
+        Gage1 := True;
+        Gage2 := True;
+        Gage3 := True;
+      end;
+      
       if Gage0 then
       begin
         DataArray := DataSets[0];
@@ -223,6 +248,11 @@ begin
     InvalidateModel;
     FGage7 := Value;
   end;
+end;
+
+procedure TStreamGage.SetObservations(const Value: TSfrObservations);
+begin
+  FObservations.Assign(Value);
 end;
 
 function TStreamGage.Used: boolean;

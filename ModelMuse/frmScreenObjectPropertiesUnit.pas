@@ -213,7 +213,6 @@ type
     lblAssociatedModelDataSets: TLabel;
     reAssocModDataSets: TRichEdit;
     jvspGAGE: TJvStandardPage;
-    gbGageObservationTypes: TGroupBox;
     cbGageStandard: TCheckBox;
     cbGage1: TCheckBox;
     cbGage2: TCheckBox;
@@ -373,6 +372,11 @@ type
     frameMT3D_SFT: TframeScreenObjectMt3dSft;
     jvspCSUB: TJvStandardPage;
     frameCSUB: TframeScreenObjectCSub;
+    pnlGageTop: TPanel;
+    pcGage: TPageControl;
+    tabGageTypes: TTabSheet;
+    tabGageObservations: TTabSheet;
+    frameGagePestObs: TframePestObs;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1656,6 +1660,8 @@ type
     FRipNode: TJvPageIndexNode;
     FSutraGeneralizedTransportNode: TJvPageIndexNode;
     FSFR6_Node: TJvPageIndexNode;
+    FObjectCount: Integer;
+    FVertexCount: Integer;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2009,7 +2015,8 @@ type
     procedure GetRiverFluxObservations(const AScreenObjectList: TList);
     procedure CreateGageNode;
     procedure GetGages(ListOfScreenObjects: TList);
-    procedure SetGages(List: TList);
+    procedure SetGages(List: TList); overload;
+    procedure SetGages(Collection: TScreenObjectEditCollection); overload;
     procedure CreateMnw2Node;
     procedure CreateMnw1Node;
     procedure GetMnw2Boundary(const ScreenObjectList: TList);
@@ -2335,6 +2342,7 @@ type
       var PotentialSources: TSourcePackageChoices);
     procedure UpdateDrtReturnFlowLabels(Sender: TObject);
     procedure LakePestObsChanged(Sender: TObject);
+    procedure ShowGageObservations;
     { Private declarations }
   public
     procedure Initialize;
@@ -2934,6 +2942,15 @@ begin
   inherited;
   UpdateNodeState(FGHB_Node);
   StoreGhbBoundary;
+end;
+
+procedure TfrmScreenObjectProperties.ShowGageObservations;
+begin
+{$IFDEF PEST}
+  tabGageObservations.TabVisible := (FObjectCount = 1) and (FVertexCount = 1)
+{$ELSE}  
+  tabGageObservations.TabVisible := False;
+{$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.ShowOrHideObsTabs;
@@ -3697,6 +3714,10 @@ var
 //  ItemIndex: integer;
   TempList: TList;
 begin
+  FObjectCount := 1;
+  FVertexCount := AScreenObject.Count;
+  ShowGageObservations;
+  
   // This line should always be the first line.
   IsLoaded := False;
 
@@ -4784,6 +4805,8 @@ begin
     List.Free;
   end;
 
+  SetGages(FNewProperties);
+
   FUndoSetScreenObjectProperties.Free;
   FUndoSetScreenObjectProperties :=
     TUndoSetScreenObjectProperties.Create(FScreenObjectList,
@@ -4796,7 +4819,7 @@ begin
 
   if FUndoSetScreenObjectProperties <> nil then
   begin
-    SetGages(FScreenObjectList);
+//    SetGages(FScreenObjectList);
     SetAllFluxObservations(FScreenObjectList);
     FUndoSetScreenObjectProperties.UpdateObservations;
     frmGoPhast.UndoStack.Submit(FUndoSetScreenObjectProperties);
@@ -5527,6 +5550,10 @@ begin
       FCanFillTreeView := False;
       IsLoaded := False;
     end;
+
+    FObjectCount := AScreenObjectList.Count;
+    ShowGageObservations;
+
     if AScreenObjectList.Count > 1 then
     begin
       memoComments.Enabled := False;
@@ -7188,6 +7215,24 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.SetGages(
+  Collection: TScreenObjectEditCollection);
+var
+  List: TList;
+  index: Integer;
+begin
+  List := TList.Create;
+  try
+    for index := 0 to Collection.Count - 1 do
+    begin
+      List.Add(Collection[index].ScreenObject)
+    end;
+    SetGages(List);
+  finally
+    List.Free;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.GetFluxObservations(const AScreenObjectList: TList);
 begin
   GetHeadFluxObservations(AScreenObjectList);
@@ -7425,6 +7470,21 @@ var
   ScreenObject: TScreenObject;
   Gage: TStreamGage;
 begin
+  if tabGageObservations.TabVisible then
+  begin
+    ScreenObject := List[0];
+    Gage := ScreenObject.ModflowStreamGage;
+    if frameGagePestObs.frameObservations.seNumber.AsInteger > 0 then
+    begin
+      if Gage = nil then
+      begin
+        ScreenObject.CreateGagBoundary;
+        Gage := ScreenObject.ModflowStreamGage;
+      end;
+      frameGagePestObs.SetData(Gage.Observations);
+    end;
+  end;
+
   for Index := 0 to List.Count - 1 do
   begin
     ScreenObject := List[Index];
@@ -7487,6 +7547,14 @@ begin
       and (cbGage3.State = cbUnchecked) then
     begin
       Gage.Gage3 := False;
+    end;
+
+    if Gage.Observations.Count > 0 then
+    begin
+      Gage.Gage0 := True;
+      Gage.Gage1 := True;
+      Gage.Gage2 := True;
+      Gage.Gage3 := True;
     end;
 
     if (cbGage5.State = cbChecked) then
@@ -8558,6 +8626,7 @@ var
     end;
   end;
 begin
+  pcGage.ActivePageIndex := 0;
   cbGageStandard.AllowGrayed := False;
   cbGage1.AllowGrayed := False;
   cbGage2.AllowGrayed := False;
@@ -8645,6 +8714,18 @@ begin
     end;
   end;
   SetGageNodeStateIndex;
+
+  frameGagePestObs.InitializeControls;
+  frameGagePestObs.SpecifyObservationTypes(StreamGageOutputTypes);
+  if ListOfScreenObjects.Count = 1 then
+  begin
+    ScreenObject := ListOfScreenObjects[0];
+    Gage := ScreenObject.ModflowStreamGage;
+    if Gage <> nil then    
+    begin    
+      frameGagePestObs.GetData(Gage.Observations);
+    end;      
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.GetModpathParticles(ListOfScreenObjects: TList);

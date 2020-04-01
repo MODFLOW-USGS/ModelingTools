@@ -3,7 +3,7 @@ unit DisclaimerTextUnit;
 interface
 
 uses
-  System.Classes;
+  Classes;
 
 var
   Disclaimer: TStringList;
@@ -13,13 +13,23 @@ function DisclaimerString: string;
 implementation
 
 uses
-  System.SysUtils;
+  SysUtils;
 
 function DisclaimerString: string;
 var
   LineIndex: Integer;
+  {$IFDEF FPC}
+  {$ELSE}
   DisclaimBuilder: TStringBuilder;
+  {$ENDIF}
 begin
+  {$IFDEF FPC}
+  result := '';
+  for LineIndex := 0 to Disclaimer.Count - 1 do
+  begin
+    result := result + Disclaimer[LineIndex]+' ';
+  end;
+  {$ELSE}
   DisclaimBuilder := TStringBuilder.Create;
   try
     for LineIndex := 0 to Disclaimer.Count - 1 do
@@ -31,6 +41,7 @@ begin
   finally
     DisclaimBuilder.Free;
   end;
+  {$ENDIF}
 end;
 
 initialization

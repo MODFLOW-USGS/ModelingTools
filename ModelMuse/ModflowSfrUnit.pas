@@ -245,7 +245,11 @@ type
       write SetGageLocation;
     property ExternalFlow: TExternalFlowProperties read FExternalFlow
       write SetExternalFlow;
-    property Observations: TSfrObservations read FObservations write SetObservations;
+    property Observations: TSfrObservations read FObservations write SetObservations
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
   end;
 
 resourcestring

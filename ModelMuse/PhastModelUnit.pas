@@ -9008,6 +9008,7 @@ const
   //               Bug fix: Fixed bug that could cause range check errors when
   //                editing MNW2 wells.
   //               Bug fix: Fixed bug importing an existing MODFLOW model.
+  //               Bug fix: Fixed editing of stream gages.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.4';
@@ -31014,6 +31015,18 @@ begin
             and (AScreenObject.ModflowSfrBoundary.Observations.Count > 0) then
           begin
             SfrObservations := AScreenObject.ModflowSfrBoundary.Observations;
+            for ObsIndex := 0 to SfrObservations.Count - 1 do
+            begin
+              AnObs := SfrObservations[ObsIndex];
+              List.Add(AnObs);
+            end;
+          end;
+
+          if (AScreenObject.ModflowStreamGage <> nil)
+            and AScreenObject.ModflowStreamGage.Used
+            and (AScreenObject.ModflowStreamGage.Observations.Count > 0) then
+          begin
+            SfrObservations := AScreenObject.ModflowStreamGage.Observations;
             for ObsIndex := 0 to SfrObservations.Count - 1 do
             begin
               AnObs := SfrObservations[ObsIndex];

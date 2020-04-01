@@ -32842,12 +32842,9 @@ end;
 
 procedure TScreenObject.GetModpathCellList(CellList: TCellAssignmentList;
   AModel: TBaseModel);
-//var
-//  LocalModel: TCustomModel;
 begin
   Assert(CellList.Count = 0);
-//  LocalModel := AModel as TCustomModel;
-  GetCellsToAssign({LocalModel.Grid,} '0', nil, nil, CellList, alAll, AModel);
+  GetCellsToAssign('0', nil, nil, CellList, alAll, AModel);
 end;
 
 function TScreenObject.GetMt3dLktConcBoundary: TMt3dLktConcBoundary;

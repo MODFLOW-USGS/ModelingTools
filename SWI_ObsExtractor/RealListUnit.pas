@@ -5,6 +5,10 @@ unit RealListUnit;
 
 interface
 
+{$IFDEF FPC}
+  {$MODE Delphi}
+{$ENDIF}
+
 uses Classes, contnrs;
 
 type

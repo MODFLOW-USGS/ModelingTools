@@ -2,14 +2,14 @@ unit SwiObsUtilities;
 
 interface
 
-uses System.SysUtils, System.StrUtils;
+uses SysUtils, StrUtils;
 
 function TryFortranStrToFloat(AString: string; var value: Extended): Boolean;
 
 implementation
 
 uses
-  System.Math;
+  Math;
 
 function TryFortranStrToFloat(AString: string; var value: Extended): Boolean;
 var

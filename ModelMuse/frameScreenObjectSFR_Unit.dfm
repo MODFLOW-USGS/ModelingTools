@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabObservations
+    ActivePage = tabGage
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet
@@ -2883,56 +2883,77 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Height = 478
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = -47
-        ExplicitTop = 24
+        ExplicitWidth = 553
+        ExplicitHeight = 478
         inherited splObservations: TSplitter
           Top = 300
           Width = 553
+          ExplicitTop = 300
+          ExplicitWidth = 553
         end
         inherited grpDirectObs: TGroupBox
           Width = 553
           Height = 300
+          ExplicitWidth = 553
+          ExplicitHeight = 300
           inherited frameObservations: TframeGrid
             Width = 549
             Height = 283
+            ExplicitWidth = 549
+            ExplicitHeight = 283
             inherited Panel: TPanel
               Top = 242
               Width = 549
+              ExplicitTop = 242
+              ExplicitWidth = 549
               inherited sbAdd: TSpeedButton
                 Left = 287
+                ExplicitLeft = 287
               end
               inherited sbInsert: TSpeedButton
                 Left = 339
+                ExplicitLeft = 339
               end
               inherited sbDelete: TSpeedButton
                 Left = 392
+                ExplicitLeft = 392
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 549
               Height = 242
+              ExplicitWidth = 549
+              ExplicitHeight = 242
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
           Top = 305
           Width = 553
+          ExplicitTop = 305
+          ExplicitWidth = 553
           inherited frameObsComparisons: TframeGrid
             Width = 549
+            ExplicitWidth = 549
             inherited Panel: TPanel
               Width = 549
+              ExplicitWidth = 549
               inherited sbAdd: TSpeedButton
                 Left = 287
+                ExplicitLeft = 287
               end
               inherited sbInsert: TSpeedButton
                 Left = 339
+                ExplicitLeft = 339
               end
               inherited sbDelete: TSpeedButton
                 Left = 392
+                ExplicitLeft = 392
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 549
+              ExplicitWidth = 549
             end
           end
         end
