@@ -40,6 +40,8 @@ type
     function ObCellCount: integer;
   end;
 
+  TDataToWrite = (dtwObservedValues, dtwInstructions);
+
   TSwiWriter = class(TCustomPackageWriter)
   private
     FNameOfFile: string;
@@ -52,6 +54,7 @@ type
     NOBS: integer;
     NSRF: integer;
     FObsOutputFileName: string;
+    FDataToWrite: TDataToWrite;
     procedure EvaluateObservations;
     procedure EvaluateInterpolatedObservations;
     procedure WriteDataSet1;
@@ -67,7 +70,7 @@ type
     procedure WriteInterpolatedZetaFile(const AFileName: string);
     procedure WriteInterpolatedSwiFileOptions(const AFileName: string; ArchiveFile: Boolean = False);
     procedure WriteInterpolatedIDs;
-    procedure WriteSwiObsExtBatchFile(const AFileName: string);
+    procedure WriteSwiObsExtBatchFile(const AFileName: string; ArchiveFile: Boolean);
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -755,8 +758,23 @@ begin
     CloseFile;
   end;
 
-  WriteInterpolatedZetaFile(AFileName);
-  WriteSwiObsExtBatchFile(AFileName);
+  if Model.PestUsed then
+  begin
+    FDataToWrite := dtwObservedValues;
+    WriteInterpolatedZetaFile(AFileName);
+    WriteSwiObsExtBatchFile(AFileName, False);
+    WriteSwiObsExtBatchFile(AFileName, True);
+    FDataToWrite := dtwInstructions;
+    WriteInterpolatedZetaFile(AFileName);
+    WriteSwiObsExtBatchFile(AFileName, False);
+    WriteSwiObsExtBatchFile(AFileName, True);
+  end
+  else
+  begin
+    WriteInterpolatedZetaFile(AFileName);
+    WriteSwiObsExtBatchFile(AFileName, False);
+    WriteSwiObsExtBatchFile(AFileName, True);
+  end;
 end;
 
 procedure TSwiWriter.WriteInterpolatedIDs;
@@ -843,6 +861,27 @@ begin
   WriteString(StrBEGINFILEOPTIONS);
   NewLine;
 
+  if Model.PestUsed then
+  begin
+    WriteString('  INSTRUCTION_FILE_FORMAT PEST');
+    NewLine;
+
+    case FDataToWrite of
+      dtwObservedValues:
+        begin
+          WriteString('  DATA_TO_WRITE VALUES');
+          NewLine;
+        end;
+      dtwInstructions:
+        begin
+          WriteString('  DATA_TO_WRITE INSTRUCTIONS');
+          NewLine;
+        end;
+      else
+        Assert(False);
+    end;
+  end;
+
   OutputFileName := ChangeFileExt(AFileName, '.swi_obsi_out');
   Model.AddSwiObsExtOutputFile(OutputFileName);
   OutputFileName := ExtractFileName(OutputFileName);
@@ -914,7 +953,25 @@ var
 begin
   if FInterpolatedObs.Count > 0 then
   begin
-    FNameOfFile := ChangeFileExt(AFileName, '.swi_obsi');
+    if Model.PestUsed then
+    begin
+      case FDataToWrite of
+        dtwObservedValues:
+          begin
+            FNameOfFile := ChangeFileExt(AFileName, '.swi_obsiv');
+          end;
+        dtwInstructions:
+          begin
+            FNameOfFile := ChangeFileExt(AFileName, '.swi_obsit');
+          end;
+        else
+          Assert(False);
+      end;
+    end
+    else
+    begin
+      FNameOfFile := ChangeFileExt(AFileName, '.swi_obsi');
+    end;
 //    Model.AddSwiObsExtInputFile(FNameOfFile);
     OpenFile(FNameOfFile);
     try
@@ -944,7 +1001,7 @@ begin
   end;
 end;
 
-procedure TSwiWriter.WriteSwiObsExtBatchFile(const AFileName: string);
+procedure TSwiWriter.WriteSwiObsExtBatchFile(const AFileName: string; ArchiveFile: Boolean);
 var
   BatchFileName: string;
   BatchFile: TStringList;
@@ -955,22 +1012,59 @@ begin
   if FInterpolatedObs.Count > 0 then
   begin
     BatchFileName := ExtractFileDir(AFileName);
-    BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
-      + 'RunSwiObsExtractor.bat' + ArchiveExt;
+    if Model.PestUsed then
+    begin
+      case FDataToWrite of
+        dtwObservedValues:
+          begin
+            BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
+              + 'RunSwiObsExtractor.bat';
+          end;
+        dtwInstructions:
+          begin
+            BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
+              + 'GenerateSwiTemplate.bat';
+          end;
+        else
+          Assert(False);
+      end;
+    end
+    else
+    begin
+      BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
+        + 'RunSwiObsExtractor.bat';
+    end;
+    if ArchiveFile then
+    begin
+      BatchFileName := BatchFileName + ArchiveExt;
+    end;
     Model.AddSwiObsExtInputFile(BatchFileName);
 
     BatchFile := TStringList.Create;
     try
-      BatchFile.Add('if not exist "..\..\output\NUL" mkdir "..\..\output"');
+      if ArchiveFile then
+      begin
+        BatchFile.Add('if not exist "..\..\output\NUL" mkdir "..\..\output"');
 
-      Modelname := ExtractFileName(ChangeFileExt(AFileName, ''));
-      OutputPrefix := '..\..\output\output.' + Modelname + '_SWI_Observation_Extractor\';
+        Modelname := ExtractFileName(ChangeFileExt(AFileName, ''));
+        OutputPrefix := '..\..\output\output.' + Modelname + '_SWI_Observation_Extractor\';
 
-      BatchFile.Add(Format('if not exist "%0:sNUL" mkdir "%0:s"', [OutputPrefix]));
+        BatchFile.Add(Format('if not exist "%0:sNUL" mkdir "%0:s"', [OutputPrefix]));
+        SwiObsExtractor := '..\..\bin\SwiObsExtractor.exe ';
+      end
+      else
+      begin
+        SwiObsExtractor := 'SwiObsExtractor.exe ';
+      end;
 
-      SwiObsExtractor := '..\..\bin\SwiObsExtractor.exe ';
       BatchFile.Add(SwiObsExtractor + ExtractFileName(FNameOfFile) {+ ' /wait'});
-      BatchFile.Add('pause');
+      if Model.PestUsed then
+      begin
+        if FDataToWrite = dtwInstructions then
+        begin
+          BatchFile.Add('pause');
+        end;
+      end;
 
       BatchFile.SaveToFile(BatchFileName);
     finally

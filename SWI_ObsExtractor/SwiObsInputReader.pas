@@ -19,6 +19,10 @@ uses
 procedure ExtractSwiObservations;
 
 type
+  TInstructionFileFormat = (iffUcode, IffPest);
+  TDataToWrite = (dtwObservedValues, dtwInstructions);
+  TDataToWriteSet = set of TDataToWrite;
+
   TSwiBinaryObsID = class(TObject)
     Fraction: double;
     ObsNumber: integer;
@@ -64,12 +68,16 @@ type
     FCurrentObs: TInterpolatedSwiObs;
     FObservationCount: integer;
     FSwiObs: TSwiObs;
-{$IFDEF FPC}
-    FOutputFile: TSimpleTextWriter;
-{$ELSE}
-    FOutputFile: TStreamWriter;
-{$ENDIF}
     FLinesToSkip: integer;
+    FInstructionFileFormat: TInstructionFileFormat;
+    FDataToWriteSet: TDataToWriteSet;
+  {$IFDEF FPC}
+    FOutputFile: TSimpleTextWriter;
+    FInstructionFile: TSimpleTextWriter;
+  {$ELSE}
+    FOutputFile: TStreamWriter;
+    FInstructionFile: TStreamWriter;
+  {$ENDIF}
     procedure ReadInputOptions(Input: TStringList);
     procedure ReadFileOptions(Input: TStringList; var LineIndex: integer);
     procedure ReadObservationIDs(Input: TStringList; var LineIndex: integer);
@@ -87,6 +95,8 @@ type
     procedure Write(Value: integer); overload;
     procedure WriteInterpolatedValuesAndTemplate;
     procedure WriteObsDefinition;
+    procedure WriteInstructionHeader;
+    procedure WriteInstruction(AnObs: TInterpolatedSwiObs);
   public
     function Version: string;
     constructor Create(InputFile: string);
@@ -135,6 +145,17 @@ resourcestring
   'SWI observation definition';
   StrErrorConvertngBinReal = 'Error convertng "%0:s" to an real number';
   StrErrorReadingTotal = 'Error reading total number of observations';
+  StrTheNameOfTheFile = 'The name of the file from which observations will b' +
+  'e read must always be specified even if interpolated values will not be c' +
+  'alculated.';
+  StrErrorReadingTheVa = 'Error reading the value for DATA_TO_WRITE. The val' +
+  'ue must be VALUES or INSTRUCTIONS.';
+  StrErrorReadingInstru = 'Error reading instruction file format. The format' +
+  ' must be UCODE or PEST.';
+  StrTheInstructionFileUcode = 'The instruction file will be written in the ' +
+  'format required by UCODE.';
+  StrTheInstructionFilePest = 'The instruction file will be written in the f' +
+  'ormat required by PEST.';
 
 procedure ExtractSwiObservations;
 var
@@ -161,7 +182,7 @@ begin
   end
   else
   begin
-    WriteLn(Format('The ninput file "%s" does not exist.', [InputFile]));
+    WriteLn(Format('The input file "%s" does not exist.', [InputFile]));
   end;
 end;
 
@@ -187,10 +208,13 @@ begin
       AStringList.Free;
     end;
 
-    case FSwiFileFormat of
-      sffAscii: ReadSwiAsciiObservations;
-      sffBinarySingle, sffBinaryDouble: ReadSwiBinaryObservations;
-      else Assert(False);
+    if dtwObservedValues in FDataToWriteSet then
+    begin
+      case FSwiFileFormat of
+        sffAscii: ReadSwiAsciiObservations;
+        sffBinarySingle, sffBinaryDouble: ReadSwiBinaryObservations;
+        else Assert(False);
+      end;
     end;
 
     WriteInterpolatedValuesAndTemplate;
@@ -212,6 +236,43 @@ begin
   FOutputFile.Free;
   FObs.Free;
   inherited Destroy;
+end;
+
+procedure TSwiObservationExtractor.WriteInstruction(AnObs: TInterpolatedSwiObs);
+begin
+  case FInstructionFileFormat of
+    iffUcode:
+      begin
+        FInstructionFile.WriteLine(AnObs.Name);
+      end;
+    IffPest:
+      begin
+        FInstructionFile.WriteLine(Format('l1 !%s!', [AnObs.Name]));
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TSwiObservationExtractor.WriteInstructionHeader;
+begin
+  case FInstructionFileFormat of
+    iffUcode:
+      begin
+        FInstructionFile.WriteLine('jif @');
+        FInstructionFile.Write('StandardFile ');
+        FInstructionFile.Write(FLinesToSkip);
+        FInstructionFile.Write(' 1 ');
+        FInstructionFile.WriteLine(FObs.Count);
+      end;
+    IffPest:
+      begin
+        FInstructionFile.WriteLine('pif @');
+        FInstructionFile.WriteLine(Format('l%d', [FLinesToSkip]));
+      end;
+    else
+      Assert(False);
+  end;
 end;
 
 procedure TSwiObservationExtractor.WriteObsDefinition;
@@ -515,6 +576,8 @@ var
   SwiPrecision: string;
   DisclaimerIndex: Integer;
 begin
+  FInstructionFileFormat := iffUcode;
+  FDataToWriteSet := [];
   FZoneCount := 0;
   FObservationCount := 0;
   FFileOptionsRead := True;
@@ -543,11 +606,11 @@ begin
         if Tag = StrOUTPUTFILE then
         begin
           FOutputFileName := Splitter[1];
-{$IFDEF FPC}
+          {$IFDEF FPC}
           FOutputFile := TSimpleTextWriter.Create(FOutputFileName);
-{$ELSE}
+          {$ELSE}
           FOutputFile := TFile.CreateText(FOutputFileName);
-{$ENDIF}
+          {$ENDIF}
           WriteLine('SWI Observation Interpolator Version ' + Version);
 
           WriteLine;
@@ -619,6 +682,40 @@ begin
           Write('Total number of zeta surfaces: ');
           WriteLine(FZoneCount);
         end
+        else if Tag = 'INSTRUCTION_FILE_FORMAT' then
+        begin
+          if UpperCase(Splitter[1]) = 'UCODE' then
+          begin
+            FInstructionFileFormat := iffUcode;
+            WriteLine(StrTheInstructionFileUcode);
+          end
+          else if UpperCase(Splitter[1]) = 'PEST' then
+          begin
+            FInstructionFileFormat := IffPest;
+            WriteLine(StrTheInstructionFilePest);
+          end
+          else
+          begin
+            Assert(False, StrErrorReadingInstru);
+          end;
+        end
+        else if Tag = 'DATA_TO_WRITE' then
+        begin
+          if UpperCase(Splitter[1]) = 'VALUES' then
+          begin
+            Include(FDataToWriteSet, dtwObservedValues);
+            WriteLine('Interpolated values will be written to the output file');
+          end
+          else if UpperCase(Splitter[1]) = 'INSTRUCTIONS' then
+          begin
+            Include(FDataToWriteSet, dtwInstructions);
+            WriteLine('An instruction file will be written');
+          end
+          else
+          begin
+            Assert(False, StrErrorReadingTheVa);
+          end;
+        end
         else
         begin
           Assert(False, Format(StrUnrecognizedTagIn, [Splitter[0]]));
@@ -626,6 +723,12 @@ begin
       end;
     until (False);
   finally
+    if FDataToWriteSet = [] then
+    begin
+      FDataToWriteSet := [dtwObservedValues, dtwInstructions];
+      WriteLine('Interpolated values will be written to the output file');
+      WriteLine('An instruction file will be written');
+    end;
     Splitter.Free;
   end;
   if FSwiFileFormat <> sffAscii then
@@ -633,6 +736,7 @@ begin
     Assert(FZoneCount > 0, StrForBinarySWIObser);
     Assert(FObservationCount > 0, StrForBinaryFilesObsCount );
   end;
+  Assert(FSwiObsFileName <> '', StrTheNameOfTheFile);
   WriteLine;
 end;
 
@@ -789,41 +893,52 @@ var
   ObsIndex: Integer;
   AnObs: TInterpolatedSwiObs;
   InstructionFileName: string;
-{$IFDEF FPC}
-  InstructionFile: TSimpleTextWriter;
-{$ELSE}
-  InstructionFile: TStreamWriter;
-{$ENDIF}
 begin
-  InstructionFileName := FOutputFileName + '.jif';
-{$IFDEF FPC}
-  InstructionFile := TSimpleTextWriter.Create(InstructionFileName);
-{$ELSE}
-  InstructionFile := TFile.CreateText(InstructionFileName);
-{$ENDIF}
+  if dtwInstructions in FDataToWriteSet then
+  begin
+    case FInstructionFileFormat of
+      iffUcode: InstructionFileName := FOutputFileName + '.jif';
+      IffPest: InstructionFileName := FOutputFileName + '.ins';
+      else Assert(False, 'Programming error: unspecified instruction file format.');
+    end;
+  {$IFDEF FPC}
+    FInstructionFile := TSimpleTextWriter.Create(InstructionFileName);
+  {$ELSE}
+    FInstructionFile := TFile.CreateText(InstructionFileName);
+  {$ENDIF}
+  end
+  else
+  begin
+    FInstructionFile := nil;
+  end;
   try
     WriteLine('OBSERVATIONS');
     WriteLine('Simulated Value, Observed Value, Name');
 
-    InstructionFile.WriteLine('jif @');
-    InstructionFile.Write('StandardFile ');
-    InstructionFile.Write(FLinesToSkip);
-    InstructionFile.Write(' 1 ');
-    InstructionFile.WriteLine(FObs.Count);
+    if dtwInstructions in FDataToWriteSet then
+    begin
+      WriteInstructionHeader;
+    end;
 
     for ObsIndex := 0 to FObs.Count - 1 do
     begin
       AnObs := FObs[ObsIndex];
-      Write(AnObs.InterpolatedValue(FSwiObs, FZoneCount));
-      Write(AnObs.ObservedValue);
-      Write(' "');
-      Write(AnObs.Name);
-      WriteLine('"');
+      if dtwObservedValues in FDataToWriteSet then
+      begin
+        Write(AnObs.InterpolatedValue(FSwiObs, FZoneCount));
+        Write(AnObs.ObservedValue);
+        Write(' "');
+        Write(AnObs.Name);
+        WriteLine('"');
+      end;
 
-      InstructionFile.WriteLine(AnObs.Name);
+      if dtwInstructions in FDataToWriteSet then
+      begin
+        WriteInstruction(AnObs);
+      end;
     end;
   finally
-    InstructionFile.Free;
+    FInstructionFile.Free;
   end;
 end;
 

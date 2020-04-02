@@ -340,6 +340,7 @@ type
       var Clusters: TOneDIntegerArray; var UniformLayers: TBooleanDynArray;
       LayerCount: Integer; Param: TModflowSteadyParameter);
     Function UcodeObsNameOK(Const AName: string): boolean;
+    Function PestObsNameOK(Const AName: string): boolean;
     procedure CheckCell(ValueCell: TValueCell;
       const PackageName: string); virtual;
     procedure RemoveNoDefinedError(var NoDefinedErrorRoot: string); virtual;
@@ -7936,6 +7937,18 @@ begin
     NewLine;
     NewLine;
   end;
+end;
+
+function TCustomPackageWriter.PestObsNameOK(const AName: string): boolean;
+begin
+  result := (Length(AName) <= 20)
+    and (Pos(' ', AName) <= 0)
+    and (Pos('[', AName) <= 0)
+    and (Pos(']', AName) <= 0)
+    and (Pos('(', AName) <= 0)
+    and (Pos(')', AName) <= 0)
+    and (Pos('!', AName) <= 0)
+    and (Pos('@', AName) <= 0)
 end;
 
 procedure TCustomPackageWriter.PrintFlowsOption;

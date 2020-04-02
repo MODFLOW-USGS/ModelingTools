@@ -20,6 +20,8 @@ type
     FEndTime: Double;
     IREFSP: Integer;
     FStartingTimes: TRealList;
+    FOutFileName: string;
+    FPestInstructionFile: TStringList;
     procedure Evaluate(Purpose: TObservationPurpose);
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -47,6 +49,7 @@ uses ModflowUnitNumbers, ScreenObjectUnit, DataSetUnit,
 
 resourcestring
   ObsNameWarning = 'The following Head observation names may be valid for MODFLOW but they are not valid for UCODE.';
+  ObsNameWarningPest = 'The following Head observation names may be valid for MODFLOW but they are not valid for PEST.';
   MissingObsNameError = 'The head observation in the following objects do not have observations names assigned';
   HeadOffGrid = 'One or more head observation are not located on the grid and will be ignored';
   NoHeads = 'No head observations';
@@ -94,10 +97,14 @@ constructor TModflowHobWriter.Create(Model: TCustomModel; EvaluationType: TEvalu
 begin
   inherited;
   FObservations := TList.Create;
+  FPestInstructionFile := TStringList.Create;
+  FPestInstructionFile.Add('pif @');
+  FPestInstructionFile.Add('l1');
 end;
 
 destructor TModflowHobWriter.Destroy;
 begin
+  FPestInstructionFile.Free;
   FObservations.Free;
   inherited;
 end;
@@ -130,6 +137,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, InvalidEndObsTime);
 
   frmErrorsAndWarnings.RemoveWarningGroup(Model, ObsNameWarning);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, ObsNameWarningPest);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, HeadOffGrid);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, NoHeads);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrHeadObservationLay);
@@ -407,7 +415,6 @@ end;
 procedure TModflowHobWriter.WriteFile(const AFileName: string; Purpose: TObservationPurpose);
 var
   NameOfFile: string;
-  OutFileName: string;
   Index: Integer;
   TimeIndex: Integer;
 begin
@@ -433,8 +440,8 @@ begin
     WriteToNameFile(StrHOB, Model.UnitNumbers.UnitNumber(StrHOB), NameOfFile, foInput, Model);
     if IUHOBSV <> 0 then
     begin
-      OutFileName := ChangeFileExt(NameOfFile, StrHobout);
-      WriteToNameFile(StrDATA, IUHOBSV, OutFileName, foOutput, Model);
+      FOutFileName := ChangeFileExt(NameOfFile, StrHobout);
+      WriteToNameFile(StrDATA, IUHOBSV, FOutFileName, foOutput, Model);
     end;
     OpenFile(NameOfFile);
     try
@@ -482,6 +489,11 @@ begin
     end;
   finally
     frmErrorsAndWarnings.EndUpdate;
+  end;
+
+  if Model.PestUsed then
+  begin
+    FPestInstructionFile.SaveToFile(FOutFileName + '.ins');
   end;
 end;
 
@@ -551,6 +563,8 @@ begin
           WriteString(' Comment = ' + Comment);
         end;
         NewLine;
+
+        FPestInstructionFile.Add(Format('l1 !%s!', [OBSNAM]));
       end;
     end;
   end;
@@ -824,11 +838,23 @@ begin
     frmErrorsAndWarnings.AddError(Model,
       MissingObsNameError, ScreenObject.Name, ScreenObject);
   end;
-  if not UcodeObsNameOK(OBSNAM) then
+  if Model.PestUsed then
   begin
-    ScreenObject := Observations.ScreenObject as TScreenObject;
-    frmErrorsAndWarnings.AddWarning(Model, ObsNameWarning,
-      Format(Str0sDefinedByObje, [OBSNAM, ScreenObject.Name]), ScreenObject);
+    if not PestObsNameOK(OBSNAM) then
+    begin
+      ScreenObject := Observations.ScreenObject as TScreenObject;
+      frmErrorsAndWarnings.AddWarning(Model, ObsNameWarningPest,
+        Format(Str0sDefinedByObje, [OBSNAM, ScreenObject.Name]), ScreenObject);
+    end;
+  end
+  else
+  begin
+    if not UcodeObsNameOK(OBSNAM) then
+    begin
+      ScreenObject := Observations.ScreenObject as TScreenObject;
+      frmErrorsAndWarnings.AddWarning(Model, ObsNameWarning,
+        Format(Str0sDefinedByObje, [OBSNAM, ScreenObject.Name]), ScreenObject);
+    end;
   end;
   if CellList.Count > 1 then
   begin
@@ -859,6 +885,11 @@ begin
   else
   begin
     IREFSP := -ObservationTimeCount;
+  end;
+
+  if IREFSP > 0 then
+  begin
+    FPestInstructionFile.Add(Format('l1 !%s!', [OBSNAM]));
   end;
 
   // If the observation time is at the end of a steady state stress period,

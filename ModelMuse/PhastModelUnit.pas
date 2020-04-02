@@ -2398,6 +2398,7 @@ that affects the model output should also have a comment. }
     function GetMt3dSpecesName(const Index: Integer): string;
     procedure SetGlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
+    function GetPestUsed: Boolean;
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3240,6 +3241,7 @@ that affects the model output should also have a comment. }
     property Mt3dSpecesName[const Index: Integer]: string read GetMt3dSpecesName;
     function Mt3dIsSelected: Boolean; virtual;
     procedure FileObsItemList(List: TObservationList);
+    property PestUsed: Boolean read GetPestUsed;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -44320,6 +44322,15 @@ begin
     FPathLine := TPathLineReader.Create(self);
   end;
   result := FPathLine;
+end;
+
+function TCustomModel.GetPestUsed: Boolean;
+begin
+{$IFDEF PESt}
+  result := True;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TCustomModel.StorePathLine: boolean;

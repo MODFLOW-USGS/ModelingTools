@@ -46,7 +46,15 @@ begin
   end;
 
   { add your program here }
-  ExtractSwiObservations;
+  try
+    ExtractSwiObservations;
+    Writeln('');
+    Writeln('normal termination of ', ExtractFileName(ParamStr(0)));
+    Writeln('');
+  except
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
+  end;
 
   // stop program loop
   Terminate;
