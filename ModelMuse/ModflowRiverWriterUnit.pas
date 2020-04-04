@@ -62,6 +62,8 @@ resourcestring
   StrLayerDRowDC = 'Layer: %0:d, Row %1:d, Column %2:d. Amount: %3:g.';
   StrTheFollowingRiver = 'The following River observation names may be valid' +
   ' for MODFLOW but they are not valid for UCODE.';
+  StrTheFollowingRiverPest = 'The following River observation names may be valid' +
+  ' for MODFLOW but they are not valid for PEST.';
   StrWritingRIVPackage = 'Writing RIV Package input.';
 //  StrWritingDataSet0 = '  Writing Data Set 0.';
 //  StrWritingDataSet1 = '  Writing Data Set 1.';
@@ -292,7 +294,14 @@ end;
 
 function TModflowRIV_Writer.ObsNameWarningString: string;
 begin
-  result := StrTheFollowingRiver;
+  if Model.PestUsed then
+  begin
+    result := StrTheFollowingRiverPest;
+  end
+  else
+  begin
+    result := StrTheFollowingRiver;
+  end;
 end;
 
 function TModflowRIV_Writer.ObsType: string;

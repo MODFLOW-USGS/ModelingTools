@@ -456,7 +456,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td colspan="2">
-          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">Read items 6 and 7 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RVOB" anchor="IOWTQRV" styleclass="Normal" translate="true">IOWTQRV</link><text styleclass="Normal" translate="true"> is greater than 0. </text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">Items 6 and 7 are not available in MODFLOW-2005 and MODFLOW-LGR.</text><conditional-text type="END"/></para>
+          <para styleclass="Normal"><conditional-text type="IF" value="ALLMODELS,MODFLOW-2000"/><text styleclass="Normal" translate="true">Read items 6 and 7 if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="RVOB" anchor="IOWTQRV" styleclass="Normal" translate="true">IOWTQRV</link><text styleclass="Normal" translate="true"> is greater than 0. </text><conditional-text type="END"/><conditional-text type="IF" value="ALLMODELS,MODFLOW-2005,MODFLOW-CFP,MODFLOW-FMP2,MODFLOW-LGR,MODFLOW-NWT"/><text styleclass="Normal" translate="true">Items 6 and 7 are only available in MODFLOW-2000.</text><conditional-text type="END"/></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

@@ -65,6 +65,8 @@ resourcestring
   ' assigned';
   StrTheFollowingCHDOb = 'The following CHD observation names may be valid f' +
   'or MODFLOW but they are not valid for UCODE.';
+  StrTheFollowingCHDObPest = 'The following CHD observation names may be valid f' +
+  'or MODFLOW but they are not valid for PEST.';
   StrWritingCHDPackage = 'Writing CHD Package input.';
   StrStartingHead = 'starting head';
   StrEndingHead = 'ending head';
@@ -574,7 +576,14 @@ end;
 
 function TModflowCHD_Writer.ObsNameWarningString: string;
 begin
-  result := StrTheFollowingCHDOb;
+  if Model.PestUsed then
+  begin
+    result := StrTheFollowingCHDObPest;
+  end
+  else
+  begin
+    result := StrTheFollowingCHDOb;
+  end;
 end;
 
 function TModflowCHD_Writer.ObsType: string;

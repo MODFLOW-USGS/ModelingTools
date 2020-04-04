@@ -61,6 +61,8 @@ uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers,
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +
   'or MODFLOW but they are not valid for UCODE.';
+  StrTheFollowingGHBObPest = 'The following GHB observation names may be valid f' +
+  'or MODFLOW but they are not valid for PEST.';
   StrWritingGHBPackage = 'Writing GHB Package input.';
 //  StrWritingDataSet0 = '  Writing Data Set 0.';
 //  StrWritingDataSet1 = '  Writing Data Set 1.';
@@ -254,7 +256,14 @@ end;
 
 function TModflowGHB_Writer.ObsNameWarningString: string;
 begin
-  result := StrTheFollowingGHBOb;
+  if Model.PestUsed then
+  begin
+    result := StrTheFollowingGHBObPest;
+  end
+  else
+  begin
+    result := StrTheFollowingGHBOb;
+  end;
 end;
 
 function TModflowGHB_Writer.ObsType: string;

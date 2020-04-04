@@ -62,6 +62,8 @@ uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +
   ' for MODFLOW but they are not valid for UCODE.';
+  StrTheFollowingDrainPest = 'The following Drain observation names may be valid' +
+  ' for MODFLOW but they are not valid for PEST.';
   StrWritingDRNPackage = 'Writing DRN Package input.';
 //  StrWritingDataSet0 = '  Writing Data Set 0.';
 //  StrWritingDataSet1 = '  Writing Data Set 1.';
@@ -264,7 +266,14 @@ end;
 
 function TModflowDRN_Writer.ObsNameWarningString: string;
 begin
-  result := StrTheFollowingDrain;
+  if Model.PestUsed then
+  begin
+    result := StrTheFollowingDrainPest;
+  end
+  else
+  begin
+    result := StrTheFollowingDrain;
+  end;
 end;
 
 function TModflowDRN_Writer.ObsType: string;

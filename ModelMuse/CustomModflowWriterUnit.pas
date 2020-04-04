@@ -698,6 +698,7 @@ type
   // and the observations.
   TFluxObsWriter = class(TCustomListWriter)
   private
+    FPestInstructionFile: TStringList;
     function GetFluxType(ObservationGroup: TFluxObservationGroup): string;
     procedure RemoveWarningGroups(ObservationGroup: TFluxObservationGroup);
   protected
@@ -759,7 +760,11 @@ type
     procedure EvaluateFactor(var Factor: Extended; var Expression: TExpression;
       ACell: TValueCell; DataSets, Variables: TList;
       ObsFactor: TObservationFactor);
+    procedure SavePestInstructionFile(OutputName: string);
 //    procedure WriteListOptions; override;
+  public
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
+    Destructor Destroy; override;
   end;
 
   TCustomTransientArrayWriter = class(TCustomParameterTransientWriter)
@@ -6046,6 +6051,14 @@ begin
     Format(LateTimeWarning, [GetFluxType(ObservationGroup)]));
 end;
 
+procedure TFluxObsWriter.SavePestInstructionFile(OutputName: string);
+begin
+  if Model.PestUsed then
+  begin
+    FPestInstructionFile.SaveToFile(OutputName + '.ins');
+  end;
+end;
+
 function TFluxObsWriter.GetFluxType(ObservationGroup: TFluxObservationGroup): string;
 begin
   case ObservationGroup.FluxObsType of
@@ -6104,9 +6117,19 @@ begin
 
       TimeString := ObsTime.ObsNameTimeString;
       OBSNAM := ObservationGroup.ObservationName + '_' + TimeString;
-      if not UcodeObsNameOK(OBSNAM) then
+      if Model.PestUsed then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, ObsNameWarningString, OBSNAM);
+        if not PestObsNameOK(OBSNAM) then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, ObsNameWarningString, OBSNAM);
+        end;
+      end
+      else
+      begin
+        if not UcodeObsNameOK(OBSNAM) then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, ObsNameWarningString, OBSNAM);
+        end;
       end;
       ReferenceStressPeriodIndex := StartingTimes.IndexOfClosest(ObsTime.Time);
       if (StartingTimes[ReferenceStressPeriodIndex] > ObsTime.Time) then
@@ -6129,6 +6152,10 @@ begin
         + FreeFormattedReal(FLWOBS)
         + ' # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS'
         + Comment);
+      if Model.PestUsed then
+      begin
+        FPestInstructionFile.Add(Format('l1 !%s!', [OBSNAM]));
+      end;
     end;
     if EarlyTimes <> '' then
     begin
@@ -6331,6 +6358,7 @@ begin
       end;
       ObsFile.Insert(0, '# ' + PackageID_Comment(ObservationPackage));
       ObsFile.SaveToFile(NameOfFile);
+      SavePestInstructionFile(OutputName);
     finally
       AllCells.Free;
       ObsFile.Free;
@@ -6590,6 +6618,20 @@ begin
     DataSets.Free;
     Model.DataArrayManager.CacheDataArrays;
   end;
+end;
+
+constructor TFluxObsWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  FPestInstructionFile:= TStringList.Create;
+  FPestInstructionFile.Add('pif @');
+end;
+
+destructor TFluxObsWriter.Destroy;
+begin
+  FPestInstructionFile.Free;
+  inherited;
 end;
 
 procedure TFluxObsWriter.EvaluateFactor(var Factor: Extended;

@@ -161,6 +161,8 @@ resourcestring
   StrEvaluatingS = '    Evaluating %s';
   StrTheFollowingStream = 'The following Stream observation names may be valid' +
   ' for MODFLOW but they are not valid for UCODE.';
+  StrTheFollowingStreamPest = 'The following Stream observation names may be valid' +
+  ' for MODFLOW but they are not valid for PEST.';
   DupNumbersError = 'The STR segments defined by %0:s and %1:s have '
     + 'the same segment number: %2:d.';
   DupErrorCategory = 'Duplicate STR segment numbers';
@@ -506,7 +508,14 @@ end;
 
 function TStrWriter.ObsNameWarningString: string;
 begin
-  result := StrTheFollowingStream;
+  if Model.PestUsed then
+  begin
+    result := StrTheFollowingStreamPest;
+  end
+  else
+  begin
+    result := StrTheFollowingStream;
+  end;
 end;
 
 function TStrWriter.ObsTypeMF6: string;
@@ -2211,6 +2220,7 @@ begin
       ObsFile.Insert(0, '# ' + PackageID_Comment(ObservationPackage));
       ObsFile.SaveToFile(NameOfFile);
 
+      SavePestInstructionFile(OutputName);
 
     finally
       AllSegments.Free;

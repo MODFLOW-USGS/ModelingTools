@@ -51,7 +51,10 @@ resourcestring
   ObsNameWarning = 'The following Head observation names may be valid for MODFLOW but they are not valid for UCODE.';
   ObsNameWarningPest = 'The following Head observation names may be valid for MODFLOW but they are not valid for PEST.';
   MissingObsNameError = 'The head observation in the following objects do not have observations names assigned';
-  HeadOffGrid = 'One or more head observation are not located on the grid and will be ignored';
+  HeadOffGrid = 'One or more head observation are ignored. They are either not '
+    + 'located on the grid or they are not in any of the stress periods being '
+    + 'evaluated. Only one stress period is evaluated when visualizing head '
+    + 'observations.';
   NoHeads = 'No head observations';
   StrNoValidHeadObserv = 'No valid head observations were defined. Check tha' +
   't "Model|Observation Type" is set to the correct value and that the obser' +

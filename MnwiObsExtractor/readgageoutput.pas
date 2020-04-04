@@ -141,13 +141,13 @@ var
   ObsTypeIndex: Integer;
   ItemPosition: Integer;
   ValueIndex: Integer;
-  LakePositions : array of Integer;
+  GagePositions : array of Integer;
   function ObsTypeToIndex(const ObsType: string): integer;
   begin
     result := FGageOutputTypes.IndexOf(ObsType);
     if result >= 0 then
     begin
-      result := LakePositions[result];
+      result := GagePositions[result];
     end;
   end;
   procedure InterpolateValues;
@@ -182,17 +182,17 @@ begin
     SetLength(ObsRecords, ObsLines.Count-2);
     HeaderLine := RemoveQuotes(Trim(ObsLines[1]));
     Splitter.DelimitedText := HeaderLine;
-    SetLength(LakePositions, FGageOutputTypes.Count);
+    SetLength(GagePositions, FGageOutputTypes.Count);
     for ObsTypeIndex := 0 to Pred(FGageOutputTypes.Count) do
     begin
       ItemPosition := Splitter.IndexOf(FGageOutputTypes[ObsTypeIndex]);
       if ItemPosition >= 0 then
       begin
-        LakePositions[ObsTypeIndex] := ItemPosition-1;
+        GagePositions[ObsTypeIndex] := ItemPosition-1;
       end
       else
       begin
-        LakePositions[ObsTypeIndex] := -1;
+        GagePositions[ObsTypeIndex] := -1;
       end;
     end;
 

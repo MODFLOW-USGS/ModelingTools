@@ -394,6 +394,11 @@ var
         result := False;
         Exit;
       end;
+      if MF2005BudgetTerms.IndexOf(Description) < 0 then
+      begin
+        result := False;
+        Exit;
+      end;
       try
         SetLength(AnArray, Abs(NLAY), NROW, NCOL);
       except on E: ERangeError do
@@ -625,6 +630,11 @@ var
       AFile.Read(NROW, SizeOf(NROW));
       AFile.Read(NLAY, SizeOf(NLAY));
       if (KSTP < 1) or (KPER < 1) or (NCOL < 1) or (NROW < 1) then
+      begin
+        result := False;
+        Exit;
+      end;
+      if MF2005BudgetTerms.IndexOf(Description) < 0 then
       begin
         result := False;
         Exit;
@@ -891,6 +901,18 @@ begin
       MF2005BudgetTerms.Add('          STO-SS');
       MF2005BudgetTerms.Add('          STO-SY');
 
+    end
+    else
+    begin
+      MF2005BudgetTerms.Add('         STORAGE');
+      MF2005BudgetTerms.Add('   CONSTANT HEAD');
+      MF2005BudgetTerms.Add('FLOW RIGHT FACE ');
+      MF2005BudgetTerms.Add('FLOW FRONT FACE ');
+      MF2005BudgetTerms.Add('FLOW LOWER FACE ');
+      MF2005BudgetTerms.Add('     NETRECHARGE');
+      MF2005BudgetTerms.Add('    NETDISCHARGE');
+      MF2005BudgetTerms.Add('      ZETASRF  1');
+      MF2005BudgetTerms.Add('      ZETASRF  2');
     end;
 
     HufFormat := False;
