@@ -1158,6 +1158,7 @@ begin
   StreamGageOutputTypes.Add('Conductance'); StreamGageOutputTypeUnits.Add('L2/T');
   StreamGageOutputTypes.Add('HeadDiff');    StreamGageOutputTypeUnits.Add('L');
   StreamGageOutputTypes.Add('Hyd.Grad.');   StreamGageOutputTypeUnits.Add('L/L');
+  StreamGageOutputTypes.Add('GW_FLOW');     StreamGageOutputTypeUnits.Add('L3/T');
 end;
 
 { TSfrObs }

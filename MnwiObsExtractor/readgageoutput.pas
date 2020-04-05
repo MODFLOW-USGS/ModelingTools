@@ -5,13 +5,15 @@ unit readgageoutput;
 interface
 
 uses
-  Classes, SysUtils, ObExtractorTypes;
+  Classes, SysUtils, ObExtractorTypes, RealListUnit;
 
 type
   TGageOutRecord = record
     Time: double;
     Values: TDoubleArray;
   end;
+
+  TGageOutArray = array of TGageOutRecord;
 
   TGageObsValue = class(TCustomObsValue)
     ObsType: string;
@@ -22,22 +24,35 @@ type
   TCustomGageObsExtractor = class(TCustomObsExtractor)
   private
     FGageOutputTypes: TStringList;
+    FTimes: TRealList;
+    FGagePositions : array of Integer;
+    FObsRecords: TGageOutArray;
     function GetItem(Index: integer): TGageObsValue;
     function Value(LakeGageRecord: TGageOutRecord; Index: Integer): double;
     property Items[Index: integer]: TGageObsValue read GetItem; default;
+    function ObsTypeToIndex(const ObsType: string): integer;
+    procedure ReadGageFile;
+  protected
+    procedure AssignDerivedValues; virtual;
   public
     procedure ExtractSimulatedValues; override;
+    Constructor Create;
+    destructor Destroy; override;
   end;
 
   { TLakeGageObsExtractor }
 
   TLakeGageObsExtractor = class(TCustomGageObsExtractor)
+  public
     Constructor Create;
   end;
 
   { TSfrGageObsExtractor }
 
   TSfrGageObsExtractor = class(TCustomGageObsExtractor)
+  protected
+    procedure AssignDerivedValues; override;
+  public
     Constructor Create;
   end;
 
@@ -48,7 +63,61 @@ var
 
 implementation
 
-uses RealListUnit;
+procedure TCustomGageObsExtractor.ReadGageFile;
+var
+  ValueIndex: Integer;
+  ItemPosition: Integer;
+  ObsTypeIndex: Integer;
+  Splitter: TStringList;
+  HeaderLine: string;
+  LineIndex: Integer;
+  ObsLines: TStringList;
+begin
+  ObsLines := TStringList.Create;
+  Splitter := TStringList.Create;
+  try
+    Splitter.Delimiter := ' ';
+    ObsLines.LoadFromFile(OutputFileName);
+    FTimes.Capacity := ObsLines.Count-2;
+    SetLength(FObsRecords, ObsLines.Count-2);
+    HeaderLine := RemoveQuotes(Trim(ObsLines[1]));
+    Splitter.DelimitedText := HeaderLine;
+    SetLength(FGagePositions, FGageOutputTypes.Count);
+    for ObsTypeIndex := 0 to Pred(FGageOutputTypes.Count) do
+    begin
+      ItemPosition := Splitter.IndexOf(FGageOutputTypes[ObsTypeIndex]);
+      if ItemPosition >= 0 then
+      begin
+        FGagePositions[ObsTypeIndex] := ItemPosition-1;
+      end
+      else
+      begin
+        FGagePositions[ObsTypeIndex] := -1;
+      end;
+    end;
+
+    for LineIndex := 2 to Pred(ObsLines.Count) do
+    begin
+      Splitter.DelimitedText := ObsLines[LineIndex];
+      SetLength(FObsRecords[LineIndex-2].Values, Splitter.Count-1);
+      FObsRecords[LineIndex-2].Time := StrToFloat(Splitter[0]);
+      for ValueIndex := 1 to Pred(Splitter.Count) do
+      begin
+        FObsRecords[LineIndex-2].Values[ValueIndex-1] :=
+          StrToFloat(Splitter[ValueIndex-1]);
+      end;
+      FTimes.Add(FObsRecords[LineIndex-2].Time);
+    end;
+  finally
+    Splitter.Free;
+    ObsLines.Free;
+  end;
+end;
+
+procedure TCustomGageObsExtractor.AssignDerivedValues;
+begin
+  // do nothing.
+end;
 
 procedure InitializeGageOutputTypes;
 begin
@@ -88,10 +157,34 @@ end;
 
 { TSfrGageObsExtractor }
 
+procedure TSfrGageObsExtractor.AssignDerivedValues;
+var
+  ConductanceIndex: Integer;
+  HeadDiffIndex: Integer;
+  ObIndex: Integer;
+  Gw_FlowIndex: Integer;
+begin
+  //inherited AssignDerivedValues;
+  FGageOutputTypes.Add('GW_FLOW');
+  Gw_FlowIndex := FGageOutputTypes.Count-1;
+  ConductanceIndex := ObsTypeToIndex('Conductance');
+  HeadDiffIndex := ObsTypeToIndex('HeadDiff');
+  if (ConductanceIndex >= 0) and (HeadDiffIndex >= 0) then
+  begin
+    for ObIndex := 0 to Pred(Length(FObsRecords)) do
+    begin
+      SetLength(FObsRecords[ObIndex].Values, FGageOutputTypes.Count);
+      FObsRecords[ObIndex].Values[Gw_FlowIndex] :=
+        FObsRecords[ObIndex].Values[ConductanceIndex]
+        * FObsRecords[ObIndex].Values[HeadDiffIndex];
+    end;
+  end;
+end;
+
 constructor TSfrGageObsExtractor.Create;
 begin
   inherited;
-  FGageOutputTypes := StreamGageOutputTypes;
+  FGageOutputTypes.Assign(StreamGageOutputTypes);
 end;
 
 { TLakeGageObsExtractor }
@@ -99,7 +192,7 @@ end;
 constructor TLakeGageObsExtractor.Create;
 begin
   inherited;
-  FGageOutputTypes := LakeGageOutputTypes;
+  FGageOutputTypes.Assign(LakeGageOutputTypes);
 end;
 
 { TCustomGageObsExtractor }
@@ -122,34 +215,25 @@ begin
   end;
 end;
 
+function TCustomGageObsExtractor.ObsTypeToIndex(const ObsType: string): integer;
+begin
+  result := FGageOutputTypes.IndexOf(ObsType);
+  if result >= 0 then
+  begin
+    result := FGagePositions[result];
+  end;
+end;
+
 procedure TCustomGageObsExtractor.ExtractSimulatedValues;
 const
   Epsilon = 1e-6;
 var
-  ObsLines: TStringList;
-  ObsRecords: array of TGageOutRecord;
-  LineIndex: Integer;
   ObsIndex: Integer;
-  Times: TRealList;
   Obs: TGageObsValue;
   RecordIndex: integer;
   ObsRecord: TGageOutRecord;
   FirstRecord: TGageOutRecord;
   SecondRecord: TGageOutRecord;
-  HeaderLine: string;
-  Splitter: TStringList;
-  ObsTypeIndex: Integer;
-  ItemPosition: Integer;
-  ValueIndex: Integer;
-  GagePositions : array of Integer;
-  function ObsTypeToIndex(const ObsType: string): integer;
-  begin
-    result := FGageOutputTypes.IndexOf(ObsType);
-    if result >= 0 then
-    begin
-      result := GagePositions[result];
-    end;
-  end;
   procedure InterpolateValues;
   var
     FirstValue: double;
@@ -172,50 +256,18 @@ var
 begin
   Assert(OutputFileName <> '');
   Assert(ObsCount > 0);
-  Times := TRealList.Create;
-  ObsLines := TStringList.Create;
-  Splitter := TStringList.Create;
+  FTimes := TRealList.Create;
   try
-    Splitter.Delimiter := ' ';
-    ObsLines.LoadFromFile(OutputFileName);
-    Times.Capacity := ObsLines.Count-2;
-    SetLength(ObsRecords, ObsLines.Count-2);
-    HeaderLine := RemoveQuotes(Trim(ObsLines[1]));
-    Splitter.DelimitedText := HeaderLine;
-    SetLength(GagePositions, FGageOutputTypes.Count);
-    for ObsTypeIndex := 0 to Pred(FGageOutputTypes.Count) do
-    begin
-      ItemPosition := Splitter.IndexOf(FGageOutputTypes[ObsTypeIndex]);
-      if ItemPosition >= 0 then
-      begin
-        GagePositions[ObsTypeIndex] := ItemPosition-1;
-      end
-      else
-      begin
-        GagePositions[ObsTypeIndex] := -1;
-      end;
-    end;
+    ReadGageFile;
 
-    for LineIndex := 2 to Pred(ObsLines.Count) do
-    begin
-      Splitter.DelimitedText := ObsLines[LineIndex];
-      SetLength(ObsRecords[LineIndex-2].Values, Splitter.Count-1);
-      ObsRecords[LineIndex-2].Time := StrToFloat(Splitter[0]);
-      for ValueIndex := 1 to Pred(Splitter.Count) do
-      begin
-        ObsRecords[LineIndex-2].Values[ValueIndex-1] :=
-          StrToFloat(Splitter[ValueIndex-1]);
-      end;
-      Times.Add(ObsRecords[LineIndex-2].Time);
-    end;
 
-    Times.Sorted := True;
+    FTimes.Sorted := True;
     for ObsIndex := 0 to Pred(ObsCount) do
     begin
       Obs := Items[ObsIndex];
-      RecordIndex := Times.IndexOfClosest(Obs.ObsTime);
+      RecordIndex := FTimes.IndexOfClosest(Obs.ObsTime);
       Assert(RecordIndex >= 0);
-      ObsRecord := ObsRecords[RecordIndex];
+      ObsRecord := FObsRecords[RecordIndex];
 
       if Abs(Obs.ObsTime - ObsRecord.Time) <= Epsilon then
       begin
@@ -224,16 +276,16 @@ begin
       else
       begin
         if (Obs.ObsTime > ObsRecord.Time)
-          and (RecordIndex+1 < Length(ObsRecords)) then
+          and (RecordIndex+1 < Length(FObsRecords)) then
         begin
           FirstRecord := ObsRecord;
-          SecondRecord := ObsRecords[RecordIndex+1];
+          SecondRecord := FObsRecords[RecordIndex+1];
           InterpolateValues;
         end
         else if (Obs.ObsTime < ObsRecord.Time)
           and (RecordIndex >= 1) then
         begin
-          FirstRecord := ObsRecords[RecordIndex-1];
+          FirstRecord := FObsRecords[RecordIndex-1];
           SecondRecord := ObsRecord;
           InterpolateValues;
         end
@@ -251,12 +303,23 @@ begin
       end;
     end;
 
+
   finally
-    Splitter.Free;
-    ObsLines.Free;
-    Times.Free;
+    FTimes.Free;
   end;
 
+end;
+
+constructor TCustomGageObsExtractor.Create;
+begin
+  inherited;
+  FGageOutputTypes := TStringList.Create;
+end;
+
+destructor TCustomGageObsExtractor.Destroy;
+begin
+  FGageOutputTypes.Free;
+  inherited Destroy;
 end;
 
 Initialization
