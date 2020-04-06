@@ -97,11 +97,12 @@ begin
         end;
       iftLAK:
         begin
-          ObsTypes.Assign(LakeGageOutputTypes)
+          ObsTypes.Assign(LakeGageOutputTypes);
         end;
       iftSFR:
         begin
-          ObsTypes.Assign(StreamGageOutputTypes)
+          ObsTypes.Assign(StreamGageOutputTypes);
+          ObsTypes.Add('GW_FLOW');
         end;
     else Assert(false, 'programming error');
     end;
@@ -189,7 +190,7 @@ begin
         Assert(UpperCase(Splitter[0]) = 'OBSERVATION');
         if not FGenerateInstructionFile then
         begin
-          Assert(ObsExtractor <> nil, 'No MNWI output file has been specified for processing.');
+          Assert(ObsExtractor <> nil, 'No output file has been specified for processing.');
         end;
         ObsName := Splitter[1];
         ObsTypeName := UpperCase(Splitter[2]);

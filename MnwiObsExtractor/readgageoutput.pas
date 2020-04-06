@@ -104,7 +104,7 @@ begin
       for ValueIndex := 1 to Pred(Splitter.Count) do
       begin
         FObsRecords[LineIndex-2].Values[ValueIndex-1] :=
-          StrToFloat(Splitter[ValueIndex-1]);
+          StrToFloat(Splitter[ValueIndex]);
       end;
       FTimes.Add(FObsRecords[LineIndex-2].Time);
     end;
@@ -163,10 +163,13 @@ var
   HeadDiffIndex: Integer;
   ObIndex: Integer;
   Gw_FlowIndex: Integer;
+  Conductance: double;
+  HeadDiff: double;
 begin
   //inherited AssignDerivedValues;
-  FGageOutputTypes.Add('GW_FLOW');
-  Gw_FlowIndex := FGageOutputTypes.Count-1;
+  Gw_FlowIndex := FGageOutputTypes.Add('GW_FLOW')+1;
+  SetLength(FGagePositions,FGageOutputTypes.Count);
+  FGagePositions[FGageOutputTypes.Count-1] := Gw_FlowIndex;
   ConductanceIndex := ObsTypeToIndex('Conductance');
   HeadDiffIndex := ObsTypeToIndex('HeadDiff');
   if (ConductanceIndex >= 0) and (HeadDiffIndex >= 0) then
@@ -174,9 +177,9 @@ begin
     for ObIndex := 0 to Pred(Length(FObsRecords)) do
     begin
       SetLength(FObsRecords[ObIndex].Values, FGageOutputTypes.Count);
-      FObsRecords[ObIndex].Values[Gw_FlowIndex] :=
-        FObsRecords[ObIndex].Values[ConductanceIndex]
-        * FObsRecords[ObIndex].Values[HeadDiffIndex];
+      Conductance := FObsRecords[ObIndex].Values[ConductanceIndex];
+      HeadDiff := FObsRecords[ObIndex].Values[HeadDiffIndex];
+      FObsRecords[ObIndex].Values[Gw_FlowIndex-1] := Conductance * HeadDiff;
     end;
   end;
 end;
@@ -220,7 +223,7 @@ begin
   result := FGageOutputTypes.IndexOf(ObsType);
   if result >= 0 then
   begin
-    result := FGagePositions[result];
+    result := FGagePositions[result]-1;
   end;
 end;
 
@@ -234,6 +237,7 @@ var
   ObsRecord: TGageOutRecord;
   FirstRecord: TGageOutRecord;
   SecondRecord: TGageOutRecord;
+  ObsTypeIndex: Integer;
   procedure InterpolateValues;
   var
     FirstValue: double;
@@ -260,6 +264,7 @@ begin
   try
     ReadGageFile;
 
+    AssignDerivedValues;
 
     FTimes.Sorted := True;
     for ObsIndex := 0 to Pred(ObsCount) do
@@ -271,6 +276,7 @@ begin
 
       if Abs(Obs.ObsTime - ObsRecord.Time) <= Epsilon then
       begin
+        ObsTypeIndex := ObsTypeToIndex(Obs.ObsType);
         Obs.SimulatedValue := Value(ObsRecord, ObsTypeToIndex(Obs.ObsType));
       end
       else

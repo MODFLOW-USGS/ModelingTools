@@ -13,9 +13,35 @@ uses
   InterpolatedObsResourceUnit in '..\ModelMuse\InterpolatedObsResourceUnit.pas',
   DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
 
+var
+  InputFile: string;
+  Extractor: TSwiObservationExtractor;
+
 begin
   try
-    ExtractSwiObservations;
+    if ParamCount > 0 then
+    begin
+      InputFile := ParamStr(1)
+    end
+    else
+    begin
+      WriteLn('What is the name of the input file?');
+      Readln(InputFile);
+    end;
+    if FileExists(InputFile) then
+    begin
+      Extractor := TSwiObservationExtractor.Create(InputFile);
+      try
+
+      finally
+        Extractor.Free;
+      end;
+    end
+    else
+    begin
+      raise Exception.Create(Format('The input file "%s" does not exist.', [InputFile]));
+    end;
+
     Writeln('');
     Writeln('normal termination of ', ExtractFileName(ParamStr(0)));
     Writeln('');

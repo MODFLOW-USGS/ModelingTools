@@ -16,7 +16,7 @@ uses
 {$ENDIF}  
   SwiObsReaderUnit;
 
-procedure ExtractSwiObservations;
+//procedure ExtractSwiObservations;
 
 type
   TInstructionFileFormat = (iffUcode, IffPest);
@@ -157,7 +157,7 @@ resourcestring
   StrTheInstructionFilePest = 'The instruction file will be written in the f' +
   'ormat required by PEST.';
 
-procedure ExtractSwiObservations;
+{procedure ExtractSwiObservations;
 var
   InputFile: string;
   Extractor: TSwiObservationExtractor;
@@ -182,9 +182,10 @@ begin
   end
   else
   begin
-    WriteLn(Format('The input file "%s" does not exist.', [InputFile]));
+    raise Exception.Create(Format('The input file "%s" does not exist.', [InputFile]));
   end;
 end;
+}
 
 
 
