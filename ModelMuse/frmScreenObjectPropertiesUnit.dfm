@@ -5537,7 +5537,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
-                ExplicitLeft = 0
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 155
@@ -7281,28 +7280,32 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 553
-                ExplicitHeight = 472
+                ExplicitWidth = 573
+                ExplicitHeight = 442
                 inherited frameSfrPestObs: TframePestObs
-                  Height = 472
-                  ExplicitHeight = 472
+                  Width = 573
+                  Height = 442
+                  ExplicitHeight = 442
                   inherited splObservations: TSplitter
-                    Top = 294
-                    ExplicitTop = 294
+                    Top = 264
+                    Width = 573
+                    ExplicitTop = 264
                   end
                   inherited grpDirectObs: TGroupBox
-                    Height = 294
-                    ExplicitHeight = 294
+                    Width = 573
+                    Height = 264
+                    ExplicitHeight = 264
                     inherited frameObservations: TframeGrid
                       Top = 21
-                      Height = 271
+                      Width = 569
+                      Height = 241
                       ExplicitTop = 21
-                      ExplicitHeight = 271
+                      ExplicitHeight = 241
                       inherited Panel: TPanel
-                        Top = 230
-                        ExplicitTop = 230
+                        Top = 200
+                        Width = 569
+                        ExplicitTop = 200
                         inherited lbNumber: TLabel
                           Width = 57
                           Height = 19
@@ -7315,21 +7318,25 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Height = 230
-                        ExplicitHeight = 230
+                        Width = 569
+                        Height = 200
+                        ExplicitHeight = 200
                       end
                     end
                   end
                   inherited grpObsComparisons: TGroupBox
-                    Top = 299
-                    ExplicitTop = 299
+                    Top = 269
+                    Width = 573
+                    ExplicitTop = 269
                     inherited frameObsComparisons: TframeGrid
                       Top = 21
+                      Width = 569
                       Height = 150
                       ExplicitTop = 21
                       ExplicitHeight = 150
                       inherited Panel: TPanel
                         Top = 109
+                        Width = 569
                         ExplicitTop = 109
                         inherited lbNumber: TLabel
                           Width = 57
@@ -7343,6 +7350,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
+                        Width = 569
                         Height = 109
                         ExplicitHeight = 109
                       end
@@ -8631,10 +8639,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             object tabGageObservations: TTabSheet
               Caption = 'Observations'
               ImageIndex = 1
-              ExplicitLeft = 6
-              ExplicitTop = 32
-              ExplicitWidth = 0
-              ExplicitHeight = 0
               inline frameGagePestObs: TframePestObs
                 Left = 0
                 Top = 0
@@ -8642,8 +8646,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 377
                 Align = alClient
                 TabOrder = 0
-                ExplicitLeft = -27
-                ExplicitTop = -43
                 ExplicitWidth = 573
                 ExplicitHeight = 377
                 inherited splObservations: TSplitter
@@ -8663,7 +8665,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Height = 176
                     ExplicitTop = 21
                     ExplicitWidth = 569
-                    ExplicitHeight = 219
+                    ExplicitHeight = 176
                     inherited Panel: TPanel
                       Top = 135
                       Width = 569
@@ -8696,7 +8698,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       Width = 569
                       Height = 135
                       ExplicitWidth = 569
-                      ExplicitHeight = 178
+                      ExplicitHeight = 135
                     end
                   end
                 end
@@ -9322,7 +9324,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited lblFluxObservations: TLabel
               AlignWithMargins = True
               Left = 3
-              Width = 125
+              Width = 575
               Height = 19
               Margins.Top = 8
               Align = alTop
@@ -11026,7 +11028,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitHeight = 265
                   inherited lblDescription: TLabel
                     Top = 24
-                    Width = 531
+                    Width = 563
                     Height = 57
                     ExplicitTop = 24
                     ExplicitWidth = 531

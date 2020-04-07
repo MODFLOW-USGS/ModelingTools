@@ -8703,7 +8703,7 @@ begin
   end
   else
   begin
-    result := inherited;
+    result := inherited and FCount.IsValue[Layer, Row, Col];
   end;
 end;
 

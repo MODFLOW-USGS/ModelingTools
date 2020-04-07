@@ -7549,13 +7549,18 @@ begin
       Gage.Gage3 := False;
     end;
 
-    if Gage.Observations.Count > 0 then
+  {$IFDEF PEST}
+    if Gage <> nil then
     begin
-      Gage.Gage0 := True;
-      Gage.Gage1 := True;
-      Gage.Gage2 := True;
-      Gage.Gage3 := True;
+      if Gage.Observations.Count > 0 then
+      begin
+        Gage.Gage0 := True;
+        Gage.Gage1 := True;
+        Gage.Gage2 := True;
+        Gage.Gage3 := True;
+      end;
     end;
+  {$ENDIF}
 
     if (cbGage5.State = cbChecked) then
     begin

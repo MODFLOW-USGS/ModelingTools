@@ -46,9 +46,12 @@ type
   protected
     function GetObsTypeIndex: Integer; virtual; abstract;
     procedure SetObsTypeIndex(const Value: Integer); virtual; abstract;
+    function GetObsTypeString: string; virtual; abstract;
+    procedure SetObsTypeString(const Value: string); virtual; abstract;
   public
     procedure Assign(Source: TPersistent); override;
     property ObsTypeIndex: Integer read GetObsTypeIndex write SetObsTypeIndex;
+    property ObsTypeString: string read GetObsTypeString write SetObsTypeString;
   published
     property Time: double read FTime write SetTime;
   end;

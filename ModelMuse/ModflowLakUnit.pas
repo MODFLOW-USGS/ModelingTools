@@ -271,6 +271,8 @@ type
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(const Value: Integer); override;
+    function GetObsTypeString: string; override;
+    procedure SetObsTypeString(const Value: string); override;
   public
     procedure Assign(Source: TPersistent); override;
     function ObservationType: string; override;
@@ -1938,6 +1940,11 @@ begin
   result := ObsType;
 end;
 
+function TLakeObs.GetObsTypeString: string;
+begin
+  result := ObservationType;
+end;
+
 function TLakeObs.ObservationType: string;
 begin
   if (FObsType >= 0) and (FObsType < LakeGageOutputTypes.Count) then
@@ -1958,6 +1965,12 @@ end;
 procedure TLakeObs.SetObsTypeIndex(const Value: Integer);
 begin
   ObsType := Value;
+end;
+
+procedure TLakeObs.SetObsTypeString(const Value: string);
+begin
+  inherited;
+  ObsType := LakeGageOutputTypes.IndexOf(Value);
 end;
 
 function TLakeObs.Units: string;

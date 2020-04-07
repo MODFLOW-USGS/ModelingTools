@@ -6,8 +6,9 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit,
-  readinstructions, readgageoutput, ObExtractorTypes, ReadNameFile;
+  Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit, readinstructions,
+  readgageoutput, ObExtractorTypes, ReadNameFile, SwiObsInputReader,
+  SwiObsReaderUnit, SwiObsUtilities, SimpleTextWriter;
 
 type
 

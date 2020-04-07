@@ -832,6 +832,8 @@ begin
 end;
 
 procedure TframeScreenObjectSFR.rgGagesClick(Sender: TObject);
+var
+  FlowTypes: TStringList;
 begin
   cbGagStandard.Enabled := rgGages.ItemIndex <> 0;
   cbGag1.Enabled := rgGages.ItemIndex <> 0;
@@ -842,8 +844,22 @@ begin
   cbGag7.Enabled := rgGages.ItemIndex <> 0;
 
 {$IFDEF PEST}
-  tabObservations.TabVisible := (rgGages.ItemIndex in [1,2])
+  tabObservations.TabVisible := (rgGages.ItemIndex in [1,2,3])
     and (FListCount = 1);
+  if rgGages.ItemIndex = 3 then
+  begin
+    FlowTypes := TStringList.Create;
+    try
+      FlowTypes.Add(StreamGageOutputTypes[StreamGageOutputTypes.Count-1]);
+      frameSfrPestObs.SpecifyObservationTypes(FlowTypes);
+    finally
+      FlowTypes.Free;
+    end;
+  end
+  else
+  begin
+    frameSfrPestObs.SpecifyObservationTypes(StreamGageOutputTypes);
+  end;
 {$ENDIF}
 
 end;
@@ -3931,10 +3947,6 @@ begin
         GetSfrFlowTable(Boundary, FoundFirst);
         GetUnsaturatedValues(Boundary, FoundFirst);
         GetExternalFlows(Boundary);
-        if List.Count = 1 then
-        begin
-          frameSfrPestObs.GetData(Boundary.Observations);
-        end;
 
         FoundFirst := True;
       end;
@@ -4122,6 +4134,16 @@ begin
       end;
     end;
     rgGages.ItemIndex := NewLocation;
+    rgGagesClick(nil);
+
+    if List.Count = 1 then
+    begin
+      if (Boundary <> nil) and Boundary.Used then
+      begin
+        frameSfrPestObs.GetData(Boundary.Observations);
+      end;
+    end;
+
     cbGagStandard.State := Gage0;
     cbGag1.State := Gage1;
     cbGag2.State := Gage2;
@@ -4155,6 +4177,7 @@ begin
   LayoutMultiRowEquationEditControls;
   LayoutMultiRowUpstreamEditControls;
   LayoutMultiRowDownstreamEditControls;
+
 end;
 
 procedure TframeScreenObjectSFR.GetEndTimes(Grid: TRbwDataGrid4; Col: integer);

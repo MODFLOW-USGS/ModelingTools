@@ -818,7 +818,8 @@ uses Math, Contnrs , frmGoPhastUnit, frmProgressUnit,
   ModflowMnw2Unit, frmErrorsAndWarningsUnit, ModflowSfrTable, frmGridValueUnit,
   LayerStructureUnit, ModflowStrUnit, FootprintBoundary, ModflowCfpPipeUnit,
   System.IOUtils, SutraMeshUnit, SubscriptionUnit, FootPrintUtilities,
-  ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit, frameScreenObjectSfr6Unit;
+  ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit, frameScreenObjectSfr6Unit,
+  ModflowBoundaryDisplayUnit;
 
 resourcestring
   StrParameterName = 'Parameter name';
@@ -1659,6 +1660,11 @@ begin
             begin
               DataArray := DataArrayManager.DataSets[DSIndex];
               if not DataArray.Visible then
+              begin
+                Continue;
+              end;
+
+              if DataArray is TFootprintWithdrawalDataArray then
               begin
                 Continue;
               end;

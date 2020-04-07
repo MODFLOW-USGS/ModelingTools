@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabGage
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet

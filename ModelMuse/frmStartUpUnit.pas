@@ -1046,7 +1046,8 @@ begin
     Value := FortranStrToFloatDef(rdgInitialLayers.Cells[1, 1], 0);
     LayerGroup := frmGoPhast.PhastModel.LayerStructure.Add as TLayerGroup;
     LayerGroup.AquiferName := kModelTop;
-    NewDataArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(LayerGroup.DataArrayName);
+    NewDataArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(
+      LayerGroup.DataArrayName);
     Assert(NewDataArray <> nil);
 //    NewDataArray := frmGoPhast.PhastModel.DataSets[DataArrayIndex];
     NewDataArray.Formula := FortranFloatToStr(Value);

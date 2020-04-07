@@ -355,34 +355,34 @@ procedure TNameFileReader.RunScripts;
 var
   //NewPosition: Integer;
   ItemIndex : Integer;
-  SortedInputFileLinks: TInputFileLinks;
+  //SortedInputFileLinks: TInputFileLinks;
   ObsProcessorList: TObsProcessorList;
   ObsProcessor: TObsProcessor;
 begin
-  SortedInputFileLinks := TInputFileLinks.Create;
+  //SortedInputFileLinks := TInputFileLinks.Create;
   ObsProcessorList := TObsProcessorList.Create;
   try
-    SortedInputFileLinks.Capacity := FInputFileLinks.Count;
+    //SortedInputFileLinks.Capacity := FInputFileLinks.Count;
     ObsProcessorList.Capacity := FInputFileLinks.Count;
-    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
-    begin
-      if FInputFileLinks[ItemIndex].FileType <> iftDerived then
-      begin
-        SortedInputFileLinks.Add(FInputFileLinks[ItemIndex]);
-      end;
-    end;
+    //for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+    //begin
+    //  if FInputFileLinks[ItemIndex].FileType <> iftDerived then
+    //  begin
+    //    SortedInputFileLinks.Add(FInputFileLinks[ItemIndex]);
+    //  end;
+    //end;
+    //
+    //for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
+    //begin
+    //  if FInputFileLinks[ItemIndex].FileType = iftDerived then
+    //  begin
+    //    SortedInputFileLinks.Add(FInputFileLinks[ItemIndex]);
+    //  end;
+    //end;
 
     for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
     begin
-      if FInputFileLinks[ItemIndex].FileType = iftDerived then
-      begin
-        SortedInputFileLinks.Add(FInputFileLinks[ItemIndex]);
-      end;
-    end;
-
-    for ItemIndex := 0 to Pred(SortedInputFileLinks.Count) do
-    begin
-      ObsProcessor := TObsProcessor.Create(SortedInputFileLinks[ItemIndex],
+      ObsProcessor := TObsProcessor.Create(FInputFileLinks[ItemIndex],
         FGenerateInstructionFile);
       ObsProcessorList.Add(ObsProcessor);
       ObsProcessor.ListingFile := ListingFile;
@@ -390,13 +390,13 @@ begin
       ObsProcessor.ObsDictionary := FObsDictionary;
     end;
 
-    for ItemIndex := 0 to Pred(SortedInputFileLinks.Count) do
+    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
     begin
       ObsProcessor := ObsProcessorList[ItemIndex];
       ObsProcessor.ProcessInstructionFile;
     end;
 
-    for ItemIndex := 0 to Pred(SortedInputFileLinks.Count) do
+    for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
     begin
       ObsProcessor := ObsProcessorList[ItemIndex];
       ObsProcessor.HandleDerivedObservations;
@@ -405,7 +405,7 @@ begin
     Writeln('normal termination');
 
   finally
-    SortedInputFileLinks.Free;
+    //SortedInputFileLinks.Free;
     ObsProcessorList.Free;
   end;
 end;

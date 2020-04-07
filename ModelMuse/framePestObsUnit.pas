@@ -213,7 +213,7 @@ begin
     Mnw2Ob := Observations[ItemIndex];
     frameObservations.Grid.Cells[Ord(mocName), ItemIndex+1] := Mnw2Ob.Name;
     frameObservations.Grid.Objects[Ord(mocName), ItemIndex+1] := Mnw2Ob;
-    frameObservations.Grid.ItemIndex[Ord(mocType), ItemIndex+1] := Mnw2Ob.ObsTypeIndex;
+    frameObservations.Grid.Cells[Ord(mocType), ItemIndex+1] := Mnw2Ob.ObsTypeString;
     frameObservations.Grid.RealValue[Ord(mocTime), ItemIndex+1] := Mnw2Ob.Time;
     frameObservations.Grid.RealValue[Ord(mocValue), ItemIndex+1] := Mnw2Ob.ObservedValue;
     frameObservations.Grid.RealValue[Ord(mocWeight), ItemIndex+1] := Mnw2Ob.Weight;
@@ -337,7 +337,7 @@ begin
           Mnw2Ob.GUID := GUIDToString(MyGuid);
         end;
       end;
-      Mnw2Ob.ObsTypeIndex := frameObservations.Grid.ItemIndex[Ord(mocType), RowIndex];
+      Mnw2Ob.ObsTypeString := frameObservations.Grid.Cells[Ord(mocType), RowIndex];
       Mnw2Ob.Time := frameObservations.Grid.RealValue[Ord(mocTime), RowIndex];
       Mnw2Ob.ObservedValue := frameObservations.Grid.RealValue[Ord(mocValue), RowIndex];
       Mnw2Ob.Weight := frameObservations.Grid.RealValue[Ord(mocWeight), RowIndex];

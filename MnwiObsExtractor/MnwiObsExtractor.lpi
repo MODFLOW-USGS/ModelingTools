@@ -33,7 +33,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="7">
+    <Units Count="11">
       <Unit0>
         <Filename Value="MnwiObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -65,6 +65,23 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ReadNameFile"/>
       </Unit6>
+      <Unit7>
+        <Filename Value="SwiObsInputReader.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="SwiObsReaderUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="SwiObsUtilities.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="simpletextwriter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SimpleTextWriter"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

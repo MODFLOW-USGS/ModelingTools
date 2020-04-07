@@ -287,6 +287,10 @@ var
   FirstName: string;
   SecondName: string;
   ErrorMessage: string;
+  LastNumber: Integer;
+  Names: TStringList;
+  NameIndex: Integer;
+  ListingLine: string;
 begin
   Assert(ListingFile <> nil, 'programming error');
   Assert(ObservationsFile <> nil, 'programming error');
@@ -329,8 +333,7 @@ begin
         Exit;
       end
       else if (Splitter.Count in [6,7]) and
-        ((UpperCase(Splitter[0]) = 'DIFFERENCE')
-        or (UpperCase(Splitter[0]) = 'SUM'))
+        (UpperCase(Splitter[0]) = 'DIFFERENCE')
         then
       begin
         ObsName := Splitter[1];
@@ -341,7 +344,8 @@ begin
         except on E: Exception do
           begin
             FListingFile.Add(E.Message);
-            ErrorMessage := Format(rsOnLine0D1SIs, [FLineIndex, FFileLink.FileName, Obs.ObsName]);
+            ErrorMessage := Format(rsOnLine0D1SIs,
+              [FLineIndex, FFileLink.FileName, Obs.ObsName]);
             FListingFile.Add(ErrorMessage);
             Raise Exception.Create(ErrorMessage);
           end;
@@ -371,13 +375,15 @@ begin
         SecondName := Splitter[3];
         Obs.ObservedValue := StrToFloat(Splitter[4]);
         Obs.Weight := StrToFloat(Splitter[5]);
-        if (UpperCase(Splitter[0]) = 'DIFFERENCE') then
+        if Obs.Print then
         begin
-          FListingFile.Add(Format('%0:s, %1:s - %2:s, %3:g, %4:g, PRINT', [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
+        FListingFile.Add(Format('%0:s, %1:s - %2:s, %3:g, %4:g, PRINT',
+          [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
         end
         else
         begin
-          FListingFile.Add(Format('%0:s, %1:s + %2:s, %3:g, %4:g, PRINT', [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
+          FListingFile.Add(Format('%0:s, %1:s - %2:s, %3:g, %4:g, NO_PRINT',
+            [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
         end;
         if not FObsDictionary.TryGetValue(UpperCase(FirstName), FirstValue) then
         begin
@@ -394,18 +400,109 @@ begin
           if (FirstValue.SimulatedValue <> MissingValue)
             or (SecondValue.SimulatedValue <> MissingValue) then
           begin
-            if (UpperCase(Splitter[0]) = 'DIFFERENCE') then
-            begin
-              Obs.SimulatedValue :=
-                FirstValue.SimulatedValue - SecondValue.SimulatedValue;
-            end
-            else
-            begin
-              Assert(UpperCase(Splitter[0]) = 'SUM');
-              Obs.SimulatedValue :=
-                FirstValue.SimulatedValue + SecondValue.SimulatedValue;
-            end
+            Obs.SimulatedValue :=
+              FirstValue.SimulatedValue - SecondValue.SimulatedValue;
           end;
+        end;
+      end
+      else if (Splitter.Count >= 6) and
+        (UpperCase(Splitter[0]) = 'SUM')
+        then
+      begin
+        ObsName := Splitter[1];
+        Obs := TCustomObsValue.Create;
+        Obs.ObsName := ObsName;
+        try
+          FObsDictionary.Add(UpperCase(Obs.ObsName), Obs);
+        except on E: Exception do
+          begin
+            FListingFile.Add(E.Message);
+            ErrorMessage := Format(rsOnLine0D1SIs, [FLineIndex, FFileLink.FileName, Obs.ObsName]);
+            FListingFile.Add(ErrorMessage);
+            Raise Exception.Create(ErrorMessage);
+          end;
+        end;
+        if (UpperCase(Splitter[Splitter.Count-1]) = 'PRINT') then
+        begin
+          Obs.Print := True;
+          LastNumber := Splitter.Count-2;
+        end
+        else if (UpperCase(Splitter[Splitter.Count-1]) = 'NO_PRINT') then
+        begin
+          Obs.Print := False;
+          LastNumber := Splitter.Count-2;
+        end
+        else
+        begin
+          Obs.Print := True;
+          LastNumber := Splitter.Count-1;
+        end;
+        LastNumber := LastNumber -2;
+        FObsList.Add(Obs);
+        Obs.SimulatedValue := MissingValue;
+        Obs.ObservedValue := StrToFloat(Splitter[LastNumber+1]);
+        Obs.Weight := StrToFloat(Splitter[LastNumber+2]);
+        //if (UpperCase(Splitter[0]) = 'DIFFERENCE') then
+        //begin
+        //  FListingFile.Add(Format('%0:s, %1:s - %2:s, %3:g, %4:g, PRINT',
+        //    [Obs.ObsName, FirstName, SecondName, Obs.ObservedValue, Obs.Weight]));
+        //end
+        //else
+        //begin
+        //end;
+
+
+        ListingLine := Format('%0:s, ', [Obs.ObsName]);
+
+        Names := TStringList.Create;
+        try
+          for NameIndex := 2 to LastNumber do
+          begin
+            Names.Add(Splitter[NameIndex]);
+            ListingLine := Format('%0:s %1:s +', [ListingLine, Splitter[NameIndex]])
+          end;
+          ListingLine := Copy(ListingLine, 1, Length(ListingLine)-2);
+
+          if Obs.Print then
+          begin
+            ListingLine := Format('%0:s, %1:g, %2:g, PRINT',
+              [ListingLine, Obs.ObservedValue, Obs.Weight]);
+          end
+          else
+          begin
+            ListingLine := Format('%0:s, %1:g, %2:g, NO_PRINT',
+              [ListingLine, Obs.ObservedValue, Obs.Weight]);
+          end;
+          FListingFile.Add(ListingLine);
+
+          FirstName := Names[0];
+
+          if not FObsDictionary.TryGetValue(UpperCase(FirstName), FirstValue) then
+          begin
+            FirstValue := nil;
+            ErrorMessage := Format(rsERRORSNotFou, [FirstName]);
+            FListingFile.Add(ErrorMessage);
+            raise Exception.Create(ErrorMessage);
+          end;
+          Obs.SimulatedValue := FirstValue.SimulatedValue;
+          //ListingLine := Format('%0:s, %1:g, %4:g, PRINT', [ListingLine]);
+
+          for NameIndex := 1 to Pred(Names.Count) do
+          begin
+            FirstName := Names[NameIndex];
+            if not FObsDictionary.TryGetValue(UpperCase(FirstName), FirstValue) then
+            begin
+              FirstValue := nil;
+              ErrorMessage := Format(rsERRORSNotFou, [FirstName]);
+              FListingFile.Add(ErrorMessage);
+              raise Exception.Create(ErrorMessage);
+            end;
+            Obs.SimulatedValue := Obs.SimulatedValue +
+              FirstValue.SimulatedValue;
+          end;
+
+        finally
+          Names.Free;
         end;
       end
       else

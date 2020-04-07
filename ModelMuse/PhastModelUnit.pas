@@ -9001,8 +9001,7 @@ const
   //                package.
   //               Enhancement: Added "Object|Edit|Anonymize Selected Point
   //                Objects command.
-
-  //               Bug fix: Fixed bug that could cause a range check error
+  //    '4.2.0.5'  Bug fix: Fixed bug that could cause a range check error
   //                when using the UZF package in MODFLOW 6.
   //               Bug fix: If ModelMuse encounters and error when trying to
   //                back up an initialization file, it no longer generates a
@@ -9011,9 +9010,16 @@ const
   //                editing MNW2 wells.
   //               Bug fix: Fixed bug importing an existing MODFLOW model.
   //               Bug fix: Fixed editing of stream gages.
+  //               Bug Fix: Fixed bug in opening ModelMuse file for
+  //                WellFootprint models.
+  //               Bug Fix: Fixed bug in saving ModelMuse file for
+  //                WellFootprint models.
+  //               Big fix: Fixed bug that allowed the user to import
+  //                Shapefiles that directly set the withdrawal rate in
+  //                WellFootprint models.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.4';
+  IModelVersion = '4.2.0.5';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -17054,12 +17060,13 @@ begin
   // This is needed in setting the selected column, row, or layer
   // with the ModelCube even when LGR is not used.
   result := 0;
+
 //  if LgrUsed then
   begin
     case ViewDirection of
-      vdTop: result := ModflowGrid.LayerCount;
-      vdFront: result := ModflowGrid.RowCount;
-      vdSide: result := ModflowGrid.ColumnCount;
+      vdTop: result := LayerCount;
+      vdFront: result := RowCount;
+      vdSide: result := ColumnCount;
       else Assert(False);
     end;
   end;
@@ -17191,7 +17198,13 @@ begin
     for SubDisIndex := 0 to MaxSubDiscretization - 1 do
     begin
       ChildCombinedIndex := CombinedIndex + SubDisIndex;
-      AMapping[ChildCombinedIndex].ParentPostion := ParentDisIndex;
+//      try
+        AMapping[ChildCombinedIndex].ParentPostion := ParentDisIndex;
+//      except
+//        ShowMessage(Format('ChildCombinedIndex = %d; SubDisIndex = %d; ParentDisIndex = %d',
+//          [ChildCombinedIndex, SubDisIndex, ParentDisIndex]));
+//        raise
+//      end;
     end;
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin

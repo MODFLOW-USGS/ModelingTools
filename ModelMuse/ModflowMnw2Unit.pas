@@ -478,6 +478,8 @@ type
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(const Value: Integer); override;
+    function GetObsTypeString: string; override;
+    procedure SetObsTypeString(const Value: string); override;
   public
     procedure Assign(Source: TPersistent); override;
     function ObservationType: string; override;
@@ -3685,6 +3687,11 @@ begin
   result := Ord(ObsType);
 end;
 
+function TMnw2ObsItem.GetObsTypeString: string;
+begin
+  Result := ObservationType;
+end;
+
 function TMnw2ObsItem.ObservationType: string;
 begin
   case ObsType of
@@ -3732,6 +3739,30 @@ begin
   Assert(Value >= 0);
   Assert(Value <= Ord(motHwell));
   ObsType := TMnwObsType(Value);
+end;
+
+procedure TMnw2ObsItem.SetObsTypeString(const Value: string);
+begin
+  if Value = 'MNW2_Qin' then
+  begin
+    ObsType := motQin;
+  end
+  else if Value = 'MNW2_Qout' then
+  begin
+    ObsType := motQout;
+  end
+  else if Value = 'MNW2_Qnet' then
+  begin
+    ObsType := motQnet;
+  end
+  else if Value = 'MNW2_QCumu' then
+  begin
+    ObsType := motQCumu;
+  end
+  else if Value = 'MNW2_Hwell' then
+  begin
+    ObsType := motHwell;
+  end
 end;
 
 function TMnw2ObsItem.Units: string;

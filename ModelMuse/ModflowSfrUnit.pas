@@ -97,6 +97,8 @@ type
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(const Value: Integer); override;
+    function GetObsTypeString: string; override;
+    procedure SetObsTypeString(const Value: string); override;
   public
     function ObservationType: string; override;
     function Units: string; override;
@@ -109,14 +111,17 @@ type
   TSfrObservations = class(TCustomComparisonCollection)
   private
     FGageOutputName: string;
+    FGageOutputNames: TStringList;
     function GetSfrItem(Index: Integer): TSfrObs;
     procedure SetSfrItem(Index: Integer; const Value: TSfrObs);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    destructor Destroy; override;
     property Items[Index: Integer]: TSfrObs read GetSfrItem
       write SetSfrItem; default;
     function Add: TSfrObs;
     property GageOutputName: string read FGageOutputName write FGageOutputName;
+    property GageOutputNames: TStringList read FGageOutputNames;
   end;
 
   // @name represents the MODFLOW Stream Flow Routing boundaries associated with
@@ -1177,6 +1182,11 @@ begin
   result := ObsType;
 end;
 
+function TSfrObs.GetObsTypeString: string;
+begin
+  result := ObservationType;
+end;
+
 function TSfrObs.ObservationType: string;
 begin
   if (FObsType >= 0) and (FObsType < StreamGageOutputTypes.Count) then
@@ -1197,6 +1207,11 @@ end;
 procedure TSfrObs.SetObsTypeIndex(const Value: Integer);
 begin
   ObsType := Value;
+end;
+
+procedure TSfrObs.SetObsTypeString(const Value: string);
+begin
+  ObsType := StreamGageOutputTypes.IndexOf(Value);
 end;
 
 function TSfrObs.Units: string;
@@ -1222,6 +1237,13 @@ constructor TSfrObservations.Create(InvalidateModelEvent: TNotifyEvent;
   ScreenObject: TObject);
 begin
   inherited Create(TSfrObs, InvalidateModelEvent, ScreenObject);
+  FGageOutputNames := TStringList.Create;
+end;
+
+destructor TSfrObservations.Destroy;
+begin
+  FGageOutputNames.Free;
+  inherited;
 end;
 
 function TSfrObservations.GetSfrItem(Index: Integer): TSfrObs;

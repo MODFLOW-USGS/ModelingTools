@@ -5256,6 +5256,7 @@ var
     if OUTTYPE = 4 then
     begin
       Boundary.Observations.GageOutputName := OutputName;
+      Boundary.Observations.GageOutputNames.Add(OutputName);
       if Boundary.Observations.Count > 0 then
       begin
         FSfrObservationsUsed := True;
@@ -5268,6 +5269,7 @@ begin
   begin
     Segment := FSegments[SegmentIndex];
     Boundary := Segment.FScreenObject.ModflowSfrBoundary;
+    Boundary.Observations.GageOutputNames.Clear;
     Assert((Boundary <> nil) and Boundary.Used);
     OutTypes := Boundary.OutTypes;
     if (OutTypes <> []) and (Boundary.GageLocation <> glNone) then
@@ -5347,9 +5349,14 @@ var
   Boundary: TSfrBoundary;
   Observations: TSfrObservations;
   Obs: TSfrObs;
+  ReachIndex: Integer;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
   begin
     Result := PrefixedObsName('SFR', ObjectIndex, Obs);
+  end;
+  function GetReachObName(ReachIndex, ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  begin
+    Result := PrefixedObsName('R' + (ReachIndex+1).ToString, ObjectIndex, Obs);
   end;
 begin
 {$IFNDEF PEST}
@@ -5377,31 +5384,62 @@ begin
       Observations := Boundary.Observations;
       if Observations.Count > 0 then
       begin
-        WriteString('  # ');
-        WriteString('Observations defined in ');
-        WriteString(ScreenObject.Name);
-        NewLine;
-        WriteString('  FILENAME ');
-        WriteString(Observations.GageOutputName);
-        NewLine;
-
-        for ObsIndex := 0 to Observations.Count - 1 do
+        if Observations.GageOutputNames.Count = 1 then
         begin
-          Obs := Observations[ObsIndex];
-  //          FObsItemDictionary.Add(Obs.GUID, Obs);
-          WriteString('  OBSERVATION ');
-          WriteString(GetObName(SegmentIndex, Obs));
-          WriteString(' ');
-          WriteString(Obs.ObservationType);
-          WriteFloat(Obs.Time - StartTime);
-          WriteFloat(Obs.ObservedValue);
-          WriteFloat(Obs.Weight);
-          WriteString(' PRINT');
+          WriteString('  # ');
+          WriteString('Observations defined in ');
+          WriteString(ScreenObject.Name);
           NewLine;
-        end;
+          WriteString('  FILENAME ');
+          WriteString(Observations.GageOutputName);
+          NewLine;
 
-        if Observations.Comparisons.Count > 0 then
+          for ObsIndex := 0 to Observations.Count - 1 do
+          begin
+            Obs := Observations[ObsIndex];
+            WriteString('  OBSERVATION ');
+            WriteString(GetObName(SegmentIndex, Obs));
+            WriteString(' ');
+            WriteString(Obs.ObservationType);
+            WriteFloat(Obs.Time - StartTime);
+            WriteFloat(Obs.ObservedValue);
+            WriteFloat(Obs.Weight);
+            WriteString(' PRINT');
+            NewLine;
+          end;
+
+          if Observations.Comparisons.Count > 0 then
+          begin
+            ComparisonsUsed := True;
+          end;
+        end
+        else
         begin
+          WriteString('  # ');
+          WriteString('Observations defined in ');
+          WriteString(ScreenObject.Name);
+          NewLine;
+          for ReachIndex := 0 to Observations.GageOutputNames.Count - 1 do
+          begin
+            WriteString('  FILENAME ');
+            WriteString(Observations.GageOutputNames[ReachIndex]);
+            NewLine;
+
+            for ObsIndex := 0 to Observations.Count - 1 do
+            begin
+              Obs := Observations[ObsIndex];
+      //          FObsItemDictionary.Add(Obs.GUID, Obs);
+              WriteString('  OBSERVATION ');
+              WriteString(GetReachObName(ReachIndex, SegmentIndex, Obs));
+              WriteString(' ');
+              WriteString(Obs.ObservationType);
+              WriteFloat(Obs.Time - StartTime);
+              WriteFloat(Obs.ObservedValue);
+              WriteFloat(0);
+              WriteString(' NO_PRINT');
+              NewLine;
+            end;
+          end;
           ComparisonsUsed := True;
         end;
       end;
@@ -5422,12 +5460,36 @@ begin
         Boundary := Segment.FScreenObject.ModflowSfrBoundary;
         ScreenObject := Segment.FScreenObject;
         Observations := Boundary.Observations;
-        if Observations.Comparisons.Count > 0 then
+        if (Observations.Comparisons.Count > 0)
+          or (Observations.GageOutputNames.Count > 1) then
         begin
           WriteString('  # ');
           WriteString('Observation comparisons defined in ');
           WriteString(ScreenObject.Name);
           NewLine;
+        end;
+
+        if Observations.GageOutputNames.Count > 1 then
+        begin
+          for ObsIndex := 0 to Observations.Count - 1 do
+          begin
+            Obs := Observations[ObsIndex];
+            WriteString('  SUM ');
+            WriteString(GetObName(SegmentIndex, Obs));
+            WriteString(' ');
+
+            for ReachIndex := 0 to Observations.GageOutputNames.Count - 1 do
+            begin
+              WriteString(GetReachObName(ReachIndex, SegmentIndex, Obs));
+              WriteString(' ');
+            end;
+
+            WriteFloat(Obs.ObservedValue);
+            WriteFloat(Obs.Weight);
+            WriteString(' PRINT');
+            NewLine;
+          end;
+
         end;
 
         for CompIndex := 0 to Observations.Comparisons.Count - 1 do
@@ -5437,10 +5499,10 @@ begin
           WriteString(GetObName(SegmentIndex, CompItem));
           WriteString(' ');
           Obs := Observations[CompItem.Index1];
-          WriteString(Obs.ExportedName);
+          WriteString(GetObName(SegmentIndex, Obs));
           WriteString(' ');
           Obs := Observations[CompItem.Index2];
-          WriteString(Obs.ExportedName);
+          WriteString(GetObName(SegmentIndex, Obs));
           WriteFloat(CompItem.ObservedValue);
           WriteFloat(CompItem.Weight);
           WriteString(' PRINT');
