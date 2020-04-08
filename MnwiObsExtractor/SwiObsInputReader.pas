@@ -14,7 +14,8 @@ uses
   SimpleTextWriter,
   streamex,
 {$ENDIF}  
-  SwiObsReaderUnit;
+  SwiObsReaderUnit,
+  ObExtractorTypes;
 
 //procedure ExtractSwiObservations;
 
@@ -38,11 +39,8 @@ type
 
   { TInterpolatedSwiObs }
 
-  TInterpolatedSwiObs = class(TObject)
-    Name: string;
-    Time: double;
+  TInterpolatedSwiObs = class(TCustomObsValue)
     ZetaSurface: Integer;
-    ObservedValue: double;
     FAsciiObs: TSwiAsciiObsIDObjList;
     FBinaryObs: TSwiBinaryObsIDObjList;
     constructor Create;
@@ -93,7 +91,7 @@ type
     procedure Write(Value: string); overload;
     procedure Write(Value: double); overload;
     procedure Write(Value: integer); overload;
-    procedure WriteInterpolatedValuesAndTemplate;
+    procedure WriteInterpolatedValuesOrTemplate;
     procedure WriteObsDefinition;
     procedure WriteInstructionHeader;
     procedure WriteInstruction(AnObs: TInterpolatedSwiObs);
@@ -218,7 +216,7 @@ begin
       end;
     end;
 
-    WriteInterpolatedValuesAndTemplate;
+    WriteInterpolatedValuesOrTemplate;
   except on E: Exception do
     begin
       if FOutputFile <> nil then
@@ -244,11 +242,11 @@ begin
   case FInstructionFileFormat of
     iffUcode:
       begin
-        FInstructionFile.WriteLine(AnObs.Name);
+        FInstructionFile.WriteLine(AnObs.ObsName);
       end;
     IffPest:
       begin
-        FInstructionFile.WriteLine(Format('l1 !%s!', [AnObs.Name]));
+        FInstructionFile.WriteLine(Format('l1 !%s!', [AnObs.ObsName]));
       end;
     else
       Assert(False);
@@ -283,9 +281,9 @@ var
   BinObs: TSwiBinaryObsID;
 begin
   Write('"');
-  Write(FCurrentObs.Name);
+  Write(FCurrentObs.ObsName);
   Write('"');
-  Write(FCurrentObs.Time);
+  Write(FCurrentObs.ObsTime);
   Write(FCurrentObs.ZetaSurface);
   Write(FCurrentObs.ObservedValue);
   WriteLine(' # Name, Time, Zeta Surface, Observed Value');
@@ -370,21 +368,21 @@ begin
       Assert(FCurrentObs <> nil, StrEachObservationMus);
       if Tag = StrENDOBSERVATION then
       begin
-        Assert(FCurrentObs.Name <> '', StrANameMustBeSpeci);
-        Assert(FCurrentObs.Time >= 0, Format(StrTheTimeForTheObs, [FCurrentObs.Name]));
+        Assert(FCurrentObs.ObsName <> '', StrANameMustBeSpeci);
+        Assert(FCurrentObs.ObsTime >= 0, Format(StrTheTimeForTheObs, [FCurrentObs.ObsName]));
         WriteObsDefinition;
 
         FCurrentObs := nil;
       end
       else if Tag = StrZetaNAME then
       begin
-        FCurrentObs.Name := InputLine[1];
+        FCurrentObs.ObsName := InputLine[1];
       end
       else if Tag = StrZetaTIME then
       begin
         if TryFortranStrToFloat(InputLine[1], AValue) then
         begin
-          FCurrentObs.Time := AValue;
+          FCurrentObs.ObsTime := AValue;
         end
         else
         begin
@@ -483,8 +481,8 @@ begin
       Assert(FCurrentObs <> nil, StrEachObservationMus);
       if Tag = StrENDOBSERVATION then
       begin
-        Assert(FCurrentObs.Name <> '', StrANameMustBeSpeci);
-        Assert(FCurrentObs.Time >= 0, Format(StrTheTimeForTheObs, [FCurrentObs.Name]));
+        Assert(FCurrentObs.ObsName <> '', StrANameMustBeSpeci);
+        Assert(FCurrentObs.ObsTime >= 0, Format(StrTheTimeForTheObs, [FCurrentObs.ObsName]));
 
         WriteObsDefinition;
 
@@ -492,13 +490,13 @@ begin
       end
       else if Tag = StrZetaNAME then
       begin
-        FCurrentObs.Name := InputLine[1];
+        FCurrentObs.ObsName := InputLine[1];
       end
       else if Tag = StrZetaTIME then
       begin
         if TryFortranStrToFloat(InputLine[1], AValue) then
         begin
-          FCurrentObs.Time := AValue;
+          FCurrentObs.ObsTime := AValue;
         end
         else
         begin
@@ -889,7 +887,7 @@ begin
   end;
 end;
 
-procedure TSwiObservationExtractor.WriteInterpolatedValuesAndTemplate;
+procedure TSwiObservationExtractor.WriteInterpolatedValuesOrTemplate;
 var
   ObsIndex: Integer;
   AnObs: TInterpolatedSwiObs;
@@ -929,7 +927,7 @@ begin
         Write(AnObs.InterpolatedValue(FSwiObs, FZoneCount));
         Write(AnObs.ObservedValue);
         Write(' "');
-        Write(AnObs.Name);
+        Write(AnObs.ObsName);
         WriteLine('"');
       end;
 
@@ -1008,14 +1006,14 @@ begin
   Assert((FAsciiObs.Count = 0) or (FBinaryObs.Count = 0));
   Assert((FAsciiObs.Count > 0) or (FBinaryObs.Count > 0));
   Assert(SwiObs.TimeCount > 0);
-  TimeIndex := SwiObs.IndexOfClosestTime(Time);
+  TimeIndex := SwiObs.IndexOfClosestTime(ObsTime);
   SwiTime := SwiObs.Times[TimeIndex];
-  if SwiTime = Time then
+  if SwiTime = ObsTime then
   begin
     BeforeTimeIndex := TimeIndex;
     AfterTimeIndex := TimeIndex;
   end
-  else if(Time < SwiTime) then
+  else if(ObsTime < SwiTime) then
   begin
     BeforeTimeIndex := TimeIndex-1;
     AfterTimeIndex := TimeIndex;
@@ -1038,7 +1036,7 @@ begin
   if BeforeTimeIndex <> AfterTimeIndex then
   begin
     DeltaT := SwiObs.Times[AfterTimeIndex] - SwiObs.Times[BeforeTimeIndex];
-    if Abs(Time - SwiTime)/DeltaT < Epsilon then
+    if Abs(ObsTime - SwiTime)/DeltaT < Epsilon then
     begin
       BeforeTimeIndex := TimeIndex;
       AfterTimeIndex := TimeIndex;
@@ -1080,9 +1078,10 @@ begin
     BeforeValue := BeforeValue/TotalFraction;
     AfterValue := AfterValue/TotalFraction;
     DeltaT := SwiObs.Times[AfterTimeIndex] - SwiObs.Times[BeforeTimeIndex];
-    Fraction := (Time - SwiObs.Times[BeforeTimeIndex])/DeltaT;
+    Fraction := (ObsTime - SwiObs.Times[BeforeTimeIndex])/DeltaT;
     result := BeforeValue + Fraction*(AfterValue-BeforeValue);
   end;
+  SimulatedValue := result;
 end;
 
 end.

@@ -1,5 +1,10 @@
 // This file is part of the source code of ModelMuse by
 // @author(Richard B. Winston <rbwinst@usgs.gov>).
+
+{$IFDEF FPC}
+  {$mode Delphi}
+{$ENDIF}
+
 unit ReadModflowArrayUnit;
 
 interface
@@ -171,7 +176,11 @@ function CheckBudgetPrecision(AFile: TFileStream; out HufFormat: boolean;
 implementation
 
 uses
+{$IFDEF FPC}
+  SwiObsUtilities;
+{$ELSE}
   ModelMuseUtilities;
+{$ENDIF}
 
 resourcestring
   StrUnableToReadFile = 'Unable to read file. Check that the file is an unstructured, non-formatted file. In MODFLOW-2005, this is determined in OPENSPEC.inc';

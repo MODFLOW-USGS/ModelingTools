@@ -18,12 +18,15 @@ type
     ObsTime: double;
     SimulatedValue: double;
     ObservedValue: double;
+  end;
+
+  TCustomWeightedObsValue = class(TCustomObsValue)
     Weight: double;
     Print: Boolean;
   end;
 
-  TObsValueList = specialize TList<TCustomObsValue>;
-  TCustomObsValueObjectList = specialize TObjectList<TCustomObsValue>;
+  TWeightedObsValueList = specialize TList<TCustomWeightedObsValue>;
+  TCustomWeightedObsValueObjectList = specialize TObjectList<TCustomWeightedObsValue>;
   TCustomObsValueDictionary = specialize TDictionary<string, TCustomObsValue>;
 
   { TCustomObsExtractor }
@@ -33,17 +36,14 @@ type
     FOutputFileName: string;
     function GetObsCount: integer;
     procedure SetOutputFileName(AValue: string);
-    //function GetItem(Index: integer): TMnwiObsValue;
-    //function Value(MnwiRecord: TMnwiOutRecord; Index: Integer): double;
-    //property Items[Index: integer]: TMnwiObsValue read GetItem; default;
   protected
-    FObsValueList: TObsValueList;
+    FObsValueList: TWeightedObsValueList;
   public
     Constructor Create;
     destructor Destroy; override;
-    property OutputFileName: string read FOutputFileName
+    property ModelOutputFileName: string read FOutputFileName
       write SetOutputFileName;
-    procedure AddObs(Obs: TCustomObsValue);
+    procedure AddObs(Obs: TCustomWeightedObsValue);
     property ObsCount: integer read GetObsCount;
     procedure ExtractSimulatedValues; virtual; abstract;
   end;
@@ -82,7 +82,7 @@ end;
 
 constructor TCustomObsExtractor.Create;
 begin
-  FObsValueList := TObsValueList.Create;
+  FObsValueList := TWeightedObsValueList.Create;
   FOutputFileName := '';
 end;
 
@@ -92,7 +92,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TCustomObsExtractor.AddObs(Obs: TCustomObsValue);
+procedure TCustomObsExtractor.AddObs(Obs: TCustomWeightedObsValue);
 begin
   FObsValueList.Add(Obs);
 end;

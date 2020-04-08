@@ -29,7 +29,7 @@ type
   { TSimpleStreamReader }
 
   TSimpleStreamReader = class(TStreamReader)
-    constructor Create(const FileName: string);
+    constructor Create(const FileName: string); reintroduce;
   end;
 
 implementation

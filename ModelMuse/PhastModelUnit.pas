@@ -9018,6 +9018,12 @@ const
   //                Shapefiles that directly set the withdrawal rate in
   //                WellFootprint models.
 
+  //               Big fix: Fixed bug that allowed the user to import
+  //                points that directly set the withdrawal rate in
+  //                WellFootprint models.
+  //               Big fix: Fixed bug that could cause the model selection
+  //                to be set to the wrong value when creating a new model.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.5';
   StrPvalExt = '.pval';

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Generics.Collections, Generics.Defaults, ObExtractorTypes;
 
 type
-  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftDerived);
+  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftDerived);
   //TOutputFileType = (oftList, oftObs);
 
   TInputFileLink = record
@@ -205,6 +205,13 @@ begin
           FInputFileLinks.Add(InputFile);
           FListingFile.Add(Format('SFR Instruction File = "%s"', [InputFile.FileName]));
         end
+        else if UpperCase(Splitter[0]) = 'SUB' then
+        begin
+          InputFile.FileType := iftSUB;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('SUB Instruction File = "%s"', [InputFile.FileName]));
+        end
         else if UpperCase(Splitter[0]) = 'DERIVED' then
         begin
           InputFile.FileType := iftDerived;
@@ -359,26 +366,9 @@ var
   ObsProcessorList: TObsProcessorList;
   ObsProcessor: TObsProcessor;
 begin
-  //SortedInputFileLinks := TInputFileLinks.Create;
   ObsProcessorList := TObsProcessorList.Create;
   try
-    //SortedInputFileLinks.Capacity := FInputFileLinks.Count;
     ObsProcessorList.Capacity := FInputFileLinks.Count;
-    //for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
-    //begin
-    //  if FInputFileLinks[ItemIndex].FileType <> iftDerived then
-    //  begin
-    //    SortedInputFileLinks.Add(FInputFileLinks[ItemIndex]);
-    //  end;
-    //end;
-    //
-    //for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
-    //begin
-    //  if FInputFileLinks[ItemIndex].FileType = iftDerived then
-    //  begin
-    //    SortedInputFileLinks.Add(FInputFileLinks[ItemIndex]);
-    //  end;
-    //end;
 
     for ItemIndex := 0 to Pred(FInputFileLinks.Count) do
     begin

@@ -206,7 +206,7 @@ uses Clipbrd, Contnrs, GoPhastTypes, frmGoPhastUnit, RbwParser,
   ModflowRivUnit, ModelMuseUtilities, ModflowDrnUnit, AbstractGridUnit,
   frameHeadObservationsUnit, IntListUnit, framePackageHobUnit, ModflowHobUnit,
   frameCustomCellObservationUnit, FootprintPropertiesUnit, FootprintBoundary,
-  System.Character, MeshRenumberingTypes;
+  System.Character, MeshRenumberingTypes, ModflowBoundaryDisplayUnit;
 
 {$R *.dfm}
 
@@ -423,6 +423,11 @@ begin
             end;
           end;
         end;
+      end;
+
+      if DataSet is TFootprintWithdrawalDataArray then
+      begin
+        ShouldIncludeDataSet := False;
       end;
 
       if ShouldIncludeDataSet then

@@ -153,19 +153,23 @@ procedure TSwiObs.ReadBinarySwiObs(Reader: TFileStream; NumberOfObs: Integer;
 var
   Values: TDoubleArray;
   Time: Double;
-  ASingle: single;
-  AValue: double;
+  ASingleValue: single;
+  ADoubleValue: double;
   ObsIndex: Integer;
 begin
   while Reader.Position < Reader.Size do
   begin
     SetLength(Values, NumberOfObs);
 
+    ASingleValue := 0;
+    Time := 0;
+    ADoubleValue := 0;
+
     case FileFormat of
       sffBinarySingle:
         begin
-          Reader.Read(ASingle, SizeOf(Single));
-          Time := ASingle;
+          Reader.Read(ASingleValue, SizeOf(Single));
+          Time := ASingleValue;
         end;
       sffBinaryDouble: Reader.Read(Time, SizeOf(double));
       else Assert(False);
@@ -177,13 +181,13 @@ begin
       case FileFormat of
         sffBinarySingle:
           begin
-            Reader.Read(ASingle, SizeOf(Single));
-            AValue := ASingle;
+            Reader.Read(ASingleValue, SizeOf(Single));
+            ADoubleValue := ASingleValue;
           end;
-        sffBinaryDouble: Reader.Read(AValue, SizeOf(double));
+        sffBinaryDouble: Reader.Read(ADoubleValue, SizeOf(double));
         else Assert(False);
       end;
-      Values[ObsIndex] := AValue;
+      Values[ObsIndex] := ADoubleValue;
     end;
 
     FValues.Add(Values);

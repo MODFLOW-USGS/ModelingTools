@@ -46,7 +46,8 @@ uses
   ModflowSwiObsUnit, ModflowRipUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
   Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit, ModflowMawUnit,
   MeshRenumberingTypes, Modflow6ObsUnit, ModflowLakMf6Unit, ModflowMvrUnit,
-  ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit;
+  ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
+  ModflowSubsidenceDefUnit;
 
 type
   //
@@ -1922,6 +1923,7 @@ view. }
     FFootprintWell: TFootprintWell;
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
+    FSubObservations: TSubObservations;
 //    FModflow6Obs: TModflow6Obs;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
@@ -2745,6 +2747,7 @@ view. }
     function GetModflowCSub: TCSubBoundary;
     procedure SetModflowCSub(const Value: TCSubBoundary);
     function StoreModflowCSub: Boolean;
+    procedure SetSubObservations(const Value: TSubObservations);
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -4123,6 +4126,13 @@ SectionStarts.}
     // Zero equals no refinement.
     property QuadtreeRefinementLevel: Integer read FQuadtreeRefinementLevel
       write SetQuadtreeRefinementLevel;
+
+    property SubObservations: TSubObservations read FSubObservations
+      write SetSubObservations
+    {$IFNDEF PEST}
+      Stored False
+    {$ENDIF}
+      ;
   end;
 
   // @name does not own its @link(TScreenObject)s.
@@ -6493,6 +6503,7 @@ begin
   ImportedValues := AScreenObject.ImportedValues;
   PositionLocked := AScreenObject.PositionLocked;
   StoredSutraAngle := AScreenObject.StoredSutraAngle;
+  SubObservations := AScreenObject.SubObservations;
 //  LinkedChildModels := AScreenObject.LinkedChildModels;
 
   for Index := DataSetCount - 1 downto 0 do
@@ -11062,6 +11073,8 @@ begin
   FSutraBoundaries := TSutraBoundaries.Create(Model, self);
   FStoredMinimumFraction := TRealStorage.Create;
   FStoredMinimumFraction.OnChange := InvalidateSelf;
+  
+  FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
 end;
 
 procedure TScreenObject.CreateLastSubPolygon;
@@ -18636,6 +18649,7 @@ var
   FormulaIndex: Integer;
   FormulaObject: TFormulaObject;
 begin
+  FSubObservations.Free;
   FStoredMinimumFraction.Free;
   FreeAndNil(FFootprintWell);
   FSutraBoundaries.Free;
@@ -31007,6 +31021,11 @@ end;
 procedure TScreenObject.SetStoredSutraAngle(const Value: TRealStorage);
 begin
   FStoredSutraAngle.Assign(Value);
+end;
+
+procedure TScreenObject.SetSubObservations(const Value: TSubObservations);
+begin
+  FSubObservations.Assign(Value);
 end;
 
 procedure TScreenObject.SetSutraAngle(const Value: Double);

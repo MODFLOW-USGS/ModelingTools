@@ -15,7 +15,7 @@ type
 
   TGageOutArray = array of TGageOutRecord;
 
-  TGageObsValue = class(TCustomObsValue)
+  TGageObsValue = class(TCustomWeightedObsValue)
     ObsType: string;
   end;
 
@@ -77,7 +77,7 @@ begin
   Splitter := TStringList.Create;
   try
     Splitter.Delimiter := ' ';
-    ObsLines.LoadFromFile(OutputFileName);
+    ObsLines.LoadFromFile(ModelOutputFileName);
     FTimes.Capacity := ObsLines.Count-2;
     SetLength(FObsRecords, ObsLines.Count-2);
     HeaderLine := RemoveQuotes(Trim(ObsLines[1]));
@@ -237,7 +237,7 @@ var
   ObsRecord: TGageOutRecord;
   FirstRecord: TGageOutRecord;
   SecondRecord: TGageOutRecord;
-  ObsTypeIndex: Integer;
+  //ObsTypeIndex: Integer;
   procedure InterpolateValues;
   var
     FirstValue: double;
@@ -258,7 +258,7 @@ var
     end;
   end;
 begin
-  Assert(OutputFileName <> '');
+  Assert(ModelOutputFileName <> '');
   Assert(ObsCount > 0);
   FTimes := TRealList.Create;
   try
@@ -276,7 +276,7 @@ begin
 
       if Abs(Obs.ObsTime - ObsRecord.Time) <= Epsilon then
       begin
-        ObsTypeIndex := ObsTypeToIndex(Obs.ObsType);
+        //ObsTypeIndex := ObsTypeToIndex(Obs.ObsType);
         Obs.SimulatedValue := Value(ObsRecord, ObsTypeToIndex(Obs.ObsType));
       end
       else

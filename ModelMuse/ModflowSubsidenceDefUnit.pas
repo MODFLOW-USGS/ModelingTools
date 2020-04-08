@@ -3,7 +3,7 @@ unit ModflowSubsidenceDefUnit;
 interface
 
 uses
-  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils;
+  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils, PestObsUnit;
 
 type
   TUseLayerNumberItem = class(TOrderedItem)
@@ -311,6 +311,43 @@ type
     procedure Loaded;
   end;
 
+  TSubObsItem = class(TCustomTimeObservationItem)
+  private
+    FObsType: string;
+    FInterbedSystem: Integer;
+    procedure SetObsType(const Value: string);
+    procedure SetInterbedSystem(const Value: Integer);
+  protected
+    function GetObsTypeIndex: Integer; override;
+    procedure SetObsTypeIndex(const Value: Integer); override;
+    function GetObsTypeString: string; override;
+    procedure SetObsTypeString(const Value: string); override;
+  public
+    procedure Assign(Source: TPersistent); override;
+    function ObservationType: string; override;
+    function Units: string; override;
+  published
+    property ObsType: string read FObsType write SetObsType stored True;
+    property InterbedSystem: Integer read FInterbedSystem write SetInterbedSystem;
+    property GUID;
+  end;
+
+  TSubObservations = class(TCustomComparisonCollection)
+  private
+    function GetSubItem(Index: Integer): TSubObsItem;
+    procedure SetSubItem(Index: Integer; const Value: TSubObsItem);
+    function GetUsed: Boolean;
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    property Items[Index: Integer]: TSubObsItem read GetSubItem
+      write SetSubItem; default;
+    function Add: TSubObsItem;
+    property Used: Boolean read GetUsed;
+  end;
+
+var
+  SubsidenceTypes: TStringList;
+  SubsidenceUnits: TStringList;
 
 //const
 //  StrSubSidence = 'Subsidence';
@@ -320,6 +357,15 @@ implementation
 uses
   PhastModelUnit, DataSetUnit, RbwParser, IntListUnit,
   ModflowPackageSelectionUnit, ModflowPackagesUnit;
+
+const
+  rsSUBSIDENCE = 'SUBSIDENCE';
+  rsLAYERCOMPACT = 'LAYER COMPACTION';
+  rsNDSYSCOMPACT = 'NDSYS COMPACTION';
+  rsDSYSCOMPACTI = 'DSYS COMPACTION';
+  rsZDISPLACEMEN = 'Z DISPLACEMENT';
+  rsNDCRITICALHE = 'ND CRITICAL HEAD';
+  rsDCRITICALHEA = 'D CRITICAL HEAD';
 
 const
   kNoDelayPreconsolid = 'No_Delay_Preconsolidation_Head';
@@ -374,6 +420,21 @@ resourcestring
   StrCompressionIndex     = kCompressionIndex;
   StrInitialVoidRatio     = kInitialVoidRatio;
   StrInitialCompaction    = kInitialCompaction;
+
+procedure InitializeSubsidenceTypes;
+begin
+  SubsidenceTypes := TStringList.Create;
+  SubsidenceUnits := TStringList.Create;
+  
+  SubsidenceTypes.Add(rsSUBSIDENCE);    SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsLAYERCOMPACT);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsNDSYSCOMPACT);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsDSYSCOMPACTI);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsZDISPLACEMEN);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsNDCRITICALHE);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsDCRITICALHEA);  SubsidenceUnits.Add('L');
+end;
+
 
 { TSubNoDelayBedLayers }
 
@@ -1518,6 +1579,115 @@ procedure TWaterTableLayers.SetItem(Index: integer;
 begin
   inherited Items[Index] := Value;
 end;
+
+{ TSubObsItem }
+
+procedure TSubObsItem.Assign(Source: TPersistent);
+var
+  SubSource: TSubObsItem;
+begin
+  if Source is TSubObsItem then
+  begin
+    SubSource := TSubObsItem(Source);
+    ObsType := SubSource.ObsType;
+    InterbedSystem := SubSource.InterbedSystem;
+  end;
+  inherited;
+end;
+
+function TSubObsItem.GetObsTypeIndex: Integer;
+begin
+  result := SubsidenceTypes.IndexOf(ObsType);
+end;
+
+function TSubObsItem.GetObsTypeString: string;
+begin
+  result := ObsType;
+end;
+
+function TSubObsItem.ObservationType: string;
+begin
+  result := ObsType;
+end;
+
+procedure TSubObsItem.SetInterbedSystem(const Value: Integer);
+begin
+  if FInterbedSystem <> Value then
+  begin
+    BeginUpdate;
+    try
+      FInterbedSystem := Value;
+      InvalidateModel;
+    finally
+      EndUpdate;
+    end;
+  end;
+end;
+
+procedure TSubObsItem.SetObsType(const Value: string);
+begin
+  if FObsType <> Value then
+  begin
+    BeginUpdate;
+    try
+      FObsType := Value;
+      InvalidateModel;
+    finally
+      EndUpdate;
+    end;
+  end;
+end;
+
+procedure TSubObsItem.SetObsTypeIndex(const Value: Integer);
+begin
+  ObsType := SubsidenceTypes[Value];
+end;
+
+procedure TSubObsItem.SetObsTypeString(const Value: string);
+begin
+  ObsType := Value;
+end;
+
+function TSubObsItem.Units: string;
+begin
+  result := SubsidenceTypes[ObsTypeIndex];
+end;
+
+{ TSubObservations }
+
+function TSubObservations.Add: TSubObsItem;
+begin
+  result := inherited Add as TSubObsItem;
+end;
+
+constructor TSubObservations.Create(InvalidateModelEvent: TNotifyEvent;
+  ScreenObject: TObject);
+begin
+  inherited Create(TSubObsItem, InvalidateModelEvent, ScreenObject);
+end;
+
+function TSubObservations.GetSubItem(Index: Integer): TSubObsItem;
+begin
+  result := inherited Items[Index] as TSubObsItem;
+end;
+
+function TSubObservations.GetUsed: Boolean;
+begin
+  result := Count > 0;
+end;
+
+procedure TSubObservations.SetSubItem(Index: Integer;
+  const Value: TSubObsItem);
+begin
+  inherited Items[Index] := Value;
+end;
+
+initialization;
+  InitializeSubsidenceTypes
+
+finalization
+  SubsidenceTypes.Free;
+  SubsidenceUnits.Free;
 
 end.
 

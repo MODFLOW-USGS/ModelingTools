@@ -21,7 +21,7 @@ type
     Additional: TDoubleArray;
   end;
 
-  TMnwiObsValue = class(TCustomObsValue)
+  TMnwiObsValue = class(TCustomWeightedObsValue)
     ObsType: TMnwiObsType;
   end;
 
@@ -174,12 +174,12 @@ var
     end;
   end;
 begin
-  Assert(OutputFileName <> '');
+  Assert(ModelOutputFileName <> '');
   Assert(ObsCount > 0);
   Times := TRealList.Create;
   ObsLines := TStringList.Create;
   try
-    ObsLines.LoadFromFile(OutputFileName);
+    ObsLines.LoadFromFile(ModelOutputFileName);
     Times.Capacity := ObsLines.Count-1;
     SetLength(ObsRecords, ObsLines.Count-1);
     for LineIndex := 1 to Pred(ObsLines.Count) do

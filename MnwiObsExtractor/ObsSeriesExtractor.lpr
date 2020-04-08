@@ -1,4 +1,4 @@
-program MnwiObsExtractor;
+program ObsSeriesExtractor;
 
 {$mode objfpc}{$H+}
 
@@ -7,8 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit, readinstructions,
-  readgageoutput, ObExtractorTypes, ReadNameFile, SwiObsInputReader,
-  SwiObsReaderUnit, SwiObsUtilities, SimpleTextWriter;
+  readgageoutput, ObExtractorTypes, ReadNameFile,
+  SimpleTextWriter, SubsidenceObsExtractor, SwiObsUtilities;
 
 type
 
@@ -32,7 +32,6 @@ var
   P: PChar;
   Opts: TStringList;
   NonOpts: TStringList;
-  //InputHandler: TObsProcessor;
   NameFileReader: TNameFileReader;
 begin
   Opts := TStringList.Create;

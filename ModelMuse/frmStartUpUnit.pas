@@ -952,37 +952,40 @@ end;
 
 procedure TfrmStartUp.SetModflowChoice;
 begin
-  case comboModflowSelection.ItemIndex of
-    0:
-      begin
-        // MODFLOW 6
-        frmGoPhast.ModelSelection := msModflow2015;
-      end;
-    1:
-      begin
-        //MODFLOW-2005
-        frmGoPhast.ModelSelection := msModflow;
-      end;
-    2:
-      begin
-        //MODFLOW-NWT
-        frmGoPhast.ModelSelection := msModflowNWT;
-      end;
-    3:
-      begin
-        //MODFLOW-OWHM
-        frmGoPhast.ModelSelection := msModflowFmp;
-      end;
-    4:
-      begin
-        //MODFLOW-CFP
-        frmGoPhast.ModelSelection := msModflowCfp;
-      end;
-    5:
-      begin
-        //MODFLOW-LGR
-        frmGoPhast.ModelSelection := msModflowLGR2;
-      end;
+  if rgChoice.ItemIndex = Ord(scNewModflow) then
+  begin
+    case comboModflowSelection.ItemIndex of
+      0:
+        begin
+          // MODFLOW 6
+          frmGoPhast.ModelSelection := msModflow2015;
+        end;
+      1:
+        begin
+          //MODFLOW-2005
+          frmGoPhast.ModelSelection := msModflow;
+        end;
+      2:
+        begin
+          //MODFLOW-NWT
+          frmGoPhast.ModelSelection := msModflowNWT;
+        end;
+      3:
+        begin
+          //MODFLOW-OWHM
+          frmGoPhast.ModelSelection := msModflowFmp;
+        end;
+      4:
+        begin
+          //MODFLOW-CFP
+          frmGoPhast.ModelSelection := msModflowCfp;
+        end;
+      5:
+        begin
+          //MODFLOW-LGR
+          frmGoPhast.ModelSelection := msModflowLGR2;
+        end;
+    end;
   end;
 end;
 
