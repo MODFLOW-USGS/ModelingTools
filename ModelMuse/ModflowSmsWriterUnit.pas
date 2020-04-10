@@ -354,6 +354,7 @@ begin
     NewLine;
   end;
 
+  BacktrackingNumber := -1;
   if soBacktrackingNumber in FImsPackage.SmsOverrides then
   begin
     BacktrackingNumber := FImsPackage.BacktrackingNumber;

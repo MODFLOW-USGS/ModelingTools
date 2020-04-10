@@ -832,8 +832,10 @@ begin
 end;
 
 procedure TframeScreenObjectSFR.rgGagesClick(Sender: TObject);
+{$IFDEF PEST}
 var
   FlowTypes: TStringList;
+{$ENDIF}
 begin
   cbGagStandard.Enabled := rgGages.ItemIndex <> 0;
   cbGag1.Enabled := rgGages.ItemIndex <> 0;
@@ -4138,6 +4140,8 @@ begin
 
     if List.Count = 1 then
     begin
+      Item := List.Items[0];
+      Boundary := Item.ScreenObject.ModflowSfrBoundary;
       if (Boundary <> nil) and Boundary.Used then
       begin
         frameSfrPestObs.GetData(Boundary.Observations);

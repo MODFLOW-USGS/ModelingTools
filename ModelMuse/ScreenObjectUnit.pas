@@ -1451,6 +1451,8 @@ view. }
     FMt3dSftConcBoundary: TMt3dSftBoundary;
     FModflowCSub: TCSubBoundary;
     FScreenObject: TObject;
+    FSubObservations: TSubObservations;
+//    procedure SetSubObservations(const Value: TSubObservations);
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1551,6 +1553,13 @@ view. }
       read FMt3dSftConcBoundary write FMt3dSftConcBoundary;
 
     property ModflowCSub: TCSubBoundary read FModflowCSub write FModflowCSub;
+
+    property SubObservations: TSubObservations read FSubObservations
+      write FSubObservations
+    {$IFNDEF PEST}
+      Stored False
+    {$ENDIF}
+      ;
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
@@ -1923,7 +1932,7 @@ view. }
     FFootprintWell: TFootprintWell;
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
-    FSubObservations: TSubObservations;
+//    FSubObservations: TSubObservations;
 //    FModflow6Obs: TModflow6Obs;
     procedure CreateLastSubPolygon;
     procedure DestroyLastSubPolygon;
@@ -2748,6 +2757,8 @@ view. }
     procedure SetModflowCSub(const Value: TCSubBoundary);
     function StoreModflowCSub: Boolean;
     procedure SetSubObservations(const Value: TSubObservations);
+    function GetSubObservations: TSubObservations;
+    function StoreSubObservations: Boolean;
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -3349,6 +3360,7 @@ view. }
     procedure CreateModflowMvr;
     procedure CreateModflowUzfMf6Boundary;
     procedure CreateCSubBoundary;
+    procedure CreateSubObservations;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     function ModflowDataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -4055,6 +4067,8 @@ view. }
 
     property ModflowCSub: TCSubBoundary read GetModflowCSub Write SetModflowCSub
       stored StoreModflowCSub;
+    property SubObservations: TSubObservations read GetSubObservations
+      write SetSubObservations stored StoreSubObservations;
 
 //    property Mt3dUzfSeepageConcBoundary: TMt3dUzSsmSinkConcBoundary
 //      read GetMt3dUzSsmSinkConcBoundary write SetMt3dUzSsmSinkConcBoundary
@@ -4127,12 +4141,6 @@ SectionStarts.}
     property QuadtreeRefinementLevel: Integer read FQuadtreeRefinementLevel
       write SetQuadtreeRefinementLevel;
 
-    property SubObservations: TSubObservations read FSubObservations
-      write SetSubObservations
-    {$IFNDEF PEST}
-      Stored False
-    {$ENDIF}
-      ;
   end;
 
   // @name does not own its @link(TScreenObject)s.
@@ -6686,6 +6694,7 @@ begin
   ModflowMvr := AScreenObject.ModflowMvr;
   ModflowUzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
   ModflowCSub := AScreenObject.ModflowCSub;
+  SubObservations := AScreenObject.SubObservations;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -11074,7 +11083,7 @@ begin
   FStoredMinimumFraction := TRealStorage.Create;
   FStoredMinimumFraction.OnChange := InvalidateSelf;
   
-  FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
+//  FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
 end;
 
 procedure TScreenObject.CreateLastSubPolygon;
@@ -15794,6 +15803,24 @@ begin
   end;
 end;
 
+procedure TScreenObject.CreateSubObservations;
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  if (ModflowBoundaries.FSubObservations = nil) then
+  begin
+    if FModel = nil then
+    begin
+      InvalidateModelEvent := nil;
+    end
+    else
+    begin
+      InvalidateModelEvent := FModel.Invalidate;
+    end;
+    ModflowBoundaries.FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
+  end;
+end;
+
 procedure TScreenObject.CreateSubPolygons;
 var
   Index: Integer;  
@@ -18649,7 +18676,7 @@ var
   FormulaIndex: Integer;
   FormulaObject: TFormulaObject;
 begin
-  FSubObservations.Free;
+//  FSubObservations.Free;
   FStoredMinimumFraction.Free;
   FreeAndNil(FFootprintWell);
   FSutraBoundaries.Free;
@@ -30962,6 +30989,23 @@ begin
   result := FWellBoundary;
 end;
 
+function TScreenObject.GetSubObservations: TSubObservations;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateSubObservations;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FSubObservations;
+  end;
+end;
+
 function TScreenObject.GetSubPolygon(Index: integer): TSubPolygon;
 begin
   Assert(FSubPolygons <> nil);
@@ -31024,8 +31068,22 @@ begin
 end;
 
 procedure TScreenObject.SetSubObservations(const Value: TSubObservations);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
-  FSubObservations.Assign(Value);
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FSubObservations <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FSubObservations);
+  end
+  else
+  begin
+    CreateSubObservations;
+    ModflowBoundaries.FSubObservations.Assign(Value);
+  end;
 end;
 
 procedure TScreenObject.SetSutraAngle(const Value: Double);
@@ -31632,6 +31690,16 @@ begin
   result := (FSpecifiedHeadBoundary <> nil)
     and ((SpecifiedHeadBoundary.BoundaryValue.Count > 0)
     or (SpecifiedHeadBoundary.Solution.Count > 0));
+end;
+
+function TScreenObject.StoreSubObservations: Boolean;
+begin
+{$IFDEF PEST}
+  result := (FModflowBoundaries <> nil)
+    and (SubObservations <> nil) and SubObservations.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 function TScreenObject.StoreWell: boolean;
@@ -40150,6 +40218,19 @@ begin
     FModflowCSub.Assign(Source.FModflowCSub);
   end;
 
+  if Source.FSubObservations = nil then
+  begin
+    FreeAndNil(FSubObservations);
+  end
+  else
+  begin
+    if FSubObservations = nil then
+    begin
+      FSubObservations := TSubObservations.Create(InvalidateEvent, self);
+    end;
+    FSubObservations.Assign(Source.FSubObservations);
+  end;
+
   FreeUnusedBoundaries;
 end;
 
@@ -40160,6 +40241,7 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
+  FSubObservations.Free;
   FModflowCSub.Free;
   FModflow6Obs.Free;
   FModflowMawBoundary.Free;
@@ -40426,6 +40508,11 @@ begin
   if (FModflowCSub <> nil) and not FModflowCSub.Used then
   begin
     FreeAndNil(FModflowCSub);
+  end;
+
+  if (FSubObservations <> nil) and not FSubObservations.Used then
+  begin
+    FreeAndNil(FSubObservations);
   end;
 end;
 
@@ -41462,6 +41549,11 @@ begin
   if FModflowCSub <> nil then
   begin
     FModflowCSub.StopTalkingToAnyone;
+  end;
+
+  if FSubObservations <> nil then
+  begin
+//    FSubObservations.StopTalkingToAnyone;
   end;
 end;
 

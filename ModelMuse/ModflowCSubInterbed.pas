@@ -279,6 +279,7 @@ begin
   end;
   if DataArray = nil then
   begin
+    ClassType := nil;
     Case DataType of
       rdtDouble:
         begin

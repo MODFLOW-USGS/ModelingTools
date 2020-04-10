@@ -403,7 +403,7 @@ var
         result := False;
         Exit;
       end;
-      if MF2005BudgetTerms.IndexOf(Description) < 0 then
+      if MF2005BudgetTerms.IndexOf(string(Description)) < 0 then
       begin
         result := False;
         Exit;
@@ -643,7 +643,7 @@ var
         result := False;
         Exit;
       end;
-      if MF2005BudgetTerms.IndexOf(Description) < 0 then
+      if MF2005BudgetTerms.IndexOf(string(Description)) < 0 then
       begin
         result := False;
         Exit;

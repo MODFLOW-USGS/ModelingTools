@@ -258,7 +258,6 @@ inherited frmImportPoints: TfrmImportPoints
           ItemHeight = 18
           TabOrder = 1
           OnClickCheck = jvclbDataSetsClickCheck
-          ExplicitTop = 25
           InternalVersion = 202
         end
         object pnlLabelDataSets: TPanel

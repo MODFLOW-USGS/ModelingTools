@@ -464,8 +464,8 @@ begin
       case rgElevationCount.ItemIndex of
         0:
           begin
-            if (dgData.Cells[0,RowIndex] <> '')
-              and (dgData.Cells[1,RowIndex] <> '') then
+            if (Trim(dgData.Cells[0,RowIndex]) <> '')
+              and (Trim(dgData.Cells[1,RowIndex]) <> '') then
             begin
               btnOK.Enabled := True;
               break;
@@ -473,9 +473,9 @@ begin
           end;
         1:
           begin
-            if (dgData.Cells[0,RowIndex] <> '')
-              and (dgData.Cells[1,RowIndex] <> '')
-              and (dgData.Cells[2,RowIndex] <> '')
+            if (Trim(dgData.Cells[0,RowIndex]) <> '')
+              and (Trim(dgData.Cells[1,RowIndex]) <> '')
+              and (Trim(dgData.Cells[2,RowIndex]) <> '')
               then
             begin
               btnOK.Enabled := True;
@@ -484,10 +484,10 @@ begin
           end;
         2:
           begin
-            if (dgData.Cells[0,RowIndex] <> '')
-              and (dgData.Cells[1,RowIndex] <> '')
-              and (dgData.Cells[2,RowIndex] <> '')
-              and (dgData.Cells[3,RowIndex] <> '')
+            if (Trim(dgData.Cells[0,RowIndex]) <> '')
+              and (Trim(dgData.Cells[1,RowIndex]) <> '')
+              and (Trim(dgData.Cells[2,RowIndex]) <> '')
+              and (Trim(dgData.Cells[3,RowIndex]) <> '')
               then
             begin
               btnOK.Enabled := True;
@@ -876,7 +876,7 @@ begin
       case DataArray.DataType of
         rdtDouble:
           begin
-            ARealValue := StrToFloat(dgData.Cells[ColIndex, RowIndex]);
+            ARealValue := StrToFloat(Trim(dgData.Cells[ColIndex, RowIndex]));
             if cbImportAsSingleObject.Checked then
             begin
               DataSetValues.RealValues[PointCount - 1] := ARealValue;
@@ -888,14 +888,14 @@ begin
           end;
         rdtInteger:
           begin
-            AnIntValue := StrToInt(dgData.Cells[ColIndex, RowIndex]);
+            AnIntValue := StrToInt(Trim(dgData.Cells[ColIndex, RowIndex]));
             if cbImportAsSingleObject.Checked then
             begin
               DataSetValues.IntValues[PointCount - 1] := AnIntValue;
             end
             else
             begin
-              AScreenObject.DataSetFormulas[Position] := dgData.Cells[ColIndex, RowIndex];
+              AScreenObject.DataSetFormulas[Position] := Trim(dgData.Cells[ColIndex, RowIndex]);
             end;
           end;
         rdtBoolean:
@@ -925,7 +925,7 @@ begin
           end;
         rdtString:
           begin
-            AFormula := dgData.Cells[ColIndex, RowIndex];
+            AFormula := Trim(dgData.Cells[ColIndex, RowIndex]);
             if cbImportAsSingleObject.Checked then
             begin
               if Length(AFormula) > 0 then
@@ -1030,7 +1030,7 @@ begin
         if (Package = Packages.HobPackage) and (ColIndex = dgData.ColCount - 1) then
         begin
           try
-            IntValues.Add(StrToInt(dgData.Cells[ColIndex, RowIndex]));
+            IntValues.Add(StrToInt(Trim(dgData.Cells[ColIndex, RowIndex])));
           except
             on E: EConvertError do
             begin
@@ -1048,7 +1048,7 @@ begin
         else
         begin
           try
-            Values.Add(StrToFloat(dgData.Cells[ColIndex, RowIndex]));
+            Values.Add(StrToFloat(Trim(dgData.Cells[ColIndex, RowIndex])));
           except
             on E: EConvertError do
             begin
@@ -1228,7 +1228,7 @@ begin
       Assert(comboBoundaryChoice.Items.Objects[comboBoundaryChoice.ItemIndex]
         is TFootprintProperties);
       try
-        AValue := StrToFloat(dgData.Cells[Ord(fwcWithdrawal)+2, RowIndex]);
+        AValue := StrToFloat(Trim(dgData.Cells[Ord(fwcWithdrawal)+2, RowIndex]));
       except
         on E: EConvertError do
         begin
@@ -1576,11 +1576,11 @@ begin
       PointCount := 0;
       for RowIndex := 1 to dgData.RowCount - 1 do
       begin
-        NewPoint := (dgData.Cells[AnXCol, RowIndex] <> '')
-          and (dgData.Cells[AYCol, RowIndex] <> '');
+        NewPoint := (Trim(dgData.Cells[AnXCol, RowIndex]) <> '')
+          and (Trim(dgData.Cells[AYCol, RowIndex]) <> '');
         if NewPoint and (AZ1Col >= 0) then
         begin
-          NewPoint := dgData.Cells[AZ1Col, RowIndex] <> '';
+          NewPoint := Trim(dgData.Cells[AZ1Col, RowIndex]) <> '';
         end;
         if NewPoint and (AZ2Col >= 0) then
         begin
@@ -1597,8 +1597,8 @@ begin
                   Assert(Grid <> nil);
                   // top view
                   Assert(rgViewDirection.ItemIndex = 0);
-                  Column := StrToInt(dgData.Cells[AnXCol, RowIndex])-1;
-                  Row := StrToInt(dgData.Cells[AYCol, RowIndex])-1;
+                  Column := StrToInt(Trim(dgData.Cells[AnXCol, RowIndex]))-1;
+                  Row := StrToInt(Trim(dgData.Cells[AYCol, RowIndex]))-1;
                   if rgEvaluatedAt.ItemIndex = 0 then
                   begin
                     // elements
@@ -1645,7 +1645,7 @@ begin
               end;
               if AZ2Col >= 0 then
               begin
-                StrToFloat(dgData.Cells[AZ2Col, RowIndex]);
+                StrToFloat(Trim(dgData.Cells[AZ2Col, RowIndex]));
               end;
             end;
           except on EConvertError do
@@ -1776,7 +1776,7 @@ begin
               begin
                 if cbLayer.Checked then
                 begin
-                  Layer := StrToInt(dgData.Cells[AZ1Col, RowIndex])-1;
+                  Layer := StrToInt(Trim(dgData.Cells[AZ1Col, RowIndex]))-1;
                   if Grid <> nil then
                   begin
                     Assert(Grid <> nil);
@@ -1806,7 +1806,7 @@ begin
                 end
                 else
                 begin
-                  Elevation1 := StrToFloat(dgData.Cells[AZ1Col, RowIndex]);
+                  Elevation1 := StrToFloat(Trim(dgData.Cells[AZ1Col, RowIndex]));
                 end;
                 if cbImportAsSingleObject.Checked then
                 begin
@@ -1821,8 +1821,8 @@ begin
               end;
             ecTwo:
               begin
-                Elevation1 := StrToFloat(dgData.Cells[AZ1Col, RowIndex]);
-                Elevation2 := StrToFloat(dgData.Cells[AZ2Col, RowIndex]);
+                Elevation1 := StrToFloat(Trim(dgData.Cells[AZ1Col, RowIndex]));
+                Elevation2 := StrToFloat(Trim(dgData.Cells[AZ2Col, RowIndex]));
                 if cbImportAsSingleObject.Checked then
                 begin
                   ElevValues1.RealValues[PointCount] := Elevation1;

@@ -2614,6 +2614,10 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'External_Flow_File'
       Caption = 'External Flow File'
       ImageIndex = 10
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameExternalFileValues: TframeGrid
         Left = 0
         Top = 145

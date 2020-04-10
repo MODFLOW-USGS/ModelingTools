@@ -314,9 +314,9 @@ type
   TSubObsItem = class(TCustomTimeObservationItem)
   private
     FObsType: string;
-    FInterbedSystem: Integer;
+    FInterbedSystem: string;
     procedure SetObsType(const Value: string);
-    procedure SetInterbedSystem(const Value: Integer);
+    procedure SetInterbedSystem(const Value: string);
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(const Value: Integer); override;
@@ -328,7 +328,7 @@ type
     function Units: string; override;
   published
     property ObsType: string read FObsType write SetObsType stored True;
-    property InterbedSystem: Integer read FInterbedSystem write SetInterbedSystem;
+    property InterbedSystem: string read FInterbedSystem write SetInterbedSystem;
     property GUID;
   end;
 
@@ -1610,7 +1610,7 @@ begin
   result := ObsType;
 end;
 
-procedure TSubObsItem.SetInterbedSystem(const Value: Integer);
+procedure TSubObsItem.SetInterbedSystem(const Value: string);
 begin
   if FInterbedSystem <> Value then
   begin

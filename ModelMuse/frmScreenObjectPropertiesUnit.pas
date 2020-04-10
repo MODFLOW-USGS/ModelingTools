@@ -43,7 +43,8 @@ uses System.UITypes, Windows,
   frameScreenObjectHfbMf6Unit, ModflowHfbUnit, frameScreenObjectLakMf6Unit,
   frameScreenObjectMvrUnit, ModflowMvrUnit, frameScreenObjectUzfMf6Unit,
   frameScreenObjectLktUnit, frameScreenObjectMt3dSftUnit,
-  frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit, framePestObsUnit;
+  frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit, framePestObsUnit,
+  frameSubPestObsUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -377,6 +378,8 @@ type
     tabGageTypes: TTabSheet;
     tabGageObservations: TTabSheet;
     frameGagePestObs: TframePestObs;
+    jvspSubPestObs: TJvStandardPage;
+    frameSubPestObs: TframeSubPestObs;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1528,6 +1531,7 @@ type
     FMAW_Node: TJvPageIndexNode;
     FCSUB_Node: TJvPageIndexNode;
     FMf6Obs_Node: TJvPageIndexNode;
+    FSubPestObs_Node: TJvPageIndexNode;
     // @name is used to store the column that the user last selected
     // in one of the grids for boundary-condition, time-varying stress.
     // For boundary conditions that allow PHAST-style interpolation,
@@ -2229,6 +2233,7 @@ type
     procedure SetSelectedMfBoundaryNode;
     procedure CreateMawNode(AScreenObject: TScreenObject);
     procedure CreateCSubNode;
+    procedure CreateSubPestObsNode(AScreenObject: TScreenObject);
     procedure InitializeVertexGrid;
     procedure InitializePhastSpecifiedHeadGrid;
     procedure InitializePhastSpecifiedFluxGrid;
@@ -3564,6 +3569,7 @@ begin
   CreateMt3d_UztRechNode;
   CreateMt3d_UztSatNode;
   CreateMt3d_UztUnsatNode;
+  CreateSubPestObsNode(AScreenObject);
 
   CreateSutraFeatureNodes;
 
@@ -3894,6 +3900,7 @@ begin
     CreateDataSetEdits(List);
     GetGages(List);
     GetModpathParticles(List);
+    frameSubPestObs.InitializeControls;
 
     GetDataSetsForSingleObject;
     GetPhastBoundariesForSingleObject;
@@ -5226,6 +5233,9 @@ begin
   frameLak.framePestObsLak.SpecifyObservationTypes(LakeGageOutputTypes);
   frameLak.framePestObsLak.OnControlsChange := LakePestObsChanged;
 
+  frameSubPestObs.InitializeControls;
+  frameSubPestObs.SpecifyObservationTypes(SubsidenceTypes);
+
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -5904,6 +5914,24 @@ begin
   frameSWR_Stage.rdgModflowBoundary.ColCount := 3;
   frameSWR_DirectRunoff.rdgModflowBoundary.ColCount := 4;
 //  frameSwrReach.frameSwr.rdgModflowBoundary.ColCount := 6;
+end;
+
+procedure TfrmScreenObjectProperties.CreateSubPestObsNode(AScreenObject: TScreenObject);
+var
+  Node: TJvPageIndexNode;
+begin
+  FSubPestObs_Node := nil;
+  if frmGoPhast.PhastModel.SubIsSelected
+    and (AScreenObject.Count = 1) then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+      frmGoPhast.PhastModel.ModflowPackages.SubPackage.PackageIdentifier)
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspSubPestObs.PageIndex;
+    frameRivParam.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FSubPestObs_Node := Node;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.CreateSutraFeatureNodes;

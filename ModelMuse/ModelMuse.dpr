@@ -701,7 +701,8 @@ uses
   frmObservationComparisonsUnit in 'frmObservationComparisonsUnit.pas' {frmObservationComparisons},
   PestObsUnit in 'PestObsUnit.pas',
   framePestObsUnit in 'framePestObsUnit.pas' {framePestObs: TFrame},
-  PestGlobalComparisonScriptWriterUnit in 'PestGlobalComparisonScriptWriterUnit.pas';
+  PestGlobalComparisonScriptWriterUnit in 'PestGlobalComparisonScriptWriterUnit.pas',
+  frameSubPestObsUnit in 'frameSubPestObsUnit.pas' {frameSubPestObs: TFrame};
 
 {$R *.res}
 

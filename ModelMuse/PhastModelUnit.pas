@@ -9014,18 +9014,25 @@ const
   //                WellFootprint models.
   //               Bug Fix: Fixed bug in saving ModelMuse file for
   //                WellFootprint models.
-  //               Big fix: Fixed bug that allowed the user to import
+  //               Bug fix: Fixed bug that allowed the user to import
   //                Shapefiles that directly set the withdrawal rate in
   //                WellFootprint models.
 
-  //               Big fix: Fixed bug that allowed the user to import
+  //               Bug fix: Fixed bug that allowed the user to import
   //                points that directly set the withdrawal rate in
   //                WellFootprint models.
-  //               Big fix: Fixed bug that could cause the model selection
+  //               Bug fix: Fixed bug that could cause the model selection
   //                to be set to the wrong value when creating a new model.
+  //               Bug fix: Fixed bug that could cause ModelMuse to have and
+  //                Input/Output error when importing a model.
+  //               Bug fix: Fixed bug that could cause importing points to
+  //                fail if the values being imported had extra spaces before
+  //                or after any value.
+  //               Enhancement: ModelMuse now uses less memory when importing
+  //                existing models.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.5';
+  IModelVersion = '4.2.0.6';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
