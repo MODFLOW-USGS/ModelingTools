@@ -2348,6 +2348,8 @@ type
     procedure UpdateDrtReturnFlowLabels(Sender: TObject);
     procedure LakePestObsChanged(Sender: TObject);
     procedure ShowGageObservations;
+    procedure GetSubObs(ListOfScreenObjects: TList);
+    procedure SubObsChanged(Sender: TObject);
     { Private declarations }
   public
     procedure Initialize;
@@ -2405,7 +2407,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowSwiObsUnit, ModflowRipUnit, ModflowWellUnit, Mt3dUztRchUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
-  ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit;
+  ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
+  ModflowSubsidenceDefUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -3407,6 +3410,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FSubPestObs_Node then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -3901,6 +3908,7 @@ begin
     GetGages(List);
     GetModpathParticles(List);
     frameSubPestObs.InitializeControls;
+    GetSubObs(List);
 
     GetDataSetsForSingleObject;
     GetPhastBoundariesForSingleObject;
@@ -5235,6 +5243,7 @@ begin
 
   frameSubPestObs.InitializeControls;
   frameSubPestObs.SpecifyObservationTypes(SubsidenceTypes);
+  frameSubPestObs.OnControlsChange := SubObsChanged;
 
 end;
 
@@ -5612,6 +5621,8 @@ begin
       //Get data for the remaining screen objects.
       GetGages(AScreenObjectList);
       GetModpathParticles(AScreenObjectList);
+      GetSubObs(AScreenObjectList);
+
       TempType := btNone;
       for ScreenObjectIndex := 1 to AScreenObjectList.Count - 1 do
       begin
@@ -5928,7 +5939,7 @@ begin
       frmGoPhast.PhastModel.ModflowPackages.SubPackage.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspSubPestObs.PageIndex;
-    frameRivParam.pnlCaption.Caption := Node.Text;
+    frameSubPestObs.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FSubPestObs_Node := Node;
   end;
@@ -6758,6 +6769,7 @@ var
   FixedHeadIndex: Integer;
   CfpFixedHeads: TCfpFixedBoundary;
   MissingHeadObsNames: TStringList;
+  ScreenObject: TScreenObject;
 begin
   if (FHOB_Node <> nil) then
   begin
@@ -7171,6 +7183,12 @@ begin
         AnEdit.ScreenObject.RemoveDataSet(CfpFixedHeadsDataArray);
       end;
     end;
+  end;
+
+  if FSubPestObs_Node <> nil then
+  begin
+    ScreenObject := FNewProperties[0].ScreenObject;
+    frameSubPestObs.SetData(ScreenObject.SubObservations);
   end;
 
   frameScreenObjectFootprintWell.SetData(FNewProperties);
@@ -7783,6 +7801,33 @@ procedure TfrmScreenObjectProperties.GetStreamFluxObservations(
 begin
   GetFluxObservationsForFrame(FStob_Node, frmGoPhast.PhastModel.StreamObservations,
     AScreenObjectList, frameSTOB);
+end;
+
+procedure TfrmScreenObjectProperties.GetSubObs(ListOfScreenObjects: TList);
+var
+  ScreenObject: TScreenObject;
+begin
+  if ListOfScreenObjects.Count = 1 then
+  begin
+    ScreenObject := ListOfScreenObjects[0];
+    frameSubPestObs.GetData(ScreenObject.SubObservations);
+    if ScreenObject.SubObservations = nil then
+    begin
+      FSubPestObs_Node.StateIndex := 1;
+    end
+    else
+    begin
+      FSubPestObs_Node.StateIndex := 2;
+    end;
+  end
+  else
+  begin
+    FreeAndNil(FSubPestObs_Node);
+    if jvplModflowBoundaries.ActivePage = jvspSubPestObs then
+    begin
+      jvplModflowBoundaries.ActivePage := jvspBlank;
+    end;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.GetSwrEvapBoundary(
@@ -21382,6 +21427,14 @@ begin
   if IsLoaded then
   begin
     FStob_Node.StateIndex := 2;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.SubObsChanged(Sender: TObject);
+begin
+  if (FSubPestObs_Node <> nil) and (FSubPestObs_Node.StateIndex <> 3) then
+  begin
+    FSubPestObs_Node.StateIndex := 2;
   end;
 end;
 

@@ -381,78 +381,9 @@ begin
 end;
 
 procedure TfrmObservationComparisons.InitializeItemList;
-//var
-//  ObjectIndex: Integer;
-//  AScreenObject: TScreenObject;
-//  Mnw2Observations: TMnw2Observations;
-//  ObsIndex: Integer;
-//  AnObs: TCustomObservationItem;
-//  LakObservations: TLakeObservations;
-//  SfrObservations: TSfrObservations;
 begin
   frmGoPhast.PhastModel.FileObsItemList(FObsItemList);
 
-//  for ObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
-//  begin
-//    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ObjectIndex];
-//    if AScreenObject.Deleted then
-//    begin
-//      Continue;
-//    end;
-//
-//    if (frmGoPhast.ModelSelection in ModflowSelection) then
-//    begin
-//      if frmGoPhast.ModelSelection <> msModflow2015 then
-//      begin
-//        if frmGoPhast.PhastModel.ModflowPackages.Mnw2Package.IsSelected then
-//        begin
-//          if (AScreenObject.ModflowMnw2Boundary <> nil)
-//            and AScreenObject.ModflowMnw2Boundary.Used
-//            and (AScreenObject.ModflowMnw2Boundary.Observations.Count > 0) then
-//          begin
-//            Mnw2Observations := AScreenObject.ModflowMnw2Boundary.Observations;
-//            for ObsIndex := 0 to Mnw2Observations.Count - 1 do
-//            begin
-//              AnObs := Mnw2Observations[ObsIndex];
-//              FObsItemList.Add(AnObs);
-//            end;
-//          end;
-//        end;
-//
-//        if frmGoPhast.PhastModel.ModflowPackages.LakPackage.IsSelected then
-//        begin
-//          if (AScreenObject.ModflowLakBoundary <> nil)
-//            and AScreenObject.ModflowLakBoundary.Used
-//            and (AScreenObject.ModflowLakBoundary.Observations.Count > 0) then
-//          begin
-//            LakObservations := AScreenObject.ModflowLakBoundary.Observations;
-//            for ObsIndex := 0 to LakObservations.Count - 1 do
-//            begin
-//              AnObs := LakObservations[ObsIndex];
-//              FObsItemList.Add(AnObs);
-//            end;
-//          end;
-//        end;
-//
-//        if frmGoPhast.PhastModel.ModflowPackages.SfrPackage.IsSelected then
-//        begin
-//          if (AScreenObject.ModflowSfrBoundary <> nil)
-//            and AScreenObject.ModflowSfrBoundary.Used
-//            and (AScreenObject.ModflowSfrBoundary.Observations.Count > 0) then
-//          begin
-//            SfrObservations := AScreenObject.ModflowSfrBoundary.Observations;
-//            for ObsIndex := 0 to SfrObservations.Count - 1 do
-//            begin
-//              AnObs := SfrObservations[ObsIndex];
-//              FObsItemList.Add(AnObs);
-//            end;
-//          end;
-//        end;
-//
-//      end;
-//    end;
-//
-//  end;
 
 end;
 

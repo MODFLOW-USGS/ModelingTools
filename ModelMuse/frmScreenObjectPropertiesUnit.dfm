@@ -13697,6 +13697,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 581
           Height = 476
           Caption = 'jvspSubPestObs'
+          ExplicitLeft = -4
+          ExplicitTop = 4
           inline frameSubPestObs: TframeSubPestObs
             Left = 0
             Top = 0
@@ -13704,25 +13706,32 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Height = 476
             Align = alClient
             TabOrder = 0
-            ExplicitLeft = -19
-            ExplicitTop = 56
+            ExplicitTop = 46
+            ExplicitWidth = 581
+            ExplicitHeight = 430
             inherited splObservations: TSplitter
               Top = 298
               Width = 581
+              ExplicitTop = 298
+              ExplicitWidth = 581
             end
             inherited grpDirectObs: TGroupBox
               Width = 581
-              Height = 298
+              Height = 274
+              ExplicitWidth = 581
+              ExplicitHeight = 298
               inherited frameObservations: TframeGrid
                 Top = 21
                 Width = 577
-                Height = 275
+                Height = 251
                 ExplicitTop = 21
-                ExplicitHeight = 219
+                ExplicitWidth = 577
+                ExplicitHeight = 275
                 inherited Panel: TPanel
-                  Top = 234
+                  Top = 210
                   Width = 577
-                  ExplicitTop = 178
+                  ExplicitTop = 234
+                  ExplicitWidth = 577
                   inherited lbNumber: TLabel
                     Width = 57
                     Height = 19
@@ -13731,12 +13740,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited sbAdd: TSpeedButton
                     Left = 302
+                    ExplicitLeft = 302
                   end
                   inherited sbInsert: TSpeedButton
                     Left = 357
+                    ExplicitLeft = 357
                   end
                   inherited sbDelete: TSpeedButton
                     Left = 413
+                    ExplicitLeft = 413
                   end
                   inherited seNumber: TJvSpinEdit
                     Height = 27
@@ -13745,7 +13757,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 577
-                  Height = 234
+                  Height = 210
                   ExplicitLeft = 4
                   ExplicitWidth = 577
                   ExplicitHeight = 234
@@ -13755,16 +13767,20 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited grpObsComparisons: TGroupBox
               Top = 303
               Width = 581
+              ExplicitTop = 303
+              ExplicitWidth = 581
               inherited frameObsComparisons: TframeGrid
                 Top = 21
                 Width = 577
                 Height = 150
                 ExplicitTop = 21
+                ExplicitWidth = 577
                 ExplicitHeight = 150
                 inherited Panel: TPanel
                   Top = 109
                   Width = 577
                   ExplicitTop = 109
+                  ExplicitWidth = 577
                   inherited lbNumber: TLabel
                     Width = 57
                     Height = 19
@@ -13773,12 +13789,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited sbAdd: TSpeedButton
                     Left = 302
+                    ExplicitLeft = 302
                   end
                   inherited sbInsert: TSpeedButton
                     Left = 357
+                    ExplicitLeft = 357
                   end
                   inherited sbDelete: TSpeedButton
                     Left = 413
+                    ExplicitLeft = 413
                   end
                   inherited seNumber: TJvSpinEdit
                     Height = 27
@@ -13788,9 +13807,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited Grid: TRbwDataGrid4
                   Width = 577
                   Height = 109
+                  ExplicitWidth = 577
                   ExplicitHeight = 109
                 end
               end
+            end
+            inherited pnlCaption: TPanel
+              Width = 581
             end
           end
         end

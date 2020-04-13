@@ -1,7 +1,16 @@
 inherited frameSubPestObs: TframeSubPestObs
   inherited grpDirectObs: TGroupBox
+    Top = 24
+    Height = 218
+    ExplicitTop = 64
+    ExplicitHeight = 178
     inherited frameObservations: TframeGrid
+      Height = 201
+      inherited Panel: TPanel
+        Top = 160
+      end
       inherited Grid: TRbwDataGrid4
+        Height = 160
         ColCount = 7
         Columns = <
           item
@@ -181,5 +190,16 @@ inherited frameSubPestObs: TframeSubPestObs
           64)
       end
     end
+  end
+  object pnlCaption: TPanel
+    Left = 0
+    Top = 0
+    Width = 600
+    Height = 24
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 2
+    ExplicitLeft = -4
+    ExplicitWidth = 581
   end
 end

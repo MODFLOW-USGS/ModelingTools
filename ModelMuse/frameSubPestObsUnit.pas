@@ -12,6 +12,7 @@ type
     socInterbedSystem, socComment);
 
   TframeSubPestObs = class(TframePestObs)
+    pnlCaption: TPanel;
   private
     { Private declarations }
   protected

@@ -90,6 +90,7 @@ type
     FNameOfFile: string;
     procedure RetrieveArrays;
     procedure EvaluateMaterialZones;
+    procedure EvaluatePestObs;
     procedure Evaluate;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -115,7 +116,8 @@ implementation
 uses
   Contnrs, LayerStructureUnit, ModflowSubsidenceDefUnit, DataSetUnit,
   GoPhastTypes, RbwParser, ModflowUnitNumbers, frmProgressUnit,
-  frmErrorsAndWarningsUnit, Forms, JclMath;
+  frmErrorsAndWarningsUnit, Forms, JclMath, ScreenObjectUnit, System.Math,
+  ModflowTimeUnit;
 
 resourcestring
   StrSubsidenceNotSuppo = 'Subsidence not supported with MODFLOW-LGR';
@@ -224,6 +226,11 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoSubsidenceLayers);
   RetrieveArrays;
   EvaluateMaterialZones;
+
+  if Model.PestUsed then
+  begin
+    EvaluatePestObs;
+  end;
 end;
 
 procedure TModflowSUB_Writer.EvaluateMaterialZones;
@@ -265,6 +272,146 @@ begin
       end;
     end;
     MaterialZoneArray.UpToDate := True;
+  end;
+end;
+
+function CompareSubObservations(Item1, Item2: Pointer): Integer;
+var
+  Sub1: TSubObsItem;
+  Sub2: TSubObsItem;
+begin
+  Sub1 := Item1;
+  Sub2 := Item2;
+  Result := Sign(Sub2.Time - Sub2.Time);
+end;
+
+procedure TModflowSUB_Writer.EvaluatePestObs;
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  SubObservations: TSubObservations;
+  ObsList: TList;
+  ObsIndex: Integer;
+  CurrentPrintItem: TSubPrintItem;
+  Obs: TSubObsItem;
+  PrintIndex: Integer;
+  PrintChoiceIndex: Integer;
+  PrintChoice: TSubPrintItem;
+  StressPeriodIndex: Integer;
+  StressPeriod: TModflowStressPeriod;
+  CurrentStressPeriod: TModflowStressPeriod;
+begin
+  ObsList := TList.Create;
+  try
+    for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      AScreenObject := Model.ScreenObjects[ObjectIndex];
+      if AScreenObject.Deleted
+        or not AScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+      SubObservations := AScreenObject.SubObservations;
+      if SubObservations <> nil then
+      begin
+        for ObsIndex := 0 to SubObservations.Count - 1 do
+        begin
+          ObsList.Add(SubObservations[ObsIndex]);
+        end;
+      end;
+    end;
+
+    CurrentPrintItem := nil;
+    ObsList.Sort(CompareSubObservations);
+    for ObsIndex := 0 to ObsList.Count - 1 do
+    begin
+      Obs := ObsList[ObsIndex];
+      if (CurrentPrintItem = nil)
+        or (Obs.Time < CurrentPrintItem.StartTime)
+        or (Obs.Time > CurrentPrintItem.EndTime) then
+      begin
+        CurrentPrintItem := nil;
+        for PrintChoiceIndex := 0 to FSubPackage.PrintChoices.Count -1 do
+        begin
+          PrintChoice := FSubPackage.PrintChoices[PrintChoiceIndex];
+          if (Obs.Time >= PrintChoice.StartTime)
+            and (Obs.Time <= PrintChoice.EndTime)  then
+          begin
+            CurrentPrintItem := PrintChoice;
+            Break;
+          end;
+        end;
+        if CurrentPrintItem = nil then
+        begin
+          CurrentStressPeriod := nil;
+          for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+          begin
+            StressPeriod := Model.ModflowFullStressPeriods[StressPeriodIndex];
+            if (Obs.Time >= StressPeriod.StartTime)
+              and (Obs.Time <= StressPeriod.EndTime) then
+            begin
+              CurrentStressPeriod := StressPeriod;
+              Break;
+            end;
+          end;
+
+          if CurrentStressPeriod <> nil then
+          begin
+            CurrentPrintItem := FSubPackage.PrintChoices.Add as TSubPrintItem;
+            CurrentPrintItem.StartTime := CurrentStressPeriod.StartTime;
+            CurrentPrintItem.EndTime := CurrentStressPeriod.EndTime;
+          end;
+        end;
+      end;
+      if CurrentPrintItem <> nil then
+      begin
+        case Obs.ObsTypeIndex of
+          0: // rsSUBSIDENCE
+            begin
+              CurrentPrintItem.SaveSubsidence := True;
+            end;
+          1: // rsLAYERCOMPACT
+            begin
+              CurrentPrintItem.SaveCompactionByModelLayer := True;
+            end;
+          2: // rsNDSYSCOMPACT
+            begin
+              CurrentPrintItem.SaveCompactionByInterbedSystem := True;
+            end;
+          3: // rsDSYSCOMPACTI
+            begin
+              CurrentPrintItem.SaveCompactionByInterbedSystem := True;
+            end;
+          4: // rsZDISPLACEMEN
+            begin
+              CurrentPrintItem.SaveVerticalDisplacement := True;
+            end;
+          5: // rsNDCRITICALHE
+            begin
+              CurrentPrintItem.SaveCriticalHeadNoDelay := True;
+            end;
+          6: // rsDCRITICALHEA
+            begin
+              CurrentPrintItem.SaveCriticalHeadDelay := True;
+            end;
+        end;
+      end;
+    end;
+{
+  SubsidenceTypes.Add(rsSUBSIDENCE);    SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsLAYERCOMPACT);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsNDSYSCOMPACT);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsDSYSCOMPACTI);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsZDISPLACEMEN);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsNDCRITICALHE);  SubsidenceUnits.Add('L');
+  SubsidenceTypes.Add(rsDCRITICALHEA);  SubsidenceUnits.Add('L');
+}
+  finally
+    ObsList.Free;
   end;
 end;
 

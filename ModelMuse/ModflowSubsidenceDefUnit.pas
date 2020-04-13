@@ -349,9 +349,6 @@ var
   SubsidenceTypes: TStringList;
   SubsidenceUnits: TStringList;
 
-//const
-//  StrSubSidence = 'Subsidence';
-
 implementation
 
 uses

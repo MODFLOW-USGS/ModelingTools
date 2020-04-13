@@ -31068,8 +31068,6 @@ begin
 end;
 
 procedure TScreenObject.SetSubObservations(const Value: TSubObservations);
-var
-  InvalidateModelEvent: TNotifyEvent;
 begin
   if (Value = nil) or not Value.Used then
   begin
@@ -40226,7 +40224,7 @@ begin
   begin
     if FSubObservations = nil then
     begin
-      FSubObservations := TSubObservations.Create(InvalidateEvent, self);
+      FSubObservations := TSubObservations.Create(InvalidateEvent, FScreenObject);
     end;
     FSubObservations.Assign(Source.FSubObservations);
   end;

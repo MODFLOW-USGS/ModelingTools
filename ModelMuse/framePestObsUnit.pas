@@ -35,6 +35,7 @@ type
     FMatchedCells1: TList<Integer>;
     FMatchedCells2: TList<Integer>;
     FOnControlsChange: TNotifyEvent;
+    FGettingData: Boolean;
     procedure UpdatedSelectedCell;
     { Private declarations }
   protected
@@ -106,7 +107,7 @@ end;
 procedure TframePestObs.frameObsComparisonsGridSetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
 begin
-  if Assigned(OnControlsChange) then
+  if (not FGettingData) and Assigned(OnControlsChange) then
   begin
     OnControlsChange(Self);
   end;
@@ -210,25 +211,37 @@ var
   Comparisons: TObsComparisons;
   ObsComp: TObsCompareItem;
 begin
-  frameObservations.seNumber.AsInteger := Observations.Count;
-  GetDirectObs(Observations);
+  FGettingData := True;
+  try
+    if Observations = nil then
+    begin
+      frameObservations.seNumber.AsInteger := 0;
+      frameObsComparisons.seNumber.AsInteger := 0;
+      Exit;
+    end;
 
-  Comparisons := Observations.Comparisons;
-  frameObsComparisons.seNumber.AsInteger := Comparisons.Count;
-  for ItemIndex := 0 to Comparisons.Count-1 do
-  begin
-    ObsComp := Comparisons[ItemIndex];
-    frameObsComparisons.Grid.Cells[Ord(poccName), ItemIndex+1] := ObsComp.Name;
+    frameObservations.seNumber.AsInteger := Observations.Count;
+    GetDirectObs(Observations);
 
-    Obs := Observations[ObsComp.Index1];
-    frameObsComparisons.Grid.Cells[Ord(poccObs1), ItemIndex+1] := Obs.Name;
+    Comparisons := Observations.Comparisons;
+    frameObsComparisons.seNumber.AsInteger := Comparisons.Count;
+    for ItemIndex := 0 to Comparisons.Count-1 do
+    begin
+      ObsComp := Comparisons[ItemIndex];
+      frameObsComparisons.Grid.Cells[Ord(poccName), ItemIndex+1] := ObsComp.Name;
 
-    Obs := Observations[ObsComp.Index2];
-    frameObsComparisons.Grid.Cells[Ord(poccObs2), ItemIndex+1] := Obs.Name;
+      Obs := Observations[ObsComp.Index1];
+      frameObsComparisons.Grid.Cells[Ord(poccObs1), ItemIndex+1] := Obs.Name;
 
-    frameObsComparisons.Grid.RealValue[Ord(poccValue), ItemIndex+1] := ObsComp.ObservedValue;
-    frameObsComparisons.Grid.RealValue[Ord(poccWeight), ItemIndex+1] := ObsComp.Weight;
-    frameObsComparisons.Grid.Cells[Ord(poccComment), ItemIndex+1] := ObsComp.Comment;
+      Obs := Observations[ObsComp.Index2];
+      frameObsComparisons.Grid.Cells[Ord(poccObs2), ItemIndex+1] := Obs.Name;
+
+      frameObsComparisons.Grid.RealValue[Ord(poccValue), ItemIndex+1] := ObsComp.ObservedValue;
+      frameObsComparisons.Grid.RealValue[Ord(poccWeight), ItemIndex+1] := ObsComp.Weight;
+      frameObsComparisons.Grid.Cells[Ord(poccComment), ItemIndex+1] := ObsComp.Comment;
+    end;
+  finally
+    FGettingData := False;
   end;
 end;
 
@@ -276,13 +289,9 @@ end;
 
 procedure TframePestObs.SetData(Observations: TCustomComparisonCollection);
 var
-  RowIndex: Integer;
   RowOK: Boolean;
   ColIndex: Integer;
-  ObsCount: Integer;
   Obs: TCustomTimeObservationItem;
-  OtherObs: TCustomTimeObservationItem;
-  MyGuid: TGUID;
   ObNames: TStringList;
   ObIndex: Integer;
   CompCount: Integer;
@@ -293,50 +302,6 @@ var
   ObsComp: TObsCompareItem;
 begin
   SetDirectObs(Observations);
-//  ObsCount := 0;
-//  for RowIndex := 1 to frameObservations.seNumber.AsInteger do
-//  begin
-//    RowOK := True;
-//    for ColIndex := 0 to Ord(pocWeight) do
-//    begin
-//      if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
-//      begin
-//        RowOK := False;
-//        Break;
-//      end;
-//    end;
-//    if RowOK then
-//    begin
-//      if ObsCount < Observations.Count then
-//      begin
-//        Obs := Observations[ObsCount]
-//      end
-//      else
-//      begin
-//        Obs := Observations.Add;
-//      end;
-//      Inc(ObsCount);
-//      Obs.Name := frameObservations.Grid.Cells[Ord(pocName), RowIndex];
-//      if frameObservations.Grid.Objects[Ord(pocName), RowIndex] <> nil then
-//      begin
-//        OtherObs := frameObservations.Grid.Objects[Ord(pocName), RowIndex] as TCustomTimeObservationItem;
-//        Obs.GUID  := OtherObs.GUID;
-//      end
-//      else
-//      begin
-//        if CreateGUID(MyGuid) = 0 then
-//        begin
-//          Obs.GUID := GUIDToString(MyGuid);
-//        end;
-//      end;
-//      Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(pocType), RowIndex];
-//      Obs.Time := frameObservations.Grid.RealValue[Ord(pocTime), RowIndex];
-//      Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(pocValue), RowIndex];
-//      Obs.Weight := frameObservations.Grid.RealValue[Ord(pocWeight), RowIndex];
-//      Obs.Comment := frameObservations.Grid.Cells[Ord(pocComment), RowIndex];
-//    end;
-//  end;
-//  Observations.Count := ObsCount;
 
   ObNames := TStringList.Create;
   try

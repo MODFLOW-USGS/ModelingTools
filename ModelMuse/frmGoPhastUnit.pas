@@ -2923,7 +2923,14 @@ begin
         WebIniFile.WriteDateTime(StrCustomization, StrInternetCheckDate,
           LastCheckInternetDate);
 
-        WebIniFile.UpdateFile;
+        try
+          WebIniFile.UpdateFile;
+        except
+          on EFCreateError do
+          begin
+            // ignore error.
+          end;
+        end;
       finally
         WebIniFile.Free;
       end;
