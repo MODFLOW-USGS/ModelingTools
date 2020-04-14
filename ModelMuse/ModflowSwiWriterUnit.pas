@@ -4,20 +4,10 @@ interface
 
 uses System.UITypes,
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, Classes,
-  PhastModelUnit, GoPhastTypes, ModflowSwiObsUnit, System.Generics.Collections;
+  PhastModelUnit, GoPhastTypes, ModflowSwiObsUnit, System.Generics.Collections,
+  InterpolatedObsCellUnit;
 
 type
-  TInterpolatedObsCell = class(TObject)
-    Layer: integer;
-    Row: Integer;
-    Col: Integer;
-    Name: string;
-    Fraction: double;
-    ObsNumber: integer;
-  end;
-
-  TInterpolatedObsCellObjectList = TObjectList<TInterpolatedObsCell>;
-
   TInterpolatedID = class(TObject)
     Name: string;
     Time: double;
@@ -28,8 +18,8 @@ type
 
   TInterpolatedIDObjectList = TObjectList<TInterpolatedID>;
 
-  TInterpolatedObs = class(TObject)
-    FCells: TInterpolatedObsCellObjectList;
+  TInterpolatedObs = class(TBaseInterpolatedObs)
+//    FCells: TInterpolatedObsCellObjectList;
     IDs: TInterpolatedIDObjectList;
     ZetaSurface: Integer;
     constructor Create;
@@ -1077,13 +1067,14 @@ end;
 
 constructor TInterpolatedObs.Create;
 begin
-  FCells := TInterpolatedObsCellObjectList.Create;
+//  FCells := TInterpolatedObsCellObjectList.Create;
   IDs := TInterpolatedIDObjectList.Create;
+  inherited;
 end;
 
 destructor TInterpolatedObs.Destroy;
 begin
-  FCells.Free;
+//  FCells.Free;
   IDs.Free;
   inherited;
 end;

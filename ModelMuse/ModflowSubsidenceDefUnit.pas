@@ -3,7 +3,8 @@ unit ModflowSubsidenceDefUnit;
 interface
 
 uses
-  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils, PestObsUnit;
+  Classes, GoPhastTypes, OrderedCollectionUnit, SysUtils, PestObsUnit,
+  System.Generics.Collections, ModflowCellUnit, InterpolatedObsCellUnit;
 
 type
   TUseLayerNumberItem = class(TOrderedItem)
@@ -315,6 +316,8 @@ type
   private
     FObsType: string;
     FInterbedSystem: string;
+    // @name is not owned by @classname.
+    FCells: TBaseInterpolatedObs;
     procedure SetObsType(const Value: string);
     procedure SetInterbedSystem(const Value: string);
   protected
@@ -326,6 +329,10 @@ type
     procedure Assign(Source: TPersistent); override;
     function ObservationType: string; override;
     function Units: string; override;
+    property Cells: TBaseInterpolatedObs read FCells write FCells;
+//    property ObservationRowOffset: double read FObservationRowOffset write FObservationRowOffset;
+//    property ObservationColumnOffset: double read FObservationColumnOffset write FObservationColumnOffset;
+
   published
     property ObsType: string read FObsType write SetObsType stored True;
     property InterbedSystem: string read FInterbedSystem write SetInterbedSystem;
@@ -345,15 +352,11 @@ type
     property Used: Boolean read GetUsed;
   end;
 
+  TSubObsItemList = TList<TSubObsItem>;
+
 var
   SubsidenceTypes: TStringList;
   SubsidenceUnits: TStringList;
-
-implementation
-
-uses
-  PhastModelUnit, DataSetUnit, RbwParser, IntListUnit,
-  ModflowPackageSelectionUnit, ModflowPackagesUnit;
 
 const
   rsSUBSIDENCE = 'SUBSIDENCE';
@@ -363,6 +366,12 @@ const
   rsZDISPLACEMEN = 'Z DISPLACEMENT';
   rsNDCRITICALHE = 'ND CRITICAL HEAD';
   rsDCRITICALHEA = 'D CRITICAL HEAD';
+
+implementation
+
+uses
+  PhastModelUnit, DataSetUnit, RbwParser, IntListUnit,
+  ModflowPackageSelectionUnit, ModflowPackagesUnit;
 
 const
   kNoDelayPreconsolid = 'No_Delay_Preconsolidation_Head';
@@ -1680,7 +1689,7 @@ begin
 end;
 
 initialization;
-  InitializeSubsidenceTypes
+  InitializeSubsidenceTypes;
 
 finalization
   SubsidenceTypes.Free;

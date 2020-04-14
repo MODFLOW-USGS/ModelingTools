@@ -702,7 +702,8 @@ uses
   PestObsUnit in 'PestObsUnit.pas',
   framePestObsUnit in 'framePestObsUnit.pas' {framePestObs: TFrame},
   PestGlobalComparisonScriptWriterUnit in 'PestGlobalComparisonScriptWriterUnit.pas',
-  frameSubPestObsUnit in 'frameSubPestObsUnit.pas' {frameSubPestObs: TFrame};
+  frameSubPestObsUnit in 'frameSubPestObsUnit.pas' {frameSubPestObs: TFrame},
+  InterpolatedObsCellUnit in 'InterpolatedObsCellUnit.pas';
 
 {$R *.res}
 
