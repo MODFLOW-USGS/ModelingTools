@@ -189,7 +189,7 @@ begin
             or (Description = rsDSYSCOMPACTI)
             then
           begin
-            UseArray := Abs(ILAY) = Obs.FCellIDs[CellIndex].Layer;
+            UseArray := Abs(ILAY) = Obs.FCellIDs[0].Layer;
           end
           else
           begin

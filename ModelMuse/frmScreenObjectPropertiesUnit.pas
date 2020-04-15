@@ -7807,17 +7807,20 @@ procedure TfrmScreenObjectProperties.GetSubObs(ListOfScreenObjects: TList);
 var
   ScreenObject: TScreenObject;
 begin
-  if ListOfScreenObjects.Count = 1 then
+  if (ListOfScreenObjects.Count = 1) then
   begin
-    ScreenObject := ListOfScreenObjects[0];
-    frameSubPestObs.GetData(ScreenObject.SubObservations);
-    if ScreenObject.SubObservations = nil then
+    if (FSubPestObs_Node <> nil) then
     begin
-      FSubPestObs_Node.StateIndex := 1;
-    end
-    else
-    begin
-      FSubPestObs_Node.StateIndex := 2;
+      ScreenObject := ListOfScreenObjects[0];
+      frameSubPestObs.GetData(ScreenObject.SubObservations);
+      if ScreenObject.SubObservations = nil then
+      begin
+        FSubPestObs_Node.StateIndex := 1;
+      end
+      else
+      begin
+        FSubPestObs_Node.StateIndex := 2;
+      end;
     end;
   end
   else

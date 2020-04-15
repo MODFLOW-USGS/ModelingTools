@@ -13,6 +13,8 @@ type
 
   TframeSubPestObs = class(TframePestObs)
     pnlCaption: TPanel;
+    procedure frameObservationsGridSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   private
     { Private declarations }
   protected
@@ -37,6 +39,24 @@ resourcestring
 {$R *.dfm}
 
 { TframeSubPestObs }
+
+procedure TframeSubPestObs.frameObservationsGridSelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if ACol = Ord(socInterbedSystem) then
+  begin
+    if (frameObservations.Grid.Cells[Ord(socType),ARow] = rsNDSYSCOMPACT)
+        or (frameObservations.Grid.Cells[Ord(socType),ARow] = rsDSYSCOMPACTI) then
+    begin
+      CanSelect := True;
+    end
+    else
+    begin
+      CanSelect := False;
+    end;
+  end;
+end;
 
 procedure TframeSubPestObs.GetDirectObs(
   Observations: TCustomComparisonCollection);
@@ -73,9 +93,18 @@ begin
   for RowIndex := 1 to frameObservations.seNumber.AsInteger do
   begin
     RowOK := True;
-    for ColIndex := 0 to Ord(socInterbedSystem) do
+    for ColIndex := 0 to Ord(socWeight) do
     begin
       if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
+      begin
+        RowOK := False;
+        Break;
+      end;
+    end;
+    if (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsNDSYSCOMPACT)
+      or (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsDSYSCOMPACTI) then
+    begin
+      if frameObservations.Grid.Cells[Ord(socInterbedSystem),RowIndex] = '' then
       begin
         RowOK := False;
         Break;

@@ -787,21 +787,6 @@ begin
 
   OpenFile(ScriptFileName);
   try
-//    ExtractorListFileName := ChangeFileExt(AFileName, '.mnw_lst');
-//    ExtractorObsFileName := ChangeFileExt(AFileName, '.mnw_obs.csv');
-//
-//    // FILENAMES block
-//    WriteString('BEGIN FILENAMES');
-//    NewLine;
-//    WriteString('  LISTING_FILE ');
-//    WriteString(ExtractFileName(ExtractorListFileName));
-//    NewLine;
-//    WriteString('  OBSERVATIONS_FILE ');
-//    WriteString(ExtractFileName(ExtractorObsFileName));
-//    NewLine;
-//    WriteString('END FILENAMES');
-//    NewLine;
-//    NewLine;
 
     ComparisonsUsed := False;
     // OBSERVATIONS block
@@ -885,34 +870,6 @@ begin
         end;
       END;
 
-      {
-      if Model.GlobalObservationComparisons.Count > 0 then
-      begin
-        WriteString('  # ');
-        WriteString('Global observation comparisons');
-        NewLine;
-      end;
-      for ComparisonIndex := 0 to Model.GlobalObservationComparisons.Count - 1 do
-      begin
-        GloCompItem := Model.GlobalObservationComparisons[ComparisonIndex];
-        if FObsItemDictionary.TryGetValue(GloCompItem.GUID1, PriorItem1)
-          and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
-        begin
-          WriteString('  DIFFERENCE ');
-//            CompItem := Boundary.Observations.Comparisons[CompIndex];
-          WriteString(GloCompItem.Name);
-          WriteString(' ');
-          WriteString(PriorItem1.ExportedName);
-          WriteString(' ');
-          WriteString(PriorItem2.ExportedName);
-          WriteFloat(GloCompItem.ObservedValue);
-          WriteFloat(GloCompItem.Weight);
-          WriteString(' PRINT');
-          NewLine;
-        end;
-      end;
-      }
-
       WriteString('END DERIVED_OBSERVATIONS');
     end;
 
@@ -920,104 +877,6 @@ begin
     CloseFile;
   end;
 
-    {
-    InstructionFileName := ExtractorObsFileName + '.ins';
-    OpenFile(InstructionFileName);
-    try
-      WriteString('pif ');
-      WriteString(MarkerDelimiter);
-      NewLine;
-
-      for ObjectIndex := 0 to FObsLinks.Count - 1 do
-      begin
-        Link := FObsLinks[ObjectIndex];
-        Boundary := Link.WellBoundary;
-
-        WriteString('l1');
-        NewLine;
-        for ObsIndex := 0 to Boundary.Observations.Count - 1 do
-        begin
-          Obs := Boundary.Observations[ObsIndex];
-          WriteString('l1 ');
-          WriteString(MarkerDelimiter);
-          WriteString('"');
-          WriteString(GetObName(ObjectIndex, Obs));
-          WriteString('",');
-          WriteString(MarkerDelimiter);
-          WriteString(' !');
-          WriteString(GetObName(ObjectIndex, Obs));
-          WriteString('! ');
-          WriteString(MarkerDelimiter);
-          WriteString(',');
-          WriteString(MarkerDelimiter);
-          NewLine;
-        end;
-
-        if Boundary.Observations.Comparisons.Count > 0 then
-        begin
-          ComparisonsUsed := True;
-        end;
-      end;
-
-      if ComparisonsUsed then
-      begin
-        for ObjectIndex := 0 to FObsLinks.Count - 1 do
-        begin
-          Link := FObsLinks[ObjectIndex];
-          Boundary := Link.WellBoundary;
-          if Boundary.Observations.Comparisons.Count > 0 then
-          begin
-            for CompIndex := 0 to Boundary.Observations.Comparisons.Count - 1 do
-            begin
-              CompItem := Boundary.Observations.Comparisons[CompIndex];
-              WriteString('l1 ');
-              WriteString(MarkerDelimiter);
-              WriteString('"');
-              WriteString(GetObName(ObjectIndex, CompItem));
-              WriteString('",');
-              WriteString(MarkerDelimiter);
-              WriteString(' !');
-              WriteString(GetObName(ObjectIndex, CompItem));
-              WriteString('! ');
-              WriteString(MarkerDelimiter);
-              WriteString(',');
-              WriteString(MarkerDelimiter);
-              NewLine;
-            end;
-          end;
-        END;
-
-        for ComparisonIndex := 0 to Model.GlobalObservationComparisons.Count - 1 do
-        begin
-          GloCompItem := Model.GlobalObservationComparisons[ComparisonIndex];
-          if FObsItemDictionary.TryGetValue(GloCompItem.GUID1, PriorItem1)
-            and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
-          begin
-            WriteString('l1 ');
-            WriteString(MarkerDelimiter);
-            WriteString('"');
-            WriteString(GloCompItem.Name);
-            WriteString('",');
-            WriteString(MarkerDelimiter);
-            WriteString(' !');
-            WriteString(GloCompItem.Name);
-            WriteString('! ');
-            WriteString(MarkerDelimiter);
-            WriteString(',');
-            WriteString(MarkerDelimiter);
-            NewLine;
-          end;
-        end;
-
-      end
-
-    finally
-      CloseFile;
-    end;
-    }
-//  finally
-//    FObsItemDictionary.Free;
-//  end;
 end;
 
 procedure TModflowMNW2_Writer.WriteMnwiDataSet3(AFileName: string);

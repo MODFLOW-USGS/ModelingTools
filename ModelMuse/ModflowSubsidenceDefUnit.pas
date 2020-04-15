@@ -339,6 +339,8 @@ type
     property GUID;
   end;
 
+  TSubObsItemList = TList<TSubObsItem>;
+
   TSubObservations = class(TCustomComparisonCollection)
   private
     function GetSubItem(Index: Integer): TSubObsItem;
@@ -352,7 +354,7 @@ type
     property Used: Boolean read GetUsed;
   end;
 
-  TSubObsItemList = TList<TSubObsItem>;
+  TSubObsCollectionList = TList<TSubObservations>;
 
 var
   SubsidenceTypes: TStringList;

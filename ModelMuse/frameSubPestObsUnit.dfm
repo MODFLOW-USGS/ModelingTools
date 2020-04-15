@@ -2,12 +2,14 @@ inherited frameSubPestObs: TframeSubPestObs
   inherited grpDirectObs: TGroupBox
     Top = 24
     Height = 218
-    ExplicitTop = 64
-    ExplicitHeight = 178
+    ExplicitTop = 24
+    ExplicitHeight = 218
     inherited frameObservations: TframeGrid
       Height = 201
+      ExplicitHeight = 201
       inherited Panel: TPanel
         Top = 160
+        ExplicitTop = 160
       end
       inherited Grid: TRbwDataGrid4
         Height = 160
@@ -180,6 +182,7 @@ inherited frameSubPestObs: TframeSubPestObs
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
+        ExplicitHeight = 160
         ColWidths = (
           64
           75
@@ -199,7 +202,5 @@ inherited frameSubPestObs: TframeSubPestObs
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = -4
-    ExplicitWidth = 581
   end
 end

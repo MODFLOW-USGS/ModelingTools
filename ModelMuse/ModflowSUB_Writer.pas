@@ -96,6 +96,7 @@ type
     FInterpolatedObs: TBaseInterpolatedObsObjectList;
     FNoDelayNames: TStringList;
     FDelayNames: TStringList;
+    FSubObsCollectionList: TSubObsCollectionList;
     procedure RetrieveArrays;
     procedure EvaluateMaterialZones;
     procedure EvaluatePestObs;
@@ -225,11 +226,13 @@ begin
   FInterpolatedObs:= TBaseInterpolatedObsObjectList.Create;
   FNoDelayNames := TStringList.Create;
   FDelayNames := TStringList.Create;
+  FSubObsCollectionList := TSubObsCollectionList.Create;
   
 end;
 
 destructor TModflowSUB_Writer.Destroy;
 begin
+  FSubObsCollectionList.Free;
   FDelayNames.Free;
   FNoDelayNames.Free;
   FInterpolatedObs.Free;
@@ -334,7 +337,6 @@ var
   ObsIndex: Integer;
   CurrentPrintItem: TSubPrintItem;
   Obs: TSubObsItem;
-  PrintIndex: Integer;
   PrintChoiceIndex: Integer;
   PrintChoice: TSubPrintItem;
   StressPeriodIndex: Integer;
@@ -360,7 +362,7 @@ var
   InterpObs: TBaseInterpolatedObs;
   Element: TElement;
   CellIndex: Integer;
-  SwiCell: TInterpolatedObsCell;
+  SubCell: TInterpolatedObsCell;
   ALocation: TPoint2D;
   Fractions: TOneDRealArray;
 begin
@@ -379,184 +381,181 @@ begin
     begin
       Continue;
     end;
-    CellList := TCellAssignmentList.Create;
-    try
-      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alFirstVertex, Model);
-      if CellList.Count > 0 then
+    SubObservations := AScreenObject.SubObservations;
+    if SubObservations <> nil then
+    begin
+      if SubObservations.Comparisons.Count > 0 then
       begin
-        ACell := CellList[0].Cell;
-        ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
-          AScreenObject.Points[0]);
+        FSubObsCollectionList.Add(SubObservations);
+      end;
 
-        Center := Grid.RowCenter(ACell.Row);
-        ObservationRowOffset := -(ObservationPoint.y - Center);
-
-        Center := Grid.ColumnCenter(ACell.Column);
-        ObservationColumnOffset := (ObservationPoint.x - Center);
-
-        ColDirection := Sign(ObservationColumnOffset);
-        RowDirection := Sign(ObservationRowOffset);
-
-        CenterCell := TInterpolatedObsCell.Create;
-        CenterCell.Layer := ACell.Layer;
-        CenterCell.Row := ACell.Row;
-        CenterCell.Col := ACell.Column;
-
-        Cell1 := nil;
-        Cell2 := nil;
-        Cell3 := nil;
-        Direction := dirX;
-
-        NewRow := 0;
-        if RowDirection <> 0 then
+      InterpObs := nil;
+      CellList := TCellAssignmentList.Create;
+      try
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alFirstVertex, Model);
+        if CellList.Count > 0 then
         begin
-          NewRow := ACell.Row + RowDirection;
-          if (NewRow >= 0) and (NewRow < Grid.RowCount)
-            and ActiveDataArray.BooleanData[ACell.Layer, NewRow, ACell.Column]  then
-          begin
-            Cell1 := TInterpolatedObsCell.Create;
-            Cell1.Layer := ACell.Layer;
-            Cell1.Row := NewRow;
-            Cell1.Col := ACell.Column;
-            Direction := dirY;
-          end;
-        end;
+          ACell := CellList[0].Cell;
+          ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
+            AScreenObject.Points[0]);
 
-        NewColumn := 0;
-        if ColDirection <> 0 then
-        begin
-          NewColumn := ACell.Column + ColDirection;
-          if (NewColumn >= 0) and (NewColumn < Grid.ColumnCount)
-            and ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, NewColumn]  then
-          begin
-            Cell3 := TInterpolatedObsCell.Create;
-            Cell3.Layer := ACell.Layer;
-            Cell3.Row := ACell.Row;
-            Cell3.Col := NewColumn;
-            Direction := dirX;
-          end;
-        end;
+          Center := Grid.RowCenter(ACell.Row);
+          ObservationRowOffset := -(ObservationPoint.y - Center);
 
-        if (RowDirection <> 0) and (ColDirection <> 0)
-          and ((Cell1 <> nil) or (Cell3 <> nil))
-          and ActiveDataArray.BooleanData[ACell.Layer, NewRow, NewColumn]  then
-        begin
-          Cell2 := TInterpolatedObsCell.Create;
-          Cell2.Layer := ACell.Layer;
-          Cell2.Row := NewRow;
-          Cell2.Col := NewColumn;
-        end;
+          Center := Grid.ColumnCenter(ACell.Column);
+          ObservationColumnOffset := (ObservationPoint.x - Center);
 
-        InterpObs := TBaseInterpolatedObs.Create;
-        FInterpolatedObs.Add(InterpObs);
+          ColDirection := Sign(ObservationColumnOffset);
+          RowDirection := Sign(ObservationRowOffset);
 
-        if (RowDirection = 0) or (ColDirection = 0) then
-        begin
-          InterpObs.Cells.Add(CenterCell);
-          if (Cell1 <> nil) then
+          CenterCell := TInterpolatedObsCell.Create;
+          CenterCell.Layer := ACell.Layer;
+          CenterCell.Row := ACell.Row;
+          CenterCell.Col := ACell.Column;
+
+          Cell1 := nil;
+          Cell2 := nil;
+          Cell3 := nil;
+          Direction := dirX;
+
+          NewRow := 0;
+          if RowDirection <> 0 then
           begin
-            InterpObs.Cells.Add(Cell1);
-          end;
-          if (Cell3 <> nil) then
-          begin
-            InterpObs.Cells.Add(Cell3);
-          end;
-        end
-        else
-        begin
-          if RowDirection = ColDirection then
-          begin
-            if (Cell3 <> nil) then
+            NewRow := ACell.Row + RowDirection;
+            if (NewRow >= 0) and (NewRow < Grid.RowCount)
+              and ActiveDataArray.BooleanData[ACell.Layer, NewRow, ACell.Column]  then
             begin
-              InterpObs.Cells.Add(Cell3);
+              Cell1 := TInterpolatedObsCell.Create;
+              Cell1.Layer := ACell.Layer;
+              Cell1.Row := NewRow;
+              Cell1.Col := ACell.Column;
+              Direction := dirY;
             end;
+          end;
+
+          NewColumn := 0;
+          if ColDirection <> 0 then
+          begin
+            NewColumn := ACell.Column + ColDirection;
+            if (NewColumn >= 0) and (NewColumn < Grid.ColumnCount)
+              and ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, NewColumn]  then
+            begin
+              Cell3 := TInterpolatedObsCell.Create;
+              Cell3.Layer := ACell.Layer;
+              Cell3.Row := ACell.Row;
+              Cell3.Col := NewColumn;
+              Direction := dirX;
+            end;
+          end;
+
+          if (RowDirection <> 0) and (ColDirection <> 0)
+            and ((Cell1 <> nil) or (Cell3 <> nil))
+            and ActiveDataArray.BooleanData[ACell.Layer, NewRow, NewColumn]  then
+          begin
+            Cell2 := TInterpolatedObsCell.Create;
+            Cell2.Layer := ACell.Layer;
+            Cell2.Row := NewRow;
+            Cell2.Col := NewColumn;
+          end;
+
+          InterpObs := TBaseInterpolatedObs.Create;
+          FInterpolatedObs.Add(InterpObs);
+
+          if (RowDirection = 0) or (ColDirection = 0) then
+          begin
             InterpObs.Cells.Add(CenterCell);
             if (Cell1 <> nil) then
             begin
               InterpObs.Cells.Add(Cell1);
             end;
-            if (Cell2 <> nil) then
+            if (Cell3 <> nil) then
             begin
-              InterpObs.Cells.Add(Cell2);
+              InterpObs.Cells.Add(Cell3);
             end;
           end
           else
           begin
-            InterpObs.Cells.Add(CenterCell);
-            if (Cell3 <> nil) then
+            if RowDirection = ColDirection then
             begin
-              InterpObs.Cells.Add(Cell3);
-            end;
-            if (Cell2 <> nil) then
+              if (Cell3 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell3);
+              end;
+              InterpObs.Cells.Add(CenterCell);
+              if (Cell1 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell1);
+              end;
+              if (Cell2 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell2);
+              end;
+            end
+            else
             begin
-              InterpObs.Cells.Add(Cell2);
-            end;
-            if (Cell1 <> nil) then
-            begin
-              InterpObs.Cells.Add(Cell1);
+              InterpObs.Cells.Add(CenterCell);
+              if (Cell3 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell3);
+              end;
+              if (Cell2 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell2);
+              end;
+              if (Cell1 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell1);
+              end;
             end;
           end;
-        end;
 
-        if InterpObs.Cells.Count = 1 then
-        begin
-          InterpObs.Cells[0].Fraction := 1;
+          if InterpObs.Cells.Count = 1 then
+          begin
+            InterpObs.Cells[0].Fraction := 1;
+          end
+          else
+          begin
+            SetLength(Element, InterpObs.Cells.Count);
+            for CellIndex := 0 to InterpObs.Cells.Count - 1 do
+            begin
+              SubCell := InterpObs.Cells[CellIndex];
+              Element[CellIndex] := Grid.UnrotatedTwoDElementCenter
+                (SubCell.Col, SubCell.Row);
+            end;
+            ALocation := Grid.
+              RotateFromRealWorldCoordinatesToGridCoordinates(AScreenObject.Points[0]);
+            GetBasisFunctionFractions(Element, ALocation, Fractions, Direction);
+            for CellIndex := 0 to InterpObs.Cells.Count - 1 do
+            begin
+              SubCell := InterpObs.Cells[CellIndex];
+              SubCell.Fraction := Fractions[CellIndex];
+            end;
+          end;
         end
         else
         begin
-          SetLength(Element, InterpObs.Cells.Count);
-          for CellIndex := 0 to InterpObs.Cells.Count - 1 do
-          begin
-            SwiCell := InterpObs.Cells[CellIndex];
-            Element[CellIndex] := Grid.UnrotatedTwoDElementCenter
-              (SwiCell.Col, SwiCell.Row);
-          end;
-          ALocation := Grid.
-            RotateFromRealWorldCoordinatesToGridCoordinates(AScreenObject.Points[0]);
-          GetBasisFunctionFractions(Element, ALocation, Fractions, Direction);
-          for CellIndex := 0 to InterpObs.Cells.Count - 1 do
-          begin
-            SwiCell := InterpObs.Cells[CellIndex];
-            SwiCell.Fraction := Fractions[CellIndex];
-          end;
+          frmErrorsAndWarnings.AddError(Model, StrInvalidSUBObservat,
+            Format(StrTheSubsidenceObser, [AScreenObject.Name]), AScreenObject);
         end;
-
-      end
-      else
-      begin
-        InterpObs := nil;
-//        ACell.Layer := -1;
-//        ACell.Row := -1;
-//        ACell.Column := -1;
-//        ObservationRowOffset := 0;
-//        ObservationColumnOffset := 0;
-        frmErrorsAndWarnings.AddError(Model, StrInvalidSUBObservat,
-          Format(StrTheSubsidenceObser, [AScreenObject.Name]), AScreenObject);
+      finally
+        CellList.Free;
       end;
-      SubObservations := AScreenObject.SubObservations;
-      if SubObservations <> nil then
+      for ObsIndex := 0 to SubObservations.Count - 1 do
       begin
-        for ObsIndex := 0 to SubObservations.Count - 1 do
-        begin
-          Obs := SubObservations[ObsIndex];
-          Obs.Cells := InterpObs;
-//          Obs.ObservationRowOffset := ObservationRowOffset;
-//          Obs.ObservationColumnOffset := ObservationColumnOffset;
-          FObsList.Add(Obs);
-        end;
+        Obs := SubObservations[ObsIndex];
+        Obs.Cells := InterpObs;
+        FObsList.Add(Obs);
       end;
-    finally
-      CellList.Free;
     end;
   end;
 
   FObsList.Sort(TComparer<TSubObsItem>.Construct(
     function (const Left, Right: TSubObsItem): Integer
     begin
-      Result := Sign(Right.Time - Left.Time);
+      Result := Sign(Left.Time - Right.Time);
     end
     ));
-    
+
   CurrentPrintItem := nil;
   for ObsIndex := 0 to FObsList.Count - 1 do
   begin
@@ -1573,90 +1572,165 @@ var
   StartTime: Double;
   ObsTypeIndex: Integer;
   ActiveDataArray: TDataArray;
+  InterbedSystemIndex: Integer;
+  ObjectIndex: Integer;
+  SubObservations: TSubObservations;
+  CompIndex: Integer;
+  CompItem: TObsCompareItem;
+  FoundFirstObs: Boolean;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
   begin
     Result := PrefixedObsName('Sub', ObjectIndex, Obs);
   end;
   procedure WriteObs(Obs: TSubObsItem);
+  var
+    CellIndex: Integer;
+    ACell: TInterpolatedObsCell;
   begin
+    if Obs.Cells = nil then
+    begin
+      Exit;
+    end;
+  
     WriteString('  OBSERVATION ');
     WriteString(GetObName(ObsIndex, Obs));
-    WriteString(' ');
+    WriteString(' "');
     WriteString(Obs.ObsType);
-    WriteString(' ');
+    WriteString('" ');
     WriteFloat(Obs.Time - StartTime);
     WriteFloat(Obs.ObservedValue);
     WriteFloat(Obs.Weight);
     WriteString(' PRINT');
     NewLine;
 
-    WriteString('  CELL ');
-    if AnsiSameText(Obs.ObsType, rsNDSYSCOMPACT)
-      or AnsiSameText(Obs.ObsType, rsDSYSCOMPACTI) then
+    InterbedSystemIndex := -1;
+    if AnsiSameText(Obs.ObsType, rsNDSYSCOMPACT) then
     begin
-//      WriteInteger(Obs.InterbedSystem);
+      InterbedSystemIndex := FNoDelayNames.IndexOf(Obs.InterbedSystem) + 1;
     end
-    else
+    else if AnsiSameText(Obs.ObsType, rsDSYSCOMPACTI) then
     begin
-//      WriteInteger(Obs.Cells.Layer+1);
+      InterbedSystemIndex := FDelayNames.IndexOf(Obs.InterbedSystem) + 1;
     end;
-//    WriteInteger(Obs.Cells.Row+1);
-//    WriteInteger(Obs.Cells.Column+1);
+
+    for CellIndex := 0 to Obs.Cells.Cells.Count - 1 do
+    begin
+      ACell := Obs.Cells.Cells[CellIndex];
+      WriteString('  CELL ');
+      if AnsiSameText(Obs.ObsType, rsNDSYSCOMPACT)
+        or AnsiSameText(Obs.ObsType, rsDSYSCOMPACTI) then
+      begin
+        WriteInteger(InterbedSystemIndex);
+      end
+      else
+      begin
+        WriteInteger(ACell.Layer+1);
+      end;
+      WriteInteger(ACell.Row+1);
+      WriteInteger(ACell.Col+1);
+      WriteFloat(ACell.Fraction);
+      NewLine;
+    end;
   end;
 begin
-    if Model.PestUsed then
+  if Model.PestUsed then
+  begin
+    if FObsList.Count = 0 then
     begin
-      if FObsList.Count = 0 then
+      Exit;
+    end;
+    ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
+    ActiveDataArray.Initialize;
+
+    StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+    ScriptFileName := ChangeFileExt(FNameOfFile, '.SubObsScript');
+    OpenFile(ScriptFileName);
+    try
+      WriteString('BEGIN OBSERVATIONS');
+      NewLine;
+      if FSubPackage.BinaryOutputChoice = sbocSingleFile then
       begin
-        Exit;
-      end;
-      ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
-      ActiveDataArray.Initialize;
-
-      StartTime := Model.ModflowFullStressPeriods.First.StartTime;
-      ScriptFileName := ChangeFileExt(FNameOfFile, '.SubObsScript');
-      OpenFile(ScriptFileName);
-      try
-        WriteString('BEGIN OBSERVATIONS');
+        WriteString('  FILENAME "');
+        WriteString(FCombinedSubFileName);
+        WriteString('"');
         NewLine;
-        if FSubPackage.BinaryOutputChoice = sbocSingleFile then
-        begin
-          WriteString('  FILENAME ');
-          WriteString(FCombinedSubFileName);
-          NewLine;
 
-          for ObsIndex := 0 to FObsList.Count - 1 do
-          begin
-            Obs := FObsList[ObsIndex];
-            WriteObs(Obs);
-          end;
-        end
-        else
+        for ObsIndex := 0 to FObsList.Count - 1 do
         begin
-          for ObsTypeIndex := 0 to SubsidenceTypes.Count - 1 do
+          Obs := FObsList[ObsIndex];
+          WriteObs(Obs);
+        end;
+      end
+      else
+      begin
+        for ObsTypeIndex := 0 to SubsidenceTypes.Count - 1 do
+        begin
+          if FMultipleSubFileNames[ObsTypeIndex] <> '' then
           begin
-            if FMultipleSubFileNames[ObsTypeIndex] <> '' then
+            FoundFirstObs := False;
+
+            for ObsIndex := 0 to FObsList.Count - 1 do
             begin
-              WriteString('  FILENAME ');
-              WriteString(FMultipleSubFileNames[ObsTypeIndex]);
-              NewLine;
-
-              for ObsIndex := 0 to FObsList.Count - 1 do
+              Obs := FObsList[ObsIndex];
+              if AnsiSameText(SubsidenceTypes[ObsTypeIndex], Obs.ObsType) then
               begin
-                Obs := FObsList[ObsIndex];
-                if AnsiSameText(SubsidenceTypes[ObsTypeIndex], Obs.ObsType) then
+                if not FoundFirstObs then
                 begin
-                  WriteObs(Obs);
+                  WriteString('  FILENAME "');
+                  WriteString(FMultipleSubFileNames[ObsTypeIndex]);
+                  WriteString('"');
+                  NewLine;
+                  FoundFirstObs := True;
                 end;
+                WriteObs(Obs);
               end;
             end;
           end;
         end;
-        WriteString('END OBSERVATIONS');
-      finally
-        CloseFile;
       end;
+      WriteString('END OBSERVATIONS');
+
+      // DERIVED_OBSERVATIONS block
+      if FSubObsCollectionList.Count > 0 then
+      begin
+        NewLine;
+        NewLine;
+        WriteString('BEGIN DERIVED_OBSERVATIONS');
+        NewLine;
+
+        for ObjectIndex := 0 to FSubObsCollectionList.Count - 1 do
+        begin
+          SubObservations := FSubObsCollectionList[ObjectIndex];
+
+          WriteString('  # ');
+          WriteString('Observation comparisons defined in ');
+          WriteString((SubObservations.ScreenObject as TScreenObject).Name);
+          NewLine;
+
+          for CompIndex := 0 to SubObservations.Comparisons.Count - 1 do
+          begin
+            WriteString('  DIFFERENCE ');
+            CompItem := SubObservations.Comparisons[CompIndex];
+            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString(' ');
+            Obs := SubObservations[CompItem.Index1];
+            WriteString(Obs.ExportedName);
+            WriteString(' ');
+            Obs := SubObservations[CompItem.Index2];
+            WriteString(Obs.ExportedName);
+            WriteFloat(CompItem.ObservedValue);
+            WriteFloat(CompItem.Weight);
+            WriteString(' PRINT');
+            NewLine;
+          end;
+        end;
+
+        WriteString('END DERIVED_OBSERVATIONS');
+      end;
+    finally
+      CloseFile;
     end;
+  end;
 end;
 
 procedure TModflowSUB_Writer.WriteFile(const AFileName: string);

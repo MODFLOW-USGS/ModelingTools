@@ -14,6 +14,7 @@ type
     Statistic: Double;
     StatFlag: TStatFlag;
     ObservedValue: double;
+    function Weight: double;
   end;
 
   TInterpolatedIDObjectList = TObjectList<TInterpolatedID>;
@@ -57,10 +58,13 @@ type
     procedure WriteDataSet6;
     procedure WriteDataSet7;
     procedure WriteDataSet8;
+    // For use with SWI_ObsExtractor
     procedure WriteInterpolatedZetaFile(const AFileName: string);
     procedure WriteInterpolatedSwiFileOptions(const AFileName: string; ArchiveFile: Boolean = False);
     procedure WriteInterpolatedIDs;
     procedure WriteSwiObsExtBatchFile(const AFileName: string; ArchiveFile: Boolean);
+    // For use with general purpose observation extractor
+    procedure WritePestScript(const AFileName: string);
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -820,7 +824,7 @@ begin
       for CellIndex := 0 to InterpItem.FCells.Count - 1 do
       begin
         ACell := InterpItem.FCells[CellIndex];
-      WriteString('    ');
+        WriteString('    ');
         WriteString(StrSWIOBSERVATION);
         WriteInteger(ACell.ObsNumber);
         WriteFloat(ACell.Fraction);
@@ -991,6 +995,69 @@ begin
   end;
 end;
 
+procedure TSwiWriter.WritePestScript(const AFileName: string);
+var
+  ActiveDataArray: TDataArray;
+  StartTime: Double;
+  ObsIndex: Integer;
+  Obs: TInterpolatedObs;
+  IdIndex: Integer;
+  ID_Item: TInterpolatedID;
+//  Weight: double;
+begin
+  if Model.PestUsed and (FInterpolatedObs.Count > 0) then
+  begin
+    ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
+    ActiveDataArray.Initialize;
+
+    StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+
+    FNameOfFile := ChangeFileExt(AFileName, '.swi_obs_Script');
+    OpenFile(FNameOfFile);
+    try
+      WriteString('BEGIN OBSERVATIONS');
+      NewLine;
+
+      WriteString('  FILENAME "');
+      WriteString(FObsOutputFileName);
+      WriteString('"');
+      NewLine;
+
+      for ObsIndex := 0 to FInterpolatedObs.Count - 1 do
+      begin
+        Obs := FInterpolatedObs[ObsIndex];
+        for IdIndex := 0 to Obs.IDs.Count - 1 do
+        begin
+          ID_Item := Obs.IDs[IdIndex];
+
+          WriteString('  OBSERVATION ');
+          WriteString(ID_Item.Name);
+          WriteString(' "');
+          WriteString('Zeta');
+          WriteString('" ');
+          WriteFloat(ID_Item.Time - StartTime);
+          WriteFloat(ID_Item.ObservedValue);
+          WriteFloat(ID_Item.Weight);
+//          WriteInteger(Obs.ZetaSurface);
+          WriteString(' PRINT');
+          NewLine;
+
+          WriteString('  ');
+          WriteString(StrZETASURFACENUMBER);
+          WriteString(' ');
+          WriteInteger(Obs.ZetaSurface);
+          NewLine;
+
+        end;
+      end;
+
+      WriteString('END OBSERVATIONS');
+    finally
+      CloseFile;
+    end;
+  end;
+end;
+
 procedure TSwiWriter.WriteSwiObsExtBatchFile(const AFileName: string; ArchiveFile: Boolean);
 var
   BatchFileName: string;
@@ -1087,6 +1154,19 @@ begin
   for AnItem in Self do
   begin
     Inc(result, AnItem.FCells.Count);
+  end;
+end;
+
+{ TInterpolatedID }
+
+function TInterpolatedID.Weight: double;
+begin
+  case StatFlag of
+    stVariance: Result := 1/Statistic;
+    stStandardDev: Result := 1/Sqr(Statistic);
+    stCoefVar:  Result := 1/Sqr(Statistic * ObservedValue);
+    stWeight: Result := Statistic;
+    stSquaredWeight: Result := Sqr(Statistic);
   end;
 end;
 
