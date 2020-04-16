@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Generics.Collections, Generics.Defaults, ObExtractorTypes;
 
 type
-  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftDerived);
+  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftSWI, iftDerived);
   //TOutputFileType = (oftList, oftObs);
 
   TInputFileLink = record
@@ -211,6 +211,13 @@ begin
           InputFile.FileName := Splitter[1];
           FInputFileLinks.Add(InputFile);
           FListingFile.Add(Format('SUB Instruction File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'SWI' then
+        begin
+          InputFile.FileType := iftSWI;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('SWI Instruction File = "%s"', [InputFile.FileName]));
         end
         else if UpperCase(Splitter[0]) = 'DERIVED' then
         begin

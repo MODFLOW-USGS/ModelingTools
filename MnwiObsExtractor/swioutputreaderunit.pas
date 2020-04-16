@@ -157,10 +157,10 @@ begin
     for ObsIndex := 0 to FSwiCellList.Count - 1 do
     begin
       AnSwiObs := FSwiCellList[ObsIndex];
-      ObsPosition := (AnSwiObs.ObsNumber-1)*ZoneCount + ZetaSurface -1;
+      ObsPosition := (AnSwiObs.Number-1)*ZoneCount + ZetaSurfaceNumber -1;
       LocalObsName := SwiObs.ObsName[ObsPosition];
       ObsZeta := StrToInt(RightStr(LocalObsName, 3));
-      Assert(ObsZeta = ZetaSurface);
+      Assert(ObsZeta = ZetaSurfaceNumber);
       LocalObsName := Copy(LocalObsName, 1, Length(LocalObsName)-3);
       Assert(UpperCase(AnSwiObs.Name) = UpperCase(LocalObsName));
       HandleSwiObs(AnSwiObs);
@@ -227,11 +227,6 @@ var
   BinaryReader: TFileStream;
   SwiObservation: TSwiObsValue;
   ObsIndex: Integer;
-  ClosestTimeIndex: Integer;
-  BeforeTimeIndex: Integer;
-  AfterTimeIndex: Integer;
-  CellIndex: Integer;
-  SwiCell: TSwiCell;
 begin
   Reader := nil;
   BinaryReader := nil;
@@ -256,54 +251,7 @@ begin
     for ObsIndex := 0 to Pred(FObsValueList.Count) do
     begin
       SwiObservation := FObsValueList[ObsIndex] as TSwiObsValue;
-      ClosestTimeIndex := SwiObs.IndexOfClosestTime(SwiObservation.ObsTime);
-      if SwiObservation.ObsTime < SwiObs.Times[ClosestTimeIndex] then
-      begin
-        if ClosestTimeIndex > 0 then
-        begin
-          BeforeTimeIndex := ClosestTimeIndex -1;
-          AfterTimeIndex := ClosestTimeIndex;
-        end
-        else
-        begin
-          BeforeTimeIndex := ClosestTimeIndex;
-          AfterTimeIndex := ClosestTimeIndex;
-        end;
-      end
-      else if SwiObservation.ObsTime > SwiObs.Times[ClosestTimeIndex] then
-      begin
-        if ClosestTimeIndex = SwiObs.TimeCount -1 then
-        begin
-          BeforeTimeIndex := -1;
-          AfterTimeIndex := -1;
-          SwiObservation.SimulatedValue := MissingValue;
-          Continue;
-        end
-        else
-        begin
-          BeforeTimeIndex := ClosestTimeIndex;
-          AfterTimeIndex := ClosestTimeIndex +1;
-        end;
-      end
-      else
-      begin
-        BeforeTimeIndex := ClosestTimeIndex;
-        AfterTimeIndex := ClosestTimeIndex;
-      end;
-
-      for CellIndex := 0 to Pred(SwiObservation.SwiCellList.Count) do
-      begin
-        SwiCell := SwiObservation.SwiCellList[CellIndex];
-        if BeforeTimeIndex = AfterTimeIndex then
-        begin
-          //SwiObservation.SwiCellList[CellIndex].Value
-            //:= SwiObs.ObservationValue[BeforeTimeIndex, SwiCell.Number]
-        end
-        else
-        begin
-
-        end;
-      end;
+      SwiObservation.SimulatedValue := SwiObservation.InterpolatedValue(SwiObs, NumberOfZetaSurfaces);
     end;
   finally
     BinaryReader.Free;

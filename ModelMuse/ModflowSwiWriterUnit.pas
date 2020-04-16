@@ -769,6 +769,8 @@ begin
     WriteSwiObsExtBatchFile(AFileName, False);
     WriteSwiObsExtBatchFile(AFileName, True);
   end;
+
+  WritePestScript(AFileName);
 end;
 
 procedure TSwiWriter.WriteInterpolatedIDs;
@@ -1003,6 +1005,8 @@ var
   Obs: TInterpolatedObs;
   IdIndex: Integer;
   ID_Item: TInterpolatedID;
+  CellIndex: Integer;
+  ACell: TInterpolatedObsCell;
 //  Weight: double;
 begin
   if Model.PestUsed and (FInterpolatedObs.Count > 0) then
@@ -1019,9 +1023,43 @@ begin
       NewLine;
 
       WriteString('  FILENAME "');
-      WriteString(FObsOutputFileName);
+      WriteString(ExtractFileName(FObsOutputFileName));
       WriteString('"');
       NewLine;
+
+      WriteString('  ');
+      WriteString(StrSWIOBSFORMAT);
+      WriteString(' ');
+      if ISWIOBS > 0 then
+      begin
+        WriteString(StrASCII);
+      end
+      else
+      begin
+        Assert(ISWIOBS < 0);
+        WriteString(StrBINARY);
+        WriteString(' ');
+        case FSwiPackage.ModflowPrecision of
+          mpSingle:
+            WriteString(StrSINGLE);
+          mpDouble:
+            WriteString(StrDOUBLE);
+        else
+          Assert(False);
+        end;
+      end;
+      NewLine;
+
+      WriteString('  ');
+      WriteString(StrTOTALNUMBEROFOBSE);
+      WriteInteger(NOBS);
+      NewLine;
+
+      WriteString('  ');
+      WriteString(StrNUMBEROFZETASURFA);
+      WriteInteger(NSRF);
+      NewLine;
+
 
       for ObsIndex := 0 to FInterpolatedObs.Count - 1 do
       begin
@@ -1047,6 +1085,18 @@ begin
           WriteString(' ');
           WriteInteger(Obs.ZetaSurface);
           NewLine;
+
+          for CellIndex := 0 to Obs.FCells.Count - 1 do
+          begin
+            ACell := Obs.FCells[CellIndex];
+            WriteString('    ');
+            WriteString(StrSWIOBSERVATION);
+            WriteInteger(ACell.ObsNumber);
+            WriteFloat(ACell.Fraction);
+            WriteString(' ');
+            WriteString(ACell.Name);
+            NewLine;
+          end;
 
         end;
       end;

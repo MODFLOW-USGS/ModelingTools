@@ -40,13 +40,19 @@ type
 
 implementation
 
-uses readgageoutput, SubsidenceObsExtractor;
+uses readgageoutput, SubsidenceObsExtractor, SwiOutputReaderUnit,
+  InterpolatedObsResourceUnit, SwiObsReaderUnit;
 
 resourcestring
   rsDERIVED_OBSE = 'DERIVED_OBSERVATIONS';
   rsERRORSNotFou = 'ERROR: %s not found among the direct observations';
   rsOnLine0D1SIs = 'On line %0:d of %1:s, "%2:s" is a duplicate of a previous '
     +'observation.';
+  rsNoOutputFile = 'No output file has been specified for processing.';
+  rsUnrecognized = 'Unrecognized keyword: "%s"';
+  rsSIsOnlyValid = '"%s" is only valid for SWI observation files.';
+  rs0SIsNotAVali = '"%0:s" is not a valid SWI format. Valid SWI formats are "%'
+    +'1:s", "%2:s %3:s", and "%2:s %4:s".';
 
   { TObsProcessor }
 
@@ -68,6 +74,16 @@ var
   ObsTypeName: string;
   SubObs: TSubsidenceObsValue;
   ACellID: TCellID;
+  SwiObsExtractor: TSwiObsExtractor;
+  SwiObs: TSwiObsValue;
+  SwiCell: TSwiCell;
+  NumberOfZetaSurfaces: Integer;
+  TotalNumberOfObs: Integer;
+  ZetaSurfaceNumber: Integer;
+  FileFormat: TSwiFileFormat;
+  SwiNumber: Integer;
+  SwiFraction: double;
+  SwiNanme: string;
   procedure ProcessObsFile;
   begin
     if ObsExtractor <> nil then
@@ -80,6 +96,7 @@ var
     end;
   end;
 begin
+  Obs := nil;
   ObsExtractor := nil;
   ObsTypes := TStringList.Create;
   Splitter := TStringList.Create;
@@ -106,6 +123,10 @@ begin
         begin
           ObsTypes.Assign(SubsidenceTypes);
         end;
+      iftSWI:
+        begin
+          ObsTypes.Add('ZETA');
+        end
     else Assert(false, 'programming error');
     end;
     ObsTypes.CaseSensitive := False;
@@ -162,22 +183,148 @@ begin
                 begin
                   ObsExtractor := TSubsidenceObsExtractor.Create;
                 end;
+              iftSWI:
+                begin
+                  ObsExtractor := TSwiObsExtractor.Create;
+                end;
             else Assert(False);
             end;
             ObsExtractor.ModelOutputFileName := ModelOutputFileName;
           end;
         end
+        else if UpperCase(Splitter[0]) = StrNUMBEROFZETASURFA then
+        begin
+          NumberOfZetaSurfaces := StrToInt(Splitter[1]);
+          FListingFile.Add(Format('Number Of Zeta Surfaces: "%d"',
+            [NumberOfZetaSurfaces]));
+          if not FGenerateInstructionFile then
+          begin
+            Assert(ObsExtractor <> nil, rsNoOutputFile);
+            Assert(ObsExtractor is TSwiObsExtractor, Format(rsSIsOnlyValid, [
+              Splitter[0]]));
+            SwiObsExtractor := TSwiObsExtractor(ObsExtractor);
+            SwiObsExtractor.NumberOfZetaSurfaces := NumberOfZetaSurfaces;
+          end;
+        end
+        else if UpperCase(Splitter[0]) = StrTOTALNUMBEROFOBSE then
+        begin
+          TotalNumberOfObs := StrToInt(Splitter[1]);
+          FListingFile.Add(Format('Number Of observations in SWI Observation output file: "%d"',
+            [TotalNumberOfObs]));
+          if not FGenerateInstructionFile then
+          begin
+            Assert(ObsExtractor <> nil, rsNoOutputFile);
+            Assert(ObsExtractor is TSwiObsExtractor, Format(rsSIsOnlyValid, [
+              Splitter[0]]));
+            SwiObsExtractor := TSwiObsExtractor(ObsExtractor);
+            SwiObsExtractor.TotalNumberOfObs := TotalNumberOfObs;
+          end;
+        end
+        else if UpperCase(Splitter[0]) = StrSWIOBSFORMAT then
+        begin
+          Assert(UpperCase(Splitter[1]) = StrASCII, Format(rs0SIsNotAVali,
+            [Splitter[1], StrASCII, StrBINARY, StrSINGLE, StrDOUBLE]));
+          FListingFile.Add('SWI File format is ASCII');
+          if not FGenerateInstructionFile then
+          begin
+            Assert(ObsExtractor <> nil, rsNoOutputFile);
+            Assert(ObsExtractor is TSwiObsExtractor, Format(rsSIsOnlyValid, [
+              Splitter[0]]));
+            SwiObsExtractor := TSwiObsExtractor(ObsExtractor);
+            SwiObsExtractor.FileFormat := sffAscii;
+          end;
+        end
+        else if UpperCase(Splitter[0]) = StrZETASURFACENUMBER then
+        begin
+          ZetaSurfaceNumber := StrToInt(Splitter[1]);
+          FListingFile.Add(Format('Zeta Surface Number: %d', [ZetaSurfaceNumber]));
+          //if not FGenerateInstructionFile then
+          begin
+            Assert(Obs <> nil, 'No observation has been defined.');
+            Assert(Obs is TSwiObsValue,
+              Format('"%s" is only valid for SWI observations.', [StrZETASURFACENUMBER]));
+            SwiObs := TSwiObsValue(Obs);
+            SwiObs.ZetaSurfaceNumber := ZetaSurfaceNumber;
+          end;
+        end
         else
         begin
-          Assert(False);
+          Assert(False, Format(rsUnrecognized, [Splitter[0]]));
         end;
+      end
+      else if Splitter.Count = 3 then
+      begin
+        if UpperCase(Splitter[0]) = StrSWIOBSFORMAT then
+        begin
+          Assert(UpperCase(Splitter[1]) = StrBINARY, Format(rs0SIsNotAVali,
+            [Splitter[1]+ ' ' + Splitter[2],
+            StrASCII, StrBINARY, StrSINGLE, StrDOUBLE]));
+          if UpperCase(Splitter[2]) = StrSINGLE then
+          begin
+            FileFormat := sffBinarySingle;
+            FListingFile.Add('SWI File format is Single Precision');
+          end
+          else if UpperCase(Splitter[2]) = StrDOUBLE then
+          begin
+            FileFormat := sffBinaryDouble;
+            FListingFile.Add('SWI File format is Double Precision');
+          end
+          else
+          begin
+            Assert(False, Format(rs0SIsNotAVali,
+              [Splitter[1]+ ' ' + Splitter[2],
+              StrASCII, StrBINARY, StrSINGLE, StrDOUBLE]));
+          end;
+
+          if not FGenerateInstructionFile then
+          begin
+            Assert(ObsExtractor <> nil, rsNoOutputFile);
+            Assert(ObsExtractor is TSwiObsExtractor, Format(rsSIsOnlyValid, [
+              Splitter[0]]));
+            SwiObsExtractor := TSwiObsExtractor(ObsExtractor);
+            SwiObsExtractor.FileFormat := FileFormat;
+          end;
+        end
+        else
+        begin
+          Assert(False, Format(rsUnrecognized, [Splitter[0]]));
+        end;
+      end
+      else if Splitter.Count = 4 then
+      begin
+        Assert(UpperCase(Splitter[0]) = StrSWIOBSERVATION,
+          Format('"%s" is only valid for SWI observations.', [StrSWIOBSERVATION]));
+        SwiNumber := StrToInt(Splitter[1]);
+        SwiFraction := StrToFloat(Splitter[2]);
+        SwiNanme := Splitter[3];
+        //if not FGenerateInstructionFile then
+        begin
+          Assert(Obs <> nil, 'No observation has been defined.');
+          Assert(Obs is TSwiObsValue, Format('"%s" is only valid for SWI observations.', [StrSWIOBSERVATION]));
+          SwiObs := TSwiObsValue(Obs);
+          SwiCell.Number := SwiNumber;
+          SwiCell.Fraction := SwiFraction;
+          SwiCell.Name := SwiNanme;
+          SwiObs.SwiCellList.Add(SwiCell);
+        end;
+      end
+      else if Splitter.Count = 5 then
+      begin
+        Assert(UpperCase(Splitter[0]) = 'CELL');
+        Assert(Obs <> nil);
+        SubObs := Obs as TSubsidenceObsValue;
+        ACellID.Layer := StrToInt(Splitter[1]);
+        ACellID.Row := StrToInt(Splitter[2]);
+        ACellID.Column := StrToInt(Splitter[3]);
+        ACellID.Fraction := StrToFloat(Splitter[4]);
+        SubObs.AddCellID(ACellID);
       end
       else if Splitter.Count in [6,7] then
       begin
         Assert(UpperCase(Splitter[0]) = 'OBSERVATION');
         if not FGenerateInstructionFile then
         begin
-          Assert(ObsExtractor <> nil, 'No output file has been specified for processing.');
+          Assert(ObsExtractor <> nil, rsNoOutputFile);
         end;
         ObsName := Splitter[1];
         ObsTypeName := UpperCase(Splitter[2]);
@@ -201,6 +348,11 @@ begin
             begin
               Obs := TSubsidenceObsValue.Create;
               TSubsidenceObsValue(Obs).ObsType := ObsTypeName;
+            end;
+          iftSWI:
+            begin
+              Obs := TSwiObsValue.Create;
+              TSwiObsValue(Obs).ObsType := ObsTypeName;
             end;
           else Assert(False);
         end;
@@ -254,17 +406,6 @@ begin
         FListingFile.Add(Format('%0:s, %1:s, %2:g, %3:g, %4:g %5:s,',
           [Obs.ObsName, ObsTypes[ObsTypeIndex], Obs.ObsTime, Obs.ObservedValue,
           Obs.Weight, PrintString]));
-      end
-      else if Splitter.Count = 5 then
-      begin
-        Assert(UpperCase(Splitter[0]) = 'CELL');
-        Assert(Obs <> nil);
-        SubObs := Obs as TSubsidenceObsValue;
-        ACellID.Layer := StrToInt(Splitter[1]);
-        ACellID.Row := StrToInt(Splitter[2]);
-        ACellID.Column := StrToInt(Splitter[3]);
-        ACellID.Fraction := StrToFloat(Splitter[4]);
-        SubObs.AddCellID(ACellID);
       end
       else
       begin

@@ -27,6 +27,7 @@ type
     FTimes: TRealList;
     FNames: TStringList;
     FValues: TValues;
+    FFileFormat: TSwiFileFormat;
     function GetObservationValue(TimeIndex, ObsIndex: Integer): double;
     function GetObsName(ObsIndex: Integer): string;
     function GetTime(TimeIndex: Integer): Double;
@@ -43,6 +44,7 @@ type
     procedure ReadAsciiSwiObs(Reader: TStreamReader);
     procedure ReadBinarySwiObs(Reader: TFileStream; NumberOfObs: Integer;
       FileFormat: TSwiFileFormat);
+    property FileFormat: TSwiFileFormat read FFileFormat;
   end;
 
 implementation
@@ -104,6 +106,7 @@ var
   AValue: Extended;
   ValueIndex: Integer;
 begin
+  FFileFormat := sffAscii;
   Assert(Reader <> nil);
   ALine := Reader.ReadLine;
   Assert(ALine <> '', 'The SWI Observation file is empty.');
@@ -157,6 +160,7 @@ var
   AValue: double;
   ObsIndex: Integer;
 begin
+  FFileFormat := FileFormat;
   while Reader.Position < Reader.Size do
   begin
     SetLength(Values, NumberOfObs);

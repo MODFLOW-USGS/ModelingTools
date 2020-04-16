@@ -19,6 +19,7 @@
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
+      <DestinationDirectory Value="C:\ModelingTools\MnwiObsExtractor\TestDir"/>
       <UseFileFilters Value="True"/>
     </PublishOptions>
     <RunParams>
@@ -33,7 +34,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="13">
       <Unit0>
         <Filename Value="ObsSeriesExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -79,6 +80,19 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="SubsidenceObsExtractor"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="swioutputreaderunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SwiOutputReaderUnit"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\ModelMuse\InterpolatedObsResourceUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\SWI_ObsExtractor\SwiObsReaderUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit12>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -89,7 +103,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\ModelMuse"/>
+      <OtherUnitFiles Value="..\ModelMuse;..\SWI_ObsExtractor"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
