@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Generics.Collections, Generics.Defaults, ObExtractorTypes;
 
 type
-  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftSWI, iftDerived);
+  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftSWT, iftSWI, iftDerived);
   //TOutputFileType = (oftList, oftObs);
 
   TInputFileLink = record
@@ -212,6 +212,13 @@ begin
           FInputFileLinks.Add(InputFile);
           FListingFile.Add(Format('SUB Instruction File = "%s"', [InputFile.FileName]));
         end
+        else if UpperCase(Splitter[0]) = 'SWT' then
+        begin
+          InputFile.FileType := iftSWT;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('SWT Instruction File = "%s"', [InputFile.FileName]));
+        end
         else if UpperCase(Splitter[0]) = 'SWI' then
         begin
           InputFile.FileType := iftSWI;
@@ -252,7 +259,7 @@ begin
   FOutputFile := TStringList.Create;
   FInputFileLinks := TInputFileLinks.Create;
 
-  FListingFile.Add('MNWI Observation Extractor');
+  FListingFile.Add('MODFLOW Observation Extractor');
   FListingFile.Add('Version ' + IVersion);
   FListingFile.Add('');
 

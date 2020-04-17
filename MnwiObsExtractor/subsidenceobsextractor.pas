@@ -43,6 +43,9 @@ type
   TSubsidenceObsExtractor = class(TCustomObsExtractor)
   private
     FSubObs: TSubsidenceObsValueList;
+  protected
+    F3DObsTypes: TStringList;
+    procedure Initialize3DObsTypes; virtual;
   public
     Constructor Create;
     destructor Destroy; override;
@@ -80,14 +83,33 @@ end;
 
 { TSubsidenceObsExtractor }
 
+procedure TSubsidenceObsExtractor.Initialize3DObsTypes;
+begin
+  F3DObsTypes.Add(rsLAYERCOMPACT);
+  F3DObsTypes.Add(rsZDISPLACEMEN);
+  F3DObsTypes.Add(rsNDSYSCOMPACT);
+  F3DObsTypes.Add(rsDSYSCOMPACTI);
+end;
+
 constructor TSubsidenceObsExtractor.Create;
 begin
   inherited;
   FSubObs:= TSubsidenceObsValueList.Create;
+  F3DObsTypes := TStringList.Create;
+  Initialize3DObsTypes;
+{
+if (Description = rsLAYERCOMPACT)
+  or (Description = rsZDISPLACEMEN)
+  or (Description = rsNDSYSCOMPACT)
+  or (Description = rsDSYSCOMPACTI)
+  then
+}
+
 end;
 
 destructor TSubsidenceObsExtractor.Destroy;
 begin
+  F3DObsTypes.Free;
   FSubObs.Free;
   inherited Destroy;
 end;
@@ -183,11 +205,7 @@ begin
         Obs := FSubObs[Index];
         if UpperCase(Obs.ObsType) = Description then
         begin
-          if (Description = rsLAYERCOMPACT)
-            or (Description = rsZDISPLACEMEN)
-            or (Description = rsNDSYSCOMPACT)
-            or (Description = rsDSYSCOMPACTI)
-            then
+          if F3DObsTypes.IndexOf(Description) >= 0 then
           begin
             UseArray := Abs(ILAY) = Obs.FCellIDs[0].Layer;
           end

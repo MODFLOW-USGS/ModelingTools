@@ -379,7 +379,9 @@ type
     tabGageObservations: TTabSheet;
     frameGagePestObs: TframePestObs;
     jvspSubPestObs: TJvStandardPage;
-    frameSubPestObs: TframeSubPestObs;
+    framePestObsSub: TframeSubPestObs;
+    jvspSwtPestObs: TJvStandardPage;
+    framePestObsSwt: TframeSubPestObs;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1532,6 +1534,7 @@ type
     FCSUB_Node: TJvPageIndexNode;
     FMf6Obs_Node: TJvPageIndexNode;
     FSubPestObs_Node: TJvPageIndexNode;
+    FSwtPestObs_Node: TJvPageIndexNode;
     // @name is used to store the column that the user last selected
     // in one of the grids for boundary-condition, time-varying stress.
     // For boundary conditions that allow PHAST-style interpolation,
@@ -2234,6 +2237,7 @@ type
     procedure CreateMawNode(AScreenObject: TScreenObject);
     procedure CreateCSubNode;
     procedure CreateSubPestObsNode(AScreenObject: TScreenObject);
+    procedure CreateSwtPestObsNode(AScreenObject: TScreenObject);
     procedure InitializeVertexGrid;
     procedure InitializePhastSpecifiedHeadGrid;
     procedure InitializePhastSpecifiedFluxGrid;
@@ -2349,7 +2353,9 @@ type
     procedure LakePestObsChanged(Sender: TObject);
     procedure ShowGageObservations;
     procedure GetSubObs(ListOfScreenObjects: TList);
+    procedure GetSwtObs(ListOfScreenObjects: TList);
     procedure SubObsChanged(Sender: TObject);
+    procedure SwtObsChanged(Sender: TObject);
     { Private declarations }
   public
     procedure Initialize;
@@ -3414,6 +3420,10 @@ begin
     begin
       // do nothing
     end
+    else if jvtlModflowBoundaryNavigator.Selected = FSwtPestObs_Node then
+    begin
+      // do nothing
+    end
 
     else
     begin
@@ -3577,6 +3587,7 @@ begin
   CreateMt3d_UztSatNode;
   CreateMt3d_UztUnsatNode;
   CreateSubPestObsNode(AScreenObject);
+  CreateSwtPestObsNode(AScreenObject);
 
   CreateSutraFeatureNodes;
 
@@ -3907,8 +3918,10 @@ begin
     CreateDataSetEdits(List);
     GetGages(List);
     GetModpathParticles(List);
-    frameSubPestObs.InitializeControls;
+    framePestObsSub.InitializeControls;
     GetSubObs(List);
+    framePestObsSwt.InitializeControls;
+    GetSwtObs(List);
 
     GetDataSetsForSingleObject;
     GetPhastBoundariesForSingleObject;
@@ -5241,9 +5254,13 @@ begin
   frameLak.framePestObsLak.SpecifyObservationTypes(LakeGageOutputTypes);
   frameLak.framePestObsLak.OnControlsChange := LakePestObsChanged;
 
-  frameSubPestObs.InitializeControls;
-  frameSubPestObs.SpecifyObservationTypes(SubsidenceTypes);
-  frameSubPestObs.OnControlsChange := SubObsChanged;
+  framePestObsSub.InitializeControls;
+  framePestObsSub.SpecifyObservationTypes(SubsidenceTypes);
+  framePestObsSub.OnControlsChange := SubObsChanged;
+
+  framePestObsSwt.InitializeControls;
+  framePestObsSwt.SpecifyObservationTypes(SwtTypes);
+  framePestObsSwt.OnControlsChange := SwtObsChanged;
 
 end;
 
@@ -5622,6 +5639,7 @@ begin
       GetGages(AScreenObjectList);
       GetModpathParticles(AScreenObjectList);
       GetSubObs(AScreenObjectList);
+      GetSwtObs(AScreenObjectList);
 
       TempType := btNone;
       for ScreenObjectIndex := 1 to AScreenObjectList.Count - 1 do
@@ -5939,7 +5957,7 @@ begin
       frmGoPhast.PhastModel.ModflowPackages.SubPackage.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspSubPestObs.PageIndex;
-    frameSubPestObs.pnlCaption.Caption := Node.Text;
+    framePestObsSub.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FSubPestObs_Node := Node;
   end;
@@ -7188,7 +7206,13 @@ begin
   if FSubPestObs_Node <> nil then
   begin
     ScreenObject := FNewProperties[0].ScreenObject;
-    frameSubPestObs.SetData(ScreenObject.SubObservations);
+    framePestObsSub.SetData(ScreenObject.ModflowSubObservations);
+  end;
+
+  if FSwtPestObs_Node <> nil then
+  begin
+    ScreenObject := FNewProperties[0].ScreenObject;
+    framePestObsSwt.SetData(ScreenObject.ModflowSwtObservations);
   end;
 
   frameScreenObjectFootprintWell.SetData(FNewProperties);
@@ -7812,8 +7836,8 @@ begin
     if (FSubPestObs_Node <> nil) then
     begin
       ScreenObject := ListOfScreenObjects[0];
-      frameSubPestObs.GetData(ScreenObject.SubObservations);
-      if ScreenObject.SubObservations = nil then
+      framePestObsSub.GetData(ScreenObject.ModflowSubObservations);
+      if ScreenObject.ModflowSubObservations = nil then
       begin
         FSubPestObs_Node.StateIndex := 1;
       end
@@ -8427,6 +8451,36 @@ begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
           := Item.BoundaryFormula[BoundaryIndex];
       end;
+    end;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.GetSwtObs(ListOfScreenObjects: TList);
+var
+  ScreenObject: TScreenObject;
+begin
+  if (ListOfScreenObjects.Count = 1) then
+  begin
+    if (FSwtPestObs_Node <> nil) then
+    begin
+      ScreenObject := ListOfScreenObjects[0];
+      framePestObsSwt.GetData(ScreenObject.ModflowSwtObservations);
+      if ScreenObject.ModflowSwtObservations = nil then
+      begin
+        FSwtPestObs_Node.StateIndex := 1;
+      end
+      else
+      begin
+        FSwtPestObs_Node.StateIndex := 2;
+      end;
+    end;
+  end
+  else
+  begin
+    FreeAndNil(FSwtPestObs_Node);
+    if jvplModflowBoundaries.ActivePage = jvspSwtPestObs then
+    begin
+      jvplModflowBoundaries.ActivePage := jvspBlank;
     end;
   end;
 end;
@@ -12168,6 +12222,25 @@ begin
     frameSWR_Stage.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FSWR_Stage_Node := Node;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateSwtPestObsNode(
+  AScreenObject: TScreenObject);
+var
+  Node: TJvPageIndexNode;
+begin
+  FSwtPestObs_Node := nil;
+  if frmGoPhast.PhastModel.SwtIsSelected
+    and (AScreenObject.Count = 1) then
+  begin
+    Node := jvtlModflowBoundaryNavigator.Items.AddChild(nil,
+      frmGoPhast.PhastModel.ModflowPackages.SwtPackage.PackageIdentifier)
+      as TJvPageIndexNode;
+    Node.PageIndex := jvspSwtPestObs.PageIndex;
+    framePestObsSwt.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    FSwtPestObs_Node := Node;
   end;
 end;
 
@@ -21552,6 +21625,14 @@ begin
 
   finally
     VariableList.Free;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.SwtObsChanged(Sender: TObject);
+begin
+  if (FSwtPestObs_Node <> nil) and (FSwtPestObs_Node.StateIndex <> 3) then
+  begin
+    FSwtPestObs_Node.StateIndex := 2;
   end;
 end;
 

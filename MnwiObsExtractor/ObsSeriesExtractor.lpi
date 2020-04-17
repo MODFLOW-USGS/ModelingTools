@@ -34,7 +34,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="13">
+    <Units Count="14">
       <Unit0>
         <Filename Value="ObsSeriesExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -93,6 +93,11 @@
         <Filename Value="..\SWI_ObsExtractor\SwiObsReaderUnit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit12>
+      <Unit13>
+        <Filename Value="swtobsextractor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SwtObsExtractor"/>
+      </Unit13>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

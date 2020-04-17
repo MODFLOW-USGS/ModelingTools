@@ -14,6 +14,7 @@ inherited frameSubPestObs: TframeSubPestObs
       inherited Grid: TRbwDataGrid4
         Height = 160
         ColCount = 7
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
         Columns = <
           item
             AutoAdjustRowHeights = True
@@ -191,6 +192,13 @@ inherited frameSubPestObs: TframeSubPestObs
           64
           64
           64)
+      end
+    end
+  end
+  inherited grpObsComparisons: TGroupBox
+    inherited frameObsComparisons: TframeGrid
+      inherited Grid: TRbwDataGrid4
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
       end
     end
   end

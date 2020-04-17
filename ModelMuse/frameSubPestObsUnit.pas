@@ -16,17 +16,23 @@ type
     procedure frameObservationsGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
   private
+    FNoDelayInterbeds: TStringList;
+    FDelayInterbeds: TStringList;
+    FWaterTableInterbeds: TStringList;
+    procedure GetInterbeds;
     { Private declarations }
   protected
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
     procedure SetDirectObs(Observations: TCustomComparisonCollection); override;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     { Public declarations }
   end;
 
-var
-  frameSubPestObs: TframeSubPestObs;
+//var
+//  frameSubPestObs: TframeSubPestObs;
 
 implementation
 
@@ -40,16 +46,54 @@ resourcestring
 
 { TframeSubPestObs }
 
+constructor TframeSubPestObs.Create(AOwner: TComponent);
+begin
+  inherited;
+  FNoDelayInterbeds := TStringList.Create;
+  FDelayInterbeds := TStringList.Create;
+  FWaterTableInterbeds := TStringList.Create;
+end;
+
+destructor TframeSubPestObs.Destroy;
+begin
+  FNoDelayInterbeds.Free;
+  FDelayInterbeds.Free;
+  FWaterTableInterbeds.Free;
+  inherited;
+end;
+
 procedure TframeSubPestObs.frameObservationsGridSelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
   if ACol = Ord(socInterbedSystem) then
   begin
-    if (frameObservations.Grid.Cells[Ord(socType),ARow] = rsNDSYSCOMPACT)
-        or (frameObservations.Grid.Cells[Ord(socType),ARow] = rsDSYSCOMPACTI) then
+    if (frameObservations.Grid.Cells[Ord(socType),ARow] = rsNDSYSCOMPACT) then
     begin
       CanSelect := True;
+      if not frameObservations.Grid.Drawing then
+      begin
+        frameObservations.Grid.Columns[Ord(socInterbedSystem)].Picklist := FNoDelayInterbeds;
+      end;
+    end
+    else if (frameObservations.Grid.Cells[Ord(socType),ARow] = rsDSYSCOMPACTI) then
+    begin
+      CanSelect := True;
+      if not frameObservations.Grid.Drawing then
+      begin
+        frameObservations.Grid.Columns[Ord(socInterbedSystem)].Picklist := FDelayInterbeds;
+      end;
+    end
+    else if (frameObservations.Grid.Cells[Ord(socType),ARow] = rsSYSTMCOMPACT)
+      or (frameObservations.Grid.Cells[Ord(socType),ARow] = rsVOIDRATIO)
+      or (frameObservations.Grid.Cells[Ord(socType),ARow] = rsTHICKNESS)
+      then
+    begin
+      CanSelect := True;
+      if not frameObservations.Grid.Drawing then
+      begin
+        frameObservations.Grid.Columns[Ord(socInterbedSystem)].Picklist := FWaterTableInterbeds;
+      end;
     end
     else
     begin
@@ -74,7 +118,43 @@ begin
     frameObservations.Grid.RealValue[Ord(socValue), ItemIndex + 1] := Obs.ObservedValue;
     frameObservations.Grid.RealValue[Ord(socWeight), ItemIndex + 1] := Obs.Weight;
     frameObservations.Grid.Cells[Ord(socInterbedSystem), ItemIndex + 1] := Obs.InterbedSystem;
+    frameObservations.Grid.Objects[Ord(socInterbedSystem), ItemIndex + 1] := Obs.Interbed;
     frameObservations.Grid.Cells[Ord(socComment), ItemIndex + 1] := Obs.Comment;
+  end;
+end;
+
+procedure TframeSubPestObs.GetInterbeds;
+var
+  LayerGroups: TLayerStructure;
+  LayerGroupIndex: Integer;
+  LayerGroup: TLayerGroup;
+  InterbedIndex: Integer;
+  Interbed: TSubNoDelayBedLayerItem;
+  DelayInterbed: TSubDelayBedLayerItem;
+  WtInterbed: TSwtWaterTableItem;
+begin
+  FNoDelayInterbeds.Clear;
+  FDelayInterbeds.Clear;
+  FWaterTableInterbeds.Clear;
+  LayerGroups := frmGoPhast.PhastModel.LayerStructure;
+  for LayerGroupIndex := 0 to LayerGroups.Count - 1 do
+  begin
+    LayerGroup := LayerGroups[LayerGroupIndex];
+    for InterbedIndex := 0 to LayerGroup.SubNoDelayBedLayers.Count - 1 do
+    begin
+      Interbed := LayerGroup.SubNoDelayBedLayers[InterbedIndex];
+      FNoDelayInterbeds.AddObject(Interbed.Name, Interbed);
+    end;
+    for InterbedIndex := 0 to LayerGroup.SubDelayBedLayers.Count - 1 do
+    begin
+      DelayInterbed := LayerGroup.SubDelayBedLayers[InterbedIndex];
+      FDelayInterbeds.AddObject(DelayInterbed.Name, DelayInterbed);
+    end;
+    for InterbedIndex := 0 to LayerGroup.WaterTableLayers.Count - 1 do
+    begin
+      WtInterbed := LayerGroup.WaterTableLayers[InterbedIndex];
+      FWaterTableInterbeds.AddObject(WtInterbed.Name, WtInterbed);
+    end;
   end;
 end;
 
@@ -101,13 +181,15 @@ begin
         Break;
       end;
     end;
-    if (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsNDSYSCOMPACT)
-      or (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsDSYSCOMPACTI) then
+    if RowOK then
     begin
-      if frameObservations.Grid.Cells[Ord(socInterbedSystem),RowIndex] = '' then
+      if (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsNDSYSCOMPACT)
+        or (frameObservations.Grid.Cells[Ord(socType),RowIndex] = rsDSYSCOMPACTI) then
       begin
-        RowOK := False;
-        Break;
+        if frameObservations.Grid.Cells[Ord(socInterbedSystem),RowIndex] = '' then
+        begin
+          RowOK := False;
+        end;
       end;
     end;
     if RowOK then
@@ -139,6 +221,11 @@ begin
       Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(socValue), RowIndex];
       Obs.Weight := frameObservations.Grid.RealValue[Ord(socWeight), RowIndex];
       Obs.InterbedSystem := frameObservations.Grid.Cells[Ord(socInterbedSystem), RowIndex];
+      if frameObservations.Grid.Objects[Ord(socInterbedSystem), RowIndex] <> nil then
+      begin
+        Obs.Interbed := frameObservations.Grid.Objects
+          [Ord(socInterbedSystem), RowIndex] as TCustomSubLayerItem
+      end;
       Obs.Comment := frameObservations.Grid.Cells[Ord(socComment), RowIndex];
     end;
   end;
@@ -146,34 +233,10 @@ begin
 end;
 
 procedure TframeSubPestObs.SetObsColumnCaptions;
-var
-  InterbedSystems: TStringList;
-  LayerGroups: TLayerStructure;
-  LayerGroup: TLayerGroup;
-  LayerGroupIndex: Integer;
-  InterbedIndex: Integer;
-  Interbed: TSubNoDelayBedLayerItem;
-  DelayInterbed: TSubDelayBedLayerItem;
 begin
-  InterbedSystems := TStringList.Create;
+  GetInterbeds;
   frameObservations.Grid.BeginUpdate;
   try
-    LayerGroups := frmGoPhast.PhastModel.LayerStructure;
-    for LayerGroupIndex := 0 to LayerGroups.Count - 1 do
-    begin
-      LayerGroup := LayerGroups[LayerGroupIndex];
-      for InterbedIndex := 0 to LayerGroup.SubNoDelayBedLayers.Count - 1 do
-      begin
-        Interbed := LayerGroup.SubNoDelayBedLayers[InterbedIndex];
-        InterbedSystems.AddObject(Interbed.Name, Interbed);
-      end;
-      for InterbedIndex := 0 to LayerGroup.SubDelayBedLayers.Count - 1 do
-      begin
-        DelayInterbed := LayerGroup.SubDelayBedLayers[InterbedIndex];
-        InterbedSystems.AddObject(DelayInterbed.Name, DelayInterbed);
-      end;
-    end;
-    frameObservations.Grid.Columns[Ord(socInterbedSystem)].Picklist := InterbedSystems;
     frameObservations.Grid.Cells[Ord(socName), 0] := StrObservationName;
     frameObservations.Grid.Cells[Ord(socType), 0] := StrObservationType;
     frameObservations.Grid.Cells[Ord(socTime), 0] := StrObservationTime;
@@ -183,7 +246,6 @@ begin
     frameObservations.Grid.Cells[Ord(socComment), 0] := StrComment;
   finally
     frameObservations.Grid.EndUpdate;
-    InterbedSystems.Free;
   end;
 end;
 

@@ -9,7 +9,7 @@ uses
   Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit,
   InterpolatedObsResourceUnit, readinstructions, readgageoutput,
   ObExtractorTypes, ReadNameFile, SimpleTextWriter, SubsidenceObsExtractor,
-  SwiObsUtilities, SwiOutputReaderUnit, SwiObsReaderUnit;
+  SwiObsUtilities, SwiOutputReaderUnit, SwiObsReaderUnit, SwtObsExtractor;
 
 type
 

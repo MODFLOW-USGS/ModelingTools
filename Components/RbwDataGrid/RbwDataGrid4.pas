@@ -4272,6 +4272,8 @@ var
     end;
   end;
   procedure AssignTextToCell;
+  var
+    PickIndex: Integer;
   begin
     if NewCol < ColCount then
     begin
@@ -4301,14 +4303,17 @@ var
         else if CollectionItem(NewCol,NewRow).ComboUsed
           and CollectionItem(NewCol,NewRow).LimitToList then
         begin
-          if CollectionItem(NewCol,NewRow).PickList.IndexOf(NewString) >= 0 then
+          PickIndex := CollectionItem(NewCol,NewRow).PickList.IndexOf(NewString);
+          if PickIndex >= 0 then
           begin
             Cells[NewCol, NewRow] := NewString;
+            Objects[NewCol, NewRow] := CollectionItem(NewCol,NewRow).PickList.Objects[PickIndex];
             SetEditText(NewCol, NewRow, NewString);
           end
           else
           begin
             Cells[NewCol, NewRow] := '';
+            Objects[NewCol, NewRow] := nil;
             SetEditText(NewCol, NewRow, '');
           end;
         end

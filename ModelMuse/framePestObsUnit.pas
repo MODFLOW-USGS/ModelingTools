@@ -256,10 +256,10 @@ begin
     frameObservations.Grid.Columns[ColIndex].AutoAdjustColWidths := True;
   end;
   SetObsColumnCaptions;
-  for ColIndex := 0 to frameObservations.Grid.ColCount - 1 do
-  begin
-    frameObservations.Grid.Columns[ColIndex].AutoAdjustColWidths := False;
-  end;
+//  for ColIndex := 0 to frameObservations.Grid.ColCount - 1 do
+//  begin
+//    frameObservations.Grid.Columns[ColIndex].AutoAdjustColWidths := False;
+//  end;
   GridSel := frameObservations.Grid.Selection;
   GridSel.Left := 1;
   GridSel.Right := 1;

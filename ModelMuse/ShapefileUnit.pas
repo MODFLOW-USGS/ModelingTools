@@ -929,6 +929,8 @@ uses Contnrs;
 resourcestring
   StrTheShapefileMainF = 'The Shapefile main file and index file headers do ' +
   'not match. The Shapefile may be corrupt.';
+  StrThereWasAnErrorA = 'There was an error attemtping to read a Shape Geome' +
+  'try file. Please check that the Shapefile is valid.';
 
 // http://community.borland.com/article/0,1410,28964,00.html
 //A gets B's values swapped
@@ -1795,7 +1797,7 @@ begin
                   ReadMultiPatch;
                 end;
             else
-              Assert(False);
+              raise EInvalidShapeFile.Create(StrThereWasAnErrorA);
             end;
           end;
         end;

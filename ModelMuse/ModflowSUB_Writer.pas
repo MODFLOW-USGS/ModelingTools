@@ -381,7 +381,7 @@ begin
     begin
       Continue;
     end;
-    SubObservations := AScreenObject.SubObservations;
+    SubObservations := AScreenObject.ModflowSubObservations;
     if SubObservations <> nil then
     begin
       if SubObservations.Comparisons.Count > 0 then

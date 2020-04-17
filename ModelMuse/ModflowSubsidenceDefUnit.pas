@@ -318,8 +318,11 @@ type
     FInterbedSystem: string;
     // @name is not owned by @classname.
     FCells: TBaseInterpolatedObs;
+    FInterbed: TCustomSubLayerItem;
     procedure SetObsType(const Value: string);
     procedure SetInterbedSystem(const Value: string);
+    function GetInterbedSystem: string;
+    procedure SetInterbed(const Value: TCustomSubLayerItem);
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(const Value: Integer); override;
@@ -330,12 +333,11 @@ type
     function ObservationType: string; override;
     function Units: string; override;
     property Cells: TBaseInterpolatedObs read FCells write FCells;
-//    property ObservationRowOffset: double read FObservationRowOffset write FObservationRowOffset;
-//    property ObservationColumnOffset: double read FObservationColumnOffset write FObservationColumnOffset;
-
+    property Interbed: TCustomSubLayerItem read FInterbed write SetInterbed;
+    procedure Loaded;
   published
     property ObsType: string read FObsType write SetObsType stored True;
-    property InterbedSystem: string read FInterbedSystem write SetInterbedSystem;
+    property InterbedSystem: string read GetInterbedSystem write SetInterbedSystem;
     property GUID;
   end;
 
@@ -352,6 +354,7 @@ type
       write SetSubItem; default;
     function Add: TSubObsItem;
     property Used: Boolean read GetUsed;
+    procedure Loaded;
   end;
 
   TSubObsCollectionList = TList<TSubObservations>;
@@ -360,7 +363,11 @@ var
   SubsidenceTypes: TStringList;
   SubsidenceUnits: TStringList;
 
+  SwtTypes: TStringList;
+
+
 const
+  // Subsidence types
   rsSUBSIDENCE = 'SUBSIDENCE';
   rsLAYERCOMPACT = 'LAYER COMPACTION';
   rsNDSYSCOMPACT = 'NDSYS COMPACTION';
@@ -369,11 +376,27 @@ const
   rsNDCRITICALHE = 'ND CRITICAL HEAD';
   rsDCRITICALHEA = 'D CRITICAL HEAD';
 
+  // SWT types
+  rsSUBSIDENCE2   = 'SUBSIDENCE';
+  rsLAYERCOMPACT2 = 'LAYER COMPACTION';
+  rsSYSTMCOMPACT = 'SYSTM COMPACTION';
+  rsZDISPLACEMEN2 = 'Z DISPLACEMENT';
+  rsPRECONSOLSTR = 'PRECONSOL STRESS';
+  rsCHANGEINPCST = 'CHANGE IN PCSTRS';
+  rsGEOSTATICSTR = 'GEOSTATIC STRESS';
+  rsCHANGEINGSTR = 'CHANGE IN G-STRS';
+  rsEFFECTIVESTR = 'EFFECTIVE STRESS';
+  rsCHANGEINEFFS = 'CHANGE IN EFF-ST';
+  rsVOIDRATIO    = 'VOID RATIO';
+  rsTHICKNESS    = 'THICKNESS';
+  rsCENTERELEVAT = 'CENTER ELEVATION';
+
 implementation
 
 uses
   PhastModelUnit, DataSetUnit, RbwParser, IntListUnit,
-  ModflowPackageSelectionUnit, ModflowPackagesUnit;
+  ModflowPackageSelectionUnit, ModflowPackagesUnit, ScreenObjectUnit,
+  frmGoPhastUnit, LayerStructureUnit;
 
 const
   kNoDelayPreconsolid = 'No_Delay_Preconsolidation_Head';
@@ -441,6 +464,24 @@ begin
   SubsidenceTypes.Add(rsZDISPLACEMEN);  SubsidenceUnits.Add('L');
   SubsidenceTypes.Add(rsNDCRITICALHE);  SubsidenceUnits.Add('L');
   SubsidenceTypes.Add(rsDCRITICALHEA);  SubsidenceUnits.Add('L');
+end;
+
+procedure InitializeSwtTypes;
+begin
+  SwtTypes := TStringList.Create;
+  SwtTypes.Add(rsSUBSIDENCE2);
+  SwtTypes.Add(rsLAYERCOMPACT2);
+  SwtTypes.Add(rsSYSTMCOMPACT);
+  SwtTypes.Add(rsZDISPLACEMEN2);
+  SwtTypes.Add(rsPRECONSOLSTR);
+  SwtTypes.Add(rsCHANGEINPCST);
+  SwtTypes.Add(rsGEOSTATICSTR);
+  SwtTypes.Add(rsCHANGEINGSTR);
+  SwtTypes.Add(rsEFFECTIVESTR);
+  SwtTypes.Add(rsCHANGEINEFFS);
+  SwtTypes.Add(rsVOIDRATIO);
+  SwtTypes.Add(rsTHICKNESS);
+  SwtTypes.Add(rsCENTERELEVAT);
 end;
 
 
@@ -1145,11 +1186,40 @@ begin
 end;
 
 destructor TCustomSubLayerItem.Destroy;
+var
+  ScreenObjectIndex: Integer;
+  LocalModel: TCustomModel;
+  AScreenObject: TScreenObject;
+  SubObservations: TSubObservations;
+  ObsIndex: Integer;
+  SubObs: TSubObsItem;
 begin
   FUsedLayers.Free;
   FDataArrayDisplayTypes.Free;
   FDataArrayTypes.Free;
   FAssociatedModelDataSetNames.Free;
+
+  if (Model <> nil) and not (csDestroying in Model.ComponentState) then
+  begin
+    LocalModel := Model as TCustomModel;
+    for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+      SubObservations := AScreenObject.ModflowSubObservations;
+      if SubObservations <> nil then
+      begin
+        for ObsIndex := 0 to SubObservations.Count - 1 do
+        begin
+          SubObs := SubObservations[ObsIndex];
+          if SubObs.Interbed = self then
+          begin
+            SubObs.Interbed := nil;
+          end;
+        end;
+      end;
+    end;
+  end;
+
   inherited;
 end;
 
@@ -1599,8 +1669,21 @@ begin
     SubSource := TSubObsItem(Source);
     ObsType := SubSource.ObsType;
     InterbedSystem := SubSource.InterbedSystem;
+    Interbed := SubSource.Interbed;
   end;
   inherited;
+end;
+
+function TSubObsItem.GetInterbedSystem: string;
+begin
+  if FInterbed <> nil then
+  begin
+    result := FInterbed.Name
+  end
+  else
+  begin
+    result := FInterbedSystem;
+  end;
 end;
 
 function TSubObsItem.GetObsTypeIndex: Integer;
@@ -1613,9 +1696,60 @@ begin
   result := ObsType;
 end;
 
+procedure TSubObsItem.Loaded;
+var
+  LayerGroups: TLayerStructure;
+  LayerGroupIndex: Integer;
+  LayerGroup: TLayerGroup;
+  InterbedIndex: Integer;
+  Item: TCustomSubLayerItem;
+begin
+  LayerGroups := frmGoPhast.PhastModel.LayerStructure;
+  for LayerGroupIndex := 0 to LayerGroups.Count - 1 do
+  begin
+    LayerGroup := LayerGroups[LayerGroupIndex];
+    for InterbedIndex := 0 to LayerGroup.SubNoDelayBedLayers.Count - 1 do
+    begin
+      Item := LayerGroup.SubNoDelayBedLayers[InterbedIndex];
+      if InterbedSystem = Item.Name then
+      begin
+        Interbed := Item;
+        Exit;
+      end;
+    end;
+    for InterbedIndex := 0 to LayerGroup.SubDelayBedLayers.Count - 1 do
+    begin
+      Item := LayerGroup.SubDelayBedLayers[InterbedIndex];
+      if InterbedSystem = Item.Name then
+      begin
+        Interbed := Item;
+        Exit;
+      end;
+    end;
+    for InterbedIndex := 0 to LayerGroup.WaterTableLayers.Count - 1 do
+    begin
+      Item := LayerGroup.WaterTableLayers[InterbedIndex];
+      if InterbedSystem = Item.Name then
+      begin
+        Interbed := Item;
+        Exit;
+      end;
+    end;
+  end;
+end;
+
 function TSubObsItem.ObservationType: string;
 begin
   result := ObsType;
+end;
+
+procedure TSubObsItem.SetInterbed(const Value: TCustomSubLayerItem);
+begin
+  FInterbed := Value;
+  if FInterbed <> nil then
+  begin
+    InterbedSystem := FInterbed.Name;
+  end;
 end;
 
 procedure TSubObsItem.SetInterbedSystem(const Value: string);
@@ -1684,6 +1818,16 @@ begin
   result := Count > 0;
 end;
 
+procedure TSubObservations.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
+end;
+
 procedure TSubObservations.SetSubItem(Index: Integer;
   const Value: TSubObsItem);
 begin
@@ -1692,10 +1836,12 @@ end;
 
 initialization;
   InitializeSubsidenceTypes;
+  InitializeSwtTypes;
 
 finalization
   SubsidenceTypes.Free;
   SubsidenceUnits.Free;
+  SwtTypes.Free;
 
 end.
 

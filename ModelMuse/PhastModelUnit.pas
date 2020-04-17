@@ -31068,13 +31068,13 @@ begin
 
         if ModflowPackages.SubPackage.IsSelected  then
         begin
-          if (AScreenObject.SubObservations <> nil)
-            and AScreenObject.SubObservations.Used
-            and (AScreenObject.SubObservations.Count > 0) then
+          if (AScreenObject.ModflowSubObservations <> nil)
+            and AScreenObject.ModflowSubObservations.Used
+            and (AScreenObject.ModflowSubObservations.Count > 0) then
           begin
-            for ObsIndex := 0 to AScreenObject.SubObservations.Count - 1 do
+            for ObsIndex := 0 to AScreenObject.ModflowSubObservations.Count - 1 do
             begin
-              AnObs := AScreenObject.SubObservations[ObsIndex];
+              AnObs := AScreenObject.ModflowSubObservations[ObsIndex];
               List.Add(AnObs);
             end;
           end;

@@ -1451,8 +1451,8 @@ view. }
     FMt3dSftConcBoundary: TMt3dSftBoundary;
     FModflowCSub: TCSubBoundary;
     FScreenObject: TObject;
-    FSubObservations: TSubObservations;
-//    procedure SetSubObservations(const Value: TSubObservations);
+    FModflowSubObservations: TSubObservations;
+    FModflowSwtObservations: TSubObservations;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1554,8 +1554,14 @@ view. }
 
     property ModflowCSub: TCSubBoundary read FModflowCSub write FModflowCSub;
 
-    property SubObservations: TSubObservations read FSubObservations
-      write FSubObservations
+    property ModflowSubObservations: TSubObservations read FModflowSubObservations
+      write FModflowSubObservations
+    {$IFNDEF PEST}
+      Stored False
+    {$ENDIF}
+      ;
+    property ModflowSwtObservations: TSubObservations read FModflowSwtObservations
+      write FModflowSwtObservations
     {$IFNDEF PEST}
       Stored False
     {$ENDIF}
@@ -1563,7 +1569,7 @@ view. }
 
     // Be sure to update Invalidate, FreeUnusedBoundaries,
     // StopTalkingToAnyone, UsesATime, ReplaceATime, Destroy,
-    // Assign, RemoveModelLink,
+    // Assign, RemoveModelLink, Loaded,
     // TScreenObject.Invalidate, and TScreenObject.Assign
     // when adding a new property.
 
@@ -1582,6 +1588,7 @@ view. }
     // @name removes a link between a @link(TPhastModel) or @link(TChildModel)
     // and a @link(TModflowBoundary)
     procedure RemoveModelLink(AModel: TBaseModel);
+    procedure Loaded;
   end;
 
   TUsedWithModelItem = class(TPhastCollectionItem)
@@ -2756,9 +2763,12 @@ view. }
     function GetModflowCSub: TCSubBoundary;
     procedure SetModflowCSub(const Value: TCSubBoundary);
     function StoreModflowCSub: Boolean;
-    procedure SetSubObservations(const Value: TSubObservations);
-    function GetSubObservations: TSubObservations;
-    function StoreSubObservations: Boolean;
+    procedure SetModflowSubObservations(const Value: TSubObservations);
+    procedure SetModflowSwtObservations(const Value: TSubObservations);
+    function GetModflowSubObservations: TSubObservations;
+    function GetModflowSwtObservations: TSubObservations;
+    function StoreModflowSubObservations: Boolean;
+    function StoreModflowSwtObservations: Boolean;
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -3361,6 +3371,7 @@ view. }
     procedure CreateModflowUzfMf6Boundary;
     procedure CreateCSubBoundary;
     procedure CreateSubObservations;
+    procedure CreateSwtObservations;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     function ModflowDataSetUsed(DataArray: TDataArray; AModel: TBaseModel): boolean;
@@ -4067,8 +4078,10 @@ view. }
 
     property ModflowCSub: TCSubBoundary read GetModflowCSub Write SetModflowCSub
       stored StoreModflowCSub;
-    property SubObservations: TSubObservations read GetSubObservations
-      write SetSubObservations stored StoreSubObservations;
+    property ModflowSubObservations: TSubObservations read GetModflowSubObservations
+      write SetModflowSubObservations stored StoreModflowSubObservations;
+    property ModflowSwtObservations: TSubObservations read GetModflowSwtObservations
+      write SetModflowSwtObservations stored StoreModflowSwtObservations;
 
 //    property Mt3dUzfSeepageConcBoundary: TMt3dUzSsmSinkConcBoundary
 //      read GetMt3dUzSsmSinkConcBoundary write SetMt3dUzSsmSinkConcBoundary
@@ -6511,7 +6524,7 @@ begin
   ImportedValues := AScreenObject.ImportedValues;
   PositionLocked := AScreenObject.PositionLocked;
   StoredSutraAngle := AScreenObject.StoredSutraAngle;
-  SubObservations := AScreenObject.SubObservations;
+//  ModflowSubObservations := AScreenObject.ModflowSubObservations;
 //  LinkedChildModels := AScreenObject.LinkedChildModels;
 
   for Index := DataSetCount - 1 downto 0 do
@@ -6694,7 +6707,8 @@ begin
   ModflowMvr := AScreenObject.ModflowMvr;
   ModflowUzfMf6Boundary := AScreenObject.ModflowUzfMf6Boundary;
   ModflowCSub := AScreenObject.ModflowCSub;
-  SubObservations := AScreenObject.SubObservations;
+  ModflowSubObservations := AScreenObject.ModflowSubObservations;
+  ModflowSwtObservations := AScreenObject.ModflowSwtObservations;
 
   SutraBoundaries := AScreenObject.SutraBoundaries;
 
@@ -14255,6 +14269,24 @@ begin
 end;
 
 
+procedure TScreenObject.SetModflowSwtObservations(
+  const Value: TSubObservations);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FModflowSwtObservations <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FModflowSwtObservations);
+  end
+  else
+  begin
+    CreateSwtObservations;
+    ModflowBoundaries.FModflowSwtObservations.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetModflowUzfBoundary(const Value: TUzfBoundary);
 begin
   if (Value = nil) or not Value.Used then
@@ -15807,7 +15839,7 @@ procedure TScreenObject.CreateSubObservations;
 var
   InvalidateModelEvent: TNotifyEvent;
 begin
-  if (ModflowBoundaries.FSubObservations = nil) then
+  if (ModflowBoundaries.FModflowSubObservations = nil) then
   begin
     if FModel = nil then
     begin
@@ -15817,7 +15849,7 @@ begin
     begin
       InvalidateModelEvent := FModel.Invalidate;
     end;
-    ModflowBoundaries.FSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
+    ModflowBoundaries.FModflowSubObservations := TSubObservations.Create(InvalidateModelEvent, self);
   end;
 end;
 
@@ -15897,6 +15929,24 @@ begin
   if (ModflowBoundaries.FSwrStage = nil) then
   begin
     ModflowBoundaries.FSwrStage := TSwrStageBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateSwtObservations;
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  if (ModflowBoundaries.FModflowSwtObservations = nil) then
+  begin
+    if FModel = nil then
+    begin
+      InvalidateModelEvent := nil;
+    end
+    else
+    begin
+      InvalidateModelEvent := FModel.Invalidate;
+    end;
+    ModflowBoundaries.FModflowSwtObservations := TSubObservations.Create(InvalidateModelEvent, self);
   end;
 end;
 
@@ -18892,203 +18942,7 @@ begin
     SpecifiedHeadBoundary.Loaded
   end;
 
-  ModflowBoundaries.FreeUnusedBoundaries;
-//
-//  if (ModflowBoundaries.FModflowChdBoundary <> nil)
-//    and not ModflowBoundaries.FModflowChdBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowChdBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowGhbBoundary <> nil)
-//    and not ModflowBoundaries.FModflowGhbBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowGhbBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowWellBoundary <> nil)
-//    and not ModflowBoundaries.FModflowWellBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowWellBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowRivBoundary <> nil)
-//    and not ModflowBoundaries.FModflowRivBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowRivBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowDrnBoundary <> nil)
-//    and not ModflowBoundaries.FModflowDrnBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowDrnBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowDrtBoundary <> nil)
-//    and not ModflowBoundaries.FModflowDrtBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowDrtBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowRchBoundary <> nil)
-//    and not ModflowBoundaries.FModflowRchBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowRchBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowEvtBoundary <> nil)
-//    and not ModflowBoundaries.FModflowEvtBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowEvtBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowEtsBoundary <> nil)
-//    and not ModflowBoundaries.FModflowEtsBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowEtsBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowResBoundary <> nil)
-//    and not ModflowBoundaries.FModflowResBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowResBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowLakBoundary <> nil)
-//    and not ModflowBoundaries.FModflowLakBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowLakBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowSfrBoundary <> nil)
-//    and not ModflowBoundaries.FModflowSfrBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowSfrBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowStrBoundary <> nil)
-//    and not ModflowBoundaries.FModflowStrBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowStrBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowUzfBoundary <> nil)
-//    and not ModflowBoundaries.FModflowUzfBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowUzfBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowHeadObservations <> nil)
-//    and not ModflowBoundaries.FModflowHeadObservations.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowHeadObservations);
-//  end;
-//  if (ModflowBoundaries.FModflowHfbBoundary <> nil)
-//    and not ModflowBoundaries.FModflowHfbBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowHfbBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowGage <> nil)
-//    and not ModflowBoundaries.FModflowGage.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowGage);
-//  end;
-//  if (ModflowBoundaries.FModflowMnw2Boundary <> nil)
-//    and not ModflowBoundaries.FModflowMnw2Boundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowMnw2Boundary);
-//  end;
-//  if (ModflowBoundaries.FModflowHydmodData <> nil)
-//    and not ModflowBoundaries.FModflowHydmodData.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowHydmodData);
-//  end;
-//  if (ModflowBoundaries.FMt3dmsConcBoundary <> nil)
-//    and not ModflowBoundaries.FMt3dmsConcBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FMt3dmsConcBoundary);
-//  end;
-//  if (ModflowBoundaries.FMt3dmsTransObservations <> nil)
-//    and not ModflowBoundaries.FMt3dmsTransObservations.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FMt3dmsTransObservations);
-//  end;
-//  if (ModflowBoundaries.FModflowFhbHeadBoundary <> nil)
-//    and not ModflowBoundaries.FModflowFhbHeadBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowFhbHeadBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowFhbFlowBoundary <> nil)
-//    and not ModflowBoundaries.FModflowFhbFlowBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowFhbFlowBoundary);
-//  end;
-//  if (ModflowBoundaries.FFmpWellBoundary <> nil)
-//    and not ModflowBoundaries.FFmpWellBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FFmpWellBoundary);
-//  end;
-//  if (ModflowBoundaries.FFmpPrecipBoundary <> nil)
-//    and not ModflowBoundaries.FFmpPrecipBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FFmpPrecipBoundary);
-//  end;
-//  if (ModflowBoundaries.FFmpRefEvapBoundary <> nil)
-//    and not ModflowBoundaries.FFmpRefEvapBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FFmpRefEvapBoundary);
-//  end;
-//  if (ModflowBoundaries.FFmpCropIDBoundary <> nil)
-//    and not ModflowBoundaries.FFmpCropIDBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FFmpCropIDBoundary);
-//  end;
-//  if (ModflowBoundaries.FFmpFarmIDBoundary <> nil)
-//    and not ModflowBoundaries.FFmpFarmIDBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FFmpFarmIDBoundary);
-//  end;
-//  if (ModflowBoundaries.FModflowRipBoundary <> nil)
-//    and not ModflowBoundaries.FModflowRipBoundary.Used then
-//  begin
-//    FreeAndNil(ModflowBoundaries.FModflowRipBoundary);
-//  end;
-
-  if ModflowBoundaries.FModflowSfr6Boundary <> nil then
-  begin
-    ModflowBoundaries.FModflowSfr6Boundary.Loaded;
-  end;
-
-  if ModflowBoundaries.FModflowHydmodData <> nil then
-  begin
-    ModflowBoundaries.FModflowHydmodData.Loaded;
-  end;
-
-  if ModflowBoundaries.SwrReaches <> nil then
-  begin
-    ModflowBoundaries.SwrReaches.Loaded;
-  end;
-
-  if ModflowBoundaries.ModflowMawBoundary <> nil then
-  begin
-    ModflowBoundaries.ModflowMawBoundary.Loaded;
-  end;
-
-  if ModflowBoundaries.ModflowLak6 <> nil then
-  begin
-    ModflowBoundaries.ModflowLak6.Loaded;
-  end;
-
-  if ModflowBoundaries.ModflowUzfMf6Boundary <> nil then
-  begin
-    ModflowBoundaries.ModflowUzfMf6Boundary.Loaded;
-  end;
-
-  if ModflowBoundaries.ModflowMvr <> nil then
-  begin
-    ModflowBoundaries.ModflowMvr.Loaded;
-  end;
-
-  if ModflowBoundaries.Mt3dLktConcBoundary <> nil then
-  begin
-    ModflowBoundaries.Mt3dLktConcBoundary.Loaded;
-  end;
-
-  if ModflowBoundaries.Mt3dSftConcBoundary <> nil then
-  begin
-    ModflowBoundaries.Mt3dSftConcBoundary.Loaded;
-  end;
-
-  if ModflowBoundaries.ModflowCSub <> nil then
-  begin
-    ModflowBoundaries.ModflowCSub.Loaded;
-  end;
+  ModflowBoundaries.Loaded;
 
   UpdateUzfGage1and2;
   UpdateUzfGage3;
@@ -30989,7 +30843,7 @@ begin
   result := FWellBoundary;
 end;
 
-function TScreenObject.GetSubObservations: TSubObservations;
+function TScreenObject.GetModflowSubObservations: TSubObservations;
 begin
   if (FModel = nil)
     or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
@@ -31002,7 +30856,7 @@ begin
   end
   else
   begin
-    result := ModflowBoundaries.FSubObservations;
+    result := ModflowBoundaries.FModflowSubObservations;
   end;
 end;
 
@@ -31067,20 +30921,20 @@ begin
   FStoredSutraAngle.Assign(Value);
 end;
 
-procedure TScreenObject.SetSubObservations(const Value: TSubObservations);
+procedure TScreenObject.SetModflowSubObservations(const Value: TSubObservations);
 begin
   if (Value = nil) or not Value.Used then
   begin
-    if ModflowBoundaries.FSubObservations <> nil then
+    if ModflowBoundaries.FModflowSubObservations <> nil then
     begin
       InvalidateModel;
     end;
-    FreeAndNil(ModflowBoundaries.FSubObservations);
+    FreeAndNil(ModflowBoundaries.FModflowSubObservations);
   end
   else
   begin
     CreateSubObservations;
-    ModflowBoundaries.FSubObservations.Assign(Value);
+    ModflowBoundaries.FModflowSubObservations.Assign(Value);
   end;
 end;
 
@@ -31586,6 +31440,16 @@ begin
     and (ModflowSwrStage <> nil) and ModflowSwrStage.Used;
 end;
 
+function TScreenObject.StoreModflowSwtObservations: Boolean;
+begin
+{$IFDEF PEST}
+  result := (FModflowBoundaries <> nil)
+    and (ModflowSwtObservations <> nil) and ModflowSwtObservations.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
+end;
+
 function TScreenObject.StoreModflowUzfBoundary: Boolean;
 begin
   result := (FModflowBoundaries <> nil)
@@ -31690,11 +31554,11 @@ begin
     or (SpecifiedHeadBoundary.Solution.Count > 0));
 end;
 
-function TScreenObject.StoreSubObservations: Boolean;
+function TScreenObject.StoreModflowSubObservations: Boolean;
 begin
 {$IFDEF PEST}
   result := (FModflowBoundaries <> nil)
-    and (SubObservations <> nil) and SubObservations.Used;
+    and (ModflowSubObservations <> nil) and ModflowSubObservations.Used;
 {$ELSE}
   result := False;
 {$ENDIF}
@@ -32871,6 +32735,23 @@ begin
   else
   begin
     result := ModflowBoundaries.FSwrStage;
+  end;
+end;
+
+function TScreenObject.GetModflowSwtObservations: TSubObservations;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateSwtObservations;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FModflowSwtObservations;
   end;
 end;
 
@@ -40216,17 +40097,30 @@ begin
     FModflowCSub.Assign(Source.FModflowCSub);
   end;
 
-  if Source.FSubObservations = nil then
+  if Source.FModflowSubObservations = nil then
   begin
-    FreeAndNil(FSubObservations);
+    FreeAndNil(FModflowSubObservations);
   end
   else
   begin
-    if FSubObservations = nil then
+    if FModflowSubObservations = nil then
     begin
-      FSubObservations := TSubObservations.Create(InvalidateEvent, FScreenObject);
+      FModflowSubObservations := TSubObservations.Create(InvalidateEvent, FScreenObject);
     end;
-    FSubObservations.Assign(Source.FSubObservations);
+    FModflowSubObservations.Assign(Source.FModflowSubObservations);
+  end;
+
+  if Source.FModflowSwtObservations = nil then
+  begin
+    FreeAndNil(FModflowSwtObservations);
+  end
+  else
+  begin
+    if FModflowSwtObservations = nil then
+    begin
+      FModflowSwtObservations := TSubObservations.Create(InvalidateEvent, FScreenObject);
+    end;
+    FModflowSwtObservations.Assign(Source.FModflowSwtObservations);
   end;
 
   FreeUnusedBoundaries;
@@ -40239,7 +40133,8 @@ end;
 
 destructor TModflowBoundaries.Destroy;
 begin
-  FSubObservations.Free;
+  FModflowSwtObservations.Free;
+  FModflowSubObservations.Free;
   FModflowCSub.Free;
   FModflow6Obs.Free;
   FModflowMawBoundary.Free;
@@ -40508,9 +40403,14 @@ begin
     FreeAndNil(FModflowCSub);
   end;
 
-  if (FSubObservations <> nil) and not FSubObservations.Used then
+  if (FModflowSubObservations <> nil) and not FModflowSubObservations.Used then
   begin
-    FreeAndNil(FSubObservations);
+    FreeAndNil(FModflowSubObservations);
+  end;
+
+  if (FModflowSwtObservations <> nil) and not FModflowSwtObservations.Used then
+  begin
+    FreeAndNil(FModflowSwtObservations);
   end;
 end;
 
@@ -40779,6 +40679,72 @@ begin
   if FModflowCSub <> nil then
   begin
     FModflowCSub.Invalidate;
+  end;
+
+end;
+
+procedure TModflowBoundaries.Loaded;
+begin
+  FreeUnusedBoundaries;
+
+  if FModflowSfr6Boundary <> nil then
+  begin
+    FModflowSfr6Boundary.Loaded;
+  end;
+
+  if FModflowHydmodData <> nil then
+  begin
+    FModflowHydmodData.Loaded;
+  end;
+
+  if SwrReaches <> nil then
+  begin
+    SwrReaches.Loaded;
+  end;
+
+  if ModflowMawBoundary <> nil then
+  begin
+    ModflowMawBoundary.Loaded;
+  end;
+
+  if ModflowLak6 <> nil then
+  begin
+    ModflowLak6.Loaded;
+  end;
+
+  if ModflowUzfMf6Boundary <> nil then
+  begin
+    ModflowUzfMf6Boundary.Loaded;
+  end;
+
+  if ModflowMvr <> nil then
+  begin
+    ModflowMvr.Loaded;
+  end;
+
+  if Mt3dLktConcBoundary <> nil then
+  begin
+    Mt3dLktConcBoundary.Loaded;
+  end;
+
+  if Mt3dSftConcBoundary <> nil then
+  begin
+    Mt3dSftConcBoundary.Loaded;
+  end;
+
+  if ModflowCSub <> nil then
+  begin
+    ModflowCSub.Loaded;
+  end;
+
+  if ModflowSubObservations <> nil then
+  begin
+    ModflowSubObservations.Loaded;
+  end;
+
+  if ModflowSwtObservations <> nil then
+  begin
+    ModflowSwtObservations.Loaded;
   end;
 
 end;
@@ -41549,7 +41515,12 @@ begin
     FModflowCSub.StopTalkingToAnyone;
   end;
 
-  if FSubObservations <> nil then
+  if FModflowSubObservations <> nil then
+  begin
+//    FSubObservations.StopTalkingToAnyone;
+  end;
+
+  if FModflowSwtObservations <> nil then
   begin
 //    FSubObservations.StopTalkingToAnyone;
   end;
