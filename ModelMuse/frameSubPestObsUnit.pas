@@ -106,11 +106,11 @@ procedure TframeSubPestObs.GetDirectObs(
   Observations: TCustomComparisonCollection);
 var
   ItemIndex: Integer;
-  Obs: TSubObsItem;
+  Obs: TCustomSubObsItem;
 begin
   for ItemIndex := 0 to Observations.Count - 1 do
   begin
-    Obs := Observations[ItemIndex] as TSubObsItem;
+    Obs := Observations[ItemIndex] as TCustomSubObsItem;
     frameObservations.Grid.Cells[Ord(socName), ItemIndex + 1] := Obs.Name;
     frameObservations.Grid.Objects[Ord(socName), ItemIndex + 1] := Obs;
     frameObservations.Grid.Cells[Ord(socType), ItemIndex + 1] := Obs.ObsTypeString;
@@ -165,8 +165,8 @@ var
   RowIndex: Integer;
   RowOK: Boolean;
   ColIndex: Integer;
-  Obs: TSubObsItem;
-  OtherObs: TSubObsItem;
+  Obs: TCustomSubObsItem;
+  OtherObs: TCustomSubObsItem;
   MyGuid: TGUID;
 begin
   ObsCount := 0;
@@ -196,17 +196,17 @@ begin
     begin
       if ObsCount < Observations.Count then
       begin
-        Obs := Observations[ObsCount] as TSubObsItem;
+        Obs := Observations[ObsCount] as TCustomSubObsItem;
       end
       else
       begin
-        Obs := Observations.Add as TSubObsItem;
+        Obs := Observations.Add as TCustomSubObsItem;
       end;
       Inc(ObsCount);
       Obs.Name := frameObservations.Grid.Cells[Ord(pocName), RowIndex];
       if frameObservations.Grid.Objects[Ord(pocName), RowIndex] <> nil then
       begin
-        OtherObs := frameObservations.Grid.Objects[Ord(pocName), RowIndex] as TSubObsItem;
+        OtherObs := frameObservations.Grid.Objects[Ord(pocName), RowIndex] as TCustomSubObsItem;
         Obs.GUID  := OtherObs.GUID;
       end
       else

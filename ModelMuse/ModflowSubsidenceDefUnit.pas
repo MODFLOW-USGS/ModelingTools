@@ -312,7 +312,7 @@ type
     procedure Loaded;
   end;
 
-  TSubObsItem = class(TCustomTimeObservationItem)
+  TCustomSubObsItem = class(TCustomTimeObservationItem)
   private
     FObsType: string;
     FInterbedSystem: string;
@@ -323,17 +323,14 @@ type
     procedure SetInterbedSystem(const Value: string);
     function GetInterbedSystem: string;
     procedure SetInterbed(const Value: TCustomSubLayerItem);
-  protected
-    function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
   public
+    property Interbed: TCustomSubLayerItem read FInterbed write SetInterbed;
     procedure Assign(Source: TPersistent); override;
     function ObservationType: string; override;
     function Units: string; override;
     property Cells: TBaseInterpolatedObs read FCells write FCells;
-    property Interbed: TCustomSubLayerItem read FInterbed write SetInterbed;
     procedure Loaded;
   published
     property ObsType: string read FObsType write SetObsType stored True;
@@ -341,23 +338,56 @@ type
     property GUID;
   end;
 
+  TSubObsItem = class(TCustomSubObsItem)
+  protected
+    function GetObsTypeIndex: Integer; override;
+    procedure SetObsTypeIndex(const Value: Integer); override;
+  end;
+
   TSubObsItemList = TList<TSubObsItem>;
 
-  TSubObservations = class(TCustomComparisonCollection)
+  TSwtObsItem = class(TCustomSubObsItem)
+  protected
+    function GetObsTypeIndex: Integer; override;
+    procedure SetObsTypeIndex(const Value: Integer); override;
+  end;
+
+  TSwtObsItemList = TList<TSwtObsItem>;
+
+  TCustomSubObservations = class(TCustomComparisonCollection)
+  private
+    function GetUsed: Boolean;
+  public
+    property Used: Boolean read GetUsed;
+  end;
+
+  TSubObservations = class(TCustomSubObservations)
   private
     function GetSubItem(Index: Integer): TSubObsItem;
     procedure SetSubItem(Index: Integer; const Value: TSubObsItem);
-    function GetUsed: Boolean;
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     property Items[Index: Integer]: TSubObsItem read GetSubItem
       write SetSubItem; default;
     function Add: TSubObsItem;
-    property Used: Boolean read GetUsed;
     procedure Loaded;
   end;
 
   TSubObsCollectionList = TList<TSubObservations>;
+
+  TSwtObservations = class(TCustomSubObservations)
+  private
+    function GetSwtItem(Index: Integer): TSwtObsItem;
+    procedure SetSwtItem(Index: Integer; const Value: TSwtObsItem);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+    property Items[Index: Integer]: TSwtObsItem read GetSwtItem
+      write SetSwtItem; default;
+    function Add: TSwtObsItem;
+    procedure Loaded;
+  end;
+
+  TSwtObsCollectionList = TList<TSwtObservations>;
 
 var
   SubsidenceTypes: TStringList;
@@ -1192,7 +1222,7 @@ var
   AScreenObject: TScreenObject;
   SubObservations: TSubObservations;
   ObsIndex: Integer;
-  SubObs: TSubObsItem;
+  SubObs: TCustomSubObsItem;
 begin
   FUsedLayers.Free;
   FDataArrayDisplayTypes.Free;
@@ -1660,13 +1690,13 @@ end;
 
 { TSubObsItem }
 
-procedure TSubObsItem.Assign(Source: TPersistent);
+procedure TCustomSubObsItem.Assign(Source: TPersistent);
 var
-  SubSource: TSubObsItem;
+  SubSource: TCustomSubObsItem;
 begin
-  if Source is TSubObsItem then
+  if Source is TCustomSubObsItem then
   begin
-    SubSource := TSubObsItem(Source);
+    SubSource := TCustomSubObsItem(Source);
     ObsType := SubSource.ObsType;
     InterbedSystem := SubSource.InterbedSystem;
     Interbed := SubSource.Interbed;
@@ -1674,7 +1704,7 @@ begin
   inherited;
 end;
 
-function TSubObsItem.GetInterbedSystem: string;
+function TCustomSubObsItem.GetInterbedSystem: string;
 begin
   if FInterbed <> nil then
   begin
@@ -1691,12 +1721,12 @@ begin
   result := SubsidenceTypes.IndexOf(ObsType);
 end;
 
-function TSubObsItem.GetObsTypeString: string;
+function TCustomSubObsItem.GetObsTypeString: string;
 begin
   result := ObsType;
 end;
 
-procedure TSubObsItem.Loaded;
+procedure TCustomSubObsItem.Loaded;
 var
   LayerGroups: TLayerStructure;
   LayerGroupIndex: Integer;
@@ -1738,12 +1768,12 @@ begin
   end;
 end;
 
-function TSubObsItem.ObservationType: string;
+function TCustomSubObsItem.ObservationType: string;
 begin
   result := ObsType;
 end;
 
-procedure TSubObsItem.SetInterbed(const Value: TCustomSubLayerItem);
+procedure TCustomSubObsItem.SetInterbed(const Value: TCustomSubLayerItem);
 begin
   FInterbed := Value;
   if FInterbed <> nil then
@@ -1752,7 +1782,7 @@ begin
   end;
 end;
 
-procedure TSubObsItem.SetInterbedSystem(const Value: string);
+procedure TCustomSubObsItem.SetInterbedSystem(const Value: string);
 begin
   if FInterbedSystem <> Value then
   begin
@@ -1766,7 +1796,7 @@ begin
   end;
 end;
 
-procedure TSubObsItem.SetObsType(const Value: string);
+procedure TCustomSubObsItem.SetObsType(const Value: string);
 begin
   if FObsType <> Value then
   begin
@@ -1785,12 +1815,12 @@ begin
   ObsType := SubsidenceTypes[Value];
 end;
 
-procedure TSubObsItem.SetObsTypeString(const Value: string);
+procedure TCustomSubObsItem.SetObsTypeString(const Value: string);
 begin
   ObsType := Value;
 end;
 
-function TSubObsItem.Units: string;
+function TCustomSubObsItem.Units: string;
 begin
   result := SubsidenceTypes[ObsTypeIndex];
 end;
@@ -1813,7 +1843,7 @@ begin
   result := inherited Items[Index] as TSubObsItem;
 end;
 
-function TSubObservations.GetUsed: Boolean;
+function TCustomSubObservations.GetUsed: Boolean;
 begin
   result := Count > 0;
 end;
@@ -1830,6 +1860,51 @@ end;
 
 procedure TSubObservations.SetSubItem(Index: Integer;
   const Value: TSubObsItem);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TSwtObsItem }
+
+function TSwtObsItem.GetObsTypeIndex: Integer;
+begin
+  result := SwtTypes.IndexOf(ObsType);
+end;
+
+procedure TSwtObsItem.SetObsTypeIndex(const Value: Integer);
+begin
+  ObsType := SwtTypes[Value];
+end;
+
+{ TSwtObservations }
+
+function TSwtObservations.Add: TSwtObsItem;
+begin
+  result := inherited Add as TSwtObsItem;
+end;
+
+constructor TSwtObservations.Create(InvalidateModelEvent: TNotifyEvent;
+  ScreenObject: TObject);
+begin
+  inherited Create(TSwtObsItem, InvalidateModelEvent, ScreenObject);
+end;
+
+function TSwtObservations.GetSwtItem(Index: Integer): TSwtObsItem;
+begin
+  result := inherited Items[Index] as TSwtObsItem;
+end;
+
+procedure TSwtObservations.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
+end;
+
+procedure TSwtObservations.SetSwtItem(Index: Integer; const Value: TSwtObsItem);
 begin
   inherited Items[Index] := Value;
 end;

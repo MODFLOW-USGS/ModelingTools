@@ -335,7 +335,7 @@ var
   AScreenObject: TScreenObject;
   SubObservations: TSubObservations;
   ObsIndex: Integer;
-  CurrentPrintItem: TSubPrintItem;
+//  CurrentPrintItem: TSubPrintItem;
   Obs: TSubObsItem;
   PrintChoiceIndex: Integer;
   PrintChoice: TSubPrintItem;
@@ -365,6 +365,40 @@ var
   SubCell: TInterpolatedObsCell;
   ALocation: TPoint2D;
   Fractions: TOneDRealArray;
+  FoundPrintItem: Boolean;
+  procedure AssignSaveOption(PrintItem: TSubPrintItem);
+  begin
+    case Obs.ObsTypeIndex of
+      0: // rsSUBSIDENCE
+        begin
+          PrintItem.SaveSubsidence := True;
+        end;
+      1: // rsLAYERCOMPACT
+        begin
+          PrintItem.SaveCompactionByModelLayer := True;
+        end;
+      2: // rsNDSYSCOMPACT
+        begin
+          PrintItem.SaveCompactionByInterbedSystem := True;
+        end;
+      3: // rsDSYSCOMPACTI
+        begin
+          PrintItem.SaveCompactionByInterbedSystem := True;
+        end;
+      4: // rsZDISPLACEMEN
+        begin
+          PrintItem.SaveVerticalDisplacement := True;
+        end;
+      5: // rsNDCRITICALHE
+        begin
+          PrintItem.SaveCriticalHeadNoDelay := True;
+        end;
+      6: // rsDCRITICALHEA
+        begin
+          PrintItem.SaveCriticalHeadDelay := True;
+        end;
+    end;
+  end;
 begin
   Grid := Model.Grid;
   ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
@@ -556,86 +590,50 @@ begin
     end
     ));
 
-  CurrentPrintItem := nil;
   for ObsIndex := 0 to FObsList.Count - 1 do
   begin
+    FoundPrintItem := False;
     Obs := FObsList[ObsIndex];
     FUsedObsTypes.Add(Obs.ObsType);
-    if (CurrentPrintItem = nil)
-      or (Obs.Time < CurrentPrintItem.StartTime)
-      or (Obs.Time > CurrentPrintItem.EndTime) then
+
+    for PrintChoiceIndex := 0 to FSubPackage.PrintChoices.Count -1 do
     begin
-      CurrentPrintItem := nil;
-      for PrintChoiceIndex := 0 to FSubPackage.PrintChoices.Count -1 do
+      PrintChoice := FSubPackage.PrintChoices[PrintChoiceIndex];
+      if (Obs.Time >= PrintChoice.StartTime)
+        and (Obs.Time <= PrintChoice.EndTime)  then
       begin
-        PrintChoice := FSubPackage.PrintChoices[PrintChoiceIndex];
-        if (Obs.Time >= PrintChoice.StartTime)
-          and (Obs.Time <= PrintChoice.EndTime)  then
+        AssignSaveOption(PrintChoice);
+        FoundPrintItem := True;
+      end;
+    end;
+
+    if not FoundPrintItem then
+    begin
+      CurrentStressPeriod := nil;
+      for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+      begin
+        StressPeriod := Model.ModflowFullStressPeriods[StressPeriodIndex];
+        if (Obs.Time >= StressPeriod.StartTime)
+          and (Obs.Time <= StressPeriod.EndTime) then
         begin
-          CurrentPrintItem := PrintChoice;
+          CurrentStressPeriod := StressPeriod;
           Break;
         end;
       end;
-      if CurrentPrintItem = nil then
-      begin
-        CurrentStressPeriod := nil;
-        for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
-        begin
-          StressPeriod := Model.ModflowFullStressPeriods[StressPeriodIndex];
-          if (Obs.Time >= StressPeriod.StartTime)
-            and (Obs.Time <= StressPeriod.EndTime) then
-          begin
-            CurrentStressPeriod := StressPeriod;
-            Break;
-          end;
-        end;
 
-        if CurrentStressPeriod <> nil then
-        begin
-          CurrentPrintItem := FSubPackage.PrintChoices.Add as TSubPrintItem;
-          CurrentPrintItem.StartTime := CurrentStressPeriod.StartTime;
-          CurrentPrintItem.EndTime := CurrentStressPeriod.EndTime;
-        end;
+      if CurrentStressPeriod <> nil then
+      begin
+        PrintChoice := FSubPackage.PrintChoices.Add as TSubPrintItem;
+        PrintChoice.StartTime := CurrentStressPeriod.StartTime;
+        PrintChoice.EndTime := CurrentStressPeriod.EndTime;
+        AssignSaveOption(PrintChoice)
+      end
+      else
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrInvalidSubsidenceO,
+          Format(StrTheObservationTime, [Obs.Name,
+          (Obs.ScreenObject as TScreenObject).Name]), Obs.ScreenObject);
       end;
-    end;
-    if CurrentPrintItem <> nil then
-    begin
-      case Obs.ObsTypeIndex of
-        0: // rsSUBSIDENCE
-          begin
-            CurrentPrintItem.SaveSubsidence := True;
-          end;
-        1: // rsLAYERCOMPACT
-          begin
-            CurrentPrintItem.SaveCompactionByModelLayer := True;
-          end;
-        2: // rsNDSYSCOMPACT
-          begin
-            CurrentPrintItem.SaveCompactionByInterbedSystem := True;
-          end;
-        3: // rsDSYSCOMPACTI
-          begin
-            CurrentPrintItem.SaveCompactionByInterbedSystem := True;
-          end;
-        4: // rsZDISPLACEMEN
-          begin
-            CurrentPrintItem.SaveVerticalDisplacement := True;
-          end;
-        5: // rsNDCRITICALHE
-          begin
-            CurrentPrintItem.SaveCriticalHeadNoDelay := True;
-          end;
-        6: // rsDCRITICALHEA
-          begin
-            CurrentPrintItem.SaveCriticalHeadDelay := True;
-          end;
-      end;
-    end
-    else
-    begin
-      frmErrorsAndWarnings.AddError(Model, StrInvalidSubsidenceO,
-        Format(StrTheObservationTime, [Obs.Name,
-        (Obs.ScreenObject as TScreenObject).Name]), Obs.ScreenObject);
     end;
   end;
 end;

@@ -4,7 +4,8 @@ interface
 
 uses
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, IntListUnit,
-  PhastModelUnit, Classes;
+  PhastModelUnit, Classes, ModflowSubsidenceDefUnit, InterpolatedObsCellUnit,
+  System.Generics.Defaults;
 
 type
   TModflowSWT_Writer = class(TCustomSubWriter)
@@ -20,6 +21,14 @@ type
     FCc_List: TList;
     FVOID_List: TList;
     FSUB_List: TList;
+    FMultipleSubFileNames: TStringList;
+    FSubObsCollectionList: TSwtObsCollectionList;
+    FInterpolatedObs: TBaseInterpolatedObsObjectList;
+    FObsList: TSwtObsItemList;
+    FUsedObsTypes: TStringList;
+    FCombinedSubFileName: string;
+    FSwtLayerNames: TStringList;
+    procedure EvaluatePestObs;
     procedure RetrieveArrays;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -32,6 +41,7 @@ type
     procedure WriteDataSet15;
     procedure WriteDataSet16;
     procedure WriteDataSet17;
+    procedure WriteObsScript;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -46,8 +56,10 @@ implementation
 
 uses
   ModflowUnitNumbers, frmProgressUnit, LayerStructureUnit,
-  ModflowSubsidenceDefUnit, DataSetUnit, frmErrorsAndWarningsUnit, SysUtils,
-  Forms, GoPhastTypes;
+  DataSetUnit, frmErrorsAndWarningsUnit, SysUtils,
+  Forms, GoPhastTypes, ScreenObjectUnit, ModflowTimeUnit, ModflowCellUnit,
+  AbstractGridUnit, FastGEO, BasisFunctionUnit,
+  System.Math, PestObsUnit;
 
 resourcestring
   StrNoSWTLayersDefine = 'No SWT layers defined';
@@ -65,6 +77,12 @@ resourcestring
   StrNoWatertableSubsiDetailed = 'No water-table subsidence beds  in the Water-Table' +
   ' Subsidence package have been defined for any layer in the model. They mu' +
   'st be defined in the "Model|MODFLOW Layers" dialog box.);'#13;
+  StrInvalidSWTObservat = 'Invalid SWT observation location';
+  StrTheSWTObservations = 'The SWT observations defined in %s are invalid be' +
+  'cause it does not intersect any cells.';
+  StrInvalidSWTObservatTime = 'Invalid SWT observation time.';
+  StrTheObservationTime = 'The observation time of the SWT observation "%0:s' +
+  '" defined in %1:s is invalid';
 //  StrWritingDataSet14 = '  Writing Data Set 14.';
 //  StrWritingDataSet15 = '  Writing Data Set 15.';
 //  StrWritingDataSet16 = '  Writing Data Set 16.';
@@ -73,8 +91,11 @@ resourcestring
 { TModflowSWT_Writer }
 
 constructor TModflowSWT_Writer.Create(Model: TCustomModel; EvaluationType: TEvaluationType);
+var
+  Index: Integer;
 begin
   inherited;
+  FSwtLayerNames := TStringList.Create;
   FLNWT := TIntegerList.Create;
   FTHICK_List := TList.Create;
   FSse_List := TList.Create;
@@ -83,10 +104,28 @@ begin
   FCc_List := TList.Create;
   FVOID_List := TList.Create;
   FSUB_List := TList.Create;
+  FMultipleSubFileNames := TStringList.Create;;
+  for Index := 0 to SwtTypes.Count - 1 do
+  begin
+    FMultipleSubFileNames.Add('');
+  end;
+  FSubObsCollectionList := TSwtObsCollectionList.Create;
+  FInterpolatedObs:= TBaseInterpolatedObsObjectList.Create;
+  FObsList := TSwtObsItemList.Create;
+  FUsedObsTypes := TStringList.Create;
+  FUsedObsTypes.Sorted := True;
+  FUsedObsTypes.Duplicates := dupIgnore;
+  FUsedObsTypes.CaseSensitive := False;
 end;
 
 destructor TModflowSWT_Writer.Destroy;
 begin
+  FSwtLayerNames.Free;
+  FUsedObsTypes.Free;
+  FObsList.Free;
+  FInterpolatedObs.Free;
+  FSubObsCollectionList.Free;
+  FMultipleSubFileNames.Free;
   FSUB_List.Free;
   FVOID_List.Free;
   FCc_List.Free;
@@ -96,6 +135,339 @@ begin
   FTHICK_List.Free;
   FLNWT.Free;
   inherited;
+end;
+
+procedure TModflowSWT_Writer.EvaluatePestObs;
+var
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  SwtObservations: TSwtObservations;
+  ObsIndex: Integer;
+//  CurrentPrintItem: TSwtPrintItem;
+  Obs: TSwtObsItem;
+  PrintChoiceIndex: Integer;
+  PrintChoice: TSwtPrintItem;
+  StressPeriodIndex: Integer;
+  StressPeriod: TModflowStressPeriod;
+  CurrentStressPeriod: TModflowStressPeriod;
+  CellList: TCellAssignmentList;
+  ACell: TCellLocation;
+  Grid: TCustomModelGrid;
+  ObservationPoint: TPoint2D;
+  Center: double;
+  ObservationRowOffset: double;
+  ObservationColumnOffset: double;
+  ColDirection: Integer;
+  RowDirection: Integer;
+  CenterCell: TInterpolatedObsCell;
+  Cell1: TInterpolatedObsCell;
+  Cell3: TInterpolatedObsCell;
+  Cell2: TInterpolatedObsCell;
+  Direction: T2DDirection;
+  NewRow: Integer;
+  ActiveDataArray: TDataArray;
+  NewColumn: Integer;
+  InterpObs: TBaseInterpolatedObs;
+  Element: TElement;
+  CellIndex: Integer;
+  SubCell: TInterpolatedObsCell;
+  ALocation: TPoint2D;
+  Fractions: TOneDRealArray;
+  FoundPrintItem: Boolean;
+  procedure AssignSaveOption(PrintItem: TSwtPrintItem);
+  begin
+    case Obs.ObsTypeIndex of
+      0: // rsSUBSIDENCE2
+        begin
+          PrintItem.SaveSubsidence := True;
+        end;
+      1: // rsLAYERCOMPACT2
+        begin
+          PrintItem.SaveCompactionByModelLayer := True;
+        end;
+      2: // rsSYSTMCOMPACT
+        begin
+          PrintItem.SaveCompactionByInterbedSystem := True;
+        end;
+      3: // rsZDISPLACEMEN2
+        begin
+          PrintItem.SaveVerticalDisplacement := True;
+        end;
+      4: // rsPRECONSOLSTR
+        begin
+          PrintItem.SavePreconsolidationStress := True;
+        end;
+      5: // rsCHANGEINPCST
+        begin
+          PrintItem.SaveDeltaPreconsolidationStress := True;
+        end;
+      6: // rsGEOSTATICSTR
+        begin
+          PrintItem.SaveGeostaticStress := True;
+        end;
+      7: // rsCHANGEINGSTR
+        begin
+          PrintItem.SaveDeltaGeostaticStress := True;
+        end;
+      8: // rsEFFECTIVESTR
+        begin
+          PrintItem.SaveEffectiveStress := True;
+        end;
+      9: // rsCHANGEINEFFS
+        begin
+          PrintItem.SaveDeltaEffectiveStress := True;
+        end;
+      10: // rsVOIDRATIO
+        begin
+          PrintItem.SaveVoidRatio := True;
+        end;
+      11: // rsTHICKNESS
+        begin
+          PrintItem.SaveThicknessCompressibleSediments := True;
+        end;
+      12: // rsCENTERELEVAT
+        begin
+          PrintItem.SaveLayerCenterElevation := True;
+        end;
+    end;
+  end;
+begin
+  Grid := Model.Grid;
+  ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
+  ActiveDataArray.Initialize;
+  for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  begin
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    AScreenObject := Model.ScreenObjects[ObjectIndex];
+    if AScreenObject.Deleted
+      or not AScreenObject.UsedModels.UsesModel(Model) then
+    begin
+      Continue;
+    end;
+    SwtObservations := AScreenObject.ModflowSwtObservations;
+    if SwtObservations <> nil then
+    begin
+      if SwtObservations.Comparisons.Count > 0 then
+      begin
+        FSubObsCollectionList.Add(SwtObservations);
+      end;
+
+      InterpObs := nil;
+      CellList := TCellAssignmentList.Create;
+      try
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alFirstVertex, Model);
+        if CellList.Count > 0 then
+        begin
+          ACell := CellList[0].Cell;
+          ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
+            AScreenObject.Points[0]);
+
+          Center := Grid.RowCenter(ACell.Row);
+          ObservationRowOffset := -(ObservationPoint.y - Center);
+
+          Center := Grid.ColumnCenter(ACell.Column);
+          ObservationColumnOffset := (ObservationPoint.x - Center);
+
+          ColDirection := Sign(ObservationColumnOffset);
+          RowDirection := Sign(ObservationRowOffset);
+
+          CenterCell := TInterpolatedObsCell.Create;
+          CenterCell.Layer := ACell.Layer;
+          CenterCell.Row := ACell.Row;
+          CenterCell.Col := ACell.Column;
+
+          Cell1 := nil;
+          Cell2 := nil;
+          Cell3 := nil;
+          Direction := dirX;
+
+          NewRow := 0;
+          if RowDirection <> 0 then
+          begin
+            NewRow := ACell.Row + RowDirection;
+            if (NewRow >= 0) and (NewRow < Grid.RowCount)
+              and ActiveDataArray.BooleanData[ACell.Layer, NewRow, ACell.Column]  then
+            begin
+              Cell1 := TInterpolatedObsCell.Create;
+              Cell1.Layer := ACell.Layer;
+              Cell1.Row := NewRow;
+              Cell1.Col := ACell.Column;
+              Direction := dirY;
+            end;
+          end;
+
+          NewColumn := 0;
+          if ColDirection <> 0 then
+          begin
+            NewColumn := ACell.Column + ColDirection;
+            if (NewColumn >= 0) and (NewColumn < Grid.ColumnCount)
+              and ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, NewColumn]  then
+            begin
+              Cell3 := TInterpolatedObsCell.Create;
+              Cell3.Layer := ACell.Layer;
+              Cell3.Row := ACell.Row;
+              Cell3.Col := NewColumn;
+              Direction := dirX;
+            end;
+          end;
+
+          if (RowDirection <> 0) and (ColDirection <> 0)
+            and ((Cell1 <> nil) or (Cell3 <> nil))
+            and ActiveDataArray.BooleanData[ACell.Layer, NewRow, NewColumn]  then
+          begin
+            Cell2 := TInterpolatedObsCell.Create;
+            Cell2.Layer := ACell.Layer;
+            Cell2.Row := NewRow;
+            Cell2.Col := NewColumn;
+          end;
+
+          InterpObs := TBaseInterpolatedObs.Create;
+          FInterpolatedObs.Add(InterpObs);
+
+          if (RowDirection = 0) or (ColDirection = 0) then
+          begin
+            InterpObs.Cells.Add(CenterCell);
+            if (Cell1 <> nil) then
+            begin
+              InterpObs.Cells.Add(Cell1);
+            end;
+            if (Cell3 <> nil) then
+            begin
+              InterpObs.Cells.Add(Cell3);
+            end;
+          end
+          else
+          begin
+            if RowDirection = ColDirection then
+            begin
+              if (Cell3 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell3);
+              end;
+              InterpObs.Cells.Add(CenterCell);
+              if (Cell1 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell1);
+              end;
+              if (Cell2 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell2);
+              end;
+            end
+            else
+            begin
+              InterpObs.Cells.Add(CenterCell);
+              if (Cell3 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell3);
+              end;
+              if (Cell2 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell2);
+              end;
+              if (Cell1 <> nil) then
+              begin
+                InterpObs.Cells.Add(Cell1);
+              end;
+            end;
+          end;
+
+          if InterpObs.Cells.Count = 1 then
+          begin
+            InterpObs.Cells[0].Fraction := 1;
+          end
+          else
+          begin
+            SetLength(Element, InterpObs.Cells.Count);
+            for CellIndex := 0 to InterpObs.Cells.Count - 1 do
+            begin
+              SubCell := InterpObs.Cells[CellIndex];
+              Element[CellIndex] := Grid.UnrotatedTwoDElementCenter
+                (SubCell.Col, SubCell.Row);
+            end;
+            ALocation := Grid.
+              RotateFromRealWorldCoordinatesToGridCoordinates(AScreenObject.Points[0]);
+            GetBasisFunctionFractions(Element, ALocation, Fractions, Direction);
+            for CellIndex := 0 to InterpObs.Cells.Count - 1 do
+            begin
+              SubCell := InterpObs.Cells[CellIndex];
+              SubCell.Fraction := Fractions[CellIndex];
+            end;
+          end;
+        end
+        else
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrInvalidSWTObservat,
+            Format(StrTheSWTObservations, [AScreenObject.Name]), AScreenObject);
+        end;
+      finally
+        CellList.Free;
+      end;
+      for ObsIndex := 0 to SwtObservations.Count - 1 do
+      begin
+        Obs := SwtObservations[ObsIndex];
+        Obs.Cells := InterpObs;
+        FObsList.Add(Obs);
+      end;
+    end;
+  end;
+
+  FObsList.Sort(TComparer<TSwtObsItem>.Construct(
+    function (const Left, Right: TSwtObsItem): Integer
+    begin
+      Result := Sign(Left.Time - Right.Time);
+    end
+    ));
+
+  for ObsIndex := 0 to FObsList.Count - 1 do
+  begin
+    FoundPrintItem := False;
+    Obs := FObsList[ObsIndex];
+    FUsedObsTypes.Add(Obs.ObsType);
+
+    for PrintChoiceIndex := 0 to FSwtPackage.PrintChoices.Count -1 do
+    begin
+      PrintChoice := FSwtPackage.PrintChoices[PrintChoiceIndex];
+      if (Obs.Time >= PrintChoice.StartTime)
+        and (Obs.Time <= PrintChoice.EndTime)  then
+      begin
+        AssignSaveOption(PrintChoice);
+        FoundPrintItem := True;
+      end;
+    end;
+
+    if not FoundPrintItem then
+    begin
+      CurrentStressPeriod := nil;
+      for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+      begin
+        StressPeriod := Model.ModflowFullStressPeriods[StressPeriodIndex];
+        if (Obs.Time >= StressPeriod.StartTime)
+          and (Obs.Time <= StressPeriod.EndTime) then
+        begin
+          CurrentStressPeriod := StressPeriod;
+          Break;
+        end;
+      end;
+
+      if CurrentStressPeriod <> nil then
+      begin
+        PrintChoice := FSwtPackage.PrintChoices.Add as TSwtPrintItem;
+        PrintChoice.StartTime := CurrentStressPeriod.StartTime;
+        PrintChoice.EndTime := CurrentStressPeriod.EndTime;
+        AssignSaveOption(PrintChoice);
+      end
+      else
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrInvalidSWTObservatTime,
+          Format(StrTheObservationTime, [Obs.Name,
+          (Obs.ScreenObject as TScreenObject).Name]), Obs.ScreenObject);
+      end;
+    end;
+  end;
 end;
 
 class function TModflowSWT_Writer.Extension: string;
@@ -135,6 +507,8 @@ begin
       for SubsidenceIndex := 0 to Group.WaterTableLayers.Count - 1 do
       begin
         WT_Item := Group.WaterTableLayers[SubsidenceIndex];
+        FSwtLayerNames.AddObject(WT_Item.Name, WT_Item);
+
         CompressibleThicknessDataArray := Model.DataArrayManager.GetDataSetByName(
           WT_Item.WaterTableCompressibleThicknessDataArrayName);
         Assert(CompressibleThicknessDataArray <> nil);
@@ -441,9 +815,11 @@ var
       SwtFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSwtOut));
       WriteToNameFile(StrDATABINARY, result,
         SwtFileName, foOutput, Model);
+      FCombinedSubFileName := SwtFileName;
     end;
   end;
-  function HandleUnitNumber(Save: boolean; const Key, Extension: string): integer;
+  function HandleUnitNumber(Save: boolean; const Key, Extension: string;
+    FileIndex: Integer): integer;
   var
     AFileName: string;
   begin
@@ -460,6 +836,7 @@ var
             result := Model.UnitNumbers.UnitNumber(Key);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, Extension));
             WriteToNameFile(StrDATABINARY, result, AFileName, foOutput, Model);
+            FMultipleSubFileNames[FileIndex] := AFileName;
           end
         else Assert(False);
       end;
@@ -518,19 +895,19 @@ begin
     end;
   end;
 
-  Iun1 := HandleUnitNumber(Save1, StrSwtSUB_Out, StrSwtSubOut);
-  Iun2 := HandleUnitNumber(Save2, StrSwtComML_Out, StrSwtComMLOut);
-  Iun3 := HandleUnitNumber(Save3, StrSwtCOM_IS_Out, StrSwtComIsOut);
-  Iun4 := HandleUnitNumber(Save4, StrSwt_VD_Out, StrSwtVDOut);
-  Iun5 := HandleUnitNumber(Save5, StrSwt_PreCon_Out, StrSwtPreConStrOut);
-  Iun6 := HandleUnitNumber(Save6, StrSwt_DeltaPreCon_Out, StrSwtDeltaPreConStrOu);
-  Iun7 := HandleUnitNumber(Save7, StrSwt_GeoStat_Out, StrSwtGeoStatOut);
-  Iun8 := HandleUnitNumber(Save8, StrSwt_DeltaGeoStat_Out, StrSwtDeltaGeoStatOut);
-  Iun9 := HandleUnitNumber(Save9, StrSwt_EffStress_Out, StrSwtEffStressOut);
-  Iun10 := HandleUnitNumber(Save10, StrSwt_DeltaEffStress_Out, StrSwtDeltaEffStressOu);
-  Iun11 := HandleUnitNumber(Save11, StrSwt_VoidRatio_Out, StrSwtVoidRatioOut);
-  Iun12 := HandleUnitNumber(Save12, StrSwt_ThickCompSed_Out, StrSwtThickCompSedOut);
-  Iun13 := HandleUnitNumber(Save13, StrSwt_LayerCentElev_Out, StrSwtLayerCentElevOut);
+  Iun1 := HandleUnitNumber(Save1, StrSwtSUB_Out, StrSwtSubOut, 0);
+  Iun2 := HandleUnitNumber(Save2, StrSwtComML_Out, StrSwtComMLOut, 1);
+  Iun3 := HandleUnitNumber(Save3, StrSwtCOM_IS_Out, StrSwtComIsOut, 2);
+  Iun4 := HandleUnitNumber(Save4, StrSwt_VD_Out, StrSwtVDOut, 3);
+  Iun5 := HandleUnitNumber(Save5, StrSwt_PreCon_Out, StrSwtPreConStrOut, 4);
+  Iun6 := HandleUnitNumber(Save6, StrSwt_DeltaPreCon_Out, StrSwtDeltaPreConStrOu, 5);
+  Iun7 := HandleUnitNumber(Save7, StrSwt_GeoStat_Out, StrSwtGeoStatOut, 6);
+  Iun8 := HandleUnitNumber(Save8, StrSwt_DeltaGeoStat_Out, StrSwtDeltaGeoStatOut, 7);
+  Iun9 := HandleUnitNumber(Save9, StrSwt_EffStress_Out, StrSwtEffStressOut, 8);
+  Iun10 := HandleUnitNumber(Save10, StrSwt_DeltaEffStress_Out, StrSwtDeltaEffStressOu, 9);
+  Iun11 := HandleUnitNumber(Save11, StrSwt_VoidRatio_Out, StrSwtVoidRatioOut, 10);
+  Iun12 := HandleUnitNumber(Save12, StrSwt_ThickCompSed_Out, StrSwtThickCompSedOut, 11);
+  Iun13 := HandleUnitNumber(Save13, StrSwt_LayerCentElev_Out, StrSwtLayerCentElevOut, 12);
 
   WriteInteger(Ifm1 );
   WriteInteger(Iun1 );
@@ -820,6 +1197,12 @@ begin
       FNameOfFile, foInput, Model);
 
     RetrieveArrays;
+
+    if Model.PestUsed then
+    begin
+      EvaluatePestObs;
+    end;
+
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingSWTPackage);
@@ -926,8 +1309,180 @@ begin
     finally
       CloseFile;
     end;
+
+    WriteObsScript;
   finally
     frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TModflowSWT_Writer.WriteObsScript;
+var
+  ScriptFileName: string;
+  ObsIndex: Integer;
+  Obs: TSwtObsItem;
+  StartTime: Double;
+  ObsTypeIndex: Integer;
+  ActiveDataArray: TDataArray;
+  InterbedSystemIndex: Integer;
+  ObjectIndex: Integer;
+  SubObservations: TSwtObservations;
+  CompIndex: Integer;
+  CompItem: TObsCompareItem;
+  FoundFirstObs: Boolean;
+  function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  begin
+    Result := PrefixedObsName('Swt', ObjectIndex, Obs);
+  end;
+  procedure WriteObs(Obs: TSwtObsItem);
+  var
+    CellIndex: Integer;
+    ACell: TInterpolatedObsCell;
+  begin
+    if Obs.Cells = nil then
+    begin
+      Exit;
+    end;
+
+    WriteString('  OBSERVATION ');
+    WriteString(GetObName(ObsIndex, Obs));
+    WriteString(' "');
+    WriteString(Obs.ObsType);
+    WriteString('" ');
+    WriteFloat(Obs.Time - StartTime);
+    WriteFloat(Obs.ObservedValue);
+    WriteFloat(Obs.Weight);
+    WriteString(' PRINT');
+    NewLine;
+
+    InterbedSystemIndex := -1;
+    if AnsiSameText(Obs.ObsType, rsSYSTMCOMPACT)
+      or AnsiSameText(Obs.ObsType, rsVOIDRATIO)
+      or AnsiSameText(Obs.ObsType, rsTHICKNESS)
+      then
+    begin
+      InterbedSystemIndex := FSwtLayerNames.IndexOf(Obs.InterbedSystem) + 1;
+    end;
+
+    for CellIndex := 0 to Obs.Cells.Cells.Count - 1 do
+    begin
+      ACell := Obs.Cells.Cells[CellIndex];
+      WriteString('  CELL ');
+      if AnsiSameText(Obs.ObsType, rsSYSTMCOMPACT)
+        or AnsiSameText(Obs.ObsType, rsVOIDRATIO)
+        or AnsiSameText(Obs.ObsType, rsTHICKNESS)
+        then
+      begin
+        WriteInteger(InterbedSystemIndex);
+      end
+      else
+      begin
+        WriteInteger(ACell.Layer+1);
+      end;
+      WriteInteger(ACell.Row+1);
+      WriteInteger(ACell.Col+1);
+      WriteFloat(ACell.Fraction);
+      NewLine;
+    end;
+  end;
+begin
+  if Model.PestUsed then
+  begin
+    if FObsList.Count = 0 then
+    begin
+      Exit;
+    end;
+    ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
+    ActiveDataArray.Initialize;
+
+    StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+    ScriptFileName := ChangeFileExt(FNameOfFile, '.SwtObsScript');
+    OpenFile(ScriptFileName);
+    try
+      WriteString('BEGIN OBSERVATIONS');
+      NewLine;
+      if FSwtPackage.BinaryOutputChoice = sbocSingleFile then
+      begin
+        WriteString('  FILENAME "');
+        WriteString(FCombinedSubFileName);
+        WriteString('"');
+        NewLine;
+
+        for ObsIndex := 0 to FObsList.Count - 1 do
+        begin
+          Obs := FObsList[ObsIndex];
+          WriteObs(Obs);
+        end;
+      end
+      else
+      begin
+        for ObsTypeIndex := 0 to SwtTypes.Count - 1 do
+        begin
+          if FMultipleSubFileNames[ObsTypeIndex] <> '' then
+          begin
+            FoundFirstObs := False;
+
+            for ObsIndex := 0 to FObsList.Count - 1 do
+            begin
+              Obs := FObsList[ObsIndex];
+              if AnsiSameText(SwtTypes[ObsTypeIndex], Obs.ObsType) then
+              begin
+                if not FoundFirstObs then
+                begin
+                  WriteString('  FILENAME "');
+                  WriteString(FMultipleSubFileNames[ObsTypeIndex]);
+                  WriteString('"');
+                  NewLine;
+                  FoundFirstObs := True;
+                end;
+                WriteObs(Obs);
+              end;
+            end;
+          end;
+        end;
+      end;
+      WriteString('END OBSERVATIONS');
+
+      // DERIVED_OBSERVATIONS block
+      if FSubObsCollectionList.Count > 0 then
+      begin
+        NewLine;
+        NewLine;
+        WriteString('BEGIN DERIVED_OBSERVATIONS');
+        NewLine;
+
+        for ObjectIndex := 0 to FSubObsCollectionList.Count - 1 do
+        begin
+          SubObservations := FSubObsCollectionList[ObjectIndex];
+
+          WriteString('  # ');
+          WriteString('Observation comparisons defined in ');
+          WriteString((SubObservations.ScreenObject as TScreenObject).Name);
+          NewLine;
+
+          for CompIndex := 0 to SubObservations.Comparisons.Count - 1 do
+          begin
+            WriteString('  DIFFERENCE ');
+            CompItem := SubObservations.Comparisons[CompIndex];
+            WriteString(GetObName(ObjectIndex, CompItem));
+            WriteString(' ');
+            Obs := SubObservations[CompItem.Index1];
+            WriteString(Obs.ExportedName);
+            WriteString(' ');
+            Obs := SubObservations[CompItem.Index2];
+            WriteString(Obs.ExportedName);
+            WriteFloat(CompItem.ObservedValue);
+            WriteFloat(CompItem.Weight);
+            WriteString(' PRINT');
+            NewLine;
+          end;
+        end;
+
+        WriteString('END DERIVED_OBSERVATIONS');
+      end;
+    finally
+      CloseFile;
+    end;
   end;
 end;
 

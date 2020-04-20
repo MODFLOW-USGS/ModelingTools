@@ -1452,7 +1452,7 @@ view. }
     FModflowCSub: TCSubBoundary;
     FScreenObject: TObject;
     FModflowSubObservations: TSubObservations;
-    FModflowSwtObservations: TSubObservations;
+    FModflowSwtObservations: TSwtObservations;
   public
     property ModflowChdBoundary: TChdBoundary read FModflowChdBoundary
       write FModflowChdBoundary;
@@ -1560,7 +1560,7 @@ view. }
       Stored False
     {$ENDIF}
       ;
-    property ModflowSwtObservations: TSubObservations read FModflowSwtObservations
+    property ModflowSwtObservations: TSwtObservations read FModflowSwtObservations
       write FModflowSwtObservations
     {$IFNDEF PEST}
       Stored False
@@ -2764,9 +2764,9 @@ view. }
     procedure SetModflowCSub(const Value: TCSubBoundary);
     function StoreModflowCSub: Boolean;
     procedure SetModflowSubObservations(const Value: TSubObservations);
-    procedure SetModflowSwtObservations(const Value: TSubObservations);
+    procedure SetModflowSwtObservations(const Value: TSwtObservations);
     function GetModflowSubObservations: TSubObservations;
-    function GetModflowSwtObservations: TSubObservations;
+    function GetModflowSwtObservations: TSwtObservations;
     function StoreModflowSubObservations: Boolean;
     function StoreModflowSwtObservations: Boolean;
     property SubPolygonCount: integer read GetSubPolygonCount;
@@ -4080,7 +4080,7 @@ view. }
       stored StoreModflowCSub;
     property ModflowSubObservations: TSubObservations read GetModflowSubObservations
       write SetModflowSubObservations stored StoreModflowSubObservations;
-    property ModflowSwtObservations: TSubObservations read GetModflowSwtObservations
+    property ModflowSwtObservations: TSwtObservations read GetModflowSwtObservations
       write SetModflowSwtObservations stored StoreModflowSwtObservations;
 
 //    property Mt3dUzfSeepageConcBoundary: TMt3dUzSsmSinkConcBoundary
@@ -14270,7 +14270,7 @@ end;
 
 
 procedure TScreenObject.SetModflowSwtObservations(
-  const Value: TSubObservations);
+  const Value: TSwtObservations);
 begin
   if (Value = nil) or not Value.Used then
   begin
@@ -15946,7 +15946,7 @@ begin
     begin
       InvalidateModelEvent := FModel.Invalidate;
     end;
-    ModflowBoundaries.FModflowSwtObservations := TSubObservations.Create(InvalidateModelEvent, self);
+    ModflowBoundaries.FModflowSwtObservations := TSwtObservations.Create(InvalidateModelEvent, self);
   end;
 end;
 
@@ -32738,7 +32738,7 @@ begin
   end;
 end;
 
-function TScreenObject.GetModflowSwtObservations: TSubObservations;
+function TScreenObject.GetModflowSwtObservations: TSwtObservations;
 begin
   if (FModel = nil)
     or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
@@ -40118,7 +40118,7 @@ begin
   begin
     if FModflowSwtObservations = nil then
     begin
-      FModflowSwtObservations := TSubObservations.Create(InvalidateEvent, FScreenObject);
+      FModflowSwtObservations := TSwtObservations.Create(InvalidateEvent, FScreenObject);
     end;
     FModflowSwtObservations.Assign(Source.FModflowSwtObservations);
   end;

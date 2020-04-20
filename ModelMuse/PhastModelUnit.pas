@@ -31078,9 +31078,21 @@ begin
               List.Add(AnObs);
             end;
           end;
-
         end;
 
+        if ModflowPackages.SwtPackage.IsSelected  then
+        begin
+          if (AScreenObject.ModflowSwtObservations <> nil)
+            and AScreenObject.ModflowSwtObservations.Used
+            and (AScreenObject.ModflowSwtObservations.Count > 0) then
+          begin
+            for ObsIndex := 0 to AScreenObject.ModflowSwtObservations.Count - 1 do
+            begin
+              AnObs := AScreenObject.ModflowSwtObservations[ObsIndex];
+              List.Add(AnObs);
+            end;
+          end;
+        end;
       end;
     end;
 
