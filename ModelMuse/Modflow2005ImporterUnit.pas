@@ -3242,6 +3242,7 @@ Type
     Multi: boolean;
     Mn: boolean;
     function SameLocation(OtherCell: TMnw1Cell): boolean;
+    function SameValues(OtherCell: TMnw1Cell): boolean;
     procedure Assign(Source: TMnw1Cell);
   end;
 
@@ -3249,10 +3250,15 @@ Type
     StartingStressPeriod: integer;
     EndingStressPeriod: integer;
     function SameLocations(OtherCells: TMnw1Cells): boolean;
+    function SameValues(OtherCells: TMnw1Cells): boolean;
   end;
 
   TMnw1Well = class(TObjectList<TMnw1Cells>)
+    UsedInThisStressPeriod: Boolean;
   end;
+  
+  TMnw1Wells = TList<TMnw1Well>;
+  TMnw1WellsObjectList = TObjectList<TMnw1Wells>;
 
   TMnw1OutputFile = class(TObject)
   private
@@ -3270,8 +3276,11 @@ Type
   TMnw1Importer = class(TPackageImporter)
   private
     FWells: TObjectList<TMnw1Well>;
-    FWellPriorStressPeriod: TList<TMnw1Well>;
-    FWellCurrentStressPeriod: TList<TMnw1Well>;
+    FWellPriorStressPeriod: TMnw1Wells;
+    FWellCurrentStressPeriod: TMnw1Wells;
+    FWellLocationsPriorStressPeriod: array of array of array of TMnw1Wells;
+//    FWellLocationsCurrentStressPeriod: array of array of array of TMnw1Wells;
+    FWellLists: TMnw1WellsObjectList;
     NOMOITER: integer;
     KSPREF: integer;
     FLossType: TMnw1LossType;
@@ -5181,7 +5190,7 @@ var
   PackageImporter: TPackageImporter;
   KPER: integer;
   Index: Integer;
-  FilePosition: Integer;
+//  FilePosition: Integer;
   ChildIndex: Integer;
   ChildModel: TChildModel;
 begin
@@ -5475,7 +5484,7 @@ var
   ALine: string;
   KPER: integer;
   FileName: string;
-  FilePosition: Integer;
+//  FilePosition: Integer;
 begin
   While not Eof(FImporter.FFile) do
   begin
@@ -5515,6 +5524,7 @@ begin
         FImporter.UpdateProgress;
         FImporter.texthandler('Converting Stress Period ' + IntToStr(KPER));
         StressPeriodString := ' Stress Period ' + IntToStr(KPER);
+        FImporter.StressPeriodString := StressPeriodString;
       end
       else if Pos('OPENING FILE ON UNIT', ALine) = 1 then
       begin
@@ -34793,14 +34803,16 @@ begin
   inherited Create(Importer, 'MNW1');
   FWells := TObjectList<TMnw1Well>.Create;
   FMnw1OutputFiles := TMnw1OutputFiles.Create;
-  FWellPriorStressPeriod := TList<TMnw1Well>.Create;
-  FWellCurrentStressPeriod := TList<TMnw1Well>.Create;
+  FWellPriorStressPeriod := TMnw1Wells.Create;
+  FWellCurrentStressPeriod := TMnw1Wells.Create;
   FCellsCurrentStressPeriod := TList<TMnw1Cell>.Create;
+  FWellLists := TMnw1WellsObjectList.Create;
   FCurrentStressPeriod := -1;
 end;
 
 destructor TMnw1Importer.Destroy;
 begin
+  FWellLists.Free;
   FCellsCurrentStressPeriod.Free;
   FWellCurrentStressPeriod.Free;
   FWellPriorStressPeriod.Free;
@@ -35209,6 +35221,17 @@ begin
       for TimeIndex := 0 to AWell.Count - 1 do
       begin
         CellList := AWell[TimeIndex];
+        
+        if TimeIndex > 0 then
+        begin
+          if AWell[TimeIndex-1].SameValues(CellList) then
+          begin
+            Mnw1Item := Mnw1Boundary.Values.Last as TMnw1Item;
+            Mnw1Item.EndTime := StressPeriods[CellList.EndingStressPeriod].EndTime;
+            Continue;
+          end;
+        end;
+        
         Mnw1Item := Mnw1Boundary.Values.Add as TMnw1Item;
 
         Mnw1Item.StartTime := StressPeriods[CellList.StartingStressPeriod].StartTime;
@@ -35522,30 +35545,46 @@ var
   CellsForOneWell: TMnw1Cells;
   CellIndex: Integer;
   ACell: TMnw1Cell;
-  UsedWells: TList<TMnw1Well>;
+//  UsedWells: TMnw1Wells;
   AWell: TMnw1Well;
   SelectedWell: TMnw1Well;
+  Grid: TModflowGrid;
+  WellIndex: Integer;
   procedure AssignCellsToAParticularWell;
   var
     WellIndex: Integer;
+    FirstCell: TMnw1Cell;
+    AWellList: TMnw1Wells;
   begin
     SelectedWell := nil;
-    // Find well for these cells or create a new well.
-    for WellIndex := 0 to FWellPriorStressPeriod.Count - 1 do
+
+    FirstCell := CellsForOneWell[0];
+    AWellList := FWellLocationsPriorStressPeriod[FirstCell.Layer-1, FirstCell.Row-1, FirstCell.Column-1];
+    if AWellList = nil then
     begin
-      AWell := FWellPriorStressPeriod[WellIndex];
-      if AWell.Last.SameLocations(CellsForOneWell) then
+      AWellList := TMnw1Wells.Create;
+      FWellLists.Add(AWellList);
+      FWellLocationsPriorStressPeriod[FirstCell.Layer-1, FirstCell.Row-1, FirstCell.Column-1] := AWellList;
+    end;
+    // Find well for these cells or create a new well.
+    for WellIndex := 0 to AWellList.Count - 1 do
+    begin
+      AWell := AWellList[WellIndex];
+      if (not AWell.UsedInThisStressPeriod) 
+        and AWell.Last.SameLocations(CellsForOneWell) then
       begin
         SelectedWell := AWell;
-        FWellPriorStressPeriod.Delete(WellIndex);
+//        AWellList.Delete(WellIndex);
         break;
       end;
     end;
     if SelectedWell = nil then
     begin
       SelectedWell := TMnw1Well.Create;
+      AWellList.Add(SelectedWell);
       FWells.Add(SelectedWell);
     end;
+    SelectedWell.UsedInThisStressPeriod := True;
     SelectedWell.Add(CellsForOneWell);
     FWellCurrentStressPeriod.Add(SelectedWell);
     CellsForOneWell := nil;
@@ -35553,8 +35592,21 @@ var
 begin
   if FCellsCurrentStressPeriod.Count > 0 then
   begin
-    UsedWells := TList<TMnw1Well>.Create;
-    try
+    for WellIndex := 0 to FWells.Count - 1 do
+    begin
+      FWells[WellIndex].UsedInThisStressPeriod := False;
+    end;
+
+    if FWellLocationsPriorStressPeriod = nil then
+    begin
+      Grid := frmGoPhast.PhastModel.ModflowGrid;
+      SetLength(FWellLocationsPriorStressPeriod,
+        Grid.LayerCount, Grid.RowCount, Grid.ColumnCount);
+//      SetLength(FWellLocationsCurrentStressPeriod,
+//        Grid.LayerCount, Grid.RowCount, Grid.ColumnCount);
+    end;
+//    UsedWells := TMnw1Wells.Create;
+//    try
       CellsForOneWell := nil;
       for CellIndex := 0 to FCellsCurrentStressPeriod.Count - 1 do
       begin
@@ -35574,14 +35626,14 @@ begin
         end;
         CellsForOneWell.Add(ACell);
       end;
-      // Find the well for ththe last group of cells or create a new well.
+      // Find the well for the last group of cells or create a new well.
       AssignCellsToAParticularWell;
       FWellPriorStressPeriod.Clear;
       FWellPriorStressPeriod.AddRange(FWellCurrentStressPeriod.ToArray);
       FWellCurrentStressPeriod.Clear;
-    finally
-      UsedWells.Free;
-    end;
+//    finally
+//      UsedWells.Free;
+//    end;
     FCellsCurrentStressPeriod.Clear;
   end;
 end;
@@ -35685,6 +35737,24 @@ begin
   end;
 end;
 
+function TMnw1Cells.SameValues(OtherCells: TMnw1Cells): boolean;
+var
+  Index: Integer;
+begin
+  result := Count = OtherCells.Count;
+  if result then 
+  begin
+    for Index := 0 to Count-1 do
+    begin
+      result := Items[Index].SameValues(OtherCells.Items[Index]);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
 { TMnw1Cell }
 
 procedure TMnw1Cell.Assign(Source: TMnw1Cell);
@@ -35715,6 +35785,26 @@ begin
   result := (Layer = OtherCell.Layer)
     and (Row = OtherCell.Row)
     and (Column = OtherCell.Column);
+end;
+
+function TMnw1Cell.SameValues(OtherCell: TMnw1Cell): boolean;
+begin
+  result := (Qdes = OtherCell.Qdes)
+    and (QWval = OtherCell.QWval)
+    and (Rw = OtherCell.Rw)
+    and (Skin = OtherCell.Skin)
+    and (Hlim = OtherCell.Hlim)
+    and (Href = OtherCell.Href)
+    and (DD = OtherCell.DD)
+    and (Iwgrp = OtherCell.Iwgrp)
+    and (Cp_C = OtherCell.Cp_C)
+    and (QCUT = OtherCell.QCUT)
+    and (QPercentCUT = OtherCell.QPercentCUT)
+    and (Qfrcmn = OtherCell.Qfrcmn)
+    and (Qfrcmx = OtherCell.Qfrcmx)
+    and (Site = OtherCell.Site)
+    and (Multi = OtherCell.Multi)
+    and (Mn = OtherCell.Mn);
 end;
 
 { TMnw1OutputFile }

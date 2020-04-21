@@ -3571,49 +3571,52 @@ begin
 
     Edges.Pack;
 
-    AnEdge := Edges[0];
-    EdgeIndex := 0;
-    Start := AnEdge.N1;
-    Next := -1;
-    while AnEdge <> nil do
+    if Edges.Count > 0 then
     begin
-      IPL[IPL_Index] := AnEdge.N1;
-      Inc(IPL_Index);
-      IPL[IPL_Index] := AnEdge.N2;
-      Inc(IPL_Index);
-      IPL[IPL_Index] := AnEdge.Tri;
-      Inc(IPL_Index);
-      if AnEdge.N2 = Start then
+      AnEdge := Edges[0];
+      EdgeIndex := 0;
+      Start := AnEdge.N1;
+      Next := -1;
+      while AnEdge <> nil do
       begin
-        AnEdge := nil;
-        Edges.Delete(EdgeIndex);
-      end
-      else
-      begin
-        Next := AnEdge.N2;
-        Edges.Delete(EdgeIndex);
-        AnEdge := nil;
-        for Index := 0 to Edges.Count - 1 do
+        IPL[IPL_Index] := AnEdge.N1;
+        Inc(IPL_Index);
+        IPL[IPL_Index] := AnEdge.N2;
+        Inc(IPL_Index);
+        IPL[IPL_Index] := AnEdge.Tri;
+        Inc(IPL_Index);
+        if AnEdge.N2 = Start then
         begin
-          AnEdge := Edges[Index];
-          if AnEdge.N1 = Next then
+          AnEdge := nil;
+          Edges.Delete(EdgeIndex);
+        end
+        else
+        begin
+          Next := AnEdge.N2;
+          Edges.Delete(EdgeIndex);
+          AnEdge := nil;
+          for Index := 0 to Edges.Count - 1 do
           begin
-            EdgeIndex := Index;
-            break;
+            AnEdge := Edges[Index];
+            if AnEdge.N1 = Next then
+            begin
+              EdgeIndex := Index;
+              break;
+            end;
           end;
         end;
-      end;
-      if AnEdge <> nil then
-      begin
-        Assert(AnEdge.N1 = Next);
-      end
-      else
-      begin
-        if Edges.Count > 0 then
+        if AnEdge <> nil then
         begin
-          AnEdge := Edges[0];
-          EdgeIndex := 0;
-          Start := AnEdge.N1;
+          Assert(AnEdge.N1 = Next);
+        end
+        else
+        begin
+          if Edges.Count > 0 then
+          begin
+            AnEdge := Edges[0];
+            EdgeIndex := 0;
+            Start := AnEdge.N1;
+          end;
         end;
       end;
     end;
