@@ -323,6 +323,7 @@ type
     procedure SetInterbedSystem(const Value: string);
     function GetInterbedSystem: string;
     procedure SetInterbed(const Value: TCustomSubLayerItem);
+  protected
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
   public

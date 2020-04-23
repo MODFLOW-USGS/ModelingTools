@@ -67,6 +67,10 @@ type
     procedure frameContourDataResize(Sender: TObject);
     procedure frameColorGridsplColorMoved(Sender: TObject);
     procedure frameContourDatasplColorMoved(Sender: TObject);
+    procedure frameModpathEndpointDisplay1btnColorSchemesClick(Sender: TObject);
+    procedure frameModpathDisplaybtnColorSchemesClick(Sender: TObject);
+    procedure frameModpathTimeSeriesDisplaybtnColorSchemesClick(
+      Sender: TObject);
   private
     FShouldUpdate: Boolean;
     procedure SetData;
@@ -226,6 +230,28 @@ procedure TfrmDisplayData.frameContourDatavirttreecomboDataSetsChange(
 begin
   inherited;
   frameContourData.virttreecomboDataSetsChange(Sender);
+end;
+
+procedure TfrmDisplayData.frameModpathDisplaybtnColorSchemesClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameModpathDisplay.btnColorSchemesClick(Sender);
+end;
+
+procedure TfrmDisplayData.frameModpathEndpointDisplay1btnColorSchemesClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameModpathEndpointDisplay1.btnColorSchemesClick(Sender);
+
+end;
+
+procedure TfrmDisplayData.frameModpathTimeSeriesDisplaybtnColorSchemesClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameModpathTimeSeriesDisplay.btnColorSchemesClick(Sender);
 end;
 
 procedure TfrmDisplayData.frameSwrReachConnectionsbtnReachColorClick(
@@ -455,6 +481,9 @@ procedure TfrmDisplayData.UpdateColorSchemes;
 begin
   frameColorGrid.UpdateColorSchemes;
   frameContourData.UpdateColorSchemes;
+  frameModpathEndpointDisplay1.UpdateColorSchemes;
+  frameModpathDisplay.UpdateColorSchemes;
+  frameModpathTimeSeriesDisplay.UpdateColorSchemes;
 end;
 
 procedure TfrmDisplayData.UpdateLabelsAndLegend;

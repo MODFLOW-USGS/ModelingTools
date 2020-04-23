@@ -54,6 +54,8 @@ type
     procedure EnableInvertSelection;
     procedure WarnSfrLengthProblems(List: TList);
     procedure UpdateChildGrids;
+//    procedure BeginUpdate;
+//    procedure EndUpdate;
   end;
 
   { @abstract(@name is used to change or restore which
@@ -1002,10 +1004,26 @@ resourcestring
 
 { TCustomUpdateScreenObjectDisplayUndo }
 
+//procedure TCustomUpdateScreenObjectDisplayUndo.BeginUpdate;
+//begin
+//  if frmShowHideObjects <> nil then
+//  begin
+//    frmShowHideObjects.vstObjects.BeginUpdate;
+//  end;
+//end;
+
 procedure TCustomUpdateScreenObjectDisplayUndo.EnableInvertSelection;
 begin
   frmGoPhast.EnableInvertSelection;
 end;
+
+//procedure TCustomUpdateScreenObjectDisplayUndo.EndUpdate;
+//begin
+//  if frmShowHideObjects <> nil then
+//  begin
+//    frmShowHideObjects.vstObjects.EndUpdate;
+//  end;
+//end;
 
 procedure TCustomUpdateScreenObjectDisplayUndo.UpdateChildGrids;
 var
@@ -1613,6 +1631,7 @@ var
   Index: integer;
   AScreenObject: TScreenObject;
 begin
+//  BeginUpdate;
   Assert(FScreenObjects.Count > 0);
   for Index := 0 to FScreenObjects.Count - 1 do
   begin
@@ -1631,6 +1650,7 @@ begin
   SelectScreenObjectTool.ShouldDrawSelectionRectangle := False;
   UpdateSelectionRectangle;
   FShouldUpdateShowHideObjects := True;
+//  EndUpdate;
   UpdateDisplay;
 end;
 

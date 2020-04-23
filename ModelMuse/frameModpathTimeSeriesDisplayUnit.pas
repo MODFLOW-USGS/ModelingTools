@@ -62,6 +62,7 @@ type
     lblModelSelection: TLabel;
     setimeSeriesSize: TJvSpinEdit;
     lbltimeSeriesSize: TLabel;
+    btnColorSchemes: TButton;
     procedure rdgLimitsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgLimitsSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -82,6 +83,7 @@ type
     procedure jsColorExponentChanged(Sender: TObject);
     procedure comboTimeToPlotChange(Sender: TObject);
     procedure comboModelSelectionChange(Sender: TObject);
+    procedure btnColorSchemesClick(Sender: TObject);
   protected
     procedure Loaded; override;
   private
@@ -97,6 +99,7 @@ type
     procedure SetData;
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
+    procedure UpdateColorSchemes;
     { Public declarations }
   end;
 
@@ -104,7 +107,7 @@ implementation
 
 uses
   frmGoPhastUnit, ColorSchemes, ModflowGridUnit, ModelMuseUtilities,
-  LayerStructureUnit;
+  LayerStructureUnit, frmCustomGoPhastUnit, frmColorSchemesUnit;
 
 resourcestring
   StrTheTimeSeriesFile = 'The time series file on disk has a different date ' +
@@ -205,6 +208,11 @@ begin
   begin
     comboTimeToPlot.ItemIndex := 0;
   end;
+end;
+
+procedure TframeModpathTimeSeriesDisplay.btnColorSchemesClick(Sender: TObject);
+begin
+  ShowAForm(TfrmColorSchemes)
 end;
 
 procedure TframeModpathTimeSeriesDisplay.comboColorSchemeChange(
@@ -348,6 +356,10 @@ var
   ChildModel: TChildModel;
 begin
   Handle;
+  if frmGoPhast.PhastModel.ColorSchemes.Count > 0 then
+  begin
+    UpdateColorSchemes;
+  end;
   if frmGoPhast.PhastModel.ModflowPackages.ModPath.Binary then
   begin
     fedModpathFile.DefaultExt := '.ts_bin';
@@ -674,6 +686,11 @@ begin
       end;
   end;
   udTimeToPlot.ControlStyle := udTimeToPlot.ControlStyle - [csCaptureMouse];
+end;
+
+procedure TframeModpathTimeSeriesDisplay.UpdateColorSchemes;
+begin
+  UpdateColorScheme(comboColorScheme, pbColorScheme);
 end;
 
 end.

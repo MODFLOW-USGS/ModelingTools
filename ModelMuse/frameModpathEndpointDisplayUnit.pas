@@ -88,6 +88,7 @@ type
     btnFont: TButton;
     seEndPointSize: TJvSpinEdit;
     lblEndPointSize: TLabel;
+    btnColorSchemes: TButton;
     procedure rdgLimitsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgLimitsSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -113,6 +114,7 @@ type
     procedure seLegendRowsChange(Sender: TObject);
     procedure btnFontClick(Sender: TObject);
     procedure tmrLegendTimer(Sender: TObject);
+    procedure btnColorSchemesClick(Sender: TObject);
   protected
     procedure Loaded; override;
   private
@@ -142,6 +144,7 @@ type
     destructor Destroy; override;
     property LegendFont: TFont read FLegendFont;
     procedure UpdateLabelsAndLegend;
+    procedure UpdateColorSchemes;
 //    property LegendDataSource: TObserver read GetLegendDataSource
 //      write SetLegendDataSource;
     { Public declarations }
@@ -151,7 +154,7 @@ implementation
 
 uses
   frmGoPhastUnit, ColorSchemes, ModflowGridUnit, ModelMuseUtilities, RbwParser,
-  System.Math, LayerStructureUnit;
+  System.Math, LayerStructureUnit, frmCustomGoPhastUnit, frmColorSchemesUnit;
 
 resourcestring
   StrLimitingFactor = 'Limiting factor';
@@ -258,6 +261,11 @@ begin
 end;
 
 { TframeModpathEndpointDisplay }
+
+procedure TframeModpathEndpointDisplay.btnColorSchemesClick(Sender: TObject);
+begin
+  ShowAForm(TfrmColorSchemes)
+end;
 
 procedure TframeModpathEndpointDisplay.btnFontClick(Sender: TObject);
 begin
@@ -400,6 +408,11 @@ begin
   FGettingData := True;
   try
     Handle;
+
+    if frmGoPhast.PhastModel.ColorSchemes.Count > 0 then
+    begin
+      UpdateColorSchemes;
+    end;
 
     if not FFontAssigned then
     begin
@@ -864,6 +877,11 @@ begin
     tmrLegend.Enabled := False;
     UpdateLegend;
   end;
+end;
+
+procedure TframeModpathEndpointDisplay.UpdateColorSchemes;
+begin
+  UpdateColorScheme(comboColorScheme, pbColorScheme);
 end;
 
 procedure TframeModpathEndpointDisplay.UpdateLabelsAndLegend;

@@ -703,7 +703,8 @@ uses
   framePestObsUnit in 'framePestObsUnit.pas' {framePestObs: TFrame},
   PestGlobalComparisonScriptWriterUnit in 'PestGlobalComparisonScriptWriterUnit.pas',
   frameSubPestObsUnit in 'frameSubPestObsUnit.pas' {frameSubPestObs: TFrame},
-  InterpolatedObsCellUnit in 'InterpolatedObsCellUnit.pas';
+  InterpolatedObsCellUnit in 'InterpolatedObsCellUnit.pas',
+  SutraPestObsUnit in 'SutraPestObsUnit.pas';
 
 {$R *.res}
 

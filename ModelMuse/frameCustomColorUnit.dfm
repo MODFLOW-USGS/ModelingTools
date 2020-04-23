@@ -15,10 +15,6 @@ object frameCustomColor: TframeCustomColor
     TabOrder = 0
     object tabSelection: TTabSheet
       Caption = 'Selection'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         562
         400)
@@ -102,7 +98,7 @@ object frameCustomColor: TframeCustomColor
         Left = 456
         Top = 297
         Width = 101
-        Height = 24
+        Height = 21
         ButtonKind = bkClassic
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
@@ -128,7 +124,7 @@ object frameCustomColor: TframeCustomColor
         Left = 160
         Top = 363
         Width = 65
-        Height = 24
+        Height = 21
         ButtonKind = bkClassic
         Increment = 0.010000000000000000
         MaxValue = 2.000000000000000000
@@ -150,7 +146,7 @@ object frameCustomColor: TframeCustomColor
       object udDataSets: TJvUpDown
         Left = 479
         Top = 28
-        Width = 21
+        Width = 17
         Height = 25
         Anchors = [akTop, akRight]
         TabOrder = 1
@@ -173,18 +169,13 @@ object frameCustomColor: TframeCustomColor
         Left = 8
         Top = 25
         Width = 465
-        Height = 24
+        Height = 21
         Tree.Left = 0
         Tree.Top = 0
         Tree.Width = 304
-        Tree.Height = 202
+        Tree.Height = 201
         Tree.Align = alClient
         Tree.Header.AutoSizeIndex = 0
-        Tree.Header.Font.Charset = DEFAULT_CHARSET
-        Tree.Header.Font.Color = clWindowText
-        Tree.Header.Font.Height = -11
-        Tree.Header.Font.Name = 'Tahoma'
-        Tree.Header.Font.Style = []
         Tree.Header.MainColumn = -1
         Tree.TabOrder = 0
         Tree.TreeOptions.SelectionOptions = [toFullRowSelect]
@@ -253,10 +244,6 @@ object frameCustomColor: TframeCustomColor
     object tabFilters: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         562
         400)
@@ -393,7 +380,7 @@ object frameCustomColor: TframeCustomColor
         Left = 8
         Top = 364
         Width = 121
-        Height = 24
+        Height = 21
         CheckMinValue = True
         ButtonKind = bkClassic
         Anchors = [akLeft, akBottom]
@@ -417,10 +404,6 @@ object frameCustomColor: TframeCustomColor
       Caption = 'Legend'
       ImageIndex = 2
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object imLegend: TImage
         Left = 206
         Top = 0
@@ -448,7 +431,6 @@ object frameCustomColor: TframeCustomColor
         BevelInner = bvRaised
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitHeight = 397
         DesignSize = (
           201
           400)
@@ -485,7 +467,7 @@ object frameCustomColor: TframeCustomColor
           Left = 8
           Top = 322
           Width = 121
-          Height = 24
+          Height = 21
           CheckMaxValue = False
           ButtonKind = bkClassic
           MinValue = 1.000000000000000000

@@ -18,7 +18,7 @@ uses
   Classes, Graphics, Controls, Dialogs, StdCtrls, Grids, HtmlHelpViewer,
   JvSpin, VirtualTrees, DataSetUnit, ClassificationUnit, GLWin32Viewer,
   RbwStringTreeCombo, Mask, JvExMask, Generics.Collections, JvExStdCtrls,
-  JvCombobox, JvListComb;
+  JvCombobox, JvListComb, Vcl.ExtCtrls;
 
 type
   TEdgeDisplayEdit = class(TObject)
@@ -200,6 +200,8 @@ procedure ClearGrid(Grid: TRbwDataGrid4);
 
 procedure UpdateNextTimeCell(Grid: TRbwDataGrid4; ACol, ARow: Integer);
 
+procedure UpdateColorScheme(Combo: TComboBox; PaintBox: TPaintBox);
+
 var
   GlobalFont: TFont = nil;
   GlobalColor: TColor = clBtnFace;
@@ -215,6 +217,18 @@ resourcestring
   StrMnw2InactivationPumping = 'Inactivation Pumping Rate';
   StrMnw2ReactivationPumping = 'Reactivation Pumping Rate';
 
+  StrRainbow = 'Rainbow';
+  StrGreenToMagenta = 'Green to Magenta';
+  StrBlueToRed = 'Blue to Red';
+  StrBlueToDarkOrange = 'Blue to Dark Orange';
+  StrBlueToGreen = 'Blue to Green';
+  StrBrownToBlue = 'Brown to Blue';
+  StrBlueToGray = 'Blue to Gray';
+  StrBlueToOrange = 'Blue to Orange';
+  StrBlueToOrangeRed = 'Blue to Orange-Red';
+  StrLightBlueToDarkB = 'Light Blue to Dark Blue';
+  StrModifiedSpectralSc = 'Modified Spectral Scheme';
+  StrSteppedSequential = 'Stepped Sequential';
 
 implementation
 
@@ -1755,6 +1769,49 @@ begin
       end;
     end;
   end;
+end;
+
+procedure UpdateColorScheme(Combo: TComboBox; PaintBox: TPaintBox);
+var
+  StoredIndex: integer;
+  StoredName: string;
+  index: Integer;
+  NewIndex: Integer;
+begin
+  StoredIndex := Combo.ItemIndex;
+  StoredName := Combo.Text;
+  Combo.Items.Clear;
+  Combo.Items.Add(StrRainbow);
+  Combo.Items.Add(StrGreenToMagenta);
+  Combo.Items.Add(StrBlueToRed);
+  Combo.Items.Add(StrBlueToDarkOrange);
+  Combo.Items.Add(StrBlueToGreen);
+  Combo.Items.Add(StrBrownToBlue);
+  Combo.Items.Add(StrBlueToGray);
+  Combo.Items.Add(StrBlueToOrange);
+  Combo.Items.Add(StrBlueToOrangeRed);
+  Combo.Items.Add(StrLightBlueToDarkB);
+  Combo.Items.Add(StrModifiedSpectralSc);
+  Combo.Items.Add(StrSteppedSequential);
+
+  for index := 0 to frmGoPhast.PhastModel.ColorSchemes.Count - 1 do
+  begin
+    Combo.Items.Add(frmGoPhast.PhastModel.ColorSchemes[index].Name);
+  end;
+  NewIndex := Combo.Items.IndexOf(StoredName);
+  if (NewIndex < 0) then
+  begin
+    if StoredIndex < Combo.Items.Count then
+    begin
+      NewIndex := StoredIndex;
+    end
+    else
+    begin
+      NewIndex := 0
+    end;
+  end;
+  Combo.ItemIndex := NewIndex;
+  PaintBox.Invalidate;
 end;
 
 initialization

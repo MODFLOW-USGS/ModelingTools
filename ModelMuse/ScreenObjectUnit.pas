@@ -42614,7 +42614,8 @@ end;
 
 function TPointValue.GetValue: double;
 begin
-  result := Min(FValue, 1.78E308);
+  result := Min(FValue,  1.78E308);
+  result := Max(result, -1.78E308);
 end;
 
 procedure TPointValue.InvalidateSwrReach;

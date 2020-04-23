@@ -9034,8 +9034,13 @@ const
   //                numbers, ModelMuse will display an error message instead of
   //                generating a bug report.
 
+  //    '4.2.0.8'  Bug fix: Fixed a bug that could make it impossible to open
+  //                a ModelMuse file.
+  //               Enhancement:Custom color schemes can now be used when
+  //                plotting MODPATH data.
+
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.7';
+  IModelVersion = '4.2.0.8';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

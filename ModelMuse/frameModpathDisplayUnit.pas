@@ -65,6 +65,7 @@ type
     rdgLimits: TRbwDataGrid4;
     comboModelSelection: TComboBox;
     lblModelSelection: TLabel;
+    btnColorSchemes: TButton;
     procedure pbColorSchemePaint(Sender: TObject);
     procedure rgColorByClick(Sender: TObject);
     procedure comboColorSchemeChange(Sender: TObject);
@@ -80,6 +81,7 @@ type
     procedure fedModpathFileBeforeDialog(Sender: TObject; var AName: string;
       var AAction: Boolean);
     procedure comboModelSelectionChange(Sender: TObject);
+    procedure btnColorSchemesClick(Sender: TObject);
   protected
     procedure Loaded; override;
   private
@@ -98,6 +100,7 @@ type
     procedure SetData;
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
+    procedure UpdateColorSchemes;
     { Public declarations }
   end;
 
@@ -105,7 +108,7 @@ implementation
 
 uses
   frmGoPhastUnit, ColorSchemes, ModflowGridUnit, ModelMuseUtilities,
-  LayerStructureUnit;
+  LayerStructureUnit, frmCustomGoPhastUnit, frmColorSchemesUnit;
 
 resourcestring
   StrYouMustDefineThe = 'You must define the grid before attempting to impor' +
@@ -194,6 +197,11 @@ end;
 
 
 { TframeModpathDisplay }
+
+procedure TframeModpathDisplay.btnColorSchemesClick(Sender: TObject);
+begin
+  ShowAForm(TfrmColorSchemes)
+end;
 
 procedure TframeModpathDisplay.comboColorSchemeChange(Sender: TObject);
 begin
@@ -324,6 +332,10 @@ var
   LocalPathLines: TPathLineReader;
 begin
   Handle;
+  if frmGoPhast.PhastModel.ColorSchemes.Count > 0 then
+  begin
+    UpdateColorSchemes;
+  end;
 
   if frmGoPhast.PhastModel.ModflowPackages.ModPath.Binary then
   begin
@@ -678,6 +690,11 @@ begin
     IntLimit.StartLimit := StrToIntDef(rdgLimits.Cells[1, ARow], 1);
     IntLimit.EndLimit := StrToIntDef(rdgLimits.Cells[2, ARow], DefaultLimit);
   end;
+end;
+
+procedure TframeModpathDisplay.UpdateColorSchemes;
+begin
+  UpdateColorScheme(comboColorScheme, pbColorScheme);
 end;
 
 end.

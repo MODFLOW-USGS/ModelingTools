@@ -25295,6 +25295,13 @@ object TTaskHistory
     item
       Date = 43942.000000000000000000
       Categories.Strings = (
-        'Import')
+        'Import'
+        'Bug fix'
+        'PEST Observations')
+    end
+    item
+      Date = 43943.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
     end>
 end

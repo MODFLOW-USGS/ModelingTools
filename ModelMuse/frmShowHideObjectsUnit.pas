@@ -66,6 +66,7 @@ type
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: VirtualTrees.TImageIndex;
       var ImageList: TCustomImageList);
+    procedure FormDestroy(Sender: TObject); override;
   private
     FUndoShowHide: TUndoShowHideScreenObject;
     FCount: integer;
@@ -252,6 +253,22 @@ begin
   CreateAngleImages;
   FSupressUndo := False;
   GetData;
+end;
+
+
+procedure TfrmShowHideObjects.FormDestroy(Sender: TObject);
+var
+  i: Integer;
+begin
+  inherited;
+
+  // Let vstObjects finish with any threads to prevent an access violation.
+  for i := 1 to 5 do
+  begin
+    sleep(10);
+    application.processmessages;
+  end;
+  vstObjects.RootNodeCount := 0;
 end;
 
 procedure TfrmShowHideObjects.FormKeyUp(Sender: TObject; var Key: Word;

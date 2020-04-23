@@ -419,7 +419,7 @@ resourcestring
   StrUnsaturatedETConce = 'Unsaturated ET concentration: ';
   StrUZFSinkConcentrati = 'UZF sink concentration: ';
   StrSUTRALake = 'SUTRA Lake';
-  StrGeneralizedPressure = 'Generalized Pressure';
+  StrGeneralizedFlow = 'Generalized Flow';
   StrGeneralizedTranspor = 'Generalized Transport';
 
 {$R *.dfm}
@@ -832,7 +832,7 @@ begin
     end
     else if Node = FvstSutraGeneralizedFlowNode then
     begin
-      Data.Caption := StrGeneralizedPressure;
+      Data.Caption := StrGeneralizedFlow;
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstSutraGeneralizedTransportNode then

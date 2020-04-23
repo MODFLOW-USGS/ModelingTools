@@ -35193,6 +35193,7 @@ begin
     StressPeriods := FModel.ModflowStressPeriods;
     for WellIndex := 0 to FWells.Count - 1 do
     begin
+      FImporter.texthandler('MNW1: Importing well ' + IntToStr(WellIndex+1) + ' of ' + IntToStr(FWells.Count));
       AWell := FWells[WellIndex];
       AScreenObject := CreateScreenObject(Format('MNW1_Well_%d', [WellIndex+1]));
       AScreenObject.SetValuesOfEnclosedCells := False;
@@ -35228,6 +35229,7 @@ begin
           begin
             Mnw1Item := Mnw1Boundary.Values.Last as TMnw1Item;
             Mnw1Item.EndTime := StressPeriods[CellList.EndingStressPeriod].EndTime;
+            AWell[TimeIndex-1].Clear;
             Continue;
           end;
         end;

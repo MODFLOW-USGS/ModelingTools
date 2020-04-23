@@ -3,8 +3,7 @@ inherited frmColorSchemes: TfrmColorSchemes
   HelpKeyword = 'Custom_Color_Schemes_Dialog_Bo'
   Caption = 'Custom Color Schemes'
   ClientHeight = 307
-  ExplicitWidth = 440
-  ExplicitHeight = 345
+  ExplicitHeight = 346
   PixelsPerInch = 96
   TextHeight = 18
   object spl1: TSplitter

@@ -567,6 +567,7 @@ type
   private
     FValue: double;
     FOnChange: TNotifyEvent;
+    function GetValue: double;
     procedure SetValue(const Value: double);
   protected
     procedure ReadValue(Reader: TReader);
@@ -578,7 +579,7 @@ type
     procedure Assign(Source: TPersistent); override;
     function IsSame(Item: TRealItem): Boolean; virtual;
   published
-    property Value: double read FValue write SetValue;
+    property Value: double read GetValue write SetValue;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
@@ -1576,6 +1577,12 @@ begin
   Filer.DefineProperty('Value', ReadValue, WriteValue, Value = 0);
   Filer.DefineProperty('StringValue', ReadStringValue, WriteStringValue,
    (Value <> 0) and (Abs(Value) < 1e-10));
+end;
+
+function TRealItem.GetValue: double;
+begin
+  result := Min(FValue,  1.78E308);
+  result := Max(result, -1.78E308);
 end;
 
 function TRealItem.IsSame(Item: TRealItem): Boolean;

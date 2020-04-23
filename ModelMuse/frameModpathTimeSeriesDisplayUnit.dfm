@@ -14,6 +14,8 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
     TabOrder = 0
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 36
+      ExplicitTop = 28
       DesignSize = (
         457
         459)
@@ -129,7 +131,7 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
       object comboColorScheme: TComboBox
         Left = 3
         Top = 186
-        Width = 448
+        Width = 341
         Height = 21
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
@@ -209,6 +211,18 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
         Value = 1.000000000000000000
         Anchors = [akTop, akRight]
         TabOrder = 10
+      end
+      object btnColorSchemes: TButton
+        Left = 350
+        Top = 166
+        Width = 97
+        Height = 41
+        Anchors = [akRight, akBottom]
+        Cancel = True
+        Caption = 'Edit custom color schemes'
+        TabOrder = 11
+        WordWrap = True
+        OnClick = btnColorSchemesClick
       end
     end
     object tabOptions: TTabSheet

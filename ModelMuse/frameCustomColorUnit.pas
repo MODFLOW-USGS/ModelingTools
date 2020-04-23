@@ -171,18 +171,6 @@ resourcestring
   StrValuesToIgnore = 'Values to ignore';
   StrValues = 'Values';
   StrNone = 'none';
-  StrRainbow = 'Rainbow';
-  StrGreenToMagenta = 'Green to Magenta';
-  StrBlueToRed = 'Blue to Red';
-  StrBlueToDarkOrange = 'Blue to Dark Orange';
-  StrBlueToGreen = 'Blue to Green';
-  StrBrownToBlue = 'Brown to Blue';
-  StrBlueToGray = 'Blue to Gray';
-  StrBlueToOrange = 'Blue to Orange';
-  StrBlueToOrangeRed = 'Blue to Orange-Red';
-  StrLightBlueToDarkB = 'Light Blue to Dark Blue';
-  StrModifiedSpectralSc = 'Modified Spectral Scheme';
-  StrSteppedSequential = 'Stepped Sequential';
 
 {$R *.dfm}
 
@@ -256,7 +244,6 @@ begin
 end;
 
 procedure TframeCustomColor.btnColorSchemesClick(Sender: TObject);
-
 begin
   ShowAForm(TfrmColorSchemes)
 end;
@@ -773,60 +760,47 @@ begin
 end;
 
 procedure TframeCustomColor.UpdateColorSchemes;
-var
-  StoredIndex: integer;
-  StoredName: string;
-  index: Integer;
-  NewIndex: Integer;
+//var
+//  StoredIndex: integer;
+//  StoredName: string;
+//  index: Integer;
+//  NewIndex: Integer;
 begin
-  StoredIndex := comboColorScheme.ItemIndex;
-  StoredName := comboColorScheme.Text;
-  comboColorScheme.Items.Clear;
-  comboColorScheme.Items.Add(StrRainbow);
-  comboColorScheme.Items.Add(StrGreenToMagenta);
-  comboColorScheme.Items.Add(StrBlueToRed);
-  comboColorScheme.Items.Add(StrBlueToDarkOrange);
-  comboColorScheme.Items.Add(StrBlueToGreen);
-  comboColorScheme.Items.Add(StrBrownToBlue);
-  comboColorScheme.Items.Add(StrBlueToGray);
-  comboColorScheme.Items.Add(StrBlueToOrange);
-  comboColorScheme.Items.Add(StrBlueToOrangeRed);
-  comboColorScheme.Items.Add(StrLightBlueToDarkB);
-  comboColorScheme.Items.Add(StrModifiedSpectralSc);
-  comboColorScheme.Items.Add(StrSteppedSequential);
-
-  for index := 0 to frmGoPhast.PhastModel.ColorSchemes.Count - 1 do
-  begin
-    comboColorScheme.Items.Add(frmGoPhast.PhastModel.ColorSchemes[index].Name);
-  end;
-  NewIndex := comboColorScheme.Items.IndexOf(StoredName);
-  if (NewIndex < 0) then
-  begin
-    if StoredIndex < comboColorScheme.Items.Count then
-    begin
-      NewIndex := StoredIndex;
-    end
-    else
-    begin
-      NewIndex := 0
-    end;
-  end;
-  comboColorScheme.ItemIndex := NewIndex;
-  pbColorScheme.Invalidate;
-{
-Rainbow
-Green to Magenta
-Blue to Red
-Blue to Dark Orange
-Blue to Green
-Brown to Blue
-Blue to Gray
-Blue to Orange
-Blue to Orange-Red
-Light Blue to Dark Blue
-Modified Spectral Scheme
-Stepped Sequential
-}
+  UpdateColorScheme(comboColorScheme, pbColorScheme);
+//  StoredIndex := comboColorScheme.ItemIndex;
+//  StoredName := comboColorScheme.Text;
+//  comboColorScheme.Items.Clear;
+//  comboColorScheme.Items.Add(StrRainbow);
+//  comboColorScheme.Items.Add(StrGreenToMagenta);
+//  comboColorScheme.Items.Add(StrBlueToRed);
+//  comboColorScheme.Items.Add(StrBlueToDarkOrange);
+//  comboColorScheme.Items.Add(StrBlueToGreen);
+//  comboColorScheme.Items.Add(StrBrownToBlue);
+//  comboColorScheme.Items.Add(StrBlueToGray);
+//  comboColorScheme.Items.Add(StrBlueToOrange);
+//  comboColorScheme.Items.Add(StrBlueToOrangeRed);
+//  comboColorScheme.Items.Add(StrLightBlueToDarkB);
+//  comboColorScheme.Items.Add(StrModifiedSpectralSc);
+//  comboColorScheme.Items.Add(StrSteppedSequential);
+//
+//  for index := 0 to frmGoPhast.PhastModel.ColorSchemes.Count - 1 do
+//  begin
+//    comboColorScheme.Items.Add(frmGoPhast.PhastModel.ColorSchemes[index].Name);
+//  end;
+//  NewIndex := comboColorScheme.Items.IndexOf(StoredName);
+//  if (NewIndex < 0) then
+//  begin
+//    if StoredIndex < comboColorScheme.Items.Count then
+//    begin
+//      NewIndex := StoredIndex;
+//    end
+//    else
+//    begin
+//      NewIndex := 0
+//    end;
+//  end;
+//  comboColorScheme.ItemIndex := NewIndex;
+//  pbColorScheme.Invalidate;
 end;
 
 procedure TframeCustomColor.UpdateLegend;

@@ -3792,7 +3792,10 @@ begin
           CurrentScreenObject := nil;
           ClearPoints;
         finally
-          View.SetFocus;
+          if View.CanFocus then
+          begin
+            View.SetFocus;
+          end;
         end;
       except
         frmGoPhast.PhastModel.RemoveScreenObject(CurrentScreenObject);

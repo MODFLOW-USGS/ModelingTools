@@ -93,10 +93,13 @@ var
   AnItem: TUserDefinedColorSchemeItem;
 begin
   inherited;
-  AnItem := tvColorSchemes.Selected.Data;
-  SelectedColorScheme := nil;
-  AnItem.Free;
-  tvColorSchemes.Selected.Delete;
+  if tvColorSchemes.Selected <> nil then
+  begin
+    AnItem := tvColorSchemes.Selected.Data;
+    SelectedColorScheme := nil;
+    AnItem.Free;
+    tvColorSchemes.Selected.Delete;
+  end;
 end;
 
 procedure TfrmColorSchemes.btnInsertUnitClick(Sender: TObject);

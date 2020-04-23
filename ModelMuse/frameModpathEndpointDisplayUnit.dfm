@@ -104,7 +104,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
       object comboColorScheme: TComboBox
         Left = 8
         Top = 128
-        Width = 457
+        Width = 354
         Height = 21
         Style = csDropDownList
         Anchors = [akLeft, akTop, akRight]
@@ -185,14 +185,22 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
         Anchors = [akTop, akRight]
         TabOrder = 8
       end
+      object btnColorSchemes: TButton
+        Left = 368
+        Top = 108
+        Width = 97
+        Height = 41
+        Anchors = [akRight, akBottom]
+        Cancel = True
+        Caption = 'Edit custom color schemes'
+        TabOrder = 9
+        WordWrap = True
+        OnClick = btnColorSchemesClick
+      end
     end
     object tabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         468
         470)
