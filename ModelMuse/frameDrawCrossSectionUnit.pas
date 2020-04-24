@@ -127,7 +127,7 @@ end;
 
 procedure TframeDrawCrossSection.clrbtnSelectedColorChange(Sender: TObject);
 begin
-  if FColorIndex >= 0 then
+  if (FColorIndex >= 0) and (FColorIndex < FColors.Count) then
   begin
     FColors[FColorIndex] := clrbtnSelectedColor.Color;
   end;

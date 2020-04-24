@@ -742,6 +742,7 @@ type
     FCreatingModel: Boolean;
     FNoIniFile: Boolean;
     FRunMt3dModel: TCustomModel;
+    FInvalidatingAllViews: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
     procedure WMMenuSelect(var Msg: TWMMenuSelect); message WM_MENUSELECT;
@@ -6132,13 +6133,22 @@ end;
 
 procedure TfrmGoPhast.InvalidateImage32AllViews;
 begin
-  if csDestroying in ComponentState then
+  if FInvalidatingAllViews then
   begin
     Exit;
   end;
-  frameTopView.ZoomBox.InvalidateImage32;
-  frameFrontView.ZoomBox.InvalidateImage32;
-  frameSideView.ZoomBox.InvalidateImage32;
+  FInvalidatingAllViews := True;
+  try
+    if csDestroying in ComponentState then
+    begin
+      Exit;
+    end;
+    frameTopView.ZoomBox.InvalidateImage32;
+    frameFrontView.ZoomBox.InvalidateImage32;
+    frameSideView.ZoomBox.InvalidateImage32;
+  finally
+    FInvalidatingAllViews := False;
+  end;
 end;
 
 procedure TfrmGoPhast.ImportGlobalVariablesFile(GloVarFile: string);

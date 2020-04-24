@@ -2532,7 +2532,7 @@ resourcestring
   StrModelMuseHasEncoun = 'ModelMuse has encountered a bug in selecting the ' +
   'correct MODFLOW package in the Object Properties dialog box. ModelMuse wi' +
   'll attempt to send a bug report. If you can, please provide any informati' +
-  'on you can about what led up to this state. After the bug rep';
+  'on you can about what led up to this state. ';
   StrHeadObservationNamCount = 'Head observation names have not been specifi' +
   'ed by %d objects. Be sure to correct this before attempting to run MODFLO' +
   'W.';

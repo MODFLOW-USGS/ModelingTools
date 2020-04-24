@@ -5229,35 +5229,32 @@ var
   LayerGroupIndex: Integer;
   ALayerGroup: TLayerGroup;
   ANoDelayItem: TSubNoDelayBedLayerItem;
-  Interbed: TCSubInterbed;
   AScreenObject: TScreenObject;
   DummyUndoCreateScreenObject: TCustomUndo;
   Grid: TCustomModelGrid;
   ModflowCSub: TCSubBoundary;
-  SelectedPackageData: TCSubPackageData;
   NoDelayIndex: Integer;
   DelayIndex: Integer;
   ADelayItem: TSubDelayBedLayerItem;
   EquivNumberDataArray: TDataArray;
-  RowIndex: Integer;
-  ColIndex: Integer;
   WT_Index: Integer;
   WT_Item: TSwtWaterTableItem;
-  CSubItem: TCSubItem;
-  StressPeriod: TModflowStressPeriod;
   ScreenObjectIndex: Integer;
+  LayerCount: Integer;
+  SubLayerIndex: Integer;
+  LayerNumber: Integer;
   function GetInterbedItem(ModflowCSub: TCSubBoundary; Interbed: TCSubInterbed): TCSubPackageData;
   var
     IB_Index: Integer;
-    CSubPackageData: TCSubPackageData;
+    CSubPackageDataItem: TCSubPackageData;
   begin
     result := nil;
     for IB_Index := 0 to ModflowCSub.CSubPackageData.Count - 1 do
     begin
-      CSubPackageData := ModflowCSub.CSubPackageData[IB_Index];
-      if CSubPackageData.Interbed = Interbed then
+      CSubPackageDataItem := ModflowCSub.CSubPackageData[IB_Index];
+      if CSubPackageDataItem.Interbed = Interbed then
       begin
-        result := CSubPackageData;
+        result := CSubPackageDataItem;
         break;
       end;
     end;
@@ -5266,6 +5263,148 @@ var
       result := ModflowCSub.CSubPackageData.Add;
       result.Interbed := Interbed;
     end;
+  end;
+  procedure CreateScreenObject;
+  begin
+    AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
+      vdTop, DummyUndoCreateScreenObject, False);
+    LocalModel.AddScreenObject(AScreenObject);
+    FScreenObjectsToDelete.Add(AScreenObject);
+    AScreenObject.ElevationCount := ecTwo;
+  end;
+  procedure AssignModflowCSub;
+  begin
+    AScreenObject.CreateCSubBoundary;
+    ModflowCSub := AScreenObject.ModflowCSub;
+  end;
+  procedure AssignCellCorners;
+  begin
+    AScreenObject.Capacity := 5;
+    AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
+    AScreenObject.AddPoint(Grid.TwoDElementCorner(0,Grid.RowCount), False);
+    AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,Grid.RowCount), False);
+    AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,0), False);
+    AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), False);
+  end;
+  procedure AssignAllPoints;
+  var
+    RowIndex: Integer;
+    ColIndex: Integer;
+  begin
+    EquivNumberDataArray := LocalModel.DataArrayManager.
+      GetDataSetByName(ADelayItem.EquivNumberDataArrayName);
+    AScreenObject.Capacity := Grid.RowCount * Grid.ColumnCount;
+    for RowIndex := 0 to Grid.RowCount - 1 do
+    begin
+      for ColIndex := 0 to Grid.ColumnCount - 1 do
+      begin
+        if EquivNumberDataArray.RealData[0, RowIndex, ColIndex] >= 1 then
+        begin
+          AScreenObject.AddPoint(Grid.TwoDElementCenter(ColIndex,RowIndex), True);
+        end;
+      end;
+    end;
+  end;
+  procedure AssignNoDelayProperties;
+  var
+    Interbed: TCSubInterbed;
+    SelectedPackageData: TCSubPackageData;
+  begin
+    AssignModflowCSub;
+
+    Interbed := CSubPackage.Interbeds.Add;
+    Interbed.Name := 'CSUB_' + ANoDelayItem.Name;
+    Interbed.InterbedType := itNoDelay;
+
+    SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+    SelectedPackageData.Used := True;
+    SelectedPackageData.InitialOffset :=
+      ANoDelayItem.PreconsolidationHeadDataArrayName;
+    SelectedPackageData.InitialInelasticSpecificStorage :=
+      ANoDelayItem.InelasticSkeletalStorageCoefficientDataArrayName;
+    SelectedPackageData.InitialElasticSpecificStorage :=
+      ANoDelayItem.ElasticSkeletalStorageCoefficientDataArrayName;
+  end;
+  procedure AssignDelayProperties;
+  var
+    Interbed: TCSubInterbed;
+    SelectedPackageData: TCSubPackageData;
+  begin
+    AssignModflowCSub;
+
+    Interbed := CSubPackage.Interbeds.Add;
+    Interbed.Name := 'CSUB_' + ADelayItem.Name;
+    Interbed.InterbedType := itDelay;
+
+    SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+    SelectedPackageData.Used := True;
+
+    SelectedPackageData.Thickness :=
+      ADelayItem.InterbedEquivalentThicknessDataArrayName;
+    SelectedPackageData.EquivInterbedNumber :=
+      ADelayItem.EquivNumberDataArrayName;
+    SelectedPackageData.InitialInelasticSpecificStorage :=
+      ADelayItem.InelasticSpecificStorageDataArrayName;
+    SelectedPackageData.InitialElasticSpecificStorage :=
+      ADelayItem.ElasticSpecificStorageDataArrayName;
+    SelectedPackageData.DelayKv :=
+      ADelayItem.VerticalHydraulicConductivityDataArrayName;
+    SelectedPackageData.InitialDelayHeadOffset :=
+      ADelayItem.InterbedStartingHeadDataArrayName;
+  end;
+  procedure AssignSwtProperties;
+  var
+    Interbed: TCSubInterbed;
+    SelectedPackageData: TCSubPackageData;
+    CSubItem: TCSubItem;
+    StressPeriod: TModflowStressPeriod;
+  begin
+    AssignModflowCSub;
+
+    Interbed := CSubPackage.Interbeds.Add;
+    Interbed.Name := 'CSUB_' + WT_Item.Name;
+    Interbed.InterbedType := itNoDelay;
+
+    SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+    SelectedPackageData.Used := True;
+
+    if SwtPackage.PreconsolidationSource = pcSpecified then
+    begin
+      SelectedPackageData.InitialOffset := StrInitialPreconsolida;
+    end
+    else
+    begin
+      SelectedPackageData.InitialOffset := StrInitialPreOffsets;
+    end;
+
+    SelectedPackageData.Thickness :=
+      WT_Item.WaterTableCompressibleThicknessDataArrayName;
+
+    case SwtPackage.CompressionSource of
+      csCompressionReComp:
+        begin
+          SelectedPackageData.InitialInelasticSpecificStorage :=
+            WT_Item.WaterTableRecompressionIndexDataArrayName;
+          SelectedPackageData.InitialElasticSpecificStorage :=
+            WT_Item.WaterTableCompressionIndexDataArrayName;
+        end;
+      csSpecificStorage:
+        begin
+          SelectedPackageData.InitialInelasticSpecificStorage :=
+            WT_Item.WaterTableInitialInelasticSkeletalSpecificStorageDataArrayName;
+          SelectedPackageData.InitialElasticSpecificStorage :=
+            WT_Item.WaterTableInitialElasticSkeletalSpecificStorageDataArrayName;
+        end;
+    end;
+    SelectedPackageData.InitialPorosity := Format('%0:s / (%0:s + 1)', [
+      WT_Item.WaterTableInitialVoidRatioDataArrayName]);
+
+    CSubItem  := ModflowCSub.Values.Add as TCSubItem;
+    StressPeriod := LocalModel.ModflowStressPeriods.First;
+    CSubItem.StartTime := StressPeriod.StartTime;
+    CSubItem.EndTime := StressPeriod.EndTime;
+    CSubItem.StressOffset := '0';
+      
   end;
 begin
   inherited;
@@ -5284,60 +5423,51 @@ begin
   begin
     CSubPackage.NumberOfDelayCells := SubPackage.NumberOfNodes;
 
+    LayerCount := 0;
     for LayerGroupIndex := 1 to LayerStructure.Count - 1 do
     begin
       ALayerGroup := LayerStructure[LayerGroupIndex];
 
       if ALayerGroup.SubNoDelayBedLayers.Count > 0 then
       begin
-        AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
-          vdTop, DummyUndoCreateScreenObject, False);
-        LocalModel.AddScreenObject(AScreenObject);
-        FScreenObjectsToDelete.Add(AScreenObject);
-        AScreenObject.ElevationCount := ecTwo;
-        AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
-        AScreenObject.HigherElevationFormula :=
-          LayerStructure[LayerGroupIndex-1].DataArrayName;
-        AScreenObject.Name := GenerateNewName(
-          Format(StrNoDelayInterbedss, [ALayerGroup.AquiferName]));
-        AScreenObject.SetValuesOfEnclosedCells := True;
-
-        AScreenObject.Capacity := 5;
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,Grid.RowCount), False);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,Grid.RowCount), False);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,0), False);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), False);
-
-        AScreenObject.CreateCSubBoundary;
-        ModflowCSub := AScreenObject.ModflowCSub;
 
         for NoDelayIndex := 0 to ALayerGroup.SubNoDelayBedLayers.Count - 1 do
         begin
+        
           ANoDelayItem := ALayerGroup.SubNoDelayBedLayers[NoDelayIndex];
+          
+          if ANoDelayItem.UseInAllLayers or (ALayerGroup.LayerCount = 1) then
+          begin
+            CreateScreenObject;
+            AScreenObject.Name := GenerateNewName(
+              Format(StrNoDelayInterbedss, [ALayerGroup.AquiferName]));
+            AScreenObject.SetValuesOfEnclosedCells := True;
+            AssignCellCorners;
+            AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+            AScreenObject.HigherElevationFormula :=
+              LayerStructure[LayerGroupIndex-1].DataArrayName;
+            AssignNoDelayProperties;
+          end
+          else
+          begin
+            for SubLayerIndex := 0 to ANoDelayItem.UsedLayers.Count -1 do
+            begin
+              LayerNumber := LayerCount + 
+                ANoDelayItem.UsedLayers[SubLayerIndex].LayerNumber;
+              CreateScreenObject;
+              AScreenObject.SetValuesOfEnclosedCells := True;
+              AScreenObject.Name := GenerateNewName(
+                Format(StrNoDelayInterbedss, [ALayerGroup.AquiferName + '_'
+                  + IntToStr(LayerNumber)]));
+              AssignCellCorners;
+              AScreenObject.LowerElevationFormula :=
+                Format('%0:s(%1:d)', [StrLayerBoundaryPosition, LayerNumber+1]);
+              AScreenObject.HigherElevationFormula :=
+                Format('%0:s(%1:d)', [StrLayerBoundaryPosition, LayerNumber]);
+              AssignNoDelayProperties;
+            end;
+          end;
 
-          Interbed := CSubPackage.Interbeds.Add;
-          Interbed.Name := 'CSUB_' + ANoDelayItem.Name;
-          Interbed.InterbedType := itNoDelay;
-
-          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
-          SelectedPackageData.Used := True;
-          SelectedPackageData.InitialOffset :=
-            ANoDelayItem.PreconsolidationHeadDataArrayName;
-//          SelectedPackageData.Thickness :=
-//            ANoDelayItem.InterbedEquivalentThicknessDataArrayName;
-//          SelectedPackageData.EquivInterbedNumber :=
-//            ANoDelayItem.EquivNumberDataArrayName;
-          SelectedPackageData.InitialInelasticSpecificStorage :=
-            ANoDelayItem.InelasticSkeletalStorageCoefficientDataArrayName;
-          SelectedPackageData.InitialElasticSpecificStorage :=
-            ANoDelayItem.ElasticSkeletalStorageCoefficientDataArrayName;
-//          SelectedPackageData.InitialPorosity :=
-//            ANoDelayItem.PreconsolidationHeadDataArrayName;
-//          SelectedPackageData.DelayKv :=
-//            ANoDelayItem.VerticalHydraulicConductivityDataArrayName;
-//          SelectedPackageData.InitialDelayHeadOffset :=
-//            ANoDelayItem.InterbedStartingHeadDataArrayName;
         end;
       end;
 
@@ -5346,61 +5476,93 @@ begin
         for DelayIndex := 0 to ALayerGroup.SubDelayBedLayers.Count - 1 do
         begin
           ADelayItem := ALayerGroup.SubDelayBedLayers[DelayIndex];
-
-          AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
-            vdTop, DummyUndoCreateScreenObject, False);
-          LocalModel.AddScreenObject(AScreenObject);
-          FScreenObjectsToDelete.Add(AScreenObject);
-          AScreenObject.ElevationCount := ecTwo;
-          AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
-          AScreenObject.HigherElevationFormula :=
-            LayerStructure[LayerGroupIndex-1].DataArrayName;
-          AScreenObject.Name := GenerateNewName(
-            Format(StrDelayInterbed0s, [ALayerGroup.AquiferName, ADelayItem.Name]));
-          AScreenObject.SetValuesOfIntersectedCells := True;
-
-          EquivNumberDataArray := LocalModel.DataArrayManager.
-            GetDataSetByName(ADelayItem.EquivNumberDataArrayName);
-          AScreenObject.Capacity := Grid.RowCount * Grid.ColumnCount;
-          for RowIndex := 0 to Grid.RowCount - 1 do
+          if ADelayItem.UseInAllLayers or (ALayerGroup.LayerCount = 1) then
           begin
-            for ColIndex := 0 to Grid.ColumnCount - 1 do
+            CreateScreenObject;
+            AScreenObject.Name := GenerateNewName(
+              Format(StrDelayInterbed0s, [ALayerGroup.AquiferName, ADelayItem.Name]));
+            AScreenObject.SetValuesOfIntersectedCells := True;
+            AssignAllPoints;
+            AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+            AScreenObject.HigherElevationFormula :=
+              LayerStructure[LayerGroupIndex-1].DataArrayName;
+            AssignDelayProperties;
+          end
+          else
+          begin
+            for SubLayerIndex := 0 to ADelayItem.UsedLayers.Count -1 do
             begin
-              if EquivNumberDataArray.RealData[0, RowIndex, ColIndex] >= 1 then
-              begin
-                AScreenObject.AddPoint(Grid.TwoDElementCenter(ColIndex,RowIndex), True);
-              end;
+              LayerNumber := LayerCount + 
+                ADelayItem.UsedLayers[SubLayerIndex].LayerNumber;
+              CreateScreenObject;
+              AScreenObject.Name := GenerateNewName(
+                Format(StrDelayInterbed0s, [ALayerGroup.AquiferName + '_'
+                + IntToStr(LayerNumber), ADelayItem.Name]));
+              AScreenObject.SetValuesOfIntersectedCells := True;
+              AssignAllPoints;
+              AScreenObject.LowerElevationFormula :=
+                Format('%0:s(%1:d)', [StrLayerBoundaryPosition, LayerNumber+1]);
+              AScreenObject.HigherElevationFormula :=
+                Format('%0:s(%1:d)', [StrLayerBoundaryPosition, LayerNumber]);
+              AssignDelayProperties;
             end;
           end;
 
-          AScreenObject.CreateCSubBoundary;
-          ModflowCSub := AScreenObject.ModflowCSub;
-
-          Interbed := CSubPackage.Interbeds.Add;
-          Interbed.Name := 'CSUB_' + ADelayItem.Name;
-          Interbed.InterbedType := itNoDelay;
-
-          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
-          SelectedPackageData.Used := True;
-
-//          SelectedPackageData.InitialOffset :=
-//            ADelayItem.PreconsolidationHeadDataArrayName;
-          SelectedPackageData.Thickness :=
-            ADelayItem.InterbedEquivalentThicknessDataArrayName;
-          SelectedPackageData.EquivInterbedNumber :=
-            ADelayItem.EquivNumberDataArrayName;
-          SelectedPackageData.InitialInelasticSpecificStorage :=
-            ADelayItem.InelasticSpecificStorageDataArrayName;
-          SelectedPackageData.InitialElasticSpecificStorage :=
-            ADelayItem.ElasticSpecificStorageDataArrayName;
-//          SelectedPackageData.InitialPorosity :=
-//            ADelayItem.PreconsolidationHeadDataArrayName;
-          SelectedPackageData.DelayKv :=
-            ADelayItem.VerticalHydraulicConductivityDataArrayName;
-          SelectedPackageData.InitialDelayHeadOffset :=
-            ADelayItem.InterbedStartingHeadDataArrayName;
+//          AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
+//            vdTop, DummyUndoCreateScreenObject, False);
+//          LocalModel.AddScreenObject(AScreenObject);
+//          FScreenObjectsToDelete.Add(AScreenObject);
+//          AScreenObject.ElevationCount := ecTwo;
+//          AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+//          AScreenObject.HigherElevationFormula :=
+//            LayerStructure[LayerGroupIndex-1].DataArrayName;
+//          AScreenObject.Name := GenerateNewName(
+//            Format(StrDelayInterbed0s, [ALayerGroup.AquiferName, ADelayItem.Name]));
+//          AScreenObject.SetValuesOfIntersectedCells := True;
+//
+//          EquivNumberDataArray := LocalModel.DataArrayManager.
+//            GetDataSetByName(ADelayItem.EquivNumberDataArrayName);
+//          AScreenObject.Capacity := Grid.RowCount * Grid.ColumnCount;
+//          for RowIndex := 0 to Grid.RowCount - 1 do
+//          begin
+//            for ColIndex := 0 to Grid.ColumnCount - 1 do
+//            begin
+//              if EquivNumberDataArray.RealData[0, RowIndex, ColIndex] >= 1 then
+//              begin
+//                AScreenObject.AddPoint(Grid.TwoDElementCenter(ColIndex,RowIndex), True);
+//              end;
+//            end;
+//          end;
+//
+//          AScreenObject.CreateCSubBoundary;
+//          ModflowCSub := AScreenObject.ModflowCSub;
+//
+//          Interbed := CSubPackage.Interbeds.Add;
+//          Interbed.Name := 'CSUB_' + ADelayItem.Name;
+//          Interbed.InterbedType := itNoDelay;
+//
+//          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+//          SelectedPackageData.Used := True;
+//
+////          SelectedPackageData.InitialOffset :=
+////            ADelayItem.PreconsolidationHeadDataArrayName;
+//          SelectedPackageData.Thickness :=
+//            ADelayItem.InterbedEquivalentThicknessDataArrayName;
+//          SelectedPackageData.EquivInterbedNumber :=
+//            ADelayItem.EquivNumberDataArrayName;
+//          SelectedPackageData.InitialInelasticSpecificStorage :=
+//            ADelayItem.InelasticSpecificStorageDataArrayName;
+//          SelectedPackageData.InitialElasticSpecificStorage :=
+//            ADelayItem.ElasticSpecificStorageDataArrayName;
+////          SelectedPackageData.InitialPorosity :=
+////            ADelayItem.PreconsolidationHeadDataArrayName;
+//          SelectedPackageData.DelayKv :=
+//            ADelayItem.VerticalHydraulicConductivityDataArrayName;
+//          SelectedPackageData.InitialDelayHeadOffset :=
+//            ADelayItem.InterbedStartingHeadDataArrayName;
         end;
       end;
+      LayerCount := LayerCount + ALayerGroup.LayerCount;
     end;
   end;
 
@@ -5428,87 +5590,120 @@ begin
     CSubPackage.SpecifyInitialPreconsolidationStress := True;
 //
 
+    LayerCount := 0;
     for LayerGroupIndex := 1 to LayerStructure.Count - 1 do
     begin
       ALayerGroup := LayerStructure[LayerGroupIndex];
       if ALayerGroup.WaterTableLayers.Count > 0 then
       begin
-        AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
-          vdTop, DummyUndoCreateScreenObject, False);
-        LocalModel.AddScreenObject(AScreenObject);
-        FScreenObjectsToDelete.Add(AScreenObject);
-        AScreenObject.ElevationCount := ecTwo;
-        AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
-        AScreenObject.HigherElevationFormula :=
-          LayerStructure[LayerGroupIndex-1].DataArrayName;
-        AScreenObject.Name := GenerateNewName(
-          Format(StrWaterTableInterbeds, [ALayerGroup.AquiferName]));
-        AScreenObject.SetValuesOfEnclosedCells := True;
-
-        AScreenObject.Capacity := 5;
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,Grid.RowCount), False);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,Grid.RowCount), False);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,0), False);
-        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), False);
-
-        AScreenObject.CreateCSubBoundary;
-        ModflowCSub := AScreenObject.ModflowCSub;
+//        AScreenObject := TScreenObject.CreateWithViewDirection(LocalModel,
+//          vdTop, DummyUndoCreateScreenObject, False);
+//        LocalModel.AddScreenObject(AScreenObject);
+//        FScreenObjectsToDelete.Add(AScreenObject);
+//        AScreenObject.ElevationCount := ecTwo;
+//        AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+//        AScreenObject.HigherElevationFormula :=
+//          LayerStructure[LayerGroupIndex-1].DataArrayName;
+//        AScreenObject.Name := GenerateNewName(
+//          Format(StrWaterTableInterbeds, [ALayerGroup.AquiferName]));
+//        AScreenObject.SetValuesOfEnclosedCells := True;
+//
+//        AScreenObject.Capacity := 5;
+//        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), True);
+//        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,Grid.RowCount), False);
+//        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,Grid.RowCount), False);
+//        AScreenObject.AddPoint(Grid.TwoDElementCorner(Grid.ColumnCount,0), False);
+//        AScreenObject.AddPoint(Grid.TwoDElementCorner(0,0), False);
+//
+//        AScreenObject.CreateCSubBoundary;
+//        ModflowCSub := AScreenObject.ModflowCSub;
 
         for WT_Index := 0 to ALayerGroup.WaterTableLayers.Count - 1 do
         begin
           WT_Item :=  ALayerGroup.WaterTableLayers[WT_Index];
-
-          Interbed := CSubPackage.Interbeds.Add;
-          Interbed.Name := 'CSUB_' + WT_Item.Name;
-          Interbed.InterbedType := itNoDelay;
-
-          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
-          SelectedPackageData.Used := True;
-
-          if SwtPackage.PreconsolidationSource = pcSpecified then
+          if WT_Item.UseInAllLayers or (ALayerGroup.LayerCount = 1) then
           begin
-            SelectedPackageData.InitialOffset := StrInitialPreconsolida;
+            CreateScreenObject;
+            AScreenObject.Name := GenerateNewName(
+              Format(StrWaterTableInterbeds, [ALayerGroup.AquiferName]));
+            AScreenObject.SetValuesOfEnclosedCells := True;
+            AssignCellCorners;
+            AScreenObject.LowerElevationFormula := ALayerGroup.DataArrayName;
+            AScreenObject.HigherElevationFormula :=
+              LayerStructure[LayerGroupIndex-1].DataArrayName;
+            AssignSwtProperties;
           end
           else
           begin
-            SelectedPackageData.InitialOffset := StrInitialPreOffsets;
+            for SubLayerIndex := 0 to WT_Item.UsedLayers.Count -1 do
+            begin
+              LayerNumber := LayerCount + 
+                WT_Item.UsedLayers[SubLayerIndex].LayerNumber;
+              CreateScreenObject;
+              AScreenObject.SetValuesOfEnclosedCells := True;
+              AScreenObject.Name := GenerateNewName(
+                Format(StrNoDelayInterbedss, [ALayerGroup.AquiferName + '_'
+                  + IntToStr(LayerNumber)]));
+              AssignCellCorners;
+              AScreenObject.LowerElevationFormula :=
+                Format('%0:s(%1:d)', [StrLayerBoundaryPosition, LayerNumber+1]);
+              AScreenObject.HigherElevationFormula :=
+                Format('%0:s(%1:d)', [StrLayerBoundaryPosition, LayerNumber]);
+              AssignSwtProperties;
+            end;
           end;
 
-          SelectedPackageData.Thickness :=
-            WT_Item.WaterTableCompressibleThicknessDataArrayName;
-//          SelectedPackageData.EquivInterbedNumber :=
-//            WT_Item.EquivNumberDataArrayName;
-          case SwtPackage.CompressionSource of
-            csCompressionReComp:
-              begin
-                SelectedPackageData.InitialInelasticSpecificStorage :=
-                  WT_Item.WaterTableRecompressionIndexDataArrayName;
-                SelectedPackageData.InitialElasticSpecificStorage :=
-                  WT_Item.WaterTableCompressionIndexDataArrayName;
-              end;
-            csSpecificStorage:
-              begin
-                SelectedPackageData.InitialInelasticSpecificStorage :=
-                  WT_Item.WaterTableInitialInelasticSkeletalSpecificStorageDataArrayName;
-                SelectedPackageData.InitialElasticSpecificStorage :=
-                  WT_Item.WaterTableInitialElasticSkeletalSpecificStorageDataArrayName;
-              end;
-          end;
-          SelectedPackageData.InitialPorosity := Format('%0:s / (%0:s + 1)', [
-            WT_Item.WaterTableInitialVoidRatioDataArrayName]);
-//          SelectedPackageData.DelayKv :=
-//            WT_Item.VerticalHydraulicConductivityDataArrayName;
-//          SelectedPackageData.InitialDelayHeadOffset :=
-//            WT_Item.InterbedStartingHeadDataArrayName;
+//          Interbed := CSubPackage.Interbeds.Add;
+//          Interbed.Name := 'CSUB_' + WT_Item.Name;
+//          Interbed.InterbedType := itNoDelay;
+//
+//          SelectedPackageData := GetInterbedItem(ModflowCSub, Interbed);;
+//          SelectedPackageData.Used := True;
+//
+//          if SwtPackage.PreconsolidationSource = pcSpecified then
+//          begin
+//            SelectedPackageData.InitialOffset := StrInitialPreconsolida;
+//          end
+//          else
+//          begin
+//            SelectedPackageData.InitialOffset := StrInitialPreOffsets;
+//          end;
+//
+//          SelectedPackageData.Thickness :=
+//            WT_Item.WaterTableCompressibleThicknessDataArrayName;
+////          SelectedPackageData.EquivInterbedNumber :=
+////            WT_Item.EquivNumberDataArrayName;
+//          case SwtPackage.CompressionSource of
+//            csCompressionReComp:
+//              begin
+//                SelectedPackageData.InitialInelasticSpecificStorage :=
+//                  WT_Item.WaterTableRecompressionIndexDataArrayName;
+//                SelectedPackageData.InitialElasticSpecificStorage :=
+//                  WT_Item.WaterTableCompressionIndexDataArrayName;
+//              end;
+//            csSpecificStorage:
+//              begin
+//                SelectedPackageData.InitialInelasticSpecificStorage :=
+//                  WT_Item.WaterTableInitialInelasticSkeletalSpecificStorageDataArrayName;
+//                SelectedPackageData.InitialElasticSpecificStorage :=
+//                  WT_Item.WaterTableInitialElasticSkeletalSpecificStorageDataArrayName;
+//              end;
+//          end;
+//          SelectedPackageData.InitialPorosity := Format('%0:s / (%0:s + 1)', [
+//            WT_Item.WaterTableInitialVoidRatioDataArrayName]);
+////          SelectedPackageData.DelayKv :=
+////            WT_Item.VerticalHydraulicConductivityDataArrayName;
+////          SelectedPackageData.InitialDelayHeadOffset :=
+////            WT_Item.InterbedStartingHeadDataArrayName;
         end;
 
-        CSubItem  := ModflowCSub.Values.Add as TCSubItem;
-        StressPeriod := LocalModel.ModflowStressPeriods.First;
-        CSubItem.StartTime := StressPeriod.StartTime;
-        CSubItem.EndTime := StressPeriod.EndTime;
-        CSubItem.StressOffset := '0';
+//        CSubItem  := ModflowCSub.Values.Add as TCSubItem;
+//        StressPeriod := LocalModel.ModflowStressPeriods.First;
+//        CSubItem.StartTime := StressPeriod.StartTime;
+//        CSubItem.EndTime := StressPeriod.EndTime;
+//        CSubItem.StressOffset := '0';
       end;
+      LayerCount := LayerCount + ALayerGroup.LayerCount;
     end;
   end;
 
@@ -5605,7 +5800,7 @@ var
   AScreenObject: TScreenObject;
   LocalModel: TCustomModel;
   LgrUsed: Boolean;
-  ModelIndex: Integer;
+//  ModelIndex: Integer;
   Grid: TCustomModelGrid;
   Mesh: IMesh2D;
   PointIndex: Integer;

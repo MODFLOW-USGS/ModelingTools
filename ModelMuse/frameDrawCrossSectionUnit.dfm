@@ -59,11 +59,6 @@ object frameDrawCrossSection: TframeDrawCrossSection
     Height = 316
     Align = alLeft
     Header.AutoSizeIndex = 0
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -13
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.MainColumn = -1
     TabOrder = 1
     TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
@@ -112,8 +107,8 @@ object frameDrawCrossSection: TframeDrawCrossSection
       object lblDataSets: TLabel
         Left = 8
         Top = 8
-        Width = 93
-        Height = 16
+        Width = 80
+        Height = 13
         Caption = 'Data sets to plot'
       end
       object lstSelectedDataSets: TListBox
@@ -144,15 +139,15 @@ object frameDrawCrossSection: TframeDrawCrossSection
       object lblLayers: TLabel
         Left = 11
         Top = 3
-        Width = 77
-        Height = 16
+        Width = 66
+        Height = 13
         Caption = 'Layers to plot'
       end
       object lblLineThickness: TLabel
         Left = 82
         Top = 107
-        Width = 79
-        Height = 16
+        Width = 66
+        Height = 13
         Caption = 'Line thickness'
       end
       object clbLayers: TJvCheckListBox
