@@ -9033,14 +9033,14 @@ const
   //                end-point, or time-series file that contains invalid layer
   //                numbers, ModelMuse will display an error message instead of
   //                generating a bug report.
-
   //    '4.2.0.8'  Bug fix: Fixed a bug that could make it impossible to open
   //                a ModelMuse file.
   //               Enhancement:Custom color schemes can now be used when
   //                plotting MODPATH data.
+  //    '4.2.0.9'  No real change.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.8';
+  IModelVersion = '4.2.0.9';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

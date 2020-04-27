@@ -45,12 +45,17 @@ implementation
 procedure InitializeSutraObsTypes;
 begin
   SutraObsTypes := TStringList.Create;
-  SutraObsTypes.Add('Lake stage');
-  SutraObsTypes.Add('Fluid flow at specified pressure nodes');
-  SutraObsTypes.Add('Conc/temp at specified pressure nodes');
-  SutraObsTypes.Add('Conc/temp at specified flow nodes');
-  SutraObsTypes.Add('Fluid flow at generalized flow nodes');
-  SutraObsTypes.Add('Conc/temp at generalized flow nodes');
+  SutraObsTypes.Add('Pressure'); // single node, use OBC
+  SutraObsTypes.Add('U');  // single node, use OBC
+  SutraObsTypes.Add('Saturation');  // single node, use OBC
+  SutraObsTypes.Add('Lake stage');  // single node, make NLAKPR = 1, read from .lkst
+  SutraObsTypes.Add('Fluid flow rate at specified pressure nodes'); // Units = Mass/sec, Add selected nodes, use .bcop file
+  SutraObsTypes.Add('Fluid flow rate at generalized flow nodes'); // Units = Mass/sec, Add selected nodes, Use .bcopg file
+  SutraObsTypes.Add('Resultant U rate at specified pressure nodes'); // Units = solute mass/sec, Add selected nodes, use .bcop file
+  SutraObsTypes.Add('Resultant U rate at specified flow nodes'); // Units = solute mass/sec, Add selected nodes, use .bcof file
+  SutraObsTypes.Add('Resultant U rate at generalized flow nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcopg file
+  SutraObsTypes.Add('Resultant U rate at specified U nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcou file
+  SutraObsTypes.Add('Resultant U rate at generalized U nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcoug file
 end;
 
 { TSutraObsItem }
