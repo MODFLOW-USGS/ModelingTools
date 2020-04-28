@@ -6,7 +6,7 @@ uses
   GoPhastTypes, Classes, OrderedCollectionUnit, ModflowBoundaryUnit,
   FormulaManagerUnit, Generics.Collections, RbwParser, DataSetUnit,
   SysUtils, SubscriptionUnit, SutraBoundaryUnit, SutraGeneralBoundaryUnit,
-  SutraGenTransBoundUnit;
+  SutraGenTransBoundUnit, SutraPestObsUnit;
 
 type
   TSutraBoundaries = class(TGoPhastPersistent)
@@ -19,6 +19,7 @@ type
     FLake: TSutraLake;
     FGeneralFlowBoundary: TSutraGeneralFlowBoundary;
     FGenTransportBoundary: TSutraGeneralTransportBoundary;
+    FSutraStateObs: TSutraStateObservations;
     procedure SetFluidSource(const Value: TSutraFluidBoundary);
     procedure SetMassEnergySource(
       const Value: TSutraMassEnergySourceSinkBoundary);
@@ -31,6 +32,8 @@ type
     procedure SetGeneralFlowBoundary(const Value: TSutraGeneralFlowBoundary);
     procedure SetGenTransportBoundary(
       const Value: TSutraGeneralTransportBoundary);
+    procedure SetSutraStateObs(const Value: TSutraStateObservations);
+    function StoreSutraStateObs: Boolean;
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
@@ -56,6 +59,8 @@ type
       read FGeneralFlowBoundary write SetGeneralFlowBoundary;
     property GenTransportBoundary: TSutraGeneralTransportBoundary
       read FGenTransportBoundary write SetGenTransportBoundary;
+    property SutraStateObs: TSutraStateObservations read FSutraStateObs
+      write SetSutraStateObs stored StoreSutraStateObs;
   end;
 
 implementation
@@ -81,6 +86,7 @@ begin
     Lake := SourceBoundaries.Lake;
     GeneralFlowBoundary := SourceBoundaries.GeneralFlowBoundary;
     GenTransportBoundary := SourceBoundaries.GenTransportBoundary;
+    SutraStateObs := SourceBoundaries.SutraStateObs;
   end
   else
   begin
@@ -98,6 +104,7 @@ begin
 //  Lake.Changed;
   GeneralFlowBoundary.Changed;
   GenTransportBoundary.Changed;
+//  SourceBoundaries..Changed;
 end;
 
 constructor TSutraBoundaries.Create(Model: TBaseModel; ScreenObject: TObject);
@@ -121,10 +128,12 @@ begin
   FLake := TSutraLake.Create(Model, ScreenObject);
   FGeneralFlowBoundary := TSutraGeneralFlowBoundary.Create(Model, ScreenObject);
   FGenTransportBoundary := TSutraGeneralTransportBoundary.Create(Model, ScreenObject);
+  FSutraStateObs := TSutraStateObservations.Create(Model, ScreenObject);
 end;
 
 destructor TSutraBoundaries.Destroy;
 begin
+  FSutraStateObs.Free;
   FGenTransportBoundary.Free;
   FGeneralFlowBoundary.Free;
   FLake.Free;
@@ -158,6 +167,10 @@ begin
   begin
     FGeneralFlowBoundary.Loaded;
   end;
+//  if FSutraStateObs <> nil then
+//  begin
+//    FSutraStateObs.Loaded;
+//  end;
 end;
 
 //procedure TSutraBoundaries.ResetObserversUptodate;
@@ -215,6 +228,21 @@ procedure TSutraBoundaries.SetSpecifiedPressure(
   const Value: TSutraSpecifiedPressureBoundary);
 begin
   FSpecifiedPressure.Assign(Value);
+end;
+
+procedure TSutraBoundaries.SetSutraStateObs(
+  const Value: TSutraStateObservations);
+begin
+  FSutraStateObs.Assign(Value);
+end;
+
+function TSutraBoundaries.StoreSutraStateObs: Boolean;
+begin
+{$IFDEF PEST}
+  result := SutraStateObs.Used;
+{$ELSE}
+  result := False;
+{$ENDIF}
 end;
 
 end.

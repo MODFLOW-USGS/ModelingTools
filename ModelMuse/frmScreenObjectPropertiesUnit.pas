@@ -3047,6 +3047,46 @@ begin
           jvpltvSutraFeatures.Selected.StateIndex := 2;
         end;
     end;
+
+    if jvpltvSutraFeatures.Selected = FSutraObs_Node then
+    begin
+      frameSutraObservations.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraLake_Node then
+    begin
+      frameSutraLake.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraSpecPressure_Node then
+    begin
+      frameSutraSpecifiedPressure.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraSpecTempConc_Node then
+    begin
+      frameSutraSpecTempConc.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraFluidFlux_Node then
+    begin
+      frameSutraFluidFlux.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraMassEnergyFlux_Node then
+    begin
+      frameSutraMassEnergyFlux.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraGeneralizedTransportNode then
+    begin
+      frameSutraGeneralizeTransBoundary.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraGeneralizedFlowNode then
+    begin
+      frameSutraGeneralizedFlowBoundary.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+
+    else
+    begin
+      Assert(False);
+    end;
+
+
   end;
 end;
 

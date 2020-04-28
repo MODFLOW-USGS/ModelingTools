@@ -1,7 +1,10 @@
 inherited frameSutraObservations: TframeSutraObservations
   Width = 347
+  Height = 281
   ExplicitWidth = 347
+  ExplicitHeight = 281
   inherited pnlBottom: TPanel
+    Top = 235
     Width = 347
     ExplicitWidth = 347
     DesignSize = (
@@ -19,14 +22,15 @@ inherited frameSutraObservations: TframeSutraObservations
   inherited pnlGrid: TPanel
     Top = 193
     Width = 347
-    Height = 1
+    Height = 42
     ExplicitTop = 193
     ExplicitWidth = 347
     ExplicitHeight = 1
     inherited rdgSutraFeature: TRbwDataGrid4
       Width = 345
-      Height = 84
+      Height = 40
       ColCount = 1
+      OnSetEditText = rdgSutraFeatureSetEditText
       Columns = <
         item
           AutoAdjustRowHeights = True
@@ -117,6 +121,7 @@ inherited frameSutraObservations: TframeSutraObservations
       Anchors = [akLeft, akTop, akRight]
       MaxLength = 40
       TabOrder = 1
+      OnChange = edNameChange
       OnExit = edNameExit
     end
   end

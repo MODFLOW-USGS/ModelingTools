@@ -23,6 +23,8 @@ type
     procedure btnDeleteClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
     procedure edNameExit(Sender: TObject);
+    procedure rdgSutraFeatureSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
   private
     // @name is @true if all the features being displayed use the same set
     // of times.
@@ -88,6 +90,7 @@ begin
     TimeValues := ASchedule.TimeValues(SutraTimeOptions.InitialTime,
       SutraTimeOptions.Schedules);
     DisplayTimes(TimeValues);
+    UpdateCheckState;
   end;
 end;
 
@@ -503,6 +506,13 @@ begin
       comboSchedule.ItemIndex := 0;
     end;
   end;
+end;
+
+procedure TframeSutraObservations.rdgSutraFeatureSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  UpdateCheckState;
 end;
 
 procedure TframeSutraObservations.seNumberOfTimesChange(Sender: TObject);

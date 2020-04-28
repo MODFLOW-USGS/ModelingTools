@@ -14,12 +14,14 @@ type
   TframeActivatibleFeature = class(TFrame)
   private
     FOnActivate: TActivateEvent;
+    procedure SetCheckState(const Value: TCheckBoxState);
     { Private declarations }
   protected
     FCheckState: TCheckBoxState;
   public
     property OnActivate: TActivateEvent read FOnActivate write FOnActivate;
     procedure RefreshNodeState;
+    property CheckState: TCheckBoxState read FCheckState write SetCheckState;
     { Public declarations }
   end;
 
@@ -33,6 +35,11 @@ begin
   begin
     OnActivate(self, FCheckState);
   end;
+end;
+
+procedure TframeActivatibleFeature.SetCheckState(const Value: TCheckBoxState);
+begin
+  FCheckState := Value;
 end;
 
 end.
