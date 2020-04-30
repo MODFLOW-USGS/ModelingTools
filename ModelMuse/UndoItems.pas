@@ -773,7 +773,6 @@ type
     FOldMt3dObs: TMassFluxObs;
     FNewMt3dObs: TMassFluxObs;
     procedure AssignMt3dObsToModel(MtsdObs: TMassFluxObs);
-    procedure FillMt3dLists(var Mt3dObs: TMassFluxObs);
   protected
     function Description: string; override;
   public
@@ -785,6 +784,7 @@ type
     Destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
+    procedure FillMt3dLists(var Mt3dObs: TMassFluxObs);
   end;
 
   TUndoEditDisplaySettings = class(TCustomUndo)

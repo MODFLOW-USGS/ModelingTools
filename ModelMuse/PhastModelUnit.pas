@@ -3240,7 +3240,7 @@ that affects the model output should also have a comment. }
     function NumberOfMt3dChemComponents: integer;
     property Mt3dSpecesName[const Index: Integer]: string read GetMt3dSpecesName;
     function Mt3dIsSelected: Boolean; virtual;
-    procedure FileObsItemList(List: TObservationList);
+    procedure FillObsItemList(List: TObservationList);
     property PestUsed: Boolean read GetPestUsed;
   published
     // @name defines the grid used with PHAST.
@@ -9183,7 +9183,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
-  ModflowMnw2Unit;
+  ModflowMnw2Unit, SutraPestObsUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -30992,7 +30992,7 @@ begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
 end;
 
-procedure TCustomModel.FileObsItemList(List: TObservationList);
+procedure TCustomModel.FillObsItemList(List: TObservationList);
 var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
@@ -31001,6 +31001,7 @@ var
   AnObs: TCustomObservationItem;
   LakObservations: TLakeObservations;
   SfrObservations: TSfrObservations;
+  SutraStateObs: TSutraStateObservations;
 begin
   for ObjectIndex := 0 to ScreenObjectCount - 1 do
   begin
@@ -31097,6 +31098,19 @@ begin
               List.Add(AnObs);
             end;
           end;
+        end;
+      end;
+    end;
+
+    if (ModelSelection in SutraSelection) then
+    begin
+      SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
+      if SutraStateObs.Used and (SutraStateObs.Count > 0)then
+      begin
+        for ObsIndex := 0 to SutraStateObs.Count - 1 do
+        begin
+          AnObs := SutraStateObs[ObsIndex];
+          List.Add(AnObs);
         end;
       end;
     end;

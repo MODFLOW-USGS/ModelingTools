@@ -44,7 +44,7 @@ uses System.UITypes, Windows,
   frameScreenObjectMvrUnit, ModflowMvrUnit, frameScreenObjectUzfMf6Unit,
   frameScreenObjectLktUnit, frameScreenObjectMt3dSftUnit,
   frameScreenObjectTabbedUnit, frameScreenObjectCSubUnit, framePestObsUnit,
-  frameSubPestObsUnit;
+  frameSubPestObsUnit, framePestObsCaptionedUnit;
 
   { TODO : Consider making this a property sheet like the Object Inspector that
   could stay open at all times.  Boundary conditions and vertices might be
@@ -382,6 +382,8 @@ type
     framePestObsSub: TframeSubPestObs;
     jvspSwtPestObs: TJvStandardPage;
     framePestObsSwt: TframeSubPestObs;
+    jvspSutraStateObs: TJvStandardPage;
+    frameSutraPestObsState: TframePestObsCaptioned;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1666,6 +1668,7 @@ type
     FSWiObs_Node: TJvPageIndexNode;
     FRipNode: TJvPageIndexNode;
     FSutraGeneralizedTransportNode: TJvPageIndexNode;
+    FSutraStateObsNode: TJvPageIndexNode;
     FSFR6_Node: TJvPageIndexNode;
     FObjectCount: Integer;
     FVertexCount: Integer;
@@ -2050,6 +2053,7 @@ type
     procedure SetMt3dFluxObs(List: TList);
     procedure CreateSutraObsNode;
     procedure ActivateSutraFeature(Sender: TObject; CheckState: TCheckBoxState);
+    procedure UpdateSutraStateObsNode(Sender: TObject);
     procedure CreateSutraSpecPressNode;
     procedure CreateSutraSpecTempConcNode;
     procedure CreateSutraFluidFluxNode;
@@ -2103,6 +2107,7 @@ type
     function ShouldCreateSutraLakeBoundary : Boolean;
     function ShouldCreateSutraGeneralBoundary: Boolean;
     procedure CreateSutraGeneralizedTransportNode;
+    procedure CreateSutraStateObsNode(AScreenObject: TScreenObject);
     procedure GetVertexLabels(ScreenObjects: TList);
     procedure RemoveLayerDataArraysFrom3DObject(AScreenObject: TScreenObject;
       DataSetList: TList<TDataArray>);
@@ -2341,7 +2346,7 @@ type
     procedure GetPositionLockedForAdditionalObject(AScreenObject: TScreenObject);
     procedure GetCanSelectNode(Node: TTreeNode; var AllowChange: Boolean);
     function ShouldCreateSutraBoundary: Boolean;
-    procedure CreateSutraFeatureNodes;
+    procedure CreateSutraFeatureNodes(AScreenObject: TScreenObject);
     procedure SetDefaultCellSize;
     procedure SetModflowBoundaryColCount;
     procedure GetObjectLabelForAdditionalScreenObject(AScreenObject: TScreenObject);
@@ -2414,7 +2419,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
-  ModflowSubsidenceDefUnit;
+  ModflowSubsidenceDefUnit, SutraPestObsUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -2550,6 +2555,7 @@ resourcestring
   StrUZFSinkConcIn = 'UZF sink conc in ';
   StrSomethingWentWrong = 'Something went wrong in the Object Properties dia' +
   'log box. Please save your work and restart ModelMuse.';
+  StrSutraStateCalibrat = 'Sutra State Calibration Observation';
 //  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
@@ -3079,6 +3085,10 @@ begin
     else if jvpltvSutraFeatures.Selected = FSutraGeneralizedFlowNode then
     begin
       frameSutraGeneralizedFlowBoundary.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
+    end
+    else if jvpltvSutraFeatures.Selected = FSutraStateObsNode then
+    begin
+//      frameSutraPestObsState.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
     end
 
     else
@@ -3629,7 +3639,7 @@ begin
   CreateSubPestObsNode(AScreenObject);
   CreateSwtPestObsNode(AScreenObject);
 
-  CreateSutraFeatureNodes;
+  CreateSutraFeatureNodes(AScreenObject);;
 
   tabLGR.TabVisible := frmGoPhast.PhastModel.LgrUsed;
   SetupChildModelControls(AScreenObject);
@@ -3709,6 +3719,17 @@ begin
       FSutraGeneralizedTransportNode.StateIndex := Ord(CheckState)+1;
     end;
   end
+//  else if Sender = frameSutraPestObsState then
+//  begin
+//    if FSutraStateObsNode <> nil then
+//    begin
+//      FSutraStateObsNode.StateIndex := Ord(CheckState)+1;
+//    end;
+//  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.GetVertexLabels(ScreenObjects: TList);
@@ -3777,6 +3798,7 @@ var
   ObjectVertexLabel: TObjectVertexLabel;
 //  ItemIndex: integer;
   TempList: TList;
+  SutraStateObs: TSutraStateObservations;
 begin
   FObjectCount := 1;
   FVertexCount := AScreenObject.Count;
@@ -4027,6 +4049,20 @@ begin
 
     frameSutraGeneralizeTransBoundary.OnActivate := ActivateSutraFeature;
     frameSutraGeneralizeTransBoundary.GetData(FNewProperties);
+
+    frameSutraPestObsState.OnControlsChange := UpdateSutraStateObsNode;
+    if FNewProperties.Count = 1 then
+    begin
+      frameSutraPestObsState.InitializeControls;
+      frameSutraPestObsState.SpecifyObservationTypes(SutraStateObsTypes);
+      SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
+      frameSutraPestObsState.GetData(SutraStateObs);
+      FSutraStateObsNode.StateIndex := Ord(SutraStateObs.Used) + 1;
+    end
+    else
+    begin
+      FreeAndNil(FSutraStateObsNode);
+    end;
 
     SetSelectedSutraBoundaryNode;
   end;
@@ -4881,7 +4917,7 @@ begin
     FNewProperties, FOldProperties, FChildModelsScreenObjects);
   // SetMultipleScreenObjectData is called when the user press the OK button
   // after editing the properties of one or more screen objects.
-  // It set up an TUndoSetScreenObjectProperties based on the data that the
+  // It sets up an TUndoSetScreenObjectProperties based on the data that the
   // user has changed.  @SeeAlso(SetData)
   FUndoSetScreenObjectProperties.FSetCellsColor := FSetCellsColor;
 
@@ -6003,7 +6039,8 @@ begin
   end;
 end;
 
-procedure TfrmScreenObjectProperties.CreateSutraFeatureNodes;
+procedure TfrmScreenObjectProperties.CreateSutraFeatureNodes(
+  AScreenObject: TScreenObject);
 begin
   jvpltvSutraFeatures.Items.Clear;
   CreateSutraObsNode;
@@ -6014,6 +6051,10 @@ begin
   CreateSutraLakeNode;
   CreateSutraGeneralizedFlowNode;
   CreateSutraGeneralizedTransportNode;
+  if AScreenObject <> nil then
+  begin
+    CreateSutraStateObsNode(AScreenObject);
+  end;
 end;
 
 function TfrmScreenObjectProperties.ShouldCreateSutraLakeBoundary: Boolean;
@@ -7254,6 +7295,14 @@ begin
     ScreenObject := FNewProperties[0].ScreenObject;
     framePestObsSwt.SetData(ScreenObject.ModflowSwtObservations);
   end;
+
+  if FSutraStateObsNode <> nil then
+  begin
+    ScreenObject := FNewProperties[0].ScreenObject;
+    frameSutraPestObsState.SetData(
+      ScreenObject.SutraBoundaries.SutraStateObs);
+  end;
+//  frameSutraGeneralizeTransBoundary FSutraStateObsNode
 
   frameScreenObjectFootprintWell.SetData(FNewProperties);
 end;
@@ -12976,6 +13025,24 @@ begin
     Node.ImageIndex := 1;
     FSutraSpecTempConc_Node := Node;
     frameSutraSpecTempConc.RefreshNodeState;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.CreateSutraStateObsNode(AScreenObject: TScreenObject);
+var
+  Node: TJvPageIndexNode;
+begin
+  FSutraStateObsNode := nil;
+  if  (frmGoPhast.ModelSelection in SutraSelection)
+    and (AScreenObject.Count = 1) then
+  begin
+    Node := jvpltvSutraFeatures.Items.AddChild(nil,
+      StrSutraStateCalibrat) as TJvPageIndexNode;
+    Node.PageIndex := jvspSutraStateObs.PageIndex;
+    frameSutraPestObsState.pnlCaption.Caption := Node.Text;
+    Node.ImageIndex := 1;
+    Node.StateIndex := 1;
+    FSutraStateObsNode := Node;
   end;
 end;
 
@@ -20435,7 +20502,22 @@ begin
   end;
 
   FPriorElevationCount := rgElevationCount.ItemIndex;
-  CreateSutraFeatureNodes;
+
+  AScreenObject := nil;
+  if FScreenObject <> nil then
+  begin
+    AScreenObject := FScreenObject;
+  end
+  else
+  begin
+    if (FScreenObjectList <> nil) and (FScreenObjectList.Count = 1) then
+    begin
+      AScreenObject := FScreenObjectList[0];
+    end;
+  end;
+  CreateSutraFeatureNodes(AScreenObject);
+
+
   SetSelectedSutraBoundaryNode;
 
   if rgElevationCount.ItemIndex > 0 then
@@ -20556,6 +20638,7 @@ var
   DataArray: TDataArray;
   List: TList;
   Edit: TScreenObjectDataEdit;
+  AScreenObject: TScreenObject;
 begin
   inherited;
   if FFillingDataSetTreeView then Exit;
@@ -20631,7 +20714,19 @@ begin
     end;
   end;
   ShowOrHideTabs;
-  CreateSutraFeatureNodes;
+  AScreenObject := nil;
+  if FScreenObject <> nil then
+  begin
+    AScreenObject := FScreenObject;
+  end
+  else
+  begin
+    if (FScreenObjectList <> nil) and (FScreenObjectList.Count = 1) then
+    begin
+      AScreenObject := FScreenObjectList[0];
+    end;
+  end;
+  CreateSutraFeatureNodes(AScreenObject);
   SetSelectedSutraBoundaryNode;
 end;
 
@@ -21497,6 +21592,11 @@ end;
 procedure TfrmScreenObjectProperties.UpdateStrNode(Sender: TObject);
 begin
   UpdateNodeState(FSTR_Node);
+end;
+
+procedure TfrmScreenObjectProperties.UpdateSutraStateObsNode(Sender: TObject);
+begin
+  UpdateNodeState(FSutraStateObsNode);
 end;
 
 procedure TfrmScreenObjectProperties.frameScreenObjectUZFdgModflowBoundaryEndUpdate(

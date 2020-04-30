@@ -98,6 +98,7 @@ type
     function CountParam(ParameterType: TParameterType): integer;
     procedure Loaded;
     function ParamNameIndex(const ParamName: string): integer;
+    function Add: TModflowTransientListParameter;
   end;
 
 implementation
@@ -322,6 +323,11 @@ begin
 end;
 
 { TModflowTransientListParameters }
+
+function TModflowTransientListParameters.Add: TModflowTransientListParameter;
+begin
+  result := inherited Add as TModflowTransientListParameter;
+end;
 
 function TModflowTransientListParameters.CountParam(
   ParameterType: TParameterType): integer;

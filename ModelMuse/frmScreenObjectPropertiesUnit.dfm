@@ -13961,7 +13961,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraObservations
+        ActivePage = jvspSutraStateObs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14827,6 +14827,117 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 59
                 ExplicitHeight = 19
               end
+            end
+          end
+        end
+        object jvspSutraStateObs: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 605
+          Height = 476
+          Caption = 'jvspSutraStateObs'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameSutraPestObsState: TframePestObsCaptioned
+            Left = 0
+            Top = 0
+            Width = 605
+            Height = 476
+            Align = alClient
+            TabOrder = 0
+            ExplicitLeft = 5
+            ExplicitTop = 32
+            inherited splObservations: TSplitter
+              Top = 298
+              Width = 605
+            end
+            inherited grpDirectObs: TGroupBox
+              Width = 605
+              Height = 257
+              ExplicitTop = 41
+              ExplicitHeight = 201
+              inherited frameObservations: TframeGrid
+                Top = 21
+                Width = 601
+                Height = 234
+                ExplicitTop = 21
+                ExplicitHeight = 178
+                inherited Panel: TPanel
+                  Top = 193
+                  Width = 601
+                  ExplicitTop = 137
+                  inherited lbNumber: TLabel
+                    Width = 57
+                    Height = 19
+                    ExplicitWidth = 57
+                    ExplicitHeight = 19
+                  end
+                  inherited sbAdd: TSpeedButton
+                    Left = 315
+                  end
+                  inherited sbInsert: TSpeedButton
+                    Left = 372
+                  end
+                  inherited sbDelete: TSpeedButton
+                    Left = 431
+                  end
+                  inherited seNumber: TJvSpinEdit
+                    Height = 27
+                    ExplicitHeight = 27
+                  end
+                end
+                inherited Grid: TRbwDataGrid4
+                  Width = 601
+                  Height = 193
+                  ExplicitHeight = 137
+                end
+              end
+            end
+            inherited grpObsComparisons: TGroupBox
+              Top = 303
+              Width = 605
+              inherited frameObsComparisons: TframeGrid
+                Top = 21
+                Width = 601
+                Height = 150
+                ExplicitTop = 21
+                ExplicitHeight = 150
+                inherited Panel: TPanel
+                  Top = 109
+                  Width = 601
+                  ExplicitTop = 109
+                  inherited lbNumber: TLabel
+                    Width = 57
+                    Height = 19
+                    ExplicitWidth = 57
+                    ExplicitHeight = 19
+                  end
+                  inherited sbAdd: TSpeedButton
+                    Left = 315
+                  end
+                  inherited sbInsert: TSpeedButton
+                    Left = 372
+                  end
+                  inherited sbDelete: TSpeedButton
+                    Left = 431
+                  end
+                  inherited seNumber: TJvSpinEdit
+                    Height = 27
+                    ExplicitHeight = 27
+                  end
+                end
+                inherited Grid: TRbwDataGrid4
+                  Width = 601
+                  Height = 109
+                  ExplicitHeight = 109
+                end
+              end
+            end
+            inherited pnlCaption: TPanel
+              Width = 605
+              ExplicitLeft = 0
+              ExplicitTop = 0
+              ExplicitWidth = 600
             end
           end
         end

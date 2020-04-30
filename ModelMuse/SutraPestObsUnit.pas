@@ -49,6 +49,7 @@ type
     property Items[Index: Integer]: TSutraStateObsItem read GetSutraStateObsItem
       write SetSutraStateObsItem; default;
     function Add: TSutraStateObsItem;
+    function HasNonLakeBoundary: Boolean;
   end;
 
   TCustomFluxObsItem = class(TCustomSutraObsItem)
@@ -188,6 +189,12 @@ var
   SutraFlFluxObsTypes: TStringList;
   SutraUFluxObsTypes: TStringList;
 
+const
+  StrPressure = 'Pressure';
+  StrConcOrTemp = 'Conc or Temp';
+  StrSaturation = 'Saturation';
+  StrLakeStage = 'Lake stage';
+
 implementation
 
 uses
@@ -196,9 +203,9 @@ uses
 procedure InitializeSutraObsTypes;
 begin
   SutraStateObsTypes := TStringList.Create;
-  SutraStateObsTypes.Add('Pressure'); // single node, use OBC
-  SutraStateObsTypes.Add('U');  // single node, use OBC
-  SutraStateObsTypes.Add('Saturation');  // single node, use OBC
+  SutraStateObsTypes.Add(StrPressure); // single node, use OBC
+  SutraStateObsTypes.Add(StrConcOrTemp);  // single node, use OBC
+  SutraStateObsTypes.Add(StrSaturation);  // single node, use OBC
 //  SutraStateObsTypes.Add('Fluid flow rate at specified pressure nodes'); // Units = Mass/sec, Add selected nodes, use .bcop file
 //  SutraStateObsTypes.Add('Fluid flow rate at generalized flow nodes'); // Units = Mass/sec, Add selected nodes, Use .bcopg file
 //  SutraStateObsTypes.Add('Resultant U rate at specified pressure nodes'); // Units = solute mass/sec, Add selected nodes, use .bcop file
@@ -206,7 +213,7 @@ begin
 //  SutraStateObsTypes.Add('Resultant U rate at generalized flow nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcopg file
 //  SutraStateObsTypes.Add('Resultant U rate at specified U nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcou file
 //  SutraStateObsTypes.Add('Resultant U rate at generalized U nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcoug file
-  SutraStateObsTypes.Add('Lake stage');  // single node, make NLAKPR = 1, read from .lkst
+  SutraStateObsTypes.Add(StrLakeStage);  // single node, make NLAKPR = 1, read from .lkst
 
   SutraFlFluxObsTypes := TStringList.Create;
   SutraFlFluxObsTypes.Add('Fluid flow rate'); // Units = Mass/sec, Add selected nodes
@@ -290,6 +297,21 @@ end;
 function TSutraStateObservations.GetSutraStateObsItem(Index: Integer): TSutraStateObsItem;
 begin
   result := inherited Items[Index] as TSutraStateObsItem;
+end;
+
+function TSutraStateObservations.HasNonLakeBoundary: Boolean;
+var
+  Index: Integer;
+begin
+  result := False;
+  for Index := 0 to Count - 1 do
+  begin
+    if Items[Index].ObsType <> StrLakeStage then
+    begin
+      result := True;
+      Exit;
+    end;
+  end;
 end;
 
 constructor TCustomSutraObservations.Create(ItemClass: TCollectionItemClass;
@@ -656,6 +678,7 @@ begin
 end;
 
 initialization
+  InitializeSutraObsTypes;
 
 finalization
   SutraStateObsTypes.Free;

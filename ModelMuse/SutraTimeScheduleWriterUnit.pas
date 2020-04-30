@@ -40,6 +40,7 @@ type
     FSpecifiedUTimes: TRealList;
     FGeneralFlowTimes: TRealList;
     FGeneralTransportTimes: TRealList;
+    FPestObsTimes: TRealList;
     FAllTimes: TRealList;
     FCustomSchedules: TScreenObjectScheduleList;
     FFirstTimeValues: TTimeValues;
@@ -207,13 +208,7 @@ begin
   FSpecifiedUTimes := TRealList.Create;
   FGeneralFlowTimes := TRealList.Create;
   FGeneralTransportTimes := TRealList.Create;
-
-  FFluidSourceTimes.Sorted := True;
-  FUSourceTimes.Sorted := True;
-  FSpecifiedPressureTimes.Sorted := True;
-  FSpecifiedUTimes.Sorted := True;
-  FGeneralFlowTimes.Sorted := True;
-  FGeneralTransportTimes.Sorted := True;
+  FPestObsTimes := TRealList.Create;
 
   FCustomScheduleNames := TStringList.Create;
   FAllTimes := TRealList.Create;
@@ -221,6 +216,13 @@ begin
   FItemDictionary := TTimeValuesDictionary.Create([doOwnsValues]);
   FScheduleList := TTimeValuesList.Create;
   try
+    FUSourceTimes.Sorted := True;
+    FSpecifiedPressureTimes.Sorted := True;
+    FSpecifiedUTimes.Sorted := True;
+    FGeneralFlowTimes.Sorted := True;
+    FGeneralTransportTimes.Sorted := True;
+    FPestObsTimes.Sorted := True;
+
     Evaluate;
 
     try
@@ -233,8 +235,8 @@ begin
       end;
     end;
 
-
   finally
+    FPestObsTimes.Free;
     FScheduleList.Free;
     FAllTimes.Free;
     FItemDictionary.Free;

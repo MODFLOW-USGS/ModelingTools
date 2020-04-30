@@ -723,6 +723,26 @@ type
     procedure UpdateObservations;
   end;
 
+  TUndoConvertFhbToMf6 = class(TUndoSetScreenObjectProperties)
+  private
+    FOldChdUsed: Boolean;
+    FOldWellUsed: Boolean;
+    FNewChdUsed: Boolean;
+    FNewWellUsed: Boolean;
+  protected
+    function Description: string; override;
+  public
+    constructor Create{(const AListOfScreenObjects: TList; var NewScreenObjects,
+      OldScreenObjects: TScreenObjectEditCollection;
+      var OldChildModelScreenObjects: TList)};
+    // @name destroys the @link(TUndoSetScreenObjectProperties)
+    // and releases its memory.
+    destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
+  end;
+
+
   {@abstract(@name is used to update the view of a @link(TScreenObject).)}
   {@abstract(@name is used to delete a segment of a @link(TScreenObject).)}
   TUndoDeleteSegment = class(TCustomUpdateScreenObjectUndo)
@@ -960,7 +980,10 @@ uses Math, frmGoPhastUnit, frmSelectedObjectsUnit, frmShowHideObjectsUnit,
   frmSelectResultToImportUnit, SutraMeshUnit, DisplaySettingsUnit,
   ModflowHfbUnit, ModflowTimeUnit, FluxObservationUnit, 
   LayerStructureUnit, ModflowCSubInterbed, ModflowSubsidenceDefUnit,
-  ModflowCsubUnit, MeshRenumberingTypes;
+  ModflowCsubUnit, MeshRenumberingTypes, ModflowPackagesUnit,
+  ModflowTransientListParameterUnit, OrderedCollectionUnit,
+  ModflowConstantHeadBoundaryUnit, ModflowBoundaryUnit, ModflowFhbUnit,
+  ModflowWellUnit;
 
 resourcestring
   StrChangeSelection = 'change selection';
@@ -5950,6 +5973,212 @@ begin
     UpdateScreenObject(AScreenObject);
   end;
   UpdateSelectionRectangle
+end;
+
+{ TUndoConvertFhbToMf6 }
+
+constructor TUndoConvertFhbToMf6.Create{(const AListOfScreenObjects: TList;
+  var NewScreenObjects, OldScreenObjects: TScreenObjectEditCollection;
+  var OldChildModelScreenObjects: TList)};
+var
+  Model: TPhastModel;
+  ModflowPackages: TModflowPackages;
+  NewScreenObjects: TScreenObjectEditCollection;
+  OldScreenObjects: TScreenObjectEditCollection;
+  AListOfScreenObjects: TList;
+  OldChildModelScreenObjects: TList;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  OldScreenObject: TScreenObject;
+  Item: TScreenObjectEditItem;
+  HeadParam: TModflowTransientListParameter;
+  FlowParam: TModflowTransientListParameter;
+  ChdBoundary: TChdBoundary;
+  ParamItem: TModflowParamItem;
+  TimeIndex: Integer;
+  ModflowFhbHeadBoundary: TFhbHeadBoundary;
+  HeadItem: TFhbItem;
+  ChdItem: TChdItem;
+  PriorChdItem: TChdItem;
+  WellBoundary: TMfWellBoundary;
+  FhbFlowBoundary: TFhbFlowBoundary;
+  FlowItem: TFhbItem;
+  WellItem: TWellItem;
+  PriorWellItem: TWellItem;
+  NewChobObservations: TFluxObservationGroups;
+  NewDrobObservations: TFluxObservationGroups;
+  NewGbobObservations: TFluxObservationGroups;
+  NewRvobObservations: TFluxObservationGroups;
+  NewStobObservations: TFluxObservationGroups;
+  NewMtsdObs: TMassFluxObs;
+begin
+  Model := frmGoPhast.PhastModel;
+  ModflowPackages := Model.ModflowPackages;
+  FOldChdUsed := ModflowPackages.ChdBoundary.IsSelected;
+  FOldWellUsed := ModflowPackages.WelPackage.IsSelected;
+  NewScreenObjects := TScreenObjectEditCollection.Create;
+  OldScreenObjects := TScreenObjectEditCollection.Create;
+  AListOfScreenObjects := TList.Create;
+  OldChildModelScreenObjects := TList.Create;
+  try
+    NewScreenObjects.OwnScreenObject := True;
+    OldScreenObjects.OwnScreenObject := True;
+    HeadParam := nil;
+    FlowParam := nil;
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if (not AScreenObject.Deleted) then
+      begin
+        if ((AScreenObject.ModflowFhbHeadBoundary <> nil)
+            and AScreenObject.ModflowFhbHeadBoundary.Used)
+          or ((AScreenObject.ModflowFhbFlowBoundary <> nil)
+            and AScreenObject.ModflowFhbFlowBoundary.Used) then
+        begin
+          AListOfScreenObjects.Add(AScreenObject);
+          Item := OldScreenObjects.Add;
+          Item.ScreenObject := TScreenObject.Create(nil);
+          Item.ScreenObject.Assign(AScreenObject);
+
+          Item := NewScreenObjects.Add;
+          Item.ScreenObject := TScreenObject.Create(nil);
+          Item.ScreenObject.Assign(AScreenObject);
+
+          if (AScreenObject.ModflowFhbHeadBoundary <> nil)
+            and AScreenObject.ModflowFhbHeadBoundary.Used then
+          begin
+            FNewChdUsed := True;
+            ModflowFhbHeadBoundary := AScreenObject.ModflowFhbHeadBoundary;
+            if HeadParam = nil then
+            begin
+              HeadParam := Model.ModflowTransientParameters.Add;
+              HeadParam.ParameterType := ptCHD;
+              HeadParam.Value := 1;
+              HeadParam.ParameterName := 'FHB_Head';
+            end;
+            Item.ScreenObject.CreateChdBoundary;
+            ChdBoundary := Item.ScreenObject.ModflowChdBoundary;
+            ChdBoundary.Interp := mimLinearEnd;
+            ParamItem := ChdBoundary.Parameters.Add;
+            ParamItem.Param.Param := HeadParam;
+            PriorChdItem := nil;
+            for TimeIndex := 0 to ModflowFhbHeadBoundary.Values.Count - 1 do
+            begin
+              HeadItem := ModflowFhbHeadBoundary.Values[TimeIndex] as TFhbItem;
+              ChdItem := ParamItem.Param.Add as TChdItem;
+              ChdItem.StartTime := HeadItem.StartTime;
+              ChdItem.EndTime := HeadItem.EndTime;
+              ChdItem.StartHead := HeadItem.BoundaryValue;
+              ChdItem.EndHead := HeadItem.BoundaryValue;
+              if PriorChdItem <> nil then
+              begin
+                PriorChdItem.EndTime := HeadItem.StartTime;
+                PriorChdItem.EndHead := HeadItem.BoundaryValue;
+              end;
+              PriorChdItem := ChdItem;
+            end;
+            PriorChdItem.EndTime := PriorChdItem.EndTime + 1;
+          end;
+          if (AScreenObject.ModflowFhbFlowBoundary <> nil)
+            and AScreenObject.ModflowFhbFlowBoundary.Used then
+          begin
+            FNewWellUsed := True;
+            FhbFlowBoundary := AScreenObject.ModflowFhbFlowBoundary;
+            if FlowParam = nil then
+            begin
+              FlowParam := Model.ModflowTransientParameters.Add;
+              FlowParam.ParameterType := ptQ;
+              FlowParam.Value := 1;
+              FlowParam.ParameterName := 'FHB_Flow';
+            end;
+            Item.ScreenObject.CreateWelBoundary;
+            WellBoundary := Item.ScreenObject.ModflowWellBoundary;
+            WellBoundary.Interp := mimStepwise;
+            ParamItem := WellBoundary.Parameters.Add;
+            ParamItem.Param.Param := FlowParam;
+            PriorWellItem := nil;
+            for TimeIndex := 0 to FhbFlowBoundary.Values.Count - 1 do
+            begin
+              FlowItem := FhbFlowBoundary.Values[TimeIndex] as TFhbItem;
+              WellItem := ParamItem.Param.Add as TWellItem;
+              WellItem.StartTime := FlowItem.StartTime;
+              WellItem.EndTime := FlowItem.EndTime;
+              WellItem.PumpingRate := FlowItem.BoundaryValue;
+              if PriorWellItem <> nil then
+              begin
+                PriorWellItem.EndTime := FlowItem.StartTime;
+              end;
+              PriorWellItem := WellItem;
+            end;
+            PriorWellItem.EndTime := PriorWellItem.EndTime + 1;
+          end;
+        end;
+      end;
+    end;
+    inherited Create(AListOfScreenObjects, NewScreenObjects, OldScreenObjects, OldChildModelScreenObjects);
+
+    NewChobObservations := TFluxObservationGroups.Create(nil);
+    NewDrobObservations := TFluxObservationGroups.Create(nil);
+    NewGbobObservations := TFluxObservationGroups.Create(nil);
+    NewRvobObservations := TFluxObservationGroups.Create(nil);
+    NewStobObservations := TFluxObservationGroups.Create(nil);
+    try
+      NewChobObservations.Assign(frmGoPhast.PhastModel.HeadFluxObservations);
+      NewDrobObservations.Assign(frmGoPhast.PhastModel.DrainObservations);
+      NewGbobObservations.Assign(frmGoPhast.PhastModel.GhbObservations);
+      NewRvobObservations.Assign(frmGoPhast.PhastModel.RiverObservations);
+      NewStobObservations.Assign(frmGoPhast.PhastModel.StreamObservations);
+      FUndoEditFluxObservations.FillMt3dLists(NewMtsdObs);
+
+      FUndoEditFluxObservations.AssignNewObservations(NewChobObservations, NewDrobObservations,
+        NewGbobObservations, NewRvobObservations,
+        NewStobObservations, NewMtsdObs);
+    finally
+      NewStobObservations.Free;
+      NewRvobObservations.Free;
+      NewGbobObservations.Free;
+      NewDrobObservations.Free;
+      NewChobObservations.Free;
+    end;
+
+  finally
+    NewScreenObjects.Free;
+    OldScreenObjects.Free;
+    AListOfScreenObjects.Free;
+    OldChildModelScreenObjects.Free;
+  end;
+end;
+
+function TUndoConvertFhbToMf6.Description: string;
+begin
+  result := 'Convert FHB to CHD and WEL';
+end;
+
+destructor TUndoConvertFhbToMf6.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TUndoConvertFhbToMf6.DoCommand;
+var
+  ModflowPackages: TModflowPackages;
+begin
+  inherited;
+  ModflowPackages := frmGoPhast.PhastModel.ModflowPackages;
+  ModflowPackages.ChdBoundary.IsSelected := FNewChdUsed;
+  ModflowPackages.WelPackage.IsSelected := FNewWellUsed;
+end;
+
+procedure TUndoConvertFhbToMf6.Undo;
+var
+  ModflowPackages: TModflowPackages;
+begin
+  inherited;
+  ModflowPackages := frmGoPhast.PhastModel.ModflowPackages;
+  ModflowPackages.ChdBoundary.IsSelected := FOldChdUsed;
+  ModflowPackages.WelPackage.IsSelected := FOldWellUsed;
+
 end;
 
 end.

@@ -2286,6 +2286,8 @@ resourcestring
   'W-2005 to UZF package in MODFLOW 6?';
   StrDoYouWantToConveSUB = 'Do you want to convert the SUB or SWT packages i' +
   'n MODFLOW-2005 to CSUB package in MODFLOW 6?';
+  StrDoYouWantToConveFHB = 'Do you want to convert the FHB to the CHD and WE' +
+  'L packages in MODFLOW 6?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -4920,6 +4922,15 @@ begin
         [mbYes, mbNo], 0) = mrYes) then
       begin
         UndoStack.Submit(TUndoConvertStrStreamMF6.Create);
+      end;
+    end;
+
+    if PhastModel.ModflowPackages.FhbPackage.IsSelected then
+    begin
+      if (MessageDlg(StrDoYouWantToConveFHB, mtConfirmation,
+        [mbYes, mbNo], 0) = mrYes) then
+      begin
+        UndoStack.Submit(TUndoConvertFhbToMf6.Create);
       end;
     end;
 

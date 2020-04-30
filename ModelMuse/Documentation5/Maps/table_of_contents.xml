@@ -1488,6 +1488,9 @@
             </topicref>
             <topicref type="topic" id="433544002061393" build="ALL" modified="2018-09-11T17:30:30.674Z" icon="0" href="SMS_Sparse_Matrix_Solution_Pac">
               <caption translate="true">IMS: Iterative Model Solution Package Pane</caption>
+              <topicref type="topic" id="439515840976614" build="ALL" modified="2020-04-30T09:46:15.474Z" icon="0" href="IMS_variable_values_for_the_av">
+                <caption translate="true">IMS variable values for the available complexity options</caption>
+              </topicref>
             </topicref>
           </topicref>
           <topicref type="topic" id="402207355824962" build="ALL" modified="2010-07-02T11:46:29.955Z" icon="0" href="Subsidence_MM">

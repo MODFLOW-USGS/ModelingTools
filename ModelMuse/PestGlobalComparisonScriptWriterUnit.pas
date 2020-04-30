@@ -63,7 +63,7 @@ begin
   ObservationList := TObservationList.Create;
   FObsItemDictionary := TObsItemDictionary.Create;
   try
-    Model.FileObsItemList(ObservationList);
+    Model.FillObsItemList(ObservationList);
 
     if ObservationList.Count = 0 then
     begin

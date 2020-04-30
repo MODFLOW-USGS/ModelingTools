@@ -77,7 +77,7 @@ implementation
 
 uses
   ScreenObjectUnit, SparseDataSets, OctTreeClass,
-  SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit;
+  SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit, SutraPestObsUnit;
 
 { TSutraObservationWriter }
 
@@ -104,7 +104,6 @@ var
   Observations: TSutraObservations;
   CellList: TCellAssignmentList;
   Mesh: TSutraMesh3D;
-  CellIndex: Integer;
   ACell: TCellAssignment;
   AnObsGroup: TObsGroup;
   OctTree: TRbwOctTree;
@@ -119,8 +118,180 @@ var
   CenterPoint3D: TPoint3D;
   NodeOrElementNumber: Integer;
   ObsType: TObsType;
-//  OriginalY: Double;
-//  OriginalZ: Double;
+  SutraStateObs: TSutraStateObservations;
+  TimeIndex: Integer;
+  procedure GetObservationLocations;
+  var
+    CellIndex: Integer;
+  begin
+    OctTree.Clear;
+    if (ScreenObject.SectionCount = ScreenObject.Count)
+      and (ScreenObject.ViewDirection = vdTop)
+      and ((ScreenObject.ElevationCount = ecOne)
+      or (Mesh.MeshType in [mt2D, mtProfile]))
+    then
+    begin
+      // make observations at the exact locations of the points
+      // in the objects.
+
+      for CellIndex := 0 to CellList.Count - 1 do
+      begin
+        ACell := CellList[CellIndex];
+
+        if Mesh.MeshType = mt3D then
+        begin
+          case ScreenObject.EvaluatedAt of
+            eaBlocks:
+              begin
+                AnElement := Mesh.ElementArray[ACell.Layer, ACell.Column];
+                if not AnElement.Active then
+                begin
+                  Continue;
+                end;
+              end;
+            eaNodes:
+              begin
+                ANode := Mesh.NodeArray[ACell.Layer, ACell.Column];
+                if not ANode.Active then
+                begin
+                  Continue;
+                end;
+              end;
+          end;
+        end;
+
+        X := ACell.SutraX;
+        Y := ACell.SutraY;
+        Z := ACell.SutraZ;
+        Obs := nil;
+        if OctTree.Count > 0 then
+        begin
+          OctTree.FirstNearestPoint(X, Y, Z, APointer);
+          if (X <> ACell.SutraX) or (Y <> ACell.SutraY) or
+            (Z <> ACell.SutraZ) then
+          begin
+            Obs := nil;
+          end
+          else
+          begin
+            Obs := APointer;
+          end;
+        end;
+        if Obs = nil then
+        begin
+          Obs := TObsLocation.Create;
+          Obs.X := ACell.SutraX;
+          Obs.Y := ACell.SutraY;
+          Obs.Z := ACell.SutraZ;
+          Obs.NodeOrElementNumber := 0;
+          Obs.ObsType := otExact;
+          OctTree.AddPoint(Obs.X, Obs.Y, Obs.Z, Obs);
+          AnObsGroup.FLocations.Add(Obs);
+        end;
+      end;
+    end
+    else
+    begin
+      // make observations at nodes or at the centers of elements.
+      for CellIndex := 0 to CellList.Count - 1 do
+      begin
+        ACell := CellList[CellIndex];
+        ObsType := otExact;
+        NodeOrElementNumber := -1;
+        case ScreenObject.EvaluatedAt of
+          eaBlocks:
+            begin
+              ObsType := otElement;
+              case Mesh.MeshType of
+                mt2D, mtProfile:
+                  begin
+                    AnElement2D := Mesh.Mesh2D.Elements[ACell.Column];
+                    CenterPoint2D := AnElement2D.Center;
+                    CenterPoint3D.x := CenterPoint2D.x;
+                    CenterPoint3D.y := CenterPoint2D.y;
+                    CenterPoint3D.z := 0;
+                    NodeOrElementNumber := AnElement2D.DisplayNumber;
+                  end;
+                mt3D:
+                  begin
+                    AnElement := Mesh.ElementArray[ACell.Layer, ACell.Column];
+                    if AnElement.Active then
+                    begin
+                      CenterPoint3D := AnElement.CenterLocation;
+                    end
+                    else
+                    begin
+                      Continue;
+                    end;
+                    NodeOrElementNumber := AnElement.DisplayNumber;
+                  end;
+                else Assert(False);
+              end;
+            end;
+          eaNodes:
+            begin
+              ObsType := otNode;
+              case Mesh.MeshType of
+                mt2D, mtProfile:
+                  begin
+                    ANode2D := Mesh.Mesh2D.Nodes[ACell.Column];
+                    CenterPoint2D := ANode2D.Location;
+                    CenterPoint3D.x := CenterPoint2D.x;
+                    CenterPoint3D.y := CenterPoint2D.y;
+                    CenterPoint3D.z := 0;
+                    NodeOrElementNumber := ANode2D.DisplayNumber;
+                  end;
+                mt3D:
+                  begin
+                    ANode := Mesh.NodeArray[ACell.Layer, ACell.Column];
+                    if ANode.Active then
+                    begin
+                      CenterPoint3D := ANode.NodeLocation;
+                    end
+                    else
+                    begin
+                      Continue;
+                    end;
+                    NodeOrElementNumber := ANode.DisplayNumber;
+                  end;
+                else Assert(False);
+              end;
+            end;
+        else
+          Assert(False);
+        end;
+        X := CenterPoint3D.X;
+        Y := CenterPoint3D.Y;
+        Z := CenterPoint3D.Z;
+        Assert(ObsType <> otExact);
+        Assert(NodeOrElementNumber >= 0);
+        Obs := nil;
+        if OctTree.Count > 0 then
+        begin
+          OctTree.FirstNearestPoint(X, Y, Z, APointer);
+          if (X <> CenterPoint3D.X) or (Y <> CenterPoint3D.Y) or
+            (Z <> CenterPoint3D.Z) then
+          begin
+            Obs := nil;
+          end
+          else
+          begin
+            Obs := APointer;
+          end;
+        end;
+        if Obs = nil then
+        begin
+          Obs := TObsLocation.Create;
+          Obs.Location := CenterPoint3D;
+          Obs.NodeOrElementNumber := NodeOrElementNumber;
+          Obs.ObsType := ObsType;
+          OctTree.AddPoint(Obs.X, Obs.Y, Obs.Z, Obs);
+          AnObsGroup.FLocations.Add(Obs);
+        end;
+      end;
+    end;
+
+  end;
 begin
   OctTree := TRbwOctTree.Create(nil);
   try
@@ -147,186 +318,203 @@ begin
         try
           ScreenObject.GetCellsToAssign({Mesh,} '0', nil, nil, CellList,
             alAll, Model);
-          OctTree.Clear;
-          if (ScreenObject.SectionCount = ScreenObject.Count)
-            and (ScreenObject.ViewDirection = vdTop)
-            and ((ScreenObject.ElevationCount = ecOne)
-            or (Mesh.MeshType in [mt2D, mtProfile]))
-          then
-          begin
-            // make observations at the exact locations of the points
-            // in the objects.
+          GetObservationLocations;
 
-            for CellIndex := 0 to CellList.Count - 1 do
-            begin
-              ACell := CellList[CellIndex];
-
-              if Mesh.MeshType = mt3D then
-              begin
-                case ScreenObject.EvaluatedAt of
-                  eaBlocks:
-                    begin
-                      AnElement := Mesh.ElementArray[ACell.Layer, ACell.Column];
-                      if not AnElement.Active then
-                      begin
-                        Continue;
-                      end;
-                    end;
-                  eaNodes:
-                    begin
-                      ANode := Mesh.NodeArray[ACell.Layer, ACell.Column];
-                      if not ANode.Active then
-                      begin
-                        Continue;
-                      end;
-                    end;
-                end;
-              end;
-
-              X := ACell.SutraX;
-              Y := ACell.SutraY;
-              Z := ACell.SutraZ;
-              Obs := nil;
-              if OctTree.Count > 0 then
-              begin
-                OctTree.FirstNearestPoint(X, Y, Z, APointer);
-                if (X <> ACell.SutraX) or (Y <> ACell.SutraY) or
-                  (Z <> ACell.SutraZ) then
-                begin
-                  Obs := nil;
-                end
-                else
-                begin
-                  Obs := APointer;
-                end;
-              end;
-              if Obs = nil then
-              begin
-                Obs := TObsLocation.Create;
-                Obs.X := ACell.SutraX;
-                Obs.Y := ACell.SutraY;
-                Obs.Z := ACell.SutraZ;
-                Obs.NodeOrElementNumber := 0;
-                Obs.ObsType := otExact;
-                OctTree.AddPoint(Obs.X, Obs.Y, Obs.Z, Obs);
-                AnObsGroup.FLocations.Add(Obs);
-              end;
-            end;
-          end
-          else
-          begin
-            // make observations at nodes or at the centers of elements.
-            for CellIndex := 0 to CellList.Count - 1 do
-            begin
-              ACell := CellList[CellIndex];
-              ObsType := otExact;
-              NodeOrElementNumber := -1;
-              case ScreenObject.EvaluatedAt of
-                eaBlocks:
-                  begin
-                    ObsType := otElement;
-                    case Mesh.MeshType of
-                      mt2D, mtProfile:
-                        begin
-                          AnElement2D := Mesh.Mesh2D.Elements[ACell.Column];
-//                          Obs := TObsLocation.Create;
-//                          AnObsGroup.FLocations.Add(Obs);
-                          CenterPoint2D := AnElement2D.Center;
-                          CenterPoint3D.x := CenterPoint2D.x;
-                          CenterPoint3D.y := CenterPoint2D.y;
-                          CenterPoint3D.z := 0;
-                          NodeOrElementNumber := AnElement2D.DisplayNumber;
-//                          Obs.Center2D := CenterPoint2D;
-                        end;
-                      mt3D:
-                        begin
-                          AnElement := Mesh.ElementArray[ACell.Layer, ACell.Column];
-                          if AnElement.Active then
-                          begin
-//                            Obs := TObsLocation.Create;
-//                            AnObsGroup.FLocations.Add(Obs);
-                            CenterPoint3D := AnElement.CenterLocation;
-//                            Obs.Location := CenterPoint3D;
-                          end
-                          else
-                          begin
-                            Continue;
-                          end;
-                          NodeOrElementNumber := AnElement.DisplayNumber;
-                        end;
-                      else Assert(False);
-                    end;
-                  end;
-                eaNodes:
-                  begin
-                    ObsType := otNode;
-                    case Mesh.MeshType of
-                      mt2D, mtProfile:
-                        begin
-                          ANode2D := Mesh.Mesh2D.Nodes[ACell.Column];
-//                          Obs := TObsLocation.Create;
-//                          AnObsGroup.FLocations.Add(Obs);
-                          CenterPoint2D := ANode2D.Location;
-                          CenterPoint3D.x := CenterPoint2D.x;
-                          CenterPoint3D.y := CenterPoint2D.y;
-                          CenterPoint3D.z := 0;
-                          NodeOrElementNumber := ANode2D.DisplayNumber;
-//                          Obs.Center2D := CenterPoint2D;
-                        end;
-                      mt3D:
-                        begin
-                          ANode := Mesh.NodeArray[ACell.Layer, ACell.Column];
-                          if ANode.Active then
-                          begin
-//                            Obs := TObsLocation.Create;
-//                            AnObsGroup.FLocations.Add(Obs);
-                            CenterPoint3D := ANode.NodeLocation;
-//                            Obs.Location := CenterPoint3D;
-                          end
-                          else
-                          begin
-                            Continue;
-                          end;
-                          NodeOrElementNumber := ANode.DisplayNumber;
-                        end;
-                      else Assert(False);
-                    end;
-                  end;
-              else
-                Assert(False);
-              end;
-              X := CenterPoint3D.X;
-              Y := CenterPoint3D.Y;
-              Z := CenterPoint3D.Z;
-              Assert(ObsType <> otExact);
-              Assert(NodeOrElementNumber >= 0);
-              Obs := nil;
-              if OctTree.Count > 0 then
-              begin
-                OctTree.FirstNearestPoint(X, Y, Z, APointer);
-                if (X <> CenterPoint3D.X) or (Y <> CenterPoint3D.Y) or
-                  (Z <> CenterPoint3D.Z) then
-                begin
-                  Obs := nil;
-                end
-                else
-                begin
-                  Obs := APointer;
-                end;
-              end;
-              if Obs = nil then
-              begin
-                Obs := TObsLocation.Create;
-                Obs.Location := CenterPoint3D;
-                Obs.NodeOrElementNumber := NodeOrElementNumber;
-                Obs.ObsType := ObsType;
-                OctTree.AddPoint(Obs.X, Obs.Y, Obs.Z, Obs);
-                AnObsGroup.FLocations.Add(Obs);
-              end;
-            end;
-          end;
+//          OctTree.Clear;
+//          if (ScreenObject.SectionCount = ScreenObject.Count)
+//            and (ScreenObject.ViewDirection = vdTop)
+//            and ((ScreenObject.ElevationCount = ecOne)
+//            or (Mesh.MeshType in [mt2D, mtProfile]))
+//          then
+//          begin
+//            // make observations at the exact locations of the points
+//            // in the objects.
+//
+//            for CellIndex := 0 to CellList.Count - 1 do
+//            begin
+//              ACell := CellList[CellIndex];
+//
+//              if Mesh.MeshType = mt3D then
+//              begin
+//                case ScreenObject.EvaluatedAt of
+//                  eaBlocks:
+//                    begin
+//                      AnElement := Mesh.ElementArray[ACell.Layer, ACell.Column];
+//                      if not AnElement.Active then
+//                      begin
+//                        Continue;
+//                      end;
+//                    end;
+//                  eaNodes:
+//                    begin
+//                      ANode := Mesh.NodeArray[ACell.Layer, ACell.Column];
+//                      if not ANode.Active then
+//                      begin
+//                        Continue;
+//                      end;
+//                    end;
+//                end;
+//              end;
+//
+//              X := ACell.SutraX;
+//              Y := ACell.SutraY;
+//              Z := ACell.SutraZ;
+//              Obs := nil;
+//              if OctTree.Count > 0 then
+//              begin
+//                OctTree.FirstNearestPoint(X, Y, Z, APointer);
+//                if (X <> ACell.SutraX) or (Y <> ACell.SutraY) or
+//                  (Z <> ACell.SutraZ) then
+//                begin
+//                  Obs := nil;
+//                end
+//                else
+//                begin
+//                  Obs := APointer;
+//                end;
+//              end;
+//              if Obs = nil then
+//              begin
+//                Obs := TObsLocation.Create;
+//                Obs.X := ACell.SutraX;
+//                Obs.Y := ACell.SutraY;
+//                Obs.Z := ACell.SutraZ;
+//                Obs.NodeOrElementNumber := 0;
+//                Obs.ObsType := otExact;
+//                OctTree.AddPoint(Obs.X, Obs.Y, Obs.Z, Obs);
+//                AnObsGroup.FLocations.Add(Obs);
+//              end;
+//            end;
+//          end
+//          else
+//          begin
+//            // make observations at nodes or at the centers of elements.
+//            for CellIndex := 0 to CellList.Count - 1 do
+//            begin
+//              ACell := CellList[CellIndex];
+//              ObsType := otExact;
+//              NodeOrElementNumber := -1;
+//              case ScreenObject.EvaluatedAt of
+//                eaBlocks:
+//                  begin
+//                    ObsType := otElement;
+//                    case Mesh.MeshType of
+//                      mt2D, mtProfile:
+//                        begin
+//                          AnElement2D := Mesh.Mesh2D.Elements[ACell.Column];
+//                          CenterPoint2D := AnElement2D.Center;
+//                          CenterPoint3D.x := CenterPoint2D.x;
+//                          CenterPoint3D.y := CenterPoint2D.y;
+//                          CenterPoint3D.z := 0;
+//                          NodeOrElementNumber := AnElement2D.DisplayNumber;
+//                        end;
+//                      mt3D:
+//                        begin
+//                          AnElement := Mesh.ElementArray[ACell.Layer, ACell.Column];
+//                          if AnElement.Active then
+//                          begin
+//                            CenterPoint3D := AnElement.CenterLocation;
+//                          end
+//                          else
+//                          begin
+//                            Continue;
+//                          end;
+//                          NodeOrElementNumber := AnElement.DisplayNumber;
+//                        end;
+//                      else Assert(False);
+//                    end;
+//                  end;
+//                eaNodes:
+//                  begin
+//                    ObsType := otNode;
+//                    case Mesh.MeshType of
+//                      mt2D, mtProfile:
+//                        begin
+//                          ANode2D := Mesh.Mesh2D.Nodes[ACell.Column];
+//                          CenterPoint2D := ANode2D.Location;
+//                          CenterPoint3D.x := CenterPoint2D.x;
+//                          CenterPoint3D.y := CenterPoint2D.y;
+//                          CenterPoint3D.z := 0;
+//                          NodeOrElementNumber := ANode2D.DisplayNumber;
+//                        end;
+//                      mt3D:
+//                        begin
+//                          ANode := Mesh.NodeArray[ACell.Layer, ACell.Column];
+//                          if ANode.Active then
+//                          begin
+//                            CenterPoint3D := ANode.NodeLocation;
+//                          end
+//                          else
+//                          begin
+//                            Continue;
+//                          end;
+//                          NodeOrElementNumber := ANode.DisplayNumber;
+//                        end;
+//                      else Assert(False);
+//                    end;
+//                  end;
+//              else
+//                Assert(False);
+//              end;
+//              X := CenterPoint3D.X;
+//              Y := CenterPoint3D.Y;
+//              Z := CenterPoint3D.Z;
+//              Assert(ObsType <> otExact);
+//              Assert(NodeOrElementNumber >= 0);
+//              Obs := nil;
+//              if OctTree.Count > 0 then
+//              begin
+//                OctTree.FirstNearestPoint(X, Y, Z, APointer);
+//                if (X <> CenterPoint3D.X) or (Y <> CenterPoint3D.Y) or
+//                  (Z <> CenterPoint3D.Z) then
+//                begin
+//                  Obs := nil;
+//                end
+//                else
+//                begin
+//                  Obs := APointer;
+//                end;
+//              end;
+//              if Obs = nil then
+//              begin
+//                Obs := TObsLocation.Create;
+//                Obs.Location := CenterPoint3D;
+//                Obs.NodeOrElementNumber := NodeOrElementNumber;
+//                Obs.ObsType := ObsType;
+//                OctTree.AddPoint(Obs.X, Obs.Y, Obs.Z, Obs);
+//                AnObsGroup.FLocations.Add(Obs);
+//              end;
+//            end;
+//          end;
         finally
           CellList.Free;
+        end;
+      end;
+
+      if Model.PestUsed then
+      begin
+        SutraStateObs := ScreenObject.SutraBoundaries.SutraStateObs;
+        if SutraStateObs.Used and SutraStateObs.HasNonLakeBoundary then
+        begin
+          AnObsGroup := TObsGroup.Create;
+          FObsGroups.Add(AnObsGroup);
+          AnObsGroup.ObsName := ScreenObject.Name;
+          AnObsGroup.ObservationFormat := ofOBC;
+          AnObsGroup.ObsSchedule := AnsiString(ScreenObject.Name);
+          for TimeIndex := 0 to SutraStateObs.Count - 1 do
+          begin
+            AnObsGroup.TimeValues.Add.Value := SutraStateObs[TimeIndex].Time;
+          end;
+
+          CellList := TCellAssignmentList.Create;
+          try
+            ScreenObject.GetCellsToAssign({Mesh,} '0', nil, nil, CellList,
+              alFirstVertex, Model);
+
+            GetObservationLocations;
+          finally
+            CellList.Free;
+          end;
         end;
       end;
     end;

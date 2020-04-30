@@ -450,7 +450,7 @@ object TTaskHistory
     end
     item
       Name = 'Anonymize Objects'
-      Display = True
+      Display = False
     end>
   History = <
     item
@@ -25331,6 +25331,16 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Dialog boxes'
+        'PEST Observations')
+    end
+    item
+      Date = 43950.000000000000000000
+    end
+    item
+      Date = 43951.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'MF-2015'
         'PEST Observations')
     end>
 end

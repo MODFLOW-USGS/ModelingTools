@@ -382,7 +382,7 @@ end;
 
 procedure TfrmObservationComparisons.InitializeItemList;
 begin
-  frmGoPhast.PhastModel.FileObsItemList(FObsItemList);
+  frmGoPhast.PhastModel.FillObsItemList(FObsItemList);
 
 
 end;
