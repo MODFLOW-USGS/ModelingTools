@@ -320,15 +320,25 @@ begin
 end;
 
 procedure TUndoModelSelectionChange.DoCommand;
+var
+  PhastModel: TPhastModel;
 begin
   inherited;
   frmGoPhast.tbSelectClick(frmGoPhast.tbSelect);
-  frmGoPhast.ModelSelection := FNewModelSelection;
-  frmGoPhast.PhastModel.ChildModels.Assign(FNewChildModels);
-  if (frmGoPhast.ModelSelection = msModflow2015)
-    and frmGoPhast.PhastModel.ModflowStressPeriods.TransientModel then
+
+  PhastModel := frmGoPhast.PhastModel;
+  if (FNewModelSelection = msModflow2015) 
+    and PhastModel.ModflowPackages.NwtPackage.IsSelected then
   begin
-    frmGoPhast.PhastModel.ModflowPackages.StoPackage.IsSelected := True;
+    PhastModel.ModflowOptions.NewtonMF6 := True;
+  end;
+  
+  PhastModel.ModelSelection := FNewModelSelection;
+  PhastModel.ChildModels.Assign(FNewChildModels);
+  if (PhastModel.ModelSelection = msModflow2015)
+    and PhastModel.ModflowStressPeriods.TransientModel then
+  begin
+    PhastModel.ModflowPackages.StoPackage.IsSelected := True;
   end;
   UpdatedRequiredDataSets;
   UpdateCellTypeMf6;

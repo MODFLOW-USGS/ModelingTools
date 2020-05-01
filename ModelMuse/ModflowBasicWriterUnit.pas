@@ -546,10 +546,10 @@ begin
   begin
     WriteBeginGridData;
   end;
+    DataSetName := 'STRT';
   if Model.ModflowOptions.InitialHeadFileName = '' then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsModflow_Initial_Head);
-    DataSetName := 'STRT';
     WriteDataSet(DataSetName, DataArray);
     Model.DataArrayManager.AddDataSetToCache(DataArray);
     Model.DataArrayManager.CacheDataArrays;
@@ -558,9 +558,6 @@ begin
   begin
     if not FileExists(Model.ModflowOptions.InitialHeadFileName) then
     begin
-//      frmErrorsAndWarnings.AddError(Model, StrFileForTheInitial, 'The file '
-//        + Model.ModflowOptions.InitialHeadFileName
-//        + ' does not exist.');
       frmErrorsAndWarnings.AddError(Model, StrFileForTheInitial,
         Format(StrTheFileSDoesNot,
         [Model.ModflowOptions.InitialHeadFileName]));
@@ -572,14 +569,14 @@ begin
     UnitNumber := Model.UnitNumbers.UnitNumber(BAS_InitialHeads);
     if SameText(ExtractFileExt(Model.ModflowOptions.InitialHeadFileName), StrBhd) then
     begin
-      WriteToNameFile(StrDATABINARY, UnitNumber, RelativeFileName,
-        foInputAlreadyExists, Model, True);
+      if Model.ModelSelection <> msModflow2015 then
+      begin
+        WriteToNameFile(StrDATABINARY, UnitNumber, RelativeFileName,
+          foInputAlreadyExists, Model, True);
+      end;
     end
     else
     begin
-//      frmErrorsAndWarnings.AddError(Model, StrWrongExtension, 'The file '
-//        + Model.ModflowOptions.InitialHeadFileName
-//        + ' must have an extension equal to "' + StrBhd + '".');
       frmErrorsAndWarnings.AddError(Model, StrWrongExtension,
         Format(StrTheFile1sMustH,
           [Model.ModflowOptions.InitialHeadFileName, StrBhd]));
@@ -597,17 +594,33 @@ begin
     end
     else
     begin
-      for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+      if Model.ModelSelection <> msModflow2015 then
       begin
-        if Model.IsLayerSimulated(LayerIndex) then
+        for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
         begin
-          WriteString('EXTERNAL');
-          WriteInteger(UnitNumber);
-          WriteInteger(1);
-          WriteString(' (BINARY)');
-          WriteInteger(IPRN_Real);
-          NewLine;
+          if Model.IsLayerSimulated(LayerIndex) then
+          begin
+            WriteString('EXTERNAL');
+            WriteInteger(UnitNumber);
+            WriteInteger(1);
+            WriteString(' (BINARY)');
+            WriteInteger(IPRN_Real);
+            NewLine;
+          end;
         end;
+      end
+      else
+      begin
+        WriteString('  ');
+        WriteString(DataSetName);
+        WriteString(' IPRN');
+        WriteInteger(IPRN_Real);
+        NewLine;
+
+        WriteString('    OPEN/CLOSE ');
+        WriteString(RelativeFileName);
+        WriteString(' (BINARY)');
+        NewLine;
       end;
     end;
   end;

@@ -9038,9 +9038,22 @@ const
   //               Enhancement:Custom color schemes can now be used when
   //                plotting MODPATH data.
   //    '4.2.0.9'  No real change.
+  //    '4.2.0.10' Bug fix: Fixed using binary head file for initial heads in
+  //                MODFLOW 6.
+  //               Enhancement: When importing an existing model that uses the
+  //                BCF package, specific storage is calculated from the
+  //                confined storage coefficient and hydraulic conductivity is
+  //                calculated from transmissivity.
+  //               Bug fix: When convertng to MODFLOW 6 from earlier versions of MODFLOW
+  //                the user can now convert the FHB package to the CHD and WEL
+  //                packages.
+  //               Bug fix: When convertng to MODFLOW 6 from a model in which the NWt
+  //                package is selected, the Newton option in MODFLOW 6 is
+  //                now selected automatically.
+  //               Bug fix: Fixed using binary head file in MODFLOW 6 for starting heads.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.9';
+  IModelVersion = '4.2.0.10';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -36445,6 +36458,7 @@ end;
 function TCustomModel.BcfUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
+    and (ModelSelection <> msModflow2015)
     and ModflowPackages.BcfPackage.IsSelected
 end;
 
@@ -36498,6 +36512,7 @@ end;
 function TCustomModel.HufSelected(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
+    and (ModelSelection <> msModflow2015)
     and ModflowPackages.HufPackage.IsSelected
 end;
 
@@ -36540,6 +36555,7 @@ end;
 function TCustomModel.SwtSelected(Sender: TObject): boolean;
 begin
   result := (ModelSelection in ModflowSelection)
+    and (ModelSelection <> msModflow2015)
     and ModflowPackages.SwtPackage.IsSelected
 end;
 

@@ -443,11 +443,18 @@ Type
     NLAY: integer;
     NROW: integer;
     NCOL: integer;
+    NBOTM: integer;
     FHasFixedElevations: Boolean;
     FGridOrigin: TGridOrigin;
+    FLayerThicknesses: T3DDoubleArray;
+    FConstantLayerThicknesses : TRealConstantRecordArray;
     procedure ImportElevationsAndReleaseMemory;
     procedure CreateImportOutline;
     procedure SetGridLimitsFromOutline;
+    function GetConstLayerThickness(LayIndex: Integer): double;
+    function GetIsConstLayerThickness(LayIndex: Integer): Boolean;
+    function GetVariableLayerThickness(LayIndex, RowIndex,
+      ColIndex: Integer): double;
   strict private
     FBas: TBasImporter;
     FOriginPoint: TPoint2D;
@@ -478,6 +485,7 @@ Type
     procedure InitializeView;
     procedure ReleaseMemory;
     procedure FixElevations;
+    procedure GetLayerThicknesses;
   protected
     procedure ReadData(const ALabel: string); override;
     procedure HandlePackage; override;
@@ -485,6 +493,12 @@ Type
     Constructor Create(Importer: TModflow2005Importer;
       Bas: TBasImporter;
       XOrigin, YOrigin, GridAngle: double; GridOrigin: TGridOrigin);
+    property IsConstLayerThickness[LayIndex: Integer]: Boolean
+      read GetIsConstLayerThickness;
+    property ConstLayerThickness[LayIndex: Integer]: double
+      read GetConstLayerThickness;
+    property VariableLayerThickness[LayIndex, RowIndex, ColIndex: Integer]: double
+      read GetVariableLayerThickness;
   end;
 
   TMultZoneImporter = class(TPackageImporter)
@@ -647,6 +661,8 @@ Type
     TRPY: TOneDRealArray;
     FConfinedStorage: T3DDoubleArray;
     FConfinedStorage_Const: TRealConstantRecordArray;
+    FSpecificStorage: T3DDoubleArray;
+    FSpecificStorage_Const: TRealConstantRecordArray;
     FTran_Const: TRealConstantRecordArray;
     FTran: T3DDoubleArray;
     FHY_Const: TRealConstantRecordArray;
@@ -673,6 +689,8 @@ Type
     procedure CheckPositiveVcont(Values: T3DDoubleArray;
       ConstantRecordArray: TRealConstantRecordArray; Name: string;
       Bas: TBasImporter);
+    procedure ConvertTranToKx;
+    procedure ConvertConfinedStorageToSpecificStorage;
   protected
     function ScreenObjectNameRoot: string; override;
     procedure ReadData(const ALabel: string); override;
@@ -1393,6 +1411,7 @@ Type
   private
     FIbound: T3DIntArray;
     FConstantIbound : TIntegerConstantArray;
+    FDis: TDisImporter;
   strict private
     FHeading1: string;
     FHeading2: string;
@@ -1420,7 +1439,6 @@ Type
   private
     FInitialCHDLocations: array of array of TBooleanDynArray;
     FHasReadIBound: Boolean;
-    FDis: TDisImporter;
     procedure ImportSpecifiedHeads;
   protected
     procedure ReadData(const ALabel: string); override;
@@ -5613,6 +5631,7 @@ begin
   begin
     FixElevations;
     ImportElevations;
+    GetLayerThicknesses;
     InitializeView;
     ReleaseMemory;
   end;
@@ -6277,24 +6296,6 @@ var
               ConvertElevToVariable(ModelMuseLayIndex);
             end;
             FElevations[ModelMuseLayIndex, RowIndex, ColIndex] := BottomElevation;
-//            for LIndex := ModelMuseLayIndex+1 to NLAY - 1 do
-//            begin
-//              TopElevation := FElevations[LIndex-1, RowIndex, ColIndex];
-//              BottomElevation := FElevations[LIndex, RowIndex, ColIndex];
-//              if TopElevation <= BottomElevation then
-//              begin
-//                BottomElevation := TopElevation - MinThickness;
-//                if FConstantElevations[LIndex].IsConstant then
-//                begin
-//                  ConvertElevToVariable(LIndex);
-//                end;
-//                FElevations[LIndex, RowIndex, ColIndex] := BottomElevation;
-//              end
-//              else
-//              begin
-//                break;
-//              end;
-//            end;
           end;
         end;
       end;
@@ -6386,6 +6387,16 @@ begin
   end;
 end;
 
+function TDisImporter.GetConstLayerThickness(LayIndex: Integer): double;
+begin
+  result := FConstantLayerThicknesses[LayIndex].RealValue;
+end;
+
+function TDisImporter.GetIsConstLayerThickness(LayIndex: Integer): Boolean;
+begin
+  result := FConstantLayerThicknesses[LayIndex].IsConstant;
+end;
+
 function TDisImporter.GetLayerBottomIndex(Layer: Integer): integer;
 var
   Index: Integer;
@@ -6399,6 +6410,88 @@ begin
       Inc(result);
     end;
   end;
+end;
+
+procedure TDisImporter.GetLayerThicknesses;
+var
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  TopElevation: Double;
+  BottomElevation: Double;
+  ConstantThicknesses: Double;
+  IsConstant: Boolean;
+begin
+  SetLength(FLayerThicknesses, NBOTM-1);
+  SetLength(FConstantLayerThicknesses, NBOTM-1);
+  for LayerIndex  := 0 to NBOTM - 2 do
+  begin
+    if (FConstantElevations[LayerIndex].IsConstant)
+      and (FConstantElevations[LayerIndex+1].IsConstant) then
+    begin
+      FConstantLayerThicknesses[LayerIndex].IsConstant := True;
+      FConstantLayerThicknesses[LayerIndex].RealValue :=
+        FConstantElevations[LayerIndex].RealValue -
+        FConstantElevations[LayerIndex+1].RealValue;
+    end
+    else
+    begin
+      FConstantLayerThicknesses[LayerIndex].IsConstant := False;
+      SetLength(FLayerThicknesses[LayerIndex], NROW, NCOL);
+      for RowIndex := 0 to NROW - 1 do
+      begin
+        for ColIndex := 0 to NCOL - 1 do
+        begin
+          if FConstantElevations[LayerIndex].IsConstant then
+          begin
+            TopElevation := FConstantElevations[LayerIndex].RealValue
+          end
+          else
+          begin
+            TopElevation := FElevations[LayerIndex, RowIndex, ColIndex];
+          end;
+          if FConstantElevations[LayerIndex+1].IsConstant then
+          begin
+            BottomElevation := FConstantElevations[LayerIndex+1].RealValue
+          end
+          else
+          begin
+            BottomElevation := FElevations[LayerIndex+1, RowIndex, ColIndex];
+          end;
+          FLayerThicknesses[LayerIndex, RowIndex, ColIndex] :=
+            TopElevation - BottomElevation;
+        end;
+      end;
+      ConstantThicknesses := FLayerThicknesses[LayerIndex, 0, 0];
+      IsConstant := True;
+      for RowIndex := 0 to NROW - 1 do
+      begin
+        for ColIndex := 0 to NCOL - 1 do
+        begin
+          if ConstantThicknesses <> FLayerThicknesses[LayerIndex, RowIndex, ColIndex] then
+          begin
+            IsConstant := False;
+            break;
+          end;
+        end;
+        if not IsConstant then
+        begin
+          break;
+        end;
+      end;
+      if IsConstant then
+      begin
+        FConstantLayerThicknesses[LayerIndex].IsConstant := True;
+        FConstantLayerThicknesses[LayerIndex].RealValue := ConstantThicknesses;
+      end;
+    end;
+  end;
+end;
+
+function TDisImporter.GetVariableLayerThickness(LayIndex, RowIndex,
+  ColIndex: Integer): double;
+begin
+  result := FLayerThicknesses[LayIndex, RowIndex, ColIndex];
 end;
 
 procedure TDisImporter.HandlePackage;
@@ -6467,7 +6560,6 @@ end;
 procedure TDisImporter.ReadDataSet2;
 var
   Index: Integer;
-  NBOTM: integer;
 begin
   Assert(Length(LAYCBD) = NLAY);
   for Index := 0 to NLAY - 1 do
@@ -24156,6 +24248,149 @@ begin
   end;
 end;
 
+procedure TBcfImporter.ConvertConfinedStorageToSpecificStorage;
+var
+  LayerIndex: Integer;
+  Layer: Integer;
+  LayerGroup: TLayerGroup;
+  DisImporter: TDisImporter;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ConfinedStorage: Double;
+  LayerThickness: Double;
+begin
+  if (FConfinedStorage = nil) and (FConfinedStorage_Const = nil) then
+  begin
+    Exit;
+  end;
+  DisImporter := FBas.FDis;
+  SetLength(FSpecificStorage, NLAY);
+  SetLength(FSpecificStorage_Const, NLAY);
+  for LayerIndex := 0 to NLAY - 1 do
+  begin
+    FSpecificStorage_Const[LayerIndex].IsConstant := False;
+  end;
+  for LayerIndex := 0 to NLAY - 1 do
+  begin
+    Layer := FModel.ModflowLayerToDataSetLayer(LayerIndex + 1);
+    LayerGroup := FModel.LayerStructure[Layer + 1];
+    if LayerGroup.AquiferType in [0,2,3] then
+    begin
+      if FConfinedStorage_Const[LayerIndex].IsConstant
+        and DisImporter.IsConstLayerThickness[Layer] then
+      begin
+        FSpecificStorage_Const[LayerIndex].IsConstant := True;
+        FSpecificStorage_Const[LayerIndex].RealValue :=
+          FConfinedStorage_Const[LayerIndex].RealValue
+          / DisImporter.ConstLayerThickness[Layer];
+      end
+      else
+      begin
+        SetLength(FSpecificStorage[LayerIndex], DisImporter.NROW, DisImporter.NCOL);
+        for RowIndex := 0 to DisImporter.NROW - 1 do
+        begin
+          for ColIndex := 0 to DisImporter.NCOL - 1 do
+          begin
+            if FConfinedStorage_Const[LayerIndex].IsConstant then
+            begin
+              ConfinedStorage := FConfinedStorage_Const[LayerIndex].RealValue;
+            end
+            else
+            begin
+              ConfinedStorage := FTran[LayerIndex, RowIndex, ColIndex];
+            end;
+
+            if DisImporter.IsConstLayerThickness[Layer] then
+            begin
+              LayerThickness := DisImporter.ConstLayerThickness[Layer]
+            end
+            else
+            begin
+              LayerThickness :=
+                DisImporter.VariableLayerThickness[Layer, RowIndex, ColIndex]
+            end;
+
+            FSpecificStorage[LayerIndex, RowIndex, ColIndex] :=
+              ConfinedStorage/LayerThickness;
+          end;
+        end      end;
+    end;
+  end;
+end;
+
+procedure TBcfImporter.ConvertTranToKx;
+var
+  LayerIndex: Integer;
+  Layer: Integer;
+  LayerGroup: TLayerGroup;
+  DisImporter: TDisImporter;
+  Trans: Double;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  LayerThickness: Double;
+begin
+  DisImporter := FBas.FDis;
+  if FHY_Const = nil then
+  begin
+    SetLength(FHY_Const, NLAY);
+    for LayerIndex := 0 to NLAY - 1 do
+    begin
+      FHY_Const[LayerIndex].IsConstant := False;
+    end;
+  end;
+  if FHY = nil then
+  begin
+    SetLength(FHY, NLAY);
+  end;
+  for LayerIndex := 0 to NLAY - 1 do
+  begin
+    Layer := FModel.ModflowLayerToDataSetLayer(LayerIndex + 1);
+    LayerGroup := FModel.LayerStructure[Layer + 1];
+    if LayerGroup.AquiferType in [0,2] then
+    begin
+      if FTran_Const[LayerIndex].IsConstant and
+        DisImporter.IsConstLayerThickness[Layer] then
+      begin
+        FHY_Const[LayerIndex].IsConstant := True;
+        FHY_Const[LayerIndex].RealValue :=
+          FTran_Const[LayerIndex].RealValue
+          / DisImporter.ConstLayerThickness[Layer];
+      end
+      else
+      begin
+        FHY_Const[LayerIndex].IsConstant := False;
+        SetLength(FHY[LayerIndex], DisImporter.NROW, DisImporter.NCOL);
+        for RowIndex := 0 to DisImporter.NROW - 1 do
+        begin
+          for ColIndex := 0 to DisImporter.NCOL - 1 do
+          begin
+            if FTran_Const[LayerIndex].IsConstant then
+            begin
+              Trans := FTran_Const[LayerIndex].RealValue;
+            end
+            else
+            begin
+              Trans := FTran[LayerIndex, RowIndex, ColIndex];
+            end;
+
+            if DisImporter.IsConstLayerThickness[Layer] then
+            begin
+              LayerThickness := DisImporter.ConstLayerThickness[Layer]
+            end
+            else
+            begin
+              LayerThickness :=
+                DisImporter.VariableLayerThickness[Layer, RowIndex, ColIndex]
+            end;
+
+            FHY[LayerIndex, RowIndex, ColIndex] := Trans/LayerThickness;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
 constructor TBcfImporter.Create(Importer: TModflow2005Importer; Bas: TBasImporter);
 begin
   inherited Create(Importer, 'BCF:');
@@ -24458,14 +24693,21 @@ begin
     ImportDataSets2And3;
     FModel.DataArrayManager.CreateInitialDataSets;
 
+    ConvertConfinedStorageToSpecificStorage;
+
     CheckPositiveArrayValues(FConfinedStorage, FConfinedStorage_Const,
       StrConfinedStorageCoe, FBas);
     ImportDataSet(StrConfinedStorageCoe, StrConfinedStorageCoe,
       FConfinedStorage_Const, FConfinedStorage);
 
+    ImportDataSet(rsSpecific_Storage, rsSpecific_Storage,
+      FSpecificStorage_Const, FSpecificStorage);
+
     CheckPositiveArrayValues(FTran, FTran_Const, StrTransmissivity, FBas);
     ImportDataSet(StrTransmissivity, StrTransmissivity,
       FTran_Const, FTran);
+
+    ConvertTranToKx;
 
     CheckPositiveArrayValues(FHY, FHY_Const, rsKx, FBas);
     ImportDataSet(rsKx, rsKx, FHY_Const, FHY);

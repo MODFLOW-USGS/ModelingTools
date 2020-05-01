@@ -310,6 +310,25 @@ begin
         // file.
 //        RealArrayLength := StrToInt(frmExtract.adeCellCount.Text);
 //        SetLength(RealArray, RealArrayLength);
+        if OpenDialog1.FilterIndex in [1,4] then
+        begin
+          FileStream := TFileStream.Create(OpenDialog1.FileName,
+            fmOpenRead	or fmShareDenyWrite);
+          try
+            if CheckArrayFileType(FileStream) = mftFormatted then
+            begin
+              OpenDialog1.FilterIndex := 1;
+            end
+            else
+            begin
+              OpenDialog1.FilterIndex := 4;
+            end;
+          finally
+            FileStream.Free;
+          end;
+
+        end;
+
         if OpenDialog1.FilterIndex in [1,2,3,6] then
         begin
           // Formatted file.
@@ -1323,10 +1342,10 @@ begin
     pcModflow:
       begin
         OpenDialog1.Filter :=
-          'formatted head files (*.fhd)|*.fhd|'
+          'formatted head files (*.fhd, *.hds)|*.fhd;*.hds|'
           + 'formatted drawdown files (*.fdn)|*.fdn|'
           + 'formatted HUF head files (*.hhd)|*.hhd|'
-          + 'binary head files (*.bhd)|*.bhd|'
+          + 'binary head files (*.bhd, *.hds)|*.bhd;*.hds|'
           + 'binary drawdown files (*.bdn)|*.bdn|'
           + 'Any formatted file (*.*)|*.*|'
           + 'Any binary file (*.*)|*.*';

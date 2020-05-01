@@ -6093,7 +6093,7 @@ begin
             end;
             Item.ScreenObject.CreateWelBoundary;
             WellBoundary := Item.ScreenObject.ModflowWellBoundary;
-            WellBoundary.Interp := mimStepwise;
+            WellBoundary.Interp := mimLinear;
             ParamItem := WellBoundary.Parameters.Add;
             ParamItem.Param.Param := FlowParam;
             PriorWellItem := nil;

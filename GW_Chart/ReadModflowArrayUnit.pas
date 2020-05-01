@@ -14,6 +14,7 @@ type
   T3DTModflowArray = array of TModflowDoubleArray;
 
   TModflowPrecision = (mpSingle, mpDouble);
+  TModflowFileType = (mftFormatted, mftBinary);
 
   EPrecisionReadError = class(Exception);
 
@@ -85,6 +86,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   const AltNLay, AltNRow, AltNCol: integer;
   var IRESULT: integer);
 
+function CheckArrayFileType(AFile: TFileStream): TModflowFileType;
 function CheckArrayPrecision(AFile: TFileStream): TModflowPrecision;
 function CheckBudgetPrecision(AFile: TFileStream): TModflowPrecision;
 
@@ -118,6 +120,30 @@ begin
     or (Description = '       THICKNESS')
     or (Description = 'CENTER ELEVATION')
     or (Description = 'HEAD            ');
+end;
+
+function CheckArrayFileType(AFile: TFileStream): TModflowFileType;
+var
+  CharIndex: Integer;
+  DESC: TModflowDesc;
+  AChar: AnsiChar;
+  Description: string;
+begin
+  Assert(AFile.Position = 0);
+  for CharIndex := 1 to 42 do
+  begin
+    AFile.Read(AChar, SizeOf(AChar));
+  end;
+  AFile.Read(DESC, SizeOf(DESC));
+  Description := DESC;
+  if ValidDescription(Description) then
+  begin
+    result := mftFormatted;
+  end
+  else
+  begin
+    result := mftBinary;
+  end;
 end;
 
 function CheckArrayPrecision(AFile: TFileStream): TModflowPrecision;

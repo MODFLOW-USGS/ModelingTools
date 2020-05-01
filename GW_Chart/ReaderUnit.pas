@@ -268,7 +268,7 @@ var
 implementation
 
 uses Math, Contnrs, frmFormatUnit, frmAboutUnit, frmModChartUnit,
-  frmSelectDiscretizationUnit;
+  frmSelectDiscretizationUnit, frmModflowModelUnitsUnit;
 
 {$R *.DFM}
 
@@ -2857,7 +2857,8 @@ begin
   end;
 end;
 
-procedure TfrmZoneBdgtReader.ReadModflowOrSeawatFile(const BudgetStartLine: string);
+procedure TfrmZoneBdgtReader.ReadModflowOrSeawatFile(
+  const BudgetStartLine: string);
 var
   SearchTerm: string;
   LineIndex: integer;
@@ -2972,7 +2973,12 @@ begin
   if LineIndex < 0 then
   begin
     LineIndex := 0;
-    TimeUnitsString := ''
+    TimeUnitsString := '';
+    frmModflowModelUnits.ShowModal;
+    if frmModflowModelUnits.rgTimeUnits.ItemIndex >= 1 then
+    begin
+      TimeUnitsString := frmModflowModelUnits.rgTimeUnits.Items[frmModflowModelUnits.rgTimeUnits.ItemIndex];
+    end;
   end
   else
   begin

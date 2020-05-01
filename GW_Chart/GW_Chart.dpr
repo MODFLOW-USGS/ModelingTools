@@ -31,7 +31,8 @@ uses
   frmFarmUnit in 'frmFarmUnit.pas' {frmFarm},
   frmFarmFileTypeUnit in 'frmFarmFileTypeUnit.pas' {frmFarmFileType},
   DisclaimerTextUnit in 'DisclaimerTextUnit.pas',
-  Mf6ObsUtilOutputReaderUnit in 'Mf6ObsUtilOutputReaderUnit.pas';
+  Mf6ObsUtilOutputReaderUnit in 'Mf6ObsUtilOutputReaderUnit.pas',
+  frmModflowModelUnitsUnit in 'frmModflowModelUnitsUnit.pas' {frmModflowModelUnits};
 
 {$R *.RES}
 
@@ -51,6 +52,7 @@ begin
   Application.CreateForm(TfrmBudgetPrecisionQuery, frmBudgetPrecisionQuery);
   Application.CreateForm(TfrmFarm, frmFarm);
   Application.CreateForm(TfrmFarmFileType, frmFarmFileType);
+  Application.CreateForm(TfrmModflowModelUnits, frmModflowModelUnits);
   HandleParams;
   Application.Run;
 end.
