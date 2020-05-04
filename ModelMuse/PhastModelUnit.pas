@@ -9041,19 +9041,24 @@ const
   //    '4.2.0.10' Bug fix: Fixed using binary head file for initial heads in
   //                MODFLOW 6.
   //               Enhancement: When importing an existing model that uses the
-  //                BCF package, specific storage is calculated from the
-  //                confined storage coefficient and hydraulic conductivity is
-  //                calculated from transmissivity.
-  //               Bug fix: When convertng to MODFLOW 6 from earlier versions of MODFLOW
-  //                the user can now convert the FHB package to the CHD and WEL
-  //                packages.
-  //               Bug fix: When convertng to MODFLOW 6 from a model in which the NWt
-  //                package is selected, the Newton option in MODFLOW 6 is
-  //                now selected automatically.
-  //               Bug fix: Fixed using binary head file in MODFLOW 6 for starting heads.
+  //                BCF package, specific storage is calculated from
+  //                the confined storage coefficient and hydraulic conductivity
+  //                is calculated from transmissivity.
+  //               Bug fix: When convertng to MODFLOW 6 from earlier versions
+  //                of MODFLOW the user can now convert the FHB package to the
+  //                CHD and WEL packages.
+  //               Bug fix: When convertng to MODFLOW 6 from a model in which
+  //                the NWt package is selected, the Newton option in
+  //                MODFLOW 6 is now selected automatically.
+  //               Bug fix: Fixed using binary head file in MODFLOW 6 for
+  //                starting heads.
+  //    '4.2.0.11' Bug fix: Fixed export of "NO_PTC" option in MODFLOW 6.
+  //               Change: The NEWTON and UNDER_RELAXATION options in MODFLOW 6
+  //                 can now be specified in the MODFLOW Packages and Programs
+  //                 dialog box as well as the MODFLOW Options dialog box.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.10';
+  IModelVersion = '4.2.0.11';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

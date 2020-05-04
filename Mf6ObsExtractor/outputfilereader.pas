@@ -6,54 +6,19 @@ unit OutputFileReader;
 interface
 
 uses
-  Classes, SysUtils, Generics.Collections;
+  Classes, SysUtils, CustomOutputFileReader;
 
 type
-
-  TFileType = (ftText, ftBinary);
-  TOutputFile = class;
-
-  TFileId = record
-    Key: string;
-    OutputFile: TOutputFile;
-    Position: Integer;
-  end;
-
-  TObservationDictionary = specialize TDictionary<string, TFileId>;
-
   { TOutputFile }
 
-  TOutputFile = class(TObject)
+  TOutputFile = class(TCustomOutputFile)
   private
-    FFirstTime: double;
-    FSecondTime: double;
-    FTextFile: TextFile;
-    FBinaryFile: TFileStream;
-    FBinaryFileSize: Int64;
-    FFileType: TFileType;
-    FIdLocations: TObservationDictionary;
-    FFileName: string;
     FNOBS: Integer;
-    FFirstValues: array of double;
-    FSecondValues: array of double;
-    function GetFirstValue(Index: integer): double;
-    function GetSecondValue(Index: integer): double;
-    procedure ReadHeader;
+  protected
+    procedure ReadHeader; override;
   public
-    constructor Create(FileName: string; FileType: TFileType;
-      IdLocations: TObservationDictionary);
-    destructor Destroy; override;
-    property FileName: string read FFileName;
-    procedure ReadTimeAndValues;
-    property FirstTime: double read FFirstTime;
-    property SecondTime: double read FSecondTime;
-    property FirstValue[Index: integer]: double read GetFirstValue;
-    property SecondValue[Index: integer]: double read GetSecondValue;
+    procedure ReadTimeAndValues; override;
   end;
-
-  TOutputFileObjectList = specialize TObjectList<TOutputFile>;
-
-  EReadOutputError = class(Exception);
 
 implementation
 
@@ -145,53 +110,12 @@ begin
   end;
 end;
 
-function TOutputFile.GetFirstValue(Index: integer): double;
-begin
-  result := FFirstValues[Index];
-end;
-
-function TOutputFile.GetSecondValue(Index: integer): double;
-begin
-  result := FSecondValues[Index];
-end;
-
-constructor TOutputFile.Create(FileName: string; FileType: TFileType;
- IdLocations: TObservationDictionary);
-begin
-  FFileName := FileName;
-  FFileType := FileType;
-  if FileType = ftBinary then
-  begin
-    FBinaryFile := TFileStream.Create(FileName, fmOpenRead);
-    FBinaryFileSize := FBinaryFile.Size;
-  end
-  else
-  begin
-    AssignFile(FTextFile, FileName);
-    reset(FTextFile);
-  end;
-  FIdLocations:= IdLocations;
-  ReadHeader;
-  ReadTimeAndValues;
-  ReadTimeAndValues;
-end;
-
-destructor TOutputFile.Destroy;
-begin
-  if FFileType = ftText then
-  begin
-    CloseFile(FTextFile);
-  end;
-  FBinaryFile.Free;
-  inherited Destroy;
-end;
-
 procedure TOutputFile.ReadTimeAndValues;
 var
   Splitter: TStringList;
   ALine: string;
   Index: Integer;
-  FTime: double;
+  ATime: double;
   FValues: array of double;
 begin
   SetLength(FValues, FNOBS);
@@ -199,11 +123,11 @@ begin
   begin
     if FBinaryFile.Position = FBinaryFileSize then
     begin
-      FTime := FTime - 1;
+      ATime := -1;
     end
     else
     begin
-      FBinaryFile.read(FTime, SizeOf(FTime));
+      FBinaryFile.read(ATime, SizeOf(ATime));
       FBinaryFile.read(FValues[0], Length(FValues)*SizeOf(double));
     end;
   end
@@ -212,7 +136,7 @@ begin
     Readln(FTextFile, ALine);
     if ALine = '' then
     begin
-      FTime := FTime - 1;
+      ATime := -1;
     end
     else
     begin
@@ -220,7 +144,7 @@ begin
       try
         Splitter.DelimitedText := ALine;
         Assert(FNOBS = Splitter.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FIdLocations.Count - 1, FNOBS]));
-        FTime := StrToFloat(Splitter[0]);
+        ATime := StrToFloat(Splitter[0]);
         for Index := 1 to Splitter.Count -1 do
         begin
           FValues[Index-1] := StrToFloat(Splitter[Index]);
@@ -233,7 +157,7 @@ begin
   if FFirstValues = nil then
   begin
     FFirstValues := FValues;
-    FFirstTime := FTime;
+    FFirstTime := ATime;
   end
   else
   begin
@@ -243,7 +167,7 @@ begin
       FFirstTime := FSecondTime;
     end;
     FSecondValues := FValues;
-    FSecondTime := FTime;
+    FSecondTime := ATime;
   end;
 end;
 

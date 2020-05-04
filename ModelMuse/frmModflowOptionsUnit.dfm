@@ -4,7 +4,6 @@ inherited frmModflowOptions: TfrmModflowOptions
   Caption = 'MODFLOW Options'
   ClientHeight = 550
   ClientWidth = 543
-  ExplicitTop = -109
   ExplicitWidth = 559
   ExplicitHeight = 589
   PixelsPerInch = 96
@@ -372,7 +371,7 @@ inherited frmModflowOptions: TfrmModflowOptions
         Left = 8
         Top = 235
         Width = 520
-        Height = 90
+        Height = 36
         Caption = 
           'You will need to have at least one unconfined or convertible lay' +
           'er and assign non-zero values to the Wet_Dry_Threshold and Wet_D' +

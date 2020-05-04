@@ -6,7 +6,8 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, CustApp, OutputFileReader, InputFileReader;
+  Classes, SysUtils, CustApp, OutputFileReader, InputFileReader,
+  CustomInputReader, CustomOutputFileReader;
 
 type
 
@@ -31,7 +32,7 @@ var
   P: PChar;
   Opts: TStringList;
   NonOpts: TStringList;
-  I: integer;
+  //I: integer;
 begin
   Opts := TStringList.Create;
   NonOpts := TStringList.Create;

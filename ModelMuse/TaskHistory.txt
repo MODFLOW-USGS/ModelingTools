@@ -25350,5 +25350,19 @@ object TTaskHistory
         'Import'
         'MF-2015'
         'GW_Chart')
+    end
+    item
+      Date = 43953.000000000000000000
+    end
+    item
+      Date = 43954.000000000000000000
+    end
+    item
+      Date = 43955.000000000000000000
+      Categories.Strings = (
+        'Refactoring'
+        'PEST Observations'
+        'Bug fix'
+        'Dialog boxes')
     end>
 end

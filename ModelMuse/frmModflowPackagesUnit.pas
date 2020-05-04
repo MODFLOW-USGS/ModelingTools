@@ -318,6 +318,7 @@ type
       Sender: TObject);
     procedure framePackageSfrMF6rcSelectionControllerEnabledChange(
       Sender: TObject);
+    procedure framePkgSMSrcSelectionControllerEnabledChange(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -1533,6 +1534,14 @@ procedure TfrmModflowPackages.framePkgSFRrgSfr2ISFROPTClick(Sender: TObject);
 begin
   inherited;
   EnableSfrParameters;
+end;
+
+procedure TfrmModflowPackages.framePkgSMSrcSelectionControllerEnabledChange(
+  Sender: TObject);
+begin
+  inherited;
+  framePkgSMS.rcSelectionControllerEnabledChange(Sender);
+
 end;
 
 procedure TfrmModflowPackages.framePkgSWRjvplSwrChange(Sender: TObject);

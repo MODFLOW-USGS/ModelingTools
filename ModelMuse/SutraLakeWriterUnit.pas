@@ -47,6 +47,7 @@ type
     procedure WriteLakeInteractionDataSet5;
     procedure WriteLakeInteractionDataSet6A;
     procedure WriteLakeInteractionDataSet6B;
+    procedure WriteLakeObsNodes;
   protected
     class function Extension: string; override;
   public
@@ -831,6 +832,11 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TSutraLakeWriter.WriteLakeObsNodes;
+begin
+
 end;
 
 end.

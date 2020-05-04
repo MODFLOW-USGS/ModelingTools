@@ -10,7 +10,7 @@
       </Flags>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <Title Value="MODFLOW 6 Observation Extractor"/>
+      <Title Value="SUTRA Observation Extractor"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -25,63 +25,39 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <RequiredPackages Count="1">
-      <Item1>
-        <PackageName Value="sparta_Generics"/>
-      </Item1>
-    </RequiredPackages>
-    <Units Count="9">
+    <Units Count="5">
       <Unit0>
-        <Filename Value="Mf6ObsExtractor.lpr"/>
+        <Filename Value="SutraObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="outputfilereader.pas"/>
+        <Filename Value="..\ModelMuse\BasisFunctionUnit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="OutputFileReader"/>
       </Unit1>
       <Unit2>
-        <Filename Value="inputfilereader.pas"/>
+        <Filename Value="..\ModelMuse\FastGEO.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="InputFileReader"/>
       </Unit2>
       <Unit3>
-        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <Filename Value="..\ModelMuse\SubPolygonUnit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>
-        <Filename Value="..\ModelMuse\BasisFunctionUnit.pas"/>
+        <Filename Value="inputfilereader.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="InputFileReader"/>
       </Unit4>
-      <Unit5>
-        <Filename Value="..\ModelMuse\FastGEO.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="..\ModelMuse\SubPolygonUnit.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="custominputreader.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="CustomInputReader"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="customoutputfilereader.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="CustomOutputFileReader"/>
-      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="Mf6ObsExtractor"/>
+      <Filename Value="SutraObsExtractor"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\Components\RbwParser;..\ModelMuse"/>
+      <OtherUnitFiles Value="..\ModelMuse"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

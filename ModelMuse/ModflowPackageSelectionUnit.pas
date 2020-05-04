@@ -1041,6 +1041,8 @@ Type
     FCheckInput: TCheckInput;
     FMemoryPrint: TMemoryPrint;
     FStoredOuterRClose: TRealStorage;
+    FNewtonMF6: Boolean;
+    FUnderRelaxationMF6: Boolean;
     procedure SetBacktrackingNumber(const Value: Integer);
     procedure SetComplexity(const Value: TSmsComplexityOption);
     procedure SetInnerMaxIterations(const Value: integer);
@@ -1105,6 +1107,10 @@ Type
     function GetOuterRClose: double;
     procedure SetOuterRClose(const Value: double);
     function GetUsedLinAccel: TSmsLinLinearAcceleration;
+    function GetNewtonMF6: Boolean;
+    function GetUnderRelaxationMF6: Boolean;
+    procedure SetNewtonMF6(const Value: Boolean);
+    procedure SetUnderRelaxationMF6(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1138,6 +1144,9 @@ Type
     property PreconditionerDropTolerance: double
       read GetPreconditionerDropTolerance
       write SetPreconditionerDropTolerance;
+    property NewtonMF6: Boolean read GetNewtonMF6 write SetNewtonMF6;
+    property UnderRelaxationMF6: Boolean read GetUnderRelaxationMF6
+      write SetUnderRelaxationMF6;
   published
     // CONTINUE option in MODFLOW-6 Simulation Name File
     property ContinueModel: boolean read FContinueModel write SetContinueModel;
@@ -18177,6 +18186,8 @@ begin
     MaxErrors := SourceSms.MaxErrors;
     CheckInput := SourceSms.CheckInput;
     MemoryPrint := SourceSms.MemoryPrint;
+    NewtonMF6 := SourceSms.NewtonMF6;
+    UnderRelaxationMF6 := SourceSms.UnderRelaxationMF6;
   end;
   inherited;
 end;
@@ -18285,6 +18296,18 @@ begin
   Result := StoredInnerRclose.Value;
 end;
 
+function TSmsPackageSelection.GetNewtonMF6: Boolean;
+begin
+  if FModel <> nil then
+  begin
+    result := (FModel as TCustomModel).ModflowOptions.NewtonMF6;
+  end
+  else
+  begin
+    result := FNewtonMF6;
+  end;
+end;
+
 function TSmsPackageSelection.GetPreconditionerDropTolerance: double;
 begin
   Result := StoredPreconditionerDropTolerance.Value;
@@ -18303,6 +18326,18 @@ end;
 function TSmsPackageSelection.GetRelaxationFactor: double;
 begin
   Result := StoredRelaxationFactor.Value;
+end;
+
+function TSmsPackageSelection.GetUnderRelaxationMF6: Boolean;
+begin
+  if FModel <> nil then
+  begin
+    result := (FModel as TCustomModel).ModflowOptions.UnderRelaxationMF6;
+  end
+  else
+  begin
+    result := FUnderRelaxationMF6;
+  end;
 end;
 
 function TSmsPackageSelection.GetUnderRelaxGamma: double;
@@ -18500,6 +18535,15 @@ begin
   end;
 end;
 
+procedure TSmsPackageSelection.SetNewtonMF6(const Value: Boolean);
+begin
+  FNewtonMF6 := Value;
+  if FModel <> nil then
+  begin
+    (FModel as TCustomModel).ModflowOptions.NewtonMF6 := Value;
+  end;
+end;
+
 procedure TSmsPackageSelection.SetNumberOfOrthoganalizations(
   const Value: Integer);
 begin
@@ -18680,6 +18724,15 @@ begin
   begin
     FUnderRelaxation := Value;
     InvalidateModel;
+  end;
+end;
+
+procedure TSmsPackageSelection.SetUnderRelaxationMF6(const Value: Boolean);
+begin
+  FUnderRelaxationMF6 := Value;
+  if FModel <> nil then
+  begin
+    (FModel as TCustomModel).ModflowOptions.UnderRelaxationMF6 := Value;
   end;
 end;
 

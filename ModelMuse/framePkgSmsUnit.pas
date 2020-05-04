@@ -33,6 +33,8 @@ type
     cbCheckInput: TCheckBox;
     lblMemoryPrint: TLabel;
     comboMemoryPrint: TJvImageComboBox;
+    cbNewton: TCheckBox;
+    cbUnderRelaxation: TCheckBox;
     procedure rdgNonlinearOptionsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgNonlinearOptionsSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -45,6 +47,8 @@ type
       const Value: string);
     procedure rdgLinearOptionsStateChange(Sender: TObject; ACol, ARow: Integer;
       const Value: TCheckBoxState);
+    procedure rcSelectionControllerEnabledChange(Sender: TObject);
+    procedure cbNewtonClick(Sender: TObject);
   private
     FInitializedGrid: boolean;
     FUnderRelaxPickList: TStringList;
@@ -104,6 +108,12 @@ resourcestring
   StrOuterRCloseBND = 'Outer RClose BND';
 
 { TframePkgSms }
+
+procedure TframePkgSms.cbNewtonClick(Sender: TObject);
+begin
+  inherited;
+  rcSelectionControllerEnabledChange(nil);
+end;
 
 constructor TframePkgSms.Create(AOwner: TComponent);
 begin
@@ -182,6 +192,10 @@ begin
     seMaxErrors.AsInteger := SmsPackage.MaxErrors;
     cbCheckInput.Checked := SmsPackage.CheckInput = ciCheckAll;
     comboMemoryPrint.ItemIndex := Ord(SmsPackage.MemoryPrint);
+
+    cbNewton.Checked := SmsPackage.NewtonMF6;
+    cbUnderRelaxation.Checked := SmsPackage.UnderRelaxationMF6;
+    rcSelectionControllerEnabledChange(nil);
 
     for SmsOveride := Low(TSmsOverride) to High(TSmsOverride) do
     begin
@@ -386,6 +400,12 @@ begin
   Assert(result >= 1);
 end;
 
+procedure TframePkgSms.rcSelectionControllerEnabledChange(Sender: TObject);
+begin
+  inherited;
+  cbUnderRelaxation.Enabled := rcSelectionController.Enabled and cbNewton.Checked;
+end;
+
 procedure TframePkgSms.rdgLinearOptionsSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 var
@@ -396,29 +416,6 @@ var
   begin
     result := TSmsComplexityOption(comboComplexity.ItemIndex);
   end;
-//  function BackTrackingNumber: integer;
-//  begin
-//    if rdgLinearOptions.Checked[Ord(scOverride), SmsOrdToRow(soBacktrackingNumber)] then
-//    begin
-//      result := rdgLinearOptions.IntegerValueDefault[Ord(scValue), SmsOrdToRow(soBacktrackingNumber), 0];
-//    end
-//    else
-//    begin
-//      result := 10;
-//    end;
-//  end;
-//  function UnderRelaxation: TSmsUnderRelaxation;
-//  begin
-//    if rdgLinearOptions.Checked[Ord(scOverride), SmsOrdToRow(soUnderRelax)] then
-//    begin
-//      result := TSmsUnderRelaxation(FUnderRelaxPickList.IndexOf(
-//        rdgLinearOptions.Cells[Ord(scValue), SmsOrdToRow(soUnderRelax)]));
-//    end
-//    else
-//    begin
-//      result := surNone;
-//    end;
-//  end;
 begin
   inherited;
 
@@ -430,44 +427,6 @@ begin
       scOverride:
         begin
           case SmsOverride of
-{
-            soOuterHclose, soOuterMaxIt, soUnderRelax:
-              begin
-                CanSelect := True;
-              end;
-            soUnderRelaxTheta:
-              begin
-                CanSelect := (UnderRelaxation = surDbd);
-              end;
-            soUnderRelaxKappa:
-              begin
-                CanSelect := (UnderRelaxation = surDbd);
-              end;
-            soUnderRelaxGamma:
-              begin
-                CanSelect := (UnderRelaxation <> surNone);
-              end;
-            soUnderRelaxMomentum:
-              begin
-                CanSelect := (UnderRelaxation = surDbd);
-              end;
-            soBacktrackingNumber:
-              begin
-                CanSelect := True;
-              end;
-            soBacktrackingTolerance:
-              begin
-                CanSelect := BackTrackingNumber > 0;
-              end;
-            soBacktrackingReductionFactor:
-              begin
-                CanSelect := BackTrackingNumber > 0;
-              end;
-            soBacktrackingResidualLimit:
-              begin
-                CanSelect := BackTrackingNumber > 0;
-              end;
-}
             soInnerMaxIterations, soInnerHclose:
               begin
                 CanSelect := True;
@@ -1019,6 +978,9 @@ begin
   SmsPackage.MaxErrors := seMaxErrors.AsInteger;
   SmsPackage.CheckInput := TCheckInput(not cbCheckInput.Checked);
   SmsPackage.MemoryPrint := TMemoryPrint(comboMemoryPrint.ItemIndex);
+
+  SmsPackage.NewtonMF6 := cbNewton.Checked;
+  SmsPackage.UnderRelaxationMF6 := cbUnderRelaxation.Checked;
 
   NewOverRides := [];
   for SmsOveride := Low(TSmsOverride) to High(TSmsOverride) do

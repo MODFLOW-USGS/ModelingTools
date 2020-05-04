@@ -449,12 +449,12 @@ begin
       end;
     upDontUseForAll:
       begin
-        WriteString('  NO PTC ALL');
+        WriteString('  NO_PTC ALL');
         NewLine;
       end;
     upDontUseForFirst:
       begin
-        WriteString('  NO PTC FIRST');
+        WriteString('  NO_PTC FIRST');
         NewLine;
       end;
     else
@@ -463,79 +463,5 @@ begin
 
   WriteEndOptions;
 end;
-
-//procedure TImsWriter.WriteXmdBlock;
-//var
-//  UseXmd: Boolean;
-//begin
-//  UseXmd := False;
-//  if [soInnerMaxIterations, soInnerHclose, soInnerRclose,
-//    soXmdLinearAcceleration, soPreconditionerLevel,
-//    soPreconditionerDropTolerance, soNumberOfOrthoganalizations,
-//    soReorderingMethod]
-//    * FSmsPackage.SmsOverrides <> [] then
-//  begin
-//    UseXmd := True;
-//  end
-//  else if (soRedBlackOrder in FSmsPackage.SmsOverrides)
-//    and FSmsPackage.RedBlackOrder then
-//  begin
-//    UseXmd := True;
-//  end;
-//
-//  if not UseXmd then
-//  begin
-//    Exit;
-//  end;
-//
-//  WriteString('BEGIN XMD');
-//  NewLine;
-//
-//  WriteInnerMaximum;
-//  WriteInnerHClose;
-//
-//  WriteString('  INNER_RCLOSE');
-//  if soInnerRclose in FSmsPackage.SmsOverrides then
-//  begin
-//    WriteFloat(FSmsPackage.InnerRclose);
-//  end
-//  else
-//  begin
-//    WriteFloat(0.1);
-//  end;
-//  NewLine;
-//
-//  WriteString('  LINEAR_ACCELERATION ');
-//  if soXmdLinearAcceleration in FSmsPackage.SmsOverrides then
-//  begin
-//    case FSmsPackage.XmdLinearAcceleration of
-//      sxlaCg: WriteString('CG');
-//      sxlaOrthomin: WriteString('ORTHOMIN');
-//      sxlaBiCgStab: WriteString('BICGSTAB');
-//      else Assert(False);
-//    end;
-//  end
-//  else
-//  begin
-//    WriteString('CG');
-//  end;
-//  NewLine;
-//
-//  WritePreconditionerLevels;
-//  WritePreconditionerDropTolerances;
-//  WriteNumberOfOrthogonalizations;
-//
-//  if (soRedBlackOrder in FSmsPackage.SmsOverrides)
-//    and FSmsPackage.RedBlackOrder then
-//  begin
-//    WriteString('  RED_BLACK_ORDERING');
-//    NewLine;
-//  end;
-//
-//  WriteReorderingMethod;
-//
-//  WriteString('END XMD');
-//  NewLine;
-//end;
 
 end.

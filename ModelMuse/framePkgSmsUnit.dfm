@@ -1,30 +1,32 @@
 inherited framePkgSms: TframePkgSms
   Width = 495
-  Height = 481
+  Height = 493
   ExplicitWidth = 495
-  ExplicitHeight = 481
+  ExplicitHeight = 493
   DesignSize = (
     495
-    481)
+    493)
+  inherited lblComments: TLabel
+    Enabled = True
+  end
   inherited memoComments: TMemo
     Width = 464
+    Enabled = True
     ExplicitWidth = 464
   end
   object pgcControls: TPageControl [3]
     Left = 0
     Top = 157
     Width = 495
-    Height = 324
-    ActivePage = tabLinear
+    Height = 336
+    ActivePage = tabBasic
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
+    ExplicitHeight = 324
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 296
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
@@ -48,42 +50,37 @@ inherited framePkgSms: TframePkgSms
       end
       object lblUsePTC: TLabel
         Left = 16
-        Top = 104
+        Top = 100
         Width = 398
         Height = 13
         Caption = 
           'Use pseudo-transient continuation (PTC)  (Inverse of  NO_PTC and' +
           ' no_ptc_option)'
-        Enabled = False
       end
       object lblMaxErrors: TLabel
         Left = 16
-        Top = 155
+        Top = 151
         Width = 353
         Height = 13
         Caption = 
           'Maximum number of allowed error messages (-1 for no limit) (MAXE' +
           'RROR)'
-        Enabled = False
       end
       object lblMemoryPrint: TLabel
         Left = 16
-        Top = 224
+        Top = 220
         Width = 263
         Height = 13
         Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
-        Enabled = False
       end
       object comboPrintOption: TJvImageComboBox
         Left = 16
-        Top = 31
+        Top = 27
         Width = 113
         Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
-        Color = clBtnFace
         DroppedWidth = 145
-        Enabled = False
         ImageHeight = 0
         ImageWidth = 0
         ItemHeight = 17
@@ -108,14 +105,12 @@ inherited framePkgSms: TframePkgSms
       end
       object comboComplexity: TJvImageComboBox
         Left = 152
-        Top = 31
+        Top = 27
         Width = 97
         Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
-        Color = clBtnFace
         DroppedWidth = 145
-        Enabled = False
         ImageHeight = 0
         ImageWidth = 0
         ItemHeight = 17
@@ -140,43 +135,38 @@ inherited framePkgSms: TframePkgSms
       end
       object cbContinue: TCheckBox
         Left = 16
-        Top = 60
+        Top = 56
         Width = 249
         Height = 17
         Caption = 'Continue even if no convergence'
-        Enabled = False
         TabOrder = 2
       end
       object cbCsvOutput: TCheckBox
         Left = 16
-        Top = 83
+        Top = 79
         Width = 464
         Height = 17
         Caption = 'Write solver convergence values to CSV file'
-        Enabled = False
         TabOrder = 3
       end
       object seSolutionGroupMaxIter: TJvSpinEdit
         Left = 264
-        Top = 33
+        Top = 29
         Width = 121
         Height = 21
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
-        Enabled = False
         TabOrder = 4
       end
       object comboUsePTC: TJvImageComboBox
         Left = 16
-        Top = 123
+        Top = 119
         Width = 297
         Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
-        Color = clBtnFace
         DroppedWidth = 297
-        Enabled = False
         ImageHeight = 0
         ImageWidth = 0
         ItemHeight = 17
@@ -201,34 +191,30 @@ inherited framePkgSms: TframePkgSms
       end
       object seMaxErrors: TJvSpinEdit
         Left = 16
-        Top = 174
+        Top = 170
         Width = 121
         Height = 21
         MaxValue = 2147483647.000000000000000000
         MinValue = -1.000000000000000000
         Value = 1.000000000000000000
-        Enabled = False
         TabOrder = 6
       end
       object cbCheckInput: TCheckBox
         Left = 16
-        Top = 201
+        Top = 197
         Width = 321
         Height = 17
         Caption = 'Check model input (Inverse of NOCHECK)'
-        Enabled = False
         TabOrder = 7
       end
       object comboMemoryPrint: TJvImageComboBox
         Left = 16
-        Top = 248
+        Top = 244
         Width = 121
         Height = 23
         Style = csOwnerDrawVariable
         ButtonStyle = fsLighter
-        Color = clBtnFace
         DroppedWidth = 297
-        Enabled = False
         ImageHeight = 0
         ImageWidth = 0
         ItemHeight = 17
@@ -251,22 +237,36 @@ inherited framePkgSms: TframePkgSms
             Text = 'All'
           end>
       end
+      object cbNewton: TCheckBox
+        Left = 16
+        Top = 273
+        Width = 382
+        Height = 17
+        Caption = 'Use Newton formulation (MODFLOW-6)'
+        TabOrder = 9
+        OnClick = cbNewtonClick
+      end
+      object cbUnderRelaxation: TCheckBox
+        Left = 16
+        Top = 296
+        Width = 406
+        Height = 17
+        Caption = 'Use Under_Relaxation option (MODFLOW-6)'
+        Enabled = False
+        TabOrder = 10
+      end
     end
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 296
       object rdgNonlinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 487
-        Height = 296
+        Height = 308
         Align = alClient
         ColCount = 3
-        Enabled = False
         FixedCols = 1
         RowCount = 24
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -354,6 +354,7 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 296
         ColWidths = (
           84
           64
@@ -363,14 +364,14 @@ inherited framePkgSms: TframePkgSms
     object tabLinear: TTabSheet
       Caption = 'Linear'
       ImageIndex = 2
+      ExplicitHeight = 296
       object rdgLinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 487
-        Height = 296
+        Height = 308
         Align = alClient
         ColCount = 3
-        Enabled = False
         FixedCols = 1
         RowCount = 23
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -458,6 +459,7 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 296
         ColWidths = (
           84
           64
@@ -514,6 +516,11 @@ inherited framePkgSms: TframePkgSms
       end
       item
         Control = comboMemoryPrint
+      end
+      item
+        Control = cbNewton
       end>
+    Enabled = True
+    OnEnabledChange = rcSelectionControllerEnabledChange
   end
 end

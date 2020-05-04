@@ -50,6 +50,7 @@ type
       write SetSutraStateObsItem; default;
     function Add: TSutraStateObsItem;
     function HasNonLakeBoundary: Boolean;
+    function HasLakeBoundary: Boolean;
   end;
 
   TCustomFluxObsItem = class(TCustomSutraObsItem)
@@ -297,6 +298,21 @@ end;
 function TSutraStateObservations.GetSutraStateObsItem(Index: Integer): TSutraStateObsItem;
 begin
   result := inherited Items[Index] as TSutraStateObsItem;
+end;
+
+function TSutraStateObservations.HasLakeBoundary: Boolean;
+var
+  Index: Integer;
+begin
+  result := False;
+  for Index := 0 to Count - 1 do
+  begin
+    if Items[Index].ObsType = StrLakeStage then
+    begin
+      result := True;
+      Exit;
+    end;
+  end;
 end;
 
 function TSutraStateObservations.HasNonLakeBoundary: Boolean;
