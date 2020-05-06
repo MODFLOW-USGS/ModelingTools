@@ -6,8 +6,8 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, FastGEO, BasisFunctionUnit, SubPolygonUnit, CustApp, InputFileReader
-  { you can add units after this };
+  Classes, SysUtils, FastGEO, BasisFunctionUnit, SubPolygonUnit, CustApp,
+  InputFileReader, CustomInputReader, CustomOutputFileReader, SutraOutputFileReader;
 
 type
 

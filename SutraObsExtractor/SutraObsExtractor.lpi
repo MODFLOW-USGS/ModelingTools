@@ -25,7 +25,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="5">
+    <Units Count="8">
       <Unit0>
         <Filename Value="SutraObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -47,6 +47,21 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="InputFileReader"/>
       </Unit4>
+      <Unit5>
+        <Filename Value="..\Mf6ObsExtractor\custominputreader.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CustomInputReader"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\Mf6ObsExtractor\customoutputfilereader.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CustomOutputFileReader"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="sutraoutputfilereader.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SutraOutputFileReader"/>
+      </Unit7>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -57,7 +72,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\ModelMuse"/>
+      <OtherUnitFiles Value="..\ModelMuse;..\Mf6ObsExtractor"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

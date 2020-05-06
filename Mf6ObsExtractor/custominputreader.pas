@@ -59,6 +59,15 @@ type
     FLocationDictionary: TLocationDictionary;
     FDerivedObsDictionary: TDerivedObsDictionary;
     FPriorDerivedObsStatus: TDerivedObsStatus;
+    FInstructionFileMode: TInstructionFileMode;
+    FOutputFile: TStringList;
+    FInstructionFile: TStringList;
+    FIdentifiersRead: Boolean;
+    FParser: TRbwParser;
+    FObsFileList: TOutputFileObjectList;
+    FOutputFileName: string;
+    FInstructionFileName: string;
+    FListingFileName: string;
     procedure AssignInactiveObs(var NewLocation: TLocationID);
     procedure RecordObs(const AnObs: TDerivedObs);
     procedure InterpOnePoint(DerivedObs: TDerivedObs; NewLocation: TLocationID);
@@ -68,33 +77,32 @@ type
       Locations: TLocationList; NewLocation: TLocationID);
     procedure InterpFourPoints(DerivedObservations: TDerivedObsList;
       Locations: TLocationList; NewLocation: TLocationID);
+    procedure ClearFileObs;
+    procedure ClearAllObservations;
+    procedure AddObsToDictionary(AnObs: TDerivedObs);
+    procedure PrintToOutputFile(const AnObs: TDerivedObs);
   protected
-    FListingFile: TStringList;
-    FInstructionFileMode: TInstructionFileMode;
+    FObservationDictionary: TObservationDictionary;
+    FIdStatus: TIdStatus;
     FSplitter: TStringList;
     FLineIndex: Integer;
     FInputFileLines: TStringList;
-    FOutputFile: TStringList;
-    FInstructionFile: TStringList;
-    FCurrentProcessStatus: TProcessStatus;
-    FIdentifiersRead: Boolean;
-    FIdStatus: TIdStatus;
-    FDerivedObsList: TDerivedObsObjectList;
-    FParser: TRbwParser;
-    FObsFileList: TOutputFileObjectList;
     FPriorProcessStatus: TProcessStatus;
-    procedure ClearFileObs; virtual; abstract;
+    FCurrentProcessStatus: TProcessStatus;
+    FListingFile: TStringList;
+    FDerivedObsList: TDerivedObsObjectList;
     function CreateObsFile(const FileType: TFileType;
-        const FileName: string): TCustomOutputFile; virtual; abstract;
-    procedure ClearAllObservations;
+      const FileName: string): TCustomOutputFile; virtual; abstract;
+    function ApplicationTitle: string; virtual; abstract;
+    procedure InterpolateInTime;
     procedure AddLocationToDictionary(Location: TLocationID);
-    procedure AddObsToDictionary(AnObs: TDerivedObs);
-    procedure PrintToOutputFile(const AnObs: TDerivedObs);
-    procedure InitializeIdentifiers;
     procedure InitializeOptions;
+    procedure InitializeObsFiles;
+    procedure InitializeIdentifiers;
     procedure InitializeDerivedObs;
-    procedure HandleDerivedObs;
+    procedure HandleOption;
     procedure HandleObservationFiles;
+    procedure HandleDerivedObs;
   public
     constructor Create;
     destructor Destroy; override;
@@ -191,6 +199,36 @@ resourcestring
   rsEndOfOBSERVA = 'End of OBSERVATION_FILES Block';
   rsOBSERVATION_Files = 'OBSERVATION_FILES';
   rsUnrecognized = 'Unrecognized option in line %0:d, ""%1:s.';
+  rsOutputFileS = '  Output file = %s';
+  rsInstructionF = '  Instruction file = %s';
+  rsLISTING = 'LISTING';
+  rsNotExactlyTwoItems = 'In line %0:d, "%1:s", there were not exactly two '
+    +'items listed.';
+  rsTheListingFi = 'The listing file was already set to "0:s".';
+  rsBeginOPTIONS = 'Begin OPTIONS block';
+  rsListingFileS = '  Listing file = %s';
+  rsOUTPUT = 'OUTPUT';
+  rsTheOutputFil = 'The output file was already set to "0:s".';
+  rsINSTRUCTION = 'INSTRUCTION';
+  rsTheInstructi = 'The instruction file was already set to "0:s".';
+  rsPestOrUcode = 'In line %0:d, "%1:s", the third item must be either "PEST" '
+    +'or "UCODE".';
+  rsOPTIONS = 'OPTIONS';
+  rsBEGINOPTIONS2 = 'BEGIN OPTIONS must be paired with END OPTIONS in line %0:'
+    +'d, "%1:s".';
+  rsEndOfOPTIONS = 'End of OPTIONS block';
+  rsStandardFile = 'StandardFile, 0, 2, %d';
+  rsBeginExtract =
+    'Begin extracting observation values interpolated in time.';
+  rsTheObservati2 = 'The observation %s is not found in any of the observation'
+    +' output files.';
+  rsObservationN2 = '  Observation Name = %s';
+  rsObservationT2 = '  Observation time = %g';
+  rsObservationV = '  Observation Value = %g';
+  rsEndExtract =
+    'End of extracting observation values interpolated in time.';
+  rsBeginOBSERVA2 = 'Begin OBSERVATION_FILES Block';
+  rsProcessingOB = 'Processing OBSERVATION_FILES Block';
 
   function NearlyTheSame(A, B, Epsilon: double): boolean;
   begin
@@ -660,6 +698,197 @@ begin
   end;
 end;
 
+procedure TCustomInputHandler.HandleOption;
+  procedure RecordOutputFile;
+  begin
+    if (FOutputFileName <> '') and (FListingFile <> nil) then
+    begin
+      FListingFile.Add(Format(rsOutputFileS, [FOutputFileName]));
+    end;
+  end;
+
+  procedure RecordInstructionFile;
+  begin
+    if (FInstructionFileName <> '') and (FListingFile <> nil) then
+    begin
+      FListingFile.Add(Format(rsInstructionF, [FInstructionFileName]));
+      case FInstructionFileMode of
+        ifmPest:
+          begin
+            FListingFile.Add('  Instruction file format = PEST');
+          end;
+        ifmUCODE:
+          begin
+            FListingFile.Add('  Instruction file format = UCODE');
+          end;
+      end;
+    end;
+  end;
+
+begin
+  Assert(FSplitter.Count in [2, 3], Format(rsExactlyTwoOrThree, [FLineIndex+1,
+    FInputFileLines[FLineIndex]]));
+  if UpperCase(FSplitter[0]) = rsLISTING then
+  begin
+    Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
+    Assert(FListingFileName = '', Format(rsTheListingFi, [FListingFileName]));
+    FListingFileName := FSplitter[1];
+    FListingFile := TStringList.Create;
+    FListingFile.Add(ApplicationTitle);
+    FListingFile.Add('');
+    FListingFile.Add(rsBeginOPTIONS);
+    FListingFile.Add(Format(rsListingFileS, [FListingFileName]));
+
+    RecordOutputFile;
+    RecordInstructionFile;
+  end
+  else if UpperCase(FSplitter[0]) = rsOUTPUT then
+  begin
+    Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
+    Assert(FOutputFileName = '', Format(rsTheOutputFil, [FOutputFileName]));
+    FOutputFileName := FSplitter[1];
+    FOutputFile := TStringList.Create;
+    RecordOutputFile;
+  end
+  else if UpperCase(FSplitter[0]) = rsINSTRUCTION then
+  begin
+    Assert(FInstructionFileName = '', Format(rsTheInstructi, [
+      FInstructionFileName]));
+    FInstructionFileName := FSplitter[1];
+    if FSplitter.Count = 3 then
+    begin
+      if UpperCase(FSplitter[2]) = 'UCODE' then
+      begin
+        FInstructionFileMode := ifmUCODE;
+      end
+      else if UpperCase(FSplitter[2]) = 'PEST' then
+      begin
+        FInstructionFileMode := ifmPest;
+      end
+      else
+      begin
+        Assert(False, Format(rsPestOrUcode, [FLineIndex+1,
+          FInputFileLines[FLineIndex]]));
+      end;
+    end
+    else
+    begin
+      FInstructionFileMode := ifmPest;
+    end;
+    FInstructionFile := TStringList.Create;
+    case FInstructionFileMode of
+      ifmPest:
+        begin
+          FInstructionFile.Add('pif @');
+        end;
+      ifmUCODE:
+        begin
+          FInstructionFile.Add('jtf @');
+        end;
+    end;
+    RecordInstructionFile;
+  end
+  else if UpperCase(FSplitter[0]) = rsEND then
+  begin
+    Assert(UpperCase(FSplitter[1]) = rsOPTIONS, Format(rsBEGINOPTIONS2,
+      [FLineIndex+1, FInputFileLines[FLineIndex]]));
+    FCurrentProcessStatus := psNone;
+    FPriorProcessStatus := psOptions;
+    if FListingFile <> nil then
+    begin
+      FListingFile.Add(rsEndOfOPTIONS);
+      FListingFile.Add('');
+    end;
+  end
+  else
+  begin
+    Assert(False, Format(rsUnrecognized, [FLineIndex+1, FInputFileLines[
+      FLineIndex]]));
+  end;
+end;
+
+procedure TCustomInputHandler.InterpolateInTime;
+var
+  ObsIndex: Integer;
+  AnObs: TDerivedObs;
+  ObsFile : TFileId;
+  FirstValue: double;
+  SecondValue: double;
+  FirstTime: double;
+  SecondTime: double;
+begin
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add('');
+    FListingFile.Add(rsBeginExtract);
+  end;
+  WriteLn(rsBeginExtract);
+  FDerivedObsList.Sort;
+  for ObsIndex := 0 to Pred(FDerivedObsList.Count) do
+  begin
+    AnObs := FDerivedObsList[ObsIndex];
+    Assert(FObservationDictionary.TryGetValue(UpperCase(AnObs.ID), ObsFile),
+      Format(rsTheObservati2, [AnObs.ID]));
+    if  ObsFile.OutputFile.FirstTime < ObsFile.OutputFile.SecondTime then
+    begin
+      while AnObs.Time > ObsFile.OutputFile.SecondTime do
+      begin
+        ObsFile.OutputFile.ReadTimeAndValues;
+        if ObsFile.OutputFile.FirstTime > ObsFile.OutputFile.SecondTime then
+        begin
+          break;
+        end;
+      end;
+      if ObsFile.OutputFile.FirstTime > ObsFile.OutputFile.SecondTime then
+      begin
+        AnObs.Value := ObsFile.OutputFile.FirstValue[ObsFile.Position];
+      end
+      else
+      begin
+        FirstValue := ObsFile.OutputFile.FirstValue[ObsFile.Position];
+        SecondValue := ObsFile.OutputFile.SecondValue[ObsFile.Position];
+        FirstTime := ObsFile.OutputFile.FirstTime;
+        SecondTime := ObsFile.OutputFile.SecondTime;
+        AnObs.Value := FirstValue + (SecondValue-FirstValue)
+          * (AnObs.Time - FirstTime)
+          / (SecondTime - FirstTime);
+      end;
+      AnObs.TimeAssigned := True;
+      AddObsToDictionary(AnObs);
+
+      FParser.CreateVariable(AnObs.ObsName, '', AnObs.Value, AnObs.ObsName);
+      PrintToOutputFile(AnObs);
+      if FListingFile <> nil then
+      begin
+        FListingFile.Add(Format(rsObservationN2, [AnObs.Obsname]));
+        FListingFile.Add(Format(rsObservationT2, [AnObs.Time]));
+        FListingFile.Add(Format(rsObservationV, [AnObs.Value]));
+        FListingFile.Add('');
+      end;
+    end;
+  end;
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add('');
+    FListingFile.Add(rsEndExtract);
+  end;
+end;
+
+procedure TCustomInputHandler.InitializeObsFiles;
+begin
+  FIdentifiersRead := False;
+  FCurrentProcessStatus := psObsFiles;
+  ClearAllObservations;
+
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add(rsBeginOBSERVA2);
+  end;
+  WriteLn(rsProcessingOB);
+end;
+
 procedure TCustomInputHandler.InterpOnePoint(DerivedObs: TDerivedObs;
   NewLocation: TLocationID);
 var
@@ -948,10 +1177,20 @@ begin
   end;
 end;
 
+procedure TCustomInputHandler.ClearFileObs;
+begin
+  FObsFileList.Clear;
+  FObservationDictionary.Clear;
+end;
+
 constructor TCustomInputHandler.Create;
 begin
   inherited;
+  FListingFileName := '';
+  FOutputFileName := '';
+  FInstructionFileName := '';
   FCurrentProcessStatus := psNone;
+  FPriorProcessStatus := psNone;
   FParser := TRbwParser.Create(nil);
   FLocationDictionary := TLocationDictionary.Create;
   FDerivedObsDictionary := TDerivedObsDictionary.Create;
@@ -959,10 +1198,29 @@ begin
   FInputFileLines := TStringList.Create;
   FSplitter := TStringList.Create;
   FObsFileList := TOutputFileObjectList.Create;
+  FObservationDictionary := TObservationDictionary.Create;
 end;
 
 destructor TCustomInputHandler.Destroy;
 begin
+  if FListingFileName <> '' then
+  begin
+    FListingFile.SaveToFile(FListingFileName);
+  end;
+  if FOutputFileName <> '' then
+  begin
+    FOutputFile.SaveToFile(FOutputFileName);
+  end;
+  if FInstructionFileName <> '' then
+  begin
+    if FInstructionFileMode = ifmUCODE then
+    begin
+      FInstructionFile.Insert(1, Format(rsStandardFile,
+        [FInstructionFile.Count-1]));
+    end;
+    FInstructionFile.SaveToFile(FInstructionFileName);
+  end;
+  FObservationDictionary.Free;
   FObsFileList.Free;
   FSplitter.Free;
   FInputFileLines.Free;

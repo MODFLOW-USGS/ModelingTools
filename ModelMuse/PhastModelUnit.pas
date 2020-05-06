@@ -9054,8 +9054,13 @@ const
   //                starting heads.
   //    '4.2.0.11' Bug fix: Fixed export of "NO_PTC" option in MODFLOW 6.
   //               Change: The NEWTON and UNDER_RELAXATION options in MODFLOW 6
-  //                 can now be specified in the MODFLOW Packages and Programs
-  //                 dialog box as well as the MODFLOW Options dialog box.
+  //                can now be specified in the MODFLOW Packages and Programs
+  //                dialog box as well as the MODFLOW Options dialog box.
+
+  //               Bug fix: Fixed bug that caused an error if the user attempted
+  //                to rename a layer group with an invalid name.
+  //               Bug fix: Fixed bug that could cause an error when drawing
+  //                contours.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.11';

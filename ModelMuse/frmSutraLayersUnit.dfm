@@ -4,8 +4,8 @@ inherited frmSutraLayers: TfrmSutraLayers
   Caption = 'Sutra Layer Groups'
   ClientHeight = 436
   ClientWidth = 585
-  ExplicitWidth = 603
-  ExplicitHeight = 481
+  ExplicitWidth = 601
+  ExplicitHeight = 475
   PixelsPerInch = 96
   TextHeight = 18
   object spl1: TSplitter
@@ -220,8 +220,8 @@ inherited frmSutraLayers: TfrmSutraLayers
           Width = 193
           ExplicitWidth = 193
           inherited lbl3: TLabel
-            Width = 179
-            Height = 36
+            Width = 193
+            Height = 41
             ExplicitWidth = 179
             ExplicitHeight = 36
           end

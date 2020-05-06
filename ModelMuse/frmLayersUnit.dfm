@@ -5,7 +5,6 @@ inherited frmLayers: TfrmLayers
   ClientHeight = 424
   ClientWidth = 583
   OnResize = FormResize
-  ExplicitTop = -51
   ExplicitWidth = 599
   ExplicitHeight = 463
   PixelsPerInch = 96
@@ -22,7 +21,7 @@ inherited frmLayers: TfrmLayers
     Top = 0
     Width = 441
     Height = 383
-    ActivePage = tabNoDelay
+    ActivePage = tabBasics
     Align = alClient
     TabOrder = 1
     OnChange = pcLayerGroupsChange
@@ -827,13 +826,13 @@ inherited frmLayers: TfrmLayers
       Align = alBottom
       ColumnCollection = <
         item
-          Value = 33.333333333333330000
+          Value = 33.333333333333340000
         end
         item
-          Value = 33.333333333333330000
+          Value = 33.333333333333340000
         end
         item
-          Value = 33.333333333333330000
+          Value = 33.333333333333340000
         end>
       ControlCollection = <
         item

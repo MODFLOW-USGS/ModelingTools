@@ -160,6 +160,8 @@ resourcestring
   StrNewLayerGroup = 'New Layer Group';
   StrThisNameIsTooSim = 'This name is too similar to the name of another aqu' +
   'ifer.';
+  StrThisNameAlreadyExists = 'This name can not be used because there is alr' +
+  'eady a data set or global variable named "%s".';
 
 implementation
 
@@ -785,6 +787,15 @@ begin
           MessageDlg(StrThisNameIsTooSim, mtWarning, [mbOK], 0);
           Exit;
         end;
+        TestName := TestName + '_Bottom';
+        if TestName <> GenerateNewName(TestName) then
+        begin
+          Beep;
+          MessageDlg(
+            Format(StrThisNameAlreadyExists, [TestName]), mtWarning, [mbOK], 0);
+          Exit;
+        end;
+
         SelectedUnit.AquiferName := edName.Text;
       end;
       TreeNode := FSelectedTreeNodes[0];

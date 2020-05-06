@@ -213,6 +213,16 @@ begin
           MessageDlg(StrThisNameIsTooSim, mtWarning, [mbOK], 0);
           Exit;
         end;
+
+        TestName := TestName + '_Bottom';
+        if TestName <> GenerateNewName(TestName) then
+        begin
+          Beep;
+          MessageDlg(
+            Format(StrThisNameAlreadyExists, [TestName]), mtWarning, [mbOK], 0);
+          Exit;
+        end;
+
         SelectedUnit.AquiferName := edName.Text;
       end;
       TreeNode := FSelectedTreeNodes[0];

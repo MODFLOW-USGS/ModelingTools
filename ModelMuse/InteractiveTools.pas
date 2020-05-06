@@ -3576,11 +3576,31 @@ var
   SelectColor32: TColor32;
   P: TPolygon32;
   MultiplePolygons: boolean;
+  Grid: TCustomModelGrid;
 begin
+  Grid := frmGoPhast.PhastModel.SelectedModel.Grid;
   P := nil;
   MultiplePolygons := False;
   Assert((FirstRow >= 0) and (LastRow >= 0)
-    and (FirstRow >= 0) and (LastRow >= 0));
+    and (FirstCol >= 0) and (LastCol >= 0));
+
+  if FirstRow >= Grid.RowCount then
+  begin
+    FirstRow := Grid.RowCount-1;
+  end;
+  if LastRow >= Grid.RowCount then
+  begin
+    LastRow := Grid.RowCount-1;
+  end;
+  if FirstCol >= Grid.ColumnCount then
+  begin
+    FirstCol := Grid.ColumnCount-1;
+  end;
+  if LastCol >= Grid.ColumnCount then
+  begin
+    LastCol := Grid.ColumnCount-1;
+  end;
+
   SetLength(Polygon, 4);
   if FirstCol < LastCol then
   begin
@@ -3605,30 +3625,30 @@ begin
 
   if GetEvalAt = eaBlocks then
   begin
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDElementCorner(C1, R1);
+    APoint := Grid.TwoDElementCorner(C1, R1);
     Polygon[0] := View(Direction).ConvertPoint(APoint);
 
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDElementCorner(C1, R2);
+    APoint := Grid.TwoDElementCorner(C1, R2);
     Polygon[1] := View(Direction).ConvertPoint(APoint);
 
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDElementCorner(C2, R2);
+    APoint := Grid.TwoDElementCorner(C2, R2);
     Polygon[2] := View(Direction).ConvertPoint(APoint);
 
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDElementCorner(C2, R1);
+    APoint := Grid.TwoDElementCorner(C2, R1);
     Polygon[3] := View(Direction).ConvertPoint(APoint);
   end
   else
   begin
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDCellCorner(C1, R1);
+    APoint := Grid.TwoDCellCorner(C1, R1);
     Polygon[0] := View(Direction).ConvertPoint(APoint);
 
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDCellCorner(C1, R2);
+    APoint := Grid.TwoDCellCorner(C1, R2);
     Polygon[1] := View(Direction).ConvertPoint(APoint);
 
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDCellCorner(C2, R2);
+    APoint := Grid.TwoDCellCorner(C2, R2);
     Polygon[2] := View(Direction).ConvertPoint(APoint);
 
-    APoint := frmGoPhast.PhastModel.SelectedModel.Grid.TwoDCellCorner(C2, R1);
+    APoint := Grid.TwoDCellCorner(C2, R1);
     Polygon[3] := View(Direction).ConvertPoint(APoint);
   end;
 
