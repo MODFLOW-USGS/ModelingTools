@@ -47,7 +47,7 @@ var
   begin
     if FIdLocations.TryGetValue(ID, FileID) then
     begin
-      raise EReadOutputError.Create(Format(rsTheIdentifie, [ID, FFileName,
+      raise EReadOutputError.Create(Format(rsTheIdentifie, [ID, FileName,
         FileID.OutputFile.FileName]));
     end
     else
@@ -60,13 +60,13 @@ var
   end;
 
 begin
-  if FFileType = ftBinary then
+  if FileType = ftBinary then
   begin
     FBinaryFile.read(ObsTypeArray[0], Length(ObsTypeArray)*SizeOf(AnAnsiChar));
     if string(ObsTypeArray) <> 'cont' then
     begin
       raise EReadOutputError.Create(Format('Error reading the header of %s.',
-        [FFileName]));
+        [FileName]));
     end;
     FBinaryFile.read(AnAnsiChar, SizeOf(AnAnsiChar));
     FBinaryFile.read(PrecisionArray[0],
@@ -74,7 +74,7 @@ begin
     if string(PrecisionArray) <> 'double' then
     begin
       raise EReadOutputError.Create(Format('Error reading the header of %s.',
-        [FFileName]));
+        [FileName]));
     end;
     FBinaryFile.read(LENOBSNAME_Array,
       Length(LENOBSNAME_Array)*SizeOf(AnAnsiChar));
@@ -116,10 +116,10 @@ var
   ALine: string;
   Index: Integer;
   ATime: double;
-  FValues: array of double;
+  Values: TDoubleArray;
 begin
-  SetLength(FValues, FNOBS);
-  if FFileType = ftBinary then
+  SetLength(Values, FNOBS);
+  if FileType = ftBinary then
   begin
     if FBinaryFile.Position = FBinaryFileSize then
     begin
@@ -128,7 +128,7 @@ begin
     else
     begin
       FBinaryFile.read(ATime, SizeOf(ATime));
-      FBinaryFile.read(FValues[0], Length(FValues)*SizeOf(double));
+      FBinaryFile.read(Values[0], Length(Values)*SizeOf(double));
     end;
   end
   else
@@ -147,28 +147,29 @@ begin
         ATime := StrToFloat(Splitter[0]);
         for Index := 1 to Splitter.Count -1 do
         begin
-          FValues[Index-1] := StrToFloat(Splitter[Index]);
+          Values[Index-1] := StrToFloat(Splitter[Index]);
         end;
       finally
         Splitter.Free;
       end;
     end;
   end;
-  if FFirstValues = nil then
-  begin
-    FFirstValues := FValues;
-    FFirstTime := ATime;
-  end
-  else
-  begin
-    if FSecondValues <> nil then
-    begin
-      FFirstValues := FSecondValues;
-      FFirstTime := FSecondTime;
-    end;
-    FSecondValues := FValues;
-    FSecondTime := ATime;
-  end;
+  UpdateStoredValues(ATime, Values);
+  //if FFirstValues = nil then
+  //begin
+  //  FFirstValues := Values;
+  //  FFirstTime := ATime;
+  //end
+  //else
+  //begin
+  //  if FSecondValues <> nil then
+  //  begin
+  //    FFirstValues := FSecondValues;
+  //    FFirstTime := FSecondTime;
+  //  end;
+  //  FSecondValues := Values;
+  //  FSecondTime := ATime;
+  //end;
 end;
 
 end.

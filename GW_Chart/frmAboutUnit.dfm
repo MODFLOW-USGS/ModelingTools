@@ -1,6 +1,6 @@
 object frmAbout: TfrmAbout
-  Left = 178
-  Top = 250
+  Left = 206
+  Top = 122
   Width = 650
   Height = 500
   Caption = 'About'
@@ -15,9 +15,9 @@ object frmAbout: TfrmAbout
   Scaled = False
   OnCreate = FormCreate
   DesignSize = (
-    632
-    455)
-  PixelsPerInch = 120
+    634
+    461)
+  PixelsPerInch = 96
   TextHeight = 19
   object ImageLogo: TImage
     Left = 21

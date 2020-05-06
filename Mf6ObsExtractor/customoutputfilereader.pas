@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Generics.Collections;
 
 type
+  TDoubleArray = array of double;
 
   TFileType = (ftText, ftBinary);
   TCustomOutputFile = class;
@@ -25,22 +26,23 @@ type
   TCustomOutputFile = class(TObject)
   private
     //FNOBS: Integer;
+    FFirstValues: TDoubleArray;
+    FSecondValues: TDoubleArray;
+    FFirstTime: double;
+    FSecondTime: double;
+    FFileType: TFileType;
+    FFileName: string;
     function GetFirstValue(Index: integer): double;
     function GetSecondValue(Index: integer): double;
   protected
     FIdLocations: TObservationDictionary;
-    FFileName: string;
-    FFileType: TFileType;
     FTextFile: TextFile;
     FBinaryFile: TFileStream;
     FBinaryFileSize: Int64;
-    FFirstValues: array of double;
-    FSecondValues: array of double;
-    FFirstTime: double;
-    FSecondTime: double;
     procedure ReadHeader; virtual; abstract;
+    procedure UpdateStoredValues(const ATime: double; const Values: TDoubleArray);
   public
-    constructor Create(FileName: string; FileType: TFileType;
+    constructor Create(AFileName: string; AFileType: TFileType;
       IdLocations: TObservationDictionary);
     destructor Destroy; override;
     property FileName: string read FFileName;
@@ -49,6 +51,7 @@ type
     property SecondTime: double read FSecondTime;
     property FirstValue[Index: integer]: double read GetFirstValue;
     property SecondValue[Index: integer]: double read GetSecondValue;
+    property FileType: TFileType read FFileType;
   end;
 
   TOutputFileObjectList = specialize TObjectList<TCustomOutputFile>;
@@ -70,20 +73,40 @@ begin
   result := FSecondValues[Index];
 end;
 
-constructor TCustomOutputFile.Create(FileName: string; FileType: TFileType;
+procedure TCustomOutputFile.UpdateStoredValues(const ATime: double;
+  const Values: TDoubleArray);
+begin
+  if FFirstValues = nil then
+  begin
+    FFirstValues := Values;
+    FFirstTime := ATime;
+  end
+  else
+  begin
+    if FSecondValues <> nil then
+    begin
+      FFirstValues := FSecondValues;
+      FFirstTime := FSecondTime;
+    end;
+    FSecondValues := Values;
+    FSecondTime := ATime;
+  end;
+end;
+
+constructor TCustomOutputFile.Create(AFileName: string; AFileType: TFileType;
   IdLocations: TObservationDictionary);
 begin
   //FTime := 0;
-  FFileName := FileName;
-  FFileType := FileType;
-  if FileType = ftBinary then
+  FFileName := AFileName;
+  FFileType := AFileType;
+  if AFileType = ftBinary then
   begin
-    FBinaryFile := TFileStream.Create(FileName, fmOpenRead);
+    FBinaryFile := TFileStream.Create(AFileName, fmOpenRead);
     FBinaryFileSize := FBinaryFile.Size;
   end
   else
   begin
-    AssignFile(FTextFile, FileName);
+    AssignFile(FTextFile, AFileName);
     reset(FTextFile);
   end;
   FIdLocations:= IdLocations;

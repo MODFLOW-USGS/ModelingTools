@@ -9056,14 +9056,13 @@ const
   //               Change: The NEWTON and UNDER_RELAXATION options in MODFLOW 6
   //                can now be specified in the MODFLOW Packages and Programs
   //                dialog box as well as the MODFLOW Options dialog box.
-
-  //               Bug fix: Fixed bug that caused an error if the user attempted
+  //    '4.2.0.12' Bug fix: Fixed bug that caused an error if the user attempted
   //                to rename a layer group with an invalid name.
   //               Bug fix: Fixed bug that could cause an error when drawing
   //                contours.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.11';
+  IModelVersion = '4.2.0.12';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

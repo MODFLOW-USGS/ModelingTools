@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, FastGEO, BasisFunctionUnit, SubPolygonUnit, CustApp,
-  InputFileReader, CustomInputReader, CustomOutputFileReader, SutraOutputFileReader;
+  SutraInputFileReader, CustomInputReader, CustomOutputFileReader,
+  SutraOutputFileReader, RbwParser;
 
 type
 

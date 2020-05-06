@@ -25,7 +25,12 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="8">
+    <RequiredPackages Count="1">
+      <Item1>
+        <PackageName Value="sparta_generics"/>
+      </Item1>
+    </RequiredPackages>
+    <Units Count="9">
       <Unit0>
         <Filename Value="SutraObsExtractor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -43,9 +48,9 @@
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>
-        <Filename Value="inputfilereader.pas"/>
+        <Filename Value="sutrainputfilereader.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="InputFileReader"/>
+        <UnitName Value="SutraInputFileReader"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\Mf6ObsExtractor\custominputreader.pas"/>
@@ -62,6 +67,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="SutraOutputFileReader"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="..\Components\RbwParser\RbwParser.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -72,7 +81,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\ModelMuse;..\Mf6ObsExtractor"/>
+      <OtherUnitFiles Value="..\ModelMuse;..\Mf6ObsExtractor;..\Components\RbwParser"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

@@ -309,6 +309,10 @@ inherited frameModpathSelection: TframeModpathSelection
     object tabVersion5Options: TTabSheet
       Caption = 'Version 5 options'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblBeginningTime: TLabel
         Left = 154
         Top = 159
@@ -495,6 +499,10 @@ inherited frameModpathSelection: TframeModpathSelection
     object tsVersion6Options: TTabSheet
       Caption = 'Version 6 && 7 options'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblWeakSource: TLabel
         Left = 3
         Top = 7
@@ -915,6 +923,10 @@ inherited frameModpathSelection: TframeModpathSelection
     object tabOutputTimes: TTabSheet
       Caption = 'Output times'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblTimeMethod: TLabel
         Left = 3
         Top = 14

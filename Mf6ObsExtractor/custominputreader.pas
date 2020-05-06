@@ -82,6 +82,7 @@ type
     procedure AddObsToDictionary(AnObs: TDerivedObs);
     procedure PrintToOutputFile(const AnObs: TDerivedObs);
   protected
+    FID: string;
     FObservationDictionary: TObservationDictionary;
     FIdStatus: TIdStatus;
     FSplitter: TStringList;
@@ -91,6 +92,10 @@ type
     FCurrentProcessStatus: TProcessStatus;
     FListingFile: TStringList;
     FDerivedObsList: TDerivedObsObjectList;
+    procedure ChangeStatusFromID; virtual;
+    procedure ChangeStatusFromLocation; virtual;
+    procedure ChangeStatusFromNone; virtual;
+    procedure ChangeStatusFromTime; virtual;
     function CreateObsFile(const FileType: TFileType;
       const FileName: string): TCustomOutputFile; virtual; abstract;
     function ApplicationTitle: string; virtual; abstract;
@@ -103,9 +108,15 @@ type
     procedure HandleOption;
     procedure HandleObservationFiles;
     procedure HandleDerivedObs;
+    procedure HandleIdentifiers;
+    procedure SpecifyID; virtual;
+    procedure DefineDerivedObservation; virtual;
+    procedure ExtractLocation; virtual;
   public
     constructor Create;
     destructor Destroy; override;
+    property LocationDictionary: TLocationDictionary read FLocationDictionary;
+    procedure ReadAndProcessInputFile(const FileName: string);
   end;
 
   EInputException = class(Exception);
@@ -119,6 +130,7 @@ resourcestring
   rsPrintTrue = '  Print = True';
   rsPrintFalse = '  Print = False';
   rsDERIVED_OBSE = 'DERIVED_OBSERVATIONS';
+  rsInLine0D1SMu = 'In line %0:d, "%1:s" must start with "OBSNAME".';
 
 implementation
 
@@ -229,6 +241,31 @@ resourcestring
     'End of extracting observation values interpolated in time.';
   rsBeginOBSERVA2 = 'Begin OBSERVATION_FILES Block';
   rsProcessingOB = 'Processing OBSERVATION_FILES Block';
+  rsID = 'ID';
+  rsMustStartWithID = 'In line %0:d, "%1:s" must start with "ID".';
+  rsLOCATION = 'LOCATION';
+  rsStartWithObsOrLocation = 'In line %0:d, "%1:s" must start with "LOCATION" '
+    +'or "OBSNAME".';
+  rsStartWithObsname = 'In line %0:d, "%1:s" must start with "OBSNAME".';
+  rsIDENTIFIERS = 'IDENTIFIERS';
+  rsBEGINIDENTIF2 = 'BEGIN IDENTIFIERS must be paired with END IDENTIFIERS in '
+    +'line %0:d, "%1:s".';
+  rsEndOfIDENTIF = 'End of IDENTIFIERS Block';
+  rsMustStartWithObsnameOrEnd = 'In line %0:d, "%1:s" must start with "OBSNAME'
+    +'" or "END".';
+  rsIDInObservat = '  ID in observation file = %s';
+  rsIMustBeThree = 'In line %0:d, "%1:s", there must be exactly three items '
+    +'listed.';
+  rsLocationInOb = '  Location in observation file = (%0:g, %1:g)';
+  rsMustBeThreeOrFor = 'In line %0:d, "%1:s", there must be exactly three or '
+    +'four items listed.';
+  rsErrorConvert2 = 'Error converting time on line %0:d, "%1:s".';
+  rsIMustBePrint = 'In line %0:d, "%1:s", the fourth item, if present, must be'
+    +' "PRINT".';
+  rsObservationN = '  Observation Name = %s.';
+  rsObservationT = '  Observation time = %g.';
+  rsProgrammingE = 'Programming error in TInputHandler.HandleIdentifiers';
+  rsBEGIN = 'BEGIN';
 
   function NearlyTheSame(A, B, Epsilon: double): boolean;
   begin
@@ -251,6 +288,76 @@ begin
   AnObs.TimeAssigned := False;
   AddLocationToDictionary(NewLocation);
   RecordObs(AnObs);
+end;
+
+procedure TCustomInputHandler.DefineDerivedObservation;
+var
+  DerivedObs: TDerivedObs;
+begin
+  Assert(FSplitter.Count in [3, 4], Format(rsMustBeThreeOrFor, [FLineIndex
+    +1, FInputFileLines[FLineIndex]]));
+  DerivedObs := TDerivedObs.Create;
+  DerivedObs.ID := FID;
+  DerivedObs.Obsname := FSplitter[1];
+  try
+    DerivedObs.Time:= StrToFloat(FSplitter[2]);
+  except on EConvertError do
+    begin
+      DerivedObs.Free;
+      raise EInputException.Create(Format(rsErrorConvert2, [FLineIndex+1,
+        FInputFileLines[FLineIndex]]));
+    end;
+  end;
+  DerivedObs.TimeAssigned := True;
+  if FSplitter.Count = 4 then
+  begin
+    Assert(UpperCase(FSplitter[3]) = rsPRINT, Format(rsIMustBePrint, [
+      FLineIndex+1, FInputFileLines[FLineIndex]]));
+    DerivedObs.Print := True;
+  end
+  else
+  begin
+    DerivedObs.Print := False;
+  end;
+  DerivedObs.Value := 0;
+  FDerivedObsList.Add(DerivedObs);
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add(Format(rsObservationN, [DerivedObs.Obsname]));
+    FListingFile.Add(Format(rsObservationT, [DerivedObs.Time]));
+    if DerivedObs.Print then
+    begin
+      FListingFile.Add(rsPrintTrue);
+    end
+    else
+    begin
+      FListingFile.Add(rsPrintFalse);
+    end;
+  end;
+end;
+
+procedure TCustomInputHandler.ExtractLocation;
+var
+  LocationID: TLocationID;
+begin
+  Assert(FSplitter.Count = 3, Format(rsIMustBeThree, [FLineIndex+1,
+    FInputFileLines[FLineIndex]]));
+  LocationID.ID := FID;
+  try
+    LocationID.APoint.X := StrToFloat(FSplitter[1]);
+    LocationID.APoint.Y := StrToFloat(FSplitter[2]);
+  except on EConvertError do
+    begin
+      raise EInputException.Create(Format(rsErrorConvert, [FLineIndex+1,
+        FInputFileLines[FLineIndex]]));
+    end;
+  end;
+  AddLocationToDictionary(LocationID);
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add(Format(rsLocationInOb, [LocationID.APoint.X,
+      LocationID.APoint.Y]));
+  end;
 end;
 
 procedure TCustomInputHandler.RecordObs(const AnObs: TDerivedObs);
@@ -309,6 +416,81 @@ begin
           end;
       end;
     end;
+  end;
+end;
+
+procedure TCustomInputHandler.ChangeStatusFromNone;
+begin
+  if UpperCase(FSplitter[0]) = rsID then
+  begin
+    FIdStatus := isID
+  end
+  else
+  begin
+    Assert(False, Format(rsMustStartWithID, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
+  end;
+end;
+
+procedure TCustomInputHandler.ChangeStatusFromTime;
+begin
+  if UpperCase(FSplitter[0]) = rsOBSNAME then
+  begin
+    FIdStatus := isTime
+  end
+  else if UpperCase(FSplitter[0]) = rsID then
+  begin
+    FIdStatus := isID
+  end
+  else if UpperCase(FSplitter[0]) = rsEND then
+  begin
+    FIdStatus := isNone;
+    FPriorProcessStatus := psIdentifiers;
+    FCurrentProcessStatus := psNone;
+    Assert(FSplitter.Count = 2, Format(rsMustBeTwo, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
+    Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS, Format(
+      rsBEGINIDENTIF2, [FLineIndex+1, FInputFileLines[FLineIndex]]));
+    if FListingFile <> nil then
+    begin
+      FListingFile.Add(rsEndOfIDENTIF);
+    end;
+    InterpolateInTime;
+  end
+  else
+  begin
+    Assert(False, Format(rsMustStartWithObsnameOrEnd, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
+  end;
+end;
+
+procedure TCustomInputHandler.ChangeStatusFromID;
+begin
+  if UpperCase(FSplitter[0]) = rsLOCATION then
+  begin
+    FIdStatus := isLocation
+  end
+  else if UpperCase(FSplitter[0]) = rsOBSNAME then
+  begin
+    FIdStatus := isTime
+  end
+  else
+  begin
+    Assert(False, Format(rsStartWithObsOrLocation, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
+  end;
+end;
+
+procedure TCustomInputHandler.ChangeStatusFromLocation;
+begin
+  if UpperCase(FSplitter[0]) = rsOBSNAME then
+  begin
+    FIdStatus := isTime
+  end
+  else
+  begin
+    Assert(False, Format(rsStartWithObsname, [FLineIndex+1,
+      FInputFileLines[FLineIndex]]));
   end;
 end;
 
@@ -626,6 +808,59 @@ begin
   finally
     LocationList.Free;
     DerivedObsList.Free;
+  end;
+end;
+
+procedure TCustomInputHandler.HandleIdentifiers;
+begin
+  case FIdStatus of
+    isNone:
+      begin
+        ChangeStatusFromNone;
+      end;
+    isID:
+      begin
+        ChangeStatusFromID;
+      end;
+    isLocation:
+      begin
+        ChangeStatusFromLocation;
+      end;
+    isTime:
+      begin
+        ChangeStatusFromTime;
+      end;
+  else Assert(False);
+  end;
+  case FIdStatus of
+    isNone:
+      begin
+      end;
+    isID:
+      begin
+        SpecifyID;
+      end;
+    isLocation:
+      begin
+        ExtractLocation;
+      end;
+    isTime:
+      begin
+        DefineDerivedObservation;
+      end;
+  else Assert(False, rsProgrammingE);
+  end;
+end;
+
+procedure TCustomInputHandler.SpecifyID;
+begin
+  Assert(FSplitter.Count = 2, Format(rsMustBeTwo, [FLineIndex+1,
+    FInputFileLines[FLineIndex]]));
+  FID := FSplitter[1];
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add('');
+    FListingFile.Add(Format(rsIDInObservat, [FID]));
   end;
 end;
 
@@ -1232,6 +1467,103 @@ begin
   FOutputFile.Free;
   FInstructionFile.Free;
   inherited Destroy;
+end;
+
+procedure TCustomInputHandler.ReadAndProcessInputFile(const FileName: string);
+var
+  Index: Integer;
+  ALine: String;
+begin
+  try
+    FInputFileLines.LoadFromFile(FileName);
+    for Index := 0 to Pred(FInputFileLines.Count) do
+    begin
+      FLineIndex := Index;
+      ALine := FInputFileLines[Index];
+      ALine := Trim(ALine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      if ALine[1] = '#' then
+      begin
+        Continue;
+      end;
+      FSplitter.DelimitedText := ALine;
+      case FCurrentProcessStatus of
+        psNone:
+        begin
+          Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems,
+            [FLineIndex+1, FInputFileLines[FLineIndex]]));
+          Assert(UpperCase(FSplitter[0]) = rsBEGIN, Format('In line %0:d, "%1:s", the first word must be "BEGIN".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
+          case FPriorProcessStatus of
+            psNone:
+            begin
+              Assert(UpperCase(FSplitter[1]) = rsOPTIONS);
+              InitializeOptions;
+            end;
+            psOptions:
+            begin
+              Assert(UpperCase(FSplitter[1]) = rsOBSERVATION_Files);
+              InitializeObsFiles;
+            end;
+            psObsFiles:
+            begin
+              Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS);
+              InitializeIdentifiers;
+            end;
+            psIdentifiers, psDerivedObs:
+            begin
+              if UpperCase(FSplitter[1]) = rsDERIVED_OBSE then
+              begin
+                InitializeDerivedObs;
+              end
+              else if UpperCase(FSplitter[1]) = rsOBSERVATION_Files then
+              begin
+                InitializeObsFiles
+              end
+              else if UpperCase(FSplitter[1]) = rsIDENTIFIERS then
+              begin
+                InitializeIdentifiers;
+              end
+              else
+              begin
+                Assert(False);
+              end;
+            end;
+            else
+              Assert(False);
+          end;
+        end;
+        psOptions:
+        begin
+          HandleOption;
+        end;
+        psObsFiles:
+        begin
+          HandleObservationFiles;
+        end;
+        psIdentifiers:
+        begin
+          HandleIdentifiers;
+        end;
+        psDerivedObs:
+        begin
+          HandleDerivedObs
+        end;
+        else
+          Assert(False);
+      end;
+    end;
+  except on E: Exception do
+    begin
+      if FListingFile <> nil then
+      begin
+        FListingFile.Add(E.Message);
+      end;
+      raise;
+    end;
+  end;
 end;
 
 { TDerivedObsObjectList }
