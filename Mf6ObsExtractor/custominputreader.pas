@@ -298,7 +298,7 @@ begin
     +1, FInputFileLines[FLineIndex]]));
   DerivedObs := TDerivedObs.Create;
   DerivedObs.ID := FID;
-  DerivedObs.Obsname := FSplitter[1];
+  DerivedObs.Obsname := UpperCase(FSplitter[1]);
   try
     DerivedObs.Time:= StrToFloat(FSplitter[2]);
   except on EConvertError do
@@ -559,11 +559,11 @@ var
   var
     ALocationID: TLocationID;
   begin
-    if FLocationDictionary.TryGetValue(UpperCase(DerivedObs1.ID), ALocationID)then
+    if FLocationDictionary.TryGetValue(UpperCase(DerivedObs1.ID), ALocationID) then
     begin
       result := ALocationID
     end
-    else if FLocationDictionary.TryGetValue(UpperCase(DerivedObs1.ID), ALocationID)then
+    else if FLocationDictionary.TryGetValue(UpperCase(DerivedObs1.Obsname), ALocationID) then
     begin
       result := ALocationID
     end
@@ -594,53 +594,54 @@ begin
   try
     case FPriorDerivedObsStatus of
       dosNone:
-      begin
-        if UpperCase(FSplitter[0]) = rsOBSNAME then
         begin
-          CurrentStatus := dosObsName;
-        end
-        else
-        begin
-          Assert(False, Format(rsLineMustStartObs, [FLineIndex+1,
-            FInputFileLines[FLineIndex]]));
-        end;
-      end;
-      dosObsName:
-      begin
-        if UpperCase(FSplitter[0]) = rsINTERPOLATE then
-        begin
-          CurrentStatus := dosInterpolate;
-        end
-        else if UpperCase(FSplitter[0]) = rsFORMULA then
-        begin
-          CurrentStatus := dosFormula;
-        end
-        else
-        begin
-          Assert(False, Format(rsNoFormula, [FLineIndex+1, FInputFileLines[
-            FLineIndex]]));
-        end;
-      end;
-      dosInterpolate, dosFormula:
-      begin
-        if UpperCase(FSplitter[0]) = rsEND then
-        begin
-          Assert(UpperCase(FSplitter[1]) = rsDERIVED_OBSE,
-            Format(rsUnmatchedEndDerObs, [FLineIndex+1,
-            FInputFileLines[FLineIndex]]));
-          CurrentStatus := dosNone;
-          FCurrentProcessStatus := psNone;
-          if FListingFile <> nil then
+          if UpperCase(FSplitter[0]) = rsOBSNAME then
           begin
-            FListingFile.Add(rsEndDERIVED_O);
+            CurrentStatus := dosObsName;
+          end
+          else
+          begin
+            Assert(False, Format(rsLineMustStartObs, [FLineIndex+1,
+              FInputFileLines[FLineIndex]]));
           end;
-        end
-        else
-        begin
-          CurrentStatus := dosObsName
         end;
-      end;
-    else Assert(False);
+      dosObsName:
+        begin
+          if UpperCase(FSplitter[0]) = rsINTERPOLATE then
+          begin
+            CurrentStatus := dosInterpolate;
+          end
+          else if UpperCase(FSplitter[0]) = rsFORMULA then
+          begin
+            CurrentStatus := dosFormula;
+          end
+          else
+          begin
+            Assert(False, Format(rsNoFormula, [FLineIndex+1, FInputFileLines[
+              FLineIndex]]));
+          end;
+        end;
+      dosInterpolate, dosFormula:
+        begin
+          if UpperCase(FSplitter[0]) = rsEND then
+          begin
+            Assert(UpperCase(FSplitter[1]) = rsDERIVED_OBSE,
+              Format(rsUnmatchedEndDerObs, [FLineIndex+1,
+              FInputFileLines[FLineIndex]]));
+            CurrentStatus := dosNone;
+            FCurrentProcessStatus := psNone;
+            if FListingFile <> nil then
+            begin
+              FListingFile.Add(rsEndDERIVED_O);
+            end;
+          end
+          else
+          begin
+            CurrentStatus := dosObsName
+          end;
+        end;
+    else
+      Assert(False);
     end;
     FPriorDerivedObsStatus := CurrentStatus;
     case CurrentStatus of
@@ -754,7 +755,8 @@ begin
               begin
                 InterpFourPoints(DerivedObsList, LocationList, NewLocation);
               end;
-            else Assert(False, rsProgrammingE5);
+            else
+              Assert(False, rsProgrammingE5);
           end;
           if FListingFile <> nil then
           begin
@@ -830,7 +832,8 @@ begin
       begin
         ChangeStatusFromTime;
       end;
-  else Assert(False);
+  else
+    Assert(False);
   end;
   case FIdStatus of
     isNone:
@@ -848,7 +851,8 @@ begin
       begin
         DefineDerivedObservation;
       end;
-  else Assert(False, rsProgrammingE);
+  else
+    Assert(False, rsProgrammingE);
   end;
 end;
 
@@ -1064,7 +1068,8 @@ begin
   for ObsIndex := 0 to Pred(FDerivedObsList.Count) do
   begin
     AnObs := FDerivedObsList[ObsIndex];
-    Assert(FObservationDictionary.TryGetValue(UpperCase(AnObs.ID), ObsFile),
+    Assert(FObservationDictionary.TryGetValue(UpperCase(AnObs.ID), ObsFile)
+      or FObservationDictionary.TryGetValue(UpperCase(AnObs.Obsname), ObsFile),
       Format(rsTheObservati2, [AnObs.ID]));
     if  ObsFile.OutputFile.FirstTime < ObsFile.OutputFile.SecondTime then
     begin
@@ -1319,10 +1324,10 @@ begin
   Location4 := Locations[3];
   SetLength(Corners, 5);
   Corners[0] := Location1.APoint;
-  Corners[2] := Location2.APoint;
-  Corners[3] := Location3.APoint;
-  Corners[4] := Location4.APoint;
-  Corners[5] := Location1.APoint;
+  Corners[1] := Location2.APoint;
+  Corners[2] := Location3.APoint;
+  Corners[3] := Location4.APoint;
+  Corners[4] := Location1.APoint;
   Quadrilateral := TSimplePolygon.Create(Corners);
   try
     if Quadrilateral.PointInside(NewLocation.APoint) then
@@ -1492,65 +1497,65 @@ begin
       FSplitter.DelimitedText := ALine;
       case FCurrentProcessStatus of
         psNone:
-        begin
-          Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems,
-            [FLineIndex+1, FInputFileLines[FLineIndex]]));
-          Assert(UpperCase(FSplitter[0]) = rsBEGIN, Format('In line %0:d, "%1:s", the first word must be "BEGIN".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
-          case FPriorProcessStatus of
-            psNone:
-            begin
-              Assert(UpperCase(FSplitter[1]) = rsOPTIONS);
-              InitializeOptions;
-            end;
-            psOptions:
-            begin
-              Assert(UpperCase(FSplitter[1]) = rsOBSERVATION_Files);
-              InitializeObsFiles;
-            end;
-            psObsFiles:
-            begin
-              Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS);
-              InitializeIdentifiers;
-            end;
-            psIdentifiers, psDerivedObs:
-            begin
-              if UpperCase(FSplitter[1]) = rsDERIVED_OBSE then
-              begin
-                InitializeDerivedObs;
-              end
-              else if UpperCase(FSplitter[1]) = rsOBSERVATION_Files then
-              begin
-                InitializeObsFiles
-              end
-              else if UpperCase(FSplitter[1]) = rsIDENTIFIERS then
-              begin
-                InitializeIdentifiers;
-              end
+          begin
+            Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems,
+              [FLineIndex+1, FInputFileLines[FLineIndex]]));
+            Assert(UpperCase(FSplitter[0]) = rsBEGIN, Format('In line %0:d, "%1:s", the first word must be "BEGIN".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
+            case FPriorProcessStatus of
+              psNone:
+                begin
+                  Assert(UpperCase(FSplitter[1]) = rsOPTIONS);
+                  InitializeOptions;
+                end;
+              psOptions:
+                begin
+                  Assert(UpperCase(FSplitter[1]) = rsOBSERVATION_Files);
+                  InitializeObsFiles;
+                end;
+              psObsFiles:
+                begin
+                  Assert(UpperCase(FSplitter[1]) = rsIDENTIFIERS);
+                  InitializeIdentifiers;
+                end;
+              psIdentifiers, psDerivedObs:
+                begin
+                  if UpperCase(FSplitter[1]) = rsDERIVED_OBSE then
+                  begin
+                    InitializeDerivedObs;
+                  end
+                  else if UpperCase(FSplitter[1]) = rsOBSERVATION_Files then
+                  begin
+                    InitializeObsFiles
+                  end
+                  else if UpperCase(FSplitter[1]) = rsIDENTIFIERS then
+                  begin
+                    InitializeIdentifiers;
+                  end
+                  else
+                  begin
+                    Assert(False);
+                  end;
+                end;
               else
-              begin
                 Assert(False);
-              end;
             end;
-            else
-              Assert(False);
           end;
-        end;
         psOptions:
-        begin
-          HandleOption;
-        end;
+          begin
+            HandleOption;
+          end;
         psObsFiles:
-        begin
-          HandleObservationFiles;
-        end;
+          begin
+            HandleObservationFiles;
+          end;
         psIdentifiers:
-        begin
-          HandleIdentifiers;
-        end;
+          begin
+            HandleIdentifiers;
+          end;
         psDerivedObs:
-        begin
-          HandleDerivedObs
-        end;
+          begin
+            HandleDerivedObs
+          end;
         else
           Assert(False);
       end;

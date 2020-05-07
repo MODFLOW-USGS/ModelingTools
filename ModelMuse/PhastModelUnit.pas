@@ -9060,9 +9060,11 @@ const
   //                to rename a layer group with an invalid name.
   //               Bug fix: Fixed bug that could cause an error when drawing
   //                contours.
+  //    '4.2.0.13' Bug fix: Fixed bug that could cause an assertion failure when drawing
+  //                when drawing contours using the ACM 626 method.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.12';
+  IModelVersion = '4.2.0.13';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

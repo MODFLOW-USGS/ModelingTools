@@ -144,7 +144,7 @@ begin
         until EOF(FTextFile);
 
         NewIds := FNumberOfValues = 0;
-        if FNumberOfValues = 0 then
+        if NewIds then
         begin
           FNumberOfValues := CurrentLines.Count * 3;
         end
@@ -158,10 +158,30 @@ begin
         for LineIndex := 0 to Pred(CurrentLines.Count) do
         begin
           FSplitter.DelimitedText := CurrentLines[LineIndex];
-          ObsNameRoot := FSplitter[NamePos];
+          ObsNameRoot := UpperCase(FSplitter[NamePos]);
 
           LocationID.APoint.X := StrToFloat(FSplitter[XPos]);
           LocationID.APoint.Y := StrToFloat(FSplitter[YPos]);
+
+          if NewIds then
+          begin
+            //if FIdLocations.TryGetValue(ObsNameRoot, FileID) then
+            // begin
+            //   raise EReadOutputError.Create(Format(rsTheIdentifie, [ObsNameRoot, FileName,
+            //     FileID.OutputFile.FileName]));
+            // end
+            // else
+            // begin
+            //   FileID.OutputFile := self;
+            //   FileID.Key := ObsNameRoot;
+            //   FileID.Position := ObsIndex;
+            //   FIdLocations.Add(ObsNameRoot, FileID);
+            //
+            //   LocationID.ID := ObsNameRoot;
+            //   FLocationDictionary.Add(LocationID.ID, LocationID);
+            //
+            // end;
+          end;
 
           ObsName := ObsNameRoot + '_P';
           AddKey;
@@ -191,10 +211,10 @@ end;
 constructor TSutraObsOutputFile.Create(AFileName: string; AFileType: TFileType;
   IdLocations: TObservationDictionary; LocationDictionary: TLocationDictionary);
 begin
-  inherited Create(AFileName, AFileType, IdLocations);
   FLocationDictionary := LocationDictionary;
   FSplitter := TStringList.Create;
   FNumberOfValues := 0;
+  inherited Create(AFileName, AFileType, IdLocations);
 end;
 
 destructor TSutraObsOutputFile.Destroy;

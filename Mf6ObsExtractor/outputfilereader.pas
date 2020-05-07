@@ -84,7 +84,7 @@ begin
     SetLength(ObsNameArray, LENOBSNAME);
     for ObsNameIndex := 0 to Pred(FNOBS) do
     begin
-      Index := ObsNameIndex+1;
+      Index := ObsNameIndex;
       FBinaryFile.read(ObsNameArray[0],
         Length(ObsNameArray)*SizeOf(AnAnsiChar));
       ID := UpperCase(Trim(string(ObsNameArray)));
@@ -99,9 +99,10 @@ begin
       Splitter.DelimitedText := ALine;
       FNOBS := Splitter.Count - 1;
       FIdLocations.Capacity := FIdLocations.Count + Splitter.Count;
-      for Index := 1 to Splitter.Count -1 do
+      for ObsNameIndex := 1 to Splitter.Count -1 do
       begin
-        ID := UpperCase(Splitter[Index]);
+        ID := UpperCase(Splitter[ObsNameIndex]);
+        Index := ObsNameIndex-1;
         AddID;
       end;
     finally

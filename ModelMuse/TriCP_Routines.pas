@@ -3446,6 +3446,7 @@ var
   Start: Integer;
   InnerIndex: Integer;
   TriIndexCreated: integer;
+  TestEdge: TEdge;
   procedure CreateEdges;
     function MatchingEdge(N1, N2: Integer): TEdge;
     var
@@ -3597,10 +3598,11 @@ begin
           AnEdge := nil;
           for Index := 0 to Edges.Count - 1 do
           begin
-            AnEdge := Edges[Index];
-            if AnEdge.N1 = Next then
+            TestEdge := Edges[Index];
+            if TestEdge.N1 = Next then
             begin
               EdgeIndex := Index;
+              AnEdge := TestEdge;
               break;
             end;
           end;

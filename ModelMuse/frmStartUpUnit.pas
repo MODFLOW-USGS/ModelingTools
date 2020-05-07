@@ -1003,7 +1003,7 @@ var
   Value: Real;
   Layers: TList;
 
-  Local_Index: Integer;
+//  LayerIndex: Integer;
   LayerName: string;
   LayerNames: TStringList;
   Root: string;
@@ -1016,11 +1016,11 @@ begin
   try
     LayerNames.Sorted := true;
     LayerNames.CaseSensitive := False;
-    for Local_Index := 2 to rdgInitialLayers.RowCount - 1 do
+    for LayerIndex := 2 to rdgInitialLayers.RowCount - 1 do
     begin
       try
-        Value := FortranStrToFloatDef(rdgInitialLayers.Cells[1, Local_Index], 0);
-        LayerName := Trim(rdgInitialLayers.Cells[0, Local_Index]);
+        Value := FortranStrToFloatDef(Trim(rdgInitialLayers.Cells[1, LayerIndex]), 0);
+        LayerName := Trim(rdgInitialLayers.Cells[0, LayerIndex]);
         if LayerName = '' then
         begin
           Continue;
@@ -1046,7 +1046,7 @@ begin
       end;
       // ignore
     end;
-    Value := FortranStrToFloatDef(rdgInitialLayers.Cells[1, 1], 0);
+    Value := FortranStrToFloatDef(Trim(rdgInitialLayers.Cells[1, 1]), 0);
     LayerGroup := frmGoPhast.PhastModel.LayerStructure.Add as TLayerGroup;
     LayerGroup.AquiferName := kModelTop;
     NewDataArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(
