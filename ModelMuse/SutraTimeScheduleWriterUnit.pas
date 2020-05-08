@@ -21,8 +21,14 @@ type
   TTimeValuesDictionary = TObjectDictionary<string, TTimeValues>;
 
   TScreenObjectSchedule = class(TObject)
+  private
+    FTimes: TRealCollection;
+    procedure SetTimes(const Value: TRealCollection);
+  public
     Name: AnsiString;
-    Times: TRealCollection;
+    property Times: TRealCollection read FTimes write SetTimes;
+    Constructor Create;
+    destructor Destroy; override;
   end;
 
   TScreenObjectScheduleList = TObjectList<TScreenObjectSchedule>;
@@ -81,7 +87,7 @@ uses
   frmErrorsAndWarningsUnit, SutraBoundariesUnit, SutraBoundaryWriterUnit,
   Math, frmGoPhastUnit, SutraOptionsUnit, SutraBoundaryUnit,
   SutraGeneralBoundaryUnit, SutraGeneralFlowWriterUnit,
-  SutraGeneralTransportWriterUnit, SutraGenTransBoundUnit;
+  SutraGeneralTransportWriterUnit, SutraGenTransBoundUnit, SutraPestObsUnit;
 
 resourcestring
   StrTheFollowingTimeS = 'The following time schedule names are defined more' +
@@ -599,6 +605,8 @@ var
   Initialtime: double;
   SimulationType: TSimulationType;
   ATime: Double;
+  ObsTimeIndex: Integer;
+  SutraStateObs: TSutraStateObservations;
   procedure DeleteDuplicateTimes(AList: TRealList);
   var
     TimeIndex: integer;
@@ -631,6 +639,8 @@ begin
       Continue;
     end;
     Boundaries := AScreenObject.SutraBoundaries;
+//    UseScheduleTimes := False;
+    CustomSchedule := nil;
     if Boundaries.Observations.Used then
     begin
       AName := UpperCase(string(Boundaries.Observations.ScheduleName));
@@ -651,7 +661,6 @@ begin
       end
       else
       begin
-//        TimeValues := nil;
         UseScheduleTimes := False;
       end;
       if not UseScheduleTimes then
@@ -663,6 +672,25 @@ begin
         CustomSchedule.Times := Boundaries.Observations.Times;
       end;
     end;
+
+    if Model.PestUsed and Boundaries.SutraStateObs.Used then
+    begin
+      SutraStateObs := Boundaries.SutraStateObs;
+      if CustomSchedule = nil then
+      begin
+        CustomSchedule := TScreenObjectSchedule.Create;
+        FCustomSchedules.Add(CustomSchedule);
+        CustomSchedule.Name := CustomScheduleName(AScreenObject);
+      end;
+      SutraStateObs.ScheduleName := CustomSchedule.Name;
+      CustomSchedule.Times.Capacity := CustomSchedule.Times.Count + SutraStateObs.Count;
+      for ObsTimeIndex := 0 to SutraStateObs.Count - 1 do
+      begin
+        CustomSchedule.Times.Add.Value := SutraStateObs[ObsTimeIndex].Time;
+      end;
+      CustomSchedule.Times.Sort;
+    end;
+
     // The boundary conditions each use a separate schedule.
     // See SutraBoundaryWriterUnit.pas.
     if Boundaries.FluidSource.Used then
@@ -907,6 +935,27 @@ destructor TTimeValues.Destroy;
 begin
   Times.Free;
   inherited;
+end;
+
+{ TScreenObjectSchedule }
+
+constructor TScreenObjectSchedule.Create;
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  InvalidateModelEvent := nil;
+  FTimes := TRealCollection.Create(InvalidateModelEvent);
+end;
+
+destructor TScreenObjectSchedule.Destroy;
+begin
+  FTimes.Free;
+  inherited;
+end;
+
+procedure TScreenObjectSchedule.SetTimes(const Value: TRealCollection);
+begin
+  FTimes.Assign(Value);
 end;
 
 end.

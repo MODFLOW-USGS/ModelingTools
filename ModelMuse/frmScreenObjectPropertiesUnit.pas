@@ -4051,7 +4051,7 @@ begin
     frameSutraGeneralizeTransBoundary.GetData(FNewProperties);
 
     frameSutraPestObsState.OnControlsChange := UpdateSutraStateObsNode;
-    if FNewProperties.Count = 1 then
+    if (FNewProperties.Count = 1) and (FSutraStateObsNode <> nil) then
     begin
       frameSutraPestObsState.InitializeControls;
       frameSutraPestObsState.SpecifyObservationTypes(SutraStateObsTypes);
@@ -13034,7 +13034,8 @@ var
 begin
   FSutraStateObsNode := nil;
   if  (frmGoPhast.ModelSelection in SutraSelection)
-    and (AScreenObject.Count = 1) then
+    and (AScreenObject.Count = 1) and frmGoPhast.PhastModel.PestUsed
+    then
   begin
     Node := jvpltvSutraFeatures.Items.AddChild(nil,
       StrSutraStateCalibrat) as TJvPageIndexNode;

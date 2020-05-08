@@ -92,12 +92,12 @@ type
     FCurrentProcessStatus: TProcessStatus;
     FListingFile: TStringList;
     FDerivedObsList: TDerivedObsObjectList;
+    FFileType: TFileType;
     procedure ChangeStatusFromID; virtual;
     procedure ChangeStatusFromLocation; virtual;
     procedure ChangeStatusFromNone; virtual;
     procedure ChangeStatusFromTime; virtual;
-    function CreateObsFile(const FileType: TFileType;
-      const FileName: string): TCustomOutputFile; virtual; abstract;
+    function CreateObsFile(const FileName: string): TCustomOutputFile; virtual; abstract;
     function ApplicationTitle: string; virtual; abstract;
     procedure InterpolateInTime;
     procedure AddLocationToDictionary(Location: TLocationID);
@@ -109,6 +109,7 @@ type
     procedure HandleObservationFiles;
     procedure HandleDerivedObs;
     procedure HandleIdentifiers;
+    procedure ReadAndRecordFileType(var FileName: string); virtual;
     procedure SpecifyID; virtual;
     procedure DefineDerivedObservation; virtual;
     procedure ExtractLocation; virtual;
@@ -131,6 +132,10 @@ resourcestring
   rsPrintFalse = '  Print = False';
   rsDERIVED_OBSE = 'DERIVED_OBSERVATIONS';
   rsInLine0D1SMu = 'In line %0:d, "%1:s" must start with "OBSNAME".';
+  rsObservationF = '  Observation file = %s';
+  rsInLine0D1SCa = 'In line %0:d, "%1:s" can only start with "LOCATION" for '
+    +'lake stage files. The location is read directly from OBC files.';
+  rsLOCATION = 'LOCATION';
 
 implementation
 
@@ -202,7 +207,6 @@ resourcestring
   rsTEXT = 'TEXT';
   rsTheFileForma = 'The file format in line %0:d, "%1:s" must be "BINARY" or "'
     +'TEXT".';
-  rsObservationF = '  Observation file = %s';
   rsFormatTextFi = '  Format = text file';
   rsFormatBinary = '  Format = binary file';
   rsMustBeTwo = 'In line %0:d, "%1:s", there must be exactly two items listed.';
@@ -243,7 +247,6 @@ resourcestring
   rsProcessingOB = 'Processing OBSERVATION_FILES Block';
   rsID = 'ID';
   rsMustStartWithID = 'In line %0:d, "%1:s" must start with "ID".';
-  rsLOCATION = 'LOCATION';
   rsStartWithObsOrLocation = 'In line %0:d, "%1:s" must start with "LOCATION" '
     +'or "OBSNAME".';
   rsStartWithObsname = 'In line %0:d, "%1:s" must start with "OBSNAME".';
@@ -856,6 +859,43 @@ begin
   end;
 end;
 
+procedure TCustomInputHandler.ReadAndRecordFileType(var FileName: string);
+begin
+  if FSplitter.Count = 3 then
+  begin
+    if UpperCase(FSplitter[2]) = rsBINARY then
+    begin
+      FFileType := ftBinary
+    end
+    else if UpperCase(FSplitter[2]) = rsTEXT then
+    begin
+      FFileType := ftText
+    end
+    else
+    begin
+      Assert(False, Format(rsTheFileForma, [FLineIndex+1,
+        FInputFileLines[FLineIndex]]));
+    end;
+  end
+  else
+  begin
+    FFileType := ftBinary
+  end;
+  if FListingFile <> nil then
+  begin
+    FListingFile.Add(Format(rsObservationF, [FileName]));
+    if FFileType  = ftText then
+    begin
+      FListingFile.Add(rsFormatTextFi);
+    end
+    else
+    begin
+      FListingFile.Add(rsFormatBinary);
+    end;
+    FListingFile.Add('');
+  end;
+end;
+
 procedure TCustomInputHandler.SpecifyID;
 begin
   Assert(FSplitter.Count = 2, Format(rsMustBeTwo, [FLineIndex+1,
@@ -871,7 +911,6 @@ end;
 procedure TCustomInputHandler.HandleObservationFiles;
 var
   FileName: string;
-  FileType: TFileType;
   ObsFile: TCustomOutputFile;
 begin
   Assert(FSplitter.Count in [2, 3], Format(rsExactlyTwoOrThree, [FLineIndex+1,
@@ -880,40 +919,8 @@ begin
   begin
     FileName := FSplitter[1];
     Assert(FileExists(FileName), Format(rsTheObservati, [FileName]));
-    if FSplitter.Count = 3 then
-    begin
-      if UpperCase(FSplitter[2]) = rsBINARY then
-      begin
-        FileType := ftBinary
-      end
-      else if UpperCase(FSplitter[2]) = rsTEXT then
-      begin
-        FileType := ftText
-      end
-      else
-      begin
-        Assert(False, Format(rsTheFileForma, [FLineIndex+1,
-          FInputFileLines[FLineIndex]]));
-      end;
-    end
-    else
-    begin
-      FileType := ftBinary
-    end;
-    if FListingFile <> nil then
-    begin
-      FListingFile.Add(Format(rsObservationF, [FileName]));
-      if FileType  = ftText then
-      begin
-        FListingFile.Add(rsFormatTextFi);
-      end
-      else
-      begin
-        FListingFile.Add(rsFormatBinary);
-      end;
-      FListingFile.Add('');
-    end;
-    ObsFile := CreateObsFile(FileType, FileName);
+    ReadAndRecordFileType(FileName);
+    ObsFile := CreateObsFile(FileName);
     FObsFileList.Add(ObsFile);
   end
   else if UpperCase(FSplitter[0]) = rsEND then
@@ -1583,6 +1590,10 @@ end;
 function TDerivedObsCompare.Compare(constref Left, Right: TDerivedObs): Integer;
 begin
   Result := Sign(Left.Time - Right.Time);
+  if Result = 0 then
+  begin
+    AnsiCompareText(Left.Obsname, Right.Obsname);
+  end;
 end;
 
 end.

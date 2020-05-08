@@ -931,6 +931,19 @@ begin
         end;
       end;
     end;
+
+    if frmGoPhast.PhastModel.PestUsed and Boundaries.SutraStateObs.Used then
+    begin
+      for TimeIndex := 0 to Boundaries.SutraStateObs.Count - 1 do
+      begin
+        AValue := Boundaries.SutraStateObs[TimeIndex].Time;
+        if AValue < LastTime then
+        begin
+          FAllTimes.AddUnique(AValue);
+        end;
+      end;
+    end;
+
     if StartingCount <> FAllTimes.Count then
     begin
       frmErrorsAndWarnings.AddWarning(frmGoPhast.PhastModel,

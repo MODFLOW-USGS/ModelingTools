@@ -511,6 +511,11 @@ begin
             ScreenObject.GetCellsToAssign({Mesh,} '0', nil, nil, CellList,
               alFirstVertex, Model);
 
+            while CellList.Count > 1 do
+            begin
+              CellList.Delete(CellList.Count -1);
+            end;
+
             GetObservationLocations;
           finally
             CellList.Free;

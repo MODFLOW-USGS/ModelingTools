@@ -42,6 +42,7 @@ type
 
   TSutraStateObservations = class(TCustomSutraObservations)
   private
+    FScheduleName: string;
     function GetSutraStateObsItem(Index: Integer): TSutraStateObsItem;
     procedure SetSutraStateObsItem(Index: Integer; const Value: TSutraStateObsItem);
   public
@@ -51,6 +52,7 @@ type
     function Add: TSutraStateObsItem;
     function HasNonLakeBoundary: Boolean;
     function HasLakeBoundary: Boolean;
+    property ScheduleName: string read FScheduleName write FScheduleName;
   end;
 
   TCustomFluxObsItem = class(TCustomSutraObsItem)

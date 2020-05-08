@@ -16,8 +16,7 @@ type
   //private
     //FID: string;
   protected
-    function CreateObsFile(const FileType: TFileType;
-      const FileName: string): TCustomOutputFile; override;
+    function CreateObsFile(const FileName: string): TCustomOutputFile; override;
     //procedure HandleIdentifiers;
     function ApplicationTitle: string; override;
   public
@@ -31,10 +30,9 @@ resourceString
 
 { TInputHandler }
 
-function TInputHandler.CreateObsFile(const FileType: TFileType;
-  const FileName: string): TCustomOutputFile;
+function TInputHandler.CreateObsFile(const FileName: string): TCustomOutputFile;
 begin
-  result := TOutputFile.Create(FileName, FileType, FObservationDictionary);
+  result := TOutputFile.Create(FileName, FFileType, FObservationDictionary);
 end;
 
 

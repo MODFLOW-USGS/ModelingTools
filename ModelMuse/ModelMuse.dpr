@@ -705,7 +705,8 @@ uses
   frameSubPestObsUnit in 'frameSubPestObsUnit.pas' {frameSubPestObs: TFrame},
   InterpolatedObsCellUnit in 'InterpolatedObsCellUnit.pas',
   SutraPestObsUnit in 'SutraPestObsUnit.pas',
-  framePestObsCaptionedUnit in 'framePestObsCaptionedUnit.pas' {framePestObsCaptioned: TFrame};
+  framePestObsCaptionedUnit in 'framePestObsCaptionedUnit.pas' {framePestObsCaptioned: TFrame},
+  SutraPestObsWriterUnit in 'SutraPestObsWriterUnit.pas';
 
 {$R *.res}
 
