@@ -225,7 +225,14 @@ begin
   InitializeGrid;
   InitializeObsItemDictionary;
 
-  ObsComparisons := frmGoPhast.PhastModel.GlobalObservationComparisons;
+  if frmGoPhast.ModelSelection in ModflowSelection then
+  begin
+    ObsComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
+  end
+  else if frmGoPhast.ModelSelection in SutraSelection then
+  begin
+    ObsComparisons := frmGoPhast.PhastModel.SutraGlobalObservationComparisons;
+  end;
   frameObsComparisons.seNumber.AsInteger := ObsComparisons.Count;
   for ItemIndex := 0 to ObsComparisons.Count - 1 do
   begin
@@ -408,6 +415,7 @@ var
   ObsComp: TGlobalObsComparisonItem;
   Item: TCustomObservationItem;
   InvalidateEvent: TNotifyEvent;
+  ExistingComparisons: TGlobalObservationComparisons;
 begin
   InvalidateEvent := nil;
   ObsComparisons := TGlobalObservationComparisons.Create(InvalidateEvent);
@@ -440,8 +448,18 @@ begin
         ObsComp.Comment := frameObsComparisons.Grid.Cells[Ord(occComment),RowIndex];
       end;
     end;
+    ExistingComparisons := nil;
+    if frmGoPhast.ModelSelection in ModflowSelection then
+    begin
+      ExistingComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
+    end
+    else if frmGoPhast.ModelSelection in SutraSelection then
+    begin
+      ExistingComparisons := frmGoPhast.PhastModel.SutraGlobalObservationComparisons;
+    end;
+    Assert(ExistingComparisons <> nil);
     frmGoPhast.UndoStack.Submit(TUndoGlobalObsComparisons.Create(
-      frmGoPhast.PhastModel.GlobalObservationComparisons, ObsComparisons));
+      ExistingComparisons, ObsComparisons));
   finally
     ObsComparisons.Free;
   end;

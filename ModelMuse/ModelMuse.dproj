@@ -1700,6 +1700,10 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="SutraPestObsWriterUnit.pas"/>
+        <DCCReference Include="frmManageSutraBoundaryObservationsUnit.pas">
+            <Form>frmManageSutraBoundaryObservations</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>

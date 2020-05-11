@@ -706,7 +706,8 @@ uses
   InterpolatedObsCellUnit in 'InterpolatedObsCellUnit.pas',
   SutraPestObsUnit in 'SutraPestObsUnit.pas',
   framePestObsCaptionedUnit in 'framePestObsCaptionedUnit.pas' {framePestObsCaptioned: TFrame},
-  SutraPestObsWriterUnit in 'SutraPestObsWriterUnit.pas';
+  SutraPestObsWriterUnit in 'SutraPestObsWriterUnit.pas',
+  frmManageSutraBoundaryObservationsUnit in 'frmManageSutraBoundaryObservationsUnit.pas' {frmManageSutraBoundaryObservations};
 
 {$R *.res}
 
@@ -721,6 +722,7 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
+  Application.CreateForm(TfrmManageSutraBoundaryObservations, frmManageSutraBoundaryObservations);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
   if frmErrorsAndWarnings.HasMessages then

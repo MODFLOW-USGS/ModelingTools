@@ -40,7 +40,7 @@ uses System.UITypes,
   FootprintPropertiesUnit, ModflowSwiObsUnit, ModflowRipPlantGroupsUnit,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
-  Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit;
+  Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2185,7 +2185,9 @@ that affects the model output should also have a comment. }
     FTopContoursUpToDate: Boolean;
     FSideContoursUpToDate: Boolean;
     FFrontContoursUpToDate: Boolean;
-    FGlobalObservationComparisons: TGlobalObservationComparisons;
+    FModflowGlobalObservationComparisons: TGlobalObservationComparisons;
+    FSutraGlobalObservationComparisons: TGlobalObservationComparisons;
+    FSutraFluxObs: TSutraFluxObs;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2396,9 +2398,12 @@ that affects the model output should also have a comment. }
     function MawSelected(Sender: TObject): Boolean;
     function LakMf6Selected(Sender: TObject): Boolean;
     function GetMt3dSpecesName(const Index: Integer): string;
-    procedure SetGlobalObservationComparisons(
+    procedure SetModflowGlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
     function GetPestUsed: Boolean;
+    procedure SetSutraGlobalObservationComparisons(
+      const Value: TGlobalObservationComparisons);
+    procedure SetSutraFluxObs(const Value: TSutraFluxObs);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3417,7 +3422,23 @@ that affects the model output should also have a comment. }
     property CtsSystems: TCtsSystemCollection read GetCtsSystems
       write SetCtsSystems;
     property GlobalObservationComparisons: TGlobalObservationComparisons
-      read FGlobalObservationComparisons write SetGlobalObservationComparisons
+      read FModflowGlobalObservationComparisons write SetModflowGlobalObservationComparisons
+      stored False;
+    property ModflowGlobalObservationComparisons: TGlobalObservationComparisons
+      read FModflowGlobalObservationComparisons write SetModflowGlobalObservationComparisons
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
+    property SutraGlobalObservationComparisons: TGlobalObservationComparisons
+      read FSutraGlobalObservationComparisons
+      write SetSutraGlobalObservationComparisons
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
+    property SutraFluxObs: TSutraFluxObs read FSutraFluxObs
+      write SetSutraFluxObs
     {$IFNDEF PEST}
       stored False
     {$ENDIF}
@@ -9207,7 +9228,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
-  ModflowMnw2Unit, SutraPestObsUnit;
+  ModflowMnw2Unit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -27836,6 +27857,8 @@ begin
   FMt3dmsFhbFlowMassFluxObservations := TMt3dmsFluxObservationGroups.Create(self);
   FMt3dmsFhbFlowMassFluxObservations.FluxObservationType := mfotFHB_Flow;
 
+  FSutraFluxObs := TSutraFluxObs.Create(self);
+
   FHydrogeologicUnits := THydrogeologicUnits.Create(self);
   FFilesToArchive := TStringList.Create;
   TStringList(FFilesToArchive).Duplicates := dupIgnore;
@@ -28039,7 +28062,8 @@ begin
   FFootPrintGrid := TFootprintGrid.Create(self);
 
   FDisvGrid := TModflowDisvGrid.Create(self);
-  FGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
+  FModflowGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
+  FSutraGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
 
 end;
 
@@ -28466,7 +28490,8 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
-  FGlobalObservationComparisons.Free;
+  FSutraGlobalObservationComparisons.Free;
+  FModflowGlobalObservationComparisons.Free;
   FLakScreenObjects.Free;
   FMawScreenObjects.Free;
   FSfrScreenObjects.Free;
@@ -28516,6 +28541,7 @@ begin
   FBatchFileAdditionsBeforeModel.Free;
   FModflowNameFileLines.Free;
 
+  FSutraFluxObs.Free;
   FMt3dmsHeadMassFluxObservations.Free;
   FMt3dmsWellMassFluxObservations.Free;
   FMt3dmsMassLoadingMassFluxObservations.Free;
@@ -28967,6 +28993,17 @@ begin
   FStrObservations.Assign(Value);
 end;
 
+procedure TCustomModel.SetSutraFluxObs(const Value: TSutraFluxObs);
+begin
+  FSutraFluxObs.Assign(Value);
+end;
+
+procedure TCustomModel.SetSutraGlobalObservationComparisons(
+  const Value: TGlobalObservationComparisons);
+begin
+  FSutraGlobalObservationComparisons.Assign(Value);
+end;
+
 procedure TCustomModel.SetSutraMesh(const Value: TSutraMesh3D);
 begin
   if FSutraMesh = nil then
@@ -29073,10 +29110,10 @@ begin
   FGhbObservations.Assign(Value);
 end;
 
-procedure TCustomModel.SetGlobalObservationComparisons(
+procedure TCustomModel.SetModflowGlobalObservationComparisons(
   const Value: TGlobalObservationComparisons);
 begin
-  FGlobalObservationComparisons.Assign(Value);
+  FModflowGlobalObservationComparisons.Assign(Value);
 end;
 
 procedure TCustomModel.SetHydrogeologicUnits(const Value: THydrogeologicUnits);
@@ -29689,7 +29726,8 @@ begin
   FreeAndNil(FTimeSeries);
   FreeAndNil(FEndPoints);
   FreeAndNil(FHeadObsResults);
-  GlobalObservationComparisons.Clear;
+  ModflowGlobalObservationComparisons.Clear;
+  SutraGlobalObservationComparisons.Clear;
 end;
 
 procedure TCustomModel.GenerateIrregularMesh(var ErrorMessage: string);
@@ -35510,11 +35548,13 @@ begin
     Mt3dmsStrMassFluxObservations := SourceModel.Mt3dmsStrMassFluxObservations;
     Mt3dmsFhbHeadMassFluxObservations := SourceModel.Mt3dmsFhbHeadMassFluxObservations;
     Mt3dmsFhbFlowMassFluxObservations := SourceModel.Mt3dmsFhbFlowMassFluxObservations;
+    SutraFluxObs := SourceModel.SutraFluxObs;
     SwrTabFiles := SourceModel.SwrTabFiles;
     SwrReachGeometry := SourceModel.SwrReachGeometry;
     SwrStructures := SourceModel.SwrStructures;
     SwrObservations := SourceModel.SwrObservations;
-    GlobalObservationComparisons := SourceModel.GlobalObservationComparisons;
+    ModflowGlobalObservationComparisons := SourceModel.ModflowGlobalObservationComparisons;
+    SutraGlobalObservationComparisons := SourceModel.SutraGlobalObservationComparisons;
 //    GeoRefFileName := SourceModel.GeoRefFileName;
 
     OnCrossSectionChanged := SourceModel.OnCrossSectionChanged;

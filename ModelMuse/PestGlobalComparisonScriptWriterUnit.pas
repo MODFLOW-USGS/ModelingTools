@@ -53,7 +53,7 @@ begin
 {$ENDIF}
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUnableToExportObs);
 
-  if Model.GlobalObservationComparisons.Count = 0 then
+  if Model.ModflowGlobalObservationComparisons.Count = 0 then
   begin
     Exit;
   end;
@@ -86,9 +86,9 @@ begin
       WriteString('Global observation comparisons');
       NewLine;
 
-      for ComparisonIndex := 0 to Model.GlobalObservationComparisons.Count - 1 do
+      for ComparisonIndex := 0 to Model.ModflowGlobalObservationComparisons.Count - 1 do
       begin
-        GloCompItem := Model.GlobalObservationComparisons[ComparisonIndex];
+        GloCompItem := Model.ModflowGlobalObservationComparisons[ComparisonIndex];
         if FObsItemDictionary.TryGetValue(GloCompItem.GUID1, PriorItem1)
           and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
         begin

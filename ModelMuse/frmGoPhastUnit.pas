@@ -2062,7 +2062,8 @@ uses
   SutraGeneralFlowWriterUnit, SutraGeneralTransportWriterUnit, frmFileTypesUnit,
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
-  frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit;
+  frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
+  SutraPestObsWriterUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -4050,6 +4051,7 @@ begin
         miSetSelectedColRowLayer.Enabled := True;
         acGridDragRotate.Enabled := True;
         acGridAngle.Enabled := True;
+        acEditObservationComparisons.Visible := False;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
       msModflowFmp, msModflowCfp, msModflow2015:
@@ -4080,6 +4082,11 @@ begin
         miSetSelectedColRowLayer.Enabled := not DisvUsed;
         acGridDragRotate.Enabled := not DisvUsed;
         acGridAngle.Enabled := not DisvUsed;
+        {$IFDEF PEST}
+        acEditObservationComparisons.Visible := PhastModel.PestUsed;
+        {$ELSE}
+        acEditObservationComparisons.Visible := False;
+        {$ENDIF}
       end;
     msSutra22, msSutra30:
       begin
@@ -4109,6 +4116,11 @@ begin
         miSetSelectedColRowLayer.Enabled := False;
         acGridDragRotate.Enabled := False;
         acGridAngle.Enabled := False;
+        {$IFDEF PEST}
+        acEditObservationComparisons.Visible := PhastModel.PestUsed;
+        {$ELSE}
+        acEditObservationComparisons.Visible := False;
+        {$ENDIF}
       end;
     msFootPrint:
       begin
@@ -4138,6 +4150,7 @@ begin
         miSetSelectedColRowLayer.Enabled := False;
         acGridDragRotate.Enabled := True;
         acGridAngle.Enabled := True;
+        acEditObservationComparisons.Visible := False;
       end
     else Assert(False);
   end;
@@ -9256,6 +9269,7 @@ var
   GenLakeInteractionType: TGeneralizedFlowInteractionType;
   GenTransportInteractionBcsNames: TGenTransportInteractionStringList;
   GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
+  SutraPestObsWriterWriter: TSutraPestObsWriterWriter;
 begin
   case ModelSelection of
     msSutra22:
@@ -9560,6 +9574,14 @@ begin
         finally
           IcsWriter.Free;
         end;
+
+        SutraPestObsWriterWriter := TSutraPestObsWriterWriter.Create(PhastModel);
+        try
+          SutraPestObsWriterWriter.WriteFile(FileName);
+        finally
+          SutraPestObsWriterWriter.Free;
+        end;
+
         SutraFileWriter.WriteFile;
         BatchFileName := ExtractFileDir(FileName);
         BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
@@ -11071,6 +11093,7 @@ begin
           end;
           PhastModel.MobileComponents.Loaded;
           PhastModel.ImmobileComponents.Loaded;
+          PhastModel.SutraFluxObs.Loaded;
 
           FootprintWithdrawalDataArray := DataArrayManager.GetDataSetByName(KWithdrawals);
           if FootprintWithdrawalDataArray <> nil then

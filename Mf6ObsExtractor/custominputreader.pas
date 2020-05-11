@@ -22,6 +22,8 @@ type
   TLocationList = specialize TList<TLocationID>;
   TLocationDictionary = specialize TDictionary<string, TLocationID>;
 
+  { TDerivedObs }
+
   TDerivedObs = class
     ID: string;
     Obsname: string;
@@ -405,7 +407,10 @@ procedure TCustomInputHandler.PrintToOutputFile(const AnObs: TDerivedObs);
 begin
   if AnObs.Print then
   begin
-    FOutputFile.Add(Format(rsPrintObsValue, [AnObs.ObsName, AnObs.Value]));
+    if FOutputFile <> nil then
+    begin
+      FOutputFile.Add(Format(rsPrintObsValue, [AnObs.ObsName, AnObs.Value]));
+    end;
     if FInstructionFile <> nil then
     begin
       case FInstructionFileMode of

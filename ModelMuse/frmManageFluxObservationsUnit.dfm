@@ -933,6 +933,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0

@@ -31,7 +31,7 @@ type
     property Model: TBaseModel read FModel;
     property Used: Boolean read GetUsed;
   end;
-  
+
   TSutraStateObsItem = class(TCustomSutraObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
@@ -84,8 +84,15 @@ type
   end;
 
   TCustomSutraFluxObservations = class(TCustomSutraObservations)
+  private
+    FObservationName: string;
+    procedure SetObservationName(const Value: string);
   public
     procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property ObservationName: string read FObservationName
+      write SetObservationName;
   end;
 
   TSutraFlFluxObsItem = class(TCustomFluxObsItem)
@@ -99,7 +106,8 @@ type
   TSutraFlFluxObservations = class(TCustomSutraFluxObservations)
   private
     function GetSutraFlFluxObsItem(Index: Integer): TSutraFlFluxObsItem;
-    procedure SetSutraFlFluxObsItem(Index: Integer; const Value: TSutraFlFluxObsItem);
+    procedure SetSutraFlFluxObsItem(Index: Integer;
+      const Value: TSutraFlFluxObsItem);
   public
     Constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TSutraFlFluxObsItem read GetSutraFlFluxObsItem
@@ -137,7 +145,7 @@ type
       write SetSutraFlFluxObsGroup; default;
     function Add: TSutraFlFluxObservationGroup;
   end;
-  
+
   TSutraUFluxObsItem = class(TCustomFluxObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
@@ -186,7 +194,23 @@ type
       write SetSutraUFluxObsGroup; default;
     function Add: TSutraUFluxObservationGroup;
   end;
-  
+
+  TSutraFluxObs = class(TGoPhastPersistent)
+  private
+    FFluidFlux: TSutraFlFluxObservationGroups;
+    FUFlux: TSutraUFluxObservationGroups;
+    procedure SetFluidFlux(const Value: TSutraFlFluxObservationGroups);
+    procedure SetUFlux(const Value: TSutraUFluxObservationGroups);
+  public
+    constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure Loaded;
+  published
+    property FluidFlux: TSutraFlFluxObservationGroups read FFluidFlux write SetFluidFlux;
+    property UFlux: TSutraUFluxObservationGroups read FUFlux write SetUFlux;
+  end;
+
 var
   SutraStateObsTypes: TStringList;
   SutraFlFluxObsTypes: TStringList;
@@ -219,11 +243,11 @@ begin
   SutraStateObsTypes.Add(StrLakeStage);  // single node, make NLAKPR = 1, read from .lkst
 
   SutraFlFluxObsTypes := TStringList.Create;
-  SutraFlFluxObsTypes.Add('Fluid flow rate'); // Units = Mass/sec, Add selected nodes
-  SutraFlFluxObsTypes.Add('Resultant U rate'); // Units = solute mass/sec, Add selected nodes
+  SutraFlFluxObsTypes.Add('Boundary fluid flow rate'); // Units = Mass/sec, Add selected nodes
+  SutraFlFluxObsTypes.Add('Boundary resultant U rate'); // Units = solute mass/sec, Add selected nodes
 
   SutraUFluxObsTypes := TStringList.Create;
-  SutraUFluxObsTypes.Add('Resultant U rate'); // Units = solute mass/sec, Add selected nodes
+  SutraUFluxObsTypes.Add('Boundary resultant U rate'); // Units = solute mass/sec, Add selected nodes
 end;
 
 { TSutraStateObsItem }
@@ -335,7 +359,7 @@ end;
 constructor TCustomSutraObservations.Create(ItemClass: TCollectionItemClass;
   Model: TBaseModel; ScreenObject: TObject);
 var
-  FInvalidateModelEvent: TNotifyEvent;  
+  FInvalidateModelEvent: TNotifyEvent;
 begin
   if Model = nil then
   begin
@@ -375,8 +399,8 @@ end;
 function TSutraFlFluxObsItem.Units: string;
 begin
   Result := '';
-end; 
-        
+end;
+
 { TSutraFlFluxObservations }
 
 function TSutraFlFluxObservations.Add: TSutraFlFluxObsItem;
@@ -513,6 +537,16 @@ end;
 
 { TCustomSutraFluxObservations }
 
+procedure TCustomSutraFluxObservations.Assign(Source: TPersistent);
+begin
+  if Source is TCustomSutraFluxObservations then
+  begin
+    ObservationName := TCustomSutraFluxObservations(Source).ObservationName;
+  end;
+  inherited;
+
+end;
+
 procedure TCustomSutraFluxObservations.Loaded;
 var
   Index: integer;
@@ -528,13 +562,13 @@ end;
 procedure TSutraFlFluxObservationGroup.Assign(Source: TPersistent);
 begin
   if Source is TSutraFlFluxObservationGroup then
-  begin  
+  begin
     ObsGroup := TSutraFlFluxObservationGroup(Source).ObsGroup;
-  end    
-  else  
-  begin  
+  end
+  else
+  begin
     inherited;
-  end;    
+  end;
 
 end;
 
@@ -695,8 +729,74 @@ begin
   inherited Items[Index] := Value;
 end;
 
+{ TSutraFluxObs }
+
+procedure TSutraFluxObs.Assign(Source: TPersistent);
+var
+  FluxObsSource: TSutraFluxObs;
+begin
+  if Source is TSutraFluxObs then
+  begin
+    FluxObsSource := TSutraFluxObs(Source);
+    FluidFlux := FluxObsSource.FluidFlux;
+    UFlux := FluxObsSource.UFlux;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+constructor TSutraFluxObs.Create(Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  if Model = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := Model.Invalidate;
+  end;
+  inherited Create(InvalidateModelEvent);
+  FFluidFlux:= TSutraFlFluxObservationGroups.Create(Model);
+  FUFlux:= TSutraUFluxObservationGroups.Create(Model);
+end;
+
+destructor TSutraFluxObs.Destroy;
+begin
+  FFluidFlux.Free;
+  FUFlux.Free;
+  inherited;
+end;
+
+procedure TSutraFluxObs.Loaded;
+begin
+  FluidFlux.Loaded;
+  UFlux.Loaded;
+end;
+
+procedure TSutraFluxObs.SetFluidFlux(
+  const Value: TSutraFlFluxObservationGroups);
+begin
+  FFluidFlux.Assign(Value);
+end;
+
+procedure TSutraFluxObs.SetUFlux(const Value: TSutraUFluxObservationGroups);
+begin
+  FUFlux.Assign(Value);
+end;
+
+procedure TCustomSutraFluxObservations.SetObservationName(const Value: string);
+begin
+  FObservationName := Value;
+end;
+
 initialization
-  InitializeSutraObsTypes;
+
+InitializeSutraObsTypes;
 
 finalization
   SutraStateObsTypes.Free;

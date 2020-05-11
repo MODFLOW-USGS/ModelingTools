@@ -309,6 +309,9 @@ resourcestring
   'e MT3DMS BTN package before this dialog box can be displayed. Chemical sp' +
   'ecies are defined in the MODFLOW Packages and Programs dialog box.';
   StrDoYouWantToSave = 'Do you want to save your changes first?';
+  StrSomethingHasGoneW = 'Something has gone wrong. Please close this dialog' +
+  ' box and try again. If problems persist, please contact the ModelMuse dev' +
+  'eloper.';
 
 {$R *.dfm}
 
@@ -547,6 +550,13 @@ begin
     end;
     AvailableList := nil;
 
+    if tvFluxObservations.Selected.Parent = nil then
+    begin
+      Beep;
+      MessageDlg(StrSomethingHasGoneW, mtInformation, [mbOK], 0);
+      Exit;
+    end;
+
     if tvFluxObservations.Selected.Parent = FHeadMassFluxNode then
     begin
       AvailableList := FHeadMassFluxObservations;
@@ -726,6 +736,12 @@ begin
       CurrentObjects.Add(ScreenObject);
     end;
     AvailableList := nil;
+    if tvFluxObservations.Selected.Parent = nil then
+    begin
+      Beep;
+      MessageDlg(StrSomethingHasGoneW, mtInformation, [mbOK], 0);
+      Exit;
+    end;
     if tvFluxObservations.Selected.Parent = FChobNode then
     begin
       AvailableList := FChdScreenObjects;
@@ -874,8 +890,8 @@ var
   AnObject: TObject;
   GroupSelected: boolean;
 begin
-  GroupSelected :=
-//    (TreeView.Selected <> nil)
+  GroupSelected := (TreeView.Selected <> nil)
+    and
     ((TreeView.Selected.Data = FChobObservations)
     or (TreeView.Selected.Data = FDrobObservations)
     or (TreeView.Selected.Data = FGbobObservations)

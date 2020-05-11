@@ -3,43 +3,60 @@ unit SutraPestObsWriterUnit;
 interface
 
 uses
-  CustomModflowWriterUnit, PhastModelUnit, System.SysUtils, ScreenObjectUnit;
+  CustomModflowWriterUnit, PhastModelUnit, System.SysUtils, ScreenObjectUnit,
+  System.Classes;
 
 type
+  TExportType = (etInstructions, etExtractedValues);
+
   TSutraPestObsWriterWriter = class(TCustomFileWriter)
   private
     FFileName: string;
     FSutraLakeObjects: TScreenObjectList;
     FSutraObsObjects: TScreenObjectList;
+    FSutraAllObsObjects: TScreenObjectList;
+    FDerivedObsList: TStringList;
+    FExportType: TExportType;
     procedure Evaluate;
     procedure WriteOptions;
     procedure WriteObservationsFileNames;
     procedure WriteIdentifiers;
-    procedure WriteDeriviedObservations;
+    procedure WriteDerivedObservations;
+
+  protected
+    class function Extension: string; override;
   public
     Constructor Create(AModel: TCustomModel); reintroduce;
     destructor Destroy; override;
-    procedure WriteFile(const FileName: string);
+    procedure WriteFile(const AFileName: string);
   end;
-
 
 implementation
 
 uses
-  SutraPestObsUnit, GoPhastTypes, SutraMeshUnit;
+  SutraPestObsUnit, GoPhastTypes, SutraMeshUnit, FastGEO, ModelMuseUtilities,
+  PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit;
 
-{ TSutraPestObsWriterWriter }
+resourcestring
+  StrTheObservationComp = 'The observation comparison item "%s" could not be' +
+  ' exported. Check that it is defined correctly for this model.';
+  StrUnableToExportObs = 'Unable to export observations';
+
+  { TSutraPestObsWriterWriter }
 
 constructor TSutraPestObsWriterWriter.Create(AModel: TCustomModel);
 begin
   inherited Create(AModel, etExport);
   FSutraLakeObjects := TScreenObjectList.Create;
   FSutraObsObjects := TScreenObjectList.Create;
-
+  FSutraAllObsObjects := TScreenObjectList.Create;
+  FDerivedObsList := TStringList.Create;
 end;
 
 destructor TSutraPestObsWriterWriter.Destroy;
 begin
+  FDerivedObsList.Free;
+  FSutraAllObsObjects.Free;
   FSutraLakeObjects.Free;
   FSutraObsObjects.Free;
   inherited;
@@ -70,26 +87,142 @@ begin
       begin
         FSutraLakeObjects.Add(AScreenObject)
       end;
+      FSutraAllObsObjects.Add(AScreenObject);
     end;
   end;
 end;
 
-procedure TSutraPestObsWriterWriter.WriteDeriviedObservations;
+class function TSutraPestObsWriterWriter.Extension: string;
 begin
-
+  Result := '.soe';
+  Assert(False);
 end;
 
-procedure TSutraPestObsWriterWriter.WriteFile(const FileName: string);
+procedure TSutraPestObsWriterWriter.WriteDerivedObservations;
+var
+  LineIndex: Integer;
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  SutraStateObs: TSutraStateObservations;
+  DerivedObsIndex: Integer;
+  CompItem: TObsCompareItem;
+  Item: TSutraStateObsItem;
+  SutraComparisons: TGlobalObservationComparisons;
+  ItemIndex: Integer;
+//  GlobalCompItem: TGlobalObsComparisonItem;
+  ObservationList: TObservationList;
+  FObsItemDictionary: TObsItemDictionary;
+  ObsItem: TCustomObservationItem;
+  GloCompItem: TGlobalObsComparisonItem;
+  PriorItem1: TCustomObservationItem;
+  PriorItem2: TCustomObservationItem;
+  ErrorMessage: string;
 begin
+  WriteString('BEGIN DERIVED_OBSERVATIONS');
+  NewLine;
+  for LineIndex := 0 to FDerivedObsList.Count - 1 do
+  begin
+    WriteString(FDerivedObsList[LineIndex]);
+    NewLine;
+  end;
+
+  for ObjectIndex := 0 to FSutraAllObsObjects.Count - 1 do
+  begin
+    AScreenObject := FSutraAllObsObjects[ObjectIndex];
+    SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
+
+    for DerivedObsIndex := 0 to SutraStateObs.Comparisons.Count - 1 do
+    begin
+      CompItem := SutraStateObs.Comparisons[DerivedObsIndex];
+      WriteString('  OBSNAME ');
+      WriteString(CompItem.Name);
+      WriteString(' PRINT');
+      NewLine;
+      WriteString('    FORMULA ');
+      Item := SutraStateObs[CompItem.Index1];
+      WriteString(Item.ExportedName);
+      WriteString(' - ');
+      Item := SutraStateObs[CompItem.Index2];
+      WriteString(Item.ExportedName);
+      NewLine;
+    end;
+  end;
+
+  ObservationList := TObservationList.Create;
+  FObsItemDictionary := TObsItemDictionary.Create;
+  try
+    Model.FillObsItemList(ObservationList);
+
+    if ObservationList.Count > 0 then
+    begin
+
+      for ItemIndex := 0 to ObservationList.Count - 1 do
+      begin
+        ObsItem := ObservationList[ItemIndex];
+        FObsItemDictionary.Add(ObsItem.GUID, ObsItem);
+      end;
+
+      SutraComparisons := Model.SutraGlobalObservationComparisons;
+      for ItemIndex := 0 to SutraComparisons.Count - 1 do
+      begin
+        GloCompItem := SutraComparisons[ItemIndex];
+        if FObsItemDictionary.TryGetValue(GloCompItem.GUID1, PriorItem1)
+          and FObsItemDictionary.TryGetValue(GloCompItem.GUID2, PriorItem2) then
+        begin
+          WriteString('  OBSNAME ');
+          WriteString(GloCompItem.Name);
+          WriteString(' PRINT');
+          NewLine;
+          WriteString('    FORMULA ');
+          WriteString(PriorItem1.ExportedName);
+          WriteString(' - ');
+          WriteString(PriorItem2.ExportedName);
+          NewLine;
+        end
+        else
+        begin
+          ErrorMessage := Format(StrTheObservationComp, [GloCompItem.Name]);
+          frmErrorsAndWarnings.AddWarning(Model, StrUnableToExportObs, ErrorMessage)
+        end;
+      end;
+    end;
+  finally
+    ObservationList.Free;
+    FObsItemDictionary.Free;
+  end;
+
+  WriteString('END DERIVED_OBSERVATIONS');
+  NewLine;
+end;
+
+procedure TSutraPestObsWriterWriter.WriteFile(const AFileName: string);
+begin
+  if not Model.PestUsed then
+  begin
+    Exit;
+  end;
   Evaluate;
 
-  FFileName := ChangeFileExt(FileName, '.soe');
+  FExportType := etInstructions;
+  FFileName := ChangeFileExt(AFileName, '.soe_i');
   OpenFile(FFileName);
   try
     WriteOptions;
     WriteObservationsFileNames;
     WriteIdentifiers;
-    WriteDeriviedObservations;
+    WriteDerivedObservations;
+  finally
+    CloseFile;
+  end;
+
+  FExportType := etExtractedValues;
+  FFileName := ChangeFileExt(AFileName, '.soe_ev');
+  OpenFile(FFileName);
+  try
+    WriteOptions;
+    WriteObservationsFileNames;
+    WriteIdentifiers;
+    WriteDerivedObservations;
   finally
     CloseFile;
   end;
@@ -112,22 +245,24 @@ var
   NodeIndex: Integer;
   Node2D: TSutraNode2D;
   CellList: TCellAssignmentList;
+  APoint: TPoint2D;
+  DerivedLine: string;
 begin
+  FDerivedObsList.Clear;
+  WriteString('BEGIN IDENTIFIERS');
+  NewLine;
   for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
   begin
     AScreenObject := FSutraObsObjects[ObjectIndex];
-    ID := Copy(AScreenObject.Name, 1, 40);
-    WriteString('  ID');
-    NewLine;
-
     SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
     for TimeIndex := 0 to SutraStateObs.Count - 1 do
     begin
       StateObs := SutraStateObs[TimeIndex];
       if StateObs.ObsType <> StrLakeStage then
       begin
-        WriteString('    OBSNAME ');
-        WriteString(StateObs.Name);
+        ID := Copy(AScreenObject.Name, 1, 40);
+        WriteString('  ID ');
+        WriteString(ID);
         case StateObs.ObsTypeIndex of
           0:
             begin
@@ -139,6 +274,27 @@ begin
             end;
           2:
             begin
+              WriteString('_S');
+            end;
+        end;
+        NewLine;
+
+        WriteString('    OBSNAME ');
+        WriteString(StateObs.Name);
+        case StateObs.ObsTypeIndex of
+          0:
+            begin
+              StateObs.ExportedName := StateObs.Name + '_P';
+              WriteString('_P');
+            end;
+          1:
+            begin
+              StateObs.ExportedName := StateObs.Name + '_U';
+              WriteString('_U');
+            end;
+          2:
+            begin
+              StateObs.ExportedName := StateObs.Name + '_S';
               WriteString('_S');
             end;
         end;
@@ -171,7 +327,8 @@ begin
             NodeNumber := Node3D.Number + 1;
 
             ID := IntToStr(NodeNumber);
-            WriteString('  ID');
+            WriteString('  ID ');
+            WriteString(ID);
             NewLine;
 
             SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
@@ -181,7 +338,9 @@ begin
               if StateObs.ObsType = StrLakeStage then
               begin
                 WriteString('    OBSNAME ');
+                StateObs.ExportedName := StateObs.Name;
                 WriteString(StateObs.Name);
+//                WriteString(ID);
                 WriteFloat(StateObs.Time);
                 WriteString(' PRINT');
                 NewLine;
@@ -190,7 +349,30 @@ begin
           end
           else
           begin
+            SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
             Element2D := Mesh2D.Elements[ACell.Column];
+            for TimeIndex := 0 to SutraStateObs.Count - 1 do
+            begin
+              StateObs := SutraStateObs[TimeIndex];
+              if StateObs.ObsType = StrLakeStage then
+              begin
+                StateObs.ExportedName := StateObs.Name;
+                FDerivedObsList.Add(Format('  OBSNAME %s PRINT', [StateObs.Name]));
+                APoint := AScreenObject.Points[0];
+                DerivedLine := Format('    INTERPOLATE %0:g %1:g ', [APoint.x, APoint.y]);
+                for NodeIndex := 0 to Element2D.NodeCount - 1 do
+                begin
+                  Node2D := Element2D.Nodes[NodeIndex].Node;
+                  Node3D := Mesh3D.NodeArray[0, Node2D.Number];
+                  NodeNumber := Node3D.Number + 1;
+                  ID := IntToStr(NodeNumber);
+
+                  DerivedLine := Format('%0:s %1:s%2:s_%3:d',
+                    [DerivedLine, StateObs.Name, ID, TimeIndex]);
+                end;
+                FDerivedObsList.Add(DerivedLine);
+              end;
+            end;
             for NodeIndex := 0 to Element2D.NodeCount - 1 do
             begin
               Node2D := Element2D.Nodes[NodeIndex].Node;
@@ -198,15 +380,15 @@ begin
               NodeNumber := Node3D.Number + 1;
 
               ID := IntToStr(NodeNumber);
-              WriteString('  ID');
+              WriteString('  ID ');
+              WriteString(ID);
               NewLine;
 
-              WriteString('  LOCATION');
+              WriteString('    LOCATION');
               WriteFloat(Node2D.X);
               WriteFloat(Node2D.Y);
               NewLine;
 
-              SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
               for TimeIndex := 0 to SutraStateObs.Count - 1 do
               begin
                 StateObs := SutraStateObs[TimeIndex];
@@ -214,6 +396,9 @@ begin
                 begin
                   WriteString('    OBSNAME ');
                   WriteString(StateObs.Name);
+                  WriteString(ID);
+                  WriteString('_');
+                  WriteString(IntToStr(TimeIndex));
                   WriteFloat(StateObs.Time);
   //                WriteString(' PRINT');
                   NewLine;
@@ -227,6 +412,9 @@ begin
       CellList.Free;
     end;
   end;
+  WriteString('END IDENTIFIERS');
+  NewLine;
+  NewLine;
 end;
 
 procedure TSutraPestObsWriterWriter.WriteObservationsFileNames;
@@ -241,7 +429,7 @@ begin
   NewLine;
 
   for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
-  begin                                             NewLine;
+  begin
     SutraStateObs := FSutraObsObjects[ObjectIndex].SutraBoundaries.SutraStateObs;
     FileName := OutputFileNameRoot + SutraStateObs.ScheduleName + '.obc';
     WriteString('  FILENAME ');
@@ -265,9 +453,44 @@ begin
 end;
 
 procedure TSutraPestObsWriterWriter.WriteOptions;
-
 begin
+  WriteString('BEGIN OPTIONS');
+  NewLine;
 
+  WriteString('  LISTING ');
+  case FExportType of
+    etInstructions:
+      begin
+        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeOut')));
+      end;
+    etExtractedValues:
+      begin
+        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeList')));
+      end;
+    else
+      Assert(False);
+  end;
+  NewLine;
+
+  case FExportType of
+    etInstructions:
+      begin
+        WriteString('  INSTRUCTION ');
+        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeIns.txt')));
+      end;
+    etExtractedValues:
+      begin
+        WriteString('  OUTPUT ');
+        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeValues')));
+      end;
+    else
+      Assert(False);
+  end;
+  NewLine;
+
+  WriteString('END OPTIONS');
+  NewLine;
+  NewLine;
 end;
 
 end.
