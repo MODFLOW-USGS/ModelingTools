@@ -164,7 +164,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Top = 65
           Width = 653
           Height = 252
-          ActivePage = tabObjects
+          ActivePage = tabObservationsTimes
           Align = alClient
           TabOrder = 1
           object tabObservationsTimes: TTabSheet
@@ -847,7 +847,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             end
             object ExclBtn: TButton
               Left = 184
-              Top = 124
+              Top = 123
               Width = 26
               Height = 26
               Hint = 'Move selected objects out of "Used objects"'
@@ -933,10 +933,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0
@@ -1019,6 +1015,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     ReadOnly = True
     TabOrder = 0
     OnChange = tvFluxObservationsChange
+    ExplicitTop = -8
   end
   object rparserThreeDFormulaElements: TRbwParser
     Left = 272

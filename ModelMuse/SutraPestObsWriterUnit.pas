@@ -245,8 +245,13 @@ var
   NodeIndex: Integer;
   Node2D: TSutraNode2D;
   CellList: TCellAssignmentList;
-  APoint: TPoint2D;
-  DerivedLine: string;
+//  APoint: TPoint2D;
+//  DerivedLine: string;
+  ClosestNode: TSutraNode2D;
+  NodePoint: TPoint2D;
+  ObjectPoint: TPoint2D;
+  NodeDistance: TFloat;
+  TestDistance: double;
 begin
   FDerivedObsList.Clear;
   WriteString('BEGIN IDENTIFIERS');
@@ -324,88 +329,129 @@ begin
           if AScreenObject.EvaluatedAt = eaNodes then
           begin
             Node3D := Mesh3D.NodeArray[0, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
-
-            ID := IntToStr(NodeNumber);
-            WriteString('  ID ');
-            WriteString(ID);
-            NewLine;
-
-            SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
-            for TimeIndex := 0 to SutraStateObs.Count - 1 do
-            begin
-              StateObs := SutraStateObs[TimeIndex];
-              if StateObs.ObsType = StrLakeStage then
-              begin
-                WriteString('    OBSNAME ');
-                StateObs.ExportedName := StateObs.Name;
-                WriteString(StateObs.Name);
-//                WriteString(ID);
-                WriteFloat(StateObs.Time);
-                WriteString(' PRINT');
-                NewLine;
-              end;
-            end;
           end
           else
           begin
-            SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
             Element2D := Mesh2D.Elements[ACell.Column];
-            for TimeIndex := 0 to SutraStateObs.Count - 1 do
-            begin
-              StateObs := SutraStateObs[TimeIndex];
-              if StateObs.ObsType = StrLakeStage then
-              begin
-                StateObs.ExportedName := StateObs.Name;
-                FDerivedObsList.Add(Format('  OBSNAME %s PRINT', [StateObs.Name]));
-                APoint := AScreenObject.Points[0];
-                DerivedLine := Format('    INTERPOLATE %0:g %1:g ', [APoint.x, APoint.y]);
-                for NodeIndex := 0 to Element2D.NodeCount - 1 do
-                begin
-                  Node2D := Element2D.Nodes[NodeIndex].Node;
-                  Node3D := Mesh3D.NodeArray[0, Node2D.Number];
-                  NodeNumber := Node3D.Number + 1;
-                  ID := IntToStr(NodeNumber);
-
-                  DerivedLine := Format('%0:s %1:s%2:s_%3:d',
-                    [DerivedLine, StateObs.Name, ID, TimeIndex]);
-                end;
-                FDerivedObsList.Add(DerivedLine);
-              end;
-            end;
-            for NodeIndex := 0 to Element2D.NodeCount - 1 do
+            ClosestNode := Element2D.Nodes[0].Node;
+            NodePoint := ClosestNode.Location;
+            ObjectPoint := AScreenObject.Points[0];
+            NodeDistance := Distance(NodePoint, ObjectPoint);
+            for NodeIndex := 1 to Element2D.NodeCount - 1 do
             begin
               Node2D := Element2D.Nodes[NodeIndex].Node;
-              Node3D := Mesh3D.NodeArray[0, Node2D.Number];
-              NodeNumber := Node3D.Number + 1;
-
-              ID := IntToStr(NodeNumber);
-              WriteString('  ID ');
-              WriteString(ID);
-              NewLine;
-
-              WriteString('    LOCATION');
-              WriteFloat(Node2D.X);
-              WriteFloat(Node2D.Y);
-              NewLine;
-
-              for TimeIndex := 0 to SutraStateObs.Count - 1 do
+              NodePoint := Node2D.Location;
+              TestDistance := Distance(NodePoint, ObjectPoint);
+              if TestDistance < NodeDistance then
               begin
-                StateObs := SutraStateObs[TimeIndex];
-                if StateObs.ObsType = StrLakeStage then
-                begin
-                  WriteString('    OBSNAME ');
-                  WriteString(StateObs.Name);
-                  WriteString(ID);
-                  WriteString('_');
-                  WriteString(IntToStr(TimeIndex));
-                  WriteFloat(StateObs.Time);
-  //                WriteString(' PRINT');
-                  NewLine;
-                end;
+                NodeDistance := TestDistance;
+                ClosestNode := Node2D;
               end;
             end;
+            Node3D := Mesh3D.NodeArray[0, ClosestNode.Number];
           end;
+          NodeNumber := Node3D.Number + 1;
+
+          ID := IntToStr(NodeNumber);
+          WriteString('  ID ');
+          WriteString(ID);
+          NewLine;
+
+          SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
+          for TimeIndex := 0 to SutraStateObs.Count - 1 do
+          begin
+            StateObs := SutraStateObs[TimeIndex];
+            if StateObs.ObsType = StrLakeStage then
+            begin
+              WriteString('    OBSNAME ');
+              StateObs.ExportedName := StateObs.Name;
+              WriteString(StateObs.Name);
+//                WriteString(ID);
+              WriteFloat(StateObs.Time);
+              WriteString(' PRINT');
+              NewLine;
+            end;
+          end;
+//          end
+//          else
+//          begin
+//            SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
+//            Element2D := Mesh2D.Elements[ACell.Column];
+//            ClosestNode := Element2D.Nodes[0].Node;
+//            NodePoint := ClosestNode.Location;
+//            ObjectPoint := AScreenObject.Points[0];
+//            NodeDistance := Distance(NodePoint, ObjectPoint);
+//            for NodeIndex := 1 to Element2D.NodeCount - 1 do
+//            begin
+//              Node2D := Element2D.Nodes[NodeIndex].Node;
+//              NodePoint := Node2D.Location;
+//              TestDistance := Distance(NodePoint, ObjectPoint);
+//              if TestDistance < NodeDistance then
+//              begin
+//                NodeDistance := TestDistance;
+//                ClosestNode := Node2D;
+//              end;
+//            end;
+//            Node3D := Mesh3D.NodeArray[0, ClosestNode.Number];
+//            NodeNumber := Node3D.Number + 1;
+//            ID := IntToStr(NodeNumber);
+//
+////            for TimeIndex := 0 to SutraStateObs.Count - 1 do
+////            begin
+////              StateObs := SutraStateObs[TimeIndex];
+////              if StateObs.ObsType = StrLakeStage then
+////              begin
+////                StateObs.ExportedName := StateObs.Name;
+////                FDerivedObsList.Add(Format('  OBSNAME %s PRINT', [StateObs.Name]));
+////                APoint := AScreenObject.Points[0];
+////                DerivedLine := Format('    INTERPOLATE %0:g %1:g ', [APoint.x, APoint.y]);
+////                for NodeIndex := 0 to Element2D.NodeCount - 1 do
+////                begin
+////                  Node2D := Element2D.Nodes[NodeIndex].Node;
+////                  Node3D := Mesh3D.NodeArray[0, Node2D.Number];
+////                  NodeNumber := Node3D.Number + 1;
+////                  ID := IntToStr(NodeNumber);
+////
+////                  DerivedLine := Format('%0:s %1:s%2:s_%3:d',
+////                    [DerivedLine, StateObs.Name, ID, TimeIndex]);
+////                end;
+////                FDerivedObsList.Add(DerivedLine);
+////              end;
+////            end;
+////            for NodeIndex := 0 to Element2D.NodeCount - 1 do
+////            begin
+////              Node2D := Element2D.Nodes[NodeIndex].Node;
+////              Node3D := Mesh3D.NodeArray[0, Node2D.Number];
+////              NodeNumber := Node3D.Number + 1;
+////
+////              ID := IntToStr(NodeNumber);
+//              WriteString('  ID ');
+//              WriteString(ID);
+//              NewLine;
+//
+////              WriteString('    LOCATION');
+////              WriteFloat(Node2D.X);
+////              WriteFloat(Node2D.Y);
+////              NewLine;
+//
+//              for TimeIndex := 0 to SutraStateObs.Count - 1 do
+//              begin
+//                StateObs := SutraStateObs[TimeIndex];
+//                if StateObs.ObsType = StrLakeStage then
+//                begin
+//                  WriteString('    OBSNAME ');
+//                  WriteString(StateObs.Name);
+//                  StateObs.ExportedName := StateObs.Name;
+////                  WriteString(ID);
+////                  WriteString('_');
+////                  WriteString(IntToStr(TimeIndex));
+//                  WriteFloat(StateObs.Time);
+//                  WriteString(' PRINT');
+//                  NewLine;
+//                end;
+//              end;
+////            end;
+//          end;
         end;
       end;
     finally

@@ -509,6 +509,8 @@ type
     miEditObservationComparisons: TMenuItem;
     acAnonymizeObjects: TAction;
     miAnonymizeObjects: TMenuItem;
+    acEditSutraFluxObs: TAction;
+    miEditSutraFluxObs: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -693,6 +695,7 @@ type
     procedure acEditCTSExecute(Sender: TObject);
     procedure acEditObservationComparisonsExecute(Sender: TObject);
     procedure acAnonymizeObjectsExecute(Sender: TObject);
+    procedure acEditSutraFluxObsExecute(Sender: TObject);
   private
     FCreateArchive: Boolean;
     CreateArchiveSet: boolean;
@@ -2063,7 +2066,7 @@ uses
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
-  SutraPestObsWriterUnit;
+  SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -4052,6 +4055,7 @@ begin
         acGridDragRotate.Enabled := True;
         acGridAngle.Enabled := True;
         acEditObservationComparisons.Visible := False;
+        acEditSutraFluxObs.Visible := False;
       end;
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
       msModflowFmp, msModflowCfp, msModflow2015:
@@ -4087,6 +4091,7 @@ begin
         {$ELSE}
         acEditObservationComparisons.Visible := False;
         {$ENDIF}
+        acEditSutraFluxObs.Visible := False;
       end;
     msSutra22, msSutra30:
       begin
@@ -4118,8 +4123,10 @@ begin
         acGridAngle.Enabled := False;
         {$IFDEF PEST}
         acEditObservationComparisons.Visible := PhastModel.PestUsed;
+        acEditSutraFluxObs.Visible := PhastModel.PestUsed;
         {$ELSE}
         acEditObservationComparisons.Visible := False;
+        acEditSutraFluxObs.Visible := False;
         {$ENDIF}
       end;
     msFootPrint:
@@ -4151,6 +4158,7 @@ begin
         acGridDragRotate.Enabled := True;
         acGridAngle.Enabled := True;
         acEditObservationComparisons.Visible := False;
+        acEditSutraFluxObs.Visible := False;
       end
     else Assert(False);
   end;
@@ -5416,6 +5424,12 @@ procedure TfrmGoPhast.acEditObservationComparisonsExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmObservationComparisons);
+end;
+
+procedure TfrmGoPhast.acEditSutraFluxObsExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmManageSutraBoundaryObservations)
 end;
 
 procedure TfrmGoPhast.acSimplifyScreenObjectsExecute(Sender: TObject);

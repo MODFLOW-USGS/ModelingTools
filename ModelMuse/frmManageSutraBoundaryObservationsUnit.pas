@@ -8,7 +8,8 @@ uses
   JvExStdCtrls, JvListBox, JvCombobox, JvListComb, ArgusDataEntry, Vcl.Mask,
   JvExMask, JvSpin, Vcl.Grids, RbwDataGrid4, JvExComCtrls, JvComCtrls, JvEdit,
   Vcl.ComCtrls, RbwParser, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Menus, JvExExtCtrls,
-  JvNetscapeSplitter, framePestObsUnit, SutraPestObsUnit, ScreenObjectUnit;
+  JvNetscapeSplitter, framePestObsUnit, FluxObservationUnit, SutraPestObsUnit,
+  ScreenObjectUnit, JvBoxProcs, UndoItems;
 
 type
   TfrmManageSutraBoundaryObservations = class(TfrmCustomGoPhast)
@@ -54,19 +55,93 @@ type
     frameSutraFluxObs: TframePestObs;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure btnIncBtnClick(Sender: TObject);
+    procedure btnIncAllBtnClick(Sender: TObject);
+    procedure btnExclBtnClick(Sender: TObject);
+    procedure btnExclAllBtnClick(Sender: TObject);
+    procedure lbSrcListDragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure lbSrcListDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure lbSrcListKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ListClick(Sender: TObject);
+    procedure lbDstListDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure lbDstListDragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure lbDstListKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnAddObservationClick(Sender: TObject);
+    procedure btnDeleteObservationClick(Sender: TObject);
+    procedure edObservationNameChange(Sender: TObject);
+    procedure btnOkClick(Sender: TObject);
+    procedure edFactorFormulaChange(Sender: TObject);
+    procedure edObservationNameExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure tvFluxObservationsChange(Sender: TObject; Node: TTreeNode);
+    procedure pmSelectEditUsedPopup(Sender: TObject);
+    procedure pmSelectEditAvailablePopup(Sender: TObject);
+    procedure miSelectAvailableClick(Sender: TObject);
+    procedure miEditAvailableClick(Sender: TObject);
+    procedure miGotoAvailableClick(Sender: TObject);
+    procedure miHideAvailableClick(Sender: TObject);
+    procedure miSelectUsedClick(Sender: TObject);
+    procedure miEditUsedClick(Sender: TObject);
+    procedure miGoToUsedClick(Sender: TObject);
+    procedure miHideUsedClick(Sender: TObject);
   private
     FFluxObs: TSutraFluxObs;
     FFluidFluxObjects: TScreenObjectList;
     FUFluxObjects: TScreenObjectList;
     FSelectedObservation: TCustomSutraFluxObservations;
+    FFluidFuxNode: TTreeNode;
+    FUFluxNode: TTreeNode;
+    FSelectedGroup: TCustomSutraFluxObservationGroup;
+    FUpdatingFormula: Boolean;
+    procedure SetSelectedGroup(const Value: TCustomSutraFluxObservationGroup);
+    property SelectedGroup: TCustomSutraFluxObservationGroup read FSelectedGroup write SetSelectedGroup;
     procedure GetData;
     procedure SetData;
     procedure SetSelectedObservation(const Value: TCustomSutraFluxObservations);
-    property SelectedObservation: TCustomSutraFluxObservations read FSelectedObservation write SetSelectedObservation;
+    property SelectedObservation: TCustomSutraFluxObservations
+      read FSelectedObservation write SetSelectedObservation;
+    procedure DisplayObservation(Value: TCustomSutraFluxObservations);
+    procedure RecordObservation(Value: TCustomSutraFluxObservations);
+    procedure UpdateObjectsInSelectedObservation;
+    procedure DisplayFactor;
+    procedure SetSelectedGroupAndObservation(TreeView: TTreeView);
+    procedure AssignObsNames;
+    procedure UpdateFactor;
+    function CheckFormula(FunctionString: string; ShowError: boolean): boolean;
+    procedure AssignFactor(NewFormula: string);
+    procedure SelectObjects(ListBox: TJvListBox);
+    procedure GetSelectedObjects(ListBox: TJvListBox; ScreenObjects: TScreenObjectList);
+    procedure EditAnObject(ListBox: TJvListBox);
+    procedure GoToAnObject(ListBox: TJvListBox);
+    procedure HideObjects(ListBox: TJvListBox);
+    procedure GetGlobalVariables;
+    procedure CreateVariables;
     { Private declarations }
   public
+    procedure SetButtons;
     { Public declarations }
   end;
+
+  TUndoEditSutraFluxObservations = class(TCustomUndo)
+  private
+    FOldSutraFluxObs: TSutraFluxObs;
+    FNewSutraFluxObs: TSutraFluxObs;
+  protected
+    function Description: string; override;
+    procedure AssignNewObservations(NewSutraFluxObs: TSutraFluxObs);
+  public
+    Constructor Create;
+    Destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
+
+  end;
+
 
 var
   frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservations;
@@ -74,9 +149,371 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, SutraBoundariesUnit;
+  frmGoPhastUnit, SutraBoundariesUnit, UndoItemsScreenObjects, frmGoToUnit,
+  GIS_Functions, GoPhastTypes, DataSetUnit, PhastModelUnit;
+
+resourcestring
+  StrErrorInFormulaS = 'Error in formula: %s';
+  StrErrorTheFormulaI = 'Error: the formula is does not result in a real num' +
+  'ber';
+  StrDoYouWantToSave = 'Do you want to save your changes first?';
+  StrEditSUTRAFluxObse = 'edit SUTRA flux observations';
 
 {$R *.dfm}
+
+procedure TfrmManageSutraBoundaryObservations.AssignFactor(NewFormula: string);
+var
+  FactorObject: TObservationFactor;
+  ObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Index: Integer;
+begin
+  for Index := 0 to lbDstList.Items.Count - 1 do
+  begin
+    if lbDstList.Selected[Index] then
+    begin
+      ScreenObject := lbDstList.Items.Objects[Index] as TScreenObject;
+      ObjectIndex := FSelectedObservation.ObservationFactors.
+        IndexOfScreenObject(ScreenObject);
+      if (ObjectIndex >= 0) then
+      begin
+        FactorObject := FSelectedObservation.ObservationFactors[ObjectIndex];
+        FactorObject.Factor := NewFormula;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.AssignObsNames;
+begin
+  // do nothing
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnAddObservationClick(
+  Sender: TObject);
+var
+//  Observations: TCustomFluxObservationGroups;
+//  ObservationGroup: TCustomFluxObservationGroup;
+  ANode: TTreeNode;
+  ObsName: string;
+  ParentNode : TTreeNode;
+  NodeList: TList;
+  Observations: TCustomSutraFluxObservationGroups;
+  ObservationGroup: TCustomSutraFluxObservations;
+begin
+  inherited;
+  NodeList := TList.Create;
+  try
+    NodeList.Add(FFluidFuxNode);
+    NodeList.Add(FUFluxNode);
+    NodeList.Pack;
+    if (tvFluxObservations.Selected = nil) and (NodeList.Count > 0) then
+    begin
+      tvFluxObservations.Selected := NodeList[0];
+    end;
+    if tvFluxObservations.Selected = nil then
+    begin
+      Exit;
+    end;
+    if NodeList.IndexOf(tvFluxObservations.Selected) >= 0 then
+    begin
+      ParentNode := tvFluxObservations.Selected;
+    end
+    else
+    begin
+      ParentNode := tvFluxObservations.Selected.Parent;
+    end;
+  finally
+    NodeList.Free;
+  end;
+
+  if ParentNode = FFluidFuxNode then
+  begin
+    ObsName := 'Flow';
+  end
+  else if ParentNode = FUFluxNode then
+  begin
+    ObsName := 'U';
+  end
+  else
+  begin
+    Assert(False);
+  end;
+
+  Observations := ParentNode.Data;
+  ObservationGroup :=
+    (Observations.Add as TCustomSutraFluxObservationGroup).ObservationGroup;
+  ObservationGroup.ObservationName := ObsName
+    + IntToStr(ParentNode.Count+1);
+  ANode := tvFluxObservations.Items.AddChild(ParentNode,
+    ObservationGroup.ObservationName);
+  ANode.Data := ObservationGroup;
+  tvFluxObservations.Selected := ANode;
+  SetSelectedGroupAndObservation(tvFluxObservations);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnDeleteObservationClick(
+  Sender: TObject);
+var
+  ParentNode: TTreeNode;
+  Observations: TCustomSutraFluxObservationGroups;
+  Item: TCustomSutraFluxObservationGroup;
+  Index: Integer;
+  AnObject: TObject;
+begin
+  inherited;
+  Assert(tvFluxObservations.Selected <> nil);
+  AnObject := tvFluxObservations.Selected.Data;
+  Assert(AnObject is TCustomSutraFluxObservationGroup);
+  Item := tvFluxObservations.Selected.Data;
+  ParentNode := tvFluxObservations.Selected.Parent;
+  Assert(ParentNode <> nil);
+  Observations := ParentNode.Data;
+  tvFluxObservations.Items.Delete(tvFluxObservations.Selected);
+  SelectedGroup := nil;
+  SelectedObservation := nil;
+  Observations.Remove(Item);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnExclAllBtnClick(
+  Sender: TObject);
+begin
+  BoxMoveAllItems(lbDstList, lbSrcList);
+  SetButtons;
+  UpdateObjectsInSelectedObservation;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnExclBtnClick(Sender: TObject);
+begin
+  BoxMoveSelectedItems(lbDstList, lbSrcList);
+  SetButtons;
+  UpdateObjectsInSelectedObservation;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnIncAllBtnClick(
+  Sender: TObject);
+begin
+  BoxMoveAllItems(lbSrcList, lbDstList);
+  SetButtons;
+  UpdateObjectsInSelectedObservation;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnIncBtnClick(Sender: TObject);
+begin
+  inherited;
+  BoxMoveSelectedItems(lbSrcList, lbDstList);
+  SetButtons;
+  UpdateObjectsInSelectedObservation;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnOkClick(Sender: TObject);
+begin
+  inherited;
+  SetData;
+end;
+
+function TfrmManageSutraBoundaryObservations.CheckFormula(
+  FunctionString: string; ShowError: boolean): boolean;
+var
+  CompiledFormula: TExpression;
+begin
+  result := True;
+  try
+    rparserThreeDFormulaElements.Compile(FunctionString);
+  except on E: ErbwParserError do
+    begin
+      edFactorFormula.Color := clRed;
+      if ShowError then
+      begin
+        Beep;
+        MessageDlg(Format(StrErrorInFormulaS, [E.Message]), mtError, [mbOK], 0);
+      end;
+      result := False;
+      Exit;
+    end
+  end;
+
+  CompiledFormula := rparserThreeDFormulaElements.CurrentExpression;
+  // check that the formula is OK.
+  if not (CompiledFormula.ResultType in [rdtDouble, rdtInteger]) then
+  begin
+    edFactorFormula.Color := clRed;
+    if ShowError then
+    begin
+      Beep;
+      MessageDlg(StrErrorTheFormulaI,
+        mtError, [mbOK], 0);
+    end;
+    result := False;
+  end
+  else
+  begin
+    edFactorFormula.Color := clWindow;
+    if ShowError then
+    begin
+      FunctionString := CompiledFormula.Decompile;
+      if FunctionString <> edFactorFormula.Text then
+      begin
+        edFactorFormula.Text := FunctionString;
+        if Assigned(edFactorFormula.OnChange) then
+        begin
+          edFactorFormula.OnChange(edFactorFormula);
+        end;
+        if Assigned(edFactorFormula.OnExit) then
+        begin
+          edFactorFormula.OnExit(edFactorFormula);
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.CreateVariables;
+var
+  Index: Integer;
+  DataArray: TDataArray;
+  DataArrayManager: TDataArrayManager;
+begin
+  DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
+  for Index := 0 to DataArrayManager.DataSetCount - 1 do
+  begin
+    DataArray := DataArrayManager.DataSets[Index];
+    if not DataArray.Visible then
+    begin
+      Continue;
+    end;
+    if DataArray.EvaluatedAt = eaNodes then
+    begin
+      case DataArray.DataType of
+        rdtDouble: rparserThreeDFormulaElements.CreateVariable(DataArray.Name,
+          DataArray.FullClassification, 0.0, DataArray.DisplayName);
+        rdtInteger: rparserThreeDFormulaElements.CreateVariable(DataArray.Name,
+          DataArray.FullClassification, 0, DataArray.DisplayName);
+        rdtBoolean: rparserThreeDFormulaElements.CreateVariable(DataArray.Name,
+          DataArray.FullClassification, False, DataArray.DisplayName);
+        rdtString: rparserThreeDFormulaElements.CreateVariable(DataArray.Name,
+          DataArray.FullClassification, '', DataArray.DisplayName);
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.DisplayFactor;
+var
+  FirstFormula: string;
+  FoundFormula: boolean;
+  Index: Integer;
+  ScreenObject: TScreenObject;
+  ObjectIndex: integer;
+  FactorObject: TObservationFactor;
+begin
+  edFactorFormula.Enabled := lbDstList.Enabled and (lbDstList.SelCount > 0);
+  btnFactorFormula.Enabled := edFactorFormula.Enabled;
+  if edFactorFormula.Enabled then
+  begin
+    FoundFormula := False;
+    FirstFormula := '';
+    for Index := 0 to lbDstList.Items.Count - 1 do
+    begin
+      if lbDstList.Selected[Index] then
+      begin
+        ScreenObject := lbDstList.Items.Objects[Index] as TScreenObject;
+        ObjectIndex := FSelectedObservation.ObservationFactors.
+          IndexOfScreenObject(ScreenObject);
+        Assert(ObjectIndex >= 0);
+        FactorObject := FSelectedObservation.ObservationFactors[ObjectIndex];
+        if FoundFormula then
+        begin
+          if FirstFormula <> FactorObject.Factor then
+          begin
+            FirstFormula := '';
+          end;
+        end
+        else
+        begin
+          FirstFormula := FactorObject.Factor;
+          FoundFormula := True;
+        end;
+      end;
+    end;
+    edFactorFormula.Text := FirstFormula;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.DisplayObservation(
+  Value: TCustomSutraFluxObservations);
+begin
+  frameSutraFluxObs.InitializeControls;
+  if Value <> nil then
+  begin
+    if Value is TSutraFlFluxObservations then
+    begin
+      frameSutraFluxObs.SpecifyObservationTypes(SutraFlFluxObsTypes);
+    end
+    else
+    begin
+      Assert(Value is TSutraUFluxObservations);
+      frameSutraFluxObs.SpecifyObservationTypes(SutraUFluxObsTypes);
+    end;
+    edObservationName.Text := Value.ObservationName;
+    frameSutraFluxObs.GetData(Value);
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.edFactorFormulaChange(
+  Sender: TObject);
+begin
+  inherited;
+  UpdateFactor;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.EditAnObject(ListBox: TJvListBox);
+var
+  ScreenObject: TScreenObject;
+  ScreenObjects: TScreenObjectList;
+begin
+  ScreenObjects := TScreenObjectList.Create;
+  try
+    GetSelectedObjects(ListBox, ScreenObjects);
+    if ScreenObjects.Count = 1 then
+    begin
+      ScreenObject := ScreenObjects[0];
+      SelectAScreenObject(ScreenObject);
+      if (MessageDlg(StrDoYouWantToSave, mtConfirmation,
+        [mbYes, mbNo], 0) = mrYes) then
+      begin
+        SetData;
+      end;
+      Close;
+      frmGoPhast.EditScreenObjects;
+    end;
+  finally
+    ScreenObjects.Free;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.edObservationNameChange(
+  Sender: TObject);
+begin
+  inherited;
+  if (FSelectedObservation <> nil) then
+  begin
+    Assert(tvFluxObservations.Selected.Data = FSelectedObservation);
+    FSelectedObservation.ObservationName := string(AnsiString(edObservationName.Text));
+    tvFluxObservations.Selected.Text := edObservationName.Text;
+    AssignObsNames;
+//    rdgGroupNames.Cells[1, FSelectedObservation.Index+1] :=
+//      SelectedObservation.ObservationName;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.edObservationNameExit(
+  Sender: TObject);
+begin
+  inherited;
+  edObservationName.Text := string(AnsiString(StringReplace(edObservationName.Text,
+    ' ', '_', [rfReplaceAll])));
+end;
 
 procedure TfrmManageSutraBoundaryObservations.FormCreate(Sender: TObject);
 begin
@@ -85,6 +522,16 @@ begin
   FFluidFluxObjects := TScreenObjectList.Create;
   FUFluxObjects := TScreenObjectList.Create;
   frameSutraFluxObs.InitializeControls;
+
+  AddGIS_Functions(rparserThreeDFormulaElements,
+    frmGoPhast.PhastModel.ModelSelection, eaNodes);
+  GetGlobalVariables;
+  CreateVariables;
+
+//  pcGroup.ActivePageIndex := 0;
+
+  GetData;
+
 end;
 
 procedure TfrmManageSutraBoundaryObservations.FormDestroy(Sender: TObject);
@@ -93,6 +540,30 @@ begin
   FFluxObs.Free;
   FUFluxObjects.Free;
   FFluidFluxObjects.Free;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  btnIncBtn.Left := 4 + (tabObjects.Width - btnIncBtn.Width) div 2;
+  btnIncAllBtn.Left := btnIncBtn.Left;
+  btnExclBtn.Left := btnIncBtn.Left;
+  btnExclAllBtn.Left := btnIncBtn.Left;
+  lbSrcList.Width := (tabObjects.Width - (8 + 7 + btnIncBtn.Width + 7 + 8)) div 2;
+  lblSrcLabel.Left := lbSrcList.Left;
+  lbDstList.Width := lbSrcList.Width;
+  lbDstList.Left := btnIncBtn.Left + btnIncBtn.Width + 7;
+  lblDstLabel.Left := lbDstList.Left;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.FormShow(Sender: TObject);
+begin
+  inherited;
+  ListClick(nil);
+//  rdgFluxObsTimes.Options := rdgFluxObsTimes.Options - [goEditing];
+//  rdgFluxObsTimes.Options := rdgFluxObsTimes.Options + [goEditing];
+  pcMain.ActivePageIndex := 0;
 end;
 
 procedure TfrmManageSutraBoundaryObservations.GetData;
@@ -156,6 +627,7 @@ begin
 
   ParentNode := tvFluxObservations.Items.Add(nil, 'Calculated fluid flow boundaries');
   ParentNode.Data := FFluxObs.FluidFlux;
+  FFluidFuxNode := ParentNode;
   for Index := 0 to FFluxObs.FluidFlux.Count - 1 do
   begin
     FlowItem := FFluxObs.FluidFlux[Index];
@@ -166,6 +638,7 @@ begin
 
   ParentNode := tvFluxObservations.Items.Add(nil, 'Calculated U rate boundaries');
   ParentNode.Data := FFluxObs.UFlux;
+  FUFluxNode := ParentNode;
   for Index := 0 to FFluxObs.UFlux.Count - 1 do
   begin
     UItem := FFluxObs.UFlux[Index];
@@ -176,15 +649,453 @@ begin
 
 end;
 
-procedure TfrmManageSutraBoundaryObservations.SetData;
+procedure TfrmManageSutraBoundaryObservations.GetGlobalVariables;
+var
+  CompilerList: TList;
 begin
+  CompilerList := TList.Create;
+  try
+    CompilerList.Add(rparserThreeDFormulaElements);
+    frmGoPhast.PhastModel.RefreshGlobalVariables(CompilerList);
+  finally
+    CompilerList.Free;
+  end;
+end;
 
+procedure TfrmManageSutraBoundaryObservations.GetSelectedObjects(
+  ListBox: TJvListBox; ScreenObjects: TScreenObjectList);
+var
+  Index: Integer;
+begin
+  for Index := 0 to ListBox.Items.Count - 1 do
+  begin
+    if ListBox.Selected[Index] then
+    begin
+      ScreenObjects.Add(ListBox.Items.Objects[Index] as TScreenObject);
+    end;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.GoToAnObject(ListBox: TJvListBox);
+var
+  ScreenObject: TScreenObject;
+  UndoShowHide: TUndoShowHideScreenObject;
+  ScreenObjects: TScreenObjectList;
+begin
+  ScreenObjects := TScreenObjectList.Create;
+  try
+    GetSelectedObjects(ListBox, ScreenObjects);
+    if ScreenObjects.Count = 1 then
+    begin
+      ScreenObject := ScreenObjects[0];
+      if not ScreenObject.Visible then
+      begin
+        UndoShowHide := TUndoShowHideScreenObject.Create;
+        UndoShowHide.AddScreenObjectToChange(ScreenObject);
+        frmGoPhast.UndoStack.Submit(UndoShowHide);
+      end;
+      GoToObject(ScreenObject);
+    end;
+  finally
+    ScreenObjects.Free;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.HideObjects(ListBox: TJvListBox);
+var
+  ScreenObjects: TScreenObjectList;
+begin
+  ScreenObjects := TScreenObjectList.Create;
+  try
+    GetSelectedObjects(ListBox, ScreenObjects);
+    if ScreenObjects.Count > 0 then
+    begin
+      HideMultipleScreenObjects(ScreenObjects);
+    end;
+  finally
+    ScreenObjects.Free;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.ListClick(Sender: TObject);
+begin
+  SetButtons;
+  DisplayFactor;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miEditAvailableClick(
+  Sender: TObject);
+begin
+  inherited;
+  EditAnObject(lbSrcList);
+
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miEditUsedClick(Sender: TObject);
+begin
+  inherited;
+  EditAnObject(lbDstList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miGotoAvailableClick(
+  Sender: TObject);
+begin
+  inherited;
+  GoToAnObject(lbSrcList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miGoToUsedClick(Sender: TObject);
+begin
+  inherited;
+  GoToAnObject(lbDstList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miHideAvailableClick(
+  Sender: TObject);
+begin
+  inherited;
+  HideObjects(lbSrcList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miHideUsedClick(Sender: TObject);
+begin
+  inherited;
+  HideObjects(lbDstList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miSelectAvailableClick(
+  Sender: TObject);
+begin
+  inherited;
+  SelectObjects(lbSrcList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.miSelectUsedClick(
+  Sender: TObject);
+begin
+  inherited;
+  SelectObjects(lbDstList);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.pmSelectEditAvailablePopup(
+  Sender: TObject);
+begin
+  inherited;
+  miSelectAvailable.Enabled := lbSrcList.SelCount > 0;
+  miEditAvailable.Enabled := lbSrcList.SelCount = 1;
+  miGotoAvailable.Enabled := lbSrcList.SelCount = 1;
+  miHideAvailable.Enabled := lbSrcList.SelCount > 0;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.pmSelectEditUsedPopup(
+  Sender: TObject);
+begin
+  inherited;
+  miSelectUsed.Enabled := lbDstList.SelCount > 0;
+  miEditUsed.Enabled := lbDstList.SelCount = 1;
+  miGotoUsed.Enabled := lbDstList.SelCount = 1;
+  miHideUsed.Enabled := lbDstList.SelCount > 0;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.lbDstListDragDrop(Sender,
+  Source: TObject; X, Y: Integer);
+begin
+  if Source = lbSrcList then
+    btnIncBtnClick(lbDstList)
+  else
+  if Source = lbDstList then
+  begin
+    BoxMoveFocusedItem(lbDstList, lbDstList.ItemAtPos(Point(X, Y), True));
+    UpdateObjectsInSelectedObservation;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.lbDstListDragOver(Sender,
+  Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+begin
+  BoxDragOver(lbDstList, Source, X, Y, State, Accept, lbDstList.Sorted);
+  if State = dsDragLeave then
+    (Source as TJvListBox).DragCursor := crDrag;
+  if (State = dsDragEnter) and ((Source as TJvListBox).SelCount > 1) then
+    (Source as TJvListBox).DragCursor := crMultiDrag;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.lbDstListKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+  Incr: Integer;
+begin
+  if not lbDstList.Sorted then
+  begin
+    if (ssCtrl in Shift) and ((Key = VK_DOWN) or (Key = VK_UP)) then
+    begin
+      if Key = VK_DOWN then
+        Incr := 1
+      else
+        Incr := -1;
+      BoxMoveFocusedItem(lbDstList, lbDstList.ItemIndex + Incr);
+      UpdateObjectsInSelectedObservation;
+      Key := 0;
+    end;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.lbSrcListDragDrop(Sender,
+  Source: TObject; X, Y: Integer);
+begin
+//  inherited;
+  if Source = lbDstList then
+    btnExclBtnClick(lbSrcList)
+  else
+  if Source = lbSrcList then
+  begin
+    BoxMoveFocusedItem(lbSrcList, lbSrcList.ItemAtPos(Point(X, Y), True));
+    UpdateObjectsInSelectedObservation;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.lbSrcListDragOver(Sender,
+  Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+begin
+  inherited;
+  BoxDragOver(lbSrcList, Source, X, Y, State, Accept, lbSrcList.Sorted);
+  if State = dsDragLeave then
+    (Source as TJvListBox).DragCursor := crDrag;
+  if (State = dsDragEnter) and ((Source as TJvListBox).SelCount > 1) then
+    (Source as TJvListBox).DragCursor := crMultiDrag;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.lbSrcListKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+  Incr: Integer;
+begin
+  if not lbSrcList.Sorted then
+  begin
+    if (ssCtrl in Shift) and ((Key = VK_DOWN) or (Key = VK_UP)) then
+    begin
+      if Key = VK_DOWN then
+        Incr := 1
+      else
+        Incr := -1;
+      BoxMoveFocusedItem(lbSrcList, lbSrcList.ItemIndex + Incr);
+      Key := 0;
+      UpdateObjectsInSelectedObservation;
+    end;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.RecordObservation(
+  Value: TCustomSutraFluxObservations);
+begin
+  if Value <> nil then
+  begin
+    Value.ObservationName := edObservationName.Text;
+    frameSutraFluxObs.SetData(Value);
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.SelectObjects(
+  ListBox: TJvListBox);
+var
+  ScreenObjects: TScreenObjectList;
+begin
+  ScreenObjects := TScreenObjectList.Create;
+  try
+    GetSelectedObjects(ListBox, ScreenObjects);
+    if ScreenObjects.Count > 0 then
+    begin
+      SelectMultipleScreenObjects(ScreenObjects);
+    end;
+  finally
+    ScreenObjects.Free;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.SetButtons;
+var
+  SrcEmpty, DstEmpty: Boolean;
+begin
+  SrcEmpty := (lbSrcList.Items.Count = 0);
+  DstEmpty := (lbDstList.Items.Count = 0);
+  btnIncBtn.Enabled := not SrcEmpty and (lbSrcList.SelCount > 0);
+  btnIncAllBtn.Enabled := not SrcEmpty;
+  btnExclBtn.Enabled := not DstEmpty and (lbDstList.SelCount > 0);
+  btnExclAllBtn.Enabled := not DstEmpty;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.SetData;
+var
+  Undo: TUndoEditSutraFluxObservations;
+begin
+  SelectedObservation := nil;
+  Undo := TUndoEditSutraFluxObservations.Create;
+  try
+    Undo.AssignNewObservations(FFluxObs);
+  except
+    Undo.Free;
+    raise;
+  end;
+  frmGoPhast.UndoStack.Submit(Undo);
+
+end;
+
+procedure TfrmManageSutraBoundaryObservations.SetSelectedGroup(
+  const Value: TCustomSutraFluxObservationGroup);
+begin
+  FSelectedGroup := Value;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.SetSelectedGroupAndObservation(
+  TreeView: TTreeView);
+var
+  AnObject: TObject;
+  GroupSelected: boolean;
+begin
+  GroupSelected := (TreeView.Selected <> nil)
+    and
+    ((TreeView.Selected.Data = FFluxObs.FluidFlux)
+    or (TreeView.Selected.Data = FFluxObs.UFlux)) ;
+
+  btnDeleteObservation.Enabled := (TreeView.Selected <> nil)
+    and not GroupSelected;
+
+  if tabObservationsTimes.TabVisible then
+  begin
+//    rdgFluxObsTimesExit(nil);
+  end;
+  if (TreeView.Selected = nil) then
+  begin
+    SelectedGroup := nil;
+    SelectedObservation := nil;
+  end
+  else
+  begin
+    AnObject := TreeView.Selected.Data;
+    if AnObject is TCustomSutraFluxObservationGroups then
+    begin
+      SelectedGroup := TreeView.Selected.Data;
+      SelectedObservation := nil;
+    end
+    else
+    begin
+      SelectedGroup := TreeView.Selected.Parent.Data;
+      SelectedObservation := TreeView.Selected.Data;
+    end;
+  end;
+  DisplayFactor;
 end;
 
 procedure TfrmManageSutraBoundaryObservations.SetSelectedObservation(
   const Value: TCustomSutraFluxObservations);
 begin
-  FSelectedObservation := Value;
+  if FSelectedObservation <> Value then
+  begin
+    RecordObservation(FSelectedObservation);
+    FSelectedObservation := Value;
+    DisplayObservation(FSelectedObservation);
+  end;
+  pcMain.Enabled := FSelectedObservation <> nil;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.tvFluxObservationsChange(
+  Sender: TObject; Node: TTreeNode);
+begin
+  inherited;
+  SetSelectedGroupAndObservation(tvFluxObservations);
+end;
+
+procedure TfrmManageSutraBoundaryObservations.UpdateFactor;
+var
+  NewFormula: string;
+begin
+  if FUpdatingFormula then Exit;
+  FUpdatingFormula := True;
+  try
+    NewFormula := edFactorFormula.Text;
+    if (NewFormula = '') or not CheckFormula(NewFormula, False) then
+    begin
+      Exit;
+    end;
+    NewFormula := edFactorFormula.Text;
+    AssignFactor(NewFormula);
+  finally
+    FUpdatingFormula := False;
+  end;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.UpdateObjectsInSelectedObservation;
+var
+  Index: Integer;
+  ScreenObject: TScreenObject;
+  DestinationList: TList;
+begin
+  DestinationList := TList.Create;
+  try
+    for Index := 0 to lbDstList.Items.Count - 1 do
+    begin
+      DestinationList.Add(lbDstList.Items.Objects[Index]);
+    end;
+
+    for Index := FSelectedObservation.ObservationFactors.Count - 1 downto 0 do
+    begin
+      ScreenObject := FSelectedObservation.
+        ObservationFactors.Items[Index].ScreenObject as TScreenObject;
+      if DestinationList.IndexOf(ScreenObject) < 0 then
+      begin
+        FSelectedObservation.ObservationFactors.Delete(Index);
+      end;
+    end;
+
+    for Index := 0 to DestinationList.Count - 1 do
+    begin
+      ScreenObject := DestinationList[Index];
+      FSelectedObservation.AddObject(ScreenObject);
+    end;
+  finally
+    DestinationList.Free;
+  end;
+  DisplayFactor;
+end;
+
+{ TUndoEditSutraFluxObservations }
+
+procedure TUndoEditSutraFluxObservations.AssignNewObservations(
+  NewSutraFluxObs: TSutraFluxObs);
+begin
+  FNewSutraFluxObs := TSutraFluxObs.Create(nil);
+  FNewSutraFluxObs.Assign(NewSutraFluxObs);
+end;
+
+constructor TUndoEditSutraFluxObservations.Create;
+begin
+  FOldSutraFluxObs := TSutraFluxObs.Create(nil);
+  FOldSutraFluxObs.Assign(frmGoPhast.PhastModel.SutraFluxObs);
+end;
+
+function TUndoEditSutraFluxObservations.Description: string;
+begin
+  Result := StrEditSUTRAFluxObse;
+end;
+
+destructor TUndoEditSutraFluxObservations.Destroy;
+begin
+  FOldSutraFluxObs.Free;
+  FNewSutraFluxObs.Free;
+  inherited;
+end;
+
+procedure TUndoEditSutraFluxObservations.DoCommand;
+begin
+  inherited;
+  frmGoPhast.PhastModel.SutraFluxObs := FNewSutraFluxObs;
+end;
+
+procedure TUndoEditSutraFluxObservations.Undo;
+begin
+  inherited;
+  frmGoPhast.PhastModel.SutraFluxObs := FOldSutraFluxObs;
+
 end;
 
 end.

@@ -25,6 +25,10 @@ type
 
 implementation
 
+resourcestring
+  rsInLine0D1SCa = 'In line %0:d, "%1:s", "LOCATION" is invalid. The location '
+    +'is read directly from OBC files and is not needed for lake stage files.';
+
 { TSutraInputHandler }
 
 function TSutraInputHandler.CreateObsFile(const FileName: string): TCustomOutputFile;
@@ -48,14 +52,14 @@ end;
 
 procedure TSutraInputHandler.ChangeStatusFromID;
 begin
-if UpperCase(FSplitter[0]) = rsLOCATION then
+  if UpperCase(FSplitter[0]) = rsLOCATION then
   begin
-    FIdStatus := isLocation;
-    if FSutraFileType = sftOBC then
-    begin
+    //FIdStatus := isLocation;
+    //if FSutraFileType = sftOBC then
+    //begin
       Assert(False, Format(rsInLine0D1SCa, [FLineIndex+1,
         FInputFileLines[FLineIndex]]));
-    end;
+    //end;
   end
   else if UpperCase(FSplitter[0]) = rsOBSNAME then
   begin

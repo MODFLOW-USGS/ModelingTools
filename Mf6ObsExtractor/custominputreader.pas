@@ -135,8 +135,8 @@ resourcestring
   rsDERIVED_OBSE = 'DERIVED_OBSERVATIONS';
   rsInLine0D1SMu = 'In line %0:d, "%1:s" must start with "OBSNAME".';
   rsObservationF = '  Observation file = %s';
-  rsInLine0D1SCa = 'In line %0:d, "%1:s" can only start with "LOCATION" for '
-    +'lake stage files. The location is read directly from OBC files.';
+  //rsInLine0D1SCa = 'In line %0:d, "%1:s", "LOCATION" is invalid. The location '
+  //  +'is read directly from OBC files and is not needed for lake stage files.';
   rsLOCATION = 'LOCATION';
 
 implementation

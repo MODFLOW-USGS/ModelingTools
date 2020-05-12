@@ -306,11 +306,11 @@ begin
     begin
       Items[ItemIndex].Assign(CompSource.Items[ItemIndex]);
     end;
-  end
-  else
-  begin
-    inherited;
   end;
+//  else
+//  begin
+    inherited;
+//  end;
 end;
 
 constructor TCustomComparisonCollection.Create(ItemClass: TCollectionItemClass;

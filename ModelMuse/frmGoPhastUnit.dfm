@@ -2230,6 +2230,10 @@ inherited frmGoPhast: TfrmGoPhast
         Action = acFootprintProgramLocation
         GroupIndex = 1
       end
+      object miEditSutraFluxObs: TMenuItem
+        Action = acEditSutraFluxObs
+        GroupIndex = 1
+      end
       object miEditObservationComparisons: TMenuItem
         Action = acEditObservationComparisons
         GroupIndex = 1
@@ -3560,6 +3564,11 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Object'
       Caption = 'Anonymize Selected Point Objects'
       OnExecute = acAnonymizeObjectsExecute
+    end
+    object acEditSutraFluxObs: TAction
+      Category = 'Model'
+      Caption = 'Edit SUTRA Boundary Observations'
+      OnExecute = acEditSutraFluxObsExecute
     end
   end
   object ilDisabledImageList: TImageList

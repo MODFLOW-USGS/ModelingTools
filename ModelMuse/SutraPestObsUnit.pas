@@ -55,16 +55,21 @@ type
     property ScheduleName: string read FScheduleName write FScheduleName;
   end;
 
-  TCustomFluxObsItem = class(TCustomSutraObsItem)
+  TCustomFluxObsItem = class(TCustomSutraObsItem);
+
+  TCustomSutraFluxObservations = class(TCustomSutraObservations)
   private
-    // See @link(ObservationFactors).
+    FObservationName: string;
     FObservationFactors: TObservationFactors;
-    // See @link(ObservationFactors).
+    procedure SetObservationName(const Value: string);
     procedure SetObservationFactors(const Value: TObservationFactors);
   public
-    procedure Assign(Source: TPersistent); override;
-    constructor Create(Collection: TCollection); override;
+    constructor Create(ItemClass: TCollectionItemClass;
+      Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
+    // @name calls @link(TObservationFactors.Loaded ObservationFactors.Loaded).
+    procedure Loaded;
+    procedure Assign(Source: TPersistent); override;
     // @name adds a new @link(TObservationFactor) to @link(ObservationFactors)
     // and makes ScreenObject its @link(TObservationFactor.ScreenObject).
     // If ScreenObject has already been added, it will be skipped.
@@ -73,26 +78,14 @@ type
     // @link(ObservationFactors) that has ScreenObject as its
     // @link(TObservationFactor.ScreenObject).
     procedure RemoveObject(ScreenObject: TObject);
-    // @name calls @link(TObservationFactors.Loaded ObservationFactors.Loaded).
-    procedure Loaded;
     // @name calls @link(TObservationFactors.EliminatedDeletedScreenObjects
     // ObservationFactors.EliminatedDeletedScreenObjects).
     procedure EliminatedDeletedScreenObjects;
   published
-    property ObservationFactors: TObservationFactors read FObservationFactors
-      write SetObservationFactors;
-  end;
-
-  TCustomSutraFluxObservations = class(TCustomSutraObservations)
-  private
-    FObservationName: string;
-    procedure SetObservationName(const Value: string);
-  public
-    procedure Loaded;
-    procedure Assign(Source: TPersistent); override;
-  published
     property ObservationName: string read FObservationName
       write SetObservationName;
+    property ObservationFactors: TObservationFactors read FObservationFactors
+      write SetObservationFactors;
   end;
 
   TSutraFlFluxObsItem = class(TCustomFluxObsItem)
@@ -115,11 +108,21 @@ type
     function Add: TSutraFlFluxObsItem;
   end;
 
-  TSutraFlFluxObservationGroup = class(TPhastCollectionItem)
+  TCustomSutraFluxObservationGroup = class(TPhastCollectionItem)
+  protected
+    function GetObservationGroup: TCustomSutraFluxObservations; virtual; abstract;
+  public
+    property ObservationGroup: TCustomSutraFluxObservations
+      read GetObservationGroup;
+  end;
+
+  TSutraFlFluxObservationGroup = class(TCustomSutraFluxObservationGroup)
   private
     FObsGroup: TSutraFlFluxObservations;
     function GetModel: TBaseModel;
     procedure SetObsGroup(const Value: TSutraFlFluxObservations);
+  protected
+    function GetObservationGroup: TCustomSutraFluxObservations; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -130,16 +133,24 @@ type
     property ObsGroup: TSutraFlFluxObservations read FObsGroup write SetObsGroup;
   end;
 
-  TSutraFlFluxObservationGroups = class(TPhastCollection)
+  TCustomSutraFluxObservationGroups = class(TPhastCollection)
   private
     FModel: TBaseModel;
+  public
+    constructor Create(ItemClass: TCollectionItemClass;
+      Model: TBaseModel);
+    property Model: TBaseModel read FModel;
+    procedure Remove(Item: TCustomSutraFluxObservationGroup);
+  end;
+
+  TSutraFlFluxObservationGroups = class(TCustomSutraFluxObservationGroups)
+  private
     function GetSutraFlFluxObsGroup(
       Index: Integer): TSutraFlFluxObservationGroup;
     procedure SetSutraFlFluxObsGroup(Index: Integer;
       const Value: TSutraFlFluxObservationGroup);
   public
     constructor Create(Model: TBaseModel);
-    property Model: TBaseModel read FModel;
     procedure Loaded;
     property Items[Index: Integer]: TSutraFlFluxObservationGroup read GetSutraFlFluxObsGroup
       write SetSutraFlFluxObsGroup; default;
@@ -165,11 +176,13 @@ type
     function Add: TSutraUFluxObsItem;
   end;
 
-  TSutraUFluxObservationGroup = class(TPhastCollectionItem)
+  TSutraUFluxObservationGroup = class(TCustomSutraFluxObservationGroup)
   private
     FObsGroup: TSutraUFluxObservations;
     function GetModel: TBaseModel;
     procedure SetObsGroup(const Value: TSutraUFluxObservations);
+  protected
+    function GetObservationGroup: TCustomSutraFluxObservations; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -180,15 +193,13 @@ type
     property ObsGroup: TSutraUFluxObservations read FObsGroup write SetObsGroup;
   end;
 
-  TSutraUFluxObservationGroups = class(TPhastCollection)
+  TSutraUFluxObservationGroups = class(TCustomSutraFluxObservationGroups)
   private
-    FModel: TBaseModel;
     function GetSutraUFluxObsGroup(Index: Integer): TSutraUFluxObservationGroup;
     procedure SetSutraUFluxObsGroup(Index: Integer;
       const Value: TSutraUFluxObservationGroup);
   public
     constructor Create(Model: TBaseModel);
-    property Model: TBaseModel read FModel;
     procedure Loaded;
     property Items[Index: Integer]: TSutraUFluxObservationGroup read GetSutraUFluxObsGroup
       write SetSutraUFluxObsGroup; default;
@@ -468,7 +479,76 @@ end;
 
 { TCustomFluxObsItem }
 
-function TCustomFluxObsItem.AddObject(ScreenObject: TObject): integer;
+//function TCustomFluxObsItem.AddObject(ScreenObject: TObject): integer;
+//var
+//  Item: TObservationFactor;
+//begin
+//  Assert(ScreenObject is TScreenObject);
+//  result := ObservationFactors.IndexOfScreenObject(ScreenObject);
+//  if result < 0 then
+//  begin
+//    Item := ObservationFactors.Add;
+//    Item.ScreenObject := ScreenObject;
+//    InvalidateModel;
+//    result := ObservationFactors.Count - 1;
+//  end;
+//end;
+
+//procedure TCustomFluxObsItem.Assign(Source: TPersistent);
+//var
+//  SourceItem: TCustomFluxObsItem;
+//begin
+//  if Source is TCustomFluxObsItem then
+//  begin
+//    SourceItem := TCustomFluxObsItem(Source);
+//    ObservationFactors := SourceItem.ObservationFactors;
+//  end;
+//  inherited;
+//end;
+
+//constructor TCustomFluxObsItem.Create(Collection: TCollection);
+//begin
+//  inherited;
+//  FObservationFactors:= TObservationFactors.Create(
+//    (Collection as TCustomSutraObservations).Model);
+//end;
+//
+//destructor TCustomFluxObsItem.Destroy;
+//begin
+//  FObservationFactors.Free;
+//  inherited;
+//end;
+
+//procedure TCustomFluxObsItem.EliminatedDeletedScreenObjects;
+//begin
+//  ObservationFactors.EliminatedDeletedScreenObjects;
+//end;
+
+//procedure TCustomFluxObsItem.Loaded;
+//begin
+//  ObservationFactors.Loaded;
+//end;
+
+//procedure TCustomFluxObsItem.RemoveObject(ScreenObject: TObject);
+//begin
+//  Assert(ScreenObject is TScreenObject);
+//  Index := ObservationFactors.IndexOfScreenObject(ScreenObject);
+//  if Index >= 0 then
+//  begin
+//    ObservationFactors.Delete(Index);
+//  end;
+//  InvalidateModel;
+//end;
+
+//procedure TCustomFluxObsItem.SetObservationFactors(
+//  const Value: TObservationFactors);
+//begin
+//  FObservationFactors.Assign(Value);
+//end;
+
+{ TCustomSutraFluxObservations }
+
+function TCustomSutraFluxObservations.AddObject(ScreenObject: TObject): integer;
 var
   Item: TObservationFactor;
 begin
@@ -483,42 +563,52 @@ begin
   end;
 end;
 
-procedure TCustomFluxObsItem.Assign(Source: TPersistent);
+procedure TCustomSutraFluxObservations.Assign(Source: TPersistent);
 var
-  SourceItem: TCustomFluxObsItem;
+  ObsSource: TCustomSutraFluxObservations;
 begin
-  if Source is TCustomFluxObsItem then
+  if Source is TCustomSutraFluxObservations then
   begin
-    SourceItem := TCustomFluxObsItem(Source);
-    ObservationFactors := SourceItem.ObservationFactors;
+    ObsSource := TCustomSutraFluxObservations(Source);
+    ObservationName := ObsSource.ObservationName;
+    ObservationFactors := ObsSource.ObservationFactors;
   end;
   inherited;
+
 end;
 
-constructor TCustomFluxObsItem.Create(Collection: TCollection);
+constructor TCustomSutraFluxObservations.Create(ItemClass: TCollectionItemClass;
+  Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FObservationFactors:= TObservationFactors.Create(
-    (Collection as TCustomSutraObservations).Model);
+  FObservationFactors:= TObservationFactors.Create(Model);
 end;
 
-destructor TCustomFluxObsItem.Destroy;
+destructor TCustomSutraFluxObservations.Destroy;
 begin
   FObservationFactors.Free;
   inherited;
 end;
 
-procedure TCustomFluxObsItem.EliminatedDeletedScreenObjects;
+procedure TCustomSutraFluxObservations.EliminatedDeletedScreenObjects;
 begin
   ObservationFactors.EliminatedDeletedScreenObjects;
 end;
 
-procedure TCustomFluxObsItem.Loaded;
+procedure TCustomSutraFluxObservations.Loaded;
+//var
+//  Index: integer;
 begin
   ObservationFactors.Loaded;
+//  for Index := 0 to Count - 1 do
+//  begin
+//    (Items[Index] as TCustomFluxObsItem).Loaded;
+//  end;
 end;
 
-procedure TCustomFluxObsItem.RemoveObject(ScreenObject: TObject);
+procedure TCustomSutraFluxObservations.RemoveObject(ScreenObject: TObject);
+var
+  Index: Integer;
 begin
   Assert(ScreenObject is TScreenObject);
   Index := ObservationFactors.IndexOfScreenObject(ScreenObject);
@@ -527,34 +617,6 @@ begin
     ObservationFactors.Delete(Index);
   end;
   InvalidateModel;
-end;
-
-procedure TCustomFluxObsItem.SetObservationFactors(
-  const Value: TObservationFactors);
-begin
-  FObservationFactors.Assign(Value);
-end;
-
-{ TCustomSutraFluxObservations }
-
-procedure TCustomSutraFluxObservations.Assign(Source: TPersistent);
-begin
-  if Source is TCustomSutraFluxObservations then
-  begin
-    ObservationName := TCustomSutraFluxObservations(Source).ObservationName;
-  end;
-  inherited;
-
-end;
-
-procedure TCustomSutraFluxObservations.Loaded;
-var
-  Index: integer;
-begin
-  for Index := 0 to Count - 1 do
-  begin
-    (Items[Index] as TCustomFluxObsItem).Loaded;
-  end;
 end;
 
 { TSutraFlFluxObservationGroup }
@@ -589,6 +651,11 @@ begin
   Result := (Collection as TSutraFlFluxObservationGroups).Model;
 end;
 
+function TSutraFlFluxObservationGroup.GetObservationGroup: TCustomSutraFluxObservations;
+begin
+  result := ObsGroup;
+end;
+
 procedure TSutraFlFluxObservationGroup.Loaded;
 begin
   ObsGroup.Loaded;
@@ -608,19 +675,8 @@ begin
 end;
 
 constructor TSutraFlFluxObservationGroups.Create(Model: TBaseModel);
-var
-  InvalidateModelEvent: TNotifyEvent;
 begin
-  FModel := Model;
-  if FModel <> nil then
-  begin
-    InvalidateModelEvent := FModel.Invalidate;
-  end
-  else
-  begin
-    InvalidateModelEvent := nil;
-  end;
-  inherited Create(TSutraFlFluxObservationGroup, InvalidateModelEvent);
+  inherited Create(TSutraFlFluxObservationGroup, Model);
 end;
 
 function TSutraFlFluxObservationGroups.GetSutraFlFluxObsGroup(
@@ -652,8 +708,11 @@ begin
   if Source is TSutraUFluxObservationGroup then
   begin
     ObsGroup := TSutraUFluxObservationGroup(Source).ObsGroup;
+  end
+  else
+  begin
+    inherited;
   end;
-  inherited;
 end;
 
 constructor TSutraUFluxObservationGroup.Create(Collection: TCollection);
@@ -671,6 +730,11 @@ end;
 function TSutraUFluxObservationGroup.GetModel: TBaseModel;
 begin
   result := (Collection as TSutraUFluxObservationGroups).Model;
+end;
+
+function TSutraUFluxObservationGroup.GetObservationGroup: TCustomSutraFluxObservations;
+begin
+  Result := ObsGroup;
 end;
 
 procedure TSutraUFluxObservationGroup.Loaded;
@@ -692,19 +756,8 @@ begin
 end;
 
 constructor TSutraUFluxObservationGroups.Create(Model: TBaseModel);
-var
-  InvalidateModelEvent: TNotifyEvent;
 begin
-  FModel := Model;
-  if FModel <> nil then
-  begin
-    InvalidateModelEvent := FModel.Invalidate;
-  end
-  else
-  begin
-    InvalidateModelEvent := nil;
-  end;
-  inherited Create(TSutraUFluxObservationGroup, InvalidateModelEvent);
+  inherited Create(TSutraUFluxObservationGroup, Model);
 end;
 
 function TSutraUFluxObservationGroups.GetSutraUFluxObsGroup(
@@ -789,9 +842,51 @@ begin
   FUFlux.Assign(Value);
 end;
 
+procedure TCustomSutraFluxObservations.SetObservationFactors(
+  const Value: TObservationFactors);
+begin
+  FObservationFactors.Assign( Value);
+end;
+
 procedure TCustomSutraFluxObservations.SetObservationName(const Value: string);
 begin
   FObservationName := Value;
+end;
+
+{ TCustomSutraFluxObservationGroups }
+
+constructor TCustomSutraFluxObservationGroups.Create(ItemClass: TCollectionItemClass;
+  Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  FModel := Model;
+  if FModel <> nil then
+  begin
+    InvalidateModelEvent := FModel.Invalidate;
+  end
+  else
+  begin
+    InvalidateModelEvent := nil;
+  end;
+  inherited Create(ItemClass, InvalidateModelEvent);
+end;
+
+procedure TCustomSutraFluxObservationGroups.Remove(
+  Item: TCustomSutraFluxObservationGroup);
+var
+  Index: integer;
+  AnItem: TCustomSutraFluxObservationGroup;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    AnItem := Items[Index] as TCustomSutraFluxObservationGroup;
+    if AnItem = Item then
+    begin
+      Delete(Index);
+      break;
+    end;
+  end;
 end;
 
 initialization
