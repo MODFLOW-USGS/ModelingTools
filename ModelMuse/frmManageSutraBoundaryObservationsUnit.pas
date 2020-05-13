@@ -442,6 +442,11 @@ end;
 
 procedure TfrmManageSutraBoundaryObservations.DisplayObservation(
   Value: TCustomSutraFluxObservations);
+var
+  AvailableObjects: TScreenObjectList;
+  CurrentObjects: TList;
+  Index: Integer;
+  ScreenObject: TScreenObject;
 begin
   frameSutraFluxObs.InitializeControls;
   if Value <> nil then
@@ -449,14 +454,50 @@ begin
     if Value is TSutraFlFluxObservations then
     begin
       frameSutraFluxObs.SpecifyObservationTypes(SutraFlFluxObsTypes);
+      AvailableObjects := FFluidFluxObjects;
     end
     else
     begin
       Assert(Value is TSutraUFluxObservations);
       frameSutraFluxObs.SpecifyObservationTypes(SutraUFluxObsTypes);
+      AvailableObjects := FUFluxObjects;
     end;
     edObservationName.Text := Value.ObservationName;
     frameSutraFluxObs.GetData(Value);
+    CurrentObjects := TList.Create;
+    try
+      for Index := 0 to Value.ObservationFactors.Count - 1 do
+      begin
+        ScreenObject := Value.ObservationFactors[Index].
+          ScreenObject as TScreenObject;
+        CurrentObjects.Add(ScreenObject);
+      end;
+      lbSrcList.Items.Clear;
+      lbDstList.Items.Clear;
+
+      for Index := 0 to AvailableObjects.Count - 1 do
+      begin
+        ScreenObject := AvailableObjects[Index];
+        if CurrentObjects.IndexOf(ScreenObject) >= 0 then
+        begin
+          lbDstList.Items.AddObject(ScreenObject.Name, ScreenObject);
+          if ScreenObject.Selected then
+          begin
+            lbDstList.Selected[lbDstList.Count - 1] := True;
+          end;
+        end
+        else
+        begin
+          lbSrcList.Items.AddObject(ScreenObject.Name, ScreenObject);
+          if ScreenObject.Selected then
+          begin
+            lbSrcList.Selected[lbSrcList.Count - 1] := True;
+          end;
+        end;
+      end;
+    finally
+      CurrentObjects.Free;
+    end;
   end;
 end;
 
@@ -960,10 +1001,10 @@ begin
   btnDeleteObservation.Enabled := (TreeView.Selected <> nil)
     and not GroupSelected;
 
-  if tabObservationsTimes.TabVisible then
-  begin
-//    rdgFluxObsTimesExit(nil);
-  end;
+//  if tabObservationsTimes.TabVisible then
+//  begin
+////    rdgFluxObsTimesExit(nil);
+//  end;
   if (TreeView.Selected = nil) then
   begin
     SelectedGroup := nil;

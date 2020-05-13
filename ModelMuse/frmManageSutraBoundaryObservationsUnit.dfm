@@ -132,6 +132,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         Width = 69
         Height = 18
         Caption = 'Treatment'
+        Visible = False
       end
       object edObservationName: TJvEdit
         Left = 6
@@ -153,6 +154,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         ItemIndex = 0
         TabOrder = 0
         Text = 'Observation'
+        Visible = False
         Items.Strings = (
           'Observation'
           'Prediction'

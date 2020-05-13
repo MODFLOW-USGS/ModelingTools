@@ -78,7 +78,7 @@ implementation
 
 uses
   frmGoPhastUnit, ScreenObjectUnit, ModflowMnw2Unit, frmErrorsAndWarningsUnit,
-  ModflowLakUnit, ModflowSfrUnit;
+  ModflowLakUnit, ModflowSfrUnit, SutraPestObsUnit;
 
 resourcestring
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';
@@ -97,10 +97,13 @@ type
   TObsTreeItem = class(TObject)
     ObsTypeName: string;
     ScreenObject: TScreenObject;
+    ObsCollection: TCustomSutraFluxObservations;
     Obs: TCustomObservationItem;
     function Caption: string;
     function Key: string; overload;
-    class function Key(ObsTypeName: string; ScreenObject: TObject; Obs: TCustomObservationItem): string; overload;
+    class function Key(ObsTypeName: string; ScreenObject: TObject;
+      ObsCollection: TCustomSutraFluxObservations;
+      Obs: TCustomObservationItem): string; overload;
   end;
   PObsTreeItem = ^TObsTreeItem;
 
@@ -225,6 +228,7 @@ begin
   InitializeGrid;
   InitializeObsItemDictionary;
 
+  ObsComparisons := nil;
   if frmGoPhast.ModelSelection in ModflowSelection then
   begin
     ObsComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
@@ -232,6 +236,10 @@ begin
   else if frmGoPhast.ModelSelection in SutraSelection then
   begin
     ObsComparisons := frmGoPhast.PhastModel.SutraGlobalObservationComparisons;
+  end
+  else
+  begin
+    Assert(False);
   end;
   frameObsComparisons.seNumber.AsInteger := ObsComparisons.Count;
   for ItemIndex := 0 to ObsComparisons.Count - 1 do
@@ -323,6 +331,7 @@ var
   NodeCaption: string;
   ObsNode: PVirtualNode;
   ItemIndex: Integer;
+  ObsCollection: TCustomSutraFluxObservations;
 begin
   treecomboInPlaceEditor.Tree.BeginUpdate;
   UsedTypes := TStringList.Create;
@@ -343,6 +352,7 @@ begin
       ObsTreeItem.Obs := nil;
       ObsTreeItem.ObsTypeName := ObsTypeName;
       ObsTreeItem.ScreenObject := nil;
+      ObsTreeItem.ObsCollection := nil;
       ANode := treecomboInPlaceEditor.Tree.AddChild(nil, ObsTreeItem);
       FObsDictionary.Add(ObsTypeName, ANode);
     end;
@@ -351,8 +361,18 @@ begin
     begin
       AnObs := FObsItemList[ItemIndex];
 
+      if AnObs is TCustomFluxObsItem then
+      begin
+        ObsCollection := AnObs.Collection as TCustomSutraFluxObservations;
+      end
+      else
+      begin
+        ObsCollection := nil;
+      end;
+
       ParentNodeKey :=
-        TObsTreeItem.Key(AnObs.ObservationType, AnObs.ScreenObject, nil);
+        TObsTreeItem.Key(AnObs.ObservationType, AnObs.ScreenObject,
+          ObsCollection, nil);
       if not FObsDictionary.TryGetValue(ParentNodeKey, ParentNode) then
       begin
         ObsTypeNode := FObsDictionary[AnObs.ObservationType];
@@ -361,11 +381,13 @@ begin
         ObsTreeItem.Obs := nil;
         ObsTreeItem.ObsTypeName := ObsTypeName;
         ObsTreeItem.ScreenObject := AnObs.ScreenObject as TScreenObject;
+        ObsTreeItem.ObsCollection := ObsCollection;
         ParentNode := treecomboInPlaceEditor.Tree.AddChild(ObsTypeNode, ObsTreeItem);
         FObsDictionary.Add(ParentNodeKey, ParentNode);
       end;
 
-      NodeCaption := TObsTreeItem.Key(AnObs.ObservationType, AnObs.ScreenObject, AnObs);
+      NodeCaption := TObsTreeItem.Key(AnObs.ObservationType, AnObs.ScreenObject,
+        ObsCollection, AnObs);
 
       if FObsDictionary.TryGetValue(AnObs.GUID, ObsNode) then
       begin
@@ -377,6 +399,7 @@ begin
         ObsTreeItem.Obs := AnObs;
         ObsTreeItem.ObsTypeName := ObsTypeName;
         ObsTreeItem.ScreenObject := AnObs.ScreenObject as TScreenObject;
+        ObsTreeItem.ObsCollection := ObsCollection;
         ANode := treecomboInPlaceEditor.Tree.AddChild(ParentNode, ObsTreeItem);
         FObsDictionary.Add(AnObs.GUID, ANode);
       end;
@@ -390,8 +413,6 @@ end;
 procedure TfrmObservationComparisons.InitializeItemList;
 begin
   frmGoPhast.PhastModel.FillObsItemList(FObsItemList);
-
-
 end;
 
 procedure TfrmObservationComparisons.InitializeObsItemDictionary;
@@ -475,8 +496,16 @@ begin
   begin
     if MyObject^.Obs <> nil then
     begin
-      frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
-        [MyObject^.ScreenObject.Name, MyObject^.Obs.Name]);
+      if MyObject^.ScreenObject <> nil then
+      begin
+        frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
+          [MyObject^.ScreenObject.Name, MyObject^.Obs.Name]);
+      end
+      else
+      begin
+        frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
+          [MyObject^.ObsCollection.ObservationName, MyObject^.Obs.Name]);
+      end;
       frameObsComparisons.Grid.Objects[FCol, FRow] := MyObject^.Obs;
     end
     else
@@ -523,7 +552,8 @@ begin
   ObsTreeItem := Sender.GetNodeData(Node);
   if ObsTreeItem^.Obs <> nil then
   begin
-    Assert(ObsTreeItem^.ScreenObject <> nil);
+    Assert((ObsTreeItem^.ScreenObject <> nil)
+      or (ObsTreeItem^.ObsCollection <> nil));
   end;
 end;
 
@@ -538,6 +568,10 @@ begin
   else if ScreenObject <> nil then
   begin
     Result := ScreenObject.Name;
+  end
+  else if ObsCollection <> nil then
+  begin
+    Result := ObsCollection.ObservationName;
   end
   else
   begin
@@ -559,16 +593,28 @@ begin
 end;
 
 class function TObsTreeItem.Key(ObsTypeName: string;
-  ScreenObject: TObject; Obs: TCustomObservationItem): string;
+  ScreenObject: TObject; ObsCollection: TCustomSutraFluxObservations;
+  Obs: TCustomObservationItem): string;
+//var
+//  ObsCollection: TCustomSutraFluxObservations;
 begin
   result := ObsTypeName;
   if ScreenObject <> nil then
   begin
     result := result + '.' + (ScreenObject as TScreenObject).Name;
-    if Obs <> nil then
-    begin
-      result := result + '.' + Obs.Name;
-    end;
+  end;
+  if ObsCollection <> nil then
+  begin
+    result := result + '.' + ObsCollection.ObservationName;
+  end;
+  if Obs <> nil then
+  begin
+//    if Obs is TCustomFluxObsItem then
+//    begin
+//      ObsCollection := Obs.Collection as TCustomSutraFluxObservations;
+//      result := result + '.' + ObsCollection.ObservationName;
+//    end;
+    result := result + '.' + Obs.Name;
   end;
 end;
 

@@ -25,18 +25,31 @@ type
     destructor Destroy; override;
   end;
 
-  { TSutraLakeStageOutputFile }
+  { TCustomNodeOutputFile }
 
-  TSutraLakeStageOutputFile = class(TCustomOutputFile)
+  TCustomNodeOutputFile = class(TCustomOutputFile)
   protected
     FSplitter: TStringList;
     FNumberOfValues: Integer;
     procedure ReadHeader; override;
   public
-    procedure ReadTimeAndValues; override;
     constructor Create(AFileName: string;
       IdLocations: TObservationDictionary);
     destructor Destroy; override;
+  end;
+
+  { TSutraLakeStageOutputFile }
+
+  TSutraLakeStageOutputFile = class(TCustomNodeOutputFile)
+  public
+    procedure ReadTimeAndValues; override;
+  end;
+
+  { TSutraSpecifiedPressureOutputFile }
+
+  TSutraSpecifiedPressureOutputFile = class(TCustomNodeOutputFile)
+  public
+    procedure ReadTimeAndValues; override;
   end;
 
 implementation
@@ -45,12 +58,138 @@ resourcestring
   rsTheIdentifie = 'The identifier %0:s in %1:s duplicates another identifier '
     +'in %2:s';
 
-{ TSutraLakeStageOutputFile }
+{ TCustomNodeOutputFile }
 
-procedure TSutraLakeStageOutputFile.ReadHeader;
+procedure TCustomNodeOutputFile.ReadHeader;
 begin
 
 end;
+
+constructor TCustomNodeOutputFile.Create(AFileName: string;
+  IdLocations: TObservationDictionary);
+begin
+  FSplitter := TStringList.Create;
+  FNumberOfValues := 0;
+  inherited Create(AFileName, ftText, IdLocations);
+end;
+
+destructor TCustomNodeOutputFile.Destroy;
+begin
+  FSplitter.Free;
+  inherited Destroy;
+end;
+
+{ TSutraSpecifiedPressureOutputFile }
+
+procedure TSutraSpecifiedPressureOutputFile.ReadTimeAndValues;
+var
+  ALine: string;
+  CurrentLines: TStringList;
+  Values: TDoubleArray;
+  NewIds: Boolean;
+  ObsIndex: Integer;
+  LineIndex: Integer;
+  FileID: TFileId;
+  ATime: double;
+  NodeNumber: string;
+  ObsName: string;
+  procedure AddKey;
+  begin
+    if NewIds then
+    begin
+      if FIdLocations.TryGetValue(NodeNumber, FileID) then
+       begin
+         raise EReadOutputError.Create(Format(rsTheIdentifie, [NodeNumber, FileName,
+           FileID.OutputFile.FileName]));
+       end
+       else
+       begin
+         FileID.OutputFile := self;
+         FileID.Key := ObsName;
+         FileID.Position := ObsIndex;
+         FIdLocations.Add(NodeNumber, FileID);
+       end;
+    end
+    else
+    begin
+      if FIdLocations.TryGetValue(ObsName, FileID) then
+      begin
+        Assert(FileID.OutputFile = self);
+        Assert(FileID.Position = ObsIndex);
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+  end;
+begin
+  Values := nil;
+  ATime := -1;
+  Assert(FileType = ftText);
+  repeat
+    Readln(FTextFile, ALine);
+    if Pos('## TIME STEP', ALine) = 1 then
+    begin
+      FSplitter.DelimitedText := ALine;
+      ATime := StrToFloat(FSplitter[FSplitter.Count-2]);
+    end
+    else if Pos('##   Node    Defined in', ALine) = 1 then
+    begin
+      CurrentLines := TStringList.Create;
+      try
+        repeat
+          Readln(FTextFile, ALine);
+          if (Pos('##', ALine) = 1) or (ALine = '') then
+          begin
+            break;
+          end;
+          CurrentLines.Add(ALine);
+        until EOF(FTextFile);
+
+        NewIds := FNumberOfValues = 0;
+        if NewIds then
+        begin
+          FNumberOfValues := CurrentLines.Count * 3;
+        end
+        else
+        begin
+          Assert(FNumberOfValues = CurrentLines.Count * 3);
+        end;
+        SetLength(Values, FNumberOfValues);
+
+        ObsIndex := 0;
+        for LineIndex := 0 to Pred(CurrentLines.Count) do
+        begin
+          FSplitter.DelimitedText := CurrentLines[LineIndex];
+          NodeNumber := UpperCase(FSplitter[0]);
+
+          ObsName := NodeNumber + '_P';
+          AddKey;
+          Values[ObsIndex] := StrToFloat(FSplitter[3]);
+          Inc(ObsIndex);
+
+          ObsName := NodeNumber + '_U';
+          AddKey;
+          Values[ObsIndex] := StrToFloat(FSplitter[3]);
+          Inc(ObsIndex);
+
+          ObsName := NodeNumber + '_R';
+          AddKey;
+          Values[ObsIndex] := StrToFloat(FSplitter[5]);
+          Inc(ObsIndex);
+        end;
+      finally
+        CurrentLines.Free;
+      end;
+      break;
+    end;
+
+  until EOF(FTextFile);
+  UpdateStoredValues(ATime, Values);
+end;
+
+{ TSutraLakeStageOutputFile }
 
 procedure TSutraLakeStageOutputFile.ReadTimeAndValues;
 var
@@ -60,7 +199,6 @@ var
   NewIds: Boolean;
   ObsIndex: Integer;
   LineIndex: Integer;
-  //ObsName: string;
   FileID: TFileId;
   ATime: double;
   NodeNumber: string;
@@ -121,11 +259,11 @@ begin
         NewIds := FNumberOfValues = 0;
         if NewIds then
         begin
-          FNumberOfValues := CurrentLines.Count * 3;
+          FNumberOfValues := CurrentLines.Count;
         end
         else
         begin
-          Assert(FNumberOfValues = CurrentLines.Count * 3);
+          Assert(FNumberOfValues = CurrentLines.Count);
         end;
         SetLength(Values, FNumberOfValues);
 
@@ -135,7 +273,6 @@ begin
           FSplitter.DelimitedText := CurrentLines[LineIndex];
           NodeNumber := UpperCase(FSplitter[0]);
 
-          //ObsName := 'Stage_' + NodeNumber;
           AddKey;
           Values[ObsIndex] := StrToFloat(FSplitter[1]);
           Inc(ObsIndex);
@@ -148,20 +285,6 @@ begin
 
   until EOF(FTextFile);
   UpdateStoredValues(ATime, Values);
-end;
-
-constructor TSutraLakeStageOutputFile.Create(AFileName: string;
-  IdLocations: TObservationDictionary);
-begin
-  FSplitter := TStringList.Create;
-  FNumberOfValues := 0;
-  inherited Create(AFileName, ftText, IdLocations);
-end;
-
-destructor TSutraLakeStageOutputFile.Destroy;
-begin
-  FSplitter.Free;
-  inherited Destroy;
 end;
 
 { TSutraObsOutputFile }

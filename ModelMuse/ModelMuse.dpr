@@ -722,7 +722,6 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
-  Application.CreateForm(TfrmManageSutraBoundaryObservations, frmManageSutraBoundaryObservations);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
   if frmErrorsAndWarnings.HasMessages then

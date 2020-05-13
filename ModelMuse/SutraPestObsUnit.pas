@@ -552,15 +552,16 @@ function TCustomSutraFluxObservations.AddObject(ScreenObject: TObject): integer;
 var
   Item: TObservationFactor;
 begin
-  Assert(ScreenObject is TScreenObject);
-  result := ObservationFactors.IndexOfScreenObject(ScreenObject);
-  if result < 0 then
-  begin
-    Item := ObservationFactors.Add;
-    Item.ScreenObject := ScreenObject;
-    InvalidateModel;
-    result := ObservationFactors.Count - 1;
-  end;
+  result := ObservationFactors.AddObject(ScreenObject);
+//  Assert(ScreenObject is TScreenObject);
+//  result := ObservationFactors.IndexOfScreenObject(ScreenObject);
+//  if result < 0 then
+//  begin
+//    Item := ObservationFactors.Add;
+//    Item.ScreenObject := ScreenObject;
+//    InvalidateModel;
+//    result := ObservationFactors.Count - 1;
+//  end;
 end;
 
 procedure TCustomSutraFluxObservations.Assign(Source: TPersistent);

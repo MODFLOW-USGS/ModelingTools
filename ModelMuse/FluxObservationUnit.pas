@@ -179,6 +179,7 @@ type
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
     //
     property Model: TBaseModel read FModel;
+    function AddObject(ScreenObject: TObject): integer;
   end;
 
   TFluxObsType = (fotHead, fotRiver, fotDrain, fotGHB, fotSTR);
@@ -663,6 +664,21 @@ end;
 function TObservationFactors.Add: TObservationFactor;
 begin
   result := inherited Add as TObservationFactor;
+end;
+
+function TObservationFactors.AddObject(ScreenObject: TObject): integer;
+var
+  Item: TObservationFactor;
+begin
+  Assert(ScreenObject is TScreenObject);
+  result := IndexOfScreenObject(ScreenObject);
+  if result < 0 then
+  begin
+    Item := Add;
+    Item.ScreenObject := ScreenObject;
+    InvalidateModel;
+    result := Count - 1;
+  end;
 end;
 
 procedure TObservationFactors.Assign(Source: TPersistent);

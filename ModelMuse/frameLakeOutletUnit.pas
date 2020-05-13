@@ -57,6 +57,7 @@ resourcestring
   StrSlope = 'Slope';
   StrRoughness = 'Roughness';
   StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d.';
+  StrOutletValuesWereN = 'Outlet values were not supplied for outlet %d.';
 
 {$R *.dfm}
 
@@ -175,6 +176,9 @@ procedure TframeLakeOutlet.SetData(const LakeOutlet: TLakeOutlet);
 var
   ItemIndex: Integer;
   OutletItem: TLakeOutletTimeItem;
+  RowIndex: Integer;
+  RowOK: Boolean;
+  ColIndex: Integer;
 begin
   if comboOutlet.ItemIndex >= 0 then
   begin
@@ -190,17 +194,46 @@ begin
     MessageDlg(Format(StrNoOutletLakeIsSp, [LakeOutlet.OutletIndex]), mtWarning, [mbOK], 0);
   end;
   LakeOutlet.OutletType := TLakeOutletType(comboOutletType.ItemIndex);
-  LakeOutlet.LakeTimes.Count := seNumber.AsInteger;
-  for ItemIndex := 0 to LakeOutlet.LakeTimes.Count - 1 do
+
+  ItemIndex := 0;
+  for RowIndex := 1 to seNumber.AsInteger do
   begin
-    OutletItem := LakeOutlet.LakeTimes[ItemIndex];
-    OutletItem.StartTime := Grid.RealValue[Ord(ocStart), ItemIndex+1];
-    OutletItem.EndTime := Grid.RealValue[Ord(ocEnd), ItemIndex+1];
-    OutletItem.Rate := Grid.Cells[Ord(ocRate), ItemIndex+1];
-    OutletItem.Invert := Grid.Cells[Ord(ocInvert), ItemIndex+1];
-    OutletItem.Width := Grid.Cells[Ord(ocWidth), ItemIndex+1];
-    OutletItem.Slope := Grid.Cells[Ord(ocSlope), ItemIndex+1];
-    OutletItem.Roughness := Grid.Cells[Ord(coRoughness), ItemIndex+1];
+    RowOK := True;
+    for ColIndex := 0 to Grid.ColCount - 1 do
+    begin
+      if Trim(Grid.Cells[ColIndex, RowIndex]) = '' then
+      begin
+        RowOK := False;
+        break;
+      end;
+    end;
+    if RowOK then
+    begin
+      if ItemIndex < LakeOutlet.LakeTimes.Count then
+      begin
+        OutletItem := LakeOutlet.LakeTimes[ItemIndex];
+      end
+      else
+      begin
+        OutletItem := LakeOutlet.LakeTimes.Add;
+      end;
+      Inc(ItemIndex);
+      OutletItem.StartTime := Grid.RealValue[Ord(ocStart), RowIndex];
+      OutletItem.EndTime := Grid.RealValue[Ord(ocEnd), RowIndex];
+      OutletItem.Rate := Grid.Cells[Ord(ocRate), RowIndex];
+      OutletItem.Invert := Grid.Cells[Ord(ocInvert), RowIndex];
+      OutletItem.Width := Grid.Cells[Ord(ocWidth), RowIndex];
+      OutletItem.Slope := Grid.Cells[Ord(ocSlope), RowIndex];
+      OutletItem.Roughness := Grid.Cells[Ord(coRoughness), RowIndex];
+    end;
+  end;
+  LakeOutlet.LakeTimes.Count := ItemIndex;
+
+  if seNumber.AsInteger <> LakeOutlet.LakeTimes.Count then
+  begin
+    Beep;
+    MessageDlg(Format(StrOutletValuesWereN, [LakeOutlet.OutletIndex]),
+      mtWarning, [mbOK], 0);
   end;
 end;
 

@@ -9081,11 +9081,14 @@ const
   //                to rename a layer group with an invalid name.
   //               Bug fix: Fixed bug that could cause an error when drawing
   //                contours.
-  //    '4.2.0.13' Bug fix: Fixed bug that could cause an assertion failure when drawing
+  //    '4.2.0.13' Bug fix: Fixed bug that could cause an assertion failure
   //                when drawing contours using the ACM 626 method.
+  //    '4.2.0.14' Bug fix: Fixed but that cause a conversion error if the
+  //                user failed to specify the properties of a lake outlet
+  //                correctly.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.13';
+  IModelVersion = '4.2.0.14';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -31064,6 +31067,10 @@ var
   LakObservations: TLakeObservations;
   SfrObservations: TSfrObservations;
   SutraStateObs: TSutraStateObservations;
+  GroupIndex: Integer;
+  FluxGroup: TCustomSutraFluxObservationGroup;
+  ItemIndex: Integer;
+  Item: TCustomObservationItem;
 begin
   for ObjectIndex := 0 to ScreenObjectCount - 1 do
   begin
@@ -31178,6 +31185,29 @@ begin
     end;
 
   end;
+
+  if (ModelSelection in SutraSelection) then
+  begin
+    for GroupIndex := 0 to SutraFluxObs.FluidFlux.Count - 1 do
+    begin
+      FluxGroup := SutraFluxObs.FluidFlux[GroupIndex];
+      for ItemIndex := 0 to FluxGroup.ObservationGroup.Count - 1 do
+      begin
+        Item := FluxGroup.ObservationGroup[ItemIndex];
+        List.Add(Item);
+      end;
+    end;
+    for GroupIndex := 0 to SutraFluxObs.UFlux.Count - 1 do
+    begin
+      FluxGroup := SutraFluxObs.UFlux[GroupIndex];
+      for ItemIndex := 0 to FluxGroup.ObservationGroup.Count - 1 do
+      begin
+        Item := FluxGroup.ObservationGroup[ItemIndex];
+        List.Add(Item);
+      end;
+    end;
+  end;
+
 
 end;
 
