@@ -9,7 +9,7 @@ uses
   JvExMask, JvSpin, Vcl.Grids, RbwDataGrid4, JvExComCtrls, JvComCtrls, JvEdit,
   Vcl.ComCtrls, RbwParser, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Menus, JvExExtCtrls,
   JvNetscapeSplitter, framePestObsUnit, FluxObservationUnit, SutraPestObsUnit,
-  ScreenObjectUnit, JvBoxProcs, UndoItems;
+  ScreenObjectUnit, JvBoxProcs, UndoItems, System.UITypes, System.Types;
 
 type
   TfrmManageSutraBoundaryObservations = class(TfrmCustomGoPhast)
@@ -53,8 +53,8 @@ type
     edFactorFormula: TJvEdit;
     btnFactorFormula: TButton;
     frameSutraFluxObs: TframePestObs;
-    procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject); override;
+    procedure FormDestroy(Sender: TObject); override;
     procedure btnIncBtnClick(Sender: TObject);
     procedure btnIncAllBtnClick(Sender: TObject);
     procedure btnExclBtnClick(Sender: TObject);
@@ -258,7 +258,7 @@ var
   ParentNode: TTreeNode;
   Observations: TCustomSutraFluxObservationGroups;
   Item: TCustomSutraFluxObservationGroup;
-  Index: Integer;
+//  Index: Integer;
   AnObject: TObject;
 begin
   inherited;
@@ -453,13 +453,13 @@ begin
   begin
     if Value is TSutraFlFluxObservations then
     begin
-      frameSutraFluxObs.SpecifyObservationTypes(SutraFlFluxObsTypes);
+      frameSutraFluxObs.SpecifyObservationTypes(SutraSpecPressureObsTypes);
       AvailableObjects := FFluidFluxObjects;
     end
     else
     begin
       Assert(Value is TSutraUFluxObservations);
-      frameSutraFluxObs.SpecifyObservationTypes(SutraUFluxObsTypes);
+      frameSutraFluxObs.SpecifyObservationTypes(SutraSpecFluidFlowObsTypes);
       AvailableObjects := FUFluxObjects;
     end;
     edObservationName.Text := Value.ObservationName;

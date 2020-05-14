@@ -138,6 +138,7 @@ resourcestring
   //rsInLine0D1SCa = 'In line %0:d, "%1:s", "LOCATION" is invalid. The location '
   //  +'is read directly from OBC files and is not needed for lake stage files.';
   rsLOCATION = 'LOCATION';
+  rsIDInObservat = '  ID in observation file = %s';
 
 implementation
 
@@ -258,7 +259,6 @@ resourcestring
   rsEndOfIDENTIF = 'End of IDENTIFIERS Block';
   rsMustStartWithObsnameOrEnd = 'In line %0:d, "%1:s" must start with "OBSNAME'
     +'" or "END".';
-  rsIDInObservat = '  ID in observation file = %s';
   rsIMustBeThree = 'In line %0:d, "%1:s", there must be exactly three items '
     +'listed.';
   rsLocationInOb = '  Location in observation file = (%0:g, %1:g)';
@@ -1512,7 +1512,9 @@ begin
           begin
             Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems,
               [FLineIndex+1, FInputFileLines[FLineIndex]]));
-            Assert(UpperCase(FSplitter[0]) = rsBEGIN, Format('In line %0:d, "%1:s", the first word must be "BEGIN".', [FLineIndex+1, FInputFileLines[FLineIndex]]));
+            Assert(UpperCase(FSplitter[0]) = rsBEGIN,
+              Format('In line %0:d, "%1:s", the first word must be "BEGIN".',
+              [FLineIndex+1, FInputFileLines[FLineIndex]]));
             case FPriorProcessStatus of
               psNone:
                 begin

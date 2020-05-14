@@ -174,6 +174,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       ExplicitHeight = 355
       object tabObservationsTimes: TTabSheet
         Caption = 'Observation times and values'
+        ExplicitLeft = 0
+        ExplicitTop = 0
         ExplicitWidth = 491
         ExplicitHeight = 322
         inline frameSutraFluxObs: TframePestObs
@@ -343,7 +345,6 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           OnDragDrop = lbSrcListDragDrop
           OnDragOver = lbSrcListDragOver
           OnKeyDown = lbSrcListKeyDown
-          ExplicitHeight = 263
         end
         object btnIncBtn: TButton
           Left = 184
@@ -442,7 +443,6 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           OnDragDrop = lbDstListDragDrop
           OnDragOver = lbDstListDragOver
           OnKeyDown = lbDstListKeyDown
-          ExplicitHeight = 263
         end
         object edFactorFormula: TJvEdit
           Left = 61
@@ -453,8 +453,6 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           TabOrder = 7
           Text = ''
           OnChange = edFactorFormulaChange
-          ExplicitTop = 292
-          ExplicitWidth = 326
         end
         object btnFactorFormula: TButton
           Left = 509

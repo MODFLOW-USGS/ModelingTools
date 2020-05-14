@@ -88,6 +88,14 @@ type
       write SetObservationFactors;
   end;
 
+  TCustomSutraFluxObservationGroup = class(TPhastCollectionItem)
+  protected
+    function GetObservationGroup: TCustomSutraFluxObservations; virtual; abstract;
+  public
+    property ObservationGroup: TCustomSutraFluxObservations
+      read GetObservationGroup;
+  end;
+
   TSutraFlFluxObsItem = class(TCustomFluxObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
@@ -106,14 +114,6 @@ type
     property Items[Index: Integer]: TSutraFlFluxObsItem read GetSutraFlFluxObsItem
       write SetSutraFlFluxObsItem; default;
     function Add: TSutraFlFluxObsItem;
-  end;
-
-  TCustomSutraFluxObservationGroup = class(TPhastCollectionItem)
-  protected
-    function GetObservationGroup: TCustomSutraFluxObservations; virtual; abstract;
-  public
-    property ObservationGroup: TCustomSutraFluxObservations
-      read GetObservationGroup;
   end;
 
   TSutraFlFluxObservationGroup = class(TCustomSutraFluxObservationGroup)
@@ -224,8 +224,10 @@ type
 
 var
   SutraStateObsTypes: TStringList;
-  SutraFlFluxObsTypes: TStringList;
-  SutraUFluxObsTypes: TStringList;
+  SutraSpecPressureObsTypes: TStringList;
+  SutraSpecFluidFlowObsTypes: TStringList;
+  SutraSpecConcObsTypes: TStringList;
+  SutraGenUObsTypes: TStringList;
 
 const
   StrPressure = 'Pressure';
@@ -253,12 +255,21 @@ begin
 //  SutraStateObsTypes.Add('Resultant U rate at generalized U nodes'); // Units = solute mass/sec, Add selected nodes, Use .bcoug file
   SutraStateObsTypes.Add(StrLakeStage);  // single node, make NLAKPR = 1, read from .lkst
 
-  SutraFlFluxObsTypes := TStringList.Create;
-  SutraFlFluxObsTypes.Add('Boundary fluid flow rate'); // Units = Mass/sec, Add selected nodes
-  SutraFlFluxObsTypes.Add('Boundary resultant U rate'); // Units = solute mass/sec, Add selected nodes
+  SutraSpecPressureObsTypes := TStringList.Create;
+  SutraSpecPressureObsTypes.Add('Fluid flow rate'); // Units = Mass/sec, Add selected nodes
+  SutraSpecPressureObsTypes.Add('Conc/Temperature'); // Units = Mass/sec, Add selected nodes
+  SutraSpecPressureObsTypes.Add('Resultant mass/energy rate'); // Units = solute mass/sec, Add selected nodes
 
-  SutraUFluxObsTypes := TStringList.Create;
-  SutraUFluxObsTypes.Add('Boundary resultant U rate'); // Units = solute mass/sec, Add selected nodes
+  SutraSpecFluidFlowObsTypes := TStringList.Create;
+  SutraSpecFluidFlowObsTypes.Add('Solute conc/temperature'); // Units = solute mass/sec, Add selected nodes
+  SutraSpecFluidFlowObsTypes.Add('Resultant mass/energy rate'); // Units = solute mass/sec, Add selected nodes
+
+  SutraSpecConcObsTypes := TStringList.Create;
+  SutraSpecConcObsTypes.Add('Resultant mass/energy rate'); // Units = solute mass/sec, Add selected nodes
+
+  SutraGenUObsTypes := TStringList.Create;
+  SutraGenUObsTypes.Add('Resultant mass/energy rate'); // Units = solute mass/sec, Add selected nodes
+  SutraGenUObsTypes.Add('Calculated conc/temp'); // Units = solute mass/sec, Add selected nodes
 end;
 
 { TSutraStateObsItem }
@@ -398,12 +409,12 @@ end;
 
 function TSutraFlFluxObsItem.GetObsTypeIndex: Integer;
 begin
-  Result := SutraFlFluxObsTypes.IndexOf(ObsType)
+  Result := SutraSpecPressureObsTypes.IndexOf(ObsType)
 end;
 
 procedure TSutraFlFluxObsItem.SetObsTypeIndex(const Value: Integer);
 begin
-  ObsType := SutraFlFluxObsTypes[Value];
+  ObsType := SutraSpecPressureObsTypes[Value];
 
 end;
 
@@ -440,12 +451,12 @@ end;
 
 function TSutraUFluxObsItem.GetObsTypeIndex: Integer;
 begin
-  result := SutraUFluxObsTypes.IndexOf(ObsType)
+  result := SutraSpecFluidFlowObsTypes.IndexOf(ObsType)
 end;
 
 procedure TSutraUFluxObsItem.SetObsTypeIndex(const Value: Integer);
 begin
-  ObsType := SutraUFluxObsTypes[Value];
+  ObsType := SutraSpecFluidFlowObsTypes[Value];
 end;
 
 function TSutraUFluxObsItem.Units: string;
@@ -896,7 +907,9 @@ InitializeSutraObsTypes;
 
 finalization
   SutraStateObsTypes.Free;
-  SutraFlFluxObsTypes.Free;
-  SutraUFluxObsTypes.Free;
+  SutraSpecPressureObsTypes.Free;
+  SutraSpecFluidFlowObsTypes.Free;
+  SutraSpecConcObsTypes.Free;
+  SutraGenUObsTypes.Free;
 
 end.

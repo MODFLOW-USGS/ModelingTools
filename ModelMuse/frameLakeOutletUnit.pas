@@ -56,7 +56,9 @@ resourcestring
   StrWidth = 'Width';
   StrSlope = 'Slope';
   StrRoughness = 'Roughness';
-  StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d.';
+  StrNoOutletLakeIsSp = 'No outlet lake is specified for outlet %d meaning ' +
+    'that flow from the outlet will either leave the model entirely or be ' +
+    'transferred to another boundary via the MVR package.';
   StrOutletValuesWereN = 'Outlet values were not supplied for outlet %d.';
 
 {$R *.dfm}

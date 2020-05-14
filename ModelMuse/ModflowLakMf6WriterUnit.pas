@@ -187,7 +187,8 @@ resourcestring
   'lets. The outflow observation will be skipped.';
   StrNoOutletLakeDefin = 'No outlet lake defined';
   StrInTheLakeDefined = 'In the lake defined by the object %0:s, no outlet l' +
-  'ake is defined for outlet %1:d.';
+  'ake is defined for outlet %1:d. Flow through this outlet will either exit ' +
+  'the model or it can be transferred to another boundary via the MVR package.';
   StrLakeTopIsAboveTh = 'Lake top is above the top of the model in a horizontal' +
   'ly connected lake cell';
   StrTheLakeDefinedByGrid = 'The lake defined by %0:s has a higher top eleva' +

@@ -746,6 +746,7 @@ type
     FNoIniFile: Boolean;
     FRunMt3dModel: TCustomModel;
     FInvalidatingAllViews: Boolean;
+//    FWriteErrorRaised: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
     procedure WMMenuSelect(var Msg: TWMMenuSelect); message WM_MENUSELECT;
@@ -1982,6 +1983,7 @@ type
     property DisvUsed:  Boolean read GetDisvUsed;
     procedure SetMt3dCaption;
     procedure EnableCTS;
+//    property WriteErrorRaised: Boolean read FWriteErrorRaised;
     { Public declarations }
   end;
 
@@ -2292,6 +2294,12 @@ resourcestring
   'n MODFLOW-2005 to CSUB package in MODFLOW 6?';
   StrDoYouWantToConveFHB = 'Do you want to convert the FHB to the CHD and WE' +
   'L packages in MODFLOW 6?';
+  StrThereWasAnErrorS = 'There was an error saving the file. ' +
+  'The error message was "%s". ' +  slinebreak +
+  'Be sure that you have permision to write to the directory where you are ' +
+  'saving the file. If saving as a ' +
+  'mmZLib file, try saving as a bin file instead. In the "File|Save As" dial' +
+  'og box, you can also try unchecking the "Save data set values" check box.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -10658,28 +10666,31 @@ begin
       PhastModel.StreamObservations.EliminatedDeletedScreenObjects;
 
       PhastModel.DataArrayManager.StoreCachedData := true;
-//      try
+
+      try
         InternalSaveFile(FileName + '.tmp');
-        Assert(FileExists(FileName + '.tmp'));
-        if FileLength(FileName + '.tmp') > 0 then
+      except on E: Exception do
         begin
-          if FileExists(FileName) then
-          begin
-            BackUpName := ChangeFileExt(FileName, '.bak');
-            if FileExists(BackUpName) then
-            begin
-              DeleteFile(BackUpName);
-            end;
-            RenameFile(FileName, BackUpName);
-          end;
-          RenameFile(FileName + '.tmp', FileName);
+          Beep;
+          MessageDlg(Format(StrThereWasAnErrorS, [E.message]), mtError, [mbOK], 0);
+          Exit;
         end;
-//      except on EOutOfMemory do
-//        begin
-//          PhastModel.DataArrayManager.StoreCachedData := False;
-//          InternalSaveFile(FileName);
-//        end;
-//      end;
+      end;
+
+      Assert(FileExists(FileName + '.tmp'));
+      if FileLength(FileName + '.tmp') > 0 then
+      begin
+        if FileExists(FileName) then
+        begin
+          BackUpName := ChangeFileExt(FileName, '.bak');
+          if FileExists(BackUpName) then
+          begin
+            DeleteFile(BackUpName);
+          end;
+          RenameFile(FileName, BackUpName);
+        end;
+        RenameFile(FileName + '.tmp', FileName);
+      end;
     finally
       PhastModel.HeadFluxObservations.Assign(TempHeadFlux);
       PhastModel.DrainObservations.Assign(TempDrainFlux);
