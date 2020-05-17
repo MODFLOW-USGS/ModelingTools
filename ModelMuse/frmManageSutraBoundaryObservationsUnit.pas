@@ -91,11 +91,17 @@ type
     procedure miHideUsedClick(Sender: TObject);
   private
     FFluxObs: TSutraFluxObs;
-    FFluidFluxObjects: TScreenObjectList;
-    FUFluxObjects: TScreenObjectList;
+    FSpecPresObjects: TScreenObjectList;
+    FSpecFluidFlowObjects: TScreenObjectList;
+    FSpecConcObjects: TScreenObjectList;
+    FGenFluidFlowObjects: TScreenObjectList;
+    FGenTransObjects: TScreenObjectList;
     FSelectedObservation: TCustomSutraFluxObservations;
-    FFluidFuxNode: TTreeNode;
-    FUFluxNode: TTreeNode;
+    FSpecPresNode: TTreeNode;
+    FFluidFlowNode: TTreeNode;
+    FSpecConcNode: TTreeNode;
+    FGenFlowNode: TTreeNode;
+    FGenTransNode: TTreeNode;
     FSelectedGroup: TCustomSutraFluxObservationGroup;
     FUpdatingFormula: Boolean;
     procedure SetSelectedGroup(const Value: TCustomSutraFluxObservationGroup);
@@ -192,8 +198,6 @@ end;
 procedure TfrmManageSutraBoundaryObservations.btnAddObservationClick(
   Sender: TObject);
 var
-//  Observations: TCustomFluxObservationGroups;
-//  ObservationGroup: TCustomFluxObservationGroup;
   ANode: TTreeNode;
   ObsName: string;
   ParentNode : TTreeNode;
@@ -204,8 +208,11 @@ begin
   inherited;
   NodeList := TList.Create;
   try
-    NodeList.Add(FFluidFuxNode);
-    NodeList.Add(FUFluxNode);
+    NodeList.Add(FSpecPresNode);
+    NodeList.Add(FFluidFlowNode);
+    NodeList.Add(FSpecConcNode);
+    NodeList.Add(FGenFlowNode);
+    NodeList.Add(FGenTransNode);
     NodeList.Pack;
     if (tvFluxObservations.Selected = nil) and (NodeList.Count > 0) then
     begin
@@ -227,13 +234,25 @@ begin
     NodeList.Free;
   end;
 
-  if ParentNode = FFluidFuxNode then
+  if ParentNode = FSpecPresNode then
   begin
-    ObsName := 'Flow';
+    ObsName := 'SpecPresObs';
   end
-  else if ParentNode = FUFluxNode then
+  else if ParentNode = FFluidFlowNode then
   begin
-    ObsName := 'U';
+    ObsName := 'SpecFlowObs';
+  end
+  else if ParentNode = FSpecConcNode then
+  begin
+    ObsName := 'SpecConcObs';
+  end
+  else if ParentNode = FGenFlowNode then
+  begin
+    ObsName := 'GenFlowObs';
+  end
+  else if ParentNode = FGenTransNode then
+  begin
+    ObsName := 'GenTransObs';
   end
   else
   begin
@@ -258,7 +277,6 @@ var
   ParentNode: TTreeNode;
   Observations: TCustomSutraFluxObservationGroups;
   Item: TCustomSutraFluxObservationGroup;
-//  Index: Integer;
   AnObject: TObject;
 begin
   inherited;
@@ -451,16 +469,16 @@ begin
   frameSutraFluxObs.InitializeControls;
   if Value <> nil then
   begin
-    if Value is TSutraFlFluxObservations then
+    if Value is TSutraSpecPressureObservations then
     begin
       frameSutraFluxObs.SpecifyObservationTypes(SutraSpecPressureObsTypes);
-      AvailableObjects := FFluidFluxObjects;
+      AvailableObjects := FSpecPresObjects;
     end
     else
     begin
-      Assert(Value is TSutraUFluxObservations);
+      Assert(Value is TSutraFluidFlowObservations);
       frameSutraFluxObs.SpecifyObservationTypes(SutraSpecFluidFlowObsTypes);
-      AvailableObjects := FUFluxObjects;
+      AvailableObjects := FSpecFluidFlowObjects;
     end;
     edObservationName.Text := Value.ObservationName;
     frameSutraFluxObs.GetData(Value);
@@ -560,8 +578,11 @@ procedure TfrmManageSutraBoundaryObservations.FormCreate(Sender: TObject);
 begin
   inherited;
   FFluxObs := TSutraFluxObs.Create(nil);
-  FFluidFluxObjects := TScreenObjectList.Create;
-  FUFluxObjects := TScreenObjectList.Create;
+  FSpecPresObjects := TScreenObjectList.Create;
+  FSpecFluidFlowObjects := TScreenObjectList.Create;
+  FSpecConcObjects := TScreenObjectList.Create;
+  FGenFluidFlowObjects := TScreenObjectList.Create;
+  FGenTransObjects := TScreenObjectList.Create;
   frameSutraFluxObs.InitializeControls;
 
   AddGIS_Functions(rparserThreeDFormulaElements,
@@ -579,8 +600,12 @@ procedure TfrmManageSutraBoundaryObservations.FormDestroy(Sender: TObject);
 begin
   inherited;
   FFluxObs.Free;
-  FUFluxObjects.Free;
-  FFluidFluxObjects.Free;
+  FSpecFluidFlowObjects.Free;
+  FSpecPresObjects.Free;
+  FSpecConcObjects.Free;
+  FGenFluidFlowObjects.Free;
+  FGenTransObjects.Free;
+
 end;
 
 procedure TfrmManageSutraBoundaryObservations.FormKeyDown(Sender: TObject;
@@ -611,13 +636,14 @@ procedure TfrmManageSutraBoundaryObservations.GetData;
 var
   Index: Integer;
   ScreenObject: TScreenObject;
-  FluidFlux: Boolean;
-  UFlux: Boolean;
   SutraBoundaries: TSutraBoundaries;
   ParentNode: TTreeNode;
-  FlowItem: TSutraFlFluxObservationGroup;
+  SpecPresObsItem: TSutraSpecPressureObservationGroup;
   ANode: TTreeNode;
-  UItem: TSutraUFluxObservationGroup;
+  SpecFlowObsItem: TSutraFluidFlowObservationGroup;
+  SpecConcObsItem: TSutraSpecConcObservationGroup;
+  SpecGenFlowItem: TSutraSpecPressureObservationGroup;
+  SpecGenTransItem: TSutraGenTransObservationGroup;
 begin
   for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
   begin
@@ -627,65 +653,92 @@ begin
       Continue;
     end;
 
-    FluidFlux := False;
-    UFlux := False;
-
     SutraBoundaries := ScreenObject.SutraBoundaries;
     if SutraBoundaries.SpecifiedPressure.Used then
     begin
-      FluidFlux := True;
-      UFlux := True;
+      FSpecPresObjects.Add(ScreenObject);
     end
     else if SutraBoundaries.FluidSource.Used then
     begin
-      UFlux := True;
+      FSpecFluidFlowObjects.Add(ScreenObject);
     end
     else if SutraBoundaries.SpecifiedConcTemp.Used then
     begin
-      UFlux := True;
+      FSpecConcObjects.Add(ScreenObject);
     end
     else if SutraBoundaries.GeneralFlowBoundary.Used then
     begin
-      FluidFlux := True;
-      UFlux := True;
+      FGenFluidFlowObjects.Add(ScreenObject);
     end
     else if SutraBoundaries.GenTransportBoundary.Used then
     begin
-      UFlux := True;
-    end;
-
-    if FluidFlux then
-    begin
-      FFluidFluxObjects.Add(ScreenObject);
-    end;
-    if UFlux then
-    begin
-      FUFluxObjects.Add(ScreenObject);
+      FGenTransObjects.Add(ScreenObject);
     end;
   end;
 
   FFluxObs.Assign(frmGoPhast.PhastModel.SutraFluxObs);
 
-  ParentNode := tvFluxObservations.Items.Add(nil, 'Calculated fluid flow boundaries');
-  ParentNode.Data := FFluxObs.FluidFlux;
-  FFluidFuxNode := ParentNode;
-  for Index := 0 to FFluxObs.FluidFlux.Count - 1 do
+  ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Pres Obs');
+  ParentNode.Data := FFluxObs.SpecPres;
+  FSpecPresNode := ParentNode;
+  for Index := 0 to FFluxObs.SpecPres.Count - 1 do
   begin
-    FlowItem := FFluxObs.FluidFlux[Index];
+    SpecPresObsItem := FFluxObs.SpecPres[Index];
     ANode := tvFluxObservations.Items.AddChild(ParentNode,
-      FlowItem.ObsGroup.ObservationName);
-    ANode.Data := FlowItem.ObsGroup;
+      SpecPresObsItem.ObsGroup.ObservationName);
+    ANode.Data := SpecPresObsItem.ObsGroup;
   end;
 
-  ParentNode := tvFluxObservations.Items.Add(nil, 'Calculated U rate boundaries');
-  ParentNode.Data := FFluxObs.UFlux;
-  FUFluxNode := ParentNode;
-  for Index := 0 to FFluxObs.UFlux.Count - 1 do
+  ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Fluid Flow Observations');
+  ParentNode.Data := FFluxObs.FluidFlow;
+  FFluidFlowNode := ParentNode;
+  for Index := 0 to FFluxObs.FluidFlow.Count - 1 do
   begin
-    UItem := FFluxObs.UFlux[Index];
+    SpecFlowObsItem := FFluxObs.FluidFlow[Index];
     ANode := tvFluxObservations.Items.AddChild(ParentNode,
-      UItem.ObsGroup.ObservationName);
-    ANode.Data := UItem.ObsGroup;
+      SpecFlowObsItem.ObsGroup.ObservationName);
+    ANode.Data := SpecFlowObsItem.ObsGroup;
+  end;
+
+  ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Conc Observations');
+  ParentNode.Data := FFluxObs.SpecConc;
+  FSpecConcNode := ParentNode;
+  for Index := 0 to FFluxObs.SpecConc.Count - 1 do
+  begin
+    SpecConcObsItem := FFluxObs.SpecConc[Index];
+    ANode := tvFluxObservations.Items.AddChild(ParentNode,
+      SpecConcObsItem.ObsGroup.ObservationName);
+    ANode.Data := SpecConcObsItem.ObsGroup;
+  end;
+
+  if frmGoPhast.ModelSelection = msSutra30 then
+  begin
+    ParentNode := tvFluxObservations.Items.Add(nil, 'Gen Flow Observations');
+    ParentNode.Data := FFluxObs.GenFlow;
+    FGenFlowNode := ParentNode;
+    for Index := 0 to FFluxObs.GenFlow.Count - 1 do
+    begin
+      SpecGenFlowItem := FFluxObs.GenFlow[Index];
+      ANode := tvFluxObservations.Items.AddChild(ParentNode,
+        SpecGenFlowItem.ObsGroup.ObservationName);
+      ANode.Data := SpecGenFlowItem.ObsGroup;
+    end;
+
+    ParentNode := tvFluxObservations.Items.Add(nil, 'Gen Transport Observations');
+    ParentNode.Data := FFluxObs.GenTrans;
+    FGenTransNode := ParentNode;
+    for Index := 0 to FFluxObs.GenTrans.Count - 1 do
+    begin
+      SpecGenTransItem := FFluxObs.GenTrans[Index];
+      ANode := tvFluxObservations.Items.AddChild(ParentNode,
+        SpecGenTransItem.ObsGroup.ObservationName);
+      ANode.Data := SpecGenTransItem.ObsGroup;
+    end;
+  end
+  else
+  begin
+    FGenFlowNode := nil;
+    FGenTransNode := nil;
   end;
 
 end;
@@ -995,8 +1048,8 @@ var
 begin
   GroupSelected := (TreeView.Selected <> nil)
     and
-    ((TreeView.Selected.Data = FFluxObs.FluidFlux)
-    or (TreeView.Selected.Data = FFluxObs.UFlux)) ;
+    ((TreeView.Selected.Data = FFluxObs.SpecPres)
+    or (TreeView.Selected.Data = FFluxObs.FluidFlow)) ;
 
   btnDeleteObservation.Enabled := (TreeView.Selected <> nil)
     and not GroupSelected;

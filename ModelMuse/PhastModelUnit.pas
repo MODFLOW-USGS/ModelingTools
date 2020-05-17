@@ -9086,9 +9086,16 @@ const
   //    '4.2.0.14' Bug fix: Fixed but that cause a conversion error if the
   //                user failed to specify the properties of a lake outlet
   //                correctly.
+  //    '4.2.0.15' Change: Modified export of the MODFLOW-2005 Lake package
+  //                input to allow for periods in which no lakes are active.
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                when updating the legend for the colors displayed in
+  //                the Data Visualization dialog box.
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                in the Global Variables dialog box.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.14';
+  IModelVersion = '4.2.0.15';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -31188,18 +31195,18 @@ begin
 
   if (ModelSelection in SutraSelection) then
   begin
-    for GroupIndex := 0 to SutraFluxObs.FluidFlux.Count - 1 do
+    for GroupIndex := 0 to SutraFluxObs.SpecPres.Count - 1 do
     begin
-      FluxGroup := SutraFluxObs.FluidFlux[GroupIndex];
+      FluxGroup := SutraFluxObs.SpecPres[GroupIndex];
       for ItemIndex := 0 to FluxGroup.ObservationGroup.Count - 1 do
       begin
         Item := FluxGroup.ObservationGroup[ItemIndex];
         List.Add(Item);
       end;
     end;
-    for GroupIndex := 0 to SutraFluxObs.UFlux.Count - 1 do
+    for GroupIndex := 0 to SutraFluxObs.FluidFlow.Count - 1 do
     begin
-      FluxGroup := SutraFluxObs.UFlux[GroupIndex];
+      FluxGroup := SutraFluxObs.FluidFlow[GroupIndex];
       for ItemIndex := 0 to FluxGroup.ObservationGroup.Count - 1 do
       begin
         Item := FluxGroup.ObservationGroup[ItemIndex];

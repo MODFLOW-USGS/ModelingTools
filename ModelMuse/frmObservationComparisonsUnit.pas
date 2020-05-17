@@ -156,7 +156,6 @@ procedure TfrmObservationComparisons.frameObsComparisonsGridSelectCell(
 var
   CellRect: TRect;
   ANode: PVirtualNode;
-//  MyObject: PObsTreeItem;
   ObItem : TCustomObservationItem;
   NodeParent: PVirtualNode;
 begin

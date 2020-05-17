@@ -25,6 +25,7 @@ type
     procedure WriteDataSet9(StressPeriod: TModflowStressPeriod);
     procedure WriteGages(Lines: TStrings);
     procedure WriteObsScript(const AFileName: string);
+    function HasLakeInStressPeriod(StressPeriod: TModflowStressPeriod): Boolean;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -410,22 +411,71 @@ var
   LayerIndex: integer;
   ModflowLayer: integer;
 begin
-  LakeLeakance := Model.DataArrayManager.GetDataSetByName(rsLakeLeakance);
-  ModflowLayer := 0;
-  for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+//  if HasLakeInStressPeriod(StressPeriod) then
+//  begin
+    LakeLeakance := Model.DataArrayManager.GetDataSetByName(rsLakeLeakance);
+    ModflowLayer := 0;
+    for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+    begin
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      if Model.IsLayerSimulated(LayerIndex) then
+      begin
+        Inc(ModflowLayer);
+        WriteArray(LakeLeakance, LayerIndex,
+          'Data Set 6, BDLKNC: Layer ' + IntToStr(ModflowLayer),
+          StrNoValueAssigned, 'BDLKNC');
+      end;
+    end;
+//  end
+//  else
+//  begin
+//    ModflowLayer := 0;
+//    for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+//    begin
+//      if Model.IsLayerSimulated(LayerIndex) then
+//      begin
+//        Inc(ModflowLayer);
+//        WriteConstantU2DREL(
+//          'Data Set 6, BDLKNC: Layer ' + IntToStr(ModflowLayer), 0,
+//            matStructured, 'BDLKNC');
+//      end;
+//    end;
+//  end;
+end;
+
+function TModflowLAK_Writer.HasLakeInStressPeriod(StressPeriod: TModflowStressPeriod): Boolean;
+var
+  LakeIndex: Integer;
+  ScreenObject: TScreenObject;
+  Lake: TLakBoundary;
+  TimeIndex: Integer;
+  LakeItem: TLakItem;
+begin
+  result := False;
+  for LakeIndex := 0 to FLakeList.Count - 1 do
   begin
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
+    ScreenObject := FLakeList[LakeIndex];
+    Assert(ScreenObject.ModflowLakBoundary <> nil);
+    Lake := ScreenObject.ModflowLakBoundary;
+    for TimeIndex := 0 to Lake.Values.Count -1 do
     begin
-      Exit;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      LakeItem := Lake.Values[TimeIndex] as TLakItem;
+      if (LakeItem.StartTime <= StressPeriod.StartTime)
+        and (LakeItem.EndTime > StressPeriod.StartTime) then
+      begin
+        result := True;
+      end;
     end;
-    if Model.IsLayerSimulated(LayerIndex) then
-    begin
-      Inc(ModflowLayer);
-      WriteArray(LakeLeakance, LayerIndex,
-        'Data Set 6, BDLKNC: Layer ' + IntToStr(ModflowLayer),
-        StrNoValueAssigned, 'BDLKNC');
-    end;
+
   end;
 end;
 
@@ -437,6 +487,7 @@ var
   TimeIndex: Integer;
   LakeItem: TLakItem;
   PRCPLK, EVAPLK, RNF, WTHDRW, SSMN, SSMX: double;
+  ItemWritten: Boolean;
 begin
   for LakeIndex := 0 to FLakeList.Count - 1 do
   begin
@@ -448,6 +499,7 @@ begin
     ScreenObject := FLakeList[LakeIndex];
     Assert(ScreenObject.ModflowLakBoundary <> nil);
     Lake := ScreenObject.ModflowLakBoundary;
+    ItemWritten := False;
     for TimeIndex := 0 to Lake.Values.Count -1 do
     begin
       Application.ProcessMessages;
@@ -482,8 +534,29 @@ begin
           WriteString(' SSMN SSMX');
         end;
         NewLine;
+        ItemWritten := True;
         break;
       end;
+    end;
+    if not ItemWritten then
+    begin
+      PRCPLK := 0;
+      EVAPLK := 0;
+      RNF := 0;
+      WTHDRW := 0;
+      if StressPeriod.StressPeriodType = sptSteadyState then
+      begin
+        SSMN := 0;
+        SSMX := 0;
+        WriteFloat(SSMN);
+        WriteFloat(SSMX);
+      end;
+      WriteString(' # DataSet 9: PRCPLK EVAPLK RNF WTHDRW');
+      if StressPeriod.StressPeriodType = sptSteadyState then
+      begin
+        WriteString(' SSMN SSMX');
+      end;
+      NewLine;
     end;
   end;
 end;
@@ -510,14 +583,15 @@ begin
     begin
       Exit;
     end;
+    StressPeriod := Model.ModflowFullStressPeriods[TimeIndex];
     // data set 4;
-    if TimeIndex = 0 then
+    if HasLakeInStressPeriod(StressPeriod) then
     begin
       ITMP := 1;
     end
     else
     begin
-      ITMP := -1;
+      ITMP := 0;
     end;
     WriteInteger(ITMP);
     WriteInteger(ITMP1);
@@ -525,18 +599,17 @@ begin
     WriteString(' # DataSet 4: ITMP ITMP1 LWRT');
     NewLine;
 
-    if TimeIndex = 0 then
+    if ITMP = 1 then
     begin
       WriteLakeDefinitions;
-    end;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
 
-    StressPeriod := Model.ModflowFullStressPeriods[TimeIndex];
-    WriteDataSet9(StressPeriod);
+      WriteDataSet9(StressPeriod);
+    end;
   end;
 end;
 

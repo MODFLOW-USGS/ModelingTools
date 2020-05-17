@@ -19194,6 +19194,8 @@ begin
 end;
 
 function TScreenObject.CheckGetSegments(AModel: TBaseModel): TCellElementSegmentList;
+var 
+  ErrorMessage: string;
 begin
   try
     result := GetSegments(AModel);
@@ -19203,7 +19205,9 @@ begin
       begin
         ElevationCount := ecZero;
         Beep;
-        MessageDlg(Format(StrThereWasAProblemCircRef, [Name, E.Message]), mtError, [mbOK], 0);
+        ErrorMessage := Format(StrThereWasAProblemCircRef, [Name, E.Message]);
+        frmErrorsAndWarnings.AddError(Model, StrCircularReferenceE, ErrorMessage, self);
+        MessageDlg(ErrorMessage, mtError, [mbOK], 0);
         result := GetSegments(AModel)
       end
       else
@@ -19219,7 +19223,7 @@ var
   RotatedPoints: TEdgePointArray;
   TempMinX, TempMinY, TempMaxX, TempMaxY: double;
 begin
-  result := nil;
+//  result := nil;
   PushGlobalStack;
   try
     Assert(AModel is TCustomModel);

@@ -57,6 +57,7 @@ type
     procedure UpdateSpecialFormat(RowIndex: integer);
     function GenerateNewRoot(const Root: string): string;
     procedure AdjustFormSize;
+    function CanGetVariable(ARow: Integer): Boolean;
     { Private declarations }
   public
     { Public declarations }
@@ -108,21 +109,40 @@ resourcestring
 
 {$R *.dfm}
 
+function TfrmGlobalVariables.CanGetVariable(ARow: Integer): Boolean;
+begin
+  Result := True;
+  if (ARow < Length(OkVariables)) and not OkVariables[ARow] then
+  begin
+    Result := False;
+  end;
+  if FDeletedGlobalVariables.IndexOf(
+    rdgGlobalVariables.Cells[Ord(gvName), ARow]) >= 0 then
+  begin
+    Result := False;
+  end;
+end;
+
 procedure TfrmGlobalVariables.rdgGlobalVariablesBeforeDrawCell(Sender: TObject;
   ACol, ARow: Integer);
 begin
   inherited;
   if (ACol = Ord(gvName)) and (ARow >= rdgGlobalVariables.FixedRows) then
   begin
-    if (ARow < Length(OkVariables)) and not OkVariables[ARow] then
+    if not CanGetVariable(ARow) then
     begin
       rdgGlobalVariables.Canvas.Brush.Color := clRed;
     end;
-    if FDeletedGlobalVariables.IndexOf(
-      rdgGlobalVariables.Cells[ACol, ARow]) >= 0 then
-    begin
-      rdgGlobalVariables.Canvas.Brush.Color := clRed;
-    end;
+
+//    if (ARow < Length(OkVariables)) and not OkVariables[ARow] then
+//    begin
+//      rdgGlobalVariables.Canvas.Brush.Color := clRed;
+//    end;
+//    if FDeletedGlobalVariables.IndexOf(
+//      rdgGlobalVariables.Cells[ACol, ARow]) >= 0 then
+//    begin
+//      rdgGlobalVariables.Canvas.Brush.Color := clRed;
+//    end;
   end;
 end;
 
@@ -178,7 +198,8 @@ var
   GlobalVariable: TGlobalVariable;
 begin
   inherited;
-  if (ACol >= 0) and (ARow >= rdgGlobalVariables.FixedRows) then
+  if (ACol >= 0) and (ARow >= rdgGlobalVariables.FixedRows)
+    and CanGetVariable(ARow) then
   begin
     GlobalVariable := rdgGlobalVariables.Objects[Ord(gvName), ARow] as TGlobalVariable;
     if (GlobalVariable <> nil) and (GlobalVariable.Locked) then

@@ -1599,6 +1599,7 @@ resourcestring
   StrInvalidDataType = 'Invalid data type.';
   StrMODFLOWMultinodeWe = 'MODFLOW Multinode Well';
   StrEvaluatingDat = '      Evaluating data set: "%s."';
+  StrCircularReferenceE = 'Circular Reference Error';
 
 const
   MaxSmallArraySize = 1000000;
@@ -1677,6 +1678,9 @@ resourcestring
   'late them.';
   StrSFT = 'SFT_';
   StrMODFLOW6CSUB = 'MODFLOW 6 CSUB';
+  StrThereWasACircular = 'There was a circular reference error in evaluating' +
+  ' %0:s that appears be due to %1:s. %1:s is being converted to a 2D object' +
+  '.';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -2167,6 +2171,7 @@ var
   ResultOK: Boolean;
   PriorInterpAnnString: string;
   DisLimits: TGridLimit;
+  ErrorMessage: string;
   procedure GetLimits;
   begin
     if LocalModel.ModelSelection in SutraSelection then
@@ -2379,9 +2384,20 @@ begin
       end
       else
       begin
-        raise ECircularReference.Create(Format(StrCircularReferenceScreen,
-          [Name, Stack.Text, CurrentObject.Name]));
-
+        if CurrentObject.ElevationCount <> ecZero then
+        begin
+          Beep;
+          CurrentObject.ElevationCount := ecZero;
+          ErrorMessage := Format(StrThereWasACircular, [Name, CurrentObject.Name]);
+          frmErrorsAndWarnings.AddError(Model, StrCircularReferenceE, ErrorMessage, CurrentObject);
+          MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+          Exit;
+        end
+        else
+        begin
+          raise ECircularReference.Create(Format(StrCircularReferenceScreen,
+            [Name, Stack.Text, CurrentObject.Name]));
+        end;
       end;
     end;
     Stack.Add(Name);

@@ -108,9 +108,12 @@ var
 begin
   if Sender = chartCumEffort.BottomAxis then
   begin
-    LabelText := StringReplace(LabelText, ',', '', [rfReplaceAll, rfIgnoreCase]);
-    ADate := StrToFloat(LabelText);
-    LabelText := DateToStr(ADate);
+    if LabelText <> '' then
+    begin
+      LabelText := StringReplace(LabelText, ',', '', [rfReplaceAll, rfIgnoreCase]);
+      ADate := StrToFloat(LabelText);
+      LabelText := DateToStr(ADate);
+    end;
   end;
 end;
 

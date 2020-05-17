@@ -122,7 +122,7 @@ object TTaskHistory
     end
     item
       Name = 'LAK'
-      Display = False
+      Display = True
     end
     item
       Name = 'OC'
@@ -25420,5 +25420,12 @@ object TTaskHistory
         'PEST Observations'
         'Refactoring'
         'Bug fix')
+    end
+    item
+      Date = 43966.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'LAK'
+        'Testing')
     end>
 end

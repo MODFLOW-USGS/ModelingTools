@@ -812,7 +812,8 @@ begin
   if FUpdatingLegend or (csDestroying in ComponentState)
     or (frmGoPhast = nil) or (frmGoPhast.PhastModel = nil)
     or frmGoPhast.PhastModel.Clearing
-    or (csDestroying in frmGoPhast.PhastModel.ComponentState) then
+    or (csDestroying in frmGoPhast.PhastModel.ComponentState)
+    or (FLegend = nil) then
   begin
     Exit;
   end;

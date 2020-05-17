@@ -12831,22 +12831,24 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited tabLakeTransientProperties: TTabSheet
                 ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 225
+                ExplicitWidth = 443
+                ExplicitHeight = 301
               end
               inherited tabLakeTable: TTabSheet
                 ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 443
-                ExplicitHeight = 301
+                ExplicitWidth = 573
+                ExplicitHeight = 225
                 inherited frameLakeTable: TframeFormulaGrid
                   Width = 573
                   Height = 225
-                  ExplicitHeight = 301
+                  ExplicitWidth = 573
+                  ExplicitHeight = 225
                   inherited Panel: TPanel
                     Top = 184
                     Width = 573
-                    ExplicitTop = 260
+                    ExplicitTop = 184
+                    ExplicitWidth = 573
                     inherited lbNumber: TLabel
                       Width = 206
                       Height = 19
@@ -12874,10 +12876,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Width = 573
                     Height = 127
                     OnButtonClick = frameResdgModflowBoundaryButtonClick
-                    ExplicitHeight = 203
+                    ExplicitWidth = 573
+                    ExplicitHeight = 127
                   end
                   inherited pnlTop: TPanel
                     Width = 573
+                    ExplicitWidth = 573
                     inherited edFormula: TLabeledEdit
                       Height = 27
                       EditLabel.Width = 59
@@ -13966,7 +13970,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraUObs
+        ActivePage = jvspSutraSpecFlowObs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14960,15 +14964,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
           end
         end
-        object jvspSutraFlowObs: TJvStandardPage
+        object jvspSutraSpecPresObs: TJvStandardPage
           Left = 0
           Top = 0
           Width = 605
           Height = 476
-          Caption = 'jvspSutraFlowObs'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
-          inline frameSutraFlowObs: TframeFluxObs
+          Caption = 'jvspSutraSpecPresObs'
+          inline frameSutraSpecPresObs: TframeFluxObs
             Left = 0
             Top = 0
             Width = 605
@@ -14976,8 +14978,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 24
-            ExplicitTop = 32
+            ExplicitWidth = 605
+            ExplicitHeight = 476
             inherited lblFluxObservations: TLabel
               Width = 125
               Height = 19
@@ -14989,21 +14991,21 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 441
               OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
               OnStateChange = frameSutraFlowObsrdgObservationGroupsStateChange
+              ExplicitWidth = 599
+              ExplicitHeight = 441
             end
             inherited btnAddOrRemoveFluxObservations: TButton
               OnClick = frameSutraUObsbtnAddOrRemoveFluxObservationsClick
             end
           end
         end
-        object jvspSutraUObs: TJvStandardPage
+        object jvspSutraSpecFlowObs: TJvStandardPage
           Left = 0
           Top = 0
           Width = 605
           Height = 476
-          Caption = 'jvspSutraUObs'
-          ExplicitWidth = 0
-          ExplicitHeight = 0
-          inline frameSutraUObs: TframeFluxObs
+          Caption = 'jvspSutraSpecFlowObs'
+          inline frameSutraSpecifiedFluidFlowObs: TframeFluxObs
             Left = 0
             Top = 0
             Width = 605
@@ -15011,8 +15013,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitLeft = 49
-            ExplicitTop = 24
+            ExplicitWidth = 605
+            ExplicitHeight = 476
             inherited lblFluxObservations: TLabel
               Width = 125
               Height = 19
@@ -15024,6 +15026,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Height = 441
               OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
               OnStateChange = frameSutraUObsrdgObservationGroupsStateChange
+              ExplicitWidth = 599
+              ExplicitHeight = 441
             end
             inherited btnAddOrRemoveFluxObservations: TButton
               OnClick = frameSutraUObsbtnAddOrRemoveFluxObservationsClick

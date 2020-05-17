@@ -384,10 +384,10 @@ type
     framePestObsSwt: TframeSubPestObs;
     jvspSutraStateObs: TJvStandardPage;
     frameSutraPestObsState: TframePestObsCaptioned;
-    jvspSutraFlowObs: TJvStandardPage;
-    frameSutraFlowObs: TframeFluxObs;
-    jvspSutraUObs: TJvStandardPage;
-    frameSutraUObs: TframeFluxObs;
+    jvspSutraSpecPresObs: TJvStandardPage;
+    frameSutraSpecPresObs: TframeFluxObs;
+    jvspSutraSpecFlowObs: TJvStandardPage;
+    frameSutraSpecifiedFluidFlowObs: TframeFluxObs;
     // @name changes which check image is displayed for the selected item
     // in @link(jvtlModflowBoundaryNavigator).
     procedure jvtlModflowBoundaryNavigatorMouseDown(Sender: TObject;
@@ -1682,8 +1682,8 @@ type
     FSFR6_Node: TJvPageIndexNode;
     FObjectCount: Integer;
     FVertexCount: Integer;
-    FSutraFlowObs_Node: TJvPageIndexNode;
-    FSutraUObs_Node: TJvPageIndexNode;
+    FSutraSpecPresObs_Node: TJvPageIndexNode;
+    FSutraSpecFluidFlowObs_Node: TJvPageIndexNode;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -3058,21 +3058,22 @@ begin
   inherited;
   CanSelectNode := True;
 
-  if jvpltvSutraFeatures.Selected = FSutraFlowObs_Node  then
+  if jvpltvSutraFeatures.Selected = FSutraSpecPresObs_Node  then
   begin
-    CanSelectNode := (frameSutraSpecifiedPressure.CheckState <> cbUnchecked)
-      or (frameSutraGeneralizedFlowBoundary.CheckState <> cbUnchecked);
-    frameSutraFlowObs.Enabled := CanSelectNode;
+    CanSelectNode := (frameSutraSpecifiedPressure.CheckState <> cbUnchecked);
+//      or (frameSutraGeneralizedFlowBoundary.CheckState <> cbUnchecked);
+    frameSutraSpecPresObs.Enabled := CanSelectNode;
   end;
 
-  if jvpltvSutraFeatures.Selected = FSutraUObs_Node  then
+  if jvpltvSutraFeatures.Selected = FSutraSpecFluidFlowObs_Node  then
   begin
-    CanSelectNode := (frameSutraSpecifiedPressure.CheckState <> cbUnchecked)
-      or (frameSutraGeneralizedFlowBoundary.CheckState <> cbUnchecked)
-      or (frameSutraFluidFlux.CheckState <> cbUnchecked)
-      or (frameSutraGeneralizeTransBoundary.CheckState <> cbUnchecked)
-      or (frameSutraSpecTempConc.CheckState <> cbUnchecked);
-    frameSutraUObs.Enabled := CanSelectNode;
+    CanSelectNode :=
+//      (frameSutraSpecifiedPressure.CheckState <> cbUnchecked)
+//      or (frameSutraGeneralizedFlowBoundary.CheckState <> cbUnchecked)
+       (frameSutraFluidFlux.CheckState <> cbUnchecked);
+//      or (frameSutraGeneralizeTransBoundary.CheckState <> cbUnchecked)
+//      or (frameSutraSpecTempConc.CheckState <> cbUnchecked);
+    frameSutraSpecifiedFluidFlowObs.Enabled := CanSelectNode;
   end;
 
 //  jvtlModflowBoundaryNavigatorChanging(Sender,
@@ -3134,11 +3135,11 @@ begin
     begin
 //      frameSutraPestObsState.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
     end
-    else if jvpltvSutraFeatures.Selected = FSutraFlowObs_Node then
+    else if jvpltvSutraFeatures.Selected = FSutraSpecPresObs_Node then
     begin
 //      frameSutraFlowObs.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
     end
-    else if jvpltvSutraFeatures.Selected = FSutraUObs_Node then
+    else if jvpltvSutraFeatures.Selected = FSutraSpecFluidFlowObs_Node then
     begin
 //      frameSutraUObs.CheckState := TCheckBoxState(jvpltvSutraFeatures.Selected.StateIndex-1);
     end
@@ -7873,10 +7874,10 @@ begin
   SetFluxObservations(List, FStob_Node, frameSTOB, frmGoPhast.PhastModel.StreamObservations);
   SetMt3dFluxObs(List);
 
-  SetFluxObservations(List, FSutraFlowObs_Node, frameSutraFlowObs,
-    frmGoPhast.PhastModel.SutraFluxObs.FluidFlux);
-  SetFluxObservations(List, FSutraUObs_Node, frameSutraUObs,
-    frmGoPhast.PhastModel.SutraFluxObs.UFlux);
+  SetFluxObservations(List, FSutraSpecPresObs_Node, frameSutraSpecPresObs,
+    frmGoPhast.PhastModel.SutraFluxObs.SpecPres);
+  SetFluxObservations(List, FSutraSpecFluidFlowObs_Node, frameSutraSpecifiedFluidFlowObs,
+    frmGoPhast.PhastModel.SutraFluxObs.FluidFlow);
 end;
 
 procedure TfrmScreenObjectProperties.SetMt3dFluxObs(List: TList);
@@ -8067,9 +8068,9 @@ end;
 procedure TfrmScreenObjectProperties.GetSutraFlowObservations(
   const AScreenObjectList: TList);
 begin
-  GetFluxObservationsForFrame(FSutraFlowObs_Node,
-    frmGoPhast.PhastModel.SutraFluxObs.FluidFlux,
-    AScreenObjectList, frameSutraFlowObs);
+  GetFluxObservationsForFrame(FSutraSpecPresObs_Node,
+    frmGoPhast.PhastModel.SutraFluxObs.SpecPres,
+    AScreenObjectList, frameSutraSpecPresObs);
 end;
 
 procedure TfrmScreenObjectProperties.GetSutraObservations(
@@ -8082,9 +8083,9 @@ end;
 procedure TfrmScreenObjectProperties.GetSutraUObservations(
   const AScreenObjectList: TList);
 begin
-  GetFluxObservationsForFrame(FSutraUObs_Node,
-    frmGoPhast.PhastModel.SutraFluxObs.UFlux,
-    AScreenObjectList, frameSutraUObs);
+  GetFluxObservationsForFrame(FSutraSpecFluidFlowObs_Node,
+    frmGoPhast.PhastModel.SutraFluxObs.FluidFlow,
+    AScreenObjectList, frameSutraSpecifiedFluidFlowObs);
 end;
 
 procedure TfrmScreenObjectProperties.GetSwrEvapBoundary(
@@ -13190,16 +13191,16 @@ end;
 
 procedure TfrmScreenObjectProperties.CreateSutraFlowObsNode;
 begin
-  CreateFluxNode(FSutraFlowObs_Node, 'Flow Observations',
-    frameSutraFlowObs, jvspSutraFlowObs,
-    frmGoPhast.PhastModel.SutraFluxObs.FluidFlux);
+  CreateFluxNode(FSutraSpecPresObs_Node, 'Spec Pressure Observations',
+    frameSutraSpecPresObs, jvspSutraSpecPresObs,
+    frmGoPhast.PhastModel.SutraFluxObs.SpecPres);
 end;
 
 procedure TfrmScreenObjectProperties.CreateSutraUObsNode;
 begin
-  CreateFluxNode(FSutraUObs_Node, 'U Observations',
-    frameSutraUObs, jvspSutraUObs,
-    frmGoPhast.PhastModel.SutraFluxObs.UFlux);
+  CreateFluxNode(FSutraSpecFluidFlowObs_Node, 'Specified Flow Observations',
+    frameSutraSpecifiedFluidFlowObs, jvspSutraSpecFlowObs,
+    frmGoPhast.PhastModel.SutraFluxObs.FluidFlow);
 end;
 
 procedure TfrmScreenObjectProperties.CreateSutraFluidFluxNode;
@@ -21936,9 +21937,10 @@ procedure TfrmScreenObjectProperties.frameSutraFlowObsrdgObservationGroupsStateC
   Sender: TObject; ACol, ARow: Integer; const Value: TCheckBoxState);
 begin
   inherited;
-  if (FSutraFlowObs_Node <> nil) and (FSutraFlowObs_Node.StateIndex <> 3) then
+  if (FSutraSpecPresObs_Node <> nil)
+    and (FSutraSpecPresObs_Node.StateIndex <> 3) then
   begin
-    FSutraFlowObs_Node.StateIndex := 2;
+    FSutraSpecPresObs_Node.StateIndex := 2;
   end;
 end;
 
@@ -21990,9 +21992,10 @@ procedure TfrmScreenObjectProperties.frameSutraUObsrdgObservationGroupsStateChan
   Sender: TObject; ACol, ARow: Integer; const Value: TCheckBoxState);
 begin
   inherited;
-  if (FSutraUObs_Node <> nil) and (FSutraUObs_Node.StateIndex <> 3) then
+  if (FSutraSpecFluidFlowObs_Node <> nil)
+    and (FSutraSpecFluidFlowObs_Node.StateIndex <> 3) then
   begin
-    FSutraUObs_Node.StateIndex := 2;
+    FSutraSpecFluidFlowObs_Node.StateIndex := 2;
   end;
 end;
 
