@@ -13970,7 +13970,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraSpecFlowObs
+        ActivePage = jvspSutraSpecUObs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14990,7 +14990,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Width = 599
               Height = 441
               OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-              OnStateChange = frameSutraFlowObsrdgObservationGroupsStateChange
+              OnStateChange = frameSutraSpecPresObsrdgObservationGroupsStateChange
               ExplicitWidth = 599
               ExplicitHeight = 441
             end
@@ -15025,12 +15025,111 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Width = 599
               Height = 441
               OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-              OnStateChange = frameSutraUObsrdgObservationGroupsStateChange
+              OnStateChange = frameSutraSpecifiedFluidFlowObsrdgObservationGroupsStateChange
               ExplicitWidth = 599
               ExplicitHeight = 441
             end
             inherited btnAddOrRemoveFluxObservations: TButton
               OnClick = frameSutraUObsbtnAddOrRemoveFluxObservationsClick
+            end
+          end
+        end
+        object jvspSutraSpecUObs: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 605
+          Height = 476
+          Caption = 'jvspSutraSpecUObs'
+          ExplicitLeft = 6
+          ExplicitTop = -2
+          inline frameSutraSpecUObs: TframeFluxObs
+            Left = 0
+            Top = 0
+            Width = 605
+            Height = 476
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitWidth = 605
+            ExplicitHeight = 476
+            inherited lblFluxObservations: TLabel
+              Width = 125
+              Height = 19
+              ExplicitWidth = 125
+              ExplicitHeight = 19
+            end
+            inherited rdgObservationGroups: TRbwDataGrid4
+              Width = 599
+              Height = 441
+              OnStateChange = frameSutraSpecUObsrdgObservationGroupsStateChange
+              ExplicitWidth = 599
+              ExplicitHeight = 441
+            end
+          end
+        end
+        object jvspSutraGenFlowObs: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 605
+          Height = 476
+          Caption = 'jvspSutraGenFlowObs'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameSutraGenFlowObs: TframeFluxObs
+            Left = 0
+            Top = 0
+            Width = 605
+            Height = 476
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitWidth = 605
+            ExplicitHeight = 476
+            inherited lblFluxObservations: TLabel
+              Width = 125
+              Height = 19
+              ExplicitWidth = 125
+              ExplicitHeight = 19
+            end
+            inherited rdgObservationGroups: TRbwDataGrid4
+              Width = 599
+              Height = 441
+              OnStateChange = frameSutraGenFlowObsrdgObservationGroupsStateChange
+              ExplicitWidth = 599
+              ExplicitHeight = 441
+            end
+          end
+        end
+        object jvspSutraGenTransObs: TJvStandardPage
+          Left = 0
+          Top = 0
+          Width = 605
+          Height = 476
+          Caption = 'jvspSutraGenTransObs'
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          inline frameSutraGenTransObs: TframeFluxObs
+            Left = 0
+            Top = 0
+            Width = 605
+            Height = 476
+            Align = alClient
+            TabOrder = 0
+            TabStop = True
+            ExplicitWidth = 605
+            ExplicitHeight = 476
+            inherited lblFluxObservations: TLabel
+              Width = 125
+              Height = 19
+              ExplicitWidth = 125
+              ExplicitHeight = 19
+            end
+            inherited rdgObservationGroups: TRbwDataGrid4
+              Width = 599
+              Height = 441
+              OnStateChange = frameSutraGenTransObsrdgObservationGroupsStateChange
+              ExplicitWidth = 599
+              ExplicitHeight = 441
             end
           end
         end

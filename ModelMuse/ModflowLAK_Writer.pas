@@ -13,6 +13,7 @@ type
     FNameOfFile: string;
     FPackage: TLakePackageSelection;
     FLakeObservationsUsed: Boolean;
+    FStressPeriod: TModflowStressPeriod;
     procedure WriteDataSet1a;
     procedure WriteDataSet1b;
     procedure WriteDataSet2;
@@ -411,8 +412,8 @@ var
   LayerIndex: integer;
   ModflowLayer: integer;
 begin
-//  if HasLakeInStressPeriod(StressPeriod) then
-//  begin
+  if HasLakeInStressPeriod(FStressPeriod) then
+  begin
     LakeLeakance := Model.DataArrayManager.GetDataSetByName(rsLakeLeakance);
     ModflowLayer := 0;
     for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
@@ -430,21 +431,21 @@ begin
           StrNoValueAssigned, 'BDLKNC');
       end;
     end;
-//  end
-//  else
-//  begin
-//    ModflowLayer := 0;
-//    for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
-//    begin
-//      if Model.IsLayerSimulated(LayerIndex) then
-//      begin
-//        Inc(ModflowLayer);
-//        WriteConstantU2DREL(
-//          'Data Set 6, BDLKNC: Layer ' + IntToStr(ModflowLayer), 0,
-//            matStructured, 'BDLKNC');
-//      end;
-//    end;
-//  end;
+  end
+  else
+  begin
+    ModflowLayer := 0;
+    for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+    begin
+      if Model.IsLayerSimulated(LayerIndex) then
+      begin
+        Inc(ModflowLayer);
+        WriteConstantU2DREL(
+          'Data Set 6, BDLKNC: Layer ' + IntToStr(ModflowLayer), 0,
+            matStructured, 'BDLKNC');
+      end;
+    end;
+  end;
 end;
 
 function TModflowLAK_Writer.HasLakeInStressPeriod(StressPeriod: TModflowStressPeriod): Boolean;
@@ -544,6 +545,12 @@ begin
       EVAPLK := 0;
       RNF := 0;
       WTHDRW := 0;
+
+      WriteFloat(PRCPLK);
+      WriteFloat(EVAPLK);
+      WriteFloat(RNF);
+      WriteFloat(WTHDRW);
+
       if StressPeriod.StressPeriodType = sptSteadyState then
       begin
         SSMN := 0;
@@ -564,7 +571,6 @@ end;
 procedure TModflowLAK_Writer.WriteDataSets4To9;
 var
   TimeIndex: integer;
-  StressPeriod: TModflowStressPeriod;
   ITMP, ITMP1, LWRT: integer;
 begin
   ITMP1 := 1;
@@ -583,15 +589,16 @@ begin
     begin
       Exit;
     end;
-    StressPeriod := Model.ModflowFullStressPeriods[TimeIndex];
+    FStressPeriod := Model.ModflowFullStressPeriods[TimeIndex];
     // data set 4;
-    if HasLakeInStressPeriod(StressPeriod) then
+    if (TimeIndex = 0) or (HasLakeInStressPeriod(FStressPeriod)
+      <> HasLakeInStressPeriod(Model.ModflowFullStressPeriods[TimeIndex-1])) then
     begin
       ITMP := 1;
     end
     else
     begin
-      ITMP := 0;
+      ITMP := -1;
     end;
     WriteInteger(ITMP);
     WriteInteger(ITMP1);
@@ -608,7 +615,7 @@ begin
         Exit;
       end;
 
-      WriteDataSet9(StressPeriod);
+      WriteDataSet9(FStressPeriod);
     end;
   end;
 end;

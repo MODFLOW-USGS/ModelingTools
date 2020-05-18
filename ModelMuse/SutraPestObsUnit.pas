@@ -63,6 +63,7 @@ type
     FObservationFactors: TObservationFactors;
     procedure SetObservationName(const Value: string);
     procedure SetObservationFactors(const Value: TObservationFactors);
+    procedure StopTalkingToAnyOne;
   public
     constructor Create(ItemClass: TCollectionItemClass;
       Model: TBaseModel; ScreenObject: TObject);
@@ -139,6 +140,7 @@ type
   TCustomSutraFluxObservationGroups = class(TPhastCollection)
   private
     FModel: TBaseModel;
+    procedure StopTalkingToAnyOne;
   public
     constructor Create(ItemClass: TCollectionItemClass;
       Model: TBaseModel);
@@ -307,29 +309,61 @@ type
     function Add: TSutraGenTransObservationGroup;
   end;
 
+  TSutraGenPressObservations = class(TSutraSpecPressureObservations);
+
+  TSutraGenPressureObservationGroup = class(TCustomSutraFluxObservationGroup)
+  private
+    FObsGroup: TSutraGenPressObservations;
+    procedure SetObsGroup(const Value: TSutraGenPressObservations);
+  protected
+    function GetObservationGroup: TCustomSutraFluxObservations; override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure Loaded;
+  published
+    property ObsGroup: TSutraGenPressObservations read FObsGroup write SetObsGroup;
+  end;
+
+  TSutraGenPressureObservationGroups = class(TCustomSutraFluxObservationGroups)
+  private
+    function GetSutraGetPressObsGroup(Index: Integer): TSutraGenPressureObservationGroup;
+    procedure SetSutraGetPressObsGroup(Index: Integer;
+      const Value: TSutraGenPressureObservationGroup);
+  public
+    constructor Create(Model: TBaseModel);
+    procedure Loaded;
+    property Items[Index: Integer]: TSutraGenPressureObservationGroup
+      read GetSutraGetPressObsGroup
+      write SetSutraGetPressObsGroup; default;
+    function Add: TSutraGenPressureObservationGroup;
+  end;
 
   TSutraFluxObs = class(TGoPhastPersistent)
   private
     FSpecPres: TSutraSpecPressureObservationGroups;
     FFluidFlow: TSutraFluidFlowObservationGroups;
     FSpecConc: TSutraSpecConcObservationGroups;
-    FGenFlow: TSutraSpecPressureObservationGroups;
+    FGenFlow: TSutraGenPressureObservationGroups;
     FGenTrans: TSutraGenTransObservationGroups;
     procedure SetSpecPres(const Value: TSutraSpecPressureObservationGroups);
     procedure SetFluidFlow(const Value: TSutraFluidFlowObservationGroups);
     procedure SetSpecConc(const Value: TSutraSpecConcObservationGroups);
-    procedure SetGenFlow(const Value: TSutraSpecPressureObservationGroups);
+    procedure SetGenFlow(const Value: TSutraGenPressureObservationGroups);
     procedure SetGenTrans(const Value: TSutraGenTransObservationGroups);
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure Loaded;
+    procedure StopTalkingToAnyOne;
+    procedure Clear;
   published
     property SpecPres: TSutraSpecPressureObservationGroups read FSpecPres write SetSpecPres;
     property FluidFlow: TSutraFluidFlowObservationGroups read FFluidFlow write SetFluidFlow;
     property SpecConc: TSutraSpecConcObservationGroups read FSpecConc write SetSpecConc;
-    property GenFlow: TSutraSpecPressureObservationGroups read FGenFlow write SetGenFlow;
+    property GenFlow: TSutraGenPressureObservationGroups read FGenFlow write SetGenFlow;
     property GenTrans: TSutraGenTransObservationGroups read FGenTrans write SetGenTrans;
   end;
 
@@ -847,6 +881,15 @@ begin
 
 end;
 
+procedure TSutraFluxObs.Clear;
+begin
+  SpecPres.Clear;
+  FluidFlow.Clear;
+  SpecConc.Clear;
+  GenFlow.Clear;
+  GenTrans.Clear;
+end;
+
 constructor TSutraFluxObs.Create(Model: TBaseModel);
 var
   InvalidateModelEvent: TNotifyEvent;
@@ -863,7 +906,7 @@ begin
   FSpecPres:= TSutraSpecPressureObservationGroups.Create(Model);
   FFluidFlow:= TSutraFluidFlowObservationGroups.Create(Model);
   FSpecConc := TSutraSpecConcObservationGroups.Create(Model);
-  FGenFlow := TSutraSpecPressureObservationGroups.Create(Model);
+  FGenFlow := TSutraGenPressureObservationGroups.Create(Model);
   FGenTrans := TSutraGenTransObservationGroups.Create(Model);
 end;
 
@@ -898,13 +941,22 @@ begin
   FSpecPres.Assign(Value);
 end;
 
+procedure TSutraFluxObs.StopTalkingToAnyOne;
+begin
+  SpecPres.StopTalkingToAnyOne;
+  FluidFlow.StopTalkingToAnyOne;
+  SpecConc.StopTalkingToAnyOne;
+  GenFlow.StopTalkingToAnyOne;
+  GenTrans.StopTalkingToAnyOne;
+end;
+
 procedure TSutraFluxObs.SetFluidFlow(const Value: TSutraFluidFlowObservationGroups);
 begin
   FFluidFlow.Assign(Value);
 end;
 
 procedure TSutraFluxObs.SetGenFlow(
-  const Value: TSutraSpecPressureObservationGroups);
+  const Value: TSutraGenPressureObservationGroups);
 begin
   FGenFlow.Assign( Value);
 end;
@@ -924,6 +976,16 @@ end;
 procedure TCustomSutraFluxObservations.SetObservationName(const Value: string);
 begin
   FObservationName := Value;
+end;
+
+procedure TCustomSutraFluxObservations.StopTalkingToAnyOne;
+var
+  ItemIndex: Integer;
+begin
+  for ItemIndex := 0 to ObservationFactors.Count - 1 do
+  begin
+    ObservationFactors[ItemIndex].Factor := '1';
+  end;
 end;
 
 { TCustomSutraFluxObservationGroups }
@@ -959,6 +1021,17 @@ begin
       Delete(Index);
       break;
     end;
+  end;
+end;
+
+procedure TCustomSutraFluxObservationGroups.StopTalkingToAnyOne;
+var
+  ItemIndex: Integer;
+begin
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    (Items[ItemIndex] as TCustomSutraFluxObservationGroup).
+      ObservationGroup.StopTalkingToAnyOne;
   end;
 end;
 
@@ -1205,6 +1278,82 @@ begin
 end;
 
 
+
+{ TSutraGenPressureObservationGroup }
+
+procedure TSutraGenPressureObservationGroup.Assign(Source: TPersistent);
+begin
+  if Source is TSutraGenPressureObservationGroup then
+  begin
+    ObsGroup := TSutraGenPressureObservationGroup(Source).ObsGroup;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TSutraGenPressureObservationGroup.Create(Collection: TCollection);
+begin
+  inherited;
+  FObsGroup:= TSutraGenPressObservations.Create(Model);
+end;
+
+destructor TSutraGenPressureObservationGroup.Destroy;
+begin
+  FObsGroup.Free;
+  inherited;
+end;
+
+function TSutraGenPressureObservationGroup.GetObservationGroup: TCustomSutraFluxObservations;
+begin
+  result := FObsGroup;
+end;
+
+procedure TSutraGenPressureObservationGroup.Loaded;
+begin
+  ObsGroup.Loaded;
+end;
+
+procedure TSutraGenPressureObservationGroup.SetObsGroup(
+  const Value: TSutraGenPressObservations);
+begin
+  FObsGroup.Assign(Value);
+end;
+
+{ TSutraGenPressureObservationGroups }
+
+function TSutraGenPressureObservationGroups.Add: TSutraGenPressureObservationGroup;
+begin
+  result := inherited Add as TSutraGenPressureObservationGroup
+end;
+
+constructor TSutraGenPressureObservationGroups.Create(Model: TBaseModel);
+begin
+  inherited Create(TSutraGenPressureObservationGroup, Model);
+end;
+
+function TSutraGenPressureObservationGroups.GetSutraGetPressObsGroup(
+  Index: Integer): TSutraGenPressureObservationGroup;
+begin
+  Result := inherited Items[Index] as TSutraGenPressureObservationGroup;
+end;
+
+procedure TSutraGenPressureObservationGroups.Loaded;
+var
+  index: Integer;
+begin
+  for index := 0 to Count - 1 do
+  begin
+    Items[index].Loaded;
+  end;
+end;
+
+procedure TSutraGenPressureObservationGroups.SetSutraGetPressObsGroup(
+  Index: Integer; const Value: TSutraGenPressureObservationGroup);
+begin
+  inherited Items[Index] := Value;
+end;
 
 initialization
 

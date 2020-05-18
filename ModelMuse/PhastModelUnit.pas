@@ -3443,6 +3443,8 @@ that affects the model output should also have a comment. }
       stored False
     {$ENDIF}
       ;
+{Any new members added to TCustomModel should be cleared in InternalClear.}
+
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
   end;
 
@@ -9093,9 +9095,15 @@ const
   //                the Data Visualization dialog box.
   //               Bug fix: Fixed a bug that could cause an access violation
   //                in the Global Variables dialog box.
+  //    '4.2.0.16' Change: Modified export of the MODFLOW-2005 Lake package
+  //                input to allow for periods in which no lakes are active.
+
+  //               Bug fix: Fixed bug that resulted in a bug report being
+  //                generated if ModelMuse attempted to import SUTRA results
+  //                 containing "NaN".
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.15';
+  IModelVersion = '4.2.0.16';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -11723,6 +11731,7 @@ begin
   FGeoRef.Initialize;
   FSaveBfhBoundaryConditions := True;
 
+  SutraFluxObs.StopTalkingToAnyOne;
   RipPlantGroups.StopTalkingToAnyone;
   AllObserversStopTalking;
   FLayerStructure.StopTalkingToAnyone;
@@ -11745,6 +11754,7 @@ begin
 //      Application.ProcessMessages;
   end;
 
+  SutraFluxObs.Clear;
   RipPlantGroups.Clear;
   Bitmaps.Clear;
   ClearViewedItems;
@@ -29736,6 +29746,7 @@ begin
   FreeAndNil(FTimeSeries);
   FreeAndNil(FEndPoints);
   FreeAndNil(FHeadObsResults);
+  CtsSystems.Clear;
   ModflowGlobalObservationComparisons.Clear;
   SutraGlobalObservationComparisons.Clear;
 end;

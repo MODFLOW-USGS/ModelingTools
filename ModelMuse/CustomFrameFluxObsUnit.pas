@@ -32,7 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses Math, ScreenObjectUnit;
+uses Math, ScreenObjectUnit, frmCustomGoPhastUnit;
 
 { TCustomframeFluxObs }
 
@@ -41,6 +41,7 @@ begin
   inherited;
   rdgObservationGroups.BeginUpdate;
   try
+    ClearGrid(rdgObservationGroups);
     rdgObservationGroups.Cells[0,0] := 'N';
     rdgObservationGroups.Cells[1,0] := 'Observation group';
     rdgObservationGroups.Cells[2,0] := 'Factor';

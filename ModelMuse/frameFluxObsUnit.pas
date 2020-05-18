@@ -15,6 +15,7 @@ type
     procedure GetObservationFactors(ObsevationIndex: Integer;
       ObservationFactors: TObservationFactors; ListOfScreenObjects: TList);
     procedure SetObservationFactors(ObsevationIndex: Integer; ObservationFactors: TObservationFactors; ListOfScreenObjects: TList; ScreenObjectsUsed: TCheckBoxState);
+    function GetFrameCheckState: TCheckBoxState;
     { Private declarations }
   public
     // @name returns the number of @link(TScreenObject)s in ListOfScreenObjects
@@ -38,6 +39,7 @@ type
     procedure SetData(ListOfScreenObjects: TList;
       Observations: TCustomSutraFluxObservationGroups;
       ScreenObjectsUsed: TCheckBoxState); overload;
+    property FrameCheckState: TCheckBoxState read GetFrameCheckState;
     { Public declarations }
   end;
 
@@ -72,53 +74,6 @@ begin
         Observation.ObservationName;
       GetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
         ListOfScreenObjects);
-//      for ScreenObjectIndex := 0 to ListOfScreenObjects.Count - 1 do
-//      begin
-//        ScreenObject := ListOfScreenObjects[ScreenObjectIndex];
-//        ScreenObjectPosition :=
-//          Observation.ObservationFactors.IndexOfScreenObject(ScreenObject);
-//        ScreenObjectUsed := ScreenObjectPosition >= 0;
-//        if ScreenObjectIndex = 0 then
-//        begin
-//          rdgObservationGroups.Checked[Ord(ocName),ObsevationIndex+1] := ScreenObjectUsed;
-//          if ScreenObjectUsed then
-//          begin
-//            ObsFactor := Observation.ObservationFactors[ScreenObjectPosition];
-//            rdgObservationGroups.Cells[Ord(ocFormula),ObsevationIndex+1] := ObsFactor.Factor;
-//          end
-//          else
-//          begin
-//            rdgObservationGroups.Cells[Ord(ocFormula),ObsevationIndex+1] := '';
-//          end;
-//        end
-//        else
-//        begin
-//          if rdgObservationGroups.State[Ord(ocName),ObsevationIndex+1] <> cbGrayed then
-//          begin
-//            if rdgObservationGroups.Checked[Ord(ocName),ObsevationIndex+1]
-//              <> ScreenObjectUsed then
-//            begin
-//              if ScreenObjectUsed then
-//              begin
-//                ObsFactor :=
-//                  Observation.ObservationFactors[ScreenObjectPosition];
-//                rdgObservationGroups.Cells[Ord(ocFormula),ObsevationIndex+1] :=
-//                  ObsFactor.Factor;
-//              end;
-//              rdgObservationGroups.State[Ord(ocName),ObsevationIndex+1] := cbGrayed
-//            end;
-//          end
-//          else if ScreenObjectUsed then
-//          begin
-//            ObsFactor := Observation.ObservationFactors[ScreenObjectPosition];
-//            if rdgObservationGroups.Cells[Ord(ocFormula),ObsevationIndex+1]
-//              <> ObsFactor.Factor then
-//            begin
-//              rdgObservationGroups.Cells[Ord(ocFormula),ObsevationIndex+1] := '';
-//            end;
-//          end;
-//        end;
-//      end;
     end;
   finally
     rdgObservationGroups.EndUpdate;
@@ -150,11 +105,11 @@ procedure TframeFluxObs.SetData(ListOfScreenObjects: TList;
 var
   ObsevationIndex: Integer;
   Observation: TFluxObservationGroup;
-  ScreenObjectIndex: Integer;
-  ScreenObject: TScreenObject;
-  ObjectPosition: Integer;
-  ObsFactor: TObservationFactor;
-  ObsState: TCheckBoxState;
+//  ScreenObjectIndex: Integer;
+//  ScreenObject: TScreenObject;
+//  ObjectPosition: Integer;
+//  ObsFactor: TObservationFactor;
+//  ObsState: TCheckBoxState;
 begin
   if Observations.Count > 0 then
   begin
@@ -168,38 +123,6 @@ begin
 
     SetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
       ListOfScreenObjects, ScreenObjectsUsed);
-//    ObsState := rdgObservationGroups.CheckState[Ord(ocName), ObsevationIndex+1];
-//    for ScreenObjectIndex := 0 to ListOfScreenObjects.Count - 1 do
-//    begin
-//      ScreenObject := ListOfScreenObjects[ScreenObjectIndex];
-//      ObjectPosition := Observation.ObservationFactors.
-//        IndexOfScreenObject(ScreenObject);
-//      if (ScreenObjectsUsed = cbUnchecked)
-//        or (ObsState = cbUnchecked) then
-//      begin
-//        // remove
-//        if ObjectPosition >= 0 then
-//        begin
-//          Observation.ObservationFactors.Delete(ObjectPosition);
-//          ObjectPosition := -1;
-//        end;
-//      end
-//      else if (ScreenObjectsUsed = cbChecked)
-//        and (ObsState = cbChecked) then
-//      begin
-//        // add
-//        if ObjectPosition < 0 then
-//        begin
-//          ObjectPosition := Observation.AddObject(ScreenObject)
-//        end;
-//      end;
-//      if (ObjectPosition >= 0)
-//        and (rdgObservationGroups.Cells[Ord(ocFormula), ObsevationIndex+1] <> '') then
-//      begin
-//        ObsFactor := Observation.ObservationFactors[ObjectPosition];
-//        ObsFactor.Factor := rdgObservationGroups.Cells[Ord(ocFormula), ObsevationIndex+1];
-//      end;
-//    end;
   end;
 end;
 
@@ -211,7 +134,6 @@ var
   ScreenObjectIndex: Integer;
   ScreenObject: Pointer;
   FirstObsForScreenObject: Boolean;
-//  ObservationFactors: TObservationFactors;
 begin
   rdgObservationGroups.RowCount := Max(Observations.Count + 1,2);
   rdgObservationGroups.FixedCols := 1;
@@ -225,7 +147,6 @@ begin
         IntToStr(ObsevationIndex+1);
       rdgObservationGroups.Cells[Ord(ocName),ObsevationIndex+1] :=
         Observation.ObservationName;
-//      ObservationFactors := Observation.ObservationFactors;
       GetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
         ListOfScreenObjects);
     end;
@@ -250,6 +171,26 @@ begin
           FirstObsForScreenObject := False;
           Inc(result);
         end;
+      end;
+    end;
+  end;
+end;
+
+function TframeFluxObs.GetFrameCheckState: TCheckBoxState;
+var
+  RowIndex: Integer;
+  CheckState: TCheckBoxState;
+begin
+  result := cbUnchecked;
+  for RowIndex := 1 to rdgObservationGroups.RowCount - 1 do
+  begin
+    CheckState := rdgObservationGroups.CheckState[Ord(ocName), RowIndex];
+    if CheckState <> cbUnchecked then
+    begin
+      result := CheckState;
+      if result = cbGrayed then
+      begin
+        Exit;
       end;
     end;
   end;

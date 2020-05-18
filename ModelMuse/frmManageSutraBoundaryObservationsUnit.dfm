@@ -162,10 +162,6 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       TabOrder = 1
       object tabObservationsTimes: TTabSheet
         Caption = 'Observation times and values'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         inline frameSutraFluxObs: TframePestObs
           Left = 0
           Top = 0

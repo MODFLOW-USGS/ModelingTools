@@ -57,6 +57,7 @@ object CustomframeFluxObs: TCustomframeFluxObs
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end
       item
@@ -79,6 +80,7 @@ object CustomframeFluxObs: TCustomframeFluxObs
         WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end
       item
@@ -101,8 +103,10 @@ object CustomframeFluxObs: TCustomframeFluxObs
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = False
       end>
+    WordWrapRowCaptions = False
     ColWidths = (
       20
       20

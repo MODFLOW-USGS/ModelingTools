@@ -1188,40 +1188,6 @@ begin
     WriteString('0');
     NewLine;
   end;
-//  if FGeneralFlowNodes.Count > 0 then
-//  begin
-//    FlowNodes := FGeneralFlowNodes[0];
-//    if FlowNodes.Count > 0 then
-//    begin
-//      WriteCommentLine('Data set 21A');
-//      NodeArray := FlowNodes.ToArray;
-//      for NodeIndex := 0 to Length(NodeArray) - 1 do
-//      begin
-//        ANode := NodeArray[NodeIndex];
-//        if ANode.Active and (FlowNodes.TimeIndex <= 1) then
-//        begin
-//          WriteInteger(ANode.NodeNumber+1);
-//          WriteFloat(ANode.P1.Value);
-//          WriteFloat(ANode.Q1.Value);
-//          WriteFloat(ANode.P2.Value);
-//          WriteFloat(ANode.Q2.Value);
-//          WriteLimit(ANode.Limit1);
-//          WriteLimit(ANode.Limit2);
-//          WriteFloat(ANode.U1.Value);
-//          WriteExitSpec(ANode.ExitSpecification);
-//          WriteFloat(ANode.U2.Value);
-//        end
-//        else
-//        begin
-//          WriteInteger(-(ANode.NodeNumber+1));
-//        end;
-//        NewLine;
-//      end;
-//      WriteString('0');
-//      NewLine;
-//
-//    end;
-//  end;
 end;
 
 procedure TSutraInputWriter.WriteDataSet21B;

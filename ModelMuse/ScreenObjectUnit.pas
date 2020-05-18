@@ -499,6 +499,7 @@ type
     Destructor Destroy; override;
     procedure Clear;
     procedure Delete(Index: integer);
+    procedure AssignCellLocationList(CellLocationList: TCellLocationList);
   end;
 
 
@@ -5411,7 +5412,7 @@ resourcestring
   ' %s. Check that the object is not above, below, or outside the mesh.';
   StrElements = 'elements';
   StrNodes = 'nodes';
-  StrAssignedBy0sUsi = 'Assigned by %0:s using the formula %1:s.';
+  StrAssignedBy0sUsi = 'Assigned by %0:s using the formula "%1:s".';
   StrThereWasAProblemCircRef = 'There was a problem using %0:s. The error me' +
   'ssage was "%1:s". The number of elevation formulas has been changed to ze' +
   'ro in an attempt to avoid this problem.';
@@ -31811,7 +31812,7 @@ begin
       UpdateImportedValues(nil);
 
       UpdateVariables(UsedVariables, nil, CellLocation.Layer, CellLocation.Row,
-        CellLocation.Column, Compiler, eaBlocks, AModel);
+        CellLocation.Column, Compiler, EvaluatedAt, AModel);
       EvaluateDataArrayExpression(nil, Expression, Compiler, DataIdentifier);
       AValue := Expression.DoubleResult;
       Results.Add(AValue);
@@ -42174,6 +42175,19 @@ begin
     FCached := False;
     FCleared := False;
     FMemoryStream := nil;
+  end;
+end;
+
+procedure TCellAssignmentList.AssignCellLocationList(
+  CellLocationList: TCellLocationList);
+var
+  CellIndex: Integer;
+begin
+  CellLocationList.Clear;
+  CellLocationList.Capacity := Count;
+  for CellIndex := 0 to Count -1 do
+  begin
+    CellLocationList.Add(Items[CellIndex].Cell);
   end;
 end;
 

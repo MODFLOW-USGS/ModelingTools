@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, PhastModelUnit, System.SysUtils, ScreenObjectUnit,
-  System.Classes;
+  System.Classes, SutraPestObsUnit, System.Generics.Collections;
 
 type
   TExportType = (etInstructions, etExtractedValues);
@@ -14,9 +14,15 @@ type
     FFileName: string;
     FSutraLakeObjects: TScreenObjectList;
     FSutraObsObjects: TScreenObjectList;
-    FSutraAllObsObjects: TScreenObjectList;
+    FSutraAllStateObsObjects: TScreenObjectList;
+//    FSutraSpecPresObsObjects: TScreenObjectList;
+//    FSutraFluidFlowObsObjects: TScreenObjectList;
+//    FSutraSpecUObsObjects: TScreenObjectList;
+//    FSutraGenPresObsObjects: TScreenObjectList;
+//    FSutraGenPresTransObjects: TScreenObjectList;
     FDerivedObsList: TStringList;
     FExportType: TExportType;
+    FSutraFluxObs: TSutraFluxObs;
     procedure Evaluate;
     procedure WriteOptions;
     procedure WriteObservationsFileNames;
@@ -34,8 +40,9 @@ type
 implementation
 
 uses
-  SutraPestObsUnit, GoPhastTypes, SutraMeshUnit, FastGEO, ModelMuseUtilities,
-  PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit;
+  GoPhastTypes, SutraMeshUnit, FastGEO, ModelMuseUtilities,
+  PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit,
+  SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -49,14 +56,28 @@ begin
   inherited Create(AModel, etExport);
   FSutraLakeObjects := TScreenObjectList.Create;
   FSutraObsObjects := TScreenObjectList.Create;
-  FSutraAllObsObjects := TScreenObjectList.Create;
+  FSutraAllStateObsObjects := TScreenObjectList.Create;
+
+//  FSutraSpecPresObsObjects := TScreenObjectList.Create;
+//  FSutraFluidFlowObsObjects := TScreenObjectList.Create;
+//  FSutraSpecUObsObjects := TScreenObjectList.Create;
+//  FSutraGenPresObsObjects := TScreenObjectList.Create;
+//  FSutraGenPresTransObjects := TScreenObjectList.Create;
+
   FDerivedObsList := TStringList.Create;
 end;
 
 destructor TSutraPestObsWriterWriter.Destroy;
 begin
   FDerivedObsList.Free;
-  FSutraAllObsObjects.Free;
+
+//  FSutraGenPresTransObjects.Free;
+//  FSutraGenPresObsObjects.Free;
+//  FSutraSpecUObsObjects.Free;
+//  FSutraFluidFlowObsObjects.Free;
+//  FSutraSpecPresObsObjects.Free;
+
+  FSutraAllStateObsObjects.Free;
   FSutraLakeObjects.Free;
   FSutraObsObjects.Free;
   inherited;
@@ -67,6 +88,7 @@ var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
   SutraStateObs: TSutraStateObservations;
+  SutraBoundaries: TSutraBoundaries;
 begin
   for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
@@ -75,8 +97,9 @@ begin
     begin
       Continue;
     end;
-    SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
-    AScreenObject.SutraBoundaries.SutraStateObs.Used;
+    SutraBoundaries := AScreenObject.SutraBoundaries;
+    SutraStateObs := SutraBoundaries.SutraStateObs;
+//    AScreenObject.SutraBoundaries.SutraStateObs.Used;
     if SutraStateObs.Used then
     begin
       if SutraStateObs.HasNonLakeBoundary then
@@ -87,8 +110,18 @@ begin
       begin
         FSutraLakeObjects.Add(AScreenObject)
       end;
-      FSutraAllObsObjects.Add(AScreenObject);
+      FSutraAllStateObsObjects.Add(AScreenObject);
     end;
+
+    FSutraFluxObs := Model.SutraFluxObs;
+  {
+    FSutraSpecPresObsObjects: TScreenObjectList;
+    FSutraFluidFlowObsObjects: TScreenObjectList;
+    FSutraSpecUObsObjects: TScreenObjectList;
+    FSutraGenPresObsObjects: TScreenObjectList;
+    FSutraGenPresTransObjects: TScreenObjectList;
+}
+
   end;
 end;
 
@@ -126,9 +159,9 @@ begin
     NewLine;
   end;
 
-  for ObjectIndex := 0 to FSutraAllObsObjects.Count - 1 do
+  for ObjectIndex := 0 to FSutraAllStateObsObjects.Count - 1 do
   begin
-    AScreenObject := FSutraAllObsObjects[ObjectIndex];
+    AScreenObject := FSutraAllStateObsObjects[ObjectIndex];
     SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
 
     for DerivedObsIndex := 0 to SutraStateObs.Comparisons.Count - 1 do
@@ -252,6 +285,19 @@ var
   ObjectPoint: TPoint2D;
   NodeDistance: TFloat;
   TestDistance: double;
+  GroupIndex: Integer;
+  SpecPresGroup: TSutraSpecPressureObservationGroup;
+  ObservationFactors: TObservationFactors;
+  CellLists: TObjectList<TCellAssignmentList>;
+  FactorsValuesList: TObjectList<TRealList>;
+  Formula: string;
+  FactorsValues: TRealList;
+  FactorAnnotation: string;
+  DataIdentifier: string;
+  CellLocationList: TCellLocationList;
+  ListIndex: Integer;
+  CellIndex: Integer;
+  AFactor: Double;
 begin
   FDerivedObsList.Clear;
   WriteString('BEGIN IDENTIFIERS');
@@ -271,15 +317,15 @@ begin
         case StateObs.ObsTypeIndex of
           0:
             begin
-              WriteString('_P');
+              WriteString(' P');
             end;
           1:
             begin
-              WriteString('_U');
+              WriteString(' U');
             end;
           2:
             begin
-              WriteString('_S');
+              WriteString(' S');
             end;
         end;
         NewLine;
@@ -310,12 +356,12 @@ begin
     end;
   end;
 
-  if FSutraLakeObjects.Count > 0 then
-  begin
+  CellList := TCellAssignmentList.Create;
+  try
+    if FSutraLakeObjects.Count > 0 then
+    begin
     Mesh3D := Model.SutraMesh;
     Mesh2D := Mesh3D.Mesh2D;
-    CellList := TCellAssignmentList.Create;
-    try
       for ObjectIndex := 0 to FSutraLakeObjects.Count - 1 do
       begin
         AScreenObject := FSutraLakeObjects[ObjectIndex];
@@ -366,98 +412,62 @@ begin
               WriteString('    OBSNAME ');
               StateObs.ExportedName := StateObs.Name;
               WriteString(StateObs.Name);
-//                WriteString(ID);
               WriteFloat(StateObs.Time);
               WriteString(' PRINT');
               NewLine;
             end;
           end;
-//          end
-//          else
-//          begin
-//            SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
-//            Element2D := Mesh2D.Elements[ACell.Column];
-//            ClosestNode := Element2D.Nodes[0].Node;
-//            NodePoint := ClosestNode.Location;
-//            ObjectPoint := AScreenObject.Points[0];
-//            NodeDistance := Distance(NodePoint, ObjectPoint);
-//            for NodeIndex := 1 to Element2D.NodeCount - 1 do
-//            begin
-//              Node2D := Element2D.Nodes[NodeIndex].Node;
-//              NodePoint := Node2D.Location;
-//              TestDistance := Distance(NodePoint, ObjectPoint);
-//              if TestDistance < NodeDistance then
-//              begin
-//                NodeDistance := TestDistance;
-//                ClosestNode := Node2D;
-//              end;
-//            end;
-//            Node3D := Mesh3D.NodeArray[0, ClosestNode.Number];
-//            NodeNumber := Node3D.Number + 1;
-//            ID := IntToStr(NodeNumber);
-//
-////            for TimeIndex := 0 to SutraStateObs.Count - 1 do
-////            begin
-////              StateObs := SutraStateObs[TimeIndex];
-////              if StateObs.ObsType = StrLakeStage then
-////              begin
-////                StateObs.ExportedName := StateObs.Name;
-////                FDerivedObsList.Add(Format('  OBSNAME %s PRINT', [StateObs.Name]));
-////                APoint := AScreenObject.Points[0];
-////                DerivedLine := Format('    INTERPOLATE %0:g %1:g ', [APoint.x, APoint.y]);
-////                for NodeIndex := 0 to Element2D.NodeCount - 1 do
-////                begin
-////                  Node2D := Element2D.Nodes[NodeIndex].Node;
-////                  Node3D := Mesh3D.NodeArray[0, Node2D.Number];
-////                  NodeNumber := Node3D.Number + 1;
-////                  ID := IntToStr(NodeNumber);
-////
-////                  DerivedLine := Format('%0:s %1:s%2:s_%3:d',
-////                    [DerivedLine, StateObs.Name, ID, TimeIndex]);
-////                end;
-////                FDerivedObsList.Add(DerivedLine);
-////              end;
-////            end;
-////            for NodeIndex := 0 to Element2D.NodeCount - 1 do
-////            begin
-////              Node2D := Element2D.Nodes[NodeIndex].Node;
-////              Node3D := Mesh3D.NodeArray[0, Node2D.Number];
-////              NodeNumber := Node3D.Number + 1;
-////
-////              ID := IntToStr(NodeNumber);
-//              WriteString('  ID ');
-//              WriteString(ID);
-//              NewLine;
-//
-////              WriteString('    LOCATION');
-////              WriteFloat(Node2D.X);
-////              WriteFloat(Node2D.Y);
-////              NewLine;
-//
-//              for TimeIndex := 0 to SutraStateObs.Count - 1 do
-//              begin
-//                StateObs := SutraStateObs[TimeIndex];
-//                if StateObs.ObsType = StrLakeStage then
-//                begin
-//                  WriteString('    OBSNAME ');
-//                  WriteString(StateObs.Name);
-//                  StateObs.ExportedName := StateObs.Name;
-////                  WriteString(ID);
-////                  WriteString('_');
-////                  WriteString(IntToStr(TimeIndex));
-//                  WriteFloat(StateObs.Time);
-//                  WriteString(' PRINT');
-//                  NewLine;
-//                end;
-//              end;
-////            end;
-//          end;
         end;
       end;
-    finally
-      CellList.Free;
     end;
+  finally
+    CellList.Free;
   end;
+
+  CellLists := TObjectList<TCellAssignmentList>.Create;
+  FactorsValuesList := TObjectList<TRealList>.Create;
+  CellLocationList := TCellLocationList.Create;
+  try
+    for GroupIndex := 0 to FSutraFluxObs.SpecPres.Count - 1 do
+    begin
+      CellLists.Clear;
+      FactorsValuesList.Clear;
+      SpecPresGroup := FSutraFluxObs.SpecPres[GroupIndex];
+      ObservationFactors := SpecPresGroup.ObsGroup.ObservationFactors;
+      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
+      begin
+        Formula := ObservationFactors[ObjectIndex].Factor;
+        AScreenObject := ObservationFactors[ObjectIndex].
+          ScreenObject as TScreenObject;
+        Assert(AScreenObject <> nil);
+        CellList := TCellAssignmentList.Create;
+        CellLists.Add(CellList);
+        FactorsValues := TRealList.Create;
+        FactorsValuesList.Add(FactorsValues);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        CellList.AssignCellLocationList(CellLocationList);
+        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
+          FactorsValues, FactorAnnotation, DataIdentifier);
+      end;
+      Assert(CellLists.Count = FactorsValuesList.Count);
+      for ListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellList := CellLists[ListIndex];
+        FactorsValues := FactorsValuesList[ListIndex];
+        Assert(CellList.Count = FactorsValues.Count);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          AFactor := FactorsValues[CellIndex];
+        end;
+      end;
+    end;
+  finally
+    CellLocationList.Free;
+    CellLists.Free;
+    FactorsValuesList.Free;
+  end;
+
   WriteString('END IDENTIFIERS');
   NewLine;
   NewLine;
@@ -490,6 +500,51 @@ begin
     WriteString('  FILENAME ');
     WriteString(FileName);
     WriteString(' LKST');
+    NewLine;
+  end;
+
+  if FSutraFluxObs.SpecPres.Count > 0 then
+  begin
+    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcop'));
+    WriteString('  FILENAME ');
+    WriteString(FileName);
+    WriteString(' BCOP');
+    NewLine;
+  end;
+
+  if FSutraFluxObs.FluidFlow.Count > 0 then
+  begin
+    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcof'));
+    WriteString('  FILENAME ');
+    WriteString(FileName);
+    WriteString(' BCOF');
+    NewLine;
+  end;
+
+  if FSutraFluxObs.SpecConc.Count > 0 then
+  begin
+    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcou'));
+    WriteString('  FILENAME ');
+    WriteString(FileName);
+    WriteString(' BCOU');
+    NewLine;
+  end;
+
+  if FSutraFluxObs.GenFlow.Count > 0 then
+  begin
+    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcopg'));
+    WriteString('  FILENAME ');
+    WriteString(FileName);
+    WriteString(' BCOPG');
+    NewLine;
+  end;
+
+  if FSutraFluxObs.GenTrans.Count > 0 then
+  begin
+    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcoug'));
+    WriteString('  FILENAME ');
+    WriteString(FileName);
+    WriteString(' BCOUG');
     NewLine;
   end;
 
