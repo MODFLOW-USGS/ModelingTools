@@ -1154,8 +1154,8 @@ begin
         for NodeIndex := 0 to Length(NodeArray) - 1 do
         begin
           ANode := NodeArray[NodeIndex];
-          if ANode.Active and (FlowNodes.TimeIndex <= 1) then
-          begin
+//          if ANode.Active and (FlowNodes.TimeIndex <= 1) then
+//          begin
             if ANode.FUseBCTime then
             begin
               WriteInteger(-ANode.NodeNumber-1);
@@ -1173,11 +1173,11 @@ begin
             WriteFloat(ANode.U1.Value);
             WriteExitSpec(ANode.ExitSpecification);
             WriteFloat(ANode.U2.Value);
-          end
-          else
-          begin
-            WriteInteger(-(ANode.NodeNumber+1));
-          end;
+//          end
+//          else
+//          begin
+//            WriteInteger(-(ANode.NodeNumber+1));
+//          end;
           NewLine;
         end;
       end
@@ -1222,8 +1222,8 @@ begin
         for NodeIndex := 0 to Length(NodeArray) - 1 do
         begin
           ANode := NodeArray[NodeIndex];
-          if ANode.Active and (TransportNodes.TimeIndex <= 1) then
-          begin
+//          if ANode.Active and (TransportNodes.TimeIndex <= 1) then
+//          begin
             if ANode.FUseBCTime then
             begin
               WriteInteger(-ANode.NodeNumber-1);
@@ -1236,11 +1236,11 @@ begin
             WriteFloat(ANode.FSoluteEnergyInflow.Value);
             WriteFloat(ANode.FUValue2.Value);
             WriteFloat(ANode.FSoluteEnergyOutflow.Value);
-          end
-          else
-          begin
-            WriteInteger(-(ANode.NodeNumber+1));
-          end;
+//          end
+//          else
+//          begin
+//            WriteInteger(-(ANode.NodeNumber+1));
+//          end;
           NewLine;
         end;
       end;

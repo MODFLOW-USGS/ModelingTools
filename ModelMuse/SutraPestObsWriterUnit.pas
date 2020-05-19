@@ -28,7 +28,10 @@ type
     procedure WriteObservationsFileNames;
     procedure WriteIdentifiers;
     procedure WriteDerivedObservations;
-
+    procedure WriteObcIdentifiers;
+    procedure WriteLakeIdentifiers;
+    procedure WriteSpecPresIdentifiers;
+    procedure WriteSpecFlowIdentifiers;
   protected
     class function Extension: string; override;
   public
@@ -150,6 +153,10 @@ var
   PriorItem1: TCustomObservationItem;
   PriorItem2: TCustomObservationItem;
   ErrorMessage: string;
+  GroupIndex: Integer;
+  SpecPresGroup: TSutraSpecPressureObservations;
+  SpecPresItem: TSutraSpecPressObsItem;
+//  SpecPresGroup: TSutraSpecPressureObservationGroup;
 begin
   WriteString('BEGIN DERIVED_OBSERVATIONS');
   NewLine;
@@ -177,6 +184,26 @@ begin
       WriteString(' - ');
       Item := SutraStateObs[CompItem.Index2];
       WriteString(Item.ExportedName);
+      NewLine;
+    end;
+  end;
+
+  for GroupIndex := 0 to FSutraFluxObs.SpecPres.Count - 1 do
+  begin
+    SpecPresGroup := FSutraFluxObs.SpecPres[GroupIndex].ObsGroup;
+    for DerivedObsIndex := 0 to SpecPresGroup.Comparisons.Count - 1 do
+    begin
+      CompItem := SpecPresGroup.Comparisons[DerivedObsIndex];
+      WriteString('  OBSNAME ');
+      WriteString(CompItem.Name);
+      WriteString(' PRINT');
+      NewLine;
+      WriteString('    FORMULA ');
+      SpecPresItem := SpecPresGroup[CompItem.Index1];
+      WriteString(SpecPresItem.Name);
+      WriteString(' - ');
+      SpecPresItem := SpecPresGroup[CompItem.Index2];
+      WriteString(SpecPresItem.Name);
       NewLine;
     end;
   end;
@@ -261,47 +288,15 @@ begin
   end;
 end;
 
-procedure TSutraPestObsWriterWriter.WriteIdentifiers;
+procedure TSutraPestObsWriterWriter.WriteObcIdentifiers;
 var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
-  ID: string;
   SutraStateObs: TSutraStateObservations;
   TimeIndex: Integer;
   StateObs: TSutraStateObsItem;
-  ACell: TCellAssignment;
-  Mesh3D: TSutraMesh3D;
-  Node3D: TSutraNode3D;
-  NodeNumber: Integer;
-  Mesh2D: TSutraMesh2D;
-  Element2D: TSutraElement2D;
-  NodeIndex: Integer;
-  Node2D: TSutraNode2D;
-  CellList: TCellAssignmentList;
-//  APoint: TPoint2D;
-//  DerivedLine: string;
-  ClosestNode: TSutraNode2D;
-  NodePoint: TPoint2D;
-  ObjectPoint: TPoint2D;
-  NodeDistance: TFloat;
-  TestDistance: double;
-  GroupIndex: Integer;
-  SpecPresGroup: TSutraSpecPressureObservationGroup;
-  ObservationFactors: TObservationFactors;
-  CellLists: TObjectList<TCellAssignmentList>;
-  FactorsValuesList: TObjectList<TRealList>;
-  Formula: string;
-  FactorsValues: TRealList;
-  FactorAnnotation: string;
-  DataIdentifier: string;
-  CellLocationList: TCellLocationList;
-  ListIndex: Integer;
-  CellIndex: Integer;
-  AFactor: Double;
+  ID: string;
 begin
-  FDerivedObsList.Clear;
-  WriteString('BEGIN IDENTIFIERS');
-  NewLine;
   for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
   begin
     AScreenObject := FSutraObsObjects[ObjectIndex];
@@ -355,13 +350,54 @@ begin
       end;
     end;
   end;
+end;
 
+procedure TSutraPestObsWriterWriter.WriteIdentifiers;
+begin
+  FDerivedObsList.Clear;
+  WriteString('BEGIN IDENTIFIERS');
+  NewLine;
+
+  WriteObcIdentifiers;
+  WriteLakeIdentifiers;
+  WriteSpecPresIdentifiers;
+  WriteSpecFlowIdentifiers;
+
+  WriteString('END IDENTIFIERS');
+  NewLine;
+  NewLine;
+end;
+
+procedure TSutraPestObsWriterWriter.WriteLakeIdentifiers;
+var
+
+  CellList: TCellAssignmentList;
+  Mesh3D: TSutraMesh3D;
+  Mesh2D: TSutraMesh2D;
+  ObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  ACell: TCellAssignment;
+  Node3D: TSutraNode3D;
+  Element2D: TSutraElement2D;
+  ClosestNode: TSutraNode2D;
+  NodePoint: TPoint2D;
+  ObjectPoint: TPoint2D;
+  NodeDistance: double;
+  NodeIndex: Integer;
+  Node2D: TSutraNode2D;
+  TestDistance: double;
+  NodeNumber: Integer;
+  ID: string;
+  SutraStateObs: TSutraStateObservations;
+  TimeIndex: Integer;
+  StateObs: TSutraStateObsItem;
+begin
   CellList := TCellAssignmentList.Create;
   try
     if FSutraLakeObjects.Count > 0 then
     begin
-    Mesh3D := Model.SutraMesh;
-    Mesh2D := Mesh3D.Mesh2D;
+      Mesh3D := Model.SutraMesh;
+      Mesh2D := Mesh3D.Mesh2D;
       for ObjectIndex := 0 to FSutraLakeObjects.Count - 1 do
       begin
         AScreenObject := FSutraLakeObjects[ObjectIndex];
@@ -401,6 +437,7 @@ begin
           ID := IntToStr(NodeNumber);
           WriteString('  ID ');
           WriteString(ID);
+          WriteString(' LKST');
           NewLine;
 
           SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
@@ -422,55 +459,7 @@ begin
     end;
   finally
     CellList.Free;
-  end;
-
-  CellLists := TObjectList<TCellAssignmentList>.Create;
-  FactorsValuesList := TObjectList<TRealList>.Create;
-  CellLocationList := TCellLocationList.Create;
-  try
-    for GroupIndex := 0 to FSutraFluxObs.SpecPres.Count - 1 do
-    begin
-      CellLists.Clear;
-      FactorsValuesList.Clear;
-      SpecPresGroup := FSutraFluxObs.SpecPres[GroupIndex];
-      ObservationFactors := SpecPresGroup.ObsGroup.ObservationFactors;
-      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
-      begin
-        Formula := ObservationFactors[ObjectIndex].Factor;
-        AScreenObject := ObservationFactors[ObjectIndex].
-          ScreenObject as TScreenObject;
-        Assert(AScreenObject <> nil);
-        CellList := TCellAssignmentList.Create;
-        CellLists.Add(CellList);
-        FactorsValues := TRealList.Create;
-        FactorsValuesList.Add(FactorsValues);
-        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-        CellList.AssignCellLocationList(CellLocationList);
-        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
-          FactorsValues, FactorAnnotation, DataIdentifier);
-      end;
-      Assert(CellLists.Count = FactorsValuesList.Count);
-      for ListIndex := 0 to CellLists.Count - 1 do
-      begin
-        CellList := CellLists[ListIndex];
-        FactorsValues := FactorsValuesList[ListIndex];
-        Assert(CellList.Count = FactorsValues.Count);
-        for CellIndex := 0 to CellList.Count - 1 do
-        begin
-          ACell := CellList[CellIndex];
-          AFactor := FactorsValues[CellIndex];
-        end;
-      end;
-    end;
-  finally
-    CellLocationList.Free;
-    CellLists.Free;
-    FactorsValuesList.Free;
-  end;
-
-  WriteString('END IDENTIFIERS');
-  NewLine;
-  NewLine;
+  end
 end;
 
 procedure TSutraPestObsWriterWriter.WriteObservationsFileNames;
@@ -521,6 +510,7 @@ begin
     NewLine;
   end;
 
+{
   if FSutraFluxObs.SpecConc.Count > 0 then
   begin
     FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcou'));
@@ -547,6 +537,7 @@ begin
     WriteString(' BCOUG');
     NewLine;
   end;
+  }
 
   WriteString('END OBSERVATION_FILES');
   NewLine;
@@ -592,6 +583,216 @@ begin
   WriteString('END OPTIONS');
   NewLine;
   NewLine;
+end;
+
+procedure TSutraPestObsWriterWriter.WriteSpecFlowIdentifiers;
+begin
+
+end;
+
+procedure TSutraPestObsWriterWriter.WriteSpecPresIdentifiers;
+var
+  CellLists: TObjectList<TCellAssignmentList>;
+  FactorsValuesList: TObjectList<TRealList>;
+  CellLocationList: TCellLocationList;
+  FlowBuilder: TStringBuilder;
+  ResultantBuilder: TStringBuilder;
+  Mesh3D: TSutraMesh3D;
+  GroupIndex: Integer;
+  SpecPresGroup: TSutraSpecPressureObservationGroup;
+  ObservationFactors: TObservationFactors;
+  ObjectIndex: Integer;
+  Formula: string;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  FactorsValues: TRealList;
+  FactorAnnotation: string;
+  DataIdentifier: string;
+  ListIndex: Integer;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  Node3D: TSutraNode3D;
+  NodeNumber: Integer;
+  ID: string;
+  ObsIndex: Integer;
+  SPObs: TSutraSpecPressObsItem;
+  AFactor: Double;
+  FlowFormula: string;
+  ResultantFormula: string;
+  DerivedFormula: string;
+begin
+  CellLists := TObjectList<TCellAssignmentList>.Create;
+  FactorsValuesList := TObjectList<TRealList>.Create;
+  CellLocationList := TCellLocationList.Create;
+  FlowBuilder := TStringBuilder.Create;
+  ResultantBuilder := TStringBuilder.Create;
+  try
+    Mesh3D := Model.SutraMesh;
+    for GroupIndex := 0 to FSutraFluxObs.SpecPres.Count - 1 do
+    begin
+      CellLists.Clear;
+      FactorsValuesList.Clear;
+      SpecPresGroup := FSutraFluxObs.SpecPres[GroupIndex];
+      ObservationFactors := SpecPresGroup.ObsGroup.ObservationFactors;
+      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
+      begin
+        Formula := ObservationFactors[ObjectIndex].Factor;
+        AScreenObject := ObservationFactors[ObjectIndex].
+          ScreenObject as TScreenObject;
+        Assert(AScreenObject <> nil);
+        CellList := TCellAssignmentList.Create;
+        CellLists.Add(CellList);
+        FactorsValues := TRealList.Create;
+        FactorsValuesList.Add(FactorsValues);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        CellList.AssignCellLocationList(CellLocationList);
+        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
+          FactorsValues, FactorAnnotation, DataIdentifier);
+      end;
+      Assert(CellLists.Count = FactorsValuesList.Count);
+      for ListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellList := CellLists[ListIndex];
+//        FactorsValues := FactorsValuesList[ListIndex];
+//        Assert(CellList.Count = FactorsValues.Count);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+//          AFactor := FactorsValues[CellIndex];
+          Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+          NodeNumber := Node3D.Number + 1;
+          ID := IntToStr(NodeNumber);
+
+          if SpecPresGroup.ObsGroup.HasObsIndex(0)
+            or SpecPresGroup.ObsGroup.HasObsIndex(1) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' PF');
+            NewLine;
+            for ObsIndex := 0 to SpecPresGroup.ObsGroup.Count - 1 do
+            begin
+              SPObs := SpecPresGroup.ObsGroup[ObsIndex];
+              if SPObs.ObsTypeIndex in [0,1] then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('PF');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(SPObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+          if SpecPresGroup.ObsGroup.HasObsIndex(1)
+            or SpecPresGroup.ObsGroup.HasObsIndex(2) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' PR');
+            NewLine;
+            for ObsIndex := 0 to SpecPresGroup.ObsGroup.Count - 1 do
+            begin
+              SPObs := SpecPresGroup.ObsGroup[ObsIndex];
+              if SPObs.ObsTypeIndex in [1,2] then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('PR');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(SPObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+        end;
+      end;
+
+      for ObsIndex := 0 to SpecPresGroup.ObsGroup.Count - 1 do
+      begin
+        SPObs := SpecPresGroup.ObsGroup[ObsIndex];
+
+        FlowBuilder.Clear;
+        ResultantBuilder.Clear;
+        for ListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellList := CellLists[ListIndex];
+          FactorsValues := FactorsValuesList[ListIndex];
+          Assert(CellList.Count = FactorsValues.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            AFactor := FactorsValues[CellIndex];
+
+            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+            NodeNumber := Node3D.Number + 1;
+            ID := IntToStr(NodeNumber);
+
+            if (ListIndex > 0) or (CellIndex > 0) then
+            begin
+              FlowBuilder.Append(' + ');
+              ResultantBuilder.Append(' + ');
+            end;
+            if AFactor <> 1 then
+            begin
+              FlowBuilder.Append(AFactor);
+              ResultantBuilder.Append(AFactor);
+
+              FlowBuilder.Append('*');
+              ResultantBuilder.Append('*');
+            end;
+
+            FlowBuilder.Append('PF');
+            ResultantBuilder.Append('PR');
+
+            FlowBuilder.Append(ID);
+            ResultantBuilder.Append(ID);
+
+            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+            FlowBuilder.Append(ObsIndex);
+            ResultantBuilder.Append(ObsIndex);
+          end;
+        end;
+        FlowFormula := FlowBuilder.ToString;
+        ResultantFormula := ResultantBuilder.ToString;
+
+        case SPObs.ObsTypeIndex of
+          0:
+            begin
+              DerivedFormula := FlowFormula;
+            end;
+          1:
+            begin
+              DerivedFormula := '(' + ResultantFormula + ')/(' + FlowFormula + ')';
+            end;
+          2:
+            begin
+              DerivedFormula := ResultantFormula;
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+
+        FDerivedObsList.Add('  OBSNAME ' + SPObs.Name + ' PRINT');
+        FDerivedObsList.Add('    FORMULA ' + DerivedFormula);
+      end;
+
+    end;
+  finally
+    ResultantBuilder.Free;
+    FlowBuilder.Free;
+    CellLocationList.Free;
+    CellLists.Free;
+    FactorsValuesList.Free;
+  end;
 end;
 
 end.

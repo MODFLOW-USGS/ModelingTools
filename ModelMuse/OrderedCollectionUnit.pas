@@ -143,7 +143,7 @@ type
       write FAlwaysAssignForeignId;
     procedure SetBooleanProperty(var AField: boolean; const NewValue: boolean);
     procedure SetIntegerProperty(var AField: Integer; const NewValue: Integer);
-    procedure SetRealProperty(var AField: double; const NewValue: double);
+    procedure SetRealProperty(var AField: double; NewValue: double);
     procedure SetCaseSensitiveStringProperty(var AField: string;
       const NewValue: string);
     procedure SetCaseInsensitiveStringProperty(var AField: string;
@@ -1285,8 +1285,16 @@ begin
   end;
 end;
 
-procedure TOrderedItem.SetRealProperty(var AField: double; const NewValue: double);
+procedure TOrderedItem.SetRealProperty(var AField: double; NewValue: double);
 begin
+  if NewValue < -1.79769313486231E308 then
+  begin
+    NewValue := -1.79769313486231E308;
+  end
+  else if NewValue > 1.79769313486231E308 then
+  begin
+    NewValue := 1.79769313486231E308;
+  end;
   if AField <> NewValue then
   begin
     AField := NewValue;

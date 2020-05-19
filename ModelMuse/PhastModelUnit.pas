@@ -9097,13 +9097,16 @@ const
   //                in the Global Variables dialog box.
   //    '4.2.0.16' Change: Modified export of the MODFLOW-2005 Lake package
   //                input to allow for periods in which no lakes are active.
-
-  //               Bug fix: Fixed bug that resulted in a bug report being
+  //    '4.2.0.17' Bug fix: Fixed bug that resulted in a bug report being
   //                generated if ModelMuse attempted to import SUTRA results
-  //                 containing "NaN".
+  //                containing "NaN".
+  //               Bug fix: Fixed export of SUTRA data sets 21A and 21B when
+  //                they are inactive initially.
+  //               Bug fix: Fixed a bug that caused issues with opening files
+  //                that contained very large or very small real number values.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.16';
+  IModelVersion = '4.2.0.17';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

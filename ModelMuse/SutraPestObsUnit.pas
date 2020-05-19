@@ -82,6 +82,7 @@ type
     // @name calls @link(TObservationFactors.EliminatedDeletedScreenObjects
     // ObservationFactors.EliminatedDeletedScreenObjects).
     procedure EliminatedDeletedScreenObjects;
+    function HasObsIndex(ObservationIndex: Integer): Boolean;
   published
     property ObservationName: string read FObservationName
       write SetObservationName;
@@ -670,6 +671,24 @@ end;
 procedure TCustomSutraFluxObservations.EliminatedDeletedScreenObjects;
 begin
   ObservationFactors.EliminatedDeletedScreenObjects;
+end;
+
+function TCustomSutraFluxObservations.HasObsIndex(
+  ObservationIndex: Integer): Boolean;
+var
+  Index: Integer;
+  Item: TCustomFluxObsItem;
+begin
+  result := False;
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index] as  TCustomFluxObsItem;
+    if Item.ObsTypeIndex = ObservationIndex then
+    begin
+      result := True;
+      Exit;
+    end;
+  end;
 end;
 
 procedure TCustomSutraFluxObservations.Loaded;
