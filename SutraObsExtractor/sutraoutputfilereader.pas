@@ -255,7 +255,7 @@ function TSutraSpecifiedConcentrationOutputFile.GetObsID(NodeNumber: string;
   ObsTypeIndex: integer): string;
 begin
   Assert(ObsTypeIndex = 0);
-  result := NodeNumber + '_UU';
+  result := NodeNumber + '_UR';
 end;
 
 function TSutraSpecifiedConcentrationOutputFile.GetObsValue(
@@ -269,7 +269,7 @@ end;
 
 function TSutraFluidSourceSinkOutputFile.NumberOfValuesPerLine: Integer;
 begin
-  result := 2;
+  result := 3;
 end;
 
 function TSutraFluidSourceSinkOutputFile.GetObsID(NodeNumber: string;
@@ -278,9 +278,13 @@ begin
   case ObsTypeIndex of
     0:
       begin
-        result := NodeNumber + '_FU'
+        result := NodeNumber + '_FF'
       end;
     1:
+      begin
+        result := NodeNumber + '_FU'
+      end;
+    2:
       begin
         result := NodeNumber + '_FR'
       end;
@@ -292,38 +296,8 @@ end;
 function TSutraFluidSourceSinkOutputFile.GetObsValue(ObsTypeIndex: integer
   ): double;
 begin
-  Assert(ObsTypeIndex in [0..1]);
-  result := StrToFloat(FSplitter[ObsTypeIndex+1]);
-  //if FSplitter[1] <> 'BCS' then
-  //begin
-  //  case ObsTypeIndex of
-  //    0:
-  //      begin
-  //        result := StrToFloat(FSplitter[4]);
-  //      end;
-  //    1:
-  //      begin
-  //        result := StrToFloat(FSplitter[5]);
-  //      end;
-  //  else
-  //    Assert(False);
-  //  end;
-  //end
-  //else
-  //begin
-  //  case ObsTypeIndex of
-  //    0:
-  //      begin
-  //        result := StrToFloat(FSplitter[5]);
-  //      end;
-  //    1:
-  //      begin
-  //        result := StrToFloat(FSplitter[6]);
-  //      end;
-  //  else
-  //    Assert(False);
-  //  end;
-  //end;
+  Assert(ObsTypeIndex in [0..2]);
+  result := StrToFloat(FSplitter[ObsTypeIndex]);
 end;
 
 { TCustomNodeOutputFile }

@@ -268,7 +268,7 @@ begin
   FOptions := Model.SutraOptions;
   if (FOptions.StartType = stWarm) and (FOptions.FullRestartFileName <> '') then
   begin
-    SutraFileWriter.AddFile(sftIcs, FOptions.FullRestartFileName);
+    SutraFileWriter.AddFile(sftIcs, lbiNoChange, FOptions.FullRestartFileName);
   end
   else
   begin
@@ -310,7 +310,7 @@ begin
         WriteDataSet1;
         WriteDataSet2;
         WriteDataSet3;
-        SutraFileWriter.AddFile(sftIcs, FileName);
+        SutraFileWriter.AddFile(sftIcs, lbiNoChange, FileName);
       finally
         CloseFile;
       end;

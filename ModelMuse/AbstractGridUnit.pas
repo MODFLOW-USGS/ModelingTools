@@ -1402,7 +1402,8 @@ end;
 procedure TCustomModelGrid.Draw(const BitMap: TPersistent;
   const ViewDirection: TViewDirection);
 begin
-  if (not CanDraw) or ((Model as TCustomModel).LayerCount = 0) then
+  if (not CanDraw) or ((Model as TCustomModel).LayerCount = 0)
+    or (BitMap = nil) then
   begin
     Exit;
   end;

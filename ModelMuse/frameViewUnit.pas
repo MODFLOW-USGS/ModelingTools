@@ -1438,8 +1438,9 @@ begin
       Exit;
     end;
     try
-      FBitMap32.Free;
-      FBitMap32 := nil;
+      FreeAndNil(FBitMap32);
+//      FBitMap32.Free;
+//      FBitMap32 := nil;
       FBitMap32 := TBitmap32.Create;
 
       FBitMap32.Height := ZoomBox.Image32.Height;

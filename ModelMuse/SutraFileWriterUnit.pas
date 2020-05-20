@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, PhastModelUnit, SysUtils,
-  Generics.Collections;
+  Generics.Collections, SutraOptionsUnit;
 
 type
   TSutraFileType = (sftInp, sftIcs, sftLst, sftRst, sftNod, sftEle,
@@ -27,7 +27,8 @@ type
   TSutraFileWriter = class(TCustomFileWriter)
   private
     FNextUnitNumber: Integer;
-    FFiles: array[TSutraFileType] of TSutraFileRecord;
+    FFiles: array[TSutraFileType, TLakeBoundaryInteraction,
+      TGeneralizedFlowInteractionType, TGeneralizedTransportInteractionType] of TSutraFileRecord;
     FBoundaries: TSutraFileList;
     FFileRoot: string;
     FArchive: Boolean;
@@ -37,7 +38,9 @@ type
   public
     Constructor Create(AModel: TCustomModel; FileRoot: string); reintroduce;
     destructor Destroy; override;
-    procedure AddFile(FileType: TSutraFileType; const FileName: string);
+    procedure AddFile(FileType: TSutraFileType;
+      LakeInteraction: TLakeBoundaryInteraction;
+      const FileName: string);
     procedure AddBoundaryFile(const FileName: string);
     procedure WriteFile;
   end;
@@ -64,12 +67,18 @@ begin
 end;
 
 procedure TSutraFileWriter.AddFile(FileType: TSutraFileType;
+  LakeInteraction: TLakeBoundaryInteraction;
   const FileName: string);
+var
+  FlowInteraction: TGeneralizedFlowInteractionType;
+  TransInteraction: TGeneralizedTransportInteractionType;
 begin
-  Assert(FFiles[FileType].UnitNumber = -1);
-  FFiles[FileType].UnitNumber := FNextUnitNumber;
+  FlowInteraction := gfitUseDefaults;
+  TransInteraction := gtitUseDefaults;
+  Assert(FFiles[FileType, LakeInteraction, FlowInteraction, TransInteraction].UnitNumber = -1);
+  FFiles[FileType, LakeInteraction, FlowInteraction, TransInteraction].UnitNumber := FNextUnitNumber;
   Inc(FNextUnitNumber);
-  FFiles[FileType].FileName := FileName;
+  FFiles[FileType, LakeInteraction, FlowInteraction, TransInteraction].FileName := FileName;
   case FileType of
     sftInp, sftIcs, sftLkin, sftLkbc, sftLkar:
       begin
@@ -89,6 +98,9 @@ end;
 constructor TSutraFileWriter.Create(AModel: TCustomModel; FileRoot: string);
 var
   FileType: TSutraFileType;
+  LBI: TLakeBoundaryInteraction;
+  GFI: TGeneralizedFlowInteractionType;
+  GTI: TGeneralizedTransportInteractionType;
 //    SutraFileName: string;
 begin
   inherited Create(AModel, etExport);
@@ -96,7 +108,16 @@ begin
   FNextUnitNumber := 20;
   for FileType := Low(TSutraFileType) to High(TSutraFileType) do
   begin
-    FFiles[FileType].UnitNumber := -1;
+    for LBI := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+    begin
+      for GFI := Low(TGeneralizedFlowInteractionType) to High(TGeneralizedFlowInteractionType) do
+      begin
+        for GTI := Low(TGeneralizedTransportInteractionType) to High(TGeneralizedTransportInteractionType) do
+        begin
+          FFiles[FileType, LBI, GFI, GTI].UnitNumber := -1;
+        end;
+      end;
+    end;
   end;
   FFileRoot := FileRoot;
 
@@ -121,11 +142,11 @@ begin
   SutraFileName := IncludeTrailingPathDelimiter(SutraFileName);
   SutraFileName := SutraFileName + 'SUTRA.FIL';
 
-  AddFile(sftLst, ChangeFileExt(FFileRoot, '.lst'));
-  AddFile(sftRst, ChangeFileExt(FFileRoot, '.rst'));
-  AddFile(sftNod, ChangeFileExt(FFileRoot, '.nod'));
-  AddFile(sftEle, ChangeFileExt(FFileRoot, '.ele'));
-  AddFile(sftSmy, ChangeFileExt(FFileRoot, '.smy'));
+  AddFile(sftLst, lbiNoChange, ChangeFileExt(FFileRoot, '.lst'));
+  AddFile(sftRst, lbiNoChange, ChangeFileExt(FFileRoot, '.rst'));
+  AddFile(sftNod, lbiNoChange, ChangeFileExt(FFileRoot, '.nod'));
+  AddFile(sftEle, lbiNoChange, ChangeFileExt(FFileRoot, '.ele'));
+  AddFile(sftSmy, lbiNoChange, ChangeFileExt(FFileRoot, '.smy'));
 
   FArchive := False;
   InternalWriteFile(SutraFileName);
@@ -142,6 +163,9 @@ var
   Item: TSutraFileObject;
   AFileName: string;
   ModelName: string;
+  LBI: TLakeBoundaryInteraction;
+  GFI: TGeneralizedFlowInteractionType;
+  GTI: TGeneralizedTransportInteractionType;
 begin
   ModelName := ExtractFileName(FFileRoot);
   ModelName := ChangeFileExt(ModelName, '');
@@ -149,77 +173,89 @@ begin
   try
     for FileType := Low(TSutraFileType) to High(TSutraFileType) do
     begin
-      if FFiles[FileType].UnitNumber > 0 then
+      for LBI := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
       begin
-        case FileType of
-          sftInp:
-            WriteString('''INP''');
-          sftIcs:
-            WriteString('''ICS''');
-          sftLst:
-            WriteString('''LST''');
-          sftRst:
-            WriteString('''RST''');
-          sftNod:
-            WriteString('''NOD''');
-          sftEle:
-            WriteString('''ELE''');
-          sftObs:
-            WriteString('''OBS''');
-          sftObc:
-            WriteString('''OBC''');
-          sftBcof:
-            WriteString('''BCOF''');
-          sftBcos:
-            WriteString('''BCOS''');
-          sftBcop:
-            WriteString('''BCOP''');
-          sftBcou:
-            WriteString('''BCOU''');
-          sftBcopg:
-            WriteString('''BCOPG''');
-          sftBcoug:
-            WriteString('''BCOUG''');
-          sftSmy:
-            WriteString('''SMY''');
-          sftLkin:
-            WriteString('''LKIN''');
-          sftLkbc:
-            WriteString('''LKBC''');
-          sftLkbu:
-            WriteString('''LKBU''');
-          sftLkar:
-            WriteString('''LKAR''');
-          sftLkst:
-            WriteString('''LKST''');
-          sftLKrs:
-            WriteString('''LKRS''');
-          sftLkn:
-            WriteString('''LKN''');
-          sftLkh:
-            WriteString('''LKH''');
-        else
-          Assert(False);
-        end;
-        WriteInteger(FFiles[FileType].UnitNumber);
-        if FArchive then
+        for GFI := Low(TGeneralizedFlowInteractionType) to High(TGeneralizedFlowInteractionType) do
         begin
-          if FileType in [sftLst, sftRst, sftNod, sftEle, sftSmy, sftLkst, sftLKrs, sftObs, sftObc] then
+          for GTI := Low(TGeneralizedTransportInteractionType) to High(TGeneralizedTransportInteractionType) do
           begin
-            AFileName := ExtractFileName(FFiles[FileType].FileName);
-            AFileName := '..\..\output\' + ModelName + '\'+ AFileName
-          end
-          else
-          begin
-            AFileName := ExtractRelativePath(FFileRoot, FFiles[FileType].FileName);
+            if FFiles[FileType, LBI, GFI, GTI].UnitNumber > 0 then
+            begin
+              case FileType of
+                sftInp:
+                  WriteString('''INP''');
+                sftIcs:
+                  WriteString('''ICS''');
+                sftLst:
+                  WriteString('''LST''');
+                sftRst:
+                  WriteString('''RST''');
+                sftNod:
+                  WriteString('''NOD''');
+                sftEle:
+                  WriteString('''ELE''');
+                sftObs:
+                  WriteString('''OBS''');
+                sftObc:
+                  WriteString('''OBC''');
+                sftBcof:
+                  WriteString('''BCOF''');
+                sftBcos:
+                  WriteString('''BCOS''');
+                sftBcop:
+                  WriteString('''BCOP''');
+                sftBcou:
+                  WriteString('''BCOU''');
+                sftBcopg:
+                  WriteString('''BCOPG''');
+                sftBcoug:
+                  WriteString('''BCOUG''');
+                sftSmy:
+                  WriteString('''SMY''');
+                sftLkin:
+                  WriteString('''LKIN''');
+                sftLkbc:
+                  WriteString('''LKBC''');
+                sftLkbu:
+                  WriteString('''LKBU''');
+                sftLkar:
+                  WriteString('''LKAR''');
+                sftLkst:
+                  WriteString('''LKST''');
+                sftLKrs:
+                  WriteString('''LKRS''');
+                sftLkn:
+                  WriteString('''LKN''');
+                sftLkh:
+                  WriteString('''LKH''');
+              else
+                Assert(False);
+              end;
+              WriteInteger(FFiles[FileType, LBI, GFI, GTI].UnitNumber);
+              if FArchive then
+              begin
+                if FileType in [sftLst, sftRst, sftNod, sftEle, sftSmy, sftLkst,
+                  sftLKrs, sftObs, sftObc] then
+                begin
+                  AFileName := ExtractFileName(FFiles[FileType, LBI, GFI, GTI].FileName);
+                  AFileName := '..\..\output\' + ModelName + '\'+ AFileName
+                end
+                else
+                begin
+                  AFileName := ExtractRelativePath(FFileRoot,
+                    FFiles[FileType, LBI, GFI, GTI].FileName);
+                end;
+                WriteString(' ''' + AFileName + '''');
+              end
+              else
+              begin
+                WriteString(' ''' + ExtractRelativePath(FFileRoot,
+                  FFiles[FileType, LBI, GFI, GTI].FileName) + '''');
+              end;
+              NewLine;
+            end;
           end;
-          WriteString(' ''' + AFileName + '''');
-        end
-        else
-        begin
-          WriteString(' ''' + ExtractRelativePath(FFileRoot, FFiles[FileType].FileName) + '''');
         end;
-        NewLine;
       end;
     end;
     for FileIndex := 0 to FBoundaries.Count - 1 do

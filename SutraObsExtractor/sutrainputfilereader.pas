@@ -229,6 +229,10 @@ begin
     begin
       FListingFile.Add('  Resultant source/sink(+/-) of mass/energy in BCOP file');
     end
+    else if ObservationType = 'FF' then
+    begin
+      FListingFile.Add('  Specified flow rate in BCOF file');
+    end
     else if ObservationType = 'FU' then
     begin
       FListingFile.Add('  Solute conc/temperature of fluid source/sink in BCOF file');
@@ -237,7 +241,7 @@ begin
     begin
       FListingFile.Add('  Resultant source/sink(+/-) of mass/energy in BCOF file');
     end
-    else if ObservationType = 'UU' then
+    else if ObservationType = 'UR' then
     begin
       FListingFile.Add('  Resultant source/sink(+/-) of mass/energy in BCOU file');
     end

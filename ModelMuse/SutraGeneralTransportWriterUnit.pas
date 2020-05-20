@@ -48,6 +48,7 @@ type
     FTimes: TRealList;
     FBcsFileNames: TGenTransportInteractionStringList;
     FUseBctime: T3DSparseBooleanArray;
+    FBcougFileName: string;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -59,8 +60,11 @@ type
     constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(AFileName: string;
-      GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TGenTransportInteractionStringList);
+      GeneralBoundaries: TList<IGeneralTransportNodes>;
+      BcsFileNames: TGenTransportInteractionStringList;
+      LakeInteraction: TLakeBoundaryInteraction);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralTransportNodes>);
+    property BcougFileName: string read FBcougFileName;
   end;
 
 const
@@ -626,7 +630,9 @@ begin
 end;
 
 procedure TSutraGeneralTransportWriter.WriteFile(AFileName: string;
-  GeneralBoundaries: TList<IGeneralTransportNodes>; BcsFileNames: TGenTransportInteractionStringList);
+  GeneralBoundaries: TList<IGeneralTransportNodes>;
+  BcsFileNames: TGenTransportInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction);
 var
   TimeIndex: Integer;
   LakeExtension: string;
@@ -717,7 +723,8 @@ begin
         WriteDataSet7B(TimeIndex);
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
-      SutraFileWriter.AddFile(sftBcoug, ChangeFileExt(FNameOfFile, '.bcoug'));
+      FBcougFileName := ChangeFileExt(FNameOfFile, '.bcoug');
+      SutraFileWriter.AddFile(sftBcoug, LakeInteraction, FBcougFileName);
     finally
       CloseFile;
     end;

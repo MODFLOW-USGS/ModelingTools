@@ -54,6 +54,7 @@ type
     FTimes: TRealList;
     FBcsFileNames: TGenFlowInteractionStringList;
     FUseBctime: T3DSparseBooleanArray;
+    FBcopgFileName: string;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -66,8 +67,9 @@ type
     destructor Destroy; override;
     procedure WriteFile(AFileName: string;
       GeneralBoundaries: TList<IGeneralFlowNodes>;
-      BcsFileNames: TGenFlowInteractionStringList);
+      BcsFileNames: TGenFlowInteractionStringList; LakeInteraction: TLakeBoundaryInteraction);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralFlowNodes>);
+    property BcopgFileName: string read FBcopgFileName;
   end;
 
 const
@@ -148,6 +150,7 @@ constructor TSutraGeneralFlowWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
+  FBcopgFileName :='';
   FPressure1TimeLists := TObjectList<TSutraTimeList>.Create;
   FPressure2TimeLists := TObjectList<TSutraTimeList>.Create;
   FFlow1TimeLists := TObjectList<TSutraTimeList>.Create;
@@ -741,7 +744,9 @@ begin
 end;
 
 procedure TSutraGeneralFlowWriter.WriteFile(AFileName: string;
-  GeneralBoundaries: TList<IGeneralFlowNodes>; BcsFileNames: TGenFlowInteractionStringList);
+  GeneralBoundaries: TList<IGeneralFlowNodes>;
+  BcsFileNames: TGenFlowInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction);
 var
   TimeIndex: Integer;
   LakeExtension: string;
@@ -834,7 +839,8 @@ begin
         WriteDataSet7A(TimeIndex);
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
-      SutraFileWriter.AddFile(sftBcopg, ChangeFileExt(FNameOfFile, '.bcopg'));
+      FBcopgFileName := ChangeFileExt(FNameOfFile, '.bcopg');
+      SutraFileWriter.AddFile(sftBcopg, LakeInteraction, BcopgFileName);
     finally
       CloseFile;
     end;

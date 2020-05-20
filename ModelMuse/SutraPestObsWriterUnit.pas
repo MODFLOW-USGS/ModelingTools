@@ -23,6 +23,8 @@ type
     FDerivedObsList: TStringList;
     FExportType: TExportType;
     FSutraFluxObs: TSutraFluxObs;
+    FBcopgFileNames: TStringList;
+    FBcougFileNames: TStringList;
     procedure Evaluate;
     procedure WriteOptions;
     procedure WriteObservationsFileNames;
@@ -32,12 +34,16 @@ type
     procedure WriteLakeIdentifiers;
     procedure WriteSpecPresIdentifiers;
     procedure WriteSpecFlowIdentifiers;
+    procedure WriteSpecConcIdentifiers;
+    procedure WriteGenFlowIdentifiers;
+    procedure WriteGenTransportIdentifiers;
   protected
     class function Extension: string; override;
   public
     Constructor Create(AModel: TCustomModel); reintroduce;
     destructor Destroy; override;
-    procedure WriteFile(const AFileName: string);
+    procedure WriteFile(const AFileName: string; BcopgFileNames,
+      BcougFileNames: TStringList);
   end;
 
 implementation
@@ -156,6 +162,14 @@ var
   GroupIndex: Integer;
   SpecPresGroup: TSutraSpecPressureObservations;
   SpecPresItem: TSutraSpecPressObsItem;
+  FluidFlowGroup: TSutraFluidFlowObservations;
+  FluidFlowItem: TSutraFluidFlowObsItem;
+  SpecConcGroup: TSutraSpecConcObservations;
+  SpecConcItem: TSutraSpecConcObsItem;
+  GenFlowGroup: TSutraGenPressObservations;
+  GenFlowItem: TSutraSpecPressObsItem;
+  GenTransGroup: TSutraGenTransObservations;
+  GenTransItem: TSutraGenTransObsItem;
 //  SpecPresGroup: TSutraSpecPressureObservationGroup;
 begin
   WriteString('BEGIN DERIVED_OBSERVATIONS');
@@ -208,6 +222,86 @@ begin
     end;
   end;
 
+  for GroupIndex := 0 to FSutraFluxObs.FluidFlow.Count - 1 do
+  begin
+    FluidFlowGroup := FSutraFluxObs.FluidFlow[GroupIndex].ObsGroup;
+    for DerivedObsIndex := 0 to FluidFlowGroup.Comparisons.Count - 1 do
+    begin
+      CompItem := FluidFlowGroup.Comparisons[DerivedObsIndex];
+      WriteString('  OBSNAME ');
+      WriteString(CompItem.Name);
+      WriteString(' PRINT');
+      NewLine;
+      WriteString('    FORMULA ');
+      FluidFlowItem := FluidFlowGroup[CompItem.Index1];
+      WriteString(FluidFlowItem.Name);
+      WriteString(' - ');
+      FluidFlowItem := FluidFlowGroup[CompItem.Index2];
+      WriteString(FluidFlowItem.Name);
+      NewLine;
+    end;
+  end;
+
+  for GroupIndex := 0 to FSutraFluxObs.SpecConc.Count - 1 do
+  begin
+    SpecConcGroup := FSutraFluxObs.SpecConc[GroupIndex].ObsGroup;
+    for DerivedObsIndex := 0 to SpecConcGroup.Comparisons.Count - 1 do
+    begin
+      CompItem := SpecConcGroup.Comparisons[DerivedObsIndex];
+      WriteString('  OBSNAME ');
+      WriteString(CompItem.Name);
+      WriteString(' PRINT');
+      NewLine;
+      WriteString('    FORMULA ');
+      SpecConcItem := SpecConcGroup[CompItem.Index1];
+      WriteString(SpecConcItem.Name);
+      WriteString(' - ');
+      SpecConcItem := SpecConcGroup[CompItem.Index2];
+      WriteString(SpecConcItem.Name);
+      NewLine;
+    end;
+  end;
+
+  for GroupIndex := 0 to FSutraFluxObs.GenFlow.Count - 1 do
+  begin
+    GenFlowGroup := FSutraFluxObs.GenFlow[GroupIndex].ObsGroup;
+    for DerivedObsIndex := 0 to GenFlowGroup.Comparisons.Count - 1 do
+    begin
+      CompItem := GenFlowGroup.Comparisons[DerivedObsIndex];
+      WriteString('  OBSNAME ');
+      WriteString(CompItem.Name);
+      WriteString(' PRINT');
+      NewLine;
+      WriteString('    FORMULA ');
+      GenFlowItem := GenFlowGroup[CompItem.Index1];
+      WriteString(GenFlowItem.Name);
+      WriteString(' - ');
+      GenFlowItem := GenFlowGroup[CompItem.Index2];
+      WriteString(GenFlowItem.Name);
+      NewLine;
+    end;
+  end;
+
+  for GroupIndex := 0 to FSutraFluxObs.GenTrans.Count - 1 do
+  begin
+    GenTransGroup := FSutraFluxObs.GenTrans[GroupIndex].ObsGroup;
+    for DerivedObsIndex := 0 to GenTransGroup.Comparisons.Count - 1 do
+    begin
+      CompItem := GenTransGroup.Comparisons[DerivedObsIndex];
+      WriteString('  OBSNAME ');
+      WriteString(CompItem.Name);
+      WriteString(' PRINT');
+      NewLine;
+      WriteString('    FORMULA ');
+      GenTransItem := GenTransGroup[CompItem.Index1];
+      WriteString(GenTransItem.Name);
+      WriteString(' - ');
+      GenTransItem := GenTransGroup[CompItem.Index2];
+      WriteString(GenTransItem.Name);
+      NewLine;
+    end;
+  end;
+
   ObservationList := TObservationList.Create;
   FObsItemDictionary := TObsItemDictionary.Create;
   try
@@ -255,12 +349,15 @@ begin
   NewLine;
 end;
 
-procedure TSutraPestObsWriterWriter.WriteFile(const AFileName: string);
+procedure TSutraPestObsWriterWriter.WriteFile(const AFileName: string;
+  BcopgFileNames, BcougFileNames: TStringList);
 begin
   if not Model.PestUsed then
   begin
     Exit;
   end;
+  FBcopgFileNames := BcopgFileNames;
+  FBcougFileNames := BcougFileNames;
   Evaluate;
 
   FExportType := etInstructions;
@@ -285,6 +382,410 @@ begin
     WriteDerivedObservations;
   finally
     CloseFile;
+  end;
+end;
+
+procedure TSutraPestObsWriterWriter.WriteGenFlowIdentifiers;
+var
+  CellLists: TObjectList<TCellAssignmentList>;
+  FactorsValuesList: TObjectList<TRealList>;
+  CellLocationList: TCellLocationList;
+  FlowBuilder: TStringBuilder;
+  ResultantBuilder: TStringBuilder;
+  Mesh3D: TSutraMesh3D;
+  GroupIndex: Integer;
+  GenFlowGroup: TSutraGenPressureObservationGroup;
+  ObservationFactors: TObservationFactors;
+  ObjectIndex: Integer;
+  Formula: string;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  FactorsValues: TRealList;
+  FactorAnnotation: string;
+  DataIdentifier: string;
+  ListIndex: Integer;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  Node3D: TSutraNode3D;
+  NodeNumber: Integer;
+  ID: string;
+  ObsIndex: Integer;
+  GenFlowObs: TSutraSpecPressObsItem;
+  AFactor: Double;
+  FlowFormula: string;
+  ResultantFormula: string;
+  DerivedFormula: string;
+begin
+  CellLists := TObjectList<TCellAssignmentList>.Create;
+  FactorsValuesList := TObjectList<TRealList>.Create;
+  CellLocationList := TCellLocationList.Create;
+  FlowBuilder := TStringBuilder.Create;
+  ResultantBuilder := TStringBuilder.Create;
+  try
+    Mesh3D := Model.SutraMesh;
+    for GroupIndex := 0 to FSutraFluxObs.GenFlow.Count - 1 do
+    begin
+      CellLists.Clear;
+      FactorsValuesList.Clear;
+      GenFlowGroup := FSutraFluxObs.GenFlow[GroupIndex];
+      ObservationFactors := GenFlowGroup.ObsGroup.ObservationFactors;
+      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
+      begin
+        Formula := ObservationFactors[ObjectIndex].Factor;
+        AScreenObject := ObservationFactors[ObjectIndex].
+          ScreenObject as TScreenObject;
+        Assert(AScreenObject <> nil);
+        CellList := TCellAssignmentList.Create;
+        CellLists.Add(CellList);
+        FactorsValues := TRealList.Create;
+        FactorsValuesList.Add(FactorsValues);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        CellList.AssignCellLocationList(CellLocationList);
+        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
+          FactorsValues, FactorAnnotation, DataIdentifier);
+      end;
+      Assert(CellLists.Count = FactorsValuesList.Count);
+      for ListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellList := CellLists[ListIndex];
+//        FactorsValues := FactorsValuesList[ListIndex];
+//        Assert(CellList.Count = FactorsValues.Count);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+//          AFactor := FactorsValues[CellIndex];
+          Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+          NodeNumber := Node3D.Number + 1;
+          ID := IntToStr(NodeNumber);
+
+          if GenFlowGroup.ObsGroup.HasObsIndex(0)
+            or GenFlowGroup.ObsGroup.HasObsIndex(1) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' PGF');
+            NewLine;
+            for ObsIndex := 0 to GenFlowGroup.ObsGroup.Count - 1 do
+            begin
+              GenFlowObs := GenFlowGroup.ObsGroup[ObsIndex];
+              if GenFlowObs.ObsTypeIndex in [0,1] then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('PGF');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(GenFlowObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+          if GenFlowGroup.ObsGroup.HasObsIndex(1)
+            or GenFlowGroup.ObsGroup.HasObsIndex(2) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' PGR');
+            NewLine;
+            for ObsIndex := 0 to GenFlowGroup.ObsGroup.Count - 1 do
+            begin
+              GenFlowObs := GenFlowGroup.ObsGroup[ObsIndex];
+              if GenFlowObs.ObsTypeIndex in [1,2] then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('PGR');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(GenFlowObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+        end;
+      end;
+
+      for ObsIndex := 0 to GenFlowGroup.ObsGroup.Count - 1 do
+      begin
+        GenFlowObs := GenFlowGroup.ObsGroup[ObsIndex];
+
+        FlowBuilder.Clear;
+        ResultantBuilder.Clear;
+        for ListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellList := CellLists[ListIndex];
+          FactorsValues := FactorsValuesList[ListIndex];
+          Assert(CellList.Count = FactorsValues.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            AFactor := FactorsValues[CellIndex];
+
+            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+            NodeNumber := Node3D.Number + 1;
+            ID := IntToStr(NodeNumber);
+
+            if (ListIndex > 0) or (CellIndex > 0) then
+            begin
+              FlowBuilder.Append(' + ');
+              ResultantBuilder.Append(' + ');
+            end;
+            if AFactor <> 1 then
+            begin
+              FlowBuilder.Append(AFactor);
+              ResultantBuilder.Append(AFactor);
+
+              FlowBuilder.Append('*');
+              ResultantBuilder.Append('*');
+            end;
+
+            FlowBuilder.Append('PGF');
+            ResultantBuilder.Append('PGR');
+
+            FlowBuilder.Append(ID);
+            ResultantBuilder.Append(ID);
+
+            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+            FlowBuilder.Append(ObsIndex);
+            ResultantBuilder.Append(ObsIndex);
+          end;
+        end;
+        FlowFormula := FlowBuilder.ToString;
+        ResultantFormula := ResultantBuilder.ToString;
+
+        case GenFlowObs.ObsTypeIndex of
+          0:
+            begin
+              DerivedFormula := FlowFormula;
+            end;
+          1:
+            begin
+              DerivedFormula := '(' + ResultantFormula + ')/(' + FlowFormula + ')';
+            end;
+          2:
+            begin
+              DerivedFormula := ResultantFormula;
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+
+        FDerivedObsList.Add('  OBSNAME ' + GenFlowObs.Name + ' PRINT');
+        FDerivedObsList.Add('    FORMULA ' + DerivedFormula);
+      end;
+
+    end;
+  finally
+    ResultantBuilder.Free;
+    FlowBuilder.Free;
+    CellLocationList.Free;
+    CellLists.Free;
+    FactorsValuesList.Free;
+  end;
+end;
+
+procedure TSutraPestObsWriterWriter.WriteGenTransportIdentifiers;
+var
+  CellLists: TObjectList<TCellAssignmentList>;
+  FactorsValuesList: TObjectList<TRealList>;
+  CellLocationList: TCellLocationList;
+  ResultantBuilder: TStringBuilder;
+  Mesh3D: TSutraMesh3D;
+  GroupIndex: Integer;
+  GenTransGroup: TSutraGenTransObservationGroup;
+  ObservationFactors: TObservationFactors;
+  ObjectIndex: Integer;
+  Formula: string;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  FactorsValues: TRealList;
+  FactorAnnotation: string;
+  DataIdentifier: string;
+  ListIndex: Integer;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  Node3D: TSutraNode3D;
+  NodeNumber: Integer;
+  ID: string;
+  ObsIndex: Integer;
+  GenTransObs: TSutraGenTransObsItem;
+  AFactor: Double;
+  ResultantFormula: string;
+  DerivedFormula: string;
+begin
+  CellLists := TObjectList<TCellAssignmentList>.Create;
+  FactorsValuesList := TObjectList<TRealList>.Create;
+  CellLocationList := TCellLocationList.Create;
+//  FlowBuilder := TStringBuilder.Create;
+  ResultantBuilder := TStringBuilder.Create;
+  try
+    Mesh3D := Model.SutraMesh;
+    for GroupIndex := 0 to FSutraFluxObs.GenTrans.Count - 1 do
+    begin
+      CellLists.Clear;
+      FactorsValuesList.Clear;
+      GenTransGroup := FSutraFluxObs.GenTrans[GroupIndex];
+      ObservationFactors := GenTransGroup.ObsGroup.ObservationFactors;
+      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
+      begin
+        Formula := ObservationFactors[ObjectIndex].Factor;
+        AScreenObject := ObservationFactors[ObjectIndex].
+          ScreenObject as TScreenObject;
+        Assert(AScreenObject <> nil);
+        CellList := TCellAssignmentList.Create;
+        CellLists.Add(CellList);
+        FactorsValues := TRealList.Create;
+        FactorsValuesList.Add(FactorsValues);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        CellList.AssignCellLocationList(CellLocationList);
+        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
+          FactorsValues, FactorAnnotation, DataIdentifier);
+      end;
+      Assert(CellLists.Count = FactorsValuesList.Count);
+      for ListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellList := CellLists[ListIndex];
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+          NodeNumber := Node3D.Number + 1;
+          ID := IntToStr(NodeNumber);
+
+//          if GenTransGroup.ObsGroup.HasObsIndex(0) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' UGR');
+            NewLine;
+            for ObsIndex := 0 to GenTransGroup.ObsGroup.Count - 1 do
+            begin
+              GenTransObs := GenTransGroup.ObsGroup[ObsIndex];
+//              if GenTransObs.ObsTypeIndex = 0 then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('UGR');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(GenTransObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+//          if GenTransGroup.ObsGroup.HasObsIndex(1)
+//            or GenTransGroup.ObsGroup.HasObsIndex(2) then
+//          begin
+//            WriteString('  ID ');
+//            WriteString(ID);
+//            WriteString(' UR');
+//            NewLine;
+//            for ObsIndex := 0 to GenTransGroup.ObsGroup.Count - 1 do
+//            begin
+//              GenTransObs := GenTransGroup.ObsGroup[ObsIndex];
+////              if GenTransObs.ObsTypeIndex in [1,2] then
+//              begin
+//                WriteString('    OBSNAME ');
+//                WriteString('UR');
+//                WriteString(ID);
+//                WriteString('_');
+//                WriteString(IntToStr(ObsIndex));
+//                WriteFloat(GenTransObs.Time);
+//                NewLine;
+//              end;
+//            end;
+//          end;
+
+        end;
+      end;
+
+      for ObsIndex := 0 to GenTransGroup.ObsGroup.Count - 1 do
+      begin
+        GenTransObs := GenTransGroup.ObsGroup[ObsIndex];
+
+//        FlowBuilder.Clear;
+        ResultantBuilder.Clear;
+        for ListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellList := CellLists[ListIndex];
+          FactorsValues := FactorsValuesList[ListIndex];
+          Assert(CellList.Count = FactorsValues.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            AFactor := FactorsValues[CellIndex];
+
+            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+            NodeNumber := Node3D.Number + 1;
+            ID := IntToStr(NodeNumber);
+
+            if (ListIndex > 0) or (CellIndex > 0) then
+            begin
+//              FlowBuilder.Append(' + ');
+              ResultantBuilder.Append(' + ');
+            end;
+            if AFactor <> 1 then
+            begin
+//              FlowBuilder.Append(AFactor);
+              ResultantBuilder.Append(AFactor);
+
+//              FlowBuilder.Append('*');
+              ResultantBuilder.Append('*');
+            end;
+
+//            FlowBuilder.Append('UR');
+            ResultantBuilder.Append('UGR');
+
+//            FlowBuilder.Append(ID);
+            ResultantBuilder.Append(ID);
+
+//            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+//            FlowBuilder.Append(ObsIndex);
+            ResultantBuilder.Append(ObsIndex);
+          end;
+        end;
+//        FlowFormula := FlowBuilder.ToString;
+        ResultantFormula := ResultantBuilder.ToString;
+
+//        case GenTransObs.ObsTypeIndex of
+////          0:
+////            begin
+////              DerivedFormula := FlowFormula;
+////            end;
+//          0:
+//            begin
+//              DerivedFormula := '(' + ResultantFormula + ')/(' + FlowFormula + ')';
+//            end;
+//          1:
+//            begin
+              DerivedFormula := ResultantFormula;
+//            end;
+//          else
+//            begin
+//              Assert(False);
+//            end;
+//        end;
+
+        FDerivedObsList.Add('  OBSNAME ' + GenTransObs.Name + ' PRINT');
+        FDerivedObsList.Add('    FORMULA ' + DerivedFormula);
+      end;
+
+    end;
+  finally
+    ResultantBuilder.Free;
+//    FlowBuilder.Free;
+    CellLocationList.Free;
+    CellLists.Free;
+    FactorsValuesList.Free;
   end;
 end;
 
@@ -362,6 +863,9 @@ begin
   WriteLakeIdentifiers;
   WriteSpecPresIdentifiers;
   WriteSpecFlowIdentifiers;
+  WriteSpecConcIdentifiers;
+  WriteGenFlowIdentifiers;
+  WriteGenTransportIdentifiers;
 
   WriteString('END IDENTIFIERS');
   NewLine;
@@ -468,6 +972,7 @@ var
   OutputFileNameRoot: string;
   SutraStateObs: TSutraStateObservations;
   FileName: string;
+  FileIndex: Integer;
 begin
   OutputFileNameRoot := ExtractFileName(ChangeFileExt(FFileName, '')) + '_';
   WriteString('BEGIN OBSERVATION_FILES');
@@ -492,7 +997,7 @@ begin
     NewLine;
   end;
 
-  if FSutraFluxObs.SpecPres.Count > 0 then
+  if FSutraFluxObs.SpecPres.HasObservations then
   begin
     FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcop'));
     WriteString('  FILENAME ');
@@ -501,7 +1006,7 @@ begin
     NewLine;
   end;
 
-  if FSutraFluxObs.FluidFlow.Count > 0 then
+  if FSutraFluxObs.FluidFlow.HasObservations then
   begin
     FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcof'));
     WriteString('  FILENAME ');
@@ -510,8 +1015,7 @@ begin
     NewLine;
   end;
 
-{
-  if FSutraFluxObs.SpecConc.Count > 0 then
+  if FSutraFluxObs.SpecConc.HasObservations then
   begin
     FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcou'));
     WriteString('  FILENAME ');
@@ -520,24 +1024,29 @@ begin
     NewLine;
   end;
 
-  if FSutraFluxObs.GenFlow.Count > 0 then
+  if FSutraFluxObs.GenFlow.HasObservations then
   begin
-    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcopg'));
-    WriteString('  FILENAME ');
-    WriteString(FileName);
-    WriteString(' BCOPG');
-    NewLine;
+    for FileIndex := 0 to FBcopgFileNames.Count - 1 do
+    begin
+      FileName := ExtractFileName(FBcopgFileNames[FileIndex]);
+      WriteString('  FILENAME ');
+      WriteString(FileName);
+      WriteString(' BCOPG');
+      NewLine;
+    end;
   end;
 
-  if FSutraFluxObs.GenTrans.Count > 0 then
+  if FSutraFluxObs.GenTrans.HasObservations then
   begin
-    FileName := ExtractFileName(ChangeFileExt(FFileName, '.bcoug'));
-    WriteString('  FILENAME ');
-    WriteString(FileName);
-    WriteString(' BCOUG');
-    NewLine;
+    for FileIndex := 0 to FBcougFileNames.Count - 1 do
+    begin
+      FileName := ExtractFileName(FBcougFileNames[FileIndex]);
+      WriteString('  FILENAME ');
+      WriteString(FileName);
+      WriteString(' BCOUG');
+      NewLine;
+    end;
   end;
-  }
 
   WriteString('END OBSERVATION_FILES');
   NewLine;
@@ -585,9 +1094,404 @@ begin
   NewLine;
 end;
 
-procedure TSutraPestObsWriterWriter.WriteSpecFlowIdentifiers;
+procedure TSutraPestObsWriterWriter.WriteSpecConcIdentifiers;
+var
+  CellLists: TObjectList<TCellAssignmentList>;
+  FactorsValuesList: TObjectList<TRealList>;
+  CellLocationList: TCellLocationList;
+  ResultantBuilder: TStringBuilder;
+  Mesh3D: TSutraMesh3D;
+  GroupIndex: Integer;
+  SpecConcGroup: TSutraSpecConcObservationGroup;
+  ObservationFactors: TObservationFactors;
+  ObjectIndex: Integer;
+  Formula: string;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  FactorsValues: TRealList;
+  FactorAnnotation: string;
+  DataIdentifier: string;
+  ListIndex: Integer;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  Node3D: TSutraNode3D;
+  NodeNumber: Integer;
+  ID: string;
+  ObsIndex: Integer;
+  SpecConcObs: TSutraSpecConcObsItem;
+  AFactor: Double;
+  ResultantFormula: string;
+  DerivedFormula: string;
 begin
+  CellLists := TObjectList<TCellAssignmentList>.Create;
+  FactorsValuesList := TObjectList<TRealList>.Create;
+  CellLocationList := TCellLocationList.Create;
+//  FlowBuilder := TStringBuilder.Create;
+  ResultantBuilder := TStringBuilder.Create;
+  try
+    Mesh3D := Model.SutraMesh;
+    for GroupIndex := 0 to FSutraFluxObs.SpecConc.Count - 1 do
+    begin
+      CellLists.Clear;
+      FactorsValuesList.Clear;
+      SpecConcGroup := FSutraFluxObs.SpecConc[GroupIndex];
+      ObservationFactors := SpecConcGroup.ObsGroup.ObservationFactors;
+      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
+      begin
+        Formula := ObservationFactors[ObjectIndex].Factor;
+        AScreenObject := ObservationFactors[ObjectIndex].
+          ScreenObject as TScreenObject;
+        Assert(AScreenObject <> nil);
+        CellList := TCellAssignmentList.Create;
+        CellLists.Add(CellList);
+        FactorsValues := TRealList.Create;
+        FactorsValuesList.Add(FactorsValues);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        CellList.AssignCellLocationList(CellLocationList);
+        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
+          FactorsValues, FactorAnnotation, DataIdentifier);
+      end;
+      Assert(CellLists.Count = FactorsValuesList.Count);
+      for ListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellList := CellLists[ListIndex];
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+          NodeNumber := Node3D.Number + 1;
+          ID := IntToStr(NodeNumber);
 
+//          if SpecConcGroup.ObsGroup.HasObsIndex(0) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' UR');
+            NewLine;
+            for ObsIndex := 0 to SpecConcGroup.ObsGroup.Count - 1 do
+            begin
+              SpecConcObs := SpecConcGroup.ObsGroup[ObsIndex];
+//              if SpecConcObs.ObsTypeIndex = 0 then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('UR');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(SpecConcObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+//          if SpecConcGroup.ObsGroup.HasObsIndex(1)
+//            or SpecConcGroup.ObsGroup.HasObsIndex(2) then
+//          begin
+//            WriteString('  ID ');
+//            WriteString(ID);
+//            WriteString(' UR');
+//            NewLine;
+//            for ObsIndex := 0 to SpecConcGroup.ObsGroup.Count - 1 do
+//            begin
+//              SpecConcObs := SpecConcGroup.ObsGroup[ObsIndex];
+////              if SpecConcObs.ObsTypeIndex in [1,2] then
+//              begin
+//                WriteString('    OBSNAME ');
+//                WriteString('UR');
+//                WriteString(ID);
+//                WriteString('_');
+//                WriteString(IntToStr(ObsIndex));
+//                WriteFloat(SpecConcObs.Time);
+//                NewLine;
+//              end;
+//            end;
+//          end;
+
+        end;
+      end;
+
+      for ObsIndex := 0 to SpecConcGroup.ObsGroup.Count - 1 do
+      begin
+        SpecConcObs := SpecConcGroup.ObsGroup[ObsIndex];
+
+//        FlowBuilder.Clear;
+        ResultantBuilder.Clear;
+        for ListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellList := CellLists[ListIndex];
+          FactorsValues := FactorsValuesList[ListIndex];
+          Assert(CellList.Count = FactorsValues.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            AFactor := FactorsValues[CellIndex];
+
+            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+            NodeNumber := Node3D.Number + 1;
+            ID := IntToStr(NodeNumber);
+
+            if (ListIndex > 0) or (CellIndex > 0) then
+            begin
+//              FlowBuilder.Append(' + ');
+              ResultantBuilder.Append(' + ');
+            end;
+            if AFactor <> 1 then
+            begin
+//              FlowBuilder.Append(AFactor);
+              ResultantBuilder.Append(AFactor);
+
+//              FlowBuilder.Append('*');
+              ResultantBuilder.Append('*');
+            end;
+
+//            FlowBuilder.Append('UR');
+            ResultantBuilder.Append('UR');
+
+//            FlowBuilder.Append(ID);
+            ResultantBuilder.Append(ID);
+
+//            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+//            FlowBuilder.Append(ObsIndex);
+            ResultantBuilder.Append(ObsIndex);
+          end;
+        end;
+//        FlowFormula := FlowBuilder.ToString;
+        ResultantFormula := ResultantBuilder.ToString;
+
+//        case SpecConcObs.ObsTypeIndex of
+////          0:
+////            begin
+////              DerivedFormula := FlowFormula;
+////            end;
+//          0:
+//            begin
+//              DerivedFormula := '(' + ResultantFormula + ')/(' + FlowFormula + ')';
+//            end;
+//          1:
+//            begin
+              DerivedFormula := ResultantFormula;
+//            end;
+//          else
+//            begin
+//              Assert(False);
+//            end;
+//        end;
+
+        FDerivedObsList.Add('  OBSNAME ' + SpecConcObs.Name + ' PRINT');
+        FDerivedObsList.Add('    FORMULA ' + DerivedFormula);
+      end;
+
+    end;
+  finally
+    ResultantBuilder.Free;
+//    FlowBuilder.Free;
+    CellLocationList.Free;
+    CellLists.Free;
+    FactorsValuesList.Free;
+  end;
+end;
+
+procedure TSutraPestObsWriterWriter.WriteSpecFlowIdentifiers;
+var
+  CellLists: TObjectList<TCellAssignmentList>;
+  FactorsValuesList: TObjectList<TRealList>;
+  CellLocationList: TCellLocationList;
+  FlowBuilder: TStringBuilder;
+  ResultantBuilder: TStringBuilder;
+  Mesh3D: TSutraMesh3D;
+  GroupIndex: Integer;
+  FluidFlowGroup: TSutraFluidFlowObservationGroup;
+  ObservationFactors: TObservationFactors;
+  ObjectIndex: Integer;
+  Formula: string;
+  AScreenObject: TScreenObject;
+  CellList: TCellAssignmentList;
+  FactorsValues: TRealList;
+  FactorAnnotation: string;
+  DataIdentifier: string;
+  ListIndex: Integer;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  Node3D: TSutraNode3D;
+  NodeNumber: Integer;
+  ID: string;
+  ObsIndex: Integer;
+  FFObs: TSutraFluidFlowObsItem;
+  AFactor: Double;
+  FlowFormula: string;
+  ResultantFormula: string;
+  DerivedFormula: string;
+begin
+  CellLists := TObjectList<TCellAssignmentList>.Create;
+  FactorsValuesList := TObjectList<TRealList>.Create;
+  CellLocationList := TCellLocationList.Create;
+  FlowBuilder := TStringBuilder.Create;
+  ResultantBuilder := TStringBuilder.Create;
+  try
+    Mesh3D := Model.SutraMesh;
+    for GroupIndex := 0 to FSutraFluxObs.FluidFlow.Count - 1 do
+    begin
+      CellLists.Clear;
+      FactorsValuesList.Clear;
+      FluidFlowGroup := FSutraFluxObs.FluidFlow[GroupIndex];
+      ObservationFactors := FluidFlowGroup.ObsGroup.ObservationFactors;
+      for ObjectIndex := 0 to ObservationFactors.Count - 1 do
+      begin
+        Formula := ObservationFactors[ObjectIndex].Factor;
+        AScreenObject := ObservationFactors[ObjectIndex].
+          ScreenObject as TScreenObject;
+        Assert(AScreenObject <> nil);
+        CellList := TCellAssignmentList.Create;
+        CellLists.Add(CellList);
+        FactorsValues := TRealList.Create;
+        FactorsValuesList.Add(FactorsValues);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        CellList.AssignCellLocationList(CellLocationList);
+        AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
+          FactorsValues, FactorAnnotation, DataIdentifier);
+      end;
+      Assert(CellLists.Count = FactorsValuesList.Count);
+      for ListIndex := 0 to CellLists.Count - 1 do
+      begin
+        CellList := CellLists[ListIndex];
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+          NodeNumber := Node3D.Number + 1;
+          ID := IntToStr(NodeNumber);
+
+          if FluidFlowGroup.ObsGroup.HasObsIndex(0) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' FF');
+            NewLine;
+            for ObsIndex := 0 to FluidFlowGroup.ObsGroup.Count - 1 do
+            begin
+              FFObs := FluidFlowGroup.ObsGroup[ObsIndex];
+              if FFObs.ObsTypeIndex = 0 then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('FF');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(FFObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+//          if FluidFlowGroup.ObsGroup.HasObsIndex(1)
+//            or FluidFlowGroup.ObsGroup.HasObsIndex(2) then
+          begin
+            WriteString('  ID ');
+            WriteString(ID);
+            WriteString(' FR');
+            NewLine;
+            for ObsIndex := 0 to FluidFlowGroup.ObsGroup.Count - 1 do
+            begin
+              FFObs := FluidFlowGroup.ObsGroup[ObsIndex];
+//              if FFObs.ObsTypeIndex in [1,2] then
+              begin
+                WriteString('    OBSNAME ');
+                WriteString('FR');
+                WriteString(ID);
+                WriteString('_');
+                WriteString(IntToStr(ObsIndex));
+                WriteFloat(FFObs.Time);
+                NewLine;
+              end;
+            end;
+          end;
+
+        end;
+      end;
+
+      for ObsIndex := 0 to FluidFlowGroup.ObsGroup.Count - 1 do
+      begin
+        FFObs := FluidFlowGroup.ObsGroup[ObsIndex];
+
+        FlowBuilder.Clear;
+        ResultantBuilder.Clear;
+        for ListIndex := 0 to CellLists.Count - 1 do
+        begin
+          CellList := CellLists[ListIndex];
+          FactorsValues := FactorsValuesList[ListIndex];
+          Assert(CellList.Count = FactorsValues.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            AFactor := FactorsValues[CellIndex];
+
+            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+            NodeNumber := Node3D.Number + 1;
+            ID := IntToStr(NodeNumber);
+
+            if (ListIndex > 0) or (CellIndex > 0) then
+            begin
+              FlowBuilder.Append(' + ');
+              ResultantBuilder.Append(' + ');
+            end;
+            if AFactor <> 1 then
+            begin
+              FlowBuilder.Append(AFactor);
+              ResultantBuilder.Append(AFactor);
+
+              FlowBuilder.Append('*');
+              ResultantBuilder.Append('*');
+            end;
+
+            FlowBuilder.Append('FF');
+            ResultantBuilder.Append('FR');
+
+            FlowBuilder.Append(ID);
+            ResultantBuilder.Append(ID);
+
+            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+            FlowBuilder.Append(ObsIndex);
+            ResultantBuilder.Append(ObsIndex);
+          end;
+        end;
+        FlowFormula := FlowBuilder.ToString;
+        ResultantFormula := ResultantBuilder.ToString;
+
+        case FFObs.ObsTypeIndex of
+//          0:
+//            begin
+//              DerivedFormula := FlowFormula;
+//            end;
+          0:
+            begin
+              DerivedFormula := '(' + ResultantFormula + ')/(' + FlowFormula + ')';
+            end;
+          1:
+            begin
+              DerivedFormula := ResultantFormula;
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+
+        FDerivedObsList.Add('  OBSNAME ' + FFObs.Name + ' PRINT');
+        FDerivedObsList.Add('    FORMULA ' + DerivedFormula);
+      end;
+
+    end;
+  finally
+    ResultantBuilder.Free;
+    FlowBuilder.Free;
+    CellLocationList.Free;
+    CellLists.Free;
+    FactorsValuesList.Free;
+  end;
 end;
 
 procedure TSutraPestObsWriterWriter.WriteSpecPresIdentifiers;

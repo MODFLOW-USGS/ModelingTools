@@ -406,7 +406,7 @@ begin
   finally
     CloseFile;
   end;
-  SutraFileWriter.AddFile(sftLkin, NameOfFile);
+  SutraFileWriter.AddFile(sftLkin, lbiNoChange, NameOfFile);
 
   if not FLakeOptions.AllNodesLakes then
   begin
@@ -418,7 +418,7 @@ begin
     finally
       CloseFile;
     end;
-    SutraFileWriter.AddFile(sftLkar, NameOfFile);
+    SutraFileWriter.AddFile(sftLkar, lbiNoChange, NameOfFile);
   end;
 
   NameOfFile := ChangeFileExt(AFileName, '.lkbc');
@@ -434,23 +434,23 @@ begin
   finally
     CloseFile;
   end;
-  SutraFileWriter.AddFile(sftLkbc, NameOfFile);
+  SutraFileWriter.AddFile(sftLkbc, lbiNoChange, NameOfFile);
 
 
   LakeStageFile := ChangeFileExt(AFileName, '.lkst');
-  SutraFileWriter.AddFile(sftLkst, LakeStageFile);
+  SutraFileWriter.AddFile(sftLkst, lbiNoChange, LakeStageFile);
 
   LakeRestartFile := ChangeFileExt(AFileName, '.lkrs');
-  SutraFileWriter.AddFile(sftLKrs, LakeRestartFile);
+  SutraFileWriter.AddFile(sftLKrs, lbiNoChange, LakeRestartFile);
 
   LakeBudgetFile := ChangeFileExt(AFileName, '.lkbu');
-  SutraFileWriter.AddFile(sftLkbu, LakeBudgetFile);
+  SutraFileWriter.AddFile(sftLkbu, lbiNoChange, LakeBudgetFile);
 
   LakeNodeFile := ChangeFileExt(AFileName, '.lkh');
-  SutraFileWriter.AddFile(sftLkh, LakeNodeFile);
+  SutraFileWriter.AddFile(sftLkh, lbiNoChange, LakeNodeFile);
 
   LakeHierarchyFile := ChangeFileExt(AFileName, '.lkn');
-  SutraFileWriter.AddFile(sftLkn, LakeHierarchyFile);
+  SutraFileWriter.AddFile(sftLkn, lbiNoChange, LakeHierarchyFile);
 end;
 
 procedure TSutraLakeWriter.WriteLakeAreaDataSet1a;

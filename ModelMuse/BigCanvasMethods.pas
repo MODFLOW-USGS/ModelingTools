@@ -309,6 +309,10 @@ var
   Bitmap: TBitmap32;
   Canvas: TCanvas;
 begin
+  if Graphic = nil then
+  begin
+    Exit;
+  end;
   try
     if Graphic is TBitmap32 then
     begin
@@ -853,6 +857,10 @@ var
   Bitmap: TBitmap32;
   Canvas: TCanvas;
 begin
+  if Graphic = nil then
+  begin
+    Exit;
+  end;
   if Graphic is TBitmap32 then
   begin
     Bitmap := TBitmap32(Graphic);
@@ -919,6 +927,11 @@ var
   Bitmap: TBitmap32;
   Canvas: TCanvas;
 begin
+  if Graphic = nil then
+  begin
+    Exit;
+  end;
+
   if Graphic is TBitmap32 then
   begin
     Bitmap := TBitmap32(Graphic);
@@ -944,6 +957,10 @@ var
   Canvas: TCanvas;
   OldWidth: Integer;
 begin
+  if Graphic = nil then
+  begin
+    Exit;
+  end;
   if Graphic is TBitmap32 then
   begin
     Bitmap := TBitmap32(Graphic);
@@ -1022,13 +1039,19 @@ end;
 procedure DrawBigTextBitmap32(const BitMap32: TBitmap32; const Location: TPoint;
   const Text: string; const Font: TFont);
 begin
-  Bitmap32.Textout(Location.X, Location.Y, Text);
+  if BitMap32 <> nil then
+  begin
+    Bitmap32.Textout(Location.X, Location.Y, Text);
+  end;
 end;
 
 procedure DrawBigTextCanvas(const Canvas: TCanvas; const Location: TPoint;
   const Text: string; const Font: TFont);
 begin
-  Canvas.Textout(Location.X, Location.Y, Text);
+  if Canvas <> nil then
+  begin
+    Canvas.Textout(Location.X, Location.Y, Text);
+  end;
 end;
 
 procedure DrawBigText(const Graphic: TPersistent; const Location: TPoint;
@@ -1037,6 +1060,10 @@ var
   Bitmap: TBitmap32;
   Canvas: TCanvas;
 begin
+  if Graphic = nil then
+  begin
+    Exit;
+  end;
   if Graphic is TBitmap32 then
   begin
     Bitmap := TBitmap32(Graphic);

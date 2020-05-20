@@ -71,7 +71,8 @@ type
     // @name calls @link(Evaluate).
     procedure UpdateMergeLists(PQTimeList, UTimeList: TSutraMergedTimeList);
     procedure WriteFile(FileName: string; BoundaryNodes: IBoundaryNodes;
-      BcsFileNames: TLakeInteractionStringList);
+      BcsFileNames: TLakeInteractionStringList;
+      LakeInteraction: TLakeBoundaryInteraction);
   end;
 
 function FixTime(AnItem: TCustomBoundaryItem; AllTimes: TRealList): double; overload;
@@ -1744,7 +1745,8 @@ begin
 end;
 
 procedure TSutraBoundaryWriter.WriteFile(FileName: string;
-  BoundaryNodes: IBoundaryNodes; BcsFileNames: TLakeInteractionStringList);
+  BoundaryNodes: IBoundaryNodes; BcsFileNames: TLakeInteractionStringList;
+  LakeInteraction: TLakeBoundaryInteraction);
 var
   UTimeList: TSutraMergedTimeList;
   PQTimeList: TSutraMergedTimeList;
@@ -1855,13 +1857,13 @@ begin
         SutraFileWriter.AddBoundaryFile(FileName);
         case FBoundaryType of
           sbtFluidSource:
-            SutraFileWriter.AddFile(sftBcof, ChangeFileExt(FileName, '.bcof'));
+            SutraFileWriter.AddFile(sftBcof, LakeInteraction, ChangeFileExt(FileName, '.bcof'));
           sbtMassEnergySource:
-            SutraFileWriter.AddFile(sftBcos, ChangeFileExt(FileName, '.bcos'));
+            SutraFileWriter.AddFile(sftBcos, LakeInteraction, ChangeFileExt(FileName, '.bcos'));
           sbtSpecPress:
-            SutraFileWriter.AddFile(sftBcop, ChangeFileExt(FileName, '.bcop'));
+            SutraFileWriter.AddFile(sftBcop, LakeInteraction, ChangeFileExt(FileName, '.bcop'));
           sbtSpecConcTemp:
-            SutraFileWriter.AddFile(sftBcou, ChangeFileExt(FileName, '.bcou'));
+            SutraFileWriter.AddFile(sftBcou, LakeInteraction, ChangeFileExt(FileName, '.bcou'));
         end;
       finally
         CloseFile;

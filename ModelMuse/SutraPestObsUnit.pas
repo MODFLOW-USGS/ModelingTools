@@ -142,11 +142,13 @@ type
   private
     FModel: TBaseModel;
     procedure StopTalkingToAnyOne;
+    function GetHasObservations: Boolean;
   public
     constructor Create(ItemClass: TCollectionItemClass;
       Model: TBaseModel);
     property Model: TBaseModel read FModel;
     procedure Remove(Item: TCustomSutraFluxObservationGroup);
+    property HasObservations: Boolean read GetHasObservations;
   end;
 
   TSutraSpecPressureObservationGroups = class(TCustomSutraFluxObservationGroups)
@@ -415,7 +417,7 @@ begin
 
   SutraGenUObsTypes := TStringList.Create;
   SutraGenUObsTypes.Add('Resultant mass/energy rate'); // Units = solute mass/sec, Add selected nodes
-  SutraGenUObsTypes.Add('Calculated conc/temp'); // Units = solute mass/sec, Add selected nodes
+//  SutraGenUObsTypes.Add('Calculated conc/temp'); // Units = solute mass/sec, Add selected nodes
 end;
 
 { TCustomSutraObsItem }
@@ -1024,6 +1026,23 @@ begin
     InvalidateModelEvent := nil;
   end;
   inherited Create(ItemClass, InvalidateModelEvent);
+end;
+
+function TCustomSutraFluxObservationGroups.GetHasObservations: Boolean;
+var
+  ItemIndex: Integer;
+  ObsGroup: TCustomSutraFluxObservations;
+begin
+  result := False;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    ObsGroup := (Items[ItemIndex] as TCustomSutraFluxObservationGroup).ObservationGroup;
+    Result := ObsGroup.ObservationFactors.Count > 0;
+    if result then
+    begin
+      Exit;
+    end;
+  end;
 end;
 
 procedure TCustomSutraFluxObservationGroups.Remove(

@@ -77,7 +77,8 @@ implementation
 
 uses
   ScreenObjectUnit, SparseDataSets, OctTreeClass,
-  SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit, SutraPestObsUnit;
+  SutraMeshUnit, SutraOutputControlUnit, SutraFileWriterUnit, SutraPestObsUnit,
+  SutraOptionsUnit;
 
 { TSutraObservationWriter }
 
@@ -568,11 +569,11 @@ begin
     ObsRoot := ChangeFileExt(FFileName, '');
     if ofOBS in FUsedFormats then
     begin
-      SutraFileWriter.AddFile(sftObs, ChangeFileExt(ObsRoot, '.obs'));
+      SutraFileWriter.AddFile(sftObs, lbiNoChange, ChangeFileExt(ObsRoot, '.obs'));
     end;
     if ofOBC in FUsedFormats then
     begin
-      SutraFileWriter.AddFile(sftObc, ChangeFileExt(ObsRoot, '.obc'));
+      SutraFileWriter.AddFile(sftObc, lbiNoChange, ChangeFileExt(ObsRoot, '.obc'));
     end;
 //    Model.AddModelInputFile(FFileName);
   finally
