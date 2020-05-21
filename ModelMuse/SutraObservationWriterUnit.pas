@@ -569,11 +569,11 @@ begin
     ObsRoot := ChangeFileExt(FFileName, '');
     if ofOBS in FUsedFormats then
     begin
-      SutraFileWriter.AddFile(sftObs, lbiNoChange, ChangeFileExt(ObsRoot, '.obs'));
+      SutraFileWriter.AddFile(sftObs, ChangeFileExt(ObsRoot, '.obs'));
     end;
     if ofOBC in FUsedFormats then
     begin
-      SutraFileWriter.AddFile(sftObc, lbiNoChange, ChangeFileExt(ObsRoot, '.obc'));
+      SutraFileWriter.AddFile(sftObc, ChangeFileExt(ObsRoot, '.obc'));
     end;
 //    Model.AddModelInputFile(FFileName);
   finally

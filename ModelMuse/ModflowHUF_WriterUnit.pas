@@ -828,6 +828,8 @@ begin
     Exit;
   end;
 
+  CheckSpecifiedHeadsConnected;
+
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrHUF2, Model.UnitNumbers.UnitNumber(StrHUF2),
     FNameOfFile, foInput, Model);

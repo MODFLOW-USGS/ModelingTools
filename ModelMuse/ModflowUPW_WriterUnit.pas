@@ -132,6 +132,7 @@ begin
 
   frmErrorsAndWarnings.BeginUpdate;
   try
+    CheckSpecifiedHeadsConnected;
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrParameterZonesNot);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheNOPARCHECKOptUPW);
 

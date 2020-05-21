@@ -35,6 +35,7 @@ type
     FLakeInteraction: TLakeBoundaryInteraction;
     procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
   public
+    constructor Create;
     property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction write SetLakeInteraction;
   end;
 
@@ -71,8 +72,7 @@ type
     // @name calls @link(Evaluate).
     procedure UpdateMergeLists(PQTimeList, UTimeList: TSutraMergedTimeList);
     procedure WriteFile(FileName: string; BoundaryNodes: IBoundaryNodes;
-      BcsFileNames: TLakeInteractionStringList;
-      LakeInteraction: TLakeBoundaryInteraction);
+      BcsFileNames: TLakeInteractionStringList);
   end;
 
 function FixTime(AnItem: TCustomBoundaryItem; AllTimes: TRealList): double; overload;
@@ -1745,8 +1745,7 @@ begin
 end;
 
 procedure TSutraBoundaryWriter.WriteFile(FileName: string;
-  BoundaryNodes: IBoundaryNodes; BcsFileNames: TLakeInteractionStringList;
-  LakeInteraction: TLakeBoundaryInteraction);
+  BoundaryNodes: IBoundaryNodes; BcsFileNames: TLakeInteractionStringList);
 var
   UTimeList: TSutraMergedTimeList;
   PQTimeList: TSutraMergedTimeList;
@@ -1755,6 +1754,8 @@ var
   FirstTimeSpecified: Boolean;
   InitialTime: double;
   LakeExtension: string;
+//  LakeInteraction: TLakeBoundaryInteraction;
+  FileRoot: string;
 begin
   FBcsFileNames := BcsFileNames;
   FIBoundaryNodes := BoundaryNodes;
@@ -1787,6 +1788,7 @@ begin
   begin
     LakeExtension := '';
   end;
+  FileRoot := ChangeFileExt(FileName, '');
   FileName := ChangeFileExt(FileName, LakeExtension);
 
   case FBoundaryType of
@@ -1857,13 +1859,22 @@ begin
         SutraFileWriter.AddBoundaryFile(FileName);
         case FBoundaryType of
           sbtFluidSource:
-            SutraFileWriter.AddFile(sftBcof, LakeInteraction, ChangeFileExt(FileName, '.bcof'));
+            begin
+              SutraFileWriter.AddFile(sftBcof, ChangeFileExt(FileRoot, '.bcof'));
+            end;
           sbtMassEnergySource:
-            SutraFileWriter.AddFile(sftBcos, LakeInteraction, ChangeFileExt(FileName, '.bcos'));
+            begin
+              SutraFileWriter.AddFile(sftBcos, ChangeFileExt(FileRoot, '.bcos'));
+            end;
           sbtSpecPress:
-            SutraFileWriter.AddFile(sftBcop, LakeInteraction, ChangeFileExt(FileName, '.bcop'));
+            begin
+              SutraFileWriter.AddFile(sftBcop, ChangeFileExt(FileRoot, '.bcop'));
+            end;
           sbtSpecConcTemp:
-            SutraFileWriter.AddFile(sftBcou, LakeInteraction, ChangeFileExt(FileName, '.bcou'));
+            begin
+              SutraFileWriter.AddFile(sftBcou, ChangeFileExt(FileRoot
+              , '.bcou'));
+            end;
         end;
       finally
         CloseFile;
@@ -1951,6 +1962,12 @@ begin
 end;
 
 { TLakeInteractionStringList }
+
+constructor TLakeInteractionStringList.Create;
+begin
+  inherited;
+  FLakeInteraction := lbiUseDefaults;
+end;
 
 procedure TLakeInteractionStringList.SetLakeInteraction(
   const Value: TLakeBoundaryInteraction);

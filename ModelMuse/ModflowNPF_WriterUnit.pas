@@ -208,16 +208,17 @@ var
   NameOfFile: string;
 begin
   FNpfPackage := Model.ModflowPackages.NpfPackage;
+  if not FNpfPackage.IsSelected then
+  begin
+    Exit
+  end;
+  if FlowPackageFileGeneratedExternally then
+  begin
+    Exit;
+  end;
   frmErrorsAndWarnings.BeginUpdate;
   try
-    if not FNpfPackage.IsSelected then
-    begin
-      Exit
-    end;
-    if FlowPackageFileGeneratedExternally then
-    begin
-      Exit;
-    end;
+    CheckSpecifiedHeadsConnected;
     NameOfFile := FileName(AFileName);
     WriteToNameFile(StrNPF, -1, NameOfFile, foInput, Model);
     OpenFile(NameOfFile);

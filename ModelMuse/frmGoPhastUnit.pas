@@ -9293,8 +9293,8 @@ var
   GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
   SutraPestObsWriterWriter: TSutraPestObsWriterWriter;
 //  BcopgFileName: string;
-  BcopgFileNames: TStringList;
-  BcougFileNames: TStringList;
+//  BcopgFileNames: TStringList;
+//  BcougFileNames: TStringList;
 begin
   case ModelSelection of
     msSutra22:
@@ -9347,8 +9347,8 @@ begin
   ModelDirectory := ExtractFileDir(FileName);
   PhastModel.ClearModelFiles;
   frmProgressMM.ShouldContinue := True;
-  BcopgFileNames := TStringList.Create;
-  BcougFileNames := TStringList.Create;
+//  BcopgFileNames := TStringList.Create;
+//  BcougFileNames := TStringList.Create;
   try
     try
       AdjustSutraBoundaries;
@@ -9373,7 +9373,7 @@ begin
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
             sbtFluidSource);
           try
-            BoundaryWriter.WriteFile(FileName, FluidSourceNodes, nil, lbiNoChange);
+            BoundaryWriter.WriteFile(FileName, FluidSourceNodes, nil);
           finally
             BoundaryWriter.Free;
           end;
@@ -9389,20 +9389,21 @@ begin
               sbtFluidSource);
             try
               BoundaryWriter.WriteFile(FileName, FluidSourceNodes,
-                FluidSourceBcsNames, LakeInteraction);
+                FluidSourceBcsNames);
             finally
               BoundaryWriter.Free;
             end;
           end;
         end;
 
-        if (ModelSelection = msSutra22) or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if (ModelSelection = msSutra22) or
+          (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
         begin
           BcsFileNames.Add(nil);
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
             sbtMassEnergySource);
           try
-            BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, nil, lbiNoChange);
+            BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, nil);
           finally
             BoundaryWriter.Free;
           end;
@@ -9418,7 +9419,7 @@ begin
               sbtMassEnergySource);
             try
               BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes,
-                MassEnergyBcsNames, LakeInteraction);
+                MassEnergyBcsNames);
             finally
               BoundaryWriter.Free;
             end;
@@ -9432,8 +9433,7 @@ begin
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
             sbtSpecPress);
           try
-            BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, nil,
-              lbiNoChange);
+            BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, nil);
           finally
             BoundaryWriter.Free;
           end;
@@ -9449,7 +9449,7 @@ begin
               sbtSpecPress);
             try
               BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes,
-                SpecifiedPressureBcsNames, LakeInteraction);
+                SpecifiedPressureBcsNames);
             finally
               BoundaryWriter.Free;
             end;
@@ -9463,8 +9463,7 @@ begin
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
             sbtSpecConcTemp);
           try
-            BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, nil,
-              lbiNoChange);
+            BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, nil);
           finally
             BoundaryWriter.Free;
           end;
@@ -9481,7 +9480,7 @@ begin
               sbtSpecConcTemp);
             try
               BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes,
-                SpecifiedTempConcBcsNames, LakeInteraction);
+                SpecifiedTempConcBcsNames);
             finally
               BoundaryWriter.Free;
             end;
@@ -9513,11 +9512,7 @@ begin
 
           GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
           try
-            GenFlowWriter.WriteFile(FileName, GeneralFlowNodes, nil, lbiNoChange);
-            if GenFlowWriter.BcopgFileName <> '' then
-            begin
-              BcopgFileNames.Add(GenFlowWriter.BcopgFileName);
-            end;
+            GenFlowWriter.WriteFile(FileName, GeneralFlowNodes, nil);
           finally
             GenFlowWriter.Free;
           end;
@@ -9540,12 +9535,7 @@ begin
               GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
               try
                 GenFlowWriter.WriteFile(FileName, GeneralFlowNodes,
-                  GenFlowInteractionBcsNames, LakeInteraction);
-
-                if GenFlowWriter.BcopgFileName <> '' then
-                begin
-                  BcopgFileNames.Add(GenFlowWriter.BcopgFileName);
-                end;
+                  GenFlowInteractionBcsNames);
               finally
                 GenFlowWriter.Free;
               end;
@@ -9562,11 +9552,7 @@ begin
 
           GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
           try
-            GenTransWriter.WriteFile(FileName, GeneralTransportNodes, nil, lbiNoChange);
-            if GenTransWriter.BcougFileName <> '' then
-            begin
-              BcougFileNames.Add(GenTransWriter.BcougFileName);
-            end;
+            GenTransWriter.WriteFile(FileName, GeneralTransportNodes, nil);
           finally
             GenTransWriter.Free;
           end;
@@ -9589,11 +9575,7 @@ begin
 
               GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
               try
-                GenTransWriter.WriteFile(FileName, GeneralTransportNodes, GenTransportInteractionBcsNames, lbiNoChange);
-                if GenTransWriter.BcougFileName <> '' then
-                begin
-                  BcougFileNames.Add(GenTransWriter.BcougFileName);
-                end;
+                GenTransWriter.WriteFile(FileName, GeneralTransportNodes, GenTransportInteractionBcsNames);
               finally
                 GenTransWriter.Free;
               end;
@@ -9629,8 +9611,7 @@ begin
 
         SutraPestObsWriterWriter := TSutraPestObsWriterWriter.Create(PhastModel);
         try
-          SutraPestObsWriterWriter.WriteFile(FileName, BcopgFileNames,
-            BcougFileNames);
+          SutraPestObsWriterWriter.WriteFile(FileName);
         finally
           SutraPestObsWriterWriter.Free;
         end;
@@ -9712,8 +9693,8 @@ begin
       end;
     end;
   finally
-    BcopgFileNames.Free;
-    BcougFileNames.Free;
+//    BcopgFileNames.Free;
+//    BcougFileNames.Free;
     frmProgressMM.ShouldContinue := False;
     frmProgressMM.btnAbort.Visible := False;
     frmProgressMM.Hide;

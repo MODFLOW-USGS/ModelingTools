@@ -369,6 +369,13 @@ type
 
   TCustomFlowPackageWriter = class(TCustomPackageWriter)
   protected
+    // return Kx or transmissivity in X direction
+    function XConnection(LayerIndex: Integer): TDataArray; virtual;
+    // return Ky or transmissivity in Y direction
+    function YConnection(LayerIndex: Integer): TDataArray; virtual;
+    // return Kz or conductance in Z direction
+    function ZConnection(LayerIndex: Integer): TDataArray; virtual;
+    procedure CheckSpecifiedHeadsConnected;
     function FlowPackageFileGeneratedExternally: boolean;
   end;
 
@@ -1049,6 +1056,10 @@ resourcestring
   'is 300. This file (%0:s) has a length of %1:d.';
   StrDirectoryDoesNotE = 'Directory does not exist.';
   StrTheDirectoryFor = 'The directory for "%s" does not exist.';
+  StrInvalidSpecifiedHe = 'Invalid specified head cell properties';
+  StrTheSpecifiedHeadC = 'The specified head cell at (Layer,Row,Col) = (%0:d' +
+  ',%1:d,%2:d) is invalid because the %3:s, %4:s, and %5:s data sets all hav' +
+  'e values of zero at that cell.';
 
 var
 //  NameFile: TStringList;
@@ -6864,6 +6875,59 @@ end;
 
 { TCustomFlowPackageWriter }
 
+procedure TCustomFlowPackageWriter.CheckSpecifiedHeadsConnected;
+var
+  SpecifiedHead: TDataArray;
+  LayerIndex: Integer;
+  XdataSet: TDataArray;
+  YdataSet: TDataArray;
+  ZdataSet: TDataArray;
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSpecifiedHe);
+  SpecifiedHead := Model.DataArrayManager.GetDataSetByName(rsModflowSpecifiedHead);
+  for LayerIndex := 0 to Model.LayerCount - 1 do
+  begin
+    if Model.IsLayerSimulated(LayerIndex) then
+    begin
+      XdataSet := XConnection(LayerIndex);
+      YdataSet := YConnection(LayerIndex);
+      ZdataSet := ZConnection(LayerIndex);
+
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          if SpecifiedHead.BooleanData[LayerIndex, RowIndex, ColIndex] then
+          begin
+            if (XdataSet.RealData[LayerIndex, RowIndex, ColIndex] = 0)
+              and (YdataSet.RealData[LayerIndex, RowIndex, ColIndex] = 0)
+              and ((ZdataSet = nil) or (ZdataSet.RealData[LayerIndex, RowIndex, ColIndex] = 0))
+              then
+            begin
+              if (ZdataSet = nil) then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrInvalidSpecifiedHe,
+                  Format('The specified head cell at (Layer,Row,Col) = (%0:d,%1:d,%2:d) is invalid because the %3:s and %4:s data sets both have values of zero at that cell.',
+                  [LayerIndex+1, RowIndex+1, ColIndex+1,
+                  XdataSet.Name, YdataSet.Name]),nil);
+              end
+              else
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrInvalidSpecifiedHe,
+                  Format(StrTheSpecifiedHeadC,
+                  [LayerIndex+1, RowIndex+1, ColIndex+1,
+                  XdataSet.Name, YdataSet.Name, ZdataSet.Name]),nil);
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
 function TCustomFlowPackageWriter.FlowPackageFileGeneratedExternally: boolean;
 var
   Index: Integer;
@@ -6882,6 +6946,28 @@ begin
         Exit;
       end;
     end;
+  end;
+end;
+
+function TCustomFlowPackageWriter.XConnection(LayerIndex: Integer): TDataArray;
+begin
+  result := Model.DataArrayManager.GetDataSetByName(rsKx);
+end;
+
+function TCustomFlowPackageWriter.YConnection(LayerIndex: Integer): TDataArray;
+begin
+  result := Model.DataArrayManager.GetDataSetByName(rsKy);
+end;
+
+function TCustomFlowPackageWriter.ZConnection(LayerIndex: Integer): TDataArray;
+begin
+  if Model.LayerCount > 1 then
+  begin
+    result := Model.DataArrayManager.GetDataSetByName(rsKz);
+  end
+  else
+  begin
+    result := nil;
   end;
 end;
 

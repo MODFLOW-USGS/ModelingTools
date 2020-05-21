@@ -256,8 +256,11 @@ begin
   begin
     Exit;
   end;
-  rdgVerticalScreens.DeleteRow(rdgVerticalScreens.Row);
-  seVerticalScreens.AsInteger := rdgVerticalScreens.RowCount - 1;
+  if rdgVerticalScreens.RowCount > 2 then
+  begin
+    rdgVerticalScreens.DeleteRow(rdgVerticalScreens.Row);
+  end;
+  seVerticalScreens.AsInteger := seVerticalScreens.AsInteger -1;
   EnableVerticalScreenButton;
   Changed;
 end;
@@ -2010,6 +2013,7 @@ end;
 procedure TframeScreenObjectMNW2.seVerticalScreensChange(Sender: TObject);
 var
   RowCount: Integer;
+  ColIndex: Integer;
 begin
   RowCount := seVerticalScreens.AsInteger;
   if RowCount < 1 then
@@ -2017,6 +2021,13 @@ begin
     RowCount := 1;
   end;
   rdgVerticalScreens.RowCount := RowCount + 1;
+  if seVerticalScreens.AsInteger = 0 then
+  begin
+    for ColIndex := 0 to rdgVerticalScreens.ColCount - 1 do
+    begin
+      rdgVerticalScreens.Cells[ColIndex, 1] := '';
+    end;
+  end;
   EnableVerticalScreenButton;
   Changed;
 end;

@@ -61,8 +61,7 @@ type
     destructor Destroy; override;
     procedure WriteFile(AFileName: string;
       GeneralBoundaries: TList<IGeneralTransportNodes>;
-      BcsFileNames: TGenTransportInteractionStringList;
-      LakeInteraction: TLakeBoundaryInteraction);
+      BcsFileNames: TGenTransportInteractionStringList);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralTransportNodes>);
     property BcougFileName: string read FBcougFileName;
   end;
@@ -631,12 +630,14 @@ end;
 
 procedure TSutraGeneralTransportWriter.WriteFile(AFileName: string;
   GeneralBoundaries: TList<IGeneralTransportNodes>;
-  BcsFileNames: TGenTransportInteractionStringList;
-  LakeInteraction: TLakeBoundaryInteraction);
+  BcsFileNames: TGenTransportInteractionStringList);
 var
   TimeIndex: Integer;
   LakeExtension: string;
   TransportTypeExtension: string;
+  LakeInteraction: TLakeBoundaryInteraction;
+  TransportInteraction: TGeneralizedTransportInteractionType;
+  FileRoot: string;
 begin
   if Model.ModelSelection = msSutra22 then
   begin
@@ -699,7 +700,8 @@ begin
       LakeExtension := '';
       TransportTypeExtension := ''
     end;
-    FNameOfFile := ChangeFileExt(AFileName, '') + LakeExtension
+    FileRoot := ChangeFileExt(AFileName, '');
+    FNameOfFile := FileRoot + LakeExtension
       + TransportTypeExtension + Extension;
     OpenFile(FNameOfFile);
     try
@@ -723,8 +725,18 @@ begin
         WriteDataSet7B(TimeIndex);
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
-      FBcougFileName := ChangeFileExt(FNameOfFile, '.bcoug');
-      SutraFileWriter.AddFile(sftBcoug, LakeInteraction, FBcougFileName);
+      FBcougFileName := ChangeFileExt(FileRoot, '.bcoug');
+      if BcsFileNames <> nil then
+      begin
+        LakeInteraction := BcsFileNames.LakeInteraction;
+        TransportInteraction := BcsFileNames.TransportInteraction;
+      end
+      else
+      begin
+        LakeInteraction := lbiUseDefaults;
+        TransportInteraction := gtitUseDefaults;
+      end;
+      SutraFileWriter.AddFile(sftBcoug, FBcougFileName);
     finally
       CloseFile;
     end;

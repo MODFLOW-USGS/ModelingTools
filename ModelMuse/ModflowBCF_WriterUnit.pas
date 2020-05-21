@@ -25,6 +25,12 @@ type
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
     function ShouldCheckCell(LayerIndex, RowIndex, ColIndex: Integer): Boolean; override;
+    // return Kx or transmissivity in X direction
+    function XConnection(LayerIndex: Integer): TDataArray; override;
+    // return Ky or transmissivity in Y direction
+    function YConnection(LayerIndex: Integer): TDataArray; override;
+    // return Kz or conductance in Z direction
+    function ZConnection(LayerIndex: Integer): TDataArray; override;
   public
     procedure WriteFile(const AFileName: string);
   end;
@@ -282,6 +288,38 @@ begin
     CloseFile;
   end;
 
+end;
+
+function TModflowBCF_Writer.XConnection(LayerIndex: Integer): TDataArray;
+var
+  Group: TLayerGroup;
+  AquiferType: Integer;
+begin
+  Group := Model.GetLayerGroupByLayer(LayerIndex);
+  AquiferType := Group.AquiferType;
+  if AquiferType in [0,2] then
+  begin
+    result := Model.DataArrayManager.GetDataSetByName(StrTransmissivity);
+  end
+  else
+  begin
+    Assert(AquiferType in [1,3]);
+    result := Model.DataArrayManager.GetDataSetByName(rsKx);
+  end;
+end;
+
+function TModflowBCF_Writer.YConnection(LayerIndex: Integer): TDataArray;
+begin
+  result := XConnection(LayerIndex)
+end;
+
+function TModflowBCF_Writer.ZConnection(LayerIndex: Integer): TDataArray;
+begin
+  result := nil;
+  if LayerIndex < Model.LayerCount-1 then
+  begin
+    result := Model.DataArrayManager.GetDataSetByName(StrVerticalConductance);
+  end;
 end;
 
 procedure TModflowBCF_Writer.WriteDataSet9(AquiferType: Integer;

@@ -67,7 +67,7 @@ type
     destructor Destroy; override;
     procedure WriteFile(AFileName: string;
       GeneralBoundaries: TList<IGeneralFlowNodes>;
-      BcsFileNames: TGenFlowInteractionStringList; LakeInteraction: TLakeBoundaryInteraction);
+      BcsFileNames: TGenFlowInteractionStringList);
     procedure UpdateDisplay(GeneralBoundaries: TList<IGeneralFlowNodes>);
     property BcopgFileName: string read FBcopgFileName;
   end;
@@ -745,12 +745,14 @@ end;
 
 procedure TSutraGeneralFlowWriter.WriteFile(AFileName: string;
   GeneralBoundaries: TList<IGeneralFlowNodes>;
-  BcsFileNames: TGenFlowInteractionStringList;
-  LakeInteraction: TLakeBoundaryInteraction);
+  BcsFileNames: TGenFlowInteractionStringList);
 var
   TimeIndex: Integer;
   LakeExtension: string;
   FlowTypeExtension: string;
+  LakeInteraction: TLakeBoundaryInteraction;
+  FlowInteraction: TGeneralizedFlowInteractionType;
+  FileRoot: string;
 begin
   FBcsFileNames := BcsFileNames;
   if (Model.ModelSelection = msSutra22) then
@@ -815,7 +817,8 @@ begin
       FlowTypeExtension := '';
     end;
 
-    FNameOfFile := ChangeFileExt(AFileName, '') + LakeExtension
+    FileRoot := ChangeFileExt(AFileName, '');
+    FNameOfFile := FileRoot + LakeExtension
       + FlowTypeExtension + Extension;
     OpenFile(FNameOfFile);
     try
@@ -839,8 +842,18 @@ begin
         WriteDataSet7A(TimeIndex);
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
-      FBcopgFileName := ChangeFileExt(FNameOfFile, '.bcopg');
-      SutraFileWriter.AddFile(sftBcopg, LakeInteraction, BcopgFileName);
+      FBcopgFileName := ChangeFileExt(FileRoot, '.bcopg');
+      if BcsFileNames <> nil then
+      begin
+        LakeInteraction := BcsFileNames.LakeInteraction;
+        FlowInteraction := BcsFileNames.FlowInteraction;
+      end
+      else
+      begin
+        LakeInteraction := lbiUseDefaults;
+        FlowInteraction := gfitUseDefaults;
+      end;
+      SutraFileWriter.AddFile(sftBcopg, BcopgFileName);
     finally
       CloseFile;
     end;

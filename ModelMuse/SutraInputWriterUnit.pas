@@ -2042,7 +2042,7 @@ begin
       WriteDataSet21A;
       WriteDataSet21B;
       WriteDataSet22;
-      SutraFileWriter.AddFile(sftInp, lbiNoChange, FFileName);
+      SutraFileWriter.AddFile(sftInp, FFileName);
     finally
       CloseFile;
     end;

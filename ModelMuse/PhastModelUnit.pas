@@ -9105,6 +9105,13 @@ const
   //               Bug fix: Fixed a bug that caused issues with opening files
   //                that contained very large or very small real number values.
 
+  //               Bug fix: Fixed a bug that could cause an assertion failure
+  //                when exporting SUTRA models.
+  //               Enhancement: ModelMuse now warns the user if any specified
+  //                head cells are cells for which Kx, Ky, and Kz are all zero.
+  //               Bug fix: Fixed a bug in inserting or deleting well screens
+  //                in the MNW2 package.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.17';
   StrPvalExt = '.pval';
@@ -25194,7 +25201,14 @@ end;
 
 function TCustomModel.IsLayerSimulated(const LayerID: integer): boolean;
 begin
-  result := LayerStructure.IsLayerSimulated(LayerID);
+  if ModelSelection = msModflow2015 then
+  begin
+    result := True;
+  end
+  else
+  begin
+    result := LayerStructure.IsLayerSimulated(LayerID);
+  end;
 end;
 
 procedure TPhastModel.SetArchiveName(const Value: string);

@@ -212,7 +212,7 @@ begin
           IEndList.Add(IntList.Count);
           Continue;
         end;
-        while (Neighbors.FNeighbors.Count > 0) and  (Neighbors.FNeighbors.Last.Count = 0) do
+        while (Neighbors.FNeighbors.Count > 0) and (Neighbors.FNeighbors.Last.Count = 0) do
         begin
           Neighbors.FNeighbors.Delete(Neighbors.FNeighbors.Count - 1);
         end;

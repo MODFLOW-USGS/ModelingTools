@@ -454,6 +454,7 @@ begin
 
   frmErrorsAndWarnings.BeginUpdate;
   try
+    CheckSpecifiedHeadsConnected;
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterZonesNot);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrVKCBParameterImpro);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheNOPARCHECKOptLPF);

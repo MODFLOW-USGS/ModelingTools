@@ -966,7 +966,12 @@ var
   LayerGroupIndex: integer;
   LayerCount: integer;
 begin
-  { TODO -cMODFLOW 6 : This needs to change for MF2015 }
+  Assert(Model <> nil);
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    result := True;
+    Exit;
+  end;
   Assert(LayerID >= 0);
   LayerCount := 0;
   result := False;
