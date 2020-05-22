@@ -1744,12 +1744,19 @@ var
   NewSection: Boolean;
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  ScreenObjectCount: Integer;
 begin
   if not Undoing then
   begin
-    SetLength(FCanMoveScreenObject, frmGoPhast.PhastModel.ScreenObjectCount);
+    ScreenObjectCount := frmGoPhast.PhastModel.ScreenObjectCount;
+    SetLength(FCanMoveScreenObject, ScreenObjectCount);
+  end
+  else
+  begin
+    ScreenObjectCount := Min(Length(FCanMoveScreenObject),
+      frmGoPhast.PhastModel.ScreenObjectCount);
   end;
-  for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+  for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
   begin
     AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
     if AScreenObject.PositionLocked then
@@ -5989,7 +5996,7 @@ var
   OldChildModelScreenObjects: TList;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
-  OldScreenObject: TScreenObject;
+//  OldScreenObject: TScreenObject;
   Item: TScreenObjectEditItem;
   HeadParam: TModflowTransientListParameter;
   FlowParam: TModflowTransientListParameter;

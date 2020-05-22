@@ -46,7 +46,8 @@ uses
   GoPhastTypes, SutraMeshUnit, FastGEO, ModelMuseUtilities,
   PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit,
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
-  SutraOptionsUnit, SutraGeneralBoundaryUnit;
+  SutraOptionsUnit, SutraGeneralBoundaryUnit, SutraBoundaryUnit,
+  SutraGenTransBoundUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -408,6 +409,8 @@ var
   NodeStart: Integer;
   NodeStarts: TList<Integer>;
   procedure UpdateNodeStart(AScreenObject: TScreenObject);
+  var
+    CellList: TCellAssignmentList;
   begin
     CellList := TCellAssignmentList.Create;
     try
@@ -427,9 +430,12 @@ begin
   ResultantBuilder := TStringBuilder.Create;
   StartDictionary := TObservationNodeStartDictionary.Create;
   try
+    // The position of each node in the main SUTRA input file will
+    // be used as the ID so it is important to replicate the order
+    // that they are added to the input file as determined in
+    // TfrmGoPhast.ExportSutra.
     NodeStart := 1;
-    if (Model.ModelSelection = msSutra22)
-      or (not Model.SutraOptions.LakeOptions.UseLakes) then
+    if not Model.SutraLakesUsed then
     begin
       for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
       begin
@@ -463,14 +469,13 @@ begin
             ABoundary := ScreenObject.SutraBoundaries.GeneralFlowBoundary;
             if (ABoundary <> nil) and ABoundary.Used then
             begin
-              if ((LakeInteraction <> ABoundary.LakeInteraction)
-                or (GenLakeInteractionType <> ABoundary.LakeInteractionType))
+              if ((LakeInteraction = ABoundary.LakeInteraction)
+                and (GenLakeInteractionType = ABoundary.LakeInteractionType))
                 then
               begin
-                Continue;
+                UpdateNodeStart(ScreenObject);
               end;
             end;
-            UpdateNodeStart(ScreenObject);
           end;
         end;
       end;
@@ -703,17 +708,87 @@ var
   AFactor: Double;
   ResultantFormula: string;
   DerivedFormula: string;
+  LakeInteraction: TLakeBoundaryInteraction;
+  GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
+  StartDictionary: TObservationNodeStartDictionary;
+  NodeStart: Integer;
+  NodeStarts: TList<Integer>;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  ABoundary: TSutraGeneralTransportBoundary;
+  procedure UpdateNodeStart(AScreenObject: TScreenObject);
+  var
+    CellList: TCellAssignmentList;
+  begin
+    CellList := TCellAssignmentList.Create;
+    try
+      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      StartDictionary.Add(AScreenObject, NodeStart);
+      NodeStart := NodeStart + CellList.Count;
+    finally
+      CellList.Free;
+    end;
+  end;
 begin
+  StartDictionary := TObservationNodeStartDictionary.Create;
+  NodeStarts := TList<Integer>.Create;
   CellLists := TObjectList<TCellAssignmentList>.Create;
   FactorsValuesList := TObjectList<TRealList>.Create;
   CellLocationList := TCellLocationList.Create;
 //  FlowBuilder := TStringBuilder.Create;
   ResultantBuilder := TStringBuilder.Create;
   try
+    if not Model.SutraLakesUsed then
+    begin
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if ScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        ABoundary := ScreenObject.SutraBoundaries.GenTransportBoundary;
+        if (ABoundary <> nil) and ABoundary.Used then
+        begin
+          UpdateNodeStart(ScreenObject);
+        end;
+      end;
+    end
+    else
+    begin
+      for LakeInteraction := Low(TLakeBoundaryInteraction)
+        to High(TLakeBoundaryInteraction) do
+      begin
+        for GenLakeTransInteractionType := Low(TGeneralizedTransportInteractionType)
+          to High(TGeneralizedTransportInteractionType) do
+        begin
+          for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+          begin
+            ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+            if ScreenObject.Deleted then
+            begin
+              Continue;
+            end;
+            ABoundary := ScreenObject.SutraBoundaries.GenTransportBoundary;
+            if (ABoundary <> nil) and ABoundary.Used then
+            begin
+              if ((LakeInteraction = ABoundary.LakeInteraction)
+                and (GenLakeTransInteractionType = ABoundary.LakeInteractionType))
+                then
+              begin
+                UpdateNodeStart(ScreenObject);
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+
     Mesh3D := Model.SutraMesh;
     for GroupIndex := 0 to FSutraFluxObs.GenTrans.Count - 1 do
     begin
       CellLists.Clear;
+      NodeStarts.Clear;
       FactorsValuesList.Clear;
       GenTransGroup := FSutraFluxObs.GenTrans[GroupIndex];
       ObservationFactors := GenTransGroup.ObsGroup.ObservationFactors;
@@ -722,6 +797,20 @@ begin
         Formula := ObservationFactors[ObjectIndex].Factor;
         AScreenObject := ObservationFactors[ObjectIndex].
           ScreenObject as TScreenObject;
+        if AScreenObject = nil then
+        begin
+          Continue;
+        end;
+        if AScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        if not StartDictionary.TryGetValue(AScreenObject, NodeStart) then
+        begin
+          Continue;
+        end;
+        NodeStarts.Add(NodeStart);
+
         Assert(AScreenObject <> nil);
         CellList := TCellAssignmentList.Create;
         CellLists.Add(CellList);
@@ -732,22 +821,26 @@ begin
         AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
           FactorsValues, FactorAnnotation, DataIdentifier);
       end;
+      Assert(CellLists.Count = NodeStarts.Count);
       Assert(CellLists.Count = FactorsValuesList.Count);
       for ListIndex := 0 to CellLists.Count - 1 do
       begin
+        NodeStart := NodeStarts[ListIndex];
         CellList := CellLists[ListIndex];
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];
           Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
           NodeNumber := Node3D.Number + 1;
-          ID := IntToStr(NodeNumber);
+//          ID := IntToStr(NodeNumber);
+          ID := IntToStr(NodeStart + CellIndex);
 
 //          if GenTransGroup.ObsGroup.HasObsIndex(0) then
           begin
             WriteString('  ID ');
             WriteString(ID);
             WriteString(' UGR');
+            WriteInteger(NodeNumber);
             NewLine;
             for ObsIndex := 0 to GenTransGroup.ObsGroup.Count - 1 do
             begin
@@ -759,6 +852,8 @@ begin
                 WriteString(ID);
                 WriteString('_');
                 WriteString(IntToStr(ObsIndex));
+                WriteString('_');
+                WriteString(IntToStr(NodeNumber));
                 WriteFloat(GenTransObs.Time);
                 NewLine;
               end;
@@ -799,6 +894,7 @@ begin
         ResultantBuilder.Clear;
         for ListIndex := 0 to CellLists.Count - 1 do
         begin
+          NodeStart := NodeStarts[ListIndex];
           CellList := CellLists[ListIndex];
           FactorsValues := FactorsValuesList[ListIndex];
           Assert(CellList.Count = FactorsValues.Count);
@@ -809,7 +905,8 @@ begin
 
             Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
             NodeNumber := Node3D.Number + 1;
-            ID := IntToStr(NodeNumber);
+//            ID := IntToStr(NodeNumber);
+            ID := IntToStr(CellIndex + NodeStart);
 
             if (ListIndex > 0) or (CellIndex > 0) then
             begin
@@ -836,6 +933,12 @@ begin
 
 //            FlowBuilder.Append(ObsIndex);
             ResultantBuilder.Append(ObsIndex);
+
+//            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+//            FlowBuilder.Append(NodeNumber);
+            ResultantBuilder.Append(NodeNumber);
           end;
         end;
 //        FlowFormula := FlowBuilder.ToString;
@@ -866,11 +969,13 @@ begin
 
     end;
   finally
+    NodeStarts.Free;
     ResultantBuilder.Free;
 //    FlowBuilder.Free;
     CellLocationList.Free;
     CellLists.Free;
     FactorsValuesList.Free;
+    StartDictionary.Free;
   end;
 end;
 
@@ -1201,17 +1306,81 @@ var
   AFactor: Double;
   ResultantFormula: string;
   DerivedFormula: string;
+  NodeStarts: TList<Integer>;
+  StartDictionary: TObservationNodeStartDictionary;
+  NodeStart: Integer;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  ABoundary: TSutraSpecifiedConcTempBoundary;
+  LakeInteraction: TLakeBoundaryInteraction;
+  procedure UpdateNodeStart(AScreenObject: TScreenObject);
+  var
+    CellList: TCellAssignmentList;
+  begin
+    CellList := TCellAssignmentList.Create;
+    try
+      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      StartDictionary.Add(AScreenObject, NodeStart);
+      NodeStart := NodeStart + CellList.Count;
+    finally
+      CellList.Free;
+    end;
+  end;
 begin
   CellLists := TObjectList<TCellAssignmentList>.Create;
   FactorsValuesList := TObjectList<TRealList>.Create;
   CellLocationList := TCellLocationList.Create;
 //  FlowBuilder := TStringBuilder.Create;
   ResultantBuilder := TStringBuilder.Create;
+  NodeStarts:= TList<Integer>.Create;
+  StartDictionary:= TObservationNodeStartDictionary.Create;
   try
+    NodeStart := 1;
+    if not Model.SutraLakesUsed then
+    begin
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if ScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        ABoundary := ScreenObject.SutraBoundaries.SpecifiedConcTemp;
+        if (ABoundary <> nil) and ABoundary.Used then
+        begin
+          UpdateNodeStart(ScreenObject);
+        end;
+      end;
+    end
+    else
+    begin
+      for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+      begin
+        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+        begin
+          ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+          if ScreenObject.Deleted then
+          begin
+            Continue;
+          end;
+          ABoundary := ScreenObject.SutraBoundaries.SpecifiedConcTemp;
+          if (ABoundary <> nil) and ABoundary.Used then
+          begin
+            if (LakeInteraction = ABoundary.LakeInteraction)
+              then
+            begin
+              UpdateNodeStart(ScreenObject);
+            end;
+          end;
+        end;
+      end;
+    end;
+
     Mesh3D := Model.SutraMesh;
     for GroupIndex := 0 to FSutraFluxObs.SpecConc.Count - 1 do
     begin
       CellLists.Clear;
+      NodeStarts.Clear;
       FactorsValuesList.Clear;
       SpecConcGroup := FSutraFluxObs.SpecConc[GroupIndex];
       ObservationFactors := SpecConcGroup.ObsGroup.ObservationFactors;
@@ -1220,6 +1389,20 @@ begin
         Formula := ObservationFactors[ObjectIndex].Factor;
         AScreenObject := ObservationFactors[ObjectIndex].
           ScreenObject as TScreenObject;
+        if AScreenObject = nil then
+        begin
+          Continue;
+        end;
+        if AScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        if not StartDictionary.TryGetValue(AScreenObject, NodeStart) then
+        begin
+          Continue;
+        end;
+        NodeStarts.Add(NodeStart);
+
         Assert(AScreenObject <> nil);
         CellList := TCellAssignmentList.Create;
         CellLists.Add(CellList);
@@ -1230,22 +1413,26 @@ begin
         AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
           FactorsValues, FactorAnnotation, DataIdentifier);
       end;
+      Assert(CellLists.Count = NodeStarts.Count);
       Assert(CellLists.Count = FactorsValuesList.Count);
       for ListIndex := 0 to CellLists.Count - 1 do
       begin
+        NodeStart := NodeStarts[ListIndex];
         CellList := CellLists[ListIndex];
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];
           Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
           NodeNumber := Node3D.Number + 1;
-          ID := IntToStr(NodeNumber);
+//          ID := IntToStr(NodeNumber);
+          ID := IntToStr(NodeStart + CellIndex);
 
 //          if SpecConcGroup.ObsGroup.HasObsIndex(0) then
           begin
             WriteString('  ID ');
             WriteString(ID);
             WriteString(' UR');
+            WriteInteger(NodeNumber);
             NewLine;
             for ObsIndex := 0 to SpecConcGroup.ObsGroup.Count - 1 do
             begin
@@ -1257,6 +1444,8 @@ begin
                 WriteString(ID);
                 WriteString('_');
                 WriteString(IntToStr(ObsIndex));
+                WriteString('_');
+                WriteString(IntToStr(NodeNumber));
                 WriteFloat(SpecConcObs.Time);
                 NewLine;
               end;
@@ -1297,6 +1486,7 @@ begin
         ResultantBuilder.Clear;
         for ListIndex := 0 to CellLists.Count - 1 do
         begin
+          NodeStart := NodeStarts[ListIndex];
           CellList := CellLists[ListIndex];
           FactorsValues := FactorsValuesList[ListIndex];
           Assert(CellList.Count = FactorsValues.Count);
@@ -1307,7 +1497,8 @@ begin
 
             Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
             NodeNumber := Node3D.Number + 1;
-            ID := IntToStr(NodeNumber);
+//            ID := IntToStr(NodeNumber);
+            ID := IntToStr(CellIndex + NodeStart);
 
             if (ListIndex > 0) or (CellIndex > 0) then
             begin
@@ -1334,6 +1525,12 @@ begin
 
 //            FlowBuilder.Append(ObsIndex);
             ResultantBuilder.Append(ObsIndex);
+
+//            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+//            FlowBuilder.Append(NodeNumber);
+            ResultantBuilder.Append(NodeNumber);
           end;
         end;
 //        FlowFormula := FlowBuilder.ToString;
@@ -1364,6 +1561,8 @@ begin
 
     end;
   finally
+    StartDictionary.Free;
+    NodeStarts.Free;
     ResultantBuilder.Free;
 //    FlowBuilder.Free;
     CellLocationList.Free;
@@ -1402,17 +1601,83 @@ var
   FlowFormula: string;
   ResultantFormula: string;
   DerivedFormula: string;
+  StartDictionary: TObservationNodeStartDictionary;
+  LakeInteraction: TLakeBoundaryInteraction;
+  NodeStart: Integer;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  ABoundary: TSutraFluidBoundary;
+  NodeStarts: TList<Integer>;
+  procedure UpdateNodeStart(AScreenObject: TScreenObject);
+  var
+    CellList: TCellAssignmentList;
+  begin
+    CellList := TCellAssignmentList.Create;
+    try
+      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      StartDictionary.Add(AScreenObject, NodeStart);
+      NodeStart := NodeStart + CellList.Count;
+    finally
+      CellList.Free;
+    end;
+  end;
 begin
   CellLists := TObjectList<TCellAssignmentList>.Create;
   FactorsValuesList := TObjectList<TRealList>.Create;
   CellLocationList := TCellLocationList.Create;
   FlowBuilder := TStringBuilder.Create;
   ResultantBuilder := TStringBuilder.Create;
+  StartDictionary := TObservationNodeStartDictionary.Create;
+  NodeStarts := TList<Integer>.Create;
   try
+    NodeStart := 1;
+    if not Model.SutraLakesUsed then
+    begin
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if ScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        ABoundary := ScreenObject.SutraBoundaries.FluidSource;
+        if (ABoundary <> nil) and ABoundary.Used then
+        begin
+          UpdateNodeStart(ScreenObject);
+        end;
+      end;
+    end
+    else
+    begin
+      for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+      begin
+        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+        begin
+          ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+          if ScreenObject.Deleted then
+          begin
+            Continue;
+          end;
+          ABoundary := ScreenObject.SutraBoundaries.FluidSource;
+          if (ABoundary <> nil) and ABoundary.Used then
+          begin
+            if (LakeInteraction = ABoundary.LakeInteraction)
+              then
+            begin
+              UpdateNodeStart(ScreenObject);
+            end;
+          end;
+        end;
+      end;
+    end;
+
+
+
     Mesh3D := Model.SutraMesh;
     for GroupIndex := 0 to FSutraFluxObs.FluidFlow.Count - 1 do
     begin
       CellLists.Clear;
+      NodeStarts.Clear;
       FactorsValuesList.Clear;
       FluidFlowGroup := FSutraFluxObs.FluidFlow[GroupIndex];
       ObservationFactors := FluidFlowGroup.ObsGroup.ObservationFactors;
@@ -1421,6 +1686,20 @@ begin
         Formula := ObservationFactors[ObjectIndex].Factor;
         AScreenObject := ObservationFactors[ObjectIndex].
           ScreenObject as TScreenObject;
+        if AScreenObject = nil then
+        begin
+          Continue;
+        end;
+        if AScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        if not StartDictionary.TryGetValue(AScreenObject, NodeStart) then
+        begin
+          Continue;
+        end;
+        NodeStarts.Add(NodeStart);
+
         Assert(AScreenObject <> nil);
         CellList := TCellAssignmentList.Create;
         CellLists.Add(CellList);
@@ -1431,22 +1710,26 @@ begin
         AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
           FactorsValues, FactorAnnotation, DataIdentifier);
       end;
+      Assert(CellLists.Count = NodeStarts.Count);
       Assert(CellLists.Count = FactorsValuesList.Count);
       for ListIndex := 0 to CellLists.Count - 1 do
       begin
+        NodeStart := NodeStarts[ListIndex];
         CellList := CellLists[ListIndex];
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];
           Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
           NodeNumber := Node3D.Number + 1;
-          ID := IntToStr(NodeNumber);
+//          ID := IntToStr(NodeNumber);
+          ID := IntToStr(NodeStart + CellIndex);
 
           if FluidFlowGroup.ObsGroup.HasObsIndex(0) then
           begin
             WriteString('  ID ');
             WriteString(ID);
             WriteString(' FF');
+            WriteInteger(NodeNumber);
             NewLine;
             for ObsIndex := 0 to FluidFlowGroup.ObsGroup.Count - 1 do
             begin
@@ -1458,6 +1741,8 @@ begin
                 WriteString(ID);
                 WriteString('_');
                 WriteString(IntToStr(ObsIndex));
+                WriteString('_');
+                WriteString(IntToStr(NodeNumber));
                 WriteFloat(FFObs.Time);
                 NewLine;
               end;
@@ -1470,6 +1755,7 @@ begin
             WriteString('  ID ');
             WriteString(ID);
             WriteString(' FR');
+            WriteInteger(NodeNumber);
             NewLine;
             for ObsIndex := 0 to FluidFlowGroup.ObsGroup.Count - 1 do
             begin
@@ -1481,6 +1767,8 @@ begin
                 WriteString(ID);
                 WriteString('_');
                 WriteString(IntToStr(ObsIndex));
+                WriteString('_');
+                WriteString(IntToStr(NodeNumber));
                 WriteFloat(FFObs.Time);
                 NewLine;
               end;
@@ -1498,6 +1786,7 @@ begin
         ResultantBuilder.Clear;
         for ListIndex := 0 to CellLists.Count - 1 do
         begin
+          NodeStart := NodeStarts[ListIndex];
           CellList := CellLists[ListIndex];
           FactorsValues := FactorsValuesList[ListIndex];
           Assert(CellList.Count = FactorsValues.Count);
@@ -1508,7 +1797,8 @@ begin
 
             Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
             NodeNumber := Node3D.Number + 1;
-            ID := IntToStr(NodeNumber);
+//            ID := IntToStr(NodeNumber);
+            ID := IntToStr(CellIndex + NodeStart);
 
             if (ListIndex > 0) or (CellIndex > 0) then
             begin
@@ -1535,6 +1825,12 @@ begin
 
             FlowBuilder.Append(ObsIndex);
             ResultantBuilder.Append(ObsIndex);
+
+            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+            FlowBuilder.Append(NodeNumber);
+            ResultantBuilder.Append(NodeNumber);
           end;
         end;
         FlowFormula := FlowBuilder.ToString;
@@ -1565,6 +1861,8 @@ begin
 
     end;
   finally
+    NodeStarts.Free;
+    StartDictionary.Free;
     ResultantBuilder.Free;
     FlowBuilder.Free;
     CellLocationList.Free;
@@ -1603,17 +1901,81 @@ var
   FlowFormula: string;
   ResultantFormula: string;
   DerivedFormula: string;
+  StartDictionary: TObservationNodeStartDictionary;
+  LakeInteraction: TLakeBoundaryInteraction;
+  NodeStart: Integer;
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  ABoundary: TSutraSpecifiedPressureBoundary;
+  NodeStarts: TList<Integer>;
+  procedure UpdateNodeStart(AScreenObject: TScreenObject);
+  var
+    CellList: TCellAssignmentList;
+  begin
+    CellList := TCellAssignmentList.Create;
+    try
+      AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+      StartDictionary.Add(AScreenObject, NodeStart);
+      NodeStart := NodeStart + CellList.Count;
+    finally
+      CellList.Free;
+    end;
+  end;
 begin
   CellLists := TObjectList<TCellAssignmentList>.Create;
   FactorsValuesList := TObjectList<TRealList>.Create;
   CellLocationList := TCellLocationList.Create;
   FlowBuilder := TStringBuilder.Create;
   ResultantBuilder := TStringBuilder.Create;
+  NodeStarts:= TList<Integer>.Create;
+  StartDictionary:= TObservationNodeStartDictionary.Create;
   try
+    NodeStart := 1;
+    if not Model.SutraLakesUsed then
+    begin
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if ScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        ABoundary := ScreenObject.SutraBoundaries.SpecifiedPressure;
+        if (ABoundary <> nil) and ABoundary.Used then
+        begin
+          UpdateNodeStart(ScreenObject);
+        end;
+      end;
+    end
+    else
+    begin
+      for LakeInteraction := Low(TLakeBoundaryInteraction) to High(TLakeBoundaryInteraction) do
+      begin
+        for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+        begin
+          ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+          if ScreenObject.Deleted then
+          begin
+            Continue;
+          end;
+          ABoundary := ScreenObject.SutraBoundaries.SpecifiedPressure;
+          if (ABoundary <> nil) and ABoundary.Used then
+          begin
+            if (LakeInteraction = ABoundary.LakeInteraction)
+              then
+            begin
+              UpdateNodeStart(ScreenObject);
+            end;
+          end;
+        end;
+      end;
+    end;
+
     Mesh3D := Model.SutraMesh;
     for GroupIndex := 0 to FSutraFluxObs.SpecPres.Count - 1 do
     begin
       CellLists.Clear;
+      NodeStarts.Clear;
       FactorsValuesList.Clear;
       SpecPresGroup := FSutraFluxObs.SpecPres[GroupIndex];
       ObservationFactors := SpecPresGroup.ObsGroup.ObservationFactors;
@@ -1622,6 +1984,20 @@ begin
         Formula := ObservationFactors[ObjectIndex].Factor;
         AScreenObject := ObservationFactors[ObjectIndex].
           ScreenObject as TScreenObject;
+        if AScreenObject = nil then
+        begin
+          Continue;
+        end;
+        if AScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+        if not StartDictionary.TryGetValue(AScreenObject, NodeStart) then
+        begin
+          Continue;
+        end;
+        NodeStarts.Add(NodeStart);
+
         Assert(AScreenObject <> nil);
         CellList := TCellAssignmentList.Create;
         CellLists.Add(CellList);
@@ -1632,9 +2008,11 @@ begin
         AScreenObject.AssignValuesWithCellList(Formula, Model, CellLocationList,
           FactorsValues, FactorAnnotation, DataIdentifier);
       end;
+      Assert(CellLists.Count = NodeStarts.Count);
       Assert(CellLists.Count = FactorsValuesList.Count);
       for ListIndex := 0 to CellLists.Count - 1 do
       begin
+        NodeStart := NodeStarts[ListIndex];
         CellList := CellLists[ListIndex];
 //        FactorsValues := FactorsValuesList[ListIndex];
 //        Assert(CellList.Count = FactorsValues.Count);
@@ -1644,7 +2022,8 @@ begin
 //          AFactor := FactorsValues[CellIndex];
           Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
           NodeNumber := Node3D.Number + 1;
-          ID := IntToStr(NodeNumber);
+//          ID := IntToStr(NodeNumber);
+          ID := IntToStr(NodeStart + CellIndex);
 
           if SpecPresGroup.ObsGroup.HasObsIndex(0)
             or SpecPresGroup.ObsGroup.HasObsIndex(1) then
@@ -1652,6 +2031,7 @@ begin
             WriteString('  ID ');
             WriteString(ID);
             WriteString(' PF');
+            WriteInteger(NodeNumber);
             NewLine;
             for ObsIndex := 0 to SpecPresGroup.ObsGroup.Count - 1 do
             begin
@@ -1663,6 +2043,8 @@ begin
                 WriteString(ID);
                 WriteString('_');
                 WriteString(IntToStr(ObsIndex));
+                WriteString('_');
+                WriteString(IntToStr(NodeNumber));
                 WriteFloat(SPObs.Time);
                 NewLine;
               end;
@@ -1675,6 +2057,7 @@ begin
             WriteString('  ID ');
             WriteString(ID);
             WriteString(' PR');
+            WriteInteger(NodeNumber);
             NewLine;
             for ObsIndex := 0 to SpecPresGroup.ObsGroup.Count - 1 do
             begin
@@ -1686,6 +2069,8 @@ begin
                 WriteString(ID);
                 WriteString('_');
                 WriteString(IntToStr(ObsIndex));
+                WriteString('_');
+                WriteString(IntToStr(NodeNumber));
                 WriteFloat(SPObs.Time);
                 NewLine;
               end;
@@ -1703,6 +2088,7 @@ begin
         ResultantBuilder.Clear;
         for ListIndex := 0 to CellLists.Count - 1 do
         begin
+          NodeStart := NodeStarts[ListIndex];
           CellList := CellLists[ListIndex];
           FactorsValues := FactorsValuesList[ListIndex];
           Assert(CellList.Count = FactorsValues.Count);
@@ -1713,7 +2099,8 @@ begin
 
             Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
             NodeNumber := Node3D.Number + 1;
-            ID := IntToStr(NodeNumber);
+//            ID := IntToStr(NodeNumber);
+            ID := IntToStr(CellIndex + NodeStart);
 
             if (ListIndex > 0) or (CellIndex > 0) then
             begin
@@ -1740,6 +2127,12 @@ begin
 
             FlowBuilder.Append(ObsIndex);
             ResultantBuilder.Append(ObsIndex);
+
+            FlowBuilder.Append('_');
+            ResultantBuilder.Append('_');
+
+            FlowBuilder.Append(NodeNumber);
+            ResultantBuilder.Append(NodeNumber);
           end;
         end;
         FlowFormula := FlowBuilder.ToString;
@@ -1770,6 +2163,8 @@ begin
 
     end;
   finally
+    StartDictionary.Free;
+    NodeStarts.Free;
     ResultantBuilder.Free;
     FlowBuilder.Free;
     CellLocationList.Free;

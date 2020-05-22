@@ -35,7 +35,7 @@ type
     function NumberOfValuesPerLine: Integer; virtual; abstract;
     function GetNumberOfValues(CurrentLines: TStringList): Integer;
     function LineIsStartOfData(ALine: string): Boolean; virtual;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; virtual; abstract;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; virtual; abstract;
     function GetObsValue(ObsTypeIndex: integer): double; virtual; abstract;
     procedure ExtractValues(ALine: string); virtual;
   public
@@ -51,7 +51,7 @@ type
   protected
     function NumberOfValuesPerLine: Integer; override;
     function LineIsStartOfData(ALine: string): Boolean; override;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; override;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; override;
     function GetObsValue(ObsTypeIndex: integer): double; override;
     procedure ExtractValues(ALine: string); override;
   end;
@@ -61,7 +61,7 @@ type
   TSutraSpecifiedPressureOutputFile = class(TCustomNodeOutputFile)
   protected
     function NumberOfValuesPerLine: Integer; override;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; override;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; override;
     function GetObsValue(ObsTypeIndex: integer): double; override;
   end;
 
@@ -70,7 +70,7 @@ type
   TSutraFluidSourceSinkOutputFile = class(TCustomNodeOutputFile)
   protected
     function NumberOfValuesPerLine: Integer; override;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; override;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; override;
     function GetObsValue(ObsTypeIndex: integer): double; override;
   end;
 
@@ -79,7 +79,7 @@ type
   TSutraSpecifiedConcentrationOutputFile = class(TCustomNodeOutputFile)
   protected
     function NumberOfValuesPerLine: Integer; override;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; override;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; override;
     function GetObsValue(ObsTypeIndex: integer): double; override;
   end;
 
@@ -88,7 +88,7 @@ type
   TSutraGeneralizedFlowOutputFile = class(TCustomNodeOutputFile)
   protected
     function NumberOfValuesPerLine: Integer; override;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; override;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; override;
     function GetObsValue(ObsTypeIndex: integer): double; override;
   end;
 
@@ -97,7 +97,7 @@ type
   TSutraGeneralizedTransportOutputFile = class(TCustomNodeOutputFile)
   protected
     function NumberOfValuesPerLine: Integer; override;
-    function GetObsID(NodeNumber: string; ObsTypeIndex: integer): string; override;
+    function GetObsID(NodeNumber: string; ObsTypeIndex: integer; LineIndex: Integer): string; override;
     function GetObsValue(ObsTypeIndex: integer): double; override;
   end;
 
@@ -115,16 +115,16 @@ begin
 end;
 
 function TSutraGeneralizedTransportOutputFile.GetObsID(NodeNumber: string;
-  ObsTypeIndex: integer): string;
+  ObsTypeIndex: integer; LineIndex: Integer): string;
 begin
   case ObsTypeIndex of
     0:
       begin
-        result := NodeNumber + '_UGR'
+        result := IntToStr(LineIndex+ 1) + '_UGR_' + NodeNumber;
       end;
     1:
       begin
-        result := NodeNumber + '_UGU'
+        result := IntToStr(LineIndex+ 1) + '_UGU_' + NodeNumber;
       end;
   else
     Assert(False);
@@ -178,20 +178,20 @@ begin
 end;
 
 function TSutraGeneralizedFlowOutputFile.GetObsID(NodeNumber: string;
-  ObsTypeIndex: integer): string;
+  ObsTypeIndex: integer; LineIndex: Integer): string;
 begin
   case ObsTypeIndex of
     0:
       begin
-        result := NodeNumber + '_PGF'
+        result := IntToStr(LineIndex+ 1) + '_PGF_' + NodeNumber;
       end;
     1:
       begin
-        result := NodeNumber + '_PGU'
+        result := IntToStr(LineIndex+ 1) + '_PGU_' + NodeNumber;
       end;
     2:
       begin
-        result := NodeNumber + '_PGR'
+        result := IntToStr(LineIndex+ 1) + '_PGR_' + NodeNumber;
       end;
   else
     Assert(False);
@@ -252,10 +252,10 @@ begin
 end;
 
 function TSutraSpecifiedConcentrationOutputFile.GetObsID(NodeNumber: string;
-  ObsTypeIndex: integer): string;
+  ObsTypeIndex: integer; LineIndex: Integer): string;
 begin
   Assert(ObsTypeIndex = 0);
-  result := NodeNumber + '_UR';
+  result := IntToStr(LineIndex+ 1) + '_UR_' + NodeNumber;
 end;
 
 function TSutraSpecifiedConcentrationOutputFile.GetObsValue(
@@ -273,20 +273,20 @@ begin
 end;
 
 function TSutraFluidSourceSinkOutputFile.GetObsID(NodeNumber: string;
-  ObsTypeIndex: integer): string;
+  ObsTypeIndex: integer; LineIndex: Integer): string;
 begin
   case ObsTypeIndex of
     0:
       begin
-        result := NodeNumber + '_FF'
+        result := IntToStr(LineIndex+1) + '_FF_' + NodeNumber;
       end;
     1:
       begin
-        result := NodeNumber + '_FU'
+        result := IntToStr(LineIndex+1) + '_FU_' + NodeNumber;
       end;
     2:
       begin
-        result := NodeNumber + '_FR'
+        result := IntToStr(LineIndex+1) + '_FR+' + NodeNumber;
       end;
   else
     Assert(False);
@@ -426,7 +426,7 @@ begin
 
           for ObsTypeIndex := 0 to Pred(NumberOfValuesPerLine) do
           begin
-            ID := GetObsID(NodeNumber, ObsTypeIndex);
+            ID := GetObsID(NodeNumber, ObsTypeIndex, LineIndex);
             AddKey;
             Values[ObsIndex] := GetObsValue(ObsTypeIndex);
             Inc(ObsIndex);
@@ -450,20 +450,20 @@ begin
 end;
 
 function TSutraSpecifiedPressureOutputFile.GetObsID(NodeNumber: string;
-  ObsTypeIndex: integer): string;
+  ObsTypeIndex: integer; LineIndex: Integer): string;
 begin
   case ObsTypeIndex of
     0:
       begin
-        result := NodeNumber + '_PF'
+        result := IntToStr(LineIndex+ 1) + '_PF_' + NodeNumber;
       end;
     1:
       begin
-        result := NodeNumber + '_PU'
+        result := IntToStr(LineIndex+ 1) + '_PU_' + NodeNumber;
       end;
     2:
       begin
-        result := NodeNumber + '_PR'
+        result := IntToStr(LineIndex+ 1) + '_PR_' + NodeNumber;
       end;
   else
     Assert(False);
@@ -528,7 +528,7 @@ begin
 end;
 
 function TSutraLakeStageOutputFile.GetObsID(NodeNumber: string;
-  ObsTypeIndex: integer): string;
+  ObsTypeIndex: integer; LineIndex: Integer): string;
 begin
   Assert(ObsTypeIndex = 0);
   result := NodeNumber + '_LKST';

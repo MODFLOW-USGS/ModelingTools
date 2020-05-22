@@ -9366,8 +9366,7 @@ begin
       Observations := TStringList.Create;
       BcsFileNames := TLakeInteractionStringLists.Create;
       try
-        if (ModelSelection = msSutra22)
-          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
@@ -9396,8 +9395,7 @@ begin
           end;
         end;
 
-        if (ModelSelection = msSutra22) or
-          (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
@@ -9426,8 +9424,7 @@ begin
           end;
         end;
 
-        if (ModelSelection = msSutra22)
-          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
@@ -9456,8 +9453,7 @@ begin
           end;
         end;
 
-        if (ModelSelection = msSutra22)
-          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
           BoundaryWriter := TSutraBoundaryWriter.Create(PhastModel, etExport,
@@ -9503,8 +9499,7 @@ begin
         end;
 
 //        BcopgFileName := '';
-        if (ModelSelection = msSutra22)
-          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
           GeneralFlowNodes := TList<IGeneralFlowNodes>.Create;
@@ -9543,8 +9538,7 @@ begin
           end;
         end;
 
-        if (ModelSelection = msSutra22)
-          or (not PhastModel.SutraOptions.LakeOptions.UseLakes) then
+        if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
           GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;

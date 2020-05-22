@@ -2404,6 +2404,7 @@ that affects the model output should also have a comment. }
     procedure SetSutraGlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
     procedure SetSutraFluxObs(const Value: TSutraFluxObs);
+    function GetSutraLakesUsed: Boolean;
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3247,6 +3248,7 @@ that affects the model output should also have a comment. }
     function Mt3dIsSelected: Boolean; virtual;
     procedure FillObsItemList(List: TObservationList);
     property PestUsed: Boolean read GetPestUsed;
+    property SutraLakesUsed: Boolean read GetSutraLakesUsed;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -31038,6 +31040,12 @@ begin
     else
        Assert(False);
   end;
+end;
+
+function TCustomModel.GetSutraLakesUsed: Boolean;
+begin
+  result := (ModelSelection = msSutra30)
+          and SutraOptions.LakeOptions.UseLakes;
 end;
 
 function TCustomModel.GetSutraMesh: TSutraMesh3D;

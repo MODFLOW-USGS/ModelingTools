@@ -15,6 +15,7 @@ type
 
   TSutraInputHandler = class(TCustomInputHandler)
   protected
+    FNodeNumber: Integer;
     FSutraFileType: TSutraFileType;
     function CreateObsFile(const FileName: string): TCustomOutputFile; override;
     function ApplicationTitle: string; override;
@@ -192,10 +193,15 @@ var
   ObservationType: string;
   ErrorMessage: string;
 begin
-  Assert(FSplitter.Count = 3, Format(rsMustBeThree, [FLineIndex+1,
+  Assert(FSplitter.Count in [3,4], Format(rsMustBeThree, [FLineIndex+1,
     FInputFileLines[FLineIndex]]));
   FID := FSplitter[1] + '_' + UpperCase(FSplitter[2]);
   ObservationType := FSplitter[2];
+  if FSplitter.Count = 4 then
+  begin
+    FNodeNumber := StrToInt(FSplitter[3]);
+    FID := FID + '_' + FSplitter[3]
+  end;
   if FListingFile <> nil then
   begin
     FListingFile.Add('');
@@ -273,6 +279,10 @@ begin
       Assert(False, ErrorMessage);
     end;
 
+    if FSplitter.Count = 4 then
+    begin
+      FListingFile.Add('  Node Number = ' + FSplitter[3]);
+    end;
   end;
 end;
 
