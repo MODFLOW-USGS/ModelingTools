@@ -635,8 +635,8 @@ var
   TimeIndex: Integer;
   LakeExtension: string;
   TransportTypeExtension: string;
-  LakeInteraction: TLakeBoundaryInteraction;
-  TransportInteraction: TGeneralizedTransportInteractionType;
+//  LakeInteraction: TLakeBoundaryInteraction;
+//  TransportInteraction: TGeneralizedTransportInteractionType;
   FileRoot: string;
 begin
   if Model.ModelSelection = msSutra22 then
@@ -726,16 +726,16 @@ begin
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
       FBcougFileName := ChangeFileExt(FileRoot, '.bcoug');
-      if BcsFileNames <> nil then
-      begin
-        LakeInteraction := BcsFileNames.LakeInteraction;
-        TransportInteraction := BcsFileNames.TransportInteraction;
-      end
-      else
-      begin
-        LakeInteraction := lbiUseDefaults;
-        TransportInteraction := gtitUseDefaults;
-      end;
+//      if BcsFileNames <> nil then
+//      begin
+//        LakeInteraction := BcsFileNames.LakeInteraction;
+//        TransportInteraction := BcsFileNames.TransportInteraction;
+//      end
+//      else
+//      begin
+//        LakeInteraction := lbiUseDefaults;
+//        TransportInteraction := gtitUseDefaults;
+//      end;
       SutraFileWriter.AddFile(sftBcoug, FBcougFileName);
     finally
       CloseFile;

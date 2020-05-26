@@ -35,7 +35,7 @@ type
     function GetFirstValue(Index: integer): double;
     function GetSecondValue(Index: integer): double;
   protected
-    FIdLocations: TObservationDictionary;
+    FObservationDictionary: TObservationDictionary;
     FTextFile: TextFile;
     FBinaryFile: TFileStream;
     FBinaryFileSize: Int64;
@@ -43,7 +43,7 @@ type
     procedure UpdateStoredValues(const ATime: double; const Values: TDoubleArray);
   public
     constructor Create(AFileName: string; AFileType: TFileType;
-      IdLocations: TObservationDictionary);
+      ObservationDictionary: TObservationDictionary);
     destructor Destroy; override;
     property FileName: string read FFileName;
     procedure ReadTimeAndValues; virtual; abstract;
@@ -94,7 +94,7 @@ begin
 end;
 
 constructor TCustomOutputFile.Create(AFileName: string; AFileType: TFileType;
-  IdLocations: TObservationDictionary);
+  ObservationDictionary: TObservationDictionary);
 begin
   //FTime := 0;
   FFileName := AFileName;
@@ -109,7 +109,7 @@ begin
     AssignFile(FTextFile, AFileName);
     reset(FTextFile);
   end;
-  FIdLocations:= IdLocations;
+  FObservationDictionary:= ObservationDictionary;
   ReadHeader;
   ReadTimeAndValues;
   ReadTimeAndValues;

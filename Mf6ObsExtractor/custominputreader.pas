@@ -1080,9 +1080,16 @@ begin
   for ObsIndex := 0 to Pred(FDerivedObsList.Count) do
   begin
     AnObs := FDerivedObsList[ObsIndex];
-    Assert(FObservationDictionary.TryGetValue(UpperCase(AnObs.ID), ObsFile)
-      or FObservationDictionary.TryGetValue(UpperCase(AnObs.Obsname), ObsFile),
-      Format(rsTheObservati2, [AnObs.ID]));
+    if not FObservationDictionary.TryGetValue(UpperCase(AnObs.ID), ObsFile) then
+    begin
+      if not FObservationDictionary.TryGetValue(UpperCase(AnObs.Obsname), ObsFile) then
+      begin
+        Assert(False, Format(rsTheObservati2, [AnObs.ID]));
+      end;
+    end;
+    //Assert(FObservationDictionary.TryGetValue(UpperCase(AnObs.ID), ObsFile)
+    //  or FObservationDictionary.TryGetValue(UpperCase(AnObs.Obsname), ObsFile),
+    //  Format(rsTheObservati2, [AnObs.ID]));
     if  ObsFile.OutputFile.FirstTime < ObsFile.OutputFile.SecondTime then
     begin
       while AnObs.Time > ObsFile.OutputFile.SecondTime do

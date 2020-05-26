@@ -1211,12 +1211,15 @@ end;
 
 function TInterpolatedID.Weight: double;
 begin
+  result := 0;
   case StatFlag of
     stVariance: Result := 1/Statistic;
     stStandardDev: Result := 1/Sqr(Statistic);
     stCoefVar:  Result := 1/Sqr(Statistic * ObservedValue);
     stWeight: Result := Statistic;
     stSquaredWeight: Result := Sqr(Statistic);
+    else
+      Assert(False);
   end;
 end;
 

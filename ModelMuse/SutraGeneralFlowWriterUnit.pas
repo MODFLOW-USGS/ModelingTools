@@ -750,8 +750,8 @@ var
   TimeIndex: Integer;
   LakeExtension: string;
   FlowTypeExtension: string;
-  LakeInteraction: TLakeBoundaryInteraction;
-  FlowInteraction: TGeneralizedFlowInteractionType;
+//  LakeInteraction: TLakeBoundaryInteraction;
+//  FlowInteraction: TGeneralizedFlowInteractionType;
   FileRoot: string;
 begin
   FBcsFileNames := BcsFileNames;
@@ -843,16 +843,16 @@ begin
       end;
       SutraFileWriter.AddBoundaryFile(FNameOfFile);
       FBcopgFileName := ChangeFileExt(FileRoot, '.bcopg');
-      if BcsFileNames <> nil then
-      begin
-        LakeInteraction := BcsFileNames.LakeInteraction;
-        FlowInteraction := BcsFileNames.FlowInteraction;
-      end
-      else
-      begin
-        LakeInteraction := lbiUseDefaults;
-        FlowInteraction := gfitUseDefaults;
-      end;
+//      if BcsFileNames <> nil then
+//      begin
+//        LakeInteraction := BcsFileNames.LakeInteraction;
+//        FlowInteraction := BcsFileNames.FlowInteraction;
+//      end
+//      else
+//      begin
+//        LakeInteraction := lbiUseDefaults;
+//        FlowInteraction := gfitUseDefaults;
+//      end;
       SutraFileWriter.AddFile(sftBcopg, BcopgFileName);
     finally
       CloseFile;

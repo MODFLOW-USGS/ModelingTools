@@ -192,8 +192,8 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
               inherited Panel: TPanel
                 Top = 181
                 Width = 604
-                ExplicitTop = 81
-                ExplicitWidth = 487
+                ExplicitTop = 181
+                ExplicitWidth = 604
                 inherited lbNumber: TLabel
                   Width = 55
                   Height = 18
@@ -241,7 +241,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
                 Top = 110
                 Width = 604
                 ExplicitTop = 110
-                ExplicitWidth = 487
+                ExplicitWidth = 604
                 inherited lbNumber: TLabel
                   Width = 55
                   Height = 18

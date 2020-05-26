@@ -45,7 +45,7 @@ var
   ObsNameArray:  array of AnsiChar;
   procedure AddID;
   begin
-    if FIdLocations.TryGetValue(ID, FileID) then
+    if FObservationDictionary.TryGetValue(ID, FileID) then
     begin
       raise EReadOutputError.Create(Format(rsTheIdentifie, [ID, FileName,
         FileID.OutputFile.FileName]));
@@ -55,7 +55,7 @@ var
       FileID.OutputFile := self;
       FileID.Key := ID;
       FileID.Position := Index;
-      FIdLocations.Add(ID, FileID);
+      FObservationDictionary.Add(ID, FileID);
     end;
   end;
 
@@ -98,7 +98,7 @@ begin
     try
       Splitter.DelimitedText := ALine;
       FNOBS := Splitter.Count - 1;
-      FIdLocations.Capacity := FIdLocations.Count + Splitter.Count;
+      FObservationDictionary.Capacity := FObservationDictionary.Count + Splitter.Count;
       for ObsNameIndex := 1 to Splitter.Count -1 do
       begin
         ID := UpperCase(Splitter[ObsNameIndex]);
@@ -144,7 +144,7 @@ begin
       Splitter := TStringList.Create;
       try
         Splitter.DelimitedText := ALine;
-        Assert(FNOBS = Splitter.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FIdLocations.Count - 1, FNOBS]));
+        Assert(FNOBS = Splitter.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FObservationDictionary.Count - 1, FNOBS]));
         ATime := StrToFloat(Splitter[0]);
         for Index := 1 to Splitter.Count -1 do
         begin

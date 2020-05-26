@@ -682,7 +682,7 @@ begin
         FCustomSchedules.Add(CustomSchedule);
         CustomSchedule.Name := CustomScheduleName(AScreenObject);
       end;
-      SutraStateObs.ScheduleName := CustomSchedule.Name;
+      SutraStateObs.ScheduleName := string(CustomSchedule.Name);
       CustomSchedule.Times.Capacity := CustomSchedule.Times.Count + SutraStateObs.Count;
       for ObsTimeIndex := 0 to SutraStateObs.Count - 1 do
       begin

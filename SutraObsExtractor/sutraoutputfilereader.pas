@@ -40,7 +40,7 @@ type
     procedure ExtractValues(ALine: string); virtual;
   public
     constructor Create(AFileName: string;
-      IdLocations: TObservationDictionary);
+      ObservationDictionary: TObservationDictionary);
     destructor Destroy; override;
     procedure ReadTimeAndValues; override;
   end;
@@ -286,7 +286,7 @@ begin
       end;
     2:
       begin
-        result := IntToStr(LineIndex+1) + '_FR+' + NodeNumber;
+        result := IntToStr(LineIndex+1) + '_FR_' + NodeNumber;
       end;
   else
     Assert(False);
@@ -325,11 +325,11 @@ begin
 end;
 
 constructor TCustomNodeOutputFile.Create(AFileName: string;
-  IdLocations: TObservationDictionary);
+  ObservationDictionary: TObservationDictionary);
 begin
   FSplitter := TStringList.Create;
   FNumberOfValues := -1;
-  inherited Create(AFileName, ftText, IdLocations);
+  inherited Create(AFileName, ftText, ObservationDictionary);
 end;
 
 destructor TCustomNodeOutputFile.Destroy;
@@ -355,7 +355,7 @@ var
   begin
     if NewIds then
     begin
-      if FIdLocations.TryGetValue(ID, FileID) then
+      if FObservationDictionary.TryGetValue(ID, FileID) then
        begin
          raise EReadOutputError.Create(Format(rsTheIdentifie, [ID, FileName,
            FileID.OutputFile.FileName]));
@@ -365,12 +365,12 @@ var
          FileID.OutputFile := self;
          FileID.Key := ID;
          FileID.Position := ObsIndex;
-         FIdLocations.Add(ID, FileID);
+         FObservationDictionary.Add(ID, FileID);
        end;
     end
     else
     begin
-      if FIdLocations.TryGetValue(ID, FileID) then
+      if FObservationDictionary.TryGetValue(ID, FileID) then
       begin
         Assert(FileID.OutputFile = self);
         Assert(FileID.Position = ObsIndex);
@@ -575,7 +575,7 @@ var
   begin
     if NewIds then
     begin
-      if FIdLocations.TryGetValue(ObsName, FileID) then
+      if FObservationDictionary.TryGetValue(ObsName, FileID) then
        begin
          raise EReadOutputError.Create(Format(rsTheIdentifie, [ObsName, FileName,
            FileID.OutputFile.FileName]));
@@ -585,7 +585,7 @@ var
          FileID.OutputFile := self;
          FileID.Key := ObsName;
          FileID.Position := ObsIndex;
-         FIdLocations.Add(ObsName, FileID);
+         FObservationDictionary.Add(ObsName, FileID);
 
          LocationID.ID := ObsName;
          FLocationDictionary.Add(ObsName, LocationID);
@@ -593,7 +593,7 @@ var
     end
     else
     begin
-      if FIdLocations.TryGetValue(ObsName, FileID) then
+      if FObservationDictionary.TryGetValue(ObsName, FileID) then
       begin
         Assert(FileID.OutputFile = self);
         Assert(FileID.Position = ObsIndex);

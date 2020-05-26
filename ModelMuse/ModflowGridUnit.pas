@@ -360,12 +360,19 @@ var
   LocalFrontDataSet: TDataArray;
   LocalFrontContourDataSet: TDataArray;
 begin
-  if not FCellElevationsNeedUpdating then Exit;
+  if not FCellElevationsNeedUpdating then
+  begin
+    Exit;
+  end;
   if not (frmGoPhast.ModelSelection in ModflowSelection) then
   begin
     Exit;
   end;
   if (ColumnCount <= 0) or (RowCount <= 0) or (LayerCount <= 0) then
+  begin
+    Exit;
+  end;
+  if FUpdatingElevations then
   begin
     Exit;
   end;

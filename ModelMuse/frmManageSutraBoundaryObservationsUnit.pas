@@ -204,6 +204,7 @@ var
   NodeList: TList;
   Observations: TCustomSutraFluxObservationGroups;
   ObservationGroup: TCustomSutraFluxObservations;
+  ObsItem: TCustomSutraFluxObservationGroup;
 begin
   inherited;
   NodeList := TList.Create;
@@ -260,13 +261,13 @@ begin
   end;
 
   Observations := ParentNode.Data;
-  ObservationGroup :=
-    (Observations.Add as TCustomSutraFluxObservationGroup).ObservationGroup;
+  ObsItem  := Observations.Add as TCustomSutraFluxObservationGroup;
+  ObservationGroup := ObsItem.ObservationGroup;
   ObservationGroup.ObservationName := ObsName
     + IntToStr(ParentNode.Count+1);
   ANode := tvFluxObservations.Items.AddChild(ParentNode,
     ObservationGroup.ObservationName);
-  ANode.Data := ObservationGroup;
+  ANode.Data := ObsItem;
   tvFluxObservations.Selected := ANode;
   SetSelectedGroupAndObservation(tvFluxObservations);
 end;
@@ -436,21 +437,24 @@ begin
       if lbDstList.Selected[Index] then
       begin
         ScreenObject := lbDstList.Items.Objects[Index] as TScreenObject;
-        ObjectIndex := FSelectedObservation.ObservationFactors.
-          IndexOfScreenObject(ScreenObject);
-        Assert(ObjectIndex >= 0);
-        FactorObject := FSelectedObservation.ObservationFactors[ObjectIndex];
-        if FoundFormula then
+        if FSelectedObservation <> nil then
         begin
-          if FirstFormula <> FactorObject.Factor then
+          ObjectIndex := FSelectedObservation.ObservationFactors.
+            IndexOfScreenObject(ScreenObject);
+          Assert(ObjectIndex >= 0);
+          FactorObject := FSelectedObservation.ObservationFactors[ObjectIndex];
+          if FoundFormula then
           begin
-            FirstFormula := '';
+            if FirstFormula <> FactorObject.Factor then
+            begin
+              FirstFormula := '';
+            end;
+          end
+          else
+          begin
+            FirstFormula := FactorObject.Factor;
+            FoundFormula := True;
           end;
-        end
-        else
-        begin
-          FirstFormula := FactorObject.Factor;
-          FoundFormula := True;
         end;
       end;
     end;
@@ -469,6 +473,7 @@ begin
   frameSutraFluxObs.InitializeControls;
   if Value <> nil then
   begin
+    AvailableObjects := nil;
     if Value is TSutraGenPressObservations then
     begin
       // test for TSutraGenPressObservations before testing for
@@ -502,6 +507,7 @@ begin
       frameSutraFluxObs.SpecifyObservationTypes(SutraGenUObsTypes);
       AvailableObjects := FGenTransObjects;
     end;
+    Assert(AvailableObjects <> nil);
     edObservationName.Text := Value.ObservationName;
     frameSutraFluxObs.GetData(Value);
     CurrentObjects := TList.Create;
@@ -575,11 +581,17 @@ end;
 
 procedure TfrmManageSutraBoundaryObservations.edObservationNameChange(
   Sender: TObject);
+var
+  AnObject: TObject;
+  AnItem: TCustomSutraFluxObservationGroup;
 begin
   inherited;
   if (FSelectedObservation <> nil) then
   begin
-    Assert(tvFluxObservations.Selected.Data = FSelectedObservation);
+    AnObject := tvFluxObservations.Selected.Data;
+    Assert(AnObject is TCustomSutraFluxObservationGroup);
+    AnItem := tvFluxObservations.Selected.Data;
+    Assert(AnItem.ObservationGroup = FSelectedObservation);
     FSelectedObservation.ObservationName := string(AnsiString(edObservationName.Text));
     tvFluxObservations.Selected.Text := edObservationName.Text;
     AssignObsNames;
@@ -664,7 +676,6 @@ var
   ANode: TTreeNode;
   SpecFlowObsItem: TSutraFluidFlowObservationGroup;
   SpecConcObsItem: TSutraSpecConcObservationGroup;
-//  SpecGenFlowItem: TSutraSpecPressureObservationGroup;
   SpecGenTransItem: TSutraGenTransObservationGroup;
   SpecGenFlowItem: TSutraGenPressureObservationGroup;
 begin
@@ -709,7 +720,7 @@ begin
     SpecPresObsItem := FFluxObs.SpecPres[Index];
     ANode := tvFluxObservations.Items.AddChild(ParentNode,
       SpecPresObsItem.ObsGroup.ObservationName);
-    ANode.Data := SpecPresObsItem.ObsGroup;
+    ANode.Data := SpecPresObsItem;
   end;
 
   ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Fluid Flow Obs');
@@ -720,7 +731,7 @@ begin
     SpecFlowObsItem := FFluxObs.FluidFlow[Index];
     ANode := tvFluxObservations.Items.AddChild(ParentNode,
       SpecFlowObsItem.ObsGroup.ObservationName);
-    ANode.Data := SpecFlowObsItem.ObsGroup;
+    ANode.Data := SpecFlowObsItem;
   end;
 
   ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Conc Obs');
@@ -731,7 +742,7 @@ begin
     SpecConcObsItem := FFluxObs.SpecConc[Index];
     ANode := tvFluxObservations.Items.AddChild(ParentNode,
       SpecConcObsItem.ObsGroup.ObservationName);
-    ANode.Data := SpecConcObsItem.ObsGroup;
+    ANode.Data := SpecConcObsItem;
   end;
 
   if frmGoPhast.ModelSelection = msSutra30 then
@@ -744,7 +755,7 @@ begin
       SpecGenFlowItem := FFluxObs.GenFlow[Index];
       ANode := tvFluxObservations.Items.AddChild(ParentNode,
         SpecGenFlowItem.ObsGroup.ObservationName);
-      ANode.Data := SpecGenFlowItem.ObsGroup;
+      ANode.Data := SpecGenFlowItem;
     end;
 
     ParentNode := tvFluxObservations.Items.Add(nil, 'Gen Transport Obs');
@@ -755,7 +766,7 @@ begin
       SpecGenTransItem := FFluxObs.GenTrans[Index];
       ANode := tvFluxObservations.Items.AddChild(ParentNode,
         SpecGenTransItem.ObsGroup.ObservationName);
-      ANode.Data := SpecGenTransItem.ObsGroup;
+      ANode.Data := SpecGenTransItem;
     end;
   end
   else
@@ -1068,11 +1079,16 @@ procedure TfrmManageSutraBoundaryObservations.SetSelectedGroupAndObservation(
 var
   AnObject: TObject;
   GroupSelected: boolean;
+  Item: TCustomSutraFluxObservationGroup;
 begin
   GroupSelected := (TreeView.Selected <> nil)
     and
     ((TreeView.Selected.Data = FFluxObs.SpecPres)
-    or (TreeView.Selected.Data = FFluxObs.FluidFlow)) ;
+    or (TreeView.Selected.Data = FFluxObs.FluidFlow)
+    or (TreeView.Selected.Data = FFluxObs.SpecConc)
+    or (TreeView.Selected.Data = FFluxObs.GenFlow)
+    or (TreeView.Selected.Data = FFluxObs.GenTrans)
+    );
 
   btnDeleteObservation.Enabled := (TreeView.Selected <> nil)
     and not GroupSelected;
@@ -1097,7 +1113,10 @@ begin
     else
     begin
       SelectedGroup := TreeView.Selected.Parent.Data;
-      SelectedObservation := TreeView.Selected.Data;
+      AnObject := TreeView.Selected.Data;
+      Assert(AnObject is TCustomSutraFluxObservationGroup);
+      Item := TreeView.Selected.Data;
+      SelectedObservation := Item.ObservationGroup;
     end;
   end;
   DisplayFactor;

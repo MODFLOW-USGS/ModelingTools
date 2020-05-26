@@ -499,7 +499,7 @@ begin
         begin
           AnObsGroup := TObsGroup.Create;
           FObsGroups.Add(AnObsGroup);
-          AnObsGroup.ObsName := ScreenObject.Name;
+          AnObsGroup.ObsName := AnsiString(ScreenObject.Name);
           AnObsGroup.ObservationFormat := ofOBC;
           AnObsGroup.ObsSchedule := AnsiString(ScreenObject.Name);
           for TimeIndex := 0 to SutraStateObs.Count - 1 do
