@@ -9113,6 +9113,9 @@ const
   //                head cells are cells for which Kx, Ky, and Kz are all zero.
   //               Bug fix: Fixed a bug in inserting or deleting well screens
   //                in the MNW2 package.
+  //               Bug fix: When importing Shapefiles that contained measured
+  //                values, values less than -1E38 are treated as no-data
+  //                values.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.17';

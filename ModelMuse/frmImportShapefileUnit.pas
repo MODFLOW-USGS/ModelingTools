@@ -9346,12 +9346,16 @@ begin
                               PointValueItem.Position := PointIndex;
                             end;
 
+
                             if cbImportMeasured.Checked
                               and (Length(ShapeObject.FMArray) = ShapeObject.FNumPoints) then
                             begin
-                              PointValue := PointValueItem.Values.Add;
-                              PointValue.Name := 'Measured';
-                              PointValue.Value := ShapeObject.FMArray[PointIndex];
+                              if ShapeObject.FMArray[0]>= -1e38 then
+                              begin
+                                PointValue := PointValueItem.Values.Add;
+                                PointValue.Name := 'Measured';
+                                PointValue.Value := ShapeObject.FMArray[PointIndex];
+                              end;
                             end;
                             if cbImportZ.Checked
                               and (Length(ShapeObject.FZArray) = ShapeObject.FNumPoints) then
@@ -9359,7 +9363,7 @@ begin
                               PointValue := PointValueItem.Values.Add;
                               PointValue.Name := 'Z';
                               PointValue.Value := ShapeObject.FZArray[PointIndex];
-                              ZValues[PointIndex] := PointValue.Value;
+                              ZValues[PointIndex] := ShapeObject.FZArray[PointIndex];
                               if PointIndex = 0 then
                               begin
                                 Distances[PointIndex] := 0
@@ -9604,6 +9608,11 @@ begin
                         end;
                       end;
                     end;
+                  end;
+                  for Index := 0 to ScreenObjectList.Count - 1 do
+                  begin
+                    AScreenObject := ScreenObjectList[Index];
+                    AScreenObject.PointPositionValues.RemoveUnusedItems;
                   end;
                   if ScreenObjectList.Count > 0 then
                   begin

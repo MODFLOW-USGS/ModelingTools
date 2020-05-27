@@ -226,7 +226,7 @@ resourcestring
   rsTheListingFi = 'The listing file was already set to "0:s".';
   rsBeginOPTIONS = 'Begin OPTIONS block';
   rsListingFileS = '  Listing file = %s';
-  rsOUTPUT = 'OUTPUT';
+  rsOUTPUT = 'VALUES';
   rsTheOutputFil = 'The output file was already set to "0:s".';
   rsINSTRUCTION = 'INSTRUCTION';
   rsTheInstructi = 'The instruction file was already set to "0:s".';

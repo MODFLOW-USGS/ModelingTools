@@ -172,6 +172,7 @@ type
     procedure Sort;
     function Add: TPointValuesItem;
     property Items[Index: Integer]: TPointValuesItem read GetItem write SetItem; default;
+    procedure RemoveUnusedItems;
   end;
 
   TLineSegment = class(TObject)
@@ -42872,6 +42873,21 @@ begin
       Exit;
     end;
   end;}
+end;
+
+procedure TPointPositionValues.RemoveUnusedItems;
+var
+  ItemIndex: Integer;
+  AnItem: TPointValuesItem;
+begin
+  for ItemIndex := Count - 1 downto 0 do
+  begin
+    AnItem := Items[ItemIndex];
+    if AnItem.Values.Count = 0 then
+    begin
+      AnItem.Free;
+    end;
+  end;
 end;
 
 function ComparePointValuesItems(Item1, Item2: Pointer): Integer;

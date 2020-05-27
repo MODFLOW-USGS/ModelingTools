@@ -569,6 +569,7 @@ type
     The @link(Parts) array holds the array index of the
     starting measure for each part. There is no delimiter in the measure array
     between parts.
+    Measured values less than -1E38 are considered no-data values.
     @name is optional}
 //    MArray: array of double;
   end;
@@ -621,6 +622,7 @@ type
     The parts array holds the array index of the
     starting measure for each part. There is no delimiter in the measure array
     between parts.
+    Measured values less than -1E38 are considered no-data values.
     @name is optional}
     FMArray: TDoubleDynArray;
     // @name is the number of parts in the Shape.

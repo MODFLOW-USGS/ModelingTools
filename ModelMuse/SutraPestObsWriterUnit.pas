@@ -1267,7 +1267,7 @@ begin
       end;
     etExtractedValues:
       begin
-        WriteString('  OUTPUT ');
+        WriteString('  VALUES ');
         WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeValues')));
       end;
     else
