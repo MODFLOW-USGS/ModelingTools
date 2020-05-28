@@ -3,6 +3,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   ClientHeight = 561
   ClientWidth = 747
   OnKeyDown = FormKeyDown
+  ExplicitTop = -122
   ExplicitWidth = 763
   ExplicitHeight = 600
   PixelsPerInch = 96
@@ -93,6 +94,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     ReadOnly = True
     TabOrder = 1
     OnChange = tvFluxObservationsChange
+    ExplicitLeft = 4
   end
   object pnlMain: TPanel
     Left = 131
@@ -443,6 +445,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           Caption = 'Edit F()...'
           Enabled = False
           TabOrder = 6
+          OnClick = btnFactorFormulaClick
         end
       end
     end

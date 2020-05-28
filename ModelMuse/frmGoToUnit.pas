@@ -193,8 +193,8 @@ uses frmGoPhastUnit,
 resourcestring
   StrElement = 'Element';
   StrBlock = 'Block';
-  StrSDoesNotHaveAny = '%s does not have any vertices. Try editing it use "O' +
-  'bject|Edit|Select Objects to Edit or Delete".';
+  StrSDoesNotHaveAny = '%s does not have any vertices. To edit or delete it ' +
+  'use "Object|Edit|Select Objects to Edit or Delete".';
 
 {$R *.dfm}
 

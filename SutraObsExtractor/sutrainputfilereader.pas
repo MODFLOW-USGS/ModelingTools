@@ -265,11 +265,11 @@ begin
     end
     else if ObservationType = 'UGR' then
     begin
-      FListingFile.Add('  Resultant source/sink(+/-) of mass/energy in BCOUPG file');
+      FListingFile.Add('  Resultant source/sink(+/-) of mass/energy in BCOUG file');
     end
     else if ObservationType = 'UGU' then
     begin
-      FListingFile.Add('  Computed conc/temperature in BCOUPG file');
+      FListingFile.Add('  Computed conc/temperature in BCOUG file');
     end
     else
     begin

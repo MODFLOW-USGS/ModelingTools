@@ -89,6 +89,7 @@ type
     procedure miEditUsedClick(Sender: TObject);
     procedure miGoToUsedClick(Sender: TObject);
     procedure miHideUsedClick(Sender: TObject);
+    procedure btnFactorFormulaClick(Sender: TObject);
   private
     FFluxObs: TSutraFluxObs;
     FSpecPresObjects: TScreenObjectList;
@@ -156,7 +157,7 @@ implementation
 
 uses
   frmGoPhastUnit, SutraBoundariesUnit, UndoItemsScreenObjects, frmGoToUnit,
-  GIS_Functions, GoPhastTypes, DataSetUnit, PhastModelUnit;
+  GIS_Functions, GoPhastTypes, DataSetUnit, PhastModelUnit, frmFormulaUnit;
 
 resourcestring
   StrErrorInFormulaS = 'Error in formula: %s';
@@ -307,6 +308,82 @@ begin
   BoxMoveSelectedItems(lbDstList, lbSrcList);
   SetButtons;
   UpdateObjectsInSelectedObservation;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.btnFactorFormulaClick(
+  Sender: TObject);
+var
+  FirstScreenObject: TScreenObject;
+  Index: Integer;
+  Variable: TCustomValue;
+  FunctionString: string;
+  ObjectIndex: Integer;
+  FactorObject: TObservationFactor;
+begin
+  inherited;
+  FirstScreenObject := nil;
+  for Index := 0 to lbDstList.Items.Count - 1 do
+  begin
+    if lbDstList.Selected[Index] then
+    begin
+      FirstScreenObject := lbDstList.Items.Objects[Index] as TScreenObject;
+      break;
+    end;
+  end;
+  if FirstScreenObject = nil then
+  begin
+    Exit;
+  end;
+
+  FunctionString := edFactorFormula.Text;
+  if FunctionString = '' then
+  begin
+    ObjectIndex := FSelectedObservation.ObservationFactors.
+      IndexOfScreenObject(FirstScreenObject);
+    Assert(ObjectIndex >= 0);
+    FactorObject := FSelectedObservation.ObservationFactors[ObjectIndex];
+    FunctionString := FactorObject.Factor;
+  end;
+
+//  with TfrmFormula.Create(nil) do
+  with frmFormula do
+  begin
+    try
+      Initialize;
+      IncludeGIS_Functions(eaBlocks);
+      RemoveGetVCont;
+      RemoveHufFunctions;
+      PopupParent := self;
+
+      for Index := 0 to rparserThreeDFormulaElements.VariableCount - 1 do
+      begin
+        Variable := rparserThreeDFormulaElements.Variables[Index];
+        if rbFormulaParser.IndexOfVariable(Variable.Name) < 0 then
+        begin
+          rbFormulaParser.RegisterVariable(Variable);
+        end;
+      end;
+
+      UpdateTreeList;
+      Formula := FunctionString;
+
+      ShowModal;
+      if ResultSet then
+      begin
+        FunctionString := Formula;
+      end
+      else
+      begin
+        if FunctionString = '' then
+          FunctionString := '0';
+      end;
+    finally
+      Initialize;
+//      Free;
+    end;
+  end;
+
+  CheckFormula(FunctionString, True)
 end;
 
 procedure TfrmManageSutraBoundaryObservations.btnIncAllBtnClick(

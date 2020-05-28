@@ -226,7 +226,7 @@ resourcestring
   rsTheListingFi = 'The listing file was already set to "0:s".';
   rsBeginOPTIONS = 'Begin OPTIONS block';
   rsListingFileS = '  Listing file = %s';
-  rsOUTPUT = 'VALUES';
+  rsValues = 'VALUES';
   rsTheOutputFil = 'The output file was already set to "0:s".';
   rsINSTRUCTION = 'INSTRUCTION';
   rsTheInstructi = 'The instruction file was already set to "0:s".';
@@ -994,7 +994,7 @@ begin
     RecordOutputFile;
     RecordInstructionFile;
   end
-  else if UpperCase(FSplitter[0]) = rsOUTPUT then
+  else if UpperCase(FSplitter[0]) = rsValues then
   begin
     Assert(FSplitter.Count = 2, Format(rsNotExactlyTwoItems, [FLineIndex+1,
       FInputFileLines[FLineIndex]]));
