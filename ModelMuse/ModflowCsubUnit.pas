@@ -310,6 +310,8 @@ type
 //    property Interp;
   end;
 
+function TryGetCSubOb(const CSubObName: string; var CSubOb: TCSubOb): Boolean;
+function CSubObToString(const CSubOb: TCSubOb): string;
 
 implementation
 
@@ -317,6 +319,61 @@ uses
   SubscriptionUnit, frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
   frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit,
   ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit;
+
+const
+  CSubObName: array[TCSubOb] of string =
+   ('CSub_interbed_flow', 'inelastic-csub',
+    'elastic-csub', 'coarse-csub',
+    'csub-cell', 'wcomp-csub-cell',
+    'sk',
+    'ske', 'sk-cell',
+    'ske-cell', 'estress-cell',
+    'gstress-cell', 'interbed-compaction',
+    'inelastic-compaction', 'elastic-compaction',
+    'coarse-compaction', 'compaction-cell',
+    'thickness', 'coarse-thickness',
+    'thickness-cell', 'theta',
+    'coarse-theta', 'theta-cell',
+    'delay-flowtop',
+    'delay-flowbot',
+    'delay-head',
+    'delay-head', 'delay-estress', 'delay-preconstress', 'delay-compaction',
+    'delay-thickness', 'delay-theta',
+    '.preconstress-cell');
+
+var
+  CSubObNames: TStringList;
+
+procedure InitializeCSubObNames;
+var
+  Index: TCSubOb;
+begin
+  CSubObNames := TStringList.Create;
+  CSubObNames.CaseSensitive := False;
+  for Index := High(TCSubOb) to High(TCSubOb) do
+  begin
+    CSubObNames.Add(CSubObName[Index]);
+  end;
+end;
+
+function TryGetCSubOb(const CSubObName: string; var CSubOb: TCSubOb): Boolean;
+var
+  index: Integer;
+begin
+  index := CSubObNames.IndexOf(CSubObName);
+  result := index >= 0;
+  if result then
+  begin
+    CSubOb := TCSubOb(index);
+  end;
+end;
+
+function CSubObToString(const CSubOb: TCSubOb): string;
+begin
+  result := CSubObName[CSubOb];
+end;
+
+
 
 resourcestring
   StrStressOffsetMultip = 'Stress offset multiplier';
@@ -1625,6 +1682,8 @@ begin
 end;
 
 initialization
+  InitializeCSubObNames;
+
   CSubOptionNames := TStringList.Create;
   CSubOptionNames.Add('coCSub');
   CSubOptionNames.Add('coInelastCSub');
@@ -1674,5 +1733,6 @@ initialization
 
 finalization
   CSubOptionNames.Free;
+  CSubObNames.Free;
 
 end.

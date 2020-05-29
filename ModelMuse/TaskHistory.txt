@@ -25539,5 +25539,11 @@ object TTaskHistory
         'Documentation'
         'PEST Observations'
         'PEST')
+    end
+    item
+      Date = 43980.000000000000000000
+      Categories.Strings = (
+        'PEST Observations'
+        'PEST')
     end>
 end

@@ -317,6 +317,8 @@ const
   UzfMf6RootPotentialPosition = 5;
   UzfMf6RootActivityPosition = 6;
 
+function TryGetUzfOb(const UzfObName: string; var UzfOb: TUzfOb): Boolean;
+function UzfObToString(const UzfOb: TUzfOb): string;
 
 implementation
 
@@ -324,6 +326,50 @@ uses
   frmGoPhastUnit, PhastModelUnit, DataSetUnit,
   ScreenObjectUnit, ModflowTimeUnit, ModflowMvrUnit, ModflowUzfUnit,
   ModelMuseUtilities, ModflowRchUnit, ModflowEvtUnit;
+  
+const
+  UzfObsNames: array[TUzfOb] of string = ('UZF_GW_Recharge', 'UZF_GW_Discharge', 'UZF_DischargeToMvr',
+    'UZF_SatZoneEvapotranspiration', 'UZF_Infiltration', 'UZF_MvrInflow',
+    'UZF_RejectInfiltration', 'UZF_RejectInfiltrationToMvr',
+    'UZF_UnsatZoneEvapotranspiration', 'UZF_Storage', 'UZF_NetInfiltration', 'UZF_WaterContent');
+    
+var 
+  UzfObsNameList: TStringList;   
+
+procedure InitializeUzfObsNameList;
+var
+  index: TUzfOb;
+begin
+  UzfObsNameList := TStringList.Create;
+  UzfObsNameList.CaseSensitive := False;
+  for index := High(TUzfOb) to High(TUzfOb) do
+  begin
+    UzfObsNameList.Add(UzfObsNames[index]);
+  end;
+end;
+
+function TryGetUzfOb(const UzfObName: string; var UzfOb: TUzfOb): Boolean;
+var
+  index: Integer;
+begin
+  index := UzfObsNameList.IndexOf(UzfObName);
+  result := index >= 0;
+  if result then
+  begin
+    UzfOb := TUzfOb(index);
+  end;
+end;
+
+function UzfObToString(const UzfOb: TUzfOb): string;
+begin
+  result := UzfObsNames[UzfOb];
+end;
+{
+  TUzfOb = (uoGW_Recharge, uoGW_Discharge, uoDischargeToMvr,
+    uoSatZoneEvapotranspiration, uoInfiltration, uoMvrInflow,
+    uoRejectInfiltration, uoRejectInfiltrationToMvr,
+    uoUnsatZoneEvapotranspiration, uoStorage, uoNetInfiltration, uoWaterContent);
+}
 
 resourcestring
   StrUZFInfiltrationDat = 'UZF infiltration';
@@ -2006,5 +2052,11 @@ procedure TUzfMf6Boundary.SetVerticalSaturatedK(const Value: string);
 begin
   UpdateFormulaBlocks(Value, VerticalSaturatedKPosition, FVerticalSaturatedK);
 end;
+
+initialization
+  InitializeUzfObsNameList;
+
+finalization
+  UzfObsNameList.Free;
 
 end.

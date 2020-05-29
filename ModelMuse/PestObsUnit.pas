@@ -102,7 +102,6 @@ type
 
   TObsItemDictionary = TDictionary<string, TCustomObservationItem>;
 
-
 function PrefixedObsName(Prefix: string; ObjectIndex: Integer; Obs: TCustomObservationItem): string;
 
 implementation
@@ -307,10 +306,7 @@ begin
       Items[ItemIndex].Assign(CompSource.Items[ItemIndex]);
     end;
   end;
-//  else
-//  begin
     inherited;
-//  end;
 end;
 
 constructor TCustomComparisonCollection.Create(ItemClass: TCollectionItemClass;
