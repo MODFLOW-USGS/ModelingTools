@@ -96,7 +96,7 @@ type
     procedure SetObsType(const Value: Integer);
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
   public
@@ -1204,7 +1204,7 @@ begin
   SetIntegerProperty(FObsType, Value);
 end;
 
-procedure TSfrObs.SetObsTypeIndex(const Value: Integer);
+procedure TSfrObs.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := Value;
 end;

@@ -45,7 +45,7 @@ type
     procedure SetTime(const Value: double);
   protected
     function GetObsTypeIndex: Integer; virtual; abstract;
-    procedure SetObsTypeIndex(const Value: Integer); virtual; abstract;
+    procedure SetObsTypeIndex(Value: Integer); virtual; abstract;
     function GetObsTypeString: string; virtual; abstract;
     procedure SetObsTypeString(const Value: string); virtual; abstract;
   public

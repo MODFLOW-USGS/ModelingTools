@@ -147,10 +147,49 @@ type
     property StoredUzfObsDepthFraction: TRealStorage read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
   end;
 
+function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
+function GenObToString(const GenOb: TObGeneral): string;
+
 implementation
 
 uses
   System.Character;
+
+const
+  ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
+    'Rch', 'EVT', 'Mvr');
+
+var
+  ObGenNames: TStringList;
+
+procedure InitializeObGenNames;
+var
+  ObGen: TObGeneral;
+begin
+  ObGenNames := TStringList.Create;
+  ObGenNames.CaseSensitive := False;
+  for ObGen := Low(TObGeneral) to High(TObGeneral) do
+  begin
+    ObGenNames.Add(ObGenName[ObGen]);
+  end;
+end;
+
+function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
+var
+  Index: Integer;
+begin
+  Index := ObGenNames.IndexOf(GenObName);
+  result := Index >= 0;
+  if result then
+  begin
+    GenOb := TObGeneral(Index);
+  end;
+end;
+
+function GenObToString(const GenOb: TObGeneral): string;
+begin
+  result := ObGenName[GenOb];
+end;
 
 { TModflow6Obs }
 
@@ -381,6 +420,7 @@ end;
 
 function TMf6CalibrationObs.GetObsTypeIndex: Integer;
 begin
+  result := -1;
   case ObSeries of
     osGeneral:
       begin
@@ -428,7 +468,37 @@ end;
 
 function TMf6CalibrationObs.GetObsTypeString: string;
 begin
-
+  result := '';
+  case ObSeries of
+    osGeneral:
+      begin
+        result := GenObToString(ObGeneral);
+      end;
+    osMaw:
+      begin
+        result := MawObToString(MawOb);
+      end;
+    osSfr:
+      begin
+        result := SfrObToString(SfrOb);
+      end;
+    osLak:
+      begin
+        result := LakObToString(LakOb);
+      end;
+    osUzf:
+      begin
+        result := UzfObToString(UzfOb);
+      end;
+    osCSub:
+      begin
+        result := CSubObToString(CSubOb);
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TMf6CalibrationObs.SetCSubOb(const Value: TCSubOb);
@@ -528,9 +598,103 @@ begin
 end;
 
 procedure TMf6CalibrationObs.SetObsTypeString(const Value: string);
+var
+  ObGen: TObGeneral;
+  ObMaw: TMawOb;
+  ObSfr: TSfrOb;
+  ObLake: TLakOb;
+  ObUzf: TUzfOb;
+  ObCSub: TCSubOb;
 begin
-  inherited;
+  case ObSeries of
+    osGeneral:
+      begin
+        if TryGetGenOb(Value, ObGen) then
+        begin
+          ObGeneral := ObGen;
+          Exit;
+        end;
+      end;
+    osMaw:
+      begin
+        if TryGetMawOb(Value, ObMaw) then
+        begin
+          MawOb := ObMaw;
+          Exit;
+        end;
+      end;
+    osSfr:
+      begin
+        if TryGetSfrOb(Value, ObSfr) then
+        begin
+          SfrOb := ObSfr;
+          Exit;
+        end;
+      end;
+    osLak:
+      begin
+        if TryGetLakOb(Value, ObLake) then
+        begin
+          LakOb := ObLake;
+          Exit;
+        end;
+      end;
+    osUzf:
+      begin
+        if TryGetUzfOb(Value, ObUzf) then
+        begin
+          UzfOb := ObUzf;
+          Exit;
+        end;
+      end;
+    osCSub:
+      begin
+        if TryGetCSubOb(Value, ObCSub) then
+        begin
+          CSubOb := ObCSub;
+          Exit;
+        end;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
 
+  if TryGetGenOb(Value, ObGen) then
+  begin
+    ObGeneral := ObGen;
+    ObSeries := osGeneral;
+  end
+  else if TryGetMawOb(Value, ObMaw) then
+  begin
+    MawOb := ObMaw;
+    ObSeries := osMaw;
+  end
+  else if TryGetSfrOb(Value, ObSfr) then
+  begin
+    SfrOb := ObSfr;
+    ObSeries := osSfr;
+  end
+  else if TryGetLakOb(Value, ObLake) then
+  begin
+    LakOb := ObLake;
+    ObSeries := osLak;
+  end
+  else if TryGetUzfOb(Value, ObUzf) then
+  begin
+    UzfOb := ObUzf;
+    ObSeries := osUzf;
+  end
+  else if TryGetCSubOb(Value, ObCSub) then
+  begin
+    CSubOb := ObCSub;
+    ObSeries := osCSub;
+  end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 procedure TMf6CalibrationObs.SetSfrOb(const Value: TSfrOb);

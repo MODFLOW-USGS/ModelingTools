@@ -27,11 +27,13 @@ program ModelMuse;
 
 uses
   FastMM4 in 'FastMM4.pas',
+{$IF CompilerVersion = 33}
   madExcept,
   madLinkDisAsm,
   madListHardware,
   madListProcesses,
   madListModules,
+{$ENDIF}
   TempFiles in 'TempFiles.pas',
   Forms,
   HTMLHelpViewer,

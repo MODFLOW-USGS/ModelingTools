@@ -1,0 +1,228 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9C1DB3C1-4C00-4C23-9D0A-01E9274FD050}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="addbtn95\addbtn95_D10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ade\Ade10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ButtonEdit\ButtonEdit10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="datagrid\datagrid10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="GLWidget\GlWidget10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MMJLabel\MMJLabel10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ModelCube\ModelCube10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QMostRecentlyUsedFiles\MostRecentFiles10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Quadtree\QuadTreePkg10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="QZoomBox2\ZoomBox2_10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwController\RbwControllerPackage10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwDataGrid\RbwDataGridD10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwDynamicCursor\DynamicCursor10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwEdit\RbwEdit10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwParser\RbwParser10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwRollup\RbwRollupPanel10_4.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RbwRuler\RbwRuler10_4.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="addbtn95_D10_4">
+        <MSBuild Projects="addbtn95\addbtn95_D10_4.dproj"/>
+    </Target>
+    <Target Name="addbtn95_D10_4:Clean">
+        <MSBuild Projects="addbtn95\addbtn95_D10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="addbtn95_D10_4:Make">
+        <MSBuild Projects="addbtn95\addbtn95_D10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Ade10_4">
+        <MSBuild Projects="ade\Ade10_4.dproj"/>
+    </Target>
+    <Target Name="Ade10_4:Clean">
+        <MSBuild Projects="ade\Ade10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Ade10_4:Make">
+        <MSBuild Projects="ade\Ade10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ButtonEdit10_4">
+        <MSBuild Projects="ButtonEdit\ButtonEdit10_4.dproj"/>
+    </Target>
+    <Target Name="ButtonEdit10_4:Clean">
+        <MSBuild Projects="ButtonEdit\ButtonEdit10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ButtonEdit10_4:Make">
+        <MSBuild Projects="ButtonEdit\ButtonEdit10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="datagrid10_4">
+        <MSBuild Projects="datagrid\datagrid10_4.dproj"/>
+    </Target>
+    <Target Name="datagrid10_4:Clean">
+        <MSBuild Projects="datagrid\datagrid10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="datagrid10_4:Make">
+        <MSBuild Projects="datagrid\datagrid10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GlWidget10_4">
+        <MSBuild Projects="GLWidget\GlWidget10_4.dproj"/>
+    </Target>
+    <Target Name="GlWidget10_4:Clean">
+        <MSBuild Projects="GLWidget\GlWidget10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GlWidget10_4:Make">
+        <MSBuild Projects="GLWidget\GlWidget10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MMJLabel10_4">
+        <MSBuild Projects="MMJLabel\MMJLabel10_4.dproj"/>
+    </Target>
+    <Target Name="MMJLabel10_4:Clean">
+        <MSBuild Projects="MMJLabel\MMJLabel10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MMJLabel10_4:Make">
+        <MSBuild Projects="MMJLabel\MMJLabel10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ModelCube10_4">
+        <MSBuild Projects="ModelCube\ModelCube10_4.dproj"/>
+    </Target>
+    <Target Name="ModelCube10_4:Clean">
+        <MSBuild Projects="ModelCube\ModelCube10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelCube10_4:Make">
+        <MSBuild Projects="ModelCube\ModelCube10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MostRecentFiles10_4">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFiles10_4.dproj"/>
+    </Target>
+    <Target Name="MostRecentFiles10_4:Clean">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFiles10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MostRecentFiles10_4:Make">
+        <MSBuild Projects="QMostRecentlyUsedFiles\MostRecentFiles10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="QuadTreePkg10_4">
+        <MSBuild Projects="Quadtree\QuadTreePkg10_4.dproj"/>
+    </Target>
+    <Target Name="QuadTreePkg10_4:Clean">
+        <MSBuild Projects="Quadtree\QuadTreePkg10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="QuadTreePkg10_4:Make">
+        <MSBuild Projects="Quadtree\QuadTreePkg10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ZoomBox2_10_4">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_10_4.dproj"/>
+    </Target>
+    <Target Name="ZoomBox2_10_4:Clean">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ZoomBox2_10_4:Make">
+        <MSBuild Projects="QZoomBox2\ZoomBox2_10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwControllerPackage10_4">
+        <MSBuild Projects="RbwController\RbwControllerPackage10_4.dproj"/>
+    </Target>
+    <Target Name="RbwControllerPackage10_4:Clean">
+        <MSBuild Projects="RbwController\RbwControllerPackage10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwControllerPackage10_4:Make">
+        <MSBuild Projects="RbwController\RbwControllerPackage10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwDataGridD10_4">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridD10_4.dproj"/>
+    </Target>
+    <Target Name="RbwDataGridD10_4:Clean">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridD10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwDataGridD10_4:Make">
+        <MSBuild Projects="RbwDataGrid\RbwDataGridD10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DynamicCursor10_4">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursor10_4.dproj"/>
+    </Target>
+    <Target Name="DynamicCursor10_4:Clean">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursor10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DynamicCursor10_4:Make">
+        <MSBuild Projects="RbwDynamicCursor\DynamicCursor10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwEdit10_4">
+        <MSBuild Projects="RbwEdit\RbwEdit10_4.dproj"/>
+    </Target>
+    <Target Name="RbwEdit10_4:Clean">
+        <MSBuild Projects="RbwEdit\RbwEdit10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwEdit10_4:Make">
+        <MSBuild Projects="RbwEdit\RbwEdit10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwParser10_4">
+        <MSBuild Projects="RbwParser\RbwParser10_4.dproj"/>
+    </Target>
+    <Target Name="RbwParser10_4:Clean">
+        <MSBuild Projects="RbwParser\RbwParser10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwParser10_4:Make">
+        <MSBuild Projects="RbwParser\RbwParser10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwRollupPanel10_4">
+        <MSBuild Projects="RbwRollup\RbwRollupPanel10_4.dproj"/>
+    </Target>
+    <Target Name="RbwRollupPanel10_4:Clean">
+        <MSBuild Projects="RbwRollup\RbwRollupPanel10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwRollupPanel10_4:Make">
+        <MSBuild Projects="RbwRollup\RbwRollupPanel10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RbwRuler10_4">
+        <MSBuild Projects="RbwRuler\RbwRuler10_4.dproj"/>
+    </Target>
+    <Target Name="RbwRuler10_4:Clean">
+        <MSBuild Projects="RbwRuler\RbwRuler10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RbwRuler10_4:Make">
+        <MSBuild Projects="RbwRuler\RbwRuler10_4.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="addbtn95_D10_4;Ade10_4;ButtonEdit10_4;datagrid10_4;GlWidget10_4;MMJLabel10_4;ModelCube10_4;MostRecentFiles10_4;QuadTreePkg10_4;ZoomBox2_10_4;RbwControllerPackage10_4;RbwDataGridD10_4;DynamicCursor10_4;RbwEdit10_4;RbwParser10_4;RbwRollupPanel10_4;RbwRuler10_4"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="addbtn95_D10_4:Clean;Ade10_4:Clean;ButtonEdit10_4:Clean;datagrid10_4:Clean;GlWidget10_4:Clean;MMJLabel10_4:Clean;ModelCube10_4:Clean;MostRecentFiles10_4:Clean;QuadTreePkg10_4:Clean;ZoomBox2_10_4:Clean;RbwControllerPackage10_4:Clean;RbwDataGridD10_4:Clean;DynamicCursor10_4:Clean;RbwEdit10_4:Clean;RbwParser10_4:Clean;RbwRollupPanel10_4:Clean;RbwRuler10_4:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="addbtn95_D10_4:Make;Ade10_4:Make;ButtonEdit10_4:Make;datagrid10_4:Make;GlWidget10_4:Make;MMJLabel10_4:Make;ModelCube10_4:Make;MostRecentFiles10_4:Make;QuadTreePkg10_4:Make;ZoomBox2_10_4:Make;RbwControllerPackage10_4:Make;RbwDataGridD10_4:Make;DynamicCursor10_4:Make;RbwEdit10_4:Make;RbwParser10_4:Make;RbwRollupPanel10_4:Make;RbwRuler10_4:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

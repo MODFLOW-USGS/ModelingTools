@@ -521,7 +521,8 @@ const
   PumpElevationPosition = 7;
   ScalingLengthPosition = 8;
 
-
+function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
+function MawObToString(const MawOb: TMawOb): string;
 
 implementation
 
@@ -529,6 +530,48 @@ uses
   frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit,
   GIS_Functions, ModflowTimeUnit, DataSetUnit, ModflowMnw2Unit,
   ModelMuseUtilities, ModflowMvrUnit;
+
+const MawObName: array[TMawOb] of string = ('Head', 'FromMvr', 'FlowRate', 'FlowRateCells', 'PumpRate', 'RateToMvr',
+    'FlowingWellFlowRate', 'FlowWellToMvr', 'StorageFlowRate', 'ConstantFlowRate', 'Conductance',
+    'ConductanceCells', 'FlowingWellConductance');
+
+var
+  MawObNames: TStringList;
+
+procedure InitializeMawObNames;
+var
+  Index: TMawOb;
+begin
+  MawObNames := TStringList.Create;
+  MawObNames.CaseSensitive := False;
+  for Index := Low(TMawOb) to High(TMawOb) do
+  begin
+    MawObNames.Add(MawObName[Index]);
+  end;
+end;
+
+function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
+var
+  Index: Integer;
+begin
+  Index := MawObNames.IndexOf(MawObName);
+  result := Index >= 0;
+  if result then
+  begin
+    MawOb := TMawOb(Index);
+  end;
+end;
+
+function MawObToString(const MawOb: TMawOb): string;
+begin
+  result := MawObName[MawOb];
+end;
+
+  {
+  TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate, moRateToMvr,
+    moFlowingWellFlowRate, moFlowWellToMvr, moStorageFlowRate, moConstantFlowRate, moConductance,
+    moConductanceCells, moFlowingWellConductance);
+  }
 
 resourcestring
   StrScreenTop = 'Screen_Top';
@@ -3121,5 +3164,11 @@ procedure TMawCell.SetRow(const Value: integer);
 begin
   FValues.Cell.Row := Value;
 end;
+
+initialization
+  InitializeMawObNames;
+
+finalization
+  MawObNames.Free;
 
 end.

@@ -477,7 +477,7 @@ type
     procedure SetObsType(const Value: TMnwObsType);
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
   public
@@ -3734,7 +3734,7 @@ begin
   end;
 end;
 
-procedure TMnw2ObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TMnw2ObsItem.SetObsTypeIndex(Value: Integer);
 begin
   Assert(Value >= 0);
   Assert(Value <= Ord(motHwell));

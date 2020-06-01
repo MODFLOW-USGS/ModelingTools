@@ -417,7 +417,8 @@ const
   HydraulicConductivityPosition = 5;
 //  SteadyRoughnessPosition = 6;
 //  SteadyUpstreamFractionPosition = 7;
-
+function TryGetSfrOb(const SfrObName: string; var SfrOb: TSfrOb): Boolean;
+function SfrObToString(const SfrOb: TSfrOb): string;
 
 implementation
 
@@ -426,6 +427,44 @@ uses
   ScreenObjectUnit, GIS_Functions, ModflowSfrUnit, ModflowSfrReachUnit,
   ModflowSfrSegment, ModflowSfrChannelUnit, ModflowSfrParamIcalcUnit,
   ModflowSfrFlows, ModflowStrUnit, DataSetUnit, ModflowMvrUnit;
+
+const
+  SfrObName: array[TSfrOb] of string =
+    ('Stage', 'ExtInflow', 'Inflow', 'FromMvr', 'Rainfall', 'Runoff', 'Sfr',
+    'Evaporation', 'Outflow', 'ExternalOutflow', 'ToMvr', 'UpstreamFlow',
+    'DownstreamFlow');
+
+var
+  SfrObNames: TStringList;
+
+procedure InitializeSfrObNames;
+var
+  SfrOb: TSfrOb;
+begin
+  SfrObNames:= TStringList.Create;
+  SfrObNames.CaseSensitive := False;
+  for SfrOb := Low(TSfrOb) to High(TSfrOb) do
+  begin
+    SfrObNames.Add(SfrObName[SfrOb]);
+  end;
+end;
+
+function TryGetSfrOb(const SfrObName: string; var SfrOb: TSfrOb): Boolean;
+var
+  Index: Integer;
+begin
+  Index := SfrObNames.IndexOf(SfrObName);
+  result := Index >= 0;
+  if result then
+  begin
+    SfrOb := TSfrOb(Index);
+  end;
+end;
+
+function SfrObToString(const SfrOb: TSfrOb): string;
+begin
+  result := SfrObName[SfrOb]
+end;
 
 resourcestring
   StrAllButTheFirstRe = 'All but the first reach in a segment is assigned a ' +
@@ -3102,5 +3141,11 @@ begin
   FInflow.Free;
   inherited;
 end;
+
+initialization
+  InitializeSfrObNames
+
+finalization
+  SfrObNames.Free;
 
 end.

@@ -342,7 +342,7 @@ type
   TSubObsItem = class(TCustomSubObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   end;
 
   TSubObsItemList = TList<TSubObsItem>;
@@ -350,7 +350,7 @@ type
   TSwtObsItem = class(TCustomSubObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   end;
 
   TSwtObsItemList = TList<TSwtObsItem>;
@@ -1811,7 +1811,7 @@ begin
   end;
 end;
 
-procedure TSubObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSubObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SubsidenceTypes[Value];
 end;
@@ -1872,7 +1872,7 @@ begin
   result := SwtTypes.IndexOf(ObsType);
 end;
 
-procedure TSwtObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSwtObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SwtTypes[Value];
 end;

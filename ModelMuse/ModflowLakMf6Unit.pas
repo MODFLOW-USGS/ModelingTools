@@ -387,12 +387,61 @@ type
 
   end;
 
+function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
+function LakObToString(const LakOb: TLakOb): string;
+
 implementation
 
 uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit, DataSetUnit;
 
 { TLakeTimeItem }
+
+const
+  LakeObName: array[TLakOb] of string = ('Stage', 'ExternalInflow', 'SimOutletInflow', 'SumInflow', 'FromMvr', 'Rain',
+    'Runoff', 'FlowRate', 'Withdrawal', 'Evap', 'ExternalOutflow', 'ToMvr', 'Storage',
+    'ConstantFlow', 'Outlet', 'Volume', 'SurfaceArea', 'WettedArea',
+    'Conductance');
+	
+var
+  LakeObNames: TStringList;
+  
+procedure InitializeLakeObNames;
+var
+  Index: TLakOb; 
+begin
+  LakeObNames := TStringList.Create;
+  LakeObNames.CaseSensitive := False;
+  for Index := Low(TLakOb) to High(TLakOb) do
+  begin
+    LakeObNames.Add(LakeObName[Index]);
+  end;  
+end;  
+	
+
+function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
+var
+  Index: Integer;
+begin
+  Index := LakeObNames.IndexOf(CSubObName);
+  result := Index >= 0;
+  if result then
+  begin
+    LakOb := TLakOb(Index);
+  end;
+end;
+
+function LakObToString(const LakOb: TLakOb): string;
+begin
+  result := LakeObName[LakOb];
+end;
+  
+{
+  TLakOb = (loStage, loExternalInflow, loSimOutletInflow, loSumInflow, loFromMvr, loRain,
+    loRunoff, loFlowRate, loWithdrawal, loEvap, loExternalOutflow, loToMvr, loStorage,
+    loConstantFlow, loOutlet, loVolume, loSurfaceArea, loWettedArea,
+    loConductance);
+}  
 
 procedure TLakeTimeItem.Assign(Source: TPersistent);
 var
@@ -1802,5 +1851,11 @@ begin
     Items[index].StopTalkingToAnyone;
   end;
 end;
+
+initialization
+  InitializeLakeObNames
+  
+finalization 
+  LakeObNames.Free; 
 
 end.

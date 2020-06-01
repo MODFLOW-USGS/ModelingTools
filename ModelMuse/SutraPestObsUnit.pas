@@ -35,7 +35,7 @@ type
   TSutraStateObsItem = class(TCustomSutraObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   public
     function Units: string; override;
   end;
@@ -104,7 +104,7 @@ type
   TSutraSpecPressObsItem = class(TCustomFluxObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   public
     function Units: string; override;
   end;
@@ -169,7 +169,7 @@ type
   TSutraFluidFlowObsItem = class(TCustomFluxObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   public
     function Units: string; override;
   end;
@@ -219,7 +219,7 @@ type
   TSutraSpecConcObsItem = class(TCustomFluxObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   public
     function Units: string; override;
   end;
@@ -267,7 +267,7 @@ type
   TSutraGenTransObsItem = class(TCustomFluxObsItem)
   protected
     function GetObsTypeIndex: Integer; override;
-    procedure SetObsTypeIndex(const Value: Integer); override;
+    procedure SetObsTypeIndex(Value: Integer); override;
   public
     function Units: string; override;
   end;
@@ -463,7 +463,7 @@ begin
   end;
 end;
 
-procedure TSutraStateObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSutraStateObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SutraStateObsTypes[Value];
 end;
@@ -560,7 +560,7 @@ begin
   Result := SutraSpecPressureObsTypes.IndexOf(ObsType)
 end;
 
-procedure TSutraSpecPressObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSutraSpecPressObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SutraSpecPressureObsTypes[Value];
 
@@ -602,7 +602,7 @@ begin
   result := SutraSpecFluidFlowObsTypes.IndexOf(ObsType)
 end;
 
-procedure TSutraFluidFlowObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSutraFluidFlowObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SutraSpecFluidFlowObsTypes[Value];
 end;
@@ -1080,7 +1080,7 @@ begin
   result := SutraSpecConcObsTypes.IndexOf(ObsType)
 end;
 
-procedure TSutraSpecConcObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSutraSpecConcObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SutraSpecConcObsTypes[Value];
 end;
@@ -1205,7 +1205,7 @@ begin
   result := SutraGenUObsTypes.IndexOf(ObsType)
 end;
 
-procedure TSutraGenTransObsItem.SetObsTypeIndex(const Value: Integer);
+procedure TSutraGenTransObsItem.SetObsTypeIndex(Value: Integer);
 begin
   ObsType := SutraGenUObsTypes[Value];
 end;
