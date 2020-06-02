@@ -1093,6 +1093,17 @@ resourcestring
   StrItLooksLikeNoStr = 'It looks like no stress periods have been defined f' +
   'or this model. If this is not true, please contact the ModelMuse develope' +
   'r for assistance.';
+  StrInvalidStartingBou = 'Invalid starting boundary time';
+  StrInvalidEndingBound = 'Invalid ending boundary time';
+  StrTheBoundaryConditiStart = 'The boundary condition defined by %s will no' +
+  't be used because the first time for it is equal to or after the end of t' +
+  'he last stress period';
+  StrTheBoundaryConditiEnd = 'The boundary condition defined by %s will not ' +
+  'be used because the last time for it is equal to or before the beginning ' +
+  'of the first stress period';
+  StrBoundaryStartingAn = 'Boundary starting and ending times are the same';
+  StrBecauseTheBoundary = 'Because the boundary starting and ending times de' +
+  'fined in %s are the same, they will have no effect.';
 
 function SortBoundaryItems(Item1, Item2: pointer): integer;
 var
@@ -3356,12 +3367,18 @@ begin
   Item := Items[0] as TCustomModflowBoundaryItem;
   if Item.StartTime >= LastUsedTime  then
   begin
+    frmErrorsAndWarnings.AddWarning(LocalModel, StrInvalidStartingBou,
+      Format(StrTheBoundaryConditiStart,
+      [(ScreenObject as TScreenObject).Name]), ScreenObject);
     Exit;
   end;
 
   Item := Items[Count-1] as TCustomModflowBoundaryItem;
   if Item.EndTime <= FirstUsedTime  then
   begin
+    frmErrorsAndWarnings.AddWarning(LocalModel, StrInvalidEndingBound,
+      Format(StrTheBoundaryConditiEnd,
+      [(ScreenObject as TScreenObject).Name]), ScreenObject);
     Exit;
   end;
 
@@ -3381,6 +3398,12 @@ begin
     for ItemIndex := 0 to Count - 1 do
     begin
       Item := Items[ItemIndex] as TCustomModflowBoundaryItem;
+      if Item.StartTime = Item.EndTime then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model, StrBoundaryStartingAn,
+          Format(StrBecauseTheBoundary,
+          [(ScreenObject as TScreenObject).Name]), ScreenObject);
+      end;
       if (Item.StartTime > LastUsedTime)
         or (Item.EndTime < FirstUsedTime) then
       begin

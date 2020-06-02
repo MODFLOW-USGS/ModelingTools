@@ -1281,6 +1281,8 @@ var
   ColIndex: Integer;
   RowIndex: Integer;
   AValue: TModflowFloat;
+  GridSize: Int64;
+  ValueSize: Int64;
 begin
   AFile.Read(NTRANS, SizeOf(NTRANS));
   AFile.Read(KSTP, SizeOf(KSTP));
@@ -1306,7 +1308,9 @@ begin
   end
   else
   begin
-    AFile.Position := AFile.Position + SizeOf(TModflowFloat)*NROW*NCOL;
+    GridSize := NROW*NCOL;
+    ValueSize := SizeOf(TModflowFloat);
+    AFile.Position := AFile.Position + ValueSize*GridSize;
     if AFile.Position > AFile.Size then
     begin
       raise EEndOfModflowFileError.Create(StrTheMODFLOWResultsBinary);
@@ -1323,6 +1327,8 @@ var
   ColIndex: Integer;
   RowIndex: Integer;
   AValue: TModflowFloat;
+  GridSize: Int64;
+  ValueSize: Int64;
 begin
   AFile.Read(KSTP, SizeOf(KSTP));
   AFile.Read(KPER, SizeOf(KPER));
@@ -1349,7 +1355,9 @@ begin
   end
   else
   begin
-    AFile.Position := AFile.Position + SizeOf(TModflowFloat)*NROW*NCOL;
+    GridSize := NROW*NCOL;
+    ValueSize := SizeOf(TModflowFloat);
+    AFile.Position := AFile.Position + ValueSize*GridSize;
     if AFile.Position > AFile.Size then
     begin
       raise EEndOfModflowFileError.Create(StrTheMODFLOWResultsBinary);
@@ -1365,6 +1373,8 @@ procedure ReadDoublePrecisionMt3dmsBinaryRealArray(AFile: TFileStream;
 var
   ColIndex: Integer;
   RowIndex: Integer;
+  GridSize: Int64;
+  ValueSize: Int64;
 begin
   AFile.Read(NTRANS, SizeOf(NTRANS));
   AFile.Read(KSTP, SizeOf(KSTP));
@@ -1387,7 +1397,9 @@ begin
   end
   else
   begin
-    AFile.Position := AFile.Position + SizeOf(TModflowDouble)*NROW*NCOL;
+    GridSize := NROW*NCOL;
+    ValueSize := SizeOf(TModflowDouble);
+    AFile.Position := AFile.Position + ValueSize*GridSize;
     if AFile.Position > AFile.Size then
     begin
       raise EEndOfModflowFileError.Create(StrTheMODFLOWResultsBinary);
@@ -1404,6 +1416,8 @@ procedure ReadDoublePrecisionModflowBinaryRealArray(AFile: TFileStream;
 var
   ColIndex: Integer;
   RowIndex: Integer;
+  GridSize: Int64;
+  ValueSize: Int64;
 begin
   AFile.Read(KSTP, SizeOf(KSTP));
   AFile.Read(KPER, SizeOf(KPER));
@@ -1426,7 +1440,9 @@ begin
   end
   else
   begin
-    AFile.Position := AFile.Position + SizeOf(TModflowDouble)*NROW*NCOL;
+    GridSize := NROW*NCOL;
+    ValueSize := SizeOf(TModflowDouble);
+    AFile.Position := AFile.Position + ValueSize*GridSize;
     if AFile.Position > AFile.Size then
     begin
       raise EEndOfModflowFileError.Create(StrTheMODFLOWResultsBinary);
@@ -1675,6 +1691,8 @@ var
   AuxVarIndex: Integer;
   NumVariable: Integer;
   NodeIndex: Integer;
+  GridSize: Int64;
+  ValueSize: Int64;
   procedure ReadModflow6Name(var AName: string);
   var
     NameArray: TModflowDesc;
@@ -1751,8 +1769,10 @@ begin
         end
         else
         begin
-          AFile.Position := AFile.Position + SizeOf(TModflowFloat)
-            * Abs(NLAY) * NROW * NCOL;
+          GridSize := Abs(NLAY) * NROW * NCOL;
+          ValueSize := SizeOf(TModflowFloat);
+          AFile.Position := AFile.Position + ValueSize
+            * GridSize;
         end;
       end;
     2,5:
@@ -2175,6 +2195,8 @@ var
   NodeIndex: Integer;
   Mf6Description: string;
   NeedToUpdateDimensions: Boolean;
+  GridSize: Int64;
+  ValueSize: Int64;
   procedure ReadModflow6Name(var AName: string);
   var
     NameArray: TModflowDesc;
@@ -2272,8 +2294,10 @@ begin
         end
         else
         begin
+          GridSize := Abs(NLAY) * NROW * NCOL;
+          ValueSize := SizeOf(TModflowDouble);
           AFile.Position := AFile.Position +
-            Abs(NLAY) * NROW * NCOL * SizeOf(TModflowDouble);
+            GridSize * ValueSize;
         end;
       end;
     2,5:

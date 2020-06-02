@@ -534,6 +534,7 @@ object frmExtract: TfrmExtract
   object ChartEditor1: TChartEditor
     Chart = ChartHydExtractor
     Options = [ceChange, ceTitle, ceHelp]
+    Title = 'Editing Hydrograph Plot'
     Left = 152
     Top = 9
   end

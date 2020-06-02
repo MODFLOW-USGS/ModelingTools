@@ -1,5 +1,5 @@
 HelpScribble project file.
-14
+16
 _vpuneq O. dvafgba-050Q35
 0
 2
@@ -9,7 +9,7 @@ TeeChart Pro v5 Editor help
 Copyright 2000 Steema Software SL
 FALSE
 
-
+C:\ModelingTools\GW_Chart\Help
 1
 BrowseButtons()
 0
@@ -22,8 +22,14 @@ TRUE
 16711680
 8388736
 255
+TRUE
+TRUE
 FALSE
 FALSE
+150
+50
+600
+500
 FALSE
 FALSE
 1
@@ -3697,7 +3703,7 @@ FALSE
 \par }
 693
 2LKY7R
-
+X
 
 
 
@@ -3839,15 +3845,15 @@ Imported
 FALSE
 19
 {\rtf1\ansi\deff0{\fonttbl{\f0\fswiss Arial;}}
-{\colortbl ;\red0\green0\blue255;\red0\green0\blue0;}
+{\colortbl ;\red0\green0\blue255;\red0\green0\blue0;\red128\green0\blue0;}
 \viewkind4\uc1\pard\cf1\lang1033\b\f0\fs20 Editor\cf2\b0 
 \par \pard\sb115\cf0\b Description\b0\fs24 
 \par \fs20 Introduction
 \par The Chart Editor is designed to help you quickly modify Charts.
-\par To get help on any Topic in the Chart Editor, select the \{bmc bm0.BMP\} button at the top righthand side of the Editor window and drag it onto the Topic in question. TeeChart Pro help will show you the runtime property or method associated with the feature.
+\par To get help on any Topic in the Chart Editor, select the \cf3\{bmc HelpButtonNew.bmp\}\cf0  button at the top righthand side of the Editor window and drag it onto the Topic in question. TeeChart Pro help will show you the runtime property or method associated with the feature.
 \par Editor design
 \par There are \b 2 principal sections\b0  to the Chart editor, \b Chart parameters\b0  and the \b Series parameters\b0 , which are separated as 2 tabs of the Chart Editor.
-\par \{bmc bm1.BMP\}
+\par \cf3\{bmc editortabs.bmp\}\cf0 
 \par Chart pages
 \par You may define overall Chart display parameters.
 \par 
@@ -6828,7 +6834,7 @@ FALSE
 \par }
 1504
 LMDBTE
-
+Z
 
 
 
@@ -6918,7 +6924,322 @@ FALSE
 main="",(247,216,453,520),4,(255,255,226),(192,192,192),f2
 0
 0
-0
+315
+1 ChangeSeriesType=ChangeSeriesType
+1 AddSeries=1NXGHCU
+1 AdjustFrame=Q22VA
+1 Alignment=2JV4SVJ
+1 Alignment=CN0YF6
+1 Alignment=10QJ_AK
+1 Enable Zoom=152JKVQ
+1 Angle=CENW_Y
+1 AngleIncrement=8Y.FGH
+1 Animated=4BRF6T
+1 AnimatedSteps=D.YHE_
+1 AreaBrush=1L1KDC5
+1 AreaPen=_DDEWZ
+1 Marks Arrow=35C7_HQ
+1 ArrowHeight=1L03_ZQ
+1 ArrowLength=UH_H4
+1 ArrowWidth=115N0YM
+1 AutoMarkPosition=3IKZJA
+1 Automatic=4E.YJZP
+1 AutomaticMaximum=1QCKS4K
+1 AutomaticMinimum=1Y9KS4K
+1 AxisPen=DWI4H.
+1 ValueFormat=1MTSZX2
+1 AxisVisible=4ACBVFK
+1 Marks Back Colour=3DES5H5
+1 BackImageInside=ZDF4E3
+1 BackImageMode=IJ3THS
+1 BarBrush=FMUGTA
+1 BarPen=B6FOL8
+1 BarStyle=19_8K9N
+1 BarWidthPercent=7IAWKN
+1 BevelInner property (TChart)=1IDCP4D
+1 BevelOuter property (TChart)=1IJJV4D
+1 Brush=84OWS4
+1 Size=GTC1.G
+1 Brush=32A87B6
+1 CandleStyle=3Z9J1J5
+1 CandleWidth=1XLEI73
+1 Caption=GKL49L
+1 CircleBackColor=EGTPI2
+1 Circled=109R5GG
+1 Clipped=LXMJN0
+1 ClipPoints=3DQLAB
+1 CloseCircle=2N1QURA
+1 PanelColor=17XUZRK
+1 ColorEachPoint=DDXBEV
+1 ColorWidth=42.FI48
+1 ConnectingPen=64A7EM
+1 Series Cursor=PEAFRY
+1 Dark3D=D6FJ9Y
+1 Datasource=30LD0OH
+1 DateTime=5C09XC0
+1 Direction=QFKFFD
+1 DividingLines=FX7H9M
+1 DownCloseColor=16IH.RO
+1 Draw3D=3PWS5GN
+1 EndColor=9NHUGR
+1 EndColor=1.7RTGQ
+1 ErrorPen=24W.R48
+1 ErrorWidth=EG51UW
+1 ErrorWidthUnits=QUY0K_
+1 ExchangeSeries=1PQ.IG8
+1 Shape Font=17W92XN
+1 Legend Font=5MGN_3.
+1 Legend Frame=88OCM1
+1 Frame=3N4O91
+1 GridPen=3ZBJ_L2
+1 Horizontal Axis=1NGJ5ZO
+1 Horizontal Margin=3ZQ1RS
+1 Horizontal Size=INZ806
+1 Increment=BWRDV9
+1 InflateMargins=8D3_XN
+1 Inverted Axis=14M.M1D
+1 InvertedStairs=19CJ5B3
+1 Label Style=1TY8IQP
+1 Labels Visible=0U0117
+1 Labels Font=6JCS.KN
+1 Labels On Axis=5CMW_1
+1 Labels Separation=94T696
+1 Labels Size=1TY704P
+1 Legend Style=CYE1H8
+1 Line Brush=2WUL_Y6
+1 Line Pen=2K01RZ9
+1 Logarithmic=9QUQ0L
+1 Maximum Points Per Page=1N2N0R4
+1 Axis Maximum=1MEX934
+1 Minimum Value=1DY50HS
+1 Axis Minimum=182L9FO
+1 MinorTick Count=216VW.2
+1 MinorTick Length=A22DDX
+1 Minor Ticks=1.CKX7
+1 MultiArea=8RB7G2
+1 MultiBar=5C9RSE
+1 NextPage=C_PDB_
+1 NumXValues=OFJ_XC
+1 NumZValues=2OFJ_XC
+1 Offset Percent=3ONVVH5
+1 Order=8OI6.MD
+1 PaletteSteps=1NN.QU3
+1 Walls=FQ531P
+1 Scroll=.7CT4N
+1 Chart3DPercent=.N48NI
+1 Page=FSTLDT
+1 Pen=DKLYS8
+1 Shape Pen=2A4LU3Q
+1 Wall Border=XKHS_3
+1 Pointer Pen=2W95OR
+1 PercentFormat=EEMD_W
+1 Period=REVQVA
+1 Circle Pen=KNNP9Y
+1 Previous Page=96Y_F2
+1 ShowPreview=80T675
+1 Print=8ZN7WE
+1 PrintMargins=12HAGUO
+1 PrintOrientation=HY1RMU
+1 PrintResolution=1YYS_ZQ
+1 RadiusIncrement=PHB_NT
+1 Remove Series=_WHW9I
+1 Resize Chart=21EYWD4
+1 RotationAngle=1JLUQWX
+1 Round First Label=G.N16W
+1 RoundRectangle=4M_R_RY
+1 Scale Last Page=1_I0YMR
+1 Series Color=11W7JUT
+1 Shadow Color=6.XQNF
+1 Shadow Size=30BVYWV
+1 ShowCloseTick=WXYCBK
+1 Show in Legend=93XQ6
+1 ShowOpenTick=OZSEY
+1 Side Margins=3.4E0IL
+1 Stairs=8DFLPL
+1 Start Color=C0EJ7Y
+1 StartColor=1JJJ4YS
+1 Shape Style=KGGZ.Y
+1 Marks Style=1QBLEAJ
+1 Pointer Style=1MMXN
+1 Set Function source=G8XHK9
+1 Axes=FPJIYW
+1 Gradient=06D0VJ
+1 TCustomAxisPanel.SeriesList=TCustomAxisPanel.SeriesList
+1 Titles=32R7FZN
+1 Text=C50KVF
+1 Text=17WFT7N
+1 Legend Text Style=1KY.OCO
+1 Tick InnerLength=9XKP5G
+1 Tick Length=1N74N8H
+1 Tick On Labels Only=AA21Z7
+1 Ticks=1VYXNVA
+1 TicksInner=ESGUQ2
+1 TimesZOrder=BGD._K
+1 Title=Q086OA
+1 Title=1VYY4W3
+1 Title=SDEWW
+1 Title Size=1BI30K.
+1 Top Position=GF0GGX
+1 Transparent=CP2FZB
+1 UpCloseColor=1NKJSID
+1 UseColorRange=8E1669
+1 UsePalette=32B1CD7
+1 UsePatterns=24E2E05
+1 UseOrigin=7_A600
+1 Vertical Axis=14MQBRD
+1 Point Vertical Size=129WEIW
+1 View3D=_TA8LO
+1 Visible Wall=3UYX_5
+1 Gradient=1XSNEW5
+1 Visible=A2GPLC
+1 WireFrame=ADXNRM
+1 X=2LKY7R
+1 XLabelsSource=1OG.ZMQ
+1 Radius=NJAZJ
+1 XYStyle=42.XY88
+1 Origin=2P9M_4E
+1 Radius=1MWVAFZ
+1 Editor=.J7AH.
+1 BackImageLoad=ZH_M4X
+1 Aspect=21Q9NP7
+1 Elevation=7H0059
+1 Chart Horizontal Offset=8DUN1G
+1 Orthogonal=4BVCES
+1 Rotation=2GJ4TCL
+1 Tilt=GUR6FQ
+1 Chart Vertical Offset=450.YR
+1 Zoom=GUX.IJ
+1 Explode Biggest Slice=91PODL
+1 OtherSlice=077LSX
+1 Style=C58LOT
+1 Text=19PP_SQ
+1 Value=4FDB_93
+1 Grid Centered=2A8JFU3
+1 Zoom Text enable=1YDP646
+1 Position=_67F8G
+1 Start=1_W2_Y_
+1 End=3UQ4EG
+1 Labels Multiline=37H._NR
+1 Legend Color=K78T29
+1 Transparent=1SHM0F5
+1 Clone Series=BZF31C
+1 Pen Color=12ILT37
+1 Labels enable=0PK8JS
+1 DepthSize=0.J7C.
+1 PiePen=M3VQAR
+1 LineHeight=31.HIQE
+1 CircleLabels=FEU54H
+1 CircleLabelsFont=24NGRYH
+1 CircleLabelsRotated=189.EUP
+1 ErrorStyle=17LLF09
+1 PeriodAlign=191._LJ
+1 PeriodStyle=G08N01
+1 NumLevels=_HB.E0
+1 YPositionLevel=6JMQPY
+1 YPosition=8K3SVZ
+1 PrintProportional=21EZML
+1 AxisBehind=135SS8R
+1 Perspective property=5GWGHJ
+1 LogarithmicBase=1MDNX2G
+1 CheckBoxes=.O4ZC5
+1 FontSeriesColor=4DE._MN
+1 VertSpacing=668RSE
+1 Position=1N_KC0F
+1 Width=1U6GJNP
+1 WidthUnits=1DDU0N
+1 ClickableLine=0P7DIH
+1 DrawEvery=6AQ89U
+1 OrthoAngle=4.U.PL
+1 Color=O6G1C5
+1 HorizSize=7IW.W9
+1 VertSize=1B4Z5CK
+1 ClockWiseLabels=YDC2LK
+1 CircleLabelsInside=L7K0HM
+1 Margins=4ME06Y
+1 SizePercent=1XIHWW1
+1 First/Last=KN54SN
+1 Depth=9IWZAN
+1 Export Chart=NDWMCM
+1 UseYOrigin=ZR8XV6
+1 YOrigin=JFB7LZ
+1 Pen Style=H3.Z0W
+1 MidColor=U0O6UE
+1 StackGroup=LGQQQ
+1 Visible Axis=21I_3R3
+1 Image=32XH_L1
+1 MedianPen=0WCFV0
+1 Position=XA2TEN
+1 WhiskerLength=VYPVVM
+1 WhiskerPen=UJ1FWL
+1 HighBrush=12XQ6.U
+1 HighPen=1LONCU
+1 LowBrush=212NJI3
+1 LowPen=Z05FU4
+1 VertAlign=3ZA6WV
+1 RCirclePen=149FHW.
+1 RLabels=I5Y3.M
+1 CirclePen=1PHWA02
+1 CCirclePen=5OJF0T
+1 CLabels=FV3T0U
+1 IrregularGrid=116Z66L
+1 SideBrush=6CN__L6
+1 SmoothPalette=.PVMT0
+1 CustomPosition=3NEW_P_
+1 Border=1.YTT7K
+1 Brush=155LOE6
+1 Direction=C.HU2R
+1 MinimumPixels=IAA8HW
+1 MouseButton=7KAJI2
+1 Pen=5E010DU
+1 ScrollMouseButton=1QGVODC
+1 Chart axes=FPJIUW
+1 Chart Pen=1UN9TW9
+1 InterCharSize=3BIKL5
+1 LabelsExponent=FJFS4B
+1 LabelsAlign=CELY97
+1 Left=Y7GBP9
+1 Top=ME0C9R
+1 ShapeStyle=2IRHKN
+1 Bevel=K5Z2S3
+1 BevelWidth=17CSTVH
+1 Panel characteristics=2W.Q_J_
+1 Visible Legend=Y5ONJ8
+1 Stacking=OI_2CT
+1 Dark3D=2A4KUCY
+1 Angle=AHY4_U
+1 Chart grid=FPPCYH
+1 Chart tools=4B9UA3Q
+1 Active=WAJ052
+1 Export formats=R0VCV1
+1 Saving Chart to file=328E3C.
+1 Series data=JH816T
+1 Series=0S3D55
+1 Width=763.W0
+1 Series data text=1.T.G9K
+1 IncludeHeader=1ZIA0HA
+1 IncludeIndex=JDHEVH
+1 IncludeLabels=1TI_4_
+1 TextDelimiter=TYN1.
+1 Page Navigator=1ZNQND
+1 Dark3D=135DKFX
+1 Chart Brush=1MXSI31
+1 CLabelsFont=1M_.HCM
+1 RLabelsFont=11T2V8J
+1 MidColor=H.A6QO
+1 PaletteStyle=1NN_0PP
+1 Levels=4_7AK2
+1 AutomaticLevels=349UG1
+1 ContourLevels=EFJ_8_
+1 UpToValue=9BS4IT
+1 Shapes=1MR.Y26
+1 Brush=4KO54G
+1 Color=QUWVH6
+1 Gradient=2HV0ZSE
+1 Text=GVJ7S6
+1 Z=LMDBTE
+1 Points=95V319
+1 DonutPercent=10P99ZO
+1 Dark3D=YDTYRA
 6
 *InternetLink
 16711680

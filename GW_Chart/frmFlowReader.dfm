@@ -332,6 +332,7 @@ object frmCellFlows: TfrmCellFlows
   end
   object ChartEditor1: TChartEditor
     Chart = chartFlow
+    Title = 'Editing Flow Rate Plot'
     Left = 64
     Top = 20
   end

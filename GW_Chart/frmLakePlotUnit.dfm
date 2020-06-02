@@ -1,6 +1,6 @@
 object frmLakePlot: TfrmLakePlot
-  Left = 378
-  Top = 290
+  Left = 373
+  Top = 181
   Width = 679
   Height = 480
   HelpContext = 500
@@ -21,13 +21,13 @@ object frmLakePlot: TfrmLakePlot
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 17
   object chrtLake: TChart
     Left = 0
     Top = 29
-    Width = 661
-    Height = 381
+    Width = 663
+    Height = 392
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     MarginRight = 15
@@ -62,7 +62,7 @@ object frmLakePlot: TfrmLakePlot
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 661
+    Width = 663
     Height = 29
     ButtonHeight = 25
     ButtonWidth = 25
@@ -403,6 +403,7 @@ object frmLakePlot: TfrmLakePlot
   object ChartEditor1: TChartEditor
     Chart = chrtLake
     Options = [ceChange, ceTitle, ceHelp]
+    Title = 'Editing Lake Plot'
     Left = 136
     Top = 17
   end

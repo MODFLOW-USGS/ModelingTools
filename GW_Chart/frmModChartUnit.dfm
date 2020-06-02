@@ -921,7 +921,7 @@ object frmModChart: TfrmModChart
         Width = 209
         Height = 22
         Anchors = [akLeft, akBottom]
-        ItemHeight = 0
+        ItemHeight = 21
         TabOrder = 2
         Text = '0'
         OnChange = adeStandardErrorChange
@@ -1305,7 +1305,7 @@ object frmModChart: TfrmModChart
             Left = 0
             Top = 0
             Width = 224
-            Height = 402
+            Height = 401
             OnClickCheck = clbLinpPlotSymbolClickCheck
             Align = alClient
             Columns = 1
@@ -1591,7 +1591,7 @@ object frmModChart: TfrmModChart
             Anchors = [akLeft, akBottom]
             Color = clBtnFace
             Enabled = False
-            ItemHeight = 0
+            ItemHeight = 21
             TabOrder = 4
             Text = '0'
             OnChange = DelayRedrawChart
@@ -1607,7 +1607,7 @@ object frmModChart: TfrmModChart
             Anchors = [akLeft, akBottom]
             Color = clBtnFace
             Enabled = False
-            ItemHeight = 0
+            ItemHeight = 21
             TabOrder = 6
             Text = '0'
             OnChange = DelayRedrawChart
@@ -2106,7 +2106,7 @@ object frmModChart: TfrmModChart
         Top = 40
         Width = 145
         Height = 22
-        ItemHeight = 0
+        ItemHeight = 21
         TabOrder = 0
         Text = '1'
         OnChange = RedrawChart
@@ -2209,7 +2209,7 @@ object frmModChart: TfrmModChart
             Height = 22
             Color = clBtnFace
             Enabled = False
-            ItemHeight = 0
+            ItemHeight = 21
             TabOrder = 1
             Text = '99.9'
             OnChange = rdeConfidenceIntervalChange
@@ -2417,6 +2417,7 @@ object frmModChart: TfrmModChart
   object ChartEditor1: TChartEditor
     Chart = chartModflow
     Options = [ceChange, ceTitle, ceHelp]
+    Title = 'Editing Calibration Plot'
     Left = 400
     Top = 33
   end

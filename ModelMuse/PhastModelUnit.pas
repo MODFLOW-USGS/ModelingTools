@@ -9116,6 +9116,11 @@ const
   //               Bug fix: When importing Shapefiles that contained measured
   //                values, values less than -1E38 are treated as no-data
   //                values.
+  //               Bug fix: Fixed bug that could cause an assertion failure 
+  //                if identical starting and ending times were specified for
+  //                the RCH package.
+  //               Bug fix: Fixed bug in reading binary MT3D model results
+  //                that could cause a bug report to be generated.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.17';
@@ -38131,9 +38136,12 @@ begin
         end;
         if IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] < 0 then
         begin
-          IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
-          IDomainArray.Annotation[LayerIndex, RowIndex, ColIndex] :=
-            StrIDOMAINSetToZeroOver;
+          if (LayerIndex > 0) and (LayerIndex < IDomainArray.LayerCount - 1) then
+          begin
+            IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
+            IDomainArray.Annotation[LayerIndex, RowIndex, ColIndex] :=
+              StrIDOMAINSetToZeroOver;
+          end;
         end;
       end;
       for LayerIndex := IDomainArray.LayerCount - 1 downto 0 do
@@ -38144,9 +38152,12 @@ begin
         end;
         if IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] < 0 then
         begin
-          IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
-          IDomainArray.Annotation[LayerIndex, RowIndex, ColIndex] :=
-            StrIDOMAINSetToZeroUnder;
+          if (LayerIndex > 0) and (LayerIndex < IDomainArray.LayerCount - 1) then
+          begin
+            IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
+            IDomainArray.Annotation[LayerIndex, RowIndex, ColIndex] :=
+              StrIDOMAINSetToZeroUnder;
+          end;
         end;
       end;
     end;

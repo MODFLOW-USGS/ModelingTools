@@ -698,6 +698,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
   object ChartEditor1: TChartEditor
     Chart = chartZONEBDGT
     Options = [ceChange, ceTitle, ceHelp]
+    Title = 'Editing Budget Plot'
     Left = 136
     Top = 17
   end

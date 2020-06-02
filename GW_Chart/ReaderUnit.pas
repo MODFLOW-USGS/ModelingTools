@@ -337,6 +337,7 @@ begin
   pnlOutBudget.Width := (pnlOutBudget.Width + pnlInBudget.Width) div 2;
   Panel1.Constraints.MinHeight := Panel1.Height;
   frmSelectDiscretization := TfrmSelectDiscretization.Create(self);
+  rgDataSourceClick(nil);
 end;
 
 procedure TfrmZoneBdgtReader.FormDestroy(Sender: TObject);
@@ -5386,7 +5387,7 @@ begin
     stZONEBDGT: // ZONEBDGT
       begin
         OpenDialog1.Filter :=
-          'Zonebudget Listing files (*.zbl, *.zblst, *.zb.lst)|*.zbl;*.zblst;*.zb.lst|All Files (*.*)|*.*';
+          'Zonebudget Listing files (*.zbl, *.zblst, *.zb.lst, .lst)|*.zbl;*.zblst;*.zb.lst;*.lst|All Files (*.*)|*.*';
 //          'Zonebudget Listing files (*.zbl)|*.zbl|All Files (*.*)|*.*';
         cbDecay.Enabled := False;
         cbDecay.Checked := False;

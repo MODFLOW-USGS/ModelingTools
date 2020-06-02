@@ -25,7 +25,7 @@ object frmFarm: TfrmFarm
     Left = 249
     Top = 0
     Width = 543
-    Height = 422
+    Height = 421
     Title.Text.Strings = (
       'Farm Budget')
     OnGetLegendPos = chtFarmPlotGetLegendPos
@@ -45,19 +45,19 @@ object frmFarm: TfrmFarm
     object spl1: TSplitter
       Left = 1
       Top = 1
-      Height = 420
+      Height = 419
     end
   end
   object pnlFarmBudgets: TPanel
     Left = 792
     Top = 0
     Width = 120
-    Height = 422
+    Height = 421
     Align = alRight
     TabOrder = 1
     object spl5: TSplitter
       Left = 1
-      Top = 205
+      Top = 204
       Width = 118
       Height = 3
       Cursor = crVSplit
@@ -67,7 +67,7 @@ object frmFarm: TfrmFarm
       Left = 1
       Top = 1
       Width = 118
-      Height = 204
+      Height = 203
       Align = alClient
       Caption = 'pnl12'
       TabOrder = 0
@@ -75,14 +75,14 @@ object frmFarm: TfrmFarm
         Left = 1
         Top = 1
         Width = 116
-        Height = 202
+        Height = 201
         Align = alClient
         TabOrder = 0
         object clbFarm: TJvCheckListBox
           Left = 1
           Top = 25
           Width = 114
-          Height = 176
+          Height = 175
           OnClickCheck = clbFarmClickCheck
           Align = alClient
           ItemHeight = 13
@@ -111,7 +111,7 @@ object frmFarm: TfrmFarm
     end
     object pnl16: TPanel
       Left = 1
-      Top = 208
+      Top = 207
       Width = 118
       Height = 213
       Align = alBottom
@@ -158,7 +158,7 @@ object frmFarm: TfrmFarm
     Left = 0
     Top = 0
     Width = 249
-    Height = 422
+    Height = 421
     ActivePage = jvspDemandSupply
     PropagateEnable = False
     Align = alLeft
@@ -166,7 +166,7 @@ object frmFarm: TfrmFarm
       Left = 0
       Top = 0
       Width = 249
-      Height = 422
+      Height = 421
       Caption = 'jvspFarmBudgets'
       object pnl1: TPanel
         Left = 0
@@ -274,7 +274,7 @@ object frmFarm: TfrmFarm
           Left = 1
           Top = 1
           Width = 247
-          Height = 332
+          Height = 331
           Align = alClient
           TabOrder = 0
           object spl4: TSplitter
@@ -323,7 +323,7 @@ object frmFarm: TfrmFarm
             Left = 1
             Top = 1
             Width = 129
-            Height = 330
+            Height = 329
             Align = alLeft
             TabOrder = 0
             object clbIn: TJvCheckListBox
@@ -363,11 +363,11 @@ object frmFarm: TfrmFarm
       Left = 0
       Top = 0
       Width = 249
-      Height = 422
+      Height = 421
       Caption = 'jvspDemandSupply'
       object pnl19: TPanel
         Left = 0
-        Top = 264
+        Top = 263
         Width = 249
         Height = 158
         Align = alBottom
@@ -486,14 +486,14 @@ object frmFarm: TfrmFarm
         Left = 0
         Top = 57
         Width = 249
-        Height = 207
+        Height = 206
         Align = alClient
         TabOrder = 2
         object clbFarmsSupplyDef: TJvCheckListBox
           Left = 1
           Top = 25
           Width = 247
-          Height = 181
+          Height = 180
           OnClickCheck = clbFarmsSupplyDefClickCheck
           Align = alClient
           ItemHeight = 13
@@ -578,6 +578,7 @@ object frmFarm: TfrmFarm
   object ChartEditor1: TChartEditor
     Chart = chtFarmPlot
     Options = [ceChange, ceTitle, ceHelp]
+    Title = 'Editing Farm Budget Plot'
     Left = 368
     Top = 1
   end

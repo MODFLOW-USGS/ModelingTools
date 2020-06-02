@@ -4997,6 +4997,12 @@ begin
         Continue;
       end;
       ParameterValues := ParamValues.Objects[Position] as TList;
+      if ParameterValues.Count = 0 then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model,
+          ErrorMessage, Param.ParameterName);
+        Continue;
+      end;
       Assert(ParameterValues.Count > 0);
       // Data set 3
       PARNAM := Param.ParameterName;
