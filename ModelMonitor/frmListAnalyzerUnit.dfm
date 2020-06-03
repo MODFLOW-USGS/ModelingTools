@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
   Left = 0
   Top = 0
-  Caption = 'Listing File Analyzer'
+  Caption = 'ListingAnalyst'
   ClientHeight = 495
   ClientWidth = 792
   Color = clBtnFace
@@ -358,6 +358,10 @@ object frmMain: TfrmMain
       Caption = 'Table'
       ImageIndex = 1
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object rdgTable: TRbwDataGrid4
         Left = 0
         Top = 0

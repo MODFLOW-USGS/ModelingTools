@@ -111,6 +111,7 @@ type
     PriorIndent: Integer;
     PriorStressPeriod: string;
     FModflow6: Boolean;
+    FReopeningAllowed: Boolean;
     procedure ListFileProgress(Sender: TObject; PerMil: integer);
     function DisplayObservations: boolean;
     function DisplayArray: Boolean;
@@ -347,6 +348,7 @@ begin
   {$IFDEF ShowTimes}
   StartTime := Now;
   {$ENDIF}
+  FReopeningAllowed := True;
   tabTable.TabVisible := False;
   tabLines.TabVisible := False;
   pgcDisplay.ActivePage := tabLines;
@@ -428,10 +430,14 @@ begin
   result := True;
   if not FListFile.TryReopenFile then
   begin
-    if (MessageDlg(StrTheFileHasChanged,
+    if FReopeningAllowed and (MessageDlg(StrTheFileHasChanged,
     mtConfirmation, [mbYes, mbNo], 0) in [mrYes]) then
     begin
       OpenAFile(FListFile.FileName);
+    end
+    else
+    begin
+      FReopeningAllowed := False;
     end;
     result := False;
   end;

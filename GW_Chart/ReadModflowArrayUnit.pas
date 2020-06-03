@@ -77,14 +77,14 @@ procedure ReadSinglePrecisionMt3dmsBinaryRealArray(AFile: TFileStream;
 procedure ReadModflowSinglePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer; var PERTIM, TOTIM: TModflowDouble;
   var DESC: TModflowDesc; var NCOL, NROW, NLAY: Integer;
-  var AnArray: T3DTModflowArray; var IRESULT: integer);
+  var AnArray: T3DTModflowArray; var IRESULT: integer; ReadArray: Boolean);
 
 procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
   const AltNLay, AltNRow, AltNCol: integer;
-  var IRESULT: integer);
+  var IRESULT: integer; ReadArray: Boolean);
 
 function CheckArrayFileType(AFile: TFileStream): TModflowFileType;
 function CheckArrayPrecision(AFile: TFileStream): TModflowPrecision;
@@ -864,7 +864,7 @@ procedure ReadModflowSinglePrecFluxArray(AFile: TFileStream;
   var KSTP, KPER: Integer;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
-  var IRESULT: integer);
+  var IRESULT: integer; ReadArray: Boolean);
 var
   ITYPE: integer;
   DELT: TModflowFloat;
@@ -896,14 +896,17 @@ begin
   AFile.Read(NCOL, SizeOf(NCOL));
   AFile.Read(NROW, SizeOf(NROW));
   AFile.Read(NLAY, SizeOf(NLAY));
-  SetLength(AnArray, Abs(NLAY), NROW, NCOL);
-  for LayerIndex := 0 to Abs(NLAY) - 1 do
+  if ReadArray then
   begin
-    for RowIndex := 0 to NROW - 1 do
+    SetLength(AnArray, Abs(NLAY), NROW, NCOL);
+    for LayerIndex := 0 to Abs(NLAY) - 1 do
     begin
-      for ColIndex := 0 to NCOL - 1 do
+      for RowIndex := 0 to NROW - 1 do
       begin
-        AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+        for ColIndex := 0 to NCOL - 1 do
+        begin
+          AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+        end;
       end;
     end;
   end;
@@ -923,12 +926,19 @@ begin
     if ITYPE = 5 then
     begin
       AFile.Read(NVAL, SizeOf(NVAL));
-      if NVAL > 1 then
+      if ReadArray then
       begin
-        for Index := 2 to NVAL do
+        if NVAL > 1 then
         begin
-          AFile.Read(CTMP, SizeOf(CTMP));
+          for Index := 2 to NVAL do
+          begin
+            AFile.Read(CTMP, SizeOf(CTMP));
+          end;
         end;
+      end
+      else
+      begin
+        AFile.Position := AFile.Position + (NVAL-1)*SizeOf(CTMP);
       end;
     end;
     if (ITYPE = 2) or (ITYPE = 5) then
@@ -939,16 +949,24 @@ begin
   case ITYPE of
     0,1: // full 3D array
       begin
-        for LayerIndex := 0 to Abs(NLAY) - 1 do
+        if ReadArray then
         begin
-          for RowIndex := 0 to NROW - 1 do
+          for LayerIndex := 0 to Abs(NLAY) - 1 do
           begin
-            for ColIndex := 0 to NCOL - 1 do
+            for RowIndex := 0 to NROW - 1 do
             begin
-              AFile.Read(AValue, SizeOf(TModflowFloat));
-              AnArray[LayerIndex, RowIndex, ColIndex] := AValue;
+              for ColIndex := 0 to NCOL - 1 do
+              begin
+                AFile.Read(AValue, SizeOf(TModflowFloat));
+                AnArray[LayerIndex, RowIndex, ColIndex] := AValue;
+              end;
             end;
           end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position + Abs(NLAY)*NROW*NCOL
+            *SizeOf(TModflowFloat);
         end;
       end;
     2,5:
@@ -956,75 +974,98 @@ begin
         if NLIST > 0 then
         begin
           NRC := NROW*NCOL;
-          SetLength(Values, NVAL);
-          for Index := 0 to NLIST - 1 do
+          if ReadArray then
           begin
-            AFile.Read(ICELL, SizeOf(ICELL));
-            for ValIndex := 0 to NVAL - 1 do
+            SetLength(Values, NVAL);
+            for Index := 0 to NLIST - 1 do
             begin
-              AFile.Read(Values[ValIndex], SizeOf(TModflowFloat));
+              AFile.Read(ICELL, SizeOf(ICELL));
+              for ValIndex := 0 to NVAL - 1 do
+              begin
+                AFile.Read(Values[ValIndex], SizeOf(TModflowFloat));
+              end;
+              LayerIndex :=  (ICELL-1) div NRC;
+              RowIndex := ( (ICELL - LayerIndex*NRC)-1 ) div NCOL;
+              ColIndex := ICELL - (LayerIndex)*NRC - (RowIndex)*NCOL-1;
+              if ((ColIndex >= 0) AND (RowIndex >= 0) AND (LayerIndex >= 0)
+                AND (ColIndex < ncol) AND (RowIndex < NROW)
+                AND (LayerIndex < Abs(NLAY))) then
+              begin
+                AnArray[LayerIndex, RowIndex, ColIndex] :=
+                  AnArray[LayerIndex, RowIndex, ColIndex] + Values[0];
+              end;
             end;
-            LayerIndex :=  (ICELL-1) div NRC;
-            RowIndex := ( (ICELL - LayerIndex*NRC)-1 ) div NCOL;
-            ColIndex := ICELL - (LayerIndex)*NRC - (RowIndex)*NCOL-1;
-            if ((ColIndex >= 0) AND (RowIndex >= 0) AND (LayerIndex >= 0)
-              AND (ColIndex < ncol) AND (RowIndex < NROW)
-              AND (LayerIndex < Abs(NLAY))) then
-            begin
-              AnArray[LayerIndex, RowIndex, ColIndex] :=
-                AnArray[LayerIndex, RowIndex, ColIndex] + Values[0];
-            end;
+          end
+          else
+          begin
+            AFile.Position := AFile.Position
+              + NLIST * (SizeOf(ICELL) + NVAL*SizeOf(TModflowFloat));
           end;
         end;
       end;
     3: // 1 layer array with layer indicator array
       begin
-        SetLength(FluxArray, NROW, NCOL);
-        SetLength(LayerIndicatorArray, NROW, NCOL);
-        for RowIndex := 0 to NROW - 1 do
+        if ReadArray then
         begin
-          for ColIndex := 0 to NCOL - 1 do
-          begin
-            AFile.Read(LayerIndicatorArray[RowIndex, ColIndex],
-              SizeOf(integer));
-          end;
-        end;
-        for RowIndex := 0 to NROW - 1 do
-        begin
-          for ColIndex := 0 to NCOL - 1 do
-          begin
-            AFile.Read(FluxArray[RowIndex, ColIndex],
-              SizeOf(TModflowFloat));
-          end;
-        end;
-        for RowIndex := 0 to NROW - 1 do
-        begin
-          for ColIndex := 0 to NCOL - 1 do
-          begin
-            AnArray[LayerIndicatorArray[RowIndex, ColIndex]-1,
-              RowIndex, ColIndex] := FluxArray[RowIndex, ColIndex];
-          end;
-        end;
-      end;
-    4: // 1-layer array that defines layer 1.
-      begin
-        for LayerIndex := 1 to Abs(NLAY) - 1 do
-        begin
+          SetLength(FluxArray, NROW, NCOL);
+          SetLength(LayerIndicatorArray, NROW, NCOL);
           for RowIndex := 0 to NROW - 1 do
           begin
             for ColIndex := 0 to NCOL - 1 do
             begin
-              AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+              AFile.Read(LayerIndicatorArray[RowIndex, ColIndex],
+                SizeOf(integer));
             end;
           end;
-        end;
-        for RowIndex := 0 to NROW - 1 do
-        begin
-          for ColIndex := 0 to NCOL - 1 do
+          for RowIndex := 0 to NROW - 1 do
           begin
-            AFile.Read(AValue, SizeOf(TModflowFloat));
-            AnArray[0, RowIndex, ColIndex] := AValue;
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AFile.Read(FluxArray[RowIndex, ColIndex],
+                SizeOf(TModflowFloat));
+            end;
           end;
+          for RowIndex := 0 to NROW - 1 do
+          begin
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AnArray[LayerIndicatorArray[RowIndex, ColIndex]-1,
+                RowIndex, ColIndex] := FluxArray[RowIndex, ColIndex];
+            end;
+          end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position + NROW*NCOL
+            *(SizeOf(integer)+SizeOf(TModflowFloat));
+        end;
+      end;
+    4: // 1-layer array that defines layer 1.
+      begin
+        if ReadArray then
+        begin
+          for LayerIndex := 1 to Abs(NLAY) - 1 do
+          begin
+            for RowIndex := 0 to NROW - 1 do
+            begin
+              for ColIndex := 0 to NCOL - 1 do
+              begin
+                AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+              end;
+            end;
+          end;
+          for RowIndex := 0 to NROW - 1 do
+          begin
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AFile.Read(AValue, SizeOf(TModflowFloat));
+              AnArray[0, RowIndex, ColIndex] := AValue;
+            end;
+          end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position + NROW*NCOL*SizeOf(TModflowFloat);
         end;
       end;
     else Assert(False);
@@ -1036,7 +1077,7 @@ procedure ReadModflowDoublePrecFluxArray(AFile: TFileStream;
   var PERTIM, TOTIM: TModflowDouble; var DESC: TModflowDesc;
   var NCOL, NROW, NLAY: Integer; var AnArray: T3DTModflowArray;
   const AltNLay, AltNRow, AltNCol: integer;
-  var IRESULT: integer);
+  var IRESULT: integer; ReadArray: Boolean);
 var
   ITYPE: integer;
   DELT: TModflowDouble;
@@ -1097,31 +1138,37 @@ begin
       or (Mf6Description = 'CSUB-INELASTIC') then
     begin
       NeedToUpdateDimensions := True;
-      SetLength(AnArray, Abs(AltNLay), AltNRow, AltNCol);
-      for LayerIndex := 0 to Abs(AltNLay) - 1 do
+      if ReadArray then
       begin
-        for RowIndex := 0 to AltNRow - 1 do
+        SetLength(AnArray, Abs(AltNLay), AltNRow, AltNCol);
+        for LayerIndex := 0 to Abs(AltNLay) - 1 do
         begin
-          for ColIndex := 0 to AltNCol - 1 do
+          for RowIndex := 0 to AltNRow - 1 do
           begin
-            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+            for ColIndex := 0 to AltNCol - 1 do
+            begin
+              AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+            end;
           end;
         end;
-      end;
+      end;        
     end
     else
     begin
-      SetLength(AnArray, Abs(NLAY), NROW, NCOL);
-      for LayerIndex := 0 to Abs(NLAY) - 1 do
+      if ReadArray then
       begin
-        for RowIndex := 0 to NROW - 1 do
+        SetLength(AnArray, Abs(NLAY), NROW, NCOL);
+        for LayerIndex := 0 to Abs(NLAY) - 1 do
         begin
-          for ColIndex := 0 to NCOL - 1 do
+          for RowIndex := 0 to NROW - 1 do
           begin
-            AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+            end;
           end;
         end;
-      end;
+      end;        
     end;
   end;
   PERTIM := -1;
@@ -1142,9 +1189,16 @@ begin
       AFile.Read(NVAL, SizeOf(NVAL));
       if NVAL > 1 then
       begin
-        for Index := 2 to NVAL do
+        if ReadArray then
         begin
-          AFile.Read(CTMP, SizeOf(CTMP));
+          for Index := 2 to NVAL do
+          begin
+            AFile.Read(CTMP, SizeOf(CTMP));
+          end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position + (NVAL-1)* SizeOf(CTMP);
         end;
       end;
     end;
@@ -1156,92 +1210,123 @@ begin
   case ITYPE of
     0,1: // full 3D array
       begin
-        for LayerIndex := 0 to Abs(NLAY) - 1 do
+        if ReadArray then
         begin
-          for RowIndex := 0 to NROW - 1 do
+          for LayerIndex := 0 to Abs(NLAY) - 1 do
           begin
-            for ColIndex := 0 to NCOL - 1 do
+            for RowIndex := 0 to NROW - 1 do
             begin
-              AFile.Read(AValue, SizeOf(TModflowDouble));
-              AnArray[LayerIndex, RowIndex, ColIndex] := AValue;
+              for ColIndex := 0 to NCOL - 1 do
+              begin
+                AFile.Read(AValue, SizeOf(TModflowDouble));
+                AnArray[LayerIndex, RowIndex, ColIndex] := AValue;
+              end;
             end;
           end;
-        end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position + Abs(NLAY)*NROW*NCOL*SizeOf(TModflowDouble);
+        end;                                          
       end;
     2,5:
       begin
         if NLIST > 0 then
         begin
           NRC := NROW*NCOL;
-          SetLength(Values, NVAL);
-          for Index := 0 to NLIST - 1 do
+          if ReadArray then
           begin
-            AFile.Read(ICELL, SizeOf(ICELL));
-            for ValIndex := 0 to NVAL - 1 do
+            SetLength(Values, NVAL);
+            for Index := 0 to NLIST - 1 do
             begin
-              AFile.Read(Values[ValIndex], SizeOf(TModflowDouble));
+              AFile.Read(ICELL, SizeOf(ICELL));
+              for ValIndex := 0 to NVAL - 1 do
+              begin
+                AFile.Read(Values[ValIndex], SizeOf(TModflowDouble));
+              end;
+              LayerIndex :=  (ICELL-1) div NRC;
+              RowIndex := ( (ICELL - LayerIndex*NRC)-1 ) div NCOL;
+              ColIndex := ICELL - (LayerIndex)*NRC - (RowIndex)*NCOL-1;
+              if ((ColIndex >= 0) AND (RowIndex >= 0) AND (LayerIndex >= 0)
+                AND (ColIndex < ncol) AND (RowIndex < NROW)
+                AND (LayerIndex < Abs(NLAY))) then
+              begin
+                AnArray[LayerIndex, RowIndex, ColIndex] :=
+                  AnArray[LayerIndex, RowIndex, ColIndex] + Values[0];
+              end;
             end;
-            LayerIndex :=  (ICELL-1) div NRC;
-            RowIndex := ( (ICELL - LayerIndex*NRC)-1 ) div NCOL;
-            ColIndex := ICELL - (LayerIndex)*NRC - (RowIndex)*NCOL-1;
-            if ((ColIndex >= 0) AND (RowIndex >= 0) AND (LayerIndex >= 0)
-              AND (ColIndex < ncol) AND (RowIndex < NROW)
-              AND (LayerIndex < Abs(NLAY))) then
-            begin
-              AnArray[LayerIndex, RowIndex, ColIndex] :=
-                AnArray[LayerIndex, RowIndex, ColIndex] + Values[0];
-            end;
-          end;
+          end
+          else
+          begin
+            AFile.Position := AFile.Position
+              + NLIST* (SizeOf(ICELL) + NVAL*SizeOf(TModflowDouble));
+          end;                                                    
         end;
       end;
     3: // 1 layer array with layer indicator array
       begin
-        SetLength(FluxArray, NROW, NCOL);
-        SetLength(LayerIndicatorArray, NROW, NCOL);
-        for RowIndex := 0 to NROW - 1 do
+        if ReadArray then
         begin
-          for ColIndex := 0 to NCOL - 1 do
-          begin
-            AFile.Read(LayerIndicatorArray[RowIndex, ColIndex],
-              SizeOf(integer));
-          end;
-        end;
-        for RowIndex := 0 to NROW - 1 do
-        begin
-          for ColIndex := 0 to NCOL - 1 do
-          begin
-            AFile.Read(FluxArray[RowIndex, ColIndex],
-              SizeOf(TModflowDouble));
-          end;
-        end;
-        for RowIndex := 0 to NROW - 1 do
-        begin
-          for ColIndex := 0 to NCOL - 1 do
-          begin
-            AnArray[LayerIndicatorArray[RowIndex, ColIndex]-1,
-              RowIndex, ColIndex] := FluxArray[RowIndex, ColIndex];
-          end;
-        end;
-      end;
-    4: // 1-layer array that defines layer 1.
-      begin
-        for LayerIndex := 1 to Abs(NLAY) - 1 do
-        begin
+          SetLength(FluxArray, NROW, NCOL);
+          SetLength(LayerIndicatorArray, NROW, NCOL);
           for RowIndex := 0 to NROW - 1 do
           begin
             for ColIndex := 0 to NCOL - 1 do
             begin
-              AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+              AFile.Read(LayerIndicatorArray[RowIndex, ColIndex],
+                SizeOf(integer));
             end;
           end;
-        end;
-        for RowIndex := 0 to NROW - 1 do
-        begin
-          for ColIndex := 0 to NCOL - 1 do
+          for RowIndex := 0 to NROW - 1 do
           begin
-            AFile.Read(AValue, SizeOf(TModflowDouble));
-            AnArray[0, RowIndex, ColIndex] := AValue;
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AFile.Read(FluxArray[RowIndex, ColIndex],
+                SizeOf(TModflowDouble));
+            end;
           end;
+          for RowIndex := 0 to NROW - 1 do
+          begin
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AnArray[LayerIndicatorArray[RowIndex, ColIndex]-1,
+                RowIndex, ColIndex] := FluxArray[RowIndex, ColIndex];
+            end;
+          end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position
+            + NROW*NCOL * (SizeOf(integer) + SizeOf(TModflowDouble));
+        end;
+      end;
+    4: // 1-layer array that defines layer 1.
+      begin
+        if ReadArray then
+        begin
+          for LayerIndex := 1 to Abs(NLAY) - 1 do
+          begin
+            for RowIndex := 0 to NROW - 1 do
+            begin
+              for ColIndex := 0 to NCOL - 1 do
+              begin
+                AnArray[LayerIndex, RowIndex, ColIndex] := 0;
+              end;
+            end;
+          end;
+          for RowIndex := 0 to NROW - 1 do
+          begin
+            for ColIndex := 0 to NCOL - 1 do
+            begin
+              AFile.Read(AValue, SizeOf(TModflowDouble));
+              AnArray[0, RowIndex, ColIndex] := AValue;
+            end;
+          end;
+        end
+        else
+        begin
+          AFile.Position := AFile.Position
+            + NROW*NCOL * SizeOf(TModflowDouble);
         end;
       end;
     6:
@@ -1253,14 +1338,14 @@ begin
         // NumVariable is the number of auxilliary variables + 1.
         AFile.Read(NumVariable, SizeOf(NumVariable));
         Assert( (NumVariable >= 0) and (NumVariable <= 20));
-//        if ReadArray then
+        if ReadArray then
         begin
           SetLength(AuxArray, NumVariable - 1);
         end;
         for AuxVarIndex := 1 to NumVariable - 1 do
         begin
           ReadModflow6Name(AuxName);
-//          if ReadArray then
+          if ReadArray then
           begin
             AuxArray[AuxVarIndex-1].Name := AuxName;
           end;
@@ -1277,7 +1362,7 @@ begin
           NCOL := AltNCol;
           NLAY := AltNLay;
         end;
-//        if ReadArray then
+        if ReadArray then
         begin
           NRC := NROW*NCOL;
           for AuxVarIndex := 1 to NumVariable - 1 do
@@ -1321,11 +1406,11 @@ begin
                 AuxArray[AuxVarIndex-1].Values[LayerIndex, RowIndex, ColIndex] + AuxValue;
             end;
           end;
-//        end
-//        else
-//        begin
-//          AFile.Position := AFile.Position +
-//            NLIST * (SizeOf(N1) + SizeOf(N2) + (NumVariable * SizeOf(TModflowDouble)));
+        end
+        else
+        begin
+          AFile.Position := AFile.Position +
+            NLIST * (SizeOf(N1) + SizeOf(N2) + (NumVariable * SizeOf(TModflowDouble)));
         end;
       end
     else Assert(False);

@@ -139,14 +139,14 @@ begin
           mpSingle:
             begin
               ReadModflowSinglePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
-                TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT);
+                TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT, False);
             end;
           mpDouble:
             begin
               ReadModflowDoublePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
                 TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
                 Abs(NLAY), NROW, NCOL,
-                IRESULT);
+                IRESULT, False);
             end;
         else Assert(False);
         end;
@@ -500,14 +500,14 @@ begin
                   mpSingle:
                     begin
                       ReadModflowSinglePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
-                        TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT);
+                        TOTIM, DESC, NCOL, NROW, NLAY, AnArray, IRESULT, True);
                     end;
                   mpDouble:
                     begin
                       ReadModflowDoublePrecFluxArray(BudgetFile, KSTP, KPER, PERTIM,
                         TOTIM, DESC, NCOL, NROW, NLAY, AnArray,
                         Abs(FNLay), FNRow, FNCol,
-                        IRESULT);
+                        IRESULT, True);
                     end;
                 else Assert(False);
                 end;

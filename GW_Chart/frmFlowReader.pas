@@ -41,6 +41,7 @@ type
     sdExportData: TSaveDialog;
     btnPlotAll: TButton;
     btnPlotNone: TButton;
+    pbFileProgress: TProgressBar;
     procedure btnSelectFileClick(Sender: TObject);
     procedure btnUpdatePlotClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -164,6 +165,7 @@ var
   Precision: TModflowPrecision;
   DESC: TModflowDesc;
   A3DArray: T3DTModflowArray;
+  Mf_FileSize: Int64;
 begin
   result := False;
   Dir := GetCurrentDir;
@@ -202,6 +204,10 @@ begin
       end;
 
       DataIndex := -1;
+      if FileStream <> nil then
+      begin
+        Mf_FileSize := FileStream.Size;
+      end;        
       while IResult = 0 do
       begin
         result := True;
@@ -211,14 +217,16 @@ begin
           case Precision of
             mpSingle:
               ReadModflowSinglePrecFluxArray(FileStream, KSTP, KPER,
-                PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT);
+                PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT, False);
             mpDouble:
               ReadModflowDoublePrecFluxArray(FileStream, KSTP, KPER,
                 PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray,
                 Abs(NLAY), NROW, NCOL,
-                IRESULT);
+                IRESULT, False);
           else Assert(False);
           end;
+          pbFileProgress.Position := Round(FileStream.Position/(2*Mf_FileSize)
+            * pbFileProgress.Max);
           TEXT := DESC;
           TOTIM := TOTIMD;
 //          ReadArray(TOTIM, KSTP, KPER, IRESULT, TEXT, Length(Text));
@@ -316,6 +324,7 @@ var
 begin
   if OpenDialog1.Execute then
   begin
+    pbFileProgress.Position := 0;
     Screen.Cursor := crHourGlass;
     try
       lblCounts.Caption := 'Columns: 0, Rows: 0, Layers: 0';
@@ -427,7 +436,9 @@ var
   A3DArray: T3DTModflowArray;
   DESC: TModflowDesc;
   PriorTotTime: double;
+  Mf_FileSize: Int64;
 begin
+//  pbFileProgress.Position := 0;
   SetLength(Cells, 3, dgCells.RowCount - 1);
   for CellIndex := 1 to dgCells.RowCount - 1 do
   begin
@@ -495,6 +506,10 @@ begin
         Length(FileName));
     end;
 
+    if FileStream <> nil then
+    begin
+      Mf_FileSize := FileStream.Size;
+    end;      
     if IResult <> 0 then
       Exit;
 
@@ -508,14 +523,17 @@ begin
         case Precision of
           mpSingle:
             ReadModflowSinglePrecFluxArray(FileStream, KSTP, KPER,
-              PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT);
+              PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray, IRESULT, True);
           mpDouble:
             ReadModflowDoublePrecFluxArray(FileStream, KSTP, KPER,
               PERTIM, TOTIMD, DESC, NCOL, NROW, NLAY, A3DArray,
               Abs(FNLay), FNRow, FNCol,
-              IRESULT);
+              IRESULT, True);
         else Assert(False);
         end;
+        pbFileProgress.Position := (pbFileProgress.Max div 2)
+          + Round(FileStream.Position/(2*Mf_FileSize)
+          * pbFileProgress.Max);
         TEXT := DESC;
         if Trim(String(TEXT)) = 'FLOW-JA-FACE' then
         begin

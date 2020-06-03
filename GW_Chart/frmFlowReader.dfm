@@ -1,6 +1,6 @@
 object frmCellFlows: TfrmCellFlows
-  Left = 349
-  Top = 174
+  Left = 313
+  Top = 132
   Width = 646
   Height = 544
   HelpContext = 635
@@ -152,6 +152,14 @@ object frmCellFlows: TfrmCellFlows
       Caption = 'Plot None'
       TabOrder = 7
       OnClick = btnPlotNoneClick
+    end
+    object pbFileProgress: TProgressBar
+      Left = 184
+      Top = 80
+      Width = 433
+      Height = 17
+      Max = 10000
+      TabOrder = 8
     end
   end
   object chartFlow: TChart
