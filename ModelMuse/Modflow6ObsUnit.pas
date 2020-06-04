@@ -82,6 +82,7 @@ type
     FUzfObs: TUzfObs;
     FCSubObs: TCSubObs;
     FCSubDelayCells: TIntegerCollection;
+    FCalibrationObservations: TMf6CalibrationObservations;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -106,8 +107,10 @@ type
     procedure SetUzfObsDepthFraction(const Value: double);
     procedure SetCSubObs(const Value: TCSubObs);
     procedure SetCSubDelayCells(const Value: TIntegerCollection);
+    procedure SetCalibrationObservations(
+      const Value: TMf6CalibrationObservations);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property UzfObsDepthFraction: double read GetUzfObsDepthFraction
@@ -139,12 +142,20 @@ type
     stored False
   {$ENDIF}
     ;
-    property CSubDelayCells: TIntegerCollection read FCSubDelayCells write SetCSubDelayCells
+    property CSubDelayCells: TIntegerCollection read FCSubDelayCells
+      write SetCSubDelayCells
   {$IFNDEF CSUB}
     stored False
   {$ENDIF}
     ;
-    property StoredUzfObsDepthFraction: TRealStorage read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
+    property StoredUzfObsDepthFraction: TRealStorage
+      read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
+    property CalibrationObservations: TMf6CalibrationObservations
+      read FCalibrationObservations write SetCalibrationObservations
+  {$IFNDEF PEST}
+    stored False
+  {$ENDIF}
+      ;
   end;
 
 function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
@@ -228,6 +239,8 @@ begin
 
     SfrObsLocation := SourceObs.SfrObsLocation;
     UzfObsDepthFraction := SourceObs.UzfObsDepthFraction;
+
+    CalibrationObservations := SourceObs.CalibrationObservations;
   end
   else
   begin
@@ -235,18 +248,21 @@ begin
   end;
 end;
 
-constructor TModflow6Obs.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TModflow6Obs.Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create(InvalidateModelEvent);
   FGwFlowObsChoices := [gfoNearestNeighbor];
   FStoredUzfObsDepthFraction := TRealStorage.Create;
   FStoredUzfObsDepthFraction.OnChange := OnInvalidateModel;
   FCSubDelayCells := TIntegerCollection.Create(OnInvalidateModel);
   FCSubObs := TCSubObs.Create;
+  FCalibrationObservations :=
+    TMf6CalibrationObservations.Create(InvalidateModelEvent, ScreenObject);
 end;
 
 destructor TModflow6Obs.Destroy;
 begin
+  FCalibrationObservations.Free;
   FCSubObs.Free;
   FCSubDelayCells.Free;
   FStoredUzfObsDepthFraction.Free;
@@ -256,6 +272,12 @@ end;
 function TModflow6Obs.GetUzfObsDepthFraction: double;
 begin
   result := FStoredUzfObsDepthFraction.Value;
+end;
+
+procedure TModflow6Obs.SetCalibrationObservations(
+  const Value: TMf6CalibrationObservations);
+begin
+  FCalibrationObservations.Assign(Value);
 end;
 
 procedure TModflow6Obs.SetChdFlowObs(const Value: Boolean);
@@ -750,7 +772,7 @@ end;
 constructor TMf6CalibrationObservations.Create(
   InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
 begin
-
+  inherited Create(TMf6CalibrationObs, InvalidateModelEvent, ScreenObject);
 end;
 
 end.

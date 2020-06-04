@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 490
     Height = 448
-    ActivePage = tabCSUB
+    ActivePage = tabCalibration
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -364,6 +364,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           TabOrder = 0
         end
       end
+    end
+    object tabCalibration: TTabSheet
+      Caption = 'Calibration'
+      ImageIndex = 6
     end
   end
   object pnlName: TPanel

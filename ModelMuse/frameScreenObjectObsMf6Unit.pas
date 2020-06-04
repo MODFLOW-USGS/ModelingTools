@@ -51,6 +51,7 @@ type
     chklstDelayBeds: TCheckListBox;
     lblDelayInterbedNumber: TLabel;
     splCSub: TSplitter;
+    tabCalibration: TTabSheet;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -451,6 +452,8 @@ begin
       chklstDelayBeds.Items.Add(IntToStr(IbIndex));
     end;
   end;
+
+  tabCalibration.tabVisible := frmGoPhast.PhastModel.PestUsed;
 
   DoOnChangeProperties;
 

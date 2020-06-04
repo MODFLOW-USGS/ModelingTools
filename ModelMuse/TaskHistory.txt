@@ -25570,5 +25570,12 @@ object TTaskHistory
       Categories.Strings = (
         'List File Analyzer'
         'GW_Chart')
+    end
+    item
+      Date = 43986.000000000000000000
+      Categories.Strings = (
+        'Installer'
+        'PEST'
+        'PEST Observations')
     end>
 end

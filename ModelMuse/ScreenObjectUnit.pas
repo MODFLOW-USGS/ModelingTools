@@ -36885,7 +36885,7 @@ procedure TScreenObject.CreateMf6Obs;
 begin
   if (ModflowBoundaries.FModflow6Obs = nil) then
   begin
-    ModflowBoundaries.FModflow6Obs := TModflow6Obs.Create(InvalidateModelEvent);
+    ModflowBoundaries.FModflow6Obs := TModflow6Obs.Create(InvalidateModelEvent, self);
   end;
 end;
 
@@ -40046,7 +40046,7 @@ begin
   begin
     if FModflow6Obs = nil then
     begin
-      FModflow6Obs := TModflow6Obs.Create(InvalidateEvent);
+      FModflow6Obs := TModflow6Obs.Create(InvalidateEvent, FScreenObject);
     end;
     FModflow6Obs.Assign(Source.FModflow6Obs);
   end;
