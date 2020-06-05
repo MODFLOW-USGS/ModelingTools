@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Revision History</text></para>
     </header>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.3 March 10, 2020]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.3 June 5, 2020]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -15,6 +15,21 @@
             <tr style="vertical-align:top">
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for CSUB package in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added &quot;Object|Edit|Anonymize Selected Point Objects command.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now uses less memory when importing existing models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Custom color schemes can now be used when plotting MODPATH data.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing an existing model that uses the BCF package, specific storage is calculated from the confined storage coefficient and hydraulic conductivity is calculated from transmissivity.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns the user if any specified head cells are cells for which Kx, Ky, and Kz are all zero.</text></para>
+              </td>
+            </tr>
+          </table></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atocs_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atocs_"><caption translate="true"><![CDATA[Changes]]></caption></toggle></para>
+          <para styleclass="Heading3_atocs_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+            <tr style="vertical-align:top">
+              <td>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The NEWTON and UNDER_RELAXATION options in MODFLOW 6 can now be specified in the MODFLOW Packages and Programs dialog box as well as the MODFLOW Options dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Modified export of the MODFLOW-2005 Lake package input to allow for periods in which no lakes are active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Modified export of the MODFLOW-2005 Lake package input to allow for periods in which no lakes are active.</text></para>
               </td>
             </tr>
           </table></para>
@@ -29,6 +44,42 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed position of buttons for the SF6, MAW, and MT3D SSM packages in the Object Properties dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause a bug report to create when attempting to export an object to a Shapefile.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing a Shapefile, ModelMuse gives the option to convert from decimal degrees to UTM coordinates. However, this may result in an invalid operation if the actual coordinates are not in decimal degrees. ModelMuse now displays an error message rather than sending a bug report in such cases.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure if an object that defined a MAW well was in a cell that was inactive in the top layer.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of pump capacity table in the MNW2 package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause a range check error when using the UZF package in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If ModelMuse encounters and error when trying to back up an initialization file, it no longer generates a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause range check errors when editing MNW2 wells.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug importing an existing MODFLOW model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed editing of stream gages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in opening ModelMuse file for WellFootprint models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in saving ModelMuse file for WellFootprint models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that allowed the user to import Shapefiles that directly set the withdrawal rate in WellFootprint models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that allowed the user to import points that directly set the withdrawal rate in WellFootprint models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause the model selection to be set to the wrong value when creating a new model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause ModelMuse to have an Input/Output error when importing a model.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause importing points to fail if the values being imported had extra spaces before or after any value.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">If the user attempts to plot a MODPATH, pathline, end-point, or time-series file that contains invalid layer numbers, ModelMuse will display an error message instead of generating a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could make it impossible to open a ModelMuse file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed using binary head file for initial heads in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When converting to MODFLOW 6 from earlier versions of MODFLOW the user can now convert the FHB package to the CHD and WEL packages.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When converting to MODFLOW 6 from a model in which the NWt package is selected, the Newton option in MODFLOW 6 is now selected automatically.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed using binary head file in MODFLOW 6 for starting heads.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of &quot;NO_PTC&quot; option in MODFLOW 6.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused an error if the user attempted to rename a layer group with an invalid name.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an error when drawing contours.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure when drawing contours using the ACM 626 method.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed but that cause a conversion error if the user failed to specify the properties of a lake outlet correctly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when updating the legend for the colors displayed in the Data Visualization dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation in the Global Variables dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that resulted in a bug report being generated if ModelMuse attempted to import SUTRA results containing &quot;NaN&quot;.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SUTRA data sets 21A and 21B when they are inactive initially.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that caused issues with opening files that contained very large or very small real number values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failure when exporting SUTRA models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in inserting or deleting well screens in the MNW2 package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing Shapefiles that contained measured values, values less than -1E38 are treated as no-data values.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure &#160;if identical starting and ending times were specified for the RCH package.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in reading binary MT3D model results that could cause a bug report to be generated.</text></para>
+                <para styleclass="Normal"></para>
               </td>
             </tr>
           </table></para>

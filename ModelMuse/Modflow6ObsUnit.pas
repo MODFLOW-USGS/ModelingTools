@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, GoPhastTypes, System.SysUtils, ModflowMawUnit,
   ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowCsubUnit, PestObsUnit;
+  ModflowCsubUnit, PestObsUnit, FormulaManagerUnit;
 
 type
   TGwFlowOb = (gfoNearestNeighbor, gfoAllNeighbors, gfoAbove, gfoBelow);
@@ -25,6 +25,7 @@ type
     FMawOb: TMawOb;
     FLakOb: TLakOb;
     FObGeneral: TObGeneral;
+    FWeightFormula: TFormulaObject;
     procedure SetCSubOb(const Value: TCSubOb);
     procedure SetLakOb(const Value: TLakOb);
     procedure SetMawOb(const Value: TMawOb);
@@ -38,11 +39,22 @@ type
     function StoreObGeneral: Boolean;
     function StoreSfrOb: Boolean;
     function StoreUzfOb: Boolean;
+    function GetWeightFormula: string;
+    procedure SetWeightFormula(const Value: string);
+    procedure RemoveFormulaObjects;
+    procedure CreateFormulaObjects;
+    function CreateFormulaObject: TFormulaObject;
+    procedure UpdateFormula(Value: string; Position: integer;
+      var FormulaObject: TFormulaObject);
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(Value: Integer); override;
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
   published
     property ObSeries: TObSeries read FObSeries write SetObSeries;
     property ObGeneral: TObGeneral read FObGeneral write SetObGeneral stored StoreObGeneral;
@@ -51,6 +63,13 @@ type
     property LakOb: TLakOb read FLakOb write SetLakOb stored StoreLakOb;
     property UzfOb: TUzfOb read FUzfOb write SetUzfOb stored StoreUzfOb;
     property CSubOb: TCSubOb read FCSubOb write SetCSubOb stored StoreCSubOb;
+    // @name is used to specify how individual cell values should
+    // be weighted when computing the an observation made up of values from
+    // multiple cells. It is unrelated to the weight of the entire observation
+    // in model calibration.
+    //
+    // @name might not be used for all observation types.
+    property WeightFormula: string read GetWeightFormula write SetWeightFormula;
   end;
 
   TMf6CalibrationObservations = class(TCustomComparisonCollection)
@@ -161,10 +180,11 @@ type
 function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
 function GenObToString(const GenOb: TObGeneral): string;
 
+
 implementation
 
 uses
-  System.Character;
+  System.Character, frmGoPhastUnit, RbwParser;
 
 const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
@@ -172,6 +192,20 @@ const
 
 var
   ObGenNames: TStringList;
+
+procedure GlobalRemoveMf6CalibrationObsSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+begin
+  // At present, this doesn't do anything.
+  Assert(Subject is TMf6CalibrationObs);
+end;
+
+procedure GlobalRestoreMf6CalibrationObsSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+begin
+  // At present, this doesn't do anything.
+  Assert(Subject is TMf6CalibrationObs);
+end;
 
 procedure InitializeObGenNames;
 var
@@ -440,6 +474,51 @@ end;
 
 { TMf6CalibrationObs }
 
+procedure TMf6CalibrationObs.Assign(Source: TPersistent);
+var
+  ObsSource: TMf6CalibrationObs;
+begin
+  if Source is TMf6CalibrationObs then
+  begin
+    ObsSource := TMf6CalibrationObs(Source);
+    ObSeries := ObsSource.ObSeries;
+    ObGeneral := ObsSource.ObGeneral;
+    MawOb := ObsSource.MawOb;
+    SfrOb := ObsSource.SfrOb;
+    LakOb := ObsSource.LakOb;
+    UzfOb := ObsSource.UzfOb;
+    CSubOb := ObsSource.CSubOb;
+    WeightFormula := ObsSource.WeightFormula;
+  end;
+  inherited;
+end;
+
+constructor TMf6CalibrationObs.Create(Collection: TCollection);
+begin
+  inherited;
+  CreateFormulaObjects;
+end;
+
+function TMf6CalibrationObs.CreateFormulaObject: TFormulaObject;
+begin
+  result := frmGoPhast.PhastModel.FormulaManager.Add;
+  result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+  result.AddSubscriptionEvents(
+    GlobalRemoveMf6CalibrationObsSubscription,
+    GlobalRestoreMf6CalibrationObsSubscription, self);
+end;
+
+procedure TMf6CalibrationObs.CreateFormulaObjects;
+begin
+  FWeightFormula := CreateFormulaObject;
+end;
+
+destructor TMf6CalibrationObs.Destroy;
+begin
+  RemoveFormulaObjects;
+  inherited;
+end;
+
 function TMf6CalibrationObs.GetObsTypeIndex: Integer;
 begin
   result := -1;
@@ -521,6 +600,19 @@ begin
         Assert(False);
       end;
   end;
+end;
+
+function TMf6CalibrationObs.GetWeightFormula: string;
+begin
+  Result := FWeightFormula.Formula;
+//  ResetItemObserver(EndHeadPosition);
+end;
+
+procedure TMf6CalibrationObs.RemoveFormulaObjects;
+begin
+  frmGoPhast.PhastModel.FormulaManager.Remove(FWeightFormula,
+    GlobalRemoveMf6CalibrationObsSubscription,
+    GlobalRestoreMf6CalibrationObsSubscription, self);
 end;
 
 procedure TMf6CalibrationObs.SetCSubOb(const Value: TCSubOb);
@@ -737,6 +829,11 @@ begin
   end;
 end;
 
+procedure TMf6CalibrationObs.SetWeightFormula(const Value: string);
+begin
+  UpdateFormula(Value, 0, FWeightFormula);
+end;
+
 function TMf6CalibrationObs.StoreCSubOb: Boolean;
 begin
   result := ObSeries = osCSub;
@@ -765,6 +862,34 @@ end;
 function TMf6CalibrationObs.StoreUzfOb: Boolean;
 begin
   result := ObSeries = osUzf;
+end;
+
+procedure TMf6CalibrationObs.UpdateFormula(Value: string; Position: integer;
+  var FormulaObject: TFormulaObject);
+var
+//  ParentModel: TPhastModel;
+  Compiler: TRbwParser;
+//  LocalObserver: TObserver;
+begin
+  if FormulaObject.Formula <> Value then
+  begin
+//    ParentModel := Model as TPhastModel;
+//    if ParentModel <> nil then
+//    begin
+//      Compiler := ParentModel.rpThreeDFormulaCompiler;
+//      LocalObserver := Observer[Position];
+//      UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
+//        Compiler);
+//    end;
+    InvalidateModel;
+    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
+      not frmGoPhast.PhastModel.Clearing then
+    begin
+      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
+        frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+        GlobalRemoveMf6CalibrationObsSubscription, GlobalRestoreMf6CalibrationObsSubscription, self);
+    end;
+  end;
 end;
 
 { TMf6CalibrationObservations }

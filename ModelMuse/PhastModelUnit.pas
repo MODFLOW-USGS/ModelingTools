@@ -9069,10 +9069,10 @@ const
   //                BCF package, specific storage is calculated from
   //                the confined storage coefficient and hydraulic conductivity
   //                is calculated from transmissivity.
-  //               Bug fix: When convertng to MODFLOW 6 from earlier versions
+  //               Bug fix: When converting to MODFLOW 6 from earlier versions
   //                of MODFLOW the user can now convert the FHB package to the
   //                CHD and WEL packages.
-  //               Bug fix: When convertng to MODFLOW 6 from a model in which
+  //               Bug fix: When converting to MODFLOW 6 from a model in which
   //                the NWt package is selected, the Newton option in
   //                MODFLOW 6 is now selected automatically.
   //               Bug fix: Fixed using binary head file in MODFLOW 6 for

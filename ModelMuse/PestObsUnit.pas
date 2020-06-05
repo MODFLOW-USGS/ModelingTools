@@ -10,18 +10,25 @@ type
   private
     FName: string;
     FComment: string;
-    FObservedValue: double;
-    FWeight: Double;
+//    FObservedValue: double;
+//    FWeight: Double;
     FGUID: string;
     FExportedName: string;
+    FStoredWeight: TRealStorage;
+    FStoredObservedValue: TRealStorage;
     procedure SetComment(const Value: string);
     procedure SetName(const Value: string);
     procedure SetObservedValue(const Value: double);
     procedure SetWeight(const Value: Double);
     function GetScreenObject: TObject;
+    procedure SetStoredObservedValue(const Value: TRealStorage);
+    procedure SetStoredWeight(const Value: TRealStorage);
+    function GetObservedValue: double;
+    function GetWeight: Double;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
     function ObservationType: string; virtual;
     function Units: string; virtual;
     property ScreenObject: TObject read GetScreenObject;
@@ -32,8 +39,12 @@ type
     property ExportedName: string read FExportedName write FExportedName;
   published
     property Name: string read FName write SetName;
-    property ObservedValue: double read FObservedValue write SetObservedValue;
-    property Weight: Double read FWeight write SetWeight;
+    property ObservedValue: double read GetObservedValue write SetObservedValue Stored False;
+    property Weight: Double read GetWeight write SetWeight Stored False;
+    property StoredObservedValue: TRealStorage read FStoredObservedValue
+      write SetStoredObservedValue;
+    property StoredWeight: TRealStorage read FStoredWeight
+      write SetStoredWeight;
     property Comment: string read FComment write SetComment;
   end;
 
@@ -155,6 +166,22 @@ begin
   begin
     FGUID := GUIDToString(MyGuid);
   end;
+  FStoredObservedValue := TRealStorage.Create;
+  FStoredObservedValue.OnChange := OnInvalidateModel;
+  FStoredWeight := TRealStorage.Create;
+  FStoredWeight.OnChange := OnInvalidateModel;
+end;
+
+destructor TCustomObservationItem.Destroy;
+begin
+  FStoredWeight.Free;
+  FStoredObservedValue.Free;
+  inherited;
+end;
+
+function TCustomObservationItem.GetObservedValue: double;
+begin
+  result := StoredObservedValue.Value;
 end;
 
 function TCustomObservationItem.GetScreenObject: TObject;
@@ -164,6 +191,11 @@ begin
   begin
     Result := (Collection as TScreenObjectOwnerCollection).ScreenObject;
   end;
+end;
+
+function TCustomObservationItem.GetWeight: Double;
+begin
+  result := StoredWeight.Value;
 end;
 
 function TCustomObservationItem.ObservationType: string;
@@ -183,12 +215,23 @@ end;
 
 procedure TCustomObservationItem.SetObservedValue(const Value: double);
 begin
-  SetRealProperty(FObservedValue, Value);
+  StoredObservedValue.Value := Value;
+end;
+
+procedure TCustomObservationItem.SetStoredObservedValue(
+  const Value: TRealStorage);
+begin
+  FStoredObservedValue.Assign(Value);
+end;
+
+procedure TCustomObservationItem.SetStoredWeight(const Value: TRealStorage);
+begin
+  FStoredWeight.Assign(Value);
 end;
 
 procedure TCustomObservationItem.SetWeight(const Value: Double);
 begin
-  SetRealProperty(FWeight, Value);
+  StoredWeight.Value := Value;
 end;
 
 function TCustomObservationItem.Units: string;
