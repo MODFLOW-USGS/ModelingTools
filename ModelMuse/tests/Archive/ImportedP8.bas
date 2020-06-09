@@ -1,6 +1,7 @@
 # MT3DMS Benchmark Problem #8
 # Sudicky 1989 Waterloo test problem
-# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 1350.
 FREE XSECTION  # OPTIONS
 INTERNAL 1 (FREE)        5 # IBOUND
      1     1     1     1     1     1     1     1     1     1

@@ -1,6 +1,7 @@
 # MT3DMS Benchmark Test Problem #3
 # 2D Advection-Dispersion in a Uniform Flow Field
-# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 1426.
 FREE  # OPTIONS
 CONSTANT        1 # IBOUND Layer 1
   9.999900000000E+002  # HNOFLO

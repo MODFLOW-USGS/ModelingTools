@@ -94,6 +94,9 @@ resourcestring
   StrErrorCallingTAscii = 'Error calling TAsciiRasterReader.ReadValues';
   StrErrorReadingDataV = 'Error reading data value for row = %0:d, column = ' +
   '%1:d. Value to be converted = %2:s.';
+//  StrThereWasAnErrorW = 'There was an error when attempting to access the fi' +
+//  'le. Please check that the file is not locked by another process and that ' +
+//  'the file is an ASCII raster.';
 
 { TAsciiRasterReader }
 
@@ -131,8 +134,17 @@ begin
         CloseFile(RasterFile);
       end;
       result := True;
-    except on E: EAsciiRasterError do
-      result := False;
+    except
+      on E: EAsciiRasterError do
+      begin
+        result := False;
+      end;
+      on E: EInOutError do
+      begin
+//        Beep;
+//        MessageDlg(StrThereWasAnErrorW, mtError, [mbOK], 0);
+        result := False;
+      end;
     end;
   end
   else

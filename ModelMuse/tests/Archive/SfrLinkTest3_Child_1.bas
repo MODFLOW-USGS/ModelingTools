@@ -1,4 +1,5 @@
-# Basic Package file created on 1/5/2017 by ModelMuse version 3.8.1.22.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 300.
 FREE CHTOCH PRINTTIME  # OPTIONS
 INTERNAL 1 (FREE)        5 # IBOUND Upper Aquifer Child layer 1
     -2    -2    -2    -2    -2    -2    -2    -2    -2    -2

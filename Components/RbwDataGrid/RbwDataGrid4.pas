@@ -5568,7 +5568,7 @@ begin
           CBRect.Top := 1;
           CBRect.Left := 1;
           { $IFDEF VER150}
-          if SServices.Available then
+          if SServices.ThemesAvailable then
           begin
 
             if Checked = cbChecked then

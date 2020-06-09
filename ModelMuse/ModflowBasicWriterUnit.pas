@@ -330,11 +330,37 @@ begin
 end;
 
 procedure TModflowBasicWriter.WriteDataSet0;
+var
+  DataArray: TDataArray;
+  LayerIndex: Integer;
+  ActiveCellCount: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
 begin
   WriteCommentLines(Model.ModflowOptions.Description);
   WriteCommentLine('Basic Package file created on ' + DateToStr(Now) + ' by '
     + Model.ProgramName
     + ' version ' + IModelVersion + '.');
+  ActiveCellCount := 0;
+  DataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
+  DataArray.Initialize;
+  for LayerIndex := 0 to Model.LayerCount - 1 do
+  begin
+    if Model.IsLayerSimulated(LayerIndex) then
+    begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          if DataArray.BooleanData[LayerIndex, RowIndex, ColIndex] then
+          begin
+            Inc(ActiveCellCount);
+          end;
+        end;
+      end;
+    end;
+  end;
+  WriteCommentLine(Format('Number of active cells = %d.', [ActiveCellCount]));
 end;
 
 procedure TModflowBasicWriter.WriteDataSet1;

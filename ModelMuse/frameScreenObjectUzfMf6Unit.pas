@@ -75,6 +75,9 @@ resourcestring
 { TframeScreenObjectUzfMf6 }
 
 procedure TframeScreenObjectUzfMf6.InitializeFrame;
+var
+  RowIndex: Integer;
+  ColIndex: Integer;
 begin
   pcUzf.ActivePageIndex := 0;
   if FIntializedFrame then
@@ -97,6 +100,11 @@ begin
   rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), 0] := StrAirEntryPotential;
   rdgModflowBoundary.Cells[Ord(ucRootPotential), 0] := StrRootPotential;
   rdgModflowBoundary.Cells[Ord(ucRootActivity), 0] := StrRootActivity;
+
+  for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
+  begin
+    rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := False;
+  end;
 end;
 
 procedure TframeScreenObjectUzfMf6.rdgModflowBoundarySelectCell(Sender: TObject;

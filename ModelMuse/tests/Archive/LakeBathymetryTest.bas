@@ -1,6 +1,7 @@
 # Hypothetical simulator of lake and surficial aquifer interaction. ------------
 # Shows convergence to equilibrium in transient mode.
-# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 1411.
 FREE  # OPTIONS
 INTERNAL 1 (FREE)        5 # IBOUND Layer 1
      1     1     1     1     1     1     1     1     1     1

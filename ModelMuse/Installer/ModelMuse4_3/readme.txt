@@ -195,7 +195,23 @@ Add the following lines to GR32_Compiler.inc near the beginning.
   {$ENDIF}
 {$ENDIF}
 
-in GR32.pas locate TCustomBitmap32.LineXS. In it change
+Changes to GR32.pas
+Locate TCustomBitmap32.LineXS. In it change
+if n > 0 then
+to
+if (n > 0) and (hyp <> 0) then
+
+Locate TCustomBitmap32.LineXSP. In it change
+if n > 0 then
+to
+if (n > 0) and (hyp <> 0) then
+
+Locate TCustomBitmap32.LineXP. In it change
+if n > 0 then
+to
+if (n > 0) and (hyp <> 0) then
+
+Locate TCustomBitmap32.LineX. In it change
 if n > 0 then
 to
 if (n > 0) and (hyp <> 0) then

@@ -369,18 +369,21 @@ begin
     ErrorValues.Add('Errors encountered in GNC input file');
     ErrorValues.Add('ERROR.  REQUIRED GNCDATA BLOCK NOT FOUND.');
     ErrorValues.Add('ERROR.  TWO MODELS ARE CONNECTED');
-    ErrorValues.Add('Error.  GWF-GWF requires that ANGLDEGX be');
-    ErrorValues.Add('Error.  GWF-GWF requires that CDIST be');
+    ErrorValues.Add('GWF-GWF requires that ANGLDEGX be');
+    ErrorValues.Add('GWF-GWF requires that CDIST be');
     ErrorValues.Add('error in gwf_gwf_cq');
     ErrorValues.Add('UNKNOWN CELL AVERAGING METHOD');
+    ErrorValues.Add('Unknown cell averaging method');
     ErrorValues.Add('GNC6 KEYWORD MUST BE FOLLOWED BY');
     ErrorValues.Add('NO GNC6 FILE SPECIFIED');
     ErrorValues.Add('MVR6 KEYWORD MUST BE FOLLOWED BY');
     ErrorValues.Add('NO MVR6 FILE SPECIFIED');
     ErrorValues.Add('OBS8 KEYWORD MUST BE FOLLOWED BY');
     ErrorValues.Add('ERROR. UNKNOWN GWF EXCHANGE OPTION');
+    ErrorValues.Add('Unknown gwf exchange option');
     ErrorValues.Add('Errors encountered in exchange input file');
     ErrorValues.Add('ERROR.  REQUIRED EXCHANGEDATA BLOCK NOT FOUND');
+    ErrorValues.Add('Required exchangedata block not found');
     ErrorValues.Add('GNC IS EXPLICIT, BUT GWF EXCHANGE HAS ACTIVE NEWTON');
     ErrorValues.Add('NUMBER OF EXCHANGES DOES NOT MATCH NUMBER OF GNCs');
     ErrorValues.Add('Error: Unrecognized observation type');
@@ -390,7 +393,9 @@ begin
     ErrorValues.Add('is invalid in package');
     ErrorValues.Add('Error: Unrecognized observation type');
     ErrorValues.Add('ERROR. UNKNOWN EXCHANGE OPTION');
+    ErrorValues.Add('Unknown exchange option');
     ErrorValues.Add('ERROR. UNKNOWN DIMENSION');
+    ErrorValues.Add('Unknown dimension');
     ErrorValues.Add('ERROR. UNKNOWN CIRCULAR GEOMETRY ATTRIBUTE');
     ErrorValues.Add('ERROR. UNKNOWN RECTANGULAR CHANNEL GEOMETRY ATTRIBUTE');
     ErrorValues.Add('ERROR. UNKNOWN RECTANGULAR GEOMETRY ATTRIBUTE');
@@ -717,6 +722,7 @@ begin
     ErrorValues.Add('ERROR. UNKNOWN TDIS OPTION');
     ErrorValues.Add('ERROR. UNKNOWN TDIS DIMENSION');
     ErrorValues.Add('ERROR.  REQUIRED DIMENSIONS BLOCK NOT FOUND');
+    ErrorValues.Add('Required dimensions block not found');
     ErrorValues.Add('THERE MUST BE AT LEAST ONE TIME STEP IN EVERY STRESS PERIOD');
     ErrorValues.Add('TSMULT MUST BE GREATER THAN 0.0');
     ErrorValues.Add('PERLEN CANNOT BE LESS THAN 0.0 FOR ANY STRESS PERIOD');
@@ -899,7 +905,7 @@ begin
     ErrorValues.Add('maxerrors_exceeded');
     ErrorValues.Add('Stopping due to error(s)');
     ErrorValues.Add('Simulation convergence failure');
-//    ErrorValues.Add('aaa');
+    ErrorValues.Add('ERROR REPORT');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
@@ -1098,8 +1104,8 @@ begin
     WarningValues.Add('XT3D IN USE, BUT ANGLE1 NOT SPECIFIED.');
     WarningValues.Add('WARNING. UNKNOWN IMSLINEAR KEYWORD');
     WarningValues.Add('END OF FILE DETECTED IN OUTPUT CONTROL.');
-//    WarningValues.Add('aaa');
-//    WarningValues.Add('aaa');
+    WarningValues.Add('WAS DEPRECATED IN VERSION');
+    WarningValues.Add('WARNING REPORT');
 //    WarningValues.Add('aaa');
 //    WarningValues.Add('aaa');
 

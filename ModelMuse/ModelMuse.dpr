@@ -707,7 +707,8 @@ uses
   SutraPestObsUnit in 'SutraPestObsUnit.pas',
   framePestObsCaptionedUnit in 'framePestObsCaptionedUnit.pas' {framePestObsCaptioned: TFrame},
   SutraPestObsWriterUnit in 'SutraPestObsWriterUnit.pas',
-  frmManageSutraBoundaryObservationsUnit in 'frmManageSutraBoundaryObservationsUnit.pas' {frmManageSutraBoundaryObservations};
+  frmManageSutraBoundaryObservationsUnit in 'frmManageSutraBoundaryObservationsUnit.pas' {frmManageSutraBoundaryObservations},
+  framePestObsMf6Unit in 'framePestObsMf6Unit.pas' {framePestObsMf6: TFrame};
 
 {$R *.res}
 

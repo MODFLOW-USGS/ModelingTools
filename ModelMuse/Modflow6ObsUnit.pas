@@ -179,7 +179,10 @@ type
 
 function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
 function GenObToString(const GenOb: TObGeneral): string;
+Procedure FillObGenSeriesNames(AList: TStrings);
 
+function TryGetObsSeries(const SeriesName: string; var ObSeries: TObSeries): Boolean;
+function ObsSeriesToString(const ObSeries: TObSeries): string;
 
 implementation
 
@@ -190,8 +193,11 @@ const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
     'Rch', 'EVT', 'Mvr');
 
+  ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub');
+
 var
   ObGenNames: TStringList;
+  ObsSeriesNames: TStringList;
 
 procedure GlobalRemoveMf6CalibrationObsSubscription(Sender: TObject; Subject: TObject;
   const AName: string);
@@ -219,6 +225,18 @@ begin
   end;
 end;
 
+procedure InitializeSeriesNames;
+var
+  ObSeries: TObSeries;
+begin
+  ObsSeriesNames := TStringList.Create;
+  ObsSeriesNames.CaseSensitive := False;
+  for ObSeries := Low(TObSeries) to High(TObSeries) do
+  begin
+    ObsSeriesNames.Add(ObSeriesName[ObSeries]);
+  end;
+end;
+
 function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
 var
   Index: Integer;
@@ -234,6 +252,28 @@ end;
 function GenObToString(const GenOb: TObGeneral): string;
 begin
   result := ObGenName[GenOb];
+end;
+
+Procedure FillObGenSeriesNames(AList: TStrings);
+begin
+  AList.Assign(ObGenNames);
+end;
+
+function TryGetObsSeries(const SeriesName: string; var ObSeries: TObSeries): Boolean;
+var
+  Index: Integer;
+begin
+  Index := ObsSeriesNames.IndexOf(SeriesName);
+  result := Index >= 0;
+  if result then
+  begin
+    ObSeries := TObSeries(Index);
+  end;
+end;
+
+function ObsSeriesToString(const ObSeries: TObSeries): string;
+begin
+  result := ObSeriesName[ObSeries];
 end;
 
 { TModflow6Obs }
@@ -866,9 +906,9 @@ end;
 
 procedure TMf6CalibrationObs.UpdateFormula(Value: string; Position: integer;
   var FormulaObject: TFormulaObject);
-var
+//var
 //  ParentModel: TPhastModel;
-  Compiler: TRbwParser;
+//  Compiler: TRbwParser;
 //  LocalObserver: TObserver;
 begin
   if FormulaObject.Formula <> Value then
@@ -899,5 +939,13 @@ constructor TMf6CalibrationObservations.Create(
 begin
   inherited Create(TMf6CalibrationObs, InvalidateModelEvent, ScreenObject);
 end;
+
+initialization
+  InitializeSeriesNames;
+  InitializeObGenNames;
+
+finalization
+  ObsSeriesNames.Free;
+  ObGenNames.Free;
 
 end.

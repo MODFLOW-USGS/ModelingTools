@@ -419,6 +419,7 @@ const
 //  SteadyUpstreamFractionPosition = 7;
 function TryGetSfrOb(const SfrObName: string; var SfrOb: TSfrOb): Boolean;
 function SfrObToString(const SfrOb: TSfrOb): string;
+Procedure FillSfrSeriesNames(AList: TStrings);
 
 implementation
 
@@ -459,6 +460,11 @@ begin
   begin
     SfrOb := TSfrOb(Index);
   end;
+end;
+
+Procedure FillSfrSeriesNames(AList: TStrings);
+begin
+  AList.Assign(SfrObNames);
 end;
 
 function SfrObToString(const SfrOb: TSfrOb): string;

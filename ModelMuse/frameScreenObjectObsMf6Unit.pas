@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.CheckLst,
-  UndoItemsScreenObjects, Vcl.ExtCtrls, Vcl.ComCtrls, ArgusDataEntry;
+  UndoItemsScreenObjects, Vcl.ExtCtrls, Vcl.ComCtrls, ArgusDataEntry,
+  framePestObsUnit, framePestObsMf6Unit;
 
 type
   TFlowObsRows = (forCHD, forDRN, forEVT, forGHB, forRCH, forRIV, forWEL, forToMvr);
@@ -52,6 +53,7 @@ type
     lblDelayInterbedNumber: TLabel;
     splCSub: TSplitter;
     tabCalibration: TTabSheet;
+    framePestObs: TframePestObsMf6;
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure cbHeadObservationClick(Sender: TObject);
     procedure chklstFlowObsClick(Sender: TObject);
@@ -71,13 +73,14 @@ type
     procedure UpdateEdObsNameColor;
     procedure SetActiveObs(const Value: Boolean);
     procedure EnableDepthFraction;
+    procedure SetOnChangeProperties(const Value: TNotifyEvent);
     { Private declarations }
   public
     procedure GetData(List: TScreenObjectEditCollection);
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
     property OnChangeProperties: TNotifyEvent read FOnChangeProperties
-      write FOnChangeProperties;
+      write SetOnChangeProperties;
     property ActiveObs: Boolean read FActiveObs write SetActiveObs;
     { Public declarations }
   end;
@@ -174,6 +177,16 @@ begin
     begin
       DelayArray[DelayIndex] := False;
     end;
+    If  List.Count = 1 then
+    begin
+      AScreenObject := List[0].ScreenObject;
+      if AScreenObject.Modflow6Obs <> nil then
+      begin
+        Mf6Obs := AScreenObject.Modflow6Obs;
+        framePestObs.GetData(Mf6Obs.CalibrationObservations);
+      end;
+    end;
+
     FoundFirst := False;
     for ScreenObjectIndex := 0 to List.Count - 1 do
     begin
@@ -455,6 +468,9 @@ begin
 
   tabCalibration.tabVisible := frmGoPhast.PhastModel.PestUsed;
 
+  framePestObs.InitializeControls;
+  framePestObs.OnControlsChange := OnChangeProperties;
+
   DoOnChangeProperties;
 
 end;
@@ -519,6 +535,7 @@ begin
       if List.Count = 1 then
       begin
         Mf6Obs.Name := edObsName.Text;
+        framePestObs.SetData(Mf6Obs.CalibrationObservations);
       end;
 
       if cbHeadObservation.State <> cbGrayed then
@@ -712,6 +729,16 @@ begin
     end;
   end;
 
+end;
+
+procedure TframeScreenObjectObsMf6.SetOnChangeProperties(
+  const Value: TNotifyEvent);
+begin
+  FOnChangeProperties := Value;
+  if framePestObs <> nil then
+  begin
+    framePestObs.OnControlsChange := Value;
+  end;
 end;
 
 procedure TframeScreenObjectObsMf6.EnableDepthFraction;

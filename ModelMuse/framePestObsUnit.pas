@@ -9,7 +9,7 @@ uses
   PestObsUnit;
 
 type
-  TPestiObsColumns = (pocName, pocType, pocTime, pocValue, pocWeight, pocComment);
+  TPestObsColumns = (pocName, pocType, pocTime, pocValue, pocWeight, pocComment);
   TPestObsCompColumns = (poccName, poccObs1, poccObs2, poccValue, poccWeight, poccComment);
 
   TframePestObs = class(TFrame)

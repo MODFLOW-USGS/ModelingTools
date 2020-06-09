@@ -2466,7 +2466,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   Mt3dUztSatEtUnit, Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
-  ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit;
+  ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
+  framePestObsMf6Unit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -3026,9 +3027,13 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.ShowOrHideObsTabs;
+var
+  Mf6ObsSeriesName: TStringList;
 begin
   if IsLoaded then
   begin
+    Mf6ObsSeriesName := TStringList.Create;
+    try
       frameObsMf6.tabMAW.TabVisible := (FMAW_Node <> nil)
         and  (FMAW_Node.StateIndex in [2,3]);
       frameObsMf6.tabSFR.TabVisible := (FSFR6_Node <> nil)
@@ -3039,6 +3044,31 @@ begin
 //        and  (FUZF_Mf6_Node.StateIndex in [2,3]);
       frameObsMf6.tabCSUB.TabVisible := (FCSUB_Node <> nil);
 //        and  (FCSUB_Node.StateIndex in [2,3]);
+      Mf6ObsSeriesName.Add(ObsSeriesToString(osGeneral));
+      if frameObsMf6.tabMAW.TabVisible then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osMaw));
+      end;
+      if frameObsMf6.tabSFR.TabVisible then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osSfr));
+      end;
+      if frameObsMf6.tabLAK.TabVisible then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osLak));
+      end;
+      if frameObsMf6.tabUZF.TabVisible then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osUzf));
+      end;
+      if frameObsMf6.tabCSUB.TabVisible then
+      begin
+        Mf6ObsSeriesName.Add(ObsSeriesToString(osCSub));
+      end;
+      frameObsMf6.framePestObs.SpecifyGroupTypes(Mf6ObsSeriesName);
+    finally
+      Mf6ObsSeriesName.Free;
+    end;
   end;
 end;
 
@@ -18824,6 +18854,11 @@ begin
   begin
     ResultType := rdtDouble;
   end
+  else if (DataGrid = frameObsMf6.framePestObs.frameObservations.Grid)
+    then
+  begin
+    ResultType := rdtDouble;
+  end
   else
   begin
     Assert(False);
@@ -24286,6 +24321,7 @@ var
   Variable: TCustomValue;
   Edit: TScreenObjectDataEdit;
   DataArrayManager: TDataArrayManager;
+  ASeries: TObSeries;
 begin
   inherited;
   DataGrid := Sender as TRbwDataGrid4;
@@ -24307,6 +24343,24 @@ begin
       then
     begin
       Orientation := dsoTop;
+    end
+    else if DataGrid = frameObsMf6.framePestObs.frameObservations.Grid then
+    begin
+      if TryGetObsSeries(DataGrid.Cells[Ord(mp6ObsSeries), ARow], ASeries) then
+      begin
+        if ASeries = osMaw then
+        begin
+          Orientation := dsoTop;
+        end
+        else
+        begin
+          Orientation := dso3D;
+        end;
+      end
+      else
+      begin
+        Orientation := dso3D;
+      end;
     end
     else
     begin

@@ -80,7 +80,7 @@ resourcestring
   StrFileName = 'File name';
   StrDataSet = 'Data set';
   StrTheFileSDoesN = 'The file "%s" does not exist.';
-  StrTheFileSIsNot = 'The file "%s" is not an ASCII raster file.';
+  StrTheFileSIsNot = 'The file "%s" either is not an ASCII raster file or it could not be read.';
   StrNoneImportAllS = 'None (import all %d points)';
   StrMultipleFiles = ' - multiple files';
   StrImportedFromAnAS = 'Imported from an ASCII Raster file';

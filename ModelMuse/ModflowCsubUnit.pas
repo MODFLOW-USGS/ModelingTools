@@ -312,6 +312,7 @@ type
 
 function TryGetCSubOb(const CSubObName: string; var CSubOb: TCSubOb): Boolean;
 function CSubObToString(const CSubOb: TCSubOb): string;
+Procedure FillCSubSeriesNames(AList: TStrings);
 
 implementation
 
@@ -350,7 +351,7 @@ var
 begin
   CSubObNames := TStringList.Create;
   CSubObNames.CaseSensitive := False;
-  for Index := High(TCSubOb) to High(TCSubOb) do
+  for Index := Low(TCSubOb) to High(TCSubOb) do
   begin
     CSubObNames.Add(CSubObName[Index]);
   end;
@@ -368,12 +369,15 @@ begin
   end;
 end;
 
+Procedure FillCSubSeriesNames(AList: TStrings);
+begin
+  AList.Assign(CSubObNames);
+end;
+
 function CSubObToString(const CSubOb: TCSubOb): string;
 begin
   result := CSubObName[CSubOb];
 end;
-
-
 
 resourcestring
   StrStressOffsetMultip = 'Stress offset multiplier';

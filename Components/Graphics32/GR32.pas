@@ -3927,7 +3927,7 @@ begin
     hypl := hyp + (Integer(L) * FixedOne);
     if hypl < 256 then Exit;
     n := hypl shr 16;
-    if n > 0 then
+    if (n > 0) and (hyp <> 0) then
     begin
       h := 65536 / hyp;
       nx := Round(nx * h); ny := Round(ny * h);
@@ -4038,7 +4038,7 @@ begin
     hypl := hyp + (Integer(L) * FixedOne);
     if hypl < 256 then Exit;
     n := hypl shr 16;
-    if n > 0 then
+    if (n > 0) and (hyp <> 0) then
     begin
       nx := Round(nx / hyp * 65536);
       ny := Round(ny / hyp * 65536);
@@ -4077,7 +4077,7 @@ var
   ChangedRect: TRect;
 begin
   ChangedRect := MakeRect(FixedRect(X1, Y1, X2, Y2));
-  
+
   if not FMeasuringMode then
   begin
     sx := X1; sy := Y1; ex := X2; ey := Y2;
@@ -4117,7 +4117,7 @@ begin
     hypl := hyp + (Integer(L) * FixedOne);
     if hypl < 256 then Exit;
     n := hypl shr 16;
-    if n > 0 then
+    if (n > 0) and (hyp <> 0) then
     begin
       nx := Round(nx / hyp * 65536); ny := Round(ny / hyp * 65536);
       for i := 0 to n - 1 do

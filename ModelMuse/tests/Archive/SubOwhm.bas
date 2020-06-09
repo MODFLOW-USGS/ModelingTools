@@ -1,4 +1,5 @@
-# Basic Package file created on 10/26/2016 by ModelMuse version 3.8.1.12.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 300.
 FREE  # OPTIONS
 CONSTANT        1 # IBOUND Layer 1
 CONSTANT        1 # IBOUND Layer 2

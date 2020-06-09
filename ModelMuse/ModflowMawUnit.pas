@@ -523,6 +523,7 @@ const
 
 function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
 function MawObToString(const MawOb: TMawOb): string;
+Procedure FillMawSeriesNames(AList: TStrings);
 
 implementation
 
@@ -567,6 +568,10 @@ begin
   result := MawObName[MawOb];
 end;
 
+Procedure FillMawSeriesNames(AList: TStrings);
+begin
+  AList.Assign(MawObNames);
+end;
   {
   TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate, moRateToMvr,
     moFlowingWellFlowRate, moFlowWellToMvr, moStorageFlowRate, moConstantFlowRate, moConductance,

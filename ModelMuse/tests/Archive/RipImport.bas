@@ -1,5 +1,6 @@
 # Riparian ET Test Model, 2 Season Model
-# Basic Package file created on 5/6/2016 by ModelMuse version 3.6.3.28.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 183.
 FREE  # OPTIONS
 INTERNAL 1 (FREE)        5 # IBOUND Layer 1
      1     1     1     1     1     0     0     0     0     0

@@ -75,8 +75,11 @@ end;
 procedure TframeZoneBudget.btnInsertZoneClick(Sender: TObject);
 begin
   inherited;
-  rdgCompositeZones.InsertRow(rdgCompositeZones.Row);
-  UpdateSpinEdit;
+  if rdgCompositeZones.Row >= 1 then
+  begin
+    rdgCompositeZones.InsertRow(rdgCompositeZones.Row);
+    UpdateSpinEdit;
+  end;
 end;
 
 procedure TframeZoneBudget.cbExportCsv2Click(Sender: TObject);

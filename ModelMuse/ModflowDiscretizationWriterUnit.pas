@@ -493,6 +493,11 @@ end;
 procedure TModflowDiscretizationWriter.WriteDataSet0;
 var
   GridAngle: Real;
+  ActiveCellCount: Integer;
+  DataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
   procedure WriteCorner(const CornerDesc: string; APoint: TPoint2D);
   begin
     WriteCommentLine(CornerDesc + ' (' + FortranFloatToStr(APoint.x)
@@ -513,6 +518,26 @@ begin
     Model.Grid.ColumnCount,Model.Grid.RowCount));
   GridAngle := Model.Grid.GridAngle * 180 / Pi;
   WriteCommentLine('Grid angle (in degrees counterclockwise): ' + FortranFloatToStr(GridAngle));
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    ActiveCellCount := 0;
+    DataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    DataArray.Initialize;
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+        for RowIndex := 0 to Model.RowCount - 1 do
+        begin
+          for ColIndex := 0 to Model.ColumnCount - 1 do
+          begin
+            if DataArray.IntegerData[LayerIndex, RowIndex, ColIndex] > 0 then
+            begin
+              Inc(ActiveCellCount);
+            end;
+          end;
+        end;
+    end;
+    WriteCommentLine(Format('Number of active cells = %d.', [ActiveCellCount]));
+  end;
 
 end;
 
@@ -899,8 +924,31 @@ begin
 end;
 
 procedure TMf6DisvWriter.WriteDataSet0;
+var
+  ActiveCellCount: Integer;
+  DataArray: TDataArray;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
 begin
   WriteCommentLines(Model.ModflowOptions.Description);
+  ActiveCellCount := 0;
+  DataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  DataArray.Initialize;
+  for LayerIndex := 0 to Model.LayerCount - 1 do
+  begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          if DataArray.IntegerData[LayerIndex, RowIndex, ColIndex] > 0 then
+          begin
+            Inc(ActiveCellCount);
+          end;
+        end;
+      end;
+  end;
+  WriteCommentLine(Format('Number of active cells = %d.', [ActiveCellCount]));
 end;
 
 procedure TMf6DisvWriter.WriteDimensions;

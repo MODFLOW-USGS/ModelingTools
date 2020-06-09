@@ -319,6 +319,7 @@ const
 
 function TryGetUzfOb(const UzfObName: string; var UzfOb: TUzfOb): Boolean;
 function UzfObToString(const UzfOb: TUzfOb): string;
+Procedure FillUzfSeriesNames(AList: TStrings);
 
 implementation
 
@@ -342,7 +343,7 @@ var
 begin
   UzfObsNameList := TStringList.Create;
   UzfObsNameList.CaseSensitive := False;
-  for index := High(TUzfOb) to High(TUzfOb) do
+  for index := Low(TUzfOb) to High(TUzfOb) do
   begin
     UzfObsNameList.Add(UzfObsNames[index]);
   end;
@@ -358,6 +359,11 @@ begin
   begin
     UzfOb := TUzfOb(index);
   end;
+end;
+
+Procedure FillUzfSeriesNames(AList: TStrings);
+begin
+  AList.Assign(UzfObsNameList);
 end;
 
 function UzfObToString(const UzfOb: TUzfOb): string;

@@ -1,9 +1,10 @@
-# Discretization File created on 8/19/2019 by ModelMuse version 4.0.0.12.
+# Discretization File created on 6/8/2020 by ModelMuse version 4.2.0.17.
 # Upper left corner: (0, 0)
 # Lower left corner: (0, -1000)
 # Upper right corner: (1000, 0)
 # Lower right corner: (1000, -1000)
 # Grid angle (in degrees counterclockwise): 0
+# Number of active cells = 294.
 BEGIN OPTIONS
   LENGTH_UNITS METERS
   XORIGIN  0.000000000000E+000 

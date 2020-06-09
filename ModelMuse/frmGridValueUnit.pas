@@ -2223,6 +2223,7 @@ var
   ScreenObject: TScreenObject;
   Index: Integer;
 begin
+  FSelectedScreenObject := nil;
   for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
   begin
     ScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];

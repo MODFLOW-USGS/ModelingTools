@@ -9106,8 +9106,7 @@ const
   //                they are inactive initially.
   //               Bug fix: Fixed a bug that caused issues with opening files
   //                that contained very large or very small real number values.
-
-  //               Bug fix: Fixed a bug that could cause an assertion failure
+  //    '4.2.0.18' Bug fix: Fixed a bug that could cause an assertion failure
   //                when exporting SUTRA models.
   //               Enhancement: ModelMuse now warns the user if any specified
   //                head cells are cells for which Kx, Ky, and Kz are all zero.
@@ -9121,9 +9120,16 @@ const
   //                the RCH package.
   //               Bug fix: Fixed bug in reading binary MT3D model results
   //                that could cause a bug report to be generated.
+  //               Bug fix: Fixed bug in inserting a new composite zone for
+  //                Zone Budget in the "Model|MODFLOW Packages and Programs"
+  //                dialog box.
+  //               Enhancement: ModelMuse now prints the number of active cells
+  //                in a MODFLOW model as a comment either in the Basic package
+  //                input file for pre-MODFLOW6 models or in the DIS or DISV
+  //                files in MODFLOW 6 models.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.17';
+  IModelVersion = '4.2.0.18';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

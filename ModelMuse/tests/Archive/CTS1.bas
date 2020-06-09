@@ -1,4 +1,5 @@
-# Basic Package file created on 2/4/2020 by ModelMuse version 4.1.0.25.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 961.
 FREE  # OPTIONS
 CONSTANT        1 # IBOUND Layer 1
  -8.880000000000E+002  # HNOFLO

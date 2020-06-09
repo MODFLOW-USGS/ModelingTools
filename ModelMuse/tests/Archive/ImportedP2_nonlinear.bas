@@ -1,6 +1,7 @@
 # MT3DMS Benchmark Test Problem #2
 # Based on GROVE & STOLLENWERK (1984)
-# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 101.
 FREE XSECTION  # OPTIONS
 INTERNAL 1 (FREE)        5 # IBOUND
      1     1     1     1     1     1     1     1     1     1

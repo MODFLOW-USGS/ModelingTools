@@ -1,4 +1,5 @@
-# Basic Package file created on 2/4/2020 by ModelMuse version 4.1.0.25.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 5971.
 FREE CHTOCH  # OPTIONS
 INTERNAL 1 (FREE)        5 # IBOUND Layer 1
      0     0     0     1     1     1     1     1     1     1

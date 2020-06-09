@@ -389,6 +389,7 @@ type
 
 function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
 function LakObToString(const LakOb: TLakOb): string;
+Procedure FillLakSeriesNames(AList: TStrings);
 
 implementation
 
@@ -429,6 +430,11 @@ begin
   begin
     LakOb := TLakOb(Index);
   end;
+end;
+
+Procedure FillLakSeriesNames(AList: TStrings);
+begin
+  AList.Assign(LakeObNames);
 end;
 
 function LakObToString(const LakOb: TLakOb): string;

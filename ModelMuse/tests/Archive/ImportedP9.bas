@@ -1,6 +1,7 @@
 # MT3DMS Benchmark Test Problem No. 9
 # TRANSPORT IN 2-D FLOW FIELD WITH A LOW-K ZONE
-# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 252.
 FREE  # OPTIONS
 CONSTANT        1 # IBOUND Layer 1
   9.999900000000E+002  # HNOFLO

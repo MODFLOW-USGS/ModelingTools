@@ -1,6 +1,7 @@
 # MT3DMS Benchmark Test Problem #10
 # 3-D Flow and Transport
-# Basic Package file created on 12/12/2015 by ModelMuse version 3.6.3.5.
+# Basic Package file created on 6/8/2020 by ModelMuse version 4.2.0.17.
+# Number of active cells = 9760.
 FREE  # OPTIONS
 CONSTANT        1 # IBOUND Layer 1
 CONSTANT        1 # IBOUND Layer 2
