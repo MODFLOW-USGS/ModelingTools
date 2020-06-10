@@ -774,6 +774,11 @@ begin
   end;
 
 {$IFDEF PEST}
+  if not Model.PestUsed then
+  begin
+    Exit;
+  end;
+
   FNameOfFile := ChangeFileExt(FNameOfFile, '.pestobs');
   OpenFile(FNameOfFile);
   try

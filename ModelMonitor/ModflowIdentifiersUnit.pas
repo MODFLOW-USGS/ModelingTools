@@ -666,7 +666,7 @@ begin
   BoundaryIdentifiers.Add('UZF (');
   BoundaryIdentifiers.Add('MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP');
   BoundaryIdentifiers.Add('NEWTON-RAPHSON');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('LAMINAR PRECALCULATION');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');

@@ -1,7 +1,9 @@
 BEGIN OPTIONS
 # The file name for the listing file contains white space so it must be enclosed in double quotes
 	LISTING "MyListing file.txt"
+# The VALUES file contains the values extracted from the observation file. 
 	VALUES Example.der_obs
+# The INSTRUCTION file contains instructions for PEST to extract the values from the VALUES file.  
 	INSTRUCTION Example.ins
 END OPTIONS
 

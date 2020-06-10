@@ -25608,5 +25608,13 @@ object TTaskHistory
         'List File Analyzer'
         'core code'
         'Components')
+    end
+    item
+      Date = 43992.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'List File Analyzer'
+        'PEST Observations'
+        'PEST')
     end>
 end
