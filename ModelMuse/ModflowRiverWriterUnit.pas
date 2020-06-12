@@ -4,7 +4,8 @@ interface
 
 uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowRivUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
-  ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes;
+  ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes,
+  Modflow6ObsUnit;
 
 type
   TModflowRIV_Writer = class(TFluxObsWriter)
@@ -44,6 +45,7 @@ type
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -54,7 +56,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit, Modflow6ObsUnit;
+  DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit;
 
 resourcestring
   StrInTheFollowingRiv = 'In the following river cells, the stage is equal to or below t' +
@@ -709,6 +711,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowRIV_Writer.Mf6ObType: TObGeneral;
+begin
+  result := ogRiv
 end;
 
 procedure TModflowRIV_Writer.WriteParameterCells(CellList: TValueCellList;

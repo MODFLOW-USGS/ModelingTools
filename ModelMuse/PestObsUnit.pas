@@ -50,21 +50,31 @@ type
 
   TObservationList = TList<TCustomObservationItem>;
 
+  {
+  FStoredWeight := TRealStorage.Create;
+  FStoredWeight.OnChange := OnInvalidateModel;
+  }
   TCustomTimeObservationItem = class(TCustomObservationItem)
   private
-    FTime: double;
+//    FTime: double;
+    FStoredTime: TRealStorage;
     procedure SetTime(const Value: double);
+    procedure SetStoredTime(const Value: TRealStorage);
+    function GetTime: double;
   protected
     function GetObsTypeIndex: Integer; virtual; abstract;
     procedure SetObsTypeIndex(Value: Integer); virtual; abstract;
     function GetObsTypeString: string; virtual; abstract;
     procedure SetObsTypeString(const Value: string); virtual; abstract;
   public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property ObsTypeIndex: Integer read GetObsTypeIndex write SetObsTypeIndex;
     property ObsTypeString: string read GetObsTypeString write SetObsTypeString;
   published
-    property Time: double read FTime write SetTime;
+    property Time: double read GetTime write SetTime stored False;
+    property StoredTime: TRealStorage read FStoredTime write SetStoredTime;
   end;
 
   // Compare two @link(TCustomObservationItem)s in the same object.
@@ -255,9 +265,33 @@ begin
 
 end;
 
+constructor TCustomTimeObservationItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredTime := TRealStorage.Create;
+  FStoredTime.OnChange := OnInvalidateModel;
+end;
+
+destructor TCustomTimeObservationItem.Destroy;
+begin
+  FStoredTime.Free;
+  inherited;
+end;
+
+function TCustomTimeObservationItem.GetTime: double;
+begin
+  result := FStoredTime.Value;
+end;
+
+procedure TCustomTimeObservationItem.SetStoredTime(const Value: TRealStorage);
+begin
+  FStoredTime.Assign(Value);
+end;
+
 procedure TCustomTimeObservationItem.SetTime(const Value: double);
 begin
-  SetRealProperty(FTime, Value);
+  FStoredTime.Value := Value;
+//  SetRealProperty(FTime, Value);
 end;
 
 { TObsCompareItem }

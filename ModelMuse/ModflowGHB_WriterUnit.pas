@@ -5,7 +5,8 @@ interface
 uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowGhbUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes,
-  ModflowBoundaryDisplayUnit, ModflowTransientListParameterUnit;
+  ModflowBoundaryDisplayUnit, ModflowTransientListParameterUnit,
+  Modflow6ObsUnit;
 
 type
   TModflowGHB_Writer = class(TFluxObsWriter)
@@ -46,6 +47,7 @@ type
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -56,7 +58,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers, 
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
-  ModflowMvrUnit, Modflow6ObsUnit;
+  ModflowMvrUnit;
 
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +
@@ -650,6 +652,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowGHB_Writer.Mf6ObType: TObGeneral;
+begin
+  result := ogGHB;
 end;
 
 procedure TModflowGHB_Writer.WriteParameterCells(CellList: TValueCellList;

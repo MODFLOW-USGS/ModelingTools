@@ -39171,6 +39171,9 @@ var
   UzfMf6Writer: TModflowUzfMf6Writer;
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
+  DirectObservationLines: TStringList;
+  DerivedObservationLines: TStringList;
+  FileNameLines: TStringList;
 begin
   // Note: MODFLOW can not read Unicode text files.
 
@@ -39180,959 +39183,909 @@ begin
   end;
 
   Assert(Assigned(NameFileWriter));
-  LocalNameWriter := NameFileWriter as TNameFileWriter;
-  UpdateCurrentModel(self);
+  DirectObservationLines := TStringList.Create;
+  DerivedObservationLines := TStringList.Create;
+  FileNameLines := TStringList.Create;
   try
-    ModflowMvrWriter := nil;
+    LocalNameWriter := NameFileWriter as TNameFileWriter;
+    UpdateCurrentModel(self);
     try
-      CheckWetting;
-
-      SetCurrentDir(ExtractFileDir(FileName));
-      TransientMultiplierArrays.Clear;
-      TransientZoneArrays.Clear;
-      ModflowSteadyParameters.ClearArrayNames;
-
-      UsedMultiplierArrayNames.Clear;
-      UsedZoneArrayNames.Clear;
-      UsedMultiplierArrayNames.Sorted := True;
-      UsedZoneArrayNames.Sorted := True;
-
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
+      ModflowMvrWriter := nil;
       try
-        SetCurrentNameFileWriter(LocalNameWriter);
-        if DisvUsed then
-        begin
-          DisvWriter := TMf6DisvWriter.Create(self, etExport);
-          try
-            DisvWriter.WriteFile(FileName);
-          finally
-            DisvWriter.Free;
-          end;
-        end
-        else
-        begin
-          DisWriter := TModflowDiscretizationWriter.Create(self, etExport);
-          try
-            DisWriter.WriteFile(FileName);
-          finally
-            DisWriter.Free;
-          end;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        frmProgressMM.StepIt;
+        CheckWetting;
 
-        if ModelSelection <> msModflow2015 then
-        begin
-          PestGridSpecificationWriter := TPestGridSpecificationWriter.
-            Create(self, etExport);
-          try
-            PestGridSpecificationWriter.WriteFile(FileName);
-          finally
-            PestGridSpecificationWriter.Free;
-          end;
-        end;
+        SetCurrentDir(ExtractFileDir(FileName));
+        TransientMultiplierArrays.Clear;
+        TransientZoneArrays.Clear;
+        ModflowSteadyParameters.ClearArrayNames;
 
+        UsedMultiplierArrayNames.Clear;
+        UsedZoneArrayNames.Clear;
+        UsedMultiplierArrayNames.Sorted := True;
+        UsedZoneArrayNames.Sorted := True;
 
         Application.ProcessMessages;
         if not frmProgressMM.ShouldContinue then
         begin
           Exit;
         end;
-        if ModelSelection = msModflow2015 then
-        begin
-          ModelData.ModelType := mtGroundWaterFlow;
-          ModelData.ModelName := DisplayName;
-          ModelData.SolutionGroup := 'Groundwater';
-          ModelData.MaxIterations := ModflowPackages.SmsPackage.SolutionGroupMaxIteration;
-          ModelData.ImsFile := TImsWriter.FileName(FileName);
-          AddModelInputFile(ModelData.ImsFile);
-          ModelData.ModelNameFile := TNameFileWriter.FileName(FileName);
-
-          SimNameWriter.AddModel(ModelData);
-
-          if ModflowPackages.MvrPackage.IsSelected then
+        try
+          SetCurrentNameFileWriter(LocalNameWriter);
+          if DisvUsed then
           begin
-            ModflowMvrWriter := TModflowMvrWriter.
-              Create(self, etExport);
-            ModflowMvrWriter.Evaluate;
-          end;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
+            DisvWriter := TMf6DisvWriter.Create(self, etExport);
+            try
+              DisvWriter.WriteFile(FileName);
+            finally
+              DisvWriter.Free;
+            end;
+          end
+          else
           begin
-            Exit;
-          end;
-
-          IcWriter := TModflowStartingHeadsWriter.Create(self, etExport);
-          try
-            IcWriter.WriteFile(FileName);
-          finally
-            IcWriter.Free;
-          end;
-          FDataArrayManager.CacheDataArrays;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-
-          NpfWriter := TNpfWriter.Create(self, etExport);
-          try
-            NpfWriter.WriteFile(FileName);
-          finally
-            NpfWriter.Free;
-          end;
-          FDataArrayManager.CacheDataArrays;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-
-          Obs6_Writer := TModflow6Obs_Writer.Create(self, etExport);
-          try
-            Obs6_Writer.WriteFile(FileName);
-          finally
-            Obs6_Writer.Free;
-          end;
-          FDataArrayManager.CacheDataArrays;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-
-          GncWriter := TModflowGncWriter.Create(self, etExport);
-          try
-            GncWriter.WriteFile(FileName);
-          finally
-            GncWriter.Free;
-          end;
-          FDataArrayManager.CacheDataArrays;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-
-          StoWriter := TStoPackageWriter.Create(self, etExport);
-          try
-            StoWriter.WriteFile(FileName);
-          finally
-            StoWriter.Free;
-          end;
-          FDataArrayManager.CacheDataArrays;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-
-          SmsWriter := TImsWriter.Create(self, etExport);
-          try
-            SmsWriter.WriteFile(FileName);
-          finally
-            SmsWriter.Free;
-          end;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-        end;
-
-        BasicWriter := TModflowBasicWriter.Create(self, etExport);
-        try
-          BasicWriter.WriteFile(FileName);
-        finally
-          BasicWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        frmProgressMM.StepIt;
-
-        OCWriter := TOutputControlWriter.Create(self, etExport);
-        try
-          OCWriter.WriteFile(FileName);
-        finally
-          OCWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        frmProgressMM.StepIt;
-
-        PcgWriter := TPcgWriter.Create(self, etExport);
-        try
-          PcgWriter.WriteFile(FileName);
-        finally
-          PcgWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.PcgPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        PcgnWriter := TPcgnWriter.Create(self, etExport);
-        try
-          PcgnWriter.WriteFile(FileName);
-        finally
-          PcgnWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.PcgnPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        GmgWriter := TGmgWriter.Create(self, etExport);
-        try
-          GmgWriter.WriteFile(FileName);
-        finally
-          GmgWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.GmgPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        SipWriter := TSipWriter.Create(self, etExport);
-        try
-          SipWriter.WriteFile(FileName);
-        finally
-          SipWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SipPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        De4Writer := TDe4Writer.Create(self, etExport);
-        try
-          De4Writer.WriteFile(FileName);
-        finally
-          De4Writer.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.De4Package.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        NwtWriter := TNwtWriter.Create(self, etExport);
-        try
-          NwtWriter.WriteFile(FileName);
-        finally
-          NwtWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.NwtPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        LPF_Writer := TModflowLPF_Writer.Create(self, etExport);
-        try
-          LPF_Writer.WriteFile(FileName);
-        {$IFDEF PEST}
-          LPF_Writer.WritePestFile(FileName);
-        {$ENDIF}
-        finally
-          LPF_Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.LpfPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        BCF_Writer := TModflowBCF_Writer.Create(self, etExport);
-        try
-          BCF_Writer.WriteFile(FileName);
-        finally
-          BCF_Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.BcfPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        HUF_Writer := TModflowHUF_Writer.Create(self, etExport);
-        try
-          HUF_Writer.WriteFile(FileName);
-        finally
-          HUF_Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.HufPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        KDEP_Writer := TModflowKDEP_Writer.Create(self, etExport);
-        try
-          KDEP_Writer.WriteFile(FileName);
-        finally
-          KDEP_Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.HufPackage.IsSelected
-          and (HufParameters.CountParameters([ptHUF_KDEP]) > 0) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        LVDA_Writer := TModflowLVDA_Writer.Create(self, etExport);
-        try
-          LVDA_Writer.WriteFile(FileName);
-        finally
-          LVDA_Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.HufPackage.IsSelected
-          and (ModflowSteadyParameters.CountParameters([ptHUF_LVDA]) > 0) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        UPW_Writer := TModflowUPW_Writer.Create(self, etExport);
-        try
-          UPW_Writer.WriteFile(FileName);
-        finally
-          UPW_Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.UpwPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        LinkWriter := TModflowMt3dmsLinkWriter.Create(self, etExport);
-        try
-          LinkWriter.WriteFile(FileName);
-        finally
-          LinkWriter.Free;
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-        ChdWriter := TModflowCHD_Writer.Create(self, etExport);
-        try
-          ChdWriter.WriteFile(FileName);
-          ChdWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          ChdWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.ChdBoundary.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        GhbWriter := TModflowGHB_Writer.Create(self, etExport);
-        try
-          GhbWriter.MvrWriter := ModflowMvrWriter;
-          GhbWriter.WriteFile(FileName);
-          GhbWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          GhbWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.GhbBoundary.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        WellWriter := TModflowWEL_Writer.Create(self, etExport);
-        try
-          WellWriter.MvrWriter := ModflowMvrWriter;
-          WellWriter.WriteFile(FileName);
-        finally
-          WellWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.WelPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        RivWriter := TModflowRIV_Writer.Create(self, etExport);
-        try
-          RivWriter.MvrWriter := ModflowMvrWriter;
-          RivWriter.WriteFile(FileName);
-          RivWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          RivWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.RivPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        DrnWriter := TModflowDRN_Writer.Create(self, etExport);
-        try
-          DrnWriter.MvrWriter := ModflowMvrWriter;
-          DrnWriter.WriteFile(FileName);
-          DrnWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          DrnWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.DrnPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        DrtWriter := TModflowDRT_Writer.Create(self, etExport);
-        try
-          DrtWriter.WriteFile(FileName);
-        finally
-          DrtWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.DrtPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        StrWriter := TStrWriter.Create(self, etExport);
-        try
-          StrWriter.WriteFile(FileName);
-          StrWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          StrWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.StrPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        Sfr6Writer := TModflowSFR_MF6_Writer.Create(self, etExport);
-        try
-          Sfr6Writer.MvrWriter := ModflowMvrWriter;
-          Sfr6Writer.WriteFile(FileName);
-//          Sfr6Writer.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          Sfr6Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SfrModflow6Package.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        MawWriter := TModflowMAW_Writer.Create(self, etExport);
-        try
-          MawWriter.MvrWriter := ModflowMvrWriter;
-          MawWriter.WriteFile(FileName);
-//          MawWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
-        finally
-          MawWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.MawPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        FhbWriter := TModflowFhbWriter.Create(self, etExport);
-        try
-          FhbWriter.WriteFile(FileName);
-        finally
-          FhbWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.FhbPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        RchWriter := TModflowRCH_Writer.Create(self, etExport);
-        try
-          RchWriter.WriteFile(FileName);
-        finally
-          RchWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.RchPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        EvtWriter := TModflowEVT_Writer.Create(self, etExport);
-        try
-          EvtWriter.WriteFile(FileName);
-        finally
-          EvtWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.EvtPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        EtsWriter := TModflowETS_Writer.Create(self, etExport);
-        try
-          EtsWriter.WriteFile(FileName);
-        finally
-          EtsWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.EtsPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        ResWriter := TModflowRES_Writer.Create(self, etExport);
-        try
-          ResWriter.WriteFile(FileName);
-        finally
-          ResWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.ResPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-
-        Mnw1Writer := TModflowMNW1_Writer.Create(self, etExport);
-        try
-          Mnw1Writer.WriteFile(FileName);
-        finally
-          Mnw1Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.Mnw1Package.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        Mnw2Writer := TModflowMNW2_Writer.Create(self, etExport);
-        try
-          Mnw2Writer.WriteFile(FileName);
-          Mnw2Writer.WriteMnwiFile(FileName);
-        finally
-          Mnw2Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.Mnw2Package.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        CfpWriter := TModflowCfpWriter.Create(self, etExport);
-        try
-          CfpWriter.WriteFile(FileName);
-        finally
-          CfpWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.ConduitFlowProcess.IsSelected
-          and (ModelSelection = msModflowCFP) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        SwiWriter := TSwiWriter.Create(self, etExport);
-        try
-          SwiWriter.WriteFile(FileName);
-        finally
-          SwiWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SwiPackage.IsSelected
-          and (ModelSelection in [msModflow, msModflowNWT]) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        SwrWriter := TModflowSwrWriter.Create(self, etExport);
-        try
-          SwrWriter.WriteFile(FileName);
-        finally
-          SwrWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SwrPackage.IsSelected
-          and (ModelSelection in [msModflowNWT]) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        RipWriter := TModflowRipWriter.Create(self, etExport);
-        try
-          RipWriter.WriteFile(FileName);
-        finally
-          RipWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.RipPackage.IsSelected
-          and (ModelSelection in [msModflowFmp]) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        LakeMf6Writer := TModflowLAKMf6Writer.Create(self, etExport);
-        try
-          LakeMf6Writer.MvrWriter := ModflowMvrWriter;
-          LakeMf6Writer.WriteFile(FileName);
-        finally
-          LakeMf6Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.LakMf6Package.IsSelected
-          and (ModelSelection in [msModflow2015]) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        UzfMf6Writer := TModflowUzfMf6Writer.Create(self, etExport);
-        try
-          UzfMf6Writer.MvrWriter := ModflowMvrWriter;
-          UzfMf6Writer.WriteFile(FileName);
-        finally
-          UzfMf6Writer.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.UzfMf6Package.IsSelected
-          and (ModelSelection in [msModflow2015]) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        CSubWriter := TCSubWriter.Create(self, etExport);
-        try
-//          CSubWriter.MvrWriter := ModflowMvrWriter;
-          CSubWriter.WriteFile(FileName);
-        finally
-          CSubWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.CsubPackage.IsSelected
-          and (ModelSelection in [msModflow2015]) then
-        begin
-          frmProgressMM.StepIt;
-        end;
-
-        if Self is TPhastModel then
-        begin
-          LocalPhastModel := TPhastModel(Self);
-          ExportLakePackage(FileName);
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-          if ExportAllLgr then
-          begin
-            for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
-            begin
-              ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-              ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
-              ChildModel.ExportLakePackage(ChildNameFile);
-              Application.ProcessMessages;
-              if not frmProgressMM.ShouldContinue then
-              begin
-                Exit;
-              end;
+            DisWriter := TModflowDiscretizationWriter.Create(self, etExport);
+            try
+              DisWriter.WriteFile(FileName);
+            finally
+              DisWriter.Free;
             end;
           end;
-        end
-        else
-        begin
-          if not ExportAllLgr then
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
           begin
+            Exit;
+          end;
+          frmProgressMM.StepIt;
+
+          if ModelSelection <> msModflow2015 then
+          begin
+            PestGridSpecificationWriter := TPestGridSpecificationWriter.
+              Create(self, etExport);
+            try
+              PestGridSpecificationWriter.WriteFile(FileName);
+            finally
+              PestGridSpecificationWriter.Free;
+            end;
+          end;
+
+
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModelSelection = msModflow2015 then
+          begin
+            ModelData.ModelType := mtGroundWaterFlow;
+            ModelData.ModelName := DisplayName;
+            ModelData.SolutionGroup := 'Groundwater';
+            ModelData.MaxIterations := ModflowPackages.SmsPackage.SolutionGroupMaxIteration;
+            ModelData.ImsFile := TImsWriter.FileName(FileName);
+            AddModelInputFile(ModelData.ImsFile);
+            ModelData.ModelNameFile := TNameFileWriter.FileName(FileName);
+
+            SimNameWriter.AddModel(ModelData);
+
+            if ModflowPackages.MvrPackage.IsSelected then
+            begin
+              ModflowMvrWriter := TModflowMvrWriter.
+                Create(self, etExport);
+              ModflowMvrWriter.Evaluate;
+            end;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+
+            IcWriter := TModflowStartingHeadsWriter.Create(self, etExport);
+            try
+              IcWriter.WriteFile(FileName);
+            finally
+              IcWriter.Free;
+            end;
+            FDataArrayManager.CacheDataArrays;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+
+            NpfWriter := TNpfWriter.Create(self, etExport);
+            try
+              NpfWriter.WriteFile(FileName);
+            finally
+              NpfWriter.Free;
+            end;
+            FDataArrayManager.CacheDataArrays;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+
+            Obs6_Writer := TModflow6Obs_Writer.Create(self, etExport);
+            try
+              Obs6_Writer.DirectObsLines := DirectObservationLines;
+              Obs6_Writer.CalculatedObsLines := DerivedObservationLines;
+              Obs6_Writer.FileNameLines := FileNameLines;
+
+              Obs6_Writer.WriteFile(FileName);
+            finally
+              Obs6_Writer.Free;
+            end;
+            FDataArrayManager.CacheDataArrays;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+
+            GncWriter := TModflowGncWriter.Create(self, etExport);
+            try
+              GncWriter.WriteFile(FileName);
+            finally
+              GncWriter.Free;
+            end;
+            FDataArrayManager.CacheDataArrays;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+
+            StoWriter := TStoPackageWriter.Create(self, etExport);
+            try
+              StoWriter.WriteFile(FileName);
+            finally
+              StoWriter.Free;
+            end;
+            FDataArrayManager.CacheDataArrays;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+
+            SmsWriter := TImsWriter.Create(self, etExport);
+            try
+              SmsWriter.WriteFile(FileName);
+            finally
+              SmsWriter.Free;
+            end;
+            Application.ProcessMessages;
+            if not frmProgressMM.ShouldContinue then
+            begin
+              Exit;
+            end;
+          end;
+
+          BasicWriter := TModflowBasicWriter.Create(self, etExport);
+          try
+            BasicWriter.WriteFile(FileName);
+          finally
+            BasicWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          frmProgressMM.StepIt;
+
+          OCWriter := TOutputControlWriter.Create(self, etExport);
+          try
+            OCWriter.WriteFile(FileName);
+          finally
+            OCWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          frmProgressMM.StepIt;
+
+          PcgWriter := TPcgWriter.Create(self, etExport);
+          try
+            PcgWriter.WriteFile(FileName);
+          finally
+            PcgWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.PcgPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          PcgnWriter := TPcgnWriter.Create(self, etExport);
+          try
+            PcgnWriter.WriteFile(FileName);
+          finally
+            PcgnWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.PcgnPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          GmgWriter := TGmgWriter.Create(self, etExport);
+          try
+            GmgWriter.WriteFile(FileName);
+          finally
+            GmgWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.GmgPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          SipWriter := TSipWriter.Create(self, etExport);
+          try
+            SipWriter.WriteFile(FileName);
+          finally
+            SipWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SipPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          De4Writer := TDe4Writer.Create(self, etExport);
+          try
+            De4Writer.WriteFile(FileName);
+          finally
+            De4Writer.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.De4Package.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          NwtWriter := TNwtWriter.Create(self, etExport);
+          try
+            NwtWriter.WriteFile(FileName);
+          finally
+            NwtWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.NwtPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          LPF_Writer := TModflowLPF_Writer.Create(self, etExport);
+          try
+            LPF_Writer.WriteFile(FileName);
+          {$IFDEF PEST}
+            LPF_Writer.WritePestFile(FileName);
+          {$ENDIF}
+          finally
+            LPF_Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.LpfPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          BCF_Writer := TModflowBCF_Writer.Create(self, etExport);
+          try
+            BCF_Writer.WriteFile(FileName);
+          finally
+            BCF_Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.BcfPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          HUF_Writer := TModflowHUF_Writer.Create(self, etExport);
+          try
+            HUF_Writer.WriteFile(FileName);
+          finally
+            HUF_Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.HufPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          KDEP_Writer := TModflowKDEP_Writer.Create(self, etExport);
+          try
+            KDEP_Writer.WriteFile(FileName);
+          finally
+            KDEP_Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.HufPackage.IsSelected
+            and (HufParameters.CountParameters([ptHUF_KDEP]) > 0) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          LVDA_Writer := TModflowLVDA_Writer.Create(self, etExport);
+          try
+            LVDA_Writer.WriteFile(FileName);
+          finally
+            LVDA_Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.HufPackage.IsSelected
+            and (ModflowSteadyParameters.CountParameters([ptHUF_LVDA]) > 0) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          UPW_Writer := TModflowUPW_Writer.Create(self, etExport);
+          try
+            UPW_Writer.WriteFile(FileName);
+          finally
+            UPW_Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.UpwPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          LinkWriter := TModflowMt3dmsLinkWriter.Create(self, etExport);
+          try
+            LinkWriter.WriteFile(FileName);
+          finally
+            LinkWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+
+          ChdWriter := TModflowCHD_Writer.Create(self, etExport);
+          try
+            ChdWriter.DirectObsLines := DirectObservationLines;
+            ChdWriter.CalculatedObsLines := DerivedObservationLines;
+            ChdWriter.FileNameLines := FileNameLines;
+            ChdWriter.WriteFile(FileName);
+            ChdWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            ChdWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.ChdBoundary.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          GhbWriter := TModflowGHB_Writer.Create(self, etExport);
+          try
+            GhbWriter.DirectObsLines := DirectObservationLines;
+            GhbWriter.CalculatedObsLines := DerivedObservationLines;
+            GhbWriter.FileNameLines := FileNameLines;
+            GhbWriter.MvrWriter := ModflowMvrWriter;
+            GhbWriter.WriteFile(FileName);
+            GhbWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            GhbWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.GhbBoundary.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          WellWriter := TModflowWEL_Writer.Create(self, etExport);
+          try
+            WellWriter.DirectObsLines := DirectObservationLines;
+            WellWriter.CalculatedObsLines := DerivedObservationLines;
+            WellWriter.FileNameLines := FileNameLines;
+            WellWriter.MvrWriter := ModflowMvrWriter;
+            WellWriter.WriteFile(FileName);
+          finally
+            WellWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.WelPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          RivWriter := TModflowRIV_Writer.Create(self, etExport);
+          try
+            RivWriter.DirectObsLines := DirectObservationLines;
+            RivWriter.CalculatedObsLines := DerivedObservationLines;
+            RivWriter.FileNameLines := FileNameLines;
+            RivWriter.MvrWriter := ModflowMvrWriter;
+            RivWriter.WriteFile(FileName);
+            RivWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            RivWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.RivPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          DrnWriter := TModflowDRN_Writer.Create(self, etExport);
+          try
+            DrnWriter.DirectObsLines := DirectObservationLines;
+            DrnWriter.CalculatedObsLines := DerivedObservationLines;
+            DrnWriter.FileNameLines := FileNameLines;
+            DrnWriter.MvrWriter := ModflowMvrWriter;
+            DrnWriter.WriteFile(FileName);
+            DrnWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            DrnWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.DrnPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          DrtWriter := TModflowDRT_Writer.Create(self, etExport);
+          try
+            DrtWriter.WriteFile(FileName);
+          finally
+            DrtWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.DrtPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          StrWriter := TStrWriter.Create(self, etExport);
+          try
+            StrWriter.WriteFile(FileName);
+            StrWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            StrWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.StrPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          Sfr6Writer := TModflowSFR_MF6_Writer.Create(self, etExport);
+          try
+            Sfr6Writer.DirectObsLines := DirectObservationLines;
+            Sfr6Writer.CalculatedObsLines := DerivedObservationLines;
+            Sfr6Writer.FileNameLines := FileNameLines;
+            Sfr6Writer.MvrWriter := ModflowMvrWriter;
+            Sfr6Writer.WriteFile(FileName);
+  //          Sfr6Writer.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            Sfr6Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SfrModflow6Package.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          MawWriter := TModflowMAW_Writer.Create(self, etExport);
+          try
+            MawWriter.DirectObsLines := DirectObservationLines;
+            MawWriter.CalculatedObsLines := DerivedObservationLines;
+            MawWriter.FileNameLines := FileNameLines;
+            MawWriter.MvrWriter := ModflowMvrWriter;
+            MawWriter.WriteFile(FileName);
+  //          MawWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
+          finally
+            MawWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.MawPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          FhbWriter := TModflowFhbWriter.Create(self, etExport);
+          try
+            FhbWriter.WriteFile(FileName);
+          finally
+            FhbWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.FhbPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          RchWriter := TModflowRCH_Writer.Create(self, etExport);
+          try
+            RchWriter.DirectObsLines := DirectObservationLines;
+            RchWriter.CalculatedObsLines := DerivedObservationLines;
+            RchWriter.FileNameLines := FileNameLines;
+            RchWriter.WriteFile(FileName);
+          finally
+            RchWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.RchPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          EvtWriter := TModflowEVT_Writer.Create(self, etExport);
+          try
+            EvtWriter.DirectObsLines := DirectObservationLines;
+            EvtWriter.CalculatedObsLines := DerivedObservationLines;
+            EvtWriter.FileNameLines := FileNameLines;
+            EvtWriter.WriteFile(FileName);
+          finally
+            EvtWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.EvtPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          EtsWriter := TModflowETS_Writer.Create(self, etExport);
+          try
+            EtsWriter.DirectObsLines := DirectObservationLines;
+            EtsWriter.CalculatedObsLines := DerivedObservationLines;
+            EtsWriter.FileNameLines := FileNameLines;
+            EtsWriter.WriteFile(FileName);
+          finally
+            EtsWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.EtsPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          ResWriter := TModflowRES_Writer.Create(self, etExport);
+          try
+            ResWriter.WriteFile(FileName);
+          finally
+            ResWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.ResPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+
+          Mnw1Writer := TModflowMNW1_Writer.Create(self, etExport);
+          try
+            Mnw1Writer.WriteFile(FileName);
+          finally
+            Mnw1Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.Mnw1Package.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          Mnw2Writer := TModflowMNW2_Writer.Create(self, etExport);
+          try
+            Mnw2Writer.WriteFile(FileName);
+            Mnw2Writer.WriteMnwiFile(FileName);
+          finally
+            Mnw2Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.Mnw2Package.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          CfpWriter := TModflowCfpWriter.Create(self, etExport);
+          try
+            CfpWriter.WriteFile(FileName);
+          finally
+            CfpWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.ConduitFlowProcess.IsSelected
+            and (ModelSelection = msModflowCFP) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          SwiWriter := TSwiWriter.Create(self, etExport);
+          try
+            SwiWriter.WriteFile(FileName);
+          finally
+            SwiWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SwiPackage.IsSelected
+            and (ModelSelection in [msModflow, msModflowNWT]) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          SwrWriter := TModflowSwrWriter.Create(self, etExport);
+          try
+            SwrWriter.WriteFile(FileName);
+          finally
+            SwrWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SwrPackage.IsSelected
+            and (ModelSelection in [msModflowNWT]) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          RipWriter := TModflowRipWriter.Create(self, etExport);
+          try
+            RipWriter.WriteFile(FileName);
+          finally
+            RipWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.RipPackage.IsSelected
+            and (ModelSelection in [msModflowFmp]) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          LakeMf6Writer := TModflowLAKMf6Writer.Create(self, etExport);
+          try
+            LakeMf6Writer.DirectObsLines := DirectObservationLines;
+            LakeMf6Writer.CalculatedObsLines := DerivedObservationLines;
+            LakeMf6Writer.FileNameLines := FileNameLines;
+            LakeMf6Writer.MvrWriter := ModflowMvrWriter;
+            LakeMf6Writer.WriteFile(FileName);
+          finally
+            LakeMf6Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.LakMf6Package.IsSelected
+            and (ModelSelection in [msModflow2015]) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          UzfMf6Writer := TModflowUzfMf6Writer.Create(self, etExport);
+          try
+            UzfMf6Writer.DirectObsLines := DirectObservationLines;
+            UzfMf6Writer.CalculatedObsLines := DerivedObservationLines;
+            UzfMf6Writer.FileNameLines := FileNameLines;
+            UzfMf6Writer.MvrWriter := ModflowMvrWriter;
+            UzfMf6Writer.WriteFile(FileName);
+          finally
+            UzfMf6Writer.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.UzfMf6Package.IsSelected
+            and (ModelSelection in [msModflow2015]) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          CSubWriter := TCSubWriter.Create(self, etExport);
+          try
+            CSubWriter.DirectObsLines := DirectObservationLines;
+            CSubWriter.CalculatedObsLines := DerivedObservationLines;
+            CSubWriter.FileNameLines := FileNameLines;
+  //          CSubWriter.MvrWriter := ModflowMvrWriter;
+            CSubWriter.WriteFile(FileName);
+          finally
+            CSubWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.CsubPackage.IsSelected
+            and (ModelSelection in [msModflow2015]) then
+          begin
+            frmProgressMM.StepIt;
+          end;
+
+          if Self is TPhastModel then
+          begin
+            LocalPhastModel := TPhastModel(Self);
             ExportLakePackage(FileName);
             Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
             begin
               Exit;
             end;
-          end;
-        end;
-        SetCurrentNameFileWriter(LocalNameWriter);
-
-        // SfrWriter requires that LakWriter be completed first
-        // so that TScreenObject.ModflowLakBoundary.TrueLakeID
-        // is set properly.
-        if Self is TPhastModel then
-        begin
-          LocalPhastModel := TPhastModel(Self);
-          EvaluateSfrPackage;
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-
-          // The Farm process requires that SFR be evaluated first so
-          // that the segment numbers are assigned.
-          // If FMP is allowed to be used with Local Grid Refinement.
-          // FMP must also be exported after SFR evaluated in the local grid.
-
-          if LocalPhastModel.LgrUsed then
-          begin
-            WriterList := TSfrWriterList.Create;
-            try
-              WriterList.Add(SfrWriter as TModflowSFR_Writer);
+            if ExportAllLgr then
+            begin
               for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
               begin
                 ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-                WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
-                ChildModel.EvaluateSfrPackage;
+                ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
+                ChildModel.ExportLakePackage(ChildNameFile);
                 Application.ProcessMessages;
                 if not frmProgressMM.ShouldContinue then
                 begin
                   Exit;
                 end;
               end;
-              (SfrWriter as TModflowSFR_Writer).AssociateLgrSubSegments(WriterList);
-              Application.ProcessMessages;
-              if not frmProgressMM.ShouldContinue then
-              begin
-                Exit;
-              end;
-
-              // if FMP is ever allowed to be used with local grid refinement.
-              // FMP for the local grid will have to be exported here.
-            finally
-              WriterList.Free;
             end;
-          end;
-
-
-
-
-          ExportSfrPackage(FileName);
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
+          end
+          else
           begin
-            Exit;
-          end;
-          ExportUzfPackage(FileName);
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-          ExportFarmProcess(FileName);
-          Application.ProcessMessages;
-          if not frmProgressMM.ShouldContinue then
-          begin
-            Exit;
-          end;
-          if ExportAllLgr then
-          begin
-            for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
+            if not ExportAllLgr then
             begin
-              ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
-              ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
-              ChildModel.ExportSfrPackage(ChildNameFile);
-              Application.ProcessMessages;
-              if not frmProgressMM.ShouldContinue then
-              begin
-                Exit;
-              end;
-              ChildModel.ExportUzfPackage(ChildNameFile);
-              Application.ProcessMessages;
-              if not frmProgressMM.ShouldContinue then
-              begin
-                Exit;
-              end;
-              ChildModel.ExportFarmProcess(ChildNameFile);
+              ExportLakePackage(FileName);
               Application.ProcessMessages;
               if not frmProgressMM.ShouldContinue then
               begin
@@ -40140,245 +40093,347 @@ begin
               end;
             end;
           end;
-        end
-        else
-        begin
-          if not ExportAllLgr then
+          SetCurrentNameFileWriter(LocalNameWriter);
+
+          // SfrWriter requires that LakWriter be completed first
+          // so that TScreenObject.ModflowLakBoundary.TrueLakeID
+          // is set properly.
+          if Self is TPhastModel then
           begin
-            ParentPhastModel := (self as TChildModel).ParentModel as TPhastModel;
-            ParentPhastModel.EvaluateSfrPackage;
+            LocalPhastModel := TPhastModel(Self);
+            EvaluateSfrPackage;
             Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
             begin
               Exit;
             end;
-            WriterList := TSfrWriterList.Create;
-            try
-              WriterList.Add(ParentPhastModel.SfrWriter as TModflowSFR_Writer);
-              for ChildIndex := 0 to ParentPhastModel.ChildModels.Count - 1 do
-              begin
-                ChildModel := ParentPhastModel.ChildModels[ChildIndex].ChildModel;
-                WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
-                ChildModel.EvaluateSfrPackage;
+
+            // The Farm process requires that SFR be evaluated first so
+            // that the segment numbers are assigned.
+            // If FMP is allowed to be used with Local Grid Refinement.
+            // FMP must also be exported after SFR evaluated in the local grid.
+
+            if LocalPhastModel.LgrUsed then
+            begin
+              WriterList := TSfrWriterList.Create;
+              try
+                WriterList.Add(SfrWriter as TModflowSFR_Writer);
+                for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
+                begin
+                  ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
+                  WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
+                  ChildModel.EvaluateSfrPackage;
+                  Application.ProcessMessages;
+                  if not frmProgressMM.ShouldContinue then
+                  begin
+                    Exit;
+                  end;
+                end;
+                (SfrWriter as TModflowSFR_Writer).AssociateLgrSubSegments(WriterList);
                 Application.ProcessMessages;
                 if not frmProgressMM.ShouldContinue then
                 begin
                   Exit;
                 end;
+
+                // if FMP is ever allowed to be used with local grid refinement.
+                // FMP for the local grid will have to be exported here.
+              finally
+                WriterList.Free;
               end;
-              (ParentPhastModel.SfrWriter as TModflowSFR_Writer).AssociateLgrSubSegments(WriterList);
-            finally
-              WriterList.Free;
             end;
+
+
+
+
             ExportSfrPackage(FileName);
             Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
             begin
               Exit;
             end;
-
             ExportUzfPackage(FileName);
             Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
             begin
               Exit;
             end;
-
-            Application.ProcessMessages;
             ExportFarmProcess(FileName);
+            Application.ProcessMessages;
             if not frmProgressMM.ShouldContinue then
             begin
               Exit;
             end;
+            if ExportAllLgr then
+            begin
+              for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
+              begin
+                ChildModel := LocalPhastModel.ChildModels[ChildIndex].ChildModel;
+                ChildNameFile := ChildModel.Child_NameFile_Name(FileName);
+                ChildModel.ExportSfrPackage(ChildNameFile);
+                Application.ProcessMessages;
+                if not frmProgressMM.ShouldContinue then
+                begin
+                  Exit;
+                end;
+                ChildModel.ExportUzfPackage(ChildNameFile);
+                Application.ProcessMessages;
+                if not frmProgressMM.ShouldContinue then
+                begin
+                  Exit;
+                end;
+                ChildModel.ExportFarmProcess(ChildNameFile);
+                Application.ProcessMessages;
+                if not frmProgressMM.ShouldContinue then
+                begin
+                  Exit;
+                end;
+              end;
+            end;
+          end
+          else
+          begin
+            if not ExportAllLgr then
+            begin
+              ParentPhastModel := (self as TChildModel).ParentModel as TPhastModel;
+              ParentPhastModel.EvaluateSfrPackage;
+              Application.ProcessMessages;
+              if not frmProgressMM.ShouldContinue then
+              begin
+                Exit;
+              end;
+              WriterList := TSfrWriterList.Create;
+              try
+                WriterList.Add(ParentPhastModel.SfrWriter as TModflowSFR_Writer);
+                for ChildIndex := 0 to ParentPhastModel.ChildModels.Count - 1 do
+                begin
+                  ChildModel := ParentPhastModel.ChildModels[ChildIndex].ChildModel;
+                  WriterList.Add(ChildModel.SfrWriter as TModflowSFR_Writer);
+                  ChildModel.EvaluateSfrPackage;
+                  Application.ProcessMessages;
+                  if not frmProgressMM.ShouldContinue then
+                  begin
+                    Exit;
+                  end;
+                end;
+                (ParentPhastModel.SfrWriter as TModflowSFR_Writer).AssociateLgrSubSegments(WriterList);
+              finally
+                WriterList.Free;
+              end;
+              ExportSfrPackage(FileName);
+              Application.ProcessMessages;
+              if not frmProgressMM.ShouldContinue then
+              begin
+                Exit;
+              end;
+
+              ExportUzfPackage(FileName);
+              Application.ProcessMessages;
+              if not frmProgressMM.ShouldContinue then
+              begin
+                Exit;
+              end;
+
+              Application.ProcessMessages;
+              ExportFarmProcess(FileName);
+              if not frmProgressMM.ShouldContinue then
+              begin
+                Exit;
+              end;
+            end;
           end;
-        end;
-        SetCurrentNameFileWriter(LocalNameWriter);
+          SetCurrentNameFileWriter(LocalNameWriter);
 
-        HydModWriter := TModflowHydmodWriter.Create(self, etExport);
-        try
-          HydModWriter.WriteFile(FileName, (SfrWriter as TModflowSFR_Writer));
-        finally
-          HydModWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.HydmodPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          HydModWriter := TModflowHydmodWriter.Create(self, etExport);
+          try
+            HydModWriter.WriteFile(FileName, (SfrWriter as TModflowSFR_Writer));
+          finally
+            HydModWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.HydmodPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
 
-        // GagWriter requires that LakWriter and SfrWriter be completed
-        // first so that the data in Gages is set.
-        GagWriter := TModflowGAG_Writer.Create(self, etExport);
-        try
-          GagWriter.WriteFile(FileName, Gages, (SfrWriter as TModflowSFR_Writer));
-        finally
-          GagWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SfrPackage.IsSelected
-          or ModflowPackages.LakPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          // GagWriter requires that LakWriter and SfrWriter be completed
+          // first so that the data in Gages is set.
+          GagWriter := TModflowGAG_Writer.Create(self, etExport);
+          try
+            GagWriter.WriteFile(FileName, Gages, (SfrWriter as TModflowSFR_Writer));
+          finally
+            GagWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SfrPackage.IsSelected
+            or ModflowPackages.LakPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
-        HfbWriter := TModflowHfb_Writer.Create(Self, etExport);
-        try
-          HfbWriter.WriteFile(FileName);
-        finally
-          HfbWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.HfbPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          HfbWriter := TModflowHfb_Writer.Create(Self, etExport);
+          try
+            HfbWriter.WriteFile(FileName);
+          finally
+            HfbWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.HfbPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
-        SubWriter := TModflowSUB_Writer.Create(Self, etExport);
-        try
-          SubWriter.WriteFile(FileName);
-        finally
-          SubWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SubPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          SubWriter := TModflowSUB_Writer.Create(Self, etExport);
+          try
+            SubWriter.WriteFile(FileName);
+          finally
+            SubWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SubPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
-        SwtWriter := TModflowSWT_Writer.Create(Self, etExport);
-        try
-          SwtWriter.WriteFile(FileName);
-        finally
-          SwtWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.SwtPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
-        // It is important that the TModflowZoneWriter not be used
-        // until after all the zones have been identified through the
-        // export of TModflowLPF_Writer and any other packages that use
-        // zone arrays.
-        ZoneWriter := TModflowZoneWriter.Create(self, etExport);
-        try
-          ZUsed := ZoneWriter.WriteFile(FileName);
-        finally
-          ZoneWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ZUsed then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          SwtWriter := TModflowSWT_Writer.Create(Self, etExport);
+          try
+            SwtWriter.WriteFile(FileName);
+          finally
+            SwtWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.SwtPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
+          // It is important that the TModflowZoneWriter not be used
+          // until after all the zones have been identified through the
+          // export of TModflowLPF_Writer and any other packages that use
+          // zone arrays.
+          ZoneWriter := TModflowZoneWriter.Create(self, etExport);
+          try
+            ZUsed := ZoneWriter.WriteFile(FileName);
+          finally
+            ZoneWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ZUsed then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
-        // It is important that the TModflowMultiplierWriter not be used
-        // until after all the multiplier arrays have been identified through the
-        // export of TModflowLPF_Writer and any other packages that use
-        // multiplier arrays.
-        MultiplierWriter := TModflowMultiplierWriter.Create(self, etExport);
-        try
-          MultipUsed := MultiplierWriter.WriteFile(FileName);
-        finally
-          MultiplierWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if MultipUsed then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          // It is important that the TModflowMultiplierWriter not be used
+          // until after all the multiplier arrays have been identified through the
+          // export of TModflowLPF_Writer and any other packages that use
+          // multiplier arrays.
+          MultiplierWriter := TModflowMultiplierWriter.Create(self, etExport);
+          try
+            MultipUsed := MultiplierWriter.WriteFile(FileName);
+          finally
+            MultiplierWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if MultipUsed then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
-        HobWriter := TModflowHobWriter.Create(Self, etExport);
-        try
-          HobWriter.WriteFile(FileName, ObservationPurpose);
-        finally
-          HobWriter.Free;
-        end;
-        FDataArrayManager.CacheDataArrays;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-        if ModflowPackages.HobPackage.IsSelected then
-        begin
-          frmProgressMM.StepIt;
-        end;
+          HobWriter := TModflowHobWriter.Create(Self, etExport);
+          try
+            HobWriter.WriteFile(FileName, ObservationPurpose);
+          finally
+            HobWriter.Free;
+          end;
+          FDataArrayManager.CacheDataArrays;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+          if ModflowPackages.HobPackage.IsSelected then
+          begin
+            frmProgressMM.StepIt;
+          end;
 
-        if ModflowMvrWriter <> nil then
-        begin
-          ModflowMvrWriter.WriteFile(FileName);
-        end;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
+          if ModflowMvrWriter <> nil then
+          begin
+            ModflowMvrWriter.WriteFile(FileName);
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
         
-        ObsScriptWriter := TGlobalComparisonScriptWriter.Create(Self, etExport);
-        try
-          ObsScriptWriter.WriteFile(FileName);
-        finally
-          ObsScriptWriter.Free;
-        end;
+          ObsScriptWriter := TGlobalComparisonScriptWriter.Create(Self, etExport);
+          try
+            ObsScriptWriter.WriteFile(FileName);
+          finally
+            ObsScriptWriter.Free;
+          end;
         
 
-        FinalizePvalAndTemplate(FileName);
+          FinalizePvalAndTemplate(FileName);
 
-        LocalNameWriter.SaveNameFile(FileName);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
+          LocalNameWriter.SaveNameFile(FileName);
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+        finally
+          SetCurrentNameFileWriter(nil);
         end;
       finally
-        SetCurrentNameFileWriter(nil);
+        ModflowMvrWriter.Free;
+        UpdateCurrentModel(SelectedModel);
       end;
-    finally
-      ModflowMvrWriter.Free;
-      UpdateCurrentModel(SelectedModel);
+    except on E: EInvalidTime do
+      begin
+        Beep;
+        MessageDlg(E.Message, mtError, [mbOK], 0);
+      end;
     end;
-  except on E: EInvalidTime do
-    begin
-      Beep;
-      MessageDlg(E.Message, mtError, [mbOK], 0);
-    end;
+  finally
+    DirectObservationLines.Free;
+    DerivedObservationLines.Free;
+    FileNameLines.Free;
   end;
 end;
 

@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, Contnrs, RbwParser, CustomModflowWriterUnit,
   PhastModelUnit, ModflowConstantHeadBoundaryUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowPackageSelectionUnit, ModflowCellUnit,
-  OrderedCollectionUnit, FluxObservationUnit, GoPhastTypes;
+  OrderedCollectionUnit, FluxObservationUnit, GoPhastTypes, Modflow6ObsUnit;
 
 type
   TModflowCHD_Writer = class(TFluxObsWriter)
@@ -46,6 +46,7 @@ type
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
     procedure WriteListOptions(InputFileName: string); override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -57,7 +58,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  ModflowGridUnit, Forms, Modflow6ObsUnit;
+  ModflowGridUnit, Forms;
 
 resourcestring
   StrErrorInCHDPackage = 'Error in CHD package';
@@ -546,6 +547,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogCHD in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowCHD_Writer.Mf6ObType: TObGeneral;
+begin
+  result := ogCHD
 end;
 
 class function TModflowCHD_Writer.ObservationExtension: string;

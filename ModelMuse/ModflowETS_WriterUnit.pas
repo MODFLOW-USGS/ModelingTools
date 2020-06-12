@@ -6,7 +6,7 @@ uses System.UITypes,Winapi.Windows, SysUtils, Classes, Contnrs,
   RbwParser, CustomModflowWriterUnit,
   ScreenObjectUnit, ModflowBoundaryUnit, ModflowPackageSelectionUnit,
   OrderedCollectionUnit, ModflowCellUnit, PhastModelUnit,
-  ModflowBoundaryDisplayUnit, DataSetUnit, Vcl.Dialogs;
+  ModflowBoundaryDisplayUnit, DataSetUnit, Vcl.Dialogs, Modflow6ObsUnit;
 
 Type
   TModflowETS_Writer = class(TCustomTransientArrayWriter)
@@ -52,6 +52,7 @@ Type
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     // @name destroys the current instance of @classname.
@@ -90,7 +91,7 @@ implementation
 uses ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowEtsUnit, GoPhastTypes,
   frmProgressUnit, Forms, frmGoPhastUnit, ModflowEvtUnit, System.Math,
-  SparseArrayUnit, SparseDataSets, Modflow6ObsUnit;
+  SparseArrayUnit, SparseDataSets;
 
 { TModflowETS_Writer }
 
@@ -209,6 +210,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogEVT in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowETS_Writer.Mf6ObType: TObGeneral;
+begin
+  result := ogEVT;
 end;
 
 class function TModflowETS_Writer.ObservationExtension: string;

@@ -114,6 +114,9 @@ type
     noutlets: Integer;
     ntables: Integer;
     FObservations: TLakObservationList;
+    FDirectObsLines: TStrings;
+    FFileNameLines: TStrings;
+    FCalculatedObsLines: TStrings;
     procedure Evaluate;
     procedure IdentifyLakesAndLakeCells;
     procedure SetLakeCellProperties;
@@ -141,6 +144,9 @@ type
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay;
+    property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
+    property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
+    property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
   end;
 
 

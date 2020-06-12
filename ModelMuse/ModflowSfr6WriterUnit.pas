@@ -53,6 +53,9 @@ type
     FReachCount: integer;
     FDiversionCount: Integer;
     FObsList: TSfr6ObservationList;
+    FDirectObsLines: TStrings;
+    FFileNameLines: TStrings;
+    FCalculatedObsLines: TStrings;
     procedure Evaluate;
     procedure EvaluateSteadyData;
     procedure AssignSteadyData(ASegment: TSfr6Segment);
@@ -79,6 +82,9 @@ type
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateSteadyData;
+    property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
+    property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
+    property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
   end;
 
 implementation

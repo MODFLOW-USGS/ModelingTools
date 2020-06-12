@@ -6,7 +6,7 @@ uses System.UITypes,Windows, SysUtils, Classes, Contnrs,
   CustomModflowWriterUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowPackageSelectionUnit, OrderedCollectionUnit,
   ModflowCellUnit, PhastModelUnit, ModflowBoundaryDisplayUnit, Vcl.Dialogs,
-  DataSetUnit, SparseDataSets;
+  DataSetUnit, SparseDataSets, Modflow6ObsUnit;
 
 Type
   TModflowRCH_Writer = class(TCustomTransientArrayWriter)
@@ -43,6 +43,7 @@ Type
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
@@ -53,7 +54,7 @@ implementation
 uses RbwParser, ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowRchUnit, GoPhastTypes,
   frmProgressUnit, Forms, ModflowOutputControlUnit, System.Math,
-  SparseArrayUnit, Modflow6ObsUnit;
+  SparseArrayUnit;
 
 resourcestring
   StrNoRechargeDefined = 'No recharge defined';
@@ -139,6 +140,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogRch in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowRCH_Writer.Mf6ObType: TObGeneral;
+begin
+  result := ogRch;
 end;
 
 class function TModflowRCH_Writer.ObservationExtension: string;

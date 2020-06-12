@@ -25,12 +25,18 @@ type
 
   TCustomMf6ObservationWriter = class(TCustomTransientWriter)
   private
+    FDirectObsLines: TStrings;
+    FFileNameLines: TStrings;
+    FCalculatedObsLines: TStrings;
     procedure WriteOptions;
     procedure WriteCell(Cell: TCellLocation);
     function WriteCellName(Cell: TCellLocation): string;
   protected
     FNameOfFile: string;
     function Package: TModflowPackageSelection; override;
+    property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
+    property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
+    property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
   end;
 
   TModflow6Obs_Writer = class(TCustomMf6ObservationWriter)
@@ -67,13 +73,13 @@ type
     procedure Evaluate; override;
   end;
 
-
   TModflow6FlowObsWriter = class(TCustomListObsWriter)
   private
     FObsType: string;
     FOutputExtension: string;
     FObsList: TBoundaryFlowObservationLocationList;
     FToMvrObsList: TBoundaryFlowObservationLocationList;
+    FObGeneral: TObGeneral;
     procedure WriteFlowObs(ObsType: string;
       List, ToMvrList: TBoundaryFlowObservationLocationList);
   public
@@ -81,7 +87,7 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
       ObsList: TBoundaryFlowObservationLocationList; ObsType: string;
       ToMvrObsList: TBoundaryFlowObservationLocationList;
-      OutputExtension: string); reintroduce;
+      OutputExtension: string; ObGeneral: TObGeneral); reintroduce;
     // @name destroys the current instance of @classname.
     procedure WriteFile(const AFileName: string);
   end;
@@ -158,7 +164,7 @@ uses
   AbstractGridUnit, MeshRenumberingTypes, GoPhastTypes, FastGEO,
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit;
+  ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +
@@ -319,7 +325,45 @@ var
   InnerMf6Cell: TModflowIrregularCell2D;
   FlowObs: TFlowObservationLocation;
   OtherObsDefined: Boolean;
+  DisvCell: TModflowIrregularCell2D;
+  ObsCells: TObsWeights;
+  Width: double;
+  Center: double;
+  ObservationPoint: TPoint2D;
+  ObservationRowOffset: double;
+  ObservationColumnOffset: double;
+  NeighborCells: TCellLocationList;
+  CellDisv2D: TModflowIrregularCell2D;
+  NeighborLocation: TCellLocation;
+  NeighborIndex: Integer;
+  ObsIndex: Integer;
+  APoint: TPoint2D;
+  ObservationIndex: Integer;
+  Observation: TMf6CalibrationObs;
+  ObservationName: string;
+  InterpolateFormula: TStringBuilder;
+  NameIndex: Integer;
+  function GetLocation(ACell: TCellLocation): TPoint2D;
+  begin
+    if Model.DisvUsed then
+    begin
+      result := Mesh.Mesh2DI.ElementsI2D[ACell.Column].Center;
+    end
+    else
+    begin
+      result := Grid.TwoDElementCenter(ACell.Column, ACell.Row);
+    end;
+  end;
 begin
+  if Model.PestUsed then
+  begin
+    // These two properties need to be specified outside of TModflow6Obs_Writer;
+    Assert(DirectObsLines <> nil);
+    Assert(CalculatedObsLines <> nil);
+    Assert(FileNameLines <> nil);
+  end;
+
+  ObsIndex := 1;
   ActiveDataArray := Model.DataArrayManager.GetDatasetByName(rsActive);
   Grid := Model.Grid;
   if Grid = nil then
@@ -350,7 +394,8 @@ begin
       Continue;
     end;
     if (Obs.MawObs <> []) or (Obs.SfrObs <> [])
-      or (Obs.LakObs <> []) or (Obs.UzfObs <> []) then
+      or (Obs.LakObs <> []) or (Obs.UzfObs <> [])
+      or (Obs.CSubObs.CSubObsSet <> []) then
     begin
       OtherObsDefined := True;
     end;
@@ -360,7 +405,7 @@ begin
     begin
       CellList := TCellAssignmentList.Create;
       try
-        AScreenObject.GetCellsToAssign({Grid,} '0', nil, nil, CellList, alAll, Model);
+        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
         FHorizontalCells.Clear;
         for CellIndex := 0 to CellList.Count - 1 do
         begin
@@ -368,13 +413,230 @@ begin
 
           if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
           begin
-            if (Obs.General * [ogHead, ogDrawdown] <> []) then
+            if Model.PestUsed and (CellList.Count = 1) and
+              (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  then
+            begin
+              // find neighbors
+              NeighborCells := TCellLocationList.Create;
+              try
+                if Model.DisvUsed then
+                begin
+                  ACell := CellList[0];
+                  NeighborLocation.Row := 0;
+                  DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
+                  GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
+                  for NeighborIndex := 0 to Length(ObsCells) - 1 do
+                  begin
+                    CellDisv2D := ObsCells[NeighborIndex];
+                    NeighborLocation.Column := CellDisv2D.ElementNumber;
+                    NeighborLocation.Layer := ACell.Layer;
+                    NeighborCells.Add(NeighborLocation);
+                  end;
+                end
+                else
+                begin
+                  ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
+                    AScreenObject.Points[0]);
+                  ACell := CellList[0];
+
+                  Width := Grid.RowWidth[ACell.Row];
+                  Center := Grid.RowCenter(ACell.Row);
+                  ObservationRowOffset := -(ObservationPoint.y - Center)/Width;
+
+                  Width := Grid.ColumnWidth[ACell.Column];
+                  Center := Grid.ColumnCenter(ACell.Column);
+                  ObservationColumnOffset := (ObservationPoint.x - Center)/Width;
+
+                  NeighborCells.Add(ACell.Cell);
+
+                  NeighborLocation.Layer := ACell.Layer;
+                  if Sign(ObservationColumnOffset) = 0 then
+                  begin
+                    if Sign(ObservationRowOffset) <> 0 then
+                    begin
+                      NeighborLocation.Column := ACell.Column;
+                      NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
+                      if (NeighborLocation.Row >= 0)
+                        and (NeighborLocation.Row < Grid.RowCount)
+                        And ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
+                    end;
+                  end
+                  else if Sign(ObservationRowOffset) = 0 then
+                  begin
+                    NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
+                    NeighborLocation.Row := ACell.Row;
+                    if (NeighborLocation.Column >= 0)
+                      and (NeighborLocation.Column < Grid.ColumnCount)
+                      And ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                  end
+                  else if Sign(ObservationRowOffset) = Sign(ObservationColumnOffset) then
+                  begin
+                    // column direction first
+                    NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
+                    NeighborLocation.Row := ACell.Row;
+                    if (NeighborLocation.Column >= 0)
+                      and (NeighborLocation.Column < Grid.ColumnCount)
+                      and ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                    NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
+                    if (NeighborLocation.Row >= 0)
+                      and (NeighborLocation.Row < Grid.RowCount)
+                      and (NeighborLocation.Column >= 0)
+                      and (NeighborLocation.Column < Grid.ColumnCount)
+                      and ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                    NeighborLocation.Column := ACell.Column;
+                    if (NeighborLocation.Row >= 0)
+                      and (NeighborLocation.Row < Grid.RowCount)
+                      and ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                  end
+                  else
+                  begin
+                    // row direction first
+                    NeighborLocation.Column := ACell.Column;
+                    NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);;
+                    if (NeighborLocation.Row >= 0)
+                      and (NeighborLocation.Row < Grid.RowCount)
+                      and ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                    NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
+                    if (NeighborLocation.Column >= 0)
+                      and (NeighborLocation.Column < Grid.ColumnCount)
+                      and (NeighborLocation.Row >= 0)
+                      and (NeighborLocation.Row < Grid.RowCount)
+                      and ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                    NeighborLocation.Row := ACell.Row;
+                    if (NeighborLocation.Column >= 0)
+                      and (NeighborLocation.Column < Grid.ColumnCount)
+                      and ActiveDataArray.BooleanData[
+                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                      then
+                    begin
+                      NeighborCells.Add(NeighborLocation)
+                    end;
+                  end;
+                  for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
+                  begin
+                    Observation := Obs.CalibrationObservations[ObservationIndex];
+                    Observation.InterpObsNames.Clear;
+                  end;
+                  for NeighborIndex := 0 to NeighborCells.Count - 1 do
+                  begin
+                    NeighborLocation := NeighborCells[NeighborIndex];
+                    APoint := GetLocation(NeighborLocation);
+                    HeadDrawdown.FCell := NeighborLocation;
+                    if ogHead in Obs.CalibrationObservations.ObGenerals then
+                    begin
+                      HeadDrawdown.FName := Obs.Name + '_H' + IntToStr(ObsIndex);
+                      FHeadObs.Add(HeadDrawdown);
+                      DirectObsLines.Add(Format('  ID %0:s', [HeadDrawdown.FName]));
+                      DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
+                      for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
+                      begin
+                        Observation := Obs.CalibrationObservations[ObservationIndex];
+                        if (Observation.ObSeries = osGeneral)
+                          and (Observation.ObGeneral = ogHead) then
+                        begin
+                          ObservationName := Format('%0:s_%1:d',
+                            [HeadDrawdown.FName, ObservationIndex+1]);
+                          DirectObsLines.Add(Format('  OBSNAME %0:s %2:g',
+                            [ObservationName, Observation.Time]));
+                          Observation.InterpObsNames.Add(ObservationName);
+                        end;
+                      end;
+                    end;
+                    if ogDrawdown in Obs.CalibrationObservations.ObGenerals  then
+                    begin
+                      HeadDrawdown.FName := Obs.Name + '_D' + IntToStr(ObsIndex);
+                      FDrawdownObs.Add(HeadDrawdown);
+                      DirectObsLines.Add(Format('  ID %0:s', [HeadDrawdown.FName]));
+                      DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
+                      for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
+                      begin
+                        Observation := Obs.CalibrationObservations[ObservationIndex];
+                        if (Observation.ObSeries = osGeneral)
+                          and (Observation.ObGeneral = ogDrawdown) then
+                        begin
+                          ObservationName := Format('%0:s_%1:d',
+                            [HeadDrawdown.FName, ObservationIndex+1]);
+                          DirectObsLines.Add(Format('  OBSNAME %0:s %2:g',
+                            [ObservationName, Observation.Time]));
+                          Observation.InterpObsNames.Add(ObservationName);
+                        end;
+                      end;
+                    end;
+                    Inc(ObsIndex);
+                  end;
+                  for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
+                  begin
+                    Observation := Obs.CalibrationObservations[ObservationIndex];
+                    if (Observation.ObSeries = osGeneral)
+                      and (Observation.ObGeneral in [ogHead, ogDrawdown]) then
+                    begin
+                      CalculatedObsLines.Add(Format('OBSNAME %s PRINT', [Observation.Name]));
+                      InterpolateFormula := TStringBuilder.Create;
+                      try
+                        InterpolateFormula.Append('INTERPOLATE ');
+                        APoint := AScreenObject.Points[0];
+                        InterpolateFormula.Append(APoint.x);
+                        InterpolateFormula.Append(' ');
+                        InterpolateFormula.Append(APoint.y);
+                        for NameIndex := 0 to Observation.InterpObsNames.Count - 1 do
+                        begin
+                          InterpolateFormula.Append(' ');
+                          InterpolateFormula.Append(Observation.InterpObsNames[NameIndex]);
+                        end;
+                        CalculatedObsLines.Add(InterpolateFormula.ToString);
+                      finally
+                        InterpolateFormula.Free;
+                      end;
+                    end;
+                  end;
+                end;
+              finally
+                NeighborCells.Free;
+              end;
+            end
+            else if (Obs.General * [ogHead, ogDrawdown] <> []) then
             begin
               HeadDrawdown.FCell := ACell.Cell;
               HeadDrawdown.FName := Obs.Name;
               if CellList.Count > 1 then
               begin
-                HeadDrawdown.FName := HeadDrawdown.FName + WriteCellName(ACell.Cell);
+                HeadDrawdown.FName := HeadDrawdown.FName
+                  + WriteCellName(ACell.Cell);
               end;
               if ogHead in Obs.General then
               begin
@@ -856,6 +1118,7 @@ var
   FlowObs: TFlowObservationLocation;
   ObsIndex: Integer;
   ObsType: string;
+  ObsFileFormat: string;
   procedure WriteHeadDrawdownOutput(ObsType: string; List: THeadDrawdownObservationLocationList);
   var
     ObsIndex: Integer;
@@ -864,20 +1127,29 @@ var
   begin
     if List.count > 0 then
     begin
+      ObsFileFormat := '';
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       case ObsPackage.OutputFormat of
         ofText:
           begin
             OutputExtension := ObservationOutputExtension + '_' + ObsType + '.csv';
+            ObsFileFormat := 'TEXT';
           end;
         ofBinary:
           begin
             OutputExtension := ObservationOutputExtension + '_' + ObsType + '.bin';
+            ObsFileFormat := 'BINARY';
           end;
         else
           Assert(False);
       end;
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+      if Model.PestUsed then
+      begin
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [OutputFileName, ObsFileFormat]));
+      end;
       Model.AddModelOutputFile(OutputFileName);
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);
@@ -1046,25 +1318,35 @@ var
   ObsPackage: TMf6ObservationUtility;
   OutputFileName: string;
   obsnam: string;
+  OutputFormat: string;
 begin
   if (List.count > 0) or (ToMvrList.count > 0) then
   begin
     ObsPackage := Package as TMf6ObservationUtility;
     WriteString('BEGIN CONTINUOUS FILEOUT ');
+    OutputFormat := '';
     case ObsPackage.OutputFormat of
       ofText:
         begin
           OutputExtension := FOutputExtension + '_' + ObsType + '.csv';
+          OutputFormat := 'TEXT';
         end;
       ofBinary:
         begin
           OutputExtension := FOutputExtension + '_' + ObsType + '.bin';
+          OutputFormat := 'BINARY';
         end;
       else
         Assert(False);
     end;
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
+    if Model.PestUsed then
+    begin
+      Assert(FileNameLines <> nil);
+      FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+        [OutputFileName, OutputFormat]));
+    end;
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
     if ObsPackage.OutputFormat = ofBinary then
@@ -1096,6 +1378,11 @@ begin
         WriteString(FlowObs.FBoundName);
       end;
       NewLine;
+
+      if FObGeneral in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
+      begin
+
+      end;
     end;
 
     for ObsIndex := 0 to ToMvrList.Count - 1 do
@@ -1131,9 +1418,10 @@ constructor TModflow6FlowObsWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType;
   ObsList: TBoundaryFlowObservationLocationList;  ObsType: string;
   ToMvrObsList: TBoundaryFlowObservationLocationList;
-  OutputExtension: string);
+  OutputExtension: string; ObGeneral: TObGeneral);
 begin
   inherited Create(Model, EvaluationType);
+  FObGeneral := ObGeneral;
   FObsType := ObsType;
   FOutputExtension := OutputExtension;
   FObsList := ObsList;

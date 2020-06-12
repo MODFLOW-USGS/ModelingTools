@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowDrnUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, FluxObservationUnit,
-  GoPhastTypes;
+  GoPhastTypes, Modflow6ObsUnit;
 
 type
   TModflowDRN_Writer = class(TFluxObsWriter)
@@ -47,6 +47,7 @@ type
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -57,8 +58,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
-  Modflow6ObsUnit;
+  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit;
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +
@@ -658,6 +658,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowDRN_Writer.Mf6ObType: TObGeneral;
+begin
+   result := ogDrain;
 end;
 
 procedure TModflowDRN_Writer.WriteParameterCells(CellList: TValueCellList;

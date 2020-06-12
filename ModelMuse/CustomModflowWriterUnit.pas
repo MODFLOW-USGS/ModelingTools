@@ -13,7 +13,7 @@ uses Windows, Types, LayerStructureUnit, ModflowTimeUnit,
   ModflowOutputControlUnit, ScreenObjectUnit, ModflowBoundaryUnit,
   ModflowPackageSelectionUnit, ModflowTransientListParameterUnit,
   OrderedCollectionUnit, ModflowBoundaryDisplayUnit, ModflowParameterUnit,
-  System.Generics.Collections, SparseDataSets;
+  System.Generics.Collections, SparseDataSets, Modflow6ObsUnit;
 
 type
   // @name indicates whether the file in the name file is an input file
@@ -60,6 +60,7 @@ type
     FCell: TCellLocation;
     FName: string;
     FBoundName: string;
+    FMf6Obs: TModflow6Obs;
   end;
 
   TBoundaryFlowObservationLocationList = TList<TBoundaryFlowObservationLocation>;
@@ -393,6 +394,9 @@ type
     FFlowObsLocations: TBoundaryFlowObservationLocationList;
     FObsLocationCheck: T3DSparseStringArray;
     FToMvrFlowObsLocations: TBoundaryFlowObservationLocationList;
+    FDirectObsLines: TStrings;
+    FFileNameLines: TStrings;
+    FCalculatedObsLines: TStrings;
     function GetOwnsValueContents: Boolean;
     procedure SetOwnsValueContents(const Value: Boolean);
   protected
@@ -471,11 +475,15 @@ type
     function ObsType: string; virtual;
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
+    Class function Mf6ObType: TObGeneral; virtual; abstract;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     // @name destroys the current instance of @classname.
     Destructor Destroy; override;
+    property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
+    property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
+    property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
   end;
 
   {@name is used as a base class for writing typical boundary condition
@@ -1011,7 +1019,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   RealListUnit, ModflowMultiplierZoneWriterUnit, IOUtils,
   ModpathResponseFileWriterUnit, ModflowPackagesUnit, Math,
   System.Generics.Defaults, ArchiveNodeInterface, ModflowOptionsUnit,
-  Modflow6ObsUnit, Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
+  Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit;
 
 resourcestring
@@ -3469,6 +3477,7 @@ begin
             Mf6Obs := ScreenObject.Modflow6Obs;
 
             FlowObs.FName := Mf6Obs.Name;
+            FlowObs.FMf6Obs := Mf6Obs;
             if Length(FlowObs.FName) > 36 then
             begin
               SetLength(FlowObs.FName, 36);
@@ -3483,6 +3492,7 @@ begin
             Mf6Obs := ScreenObject.Modflow6Obs;
 
             FlowObs.FName := Mf6Obs.Name;
+            FlowObs.FMf6Obs := Mf6Obs;
             FlowObs.FBoundName := ScreenObject.Name;
             FlowObsLocations.Add(FlowObs);
           end
@@ -4164,8 +4174,12 @@ begin
   begin
     FileName := ChangeFileExt(FileName, ObservationExtension);
     FlowObsWriter := TModflow6FlowObsWriter.Create(Model, EvaluationType,
-      FlowObsLocations, ObsType, ToMvrFlowObsLocations, ObservationOutputExtension);
+      FlowObsLocations, ObsType, ToMvrFlowObsLocations,
+      ObservationOutputExtension, Mf6ObType);
     try
+      FlowObsWriter.DirectObsLines := DirectObsLines;
+      FlowObsWriter.CalculatedObsLines := CalculatedObsLines;
+      FlowObsWriter.FileNameLines := FileNameLines;
       FlowObsWriter.WriteFile(FileName);
     finally
       FlowObsWriter.Free;

@@ -6,7 +6,7 @@ uses SysUtils, Classes, CustomModflowWriterUnit, ModflowWellUnit,
   ScreenObjectUnit, ModflowBoundaryUnit, ModflowPackageSelectionUnit,
   ModflowCellUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit,
   ModflowTransientListParameterUnit, GoPhastTypes, System.Generics.Collections,
-  PhastModelUnit;
+  PhastModelUnit, Modflow6ObsUnit;
 
 type
   TModflowWEL_Writer = class(TCustomListWriter)
@@ -53,6 +53,7 @@ type
     function ObsType: string; override;
     function ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
+    Class function Mf6ObType: TObGeneral; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     Destructor Destroy; override;
@@ -64,7 +65,7 @@ implementation
 
 uses ModflowUnitNumbers, frmProgressUnit, Forms, frmErrorsAndWarningsUnit,
   System.IOUtils, ModflowTimeSeriesUnit, ModflowTimeSeriesWriterUnit,
-  ModflowMvrWriterUnit, ModflowMvrUnit, Modflow6ObsUnit;
+  ModflowMvrWriterUnit, ModflowMvrUnit;
 
 resourcestring
   StrWritingWELPackage = 'Writing WEL Package input.';
@@ -288,6 +289,11 @@ begin
   result := (AScreenObject.Modflow6Obs <> nil)
 //    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
+end;
+
+class function TModflowWEL_Writer.Mf6ObType: TObGeneral;
+begin
+  result := ogWell;
 end;
 
 class function TModflowWEL_Writer.ObservationExtension: string;
