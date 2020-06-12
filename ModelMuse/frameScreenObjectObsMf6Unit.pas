@@ -198,8 +198,8 @@ begin
         if not FoundFirst then
         begin
           edObsName.Text := Mf6Obs.Name;
-          cbHeadObservation.Checked := Mf6Obs.HeadObs;
-          cbDrawdownObservation.Checked := Mf6Obs.DrawdownObs;
+          cbHeadObservation.Checked := ogHead in Mf6Obs.General;
+          cbDrawdownObservation.Checked := ogDrawdown in Mf6Obs.General;
           cbGroundwaterFlowObservation.Checked := Mf6Obs.GroundwaterFlowObs;
           if Mf6Obs.GroundwaterFlowObs then
           begin
@@ -210,14 +210,14 @@ begin
             end;
           end;
 
-          chklstBoundaryFlow.Checked[Ord(forCHD)] := Mf6Obs.ChdFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forDRN)] := Mf6Obs.DrnFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forEVT)] := Mf6Obs.EvtFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forGHB)] := Mf6Obs.GhbFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forRCH)] := Mf6Obs.RchFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forRIV)] := Mf6Obs.RivFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forWEL)] := Mf6Obs.WelFlowObs;
-          chklstBoundaryFlow.Checked[Ord(forToMvr)] := Mf6Obs.ToMvrFlowObs;
+          chklstBoundaryFlow.Checked[Ord(forCHD)] := ogCHD in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forDRN)] := ogDrain in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forEVT)] := ogEVT in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forGHB)] := ogGHB in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forRCH)] := ogRch in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forRIV)] := ogRiv in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forWEL)] := ogWell in Mf6Obs.General;
+          chklstBoundaryFlow.Checked[Ord(forToMvr)] := ogMvr in Mf6Obs.General;
 
           for MawOb := Low(TMawOb) to High(TMawOb) do
           begin
@@ -266,12 +266,12 @@ begin
         else
         begin
           edObsName.Enabled := False;
-          if cbHeadObservation.State <> TCheckBoxState(Mf6Obs.HeadObs) then
+          if cbHeadObservation.State <> TCheckBoxState(ogHead in Mf6Obs.General) then
           begin
             cbHeadObservation.State := cbGrayed;
           end;
           if cbDrawdownObservation.State <>
-            TCheckBoxState(Mf6Obs.DrawdownObs) then
+            TCheckBoxState(ogDrawdown in Mf6Obs.General) then
           begin
             cbDrawdownObservation.State := cbGrayed;
           end;
@@ -349,49 +349,49 @@ begin
 
 
           if chklstBoundaryFlow.State[Ord(forCHD)] <>
-            TCheckBoxState(Mf6Obs.ChdFlowObs) then
+            TCheckBoxState(ogCHD in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forCHD)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forDRN)] <>
-            TCheckBoxState(Mf6Obs.DrnFlowObs) then
+            TCheckBoxState(ogDrain in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forDRN)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forEVT)] <>
-            TCheckBoxState(Mf6Obs.EvtFlowObs) then
+            TCheckBoxState(ogEVT in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forEVT)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forGHB)] <>
-            TCheckBoxState(Mf6Obs.GhbFlowObs) then
+            TCheckBoxState(ogGHB in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forGHB)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forRCH)] <>
-            TCheckBoxState(Mf6Obs.RchFlowObs) then
+            TCheckBoxState(ogRch in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forRCH)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forRIV)] <>
-            TCheckBoxState(Mf6Obs.RivFlowObs) then
+            TCheckBoxState(ogRiv in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forRIV)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forWEL)] <>
-            TCheckBoxState(Mf6Obs.WelFlowObs) then
+            TCheckBoxState(ogWell in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forWEL)] := cbGrayed;
           end;
 
           if chklstBoundaryFlow.State[Ord(forToMvr)] <>
-            TCheckBoxState(Mf6Obs.ToMvrFlowObs) then
+            TCheckBoxState(ogMvr in Mf6Obs.General) then
           begin
             chklstBoundaryFlow.State[Ord(forToMvr)] := cbGrayed;
           end;
@@ -508,6 +508,7 @@ var
   DelayArray: array of Boolean;
   DelayIndex: Integer;
   Position: Integer;
+  NewGeneral: TObGenerals;
 begin
   SetLength(DelayArray, chklstDelayBeds.Items.Count);
   for Index := 0 to List.Count - 1 do
@@ -520,7 +521,7 @@ begin
     begin
       if BoundaryUsed then
       begin
-        Mf6Obs.Used := False;
+        Mf6Obs.Clear;
       end;
     end
     else if SetAll or BoundaryUsed then
@@ -530,7 +531,7 @@ begin
         Item.ScreenObject.CreateMf6Obs;
         Mf6Obs := Item.ScreenObject.Modflow6Obs;
       end;
-      Mf6Obs.Used := True;
+//      Mf6Obs.Used := True;
 
       if List.Count = 1 then
       begin
@@ -538,13 +539,30 @@ begin
         framePestObs.SetData(Mf6Obs.CalibrationObservations);
       end;
 
+      NewGeneral := Mf6Obs.General;
       if cbHeadObservation.State <> cbGrayed then
       begin
-        Mf6Obs.HeadObs := cbHeadObservation.Checked;
+        if cbHeadObservation.Checked then
+        begin
+          Include(NewGeneral, ogHead);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogHead);
+        end;
+//        Mf6Obs.HeadObs := cbHeadObservation.Checked;
       end;
       if cbDrawdownObservation.State <> cbGrayed then
       begin
-        Mf6Obs.DrawdownObs := cbDrawdownObservation.Checked;
+        if cbDrawdownObservation.Checked then
+        begin
+          Include(NewGeneral, ogDrawdown);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogDrawdown);
+        end;
+//        Mf6Obs.DrawdownObs := cbDrawdownObservation.Checked;
       end;
       if cbGroundwaterFlowObservation.State <> cbGrayed then
       begin
@@ -652,11 +670,6 @@ begin
       end;
       Mf6Obs.CSubObs.CSubObsSet := NewCSubObs;
 
-      if chklstBoundaryFlow.State[Ord(forCHD)] <> cbGrayed then
-      begin
-        Mf6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(forCHD)];
-      end;
-
       for DelayIndex := 0 to Length(DelayArray) - 1 do
       begin
         DelayArray[DelayIndex] := False;
@@ -682,40 +695,111 @@ begin
         end;
       end;
 
+
+      if chklstBoundaryFlow.State[Ord(forCHD)] <> cbGrayed then
+      begin
+        if chklstBoundaryFlow.Checked[Ord(forCHD)] then
+        begin
+          Include(NewGeneral, ogCHD);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogCHD);
+        end;
+//        Mf6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(forCHD)];
+      end;
+
       if chklstBoundaryFlow.State[Ord(forDRN)] <> cbGrayed then
       begin
-        Mf6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(forDRN)];
+        if chklstBoundaryFlow.Checked[Ord(forDRN)] then
+        begin
+          Include(NewGeneral, ogDrain);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogDrain);
+        end;
+//        Mf6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(forDRN)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forEVT)] <> cbGrayed then
       begin
-        Mf6Obs.EvtFlowObs := chklstBoundaryFlow.Checked[Ord(forEVT)];
+        if chklstBoundaryFlow.Checked[Ord(forEVT)] then
+        begin
+          Include(NewGeneral, ogEVT);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogEVT);
+        end;
+//        Mf6Obs.EvtFlowObs := chklstBoundaryFlow.Checked[Ord(forEVT)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forGHB)] <> cbGrayed then
       begin
-        Mf6Obs.GhbFlowObs := chklstBoundaryFlow.Checked[Ord(forGHB)];
+        if chklstBoundaryFlow.Checked[Ord(forGHB)] then
+        begin
+          Include(NewGeneral, ogGHB);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogGHB);
+        end;
+//        Mf6Obs.GhbFlowObs := chklstBoundaryFlow.Checked[Ord(forGHB)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forRCH)] <> cbGrayed then
       begin
-        Mf6Obs.RchFlowObs := chklstBoundaryFlow.Checked[Ord(forRCH)];
+        if chklstBoundaryFlow.Checked[Ord(forRCH)] then
+        begin
+          Include(NewGeneral, ogRch);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogRch);
+        end;
+//        Mf6Obs.RchFlowObs := chklstBoundaryFlow.Checked[Ord(forRCH)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forRIV)] <> cbGrayed then
       begin
-        Mf6Obs.RivFlowObs := chklstBoundaryFlow.Checked[Ord(forRIV)];
+        if chklstBoundaryFlow.Checked[Ord(forRIV)] then
+        begin
+          Include(NewGeneral, ogRiv);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogRiv);
+        end;
+//        Mf6Obs.RivFlowObs := chklstBoundaryFlow.Checked[Ord(forRIV)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forWEL)] <> cbGrayed then
       begin
-        Mf6Obs.WelFlowObs := chklstBoundaryFlow.Checked[Ord(forWEL)];
+        if chklstBoundaryFlow.Checked[Ord(forWEL)] then
+        begin
+          Include(NewGeneral, ogWell);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogWell);
+        end;
+//        Mf6Obs.WelFlowObs := chklstBoundaryFlow.Checked[Ord(forWEL)];
       end;
 
       if chklstBoundaryFlow.State[Ord(forToMvr)] <> cbGrayed then
       begin
-        Mf6Obs.ToMvrFlowObs := chklstBoundaryFlow.Checked[Ord(forToMvr)];
+        if chklstBoundaryFlow.Checked[Ord(forToMvr)] then
+        begin
+          Include(NewGeneral, ogMvr);
+        end
+        else
+        begin
+          Exclude(NewGeneral, ogMvr);
+        end;
+//        Mf6Obs.ToMvrFlowObs := chklstBoundaryFlow.Checked[Ord(forToMvr)];
       end;
+      Mf6Obs.General := NewGeneral;
 
       if rgStreamObsLocation.ItemIndex >= 0 then
       begin

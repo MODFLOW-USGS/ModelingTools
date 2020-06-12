@@ -57,7 +57,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  ModflowGridUnit, Forms;
+  ModflowGridUnit, Forms, Modflow6ObsUnit;
 
 resourcestring
   StrErrorInCHDPackage = 'Error in CHD package';
@@ -544,8 +544,8 @@ function TModflowCHD_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.ChdFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogCHD in AScreenObject.Modflow6Obs.General);
 end;
 
 class function TModflowCHD_Writer.ObservationExtension: string;

@@ -3024,6 +3024,7 @@ var
   ObsIndex: Integer;
   GwFlowObs: TGwFlowObs;
   ObsItem: TGwFlowOb;
+  GeneralObs: TObGenerals;
 begin
   if FHeadObsNames = nil then
   begin
@@ -3055,9 +3056,18 @@ begin
     AScreenObject.Modflow6Obs.Name :=
       'Obs' + IntToStr(FObsCount);
   end;
-  AScreenObject.Modflow6Obs.Used := True;
-  AScreenObject.Modflow6Obs.HeadObs := cbHeadObservation.Checked;
-  AScreenObject.Modflow6Obs.DrawdownObs := cbDrawdownObservation.Checked;
+//  AScreenObject.Modflow6Obs.Used := True;
+  GeneralObs := [];
+  if cbHeadObservation.Checked then
+  begin
+    Include(GeneralObs, ogHead);
+  end;
+//  AScreenObject.Modflow6Obs.HeadObs := cbHeadObservation.Checked;
+  if cbDrawdownObservation.Checked then
+  begin
+    Include(GeneralObs, ogDrawdown);
+  end;
+//  AScreenObject.Modflow6Obs.DrawdownObs := cbDrawdownObservation.Checked;
   AScreenObject.Modflow6Obs.GroundwaterFlowObs
     := cbGroundwaterFlowObservation.Checked;
 
@@ -3071,13 +3081,44 @@ begin
   end;
   AScreenObject.Modflow6Obs.GwFlowObsChoices := GwFlowObs;
 
-  AScreenObject.Modflow6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(morChdFlow)];
-  AScreenObject.Modflow6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(morDrnFlow)];
-  AScreenObject.Modflow6Obs.GhbFlowObs := chklstBoundaryFlow.Checked[Ord(morGhbFlow)];
-  AScreenObject.Modflow6Obs.RivFlowObs := chklstBoundaryFlow.Checked[Ord(morRivFlow)];
-  AScreenObject.Modflow6Obs.WelFlowObs := chklstBoundaryFlow.Checked[Ord(morWelFlow)];
-  AScreenObject.Modflow6Obs.RchFlowObs := chklstBoundaryFlow.Checked[Ord(morRchFlow)];
-  AScreenObject.Modflow6Obs.EvtFlowObs := chklstBoundaryFlow.Checked[Ord(morEvtFlow)];
+  if chklstBoundaryFlow.Checked[Ord(morChdFlow)] then
+  begin
+    Include(GeneralObs, ogCHD);
+  end;
+  if chklstBoundaryFlow.Checked[Ord(morDrnFlow)] then
+  begin
+    Include(GeneralObs, ogDrain);
+  end;
+  if chklstBoundaryFlow.Checked[Ord(morGhbFlow)] then
+  begin
+    Include(GeneralObs, ogGHB);
+  end;
+  if chklstBoundaryFlow.Checked[Ord(morRivFlow)] then
+  begin
+    Include(GeneralObs, ogRiv);
+  end;
+  if chklstBoundaryFlow.Checked[Ord(morWelFlow)] then
+  begin
+    Include(GeneralObs, ogWell);
+  end;
+  if chklstBoundaryFlow.Checked[Ord(morRchFlow)] then
+  begin
+    Include(GeneralObs, ogRch);
+  end;
+  if chklstBoundaryFlow.Checked[Ord(morEvtFlow)] then
+  begin
+    Include(GeneralObs, ogEVT);
+  end;
+
+  AScreenObject.Modflow6Obs.General := GeneralObs;
+
+//  AScreenObject.Modflow6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(morChdFlow)];
+//  AScreenObject.Modflow6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(morDrnFlow)];
+//  AScreenObject.Modflow6Obs.GhbFlowObs := chklstBoundaryFlow.Checked[Ord(morGhbFlow)];
+//  AScreenObject.Modflow6Obs.RivFlowObs := chklstBoundaryFlow.Checked[Ord(morRivFlow)];
+//  AScreenObject.Modflow6Obs.WelFlowObs := chklstBoundaryFlow.Checked[Ord(morWelFlow)];
+//  AScreenObject.Modflow6Obs.RchFlowObs := chklstBoundaryFlow.Checked[Ord(morRchFlow)];
+//  AScreenObject.Modflow6Obs.EvtFlowObs := chklstBoundaryFlow.Checked[Ord(morEvtFlow)];
 
 
 end;

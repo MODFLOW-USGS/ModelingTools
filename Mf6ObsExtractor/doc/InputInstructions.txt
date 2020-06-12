@@ -161,6 +161,28 @@ BEGIN IDENTIFIERS
 END IDENTIFIERS
 
 DERIVED_OBSERVATIONS
+DERIVED_OBSERVATIONS purpose
+The DERIVED_OBSERVATIONS section is used to define how to combine multiple values extracted from the MODFLOW 6 Observation files to generate values that can be compared with observed values. Two methods can be used for this purpose. First, values can be interpolated in space using, a linear, triangular, or quadrilateral finite element basis function. Second, mathematical formulas can be defined that manipulate previously extracted values.
+The DERIVED_OBSERVATIONS section is optional.
+
+Structure
+BEGIN DERIVED_OBSERVATIONS
+	OBSNAME <observation_name> [PRINT]
+	FORMULA <formula>
+	OBSNAME <observation_name> [PRINT]
+	INTERPOLATE <x> <y> <obs> [<obs> <obs>  <obs>] 
+END DERIVED_OBSERVATIONS
+
+OBSNAME is a keyword indicating that the line will specify an observation name.
+<observation_name> is the name of the observation. <observation_name> must start with a letter or the underscore character. The remaining characters in <observation_name> must be letters, digits, or the underscore character. All observation names must be unique. Mf6ObsExtractor does not limit the length of observation names. An OBSNAME line must be followed by either a single FORMULA line or a single INTERPOLATE line.
+PRINT in an optional keyword. If included, the <observation_name> and simulated value will be printed to the extracted values file or instructions for reading the <observation_name> and simulated value will be written to the instruction file. Printing the name and value imply that they will be used directly by PEST or UCODE. If the values are not printed, they may still be used in the DERIVED_OBSERVATIONS section. Regardless of whether PRINT is present or not, the name and simulated value will be written to the listing file. SutraObsExtractor does not limit the length of observation names but to be used by PEST or UCODE, the observation name must conform to the requirements of those programs.
+FORMULA is a keyword indicating that the remainder of the line is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to <observation_name>. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation named defined previously in the DERIVED_OBSERVATIONS section.
+<formula> is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to <observation_name>. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation named defined previously in the DERIVED_OBSERVATIONS section.
+INTERPOLATE is a keyword indicating that the remainder of the line consists of an x coordinate, a y coordinate, and the names of one to four previously defined <observation_name>s each of which has a location associated with it. 
+<x> and <y> are the x and y coordinates associated with <observation_name>. Together, they define the observation point at which a value is desired.
+<obs> is a previously defined <observation_name> that has an associated pair of x and y coordinates. If only one <obs> is included, its value is taken as the value of <observation_name>. If two to four <obs> are defined, Those values define the nodes and values of a linear, triangular, or quadrilateral, finite element and the value of <observation_name> will be defined using a linear, triangular or quadrilateral finite-element basis function.
+
+DERIVED_OBSERVATIONS example
 
 #(Optional)
 BEGIN DERIVED_OBSERVATIONS

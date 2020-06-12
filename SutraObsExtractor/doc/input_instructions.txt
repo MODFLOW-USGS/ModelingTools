@@ -236,6 +236,7 @@ OBSNAME is a keyword indicating that the line will specify an observation name.
 <observation_name> is the name of the observation. See the description under IDENTIFIERS.
 PRINT in an optional keyword. If included, the <observation_name> and simulated value will be printed to the extracted values file or instructions for reading the <observation_name> and simulated value will be written to the instruction file. See the description under IDENTIFIERS.
 FORMULA is a keyword indicating that the remainder of the line is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to <observation_name>. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation named defined previously in the DERIVED_OBSERVATIONS section.
+<formula> is a mathematical formula that evaluates to a real number. The result of the formula is the value assigned to <observation_name>. Variables in the formula can be any of the observation names defined in the IDENTIFIERS section or any observation named defined previously in the DERIVED_OBSERVATIONS section.
 
 DERIVED_OBSERVATIONS section example
 

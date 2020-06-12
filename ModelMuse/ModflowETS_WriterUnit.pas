@@ -90,7 +90,7 @@ implementation
 uses ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowEtsUnit, GoPhastTypes,
   frmProgressUnit, Forms, frmGoPhastUnit, ModflowEvtUnit, System.Math,
-  SparseArrayUnit, SparseDataSets;
+  SparseArrayUnit, SparseDataSets, Modflow6ObsUnit;
 
 { TModflowETS_Writer }
 
@@ -207,8 +207,8 @@ function TModflowETS_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.EvtFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogEVT in AScreenObject.Modflow6Obs.General);
 end;
 
 class function TModflowETS_Writer.ObservationExtension: string;

@@ -107,6 +107,7 @@ type
     property Items[Index: Integer]: TCustomTimeObservationItem  read GetItem
       write SetItem; default;
     function Add: TCustomTimeObservationItem;
+    procedure Clear;
   published
     property Comparisons: TObsComparisons read FComparisons write SetComparisons;
   end;
@@ -350,6 +351,12 @@ begin
     end;
   end;
     inherited;
+end;
+
+procedure TCustomComparisonCollection.Clear;
+begin
+  inherited;
+  Comparisons.Clear;
 end;
 
 constructor TCustomComparisonCollection.Create(ItemClass: TCollectionItemClass;

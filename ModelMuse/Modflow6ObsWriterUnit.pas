@@ -355,7 +355,7 @@ begin
       OtherObsDefined := True;
     end;
 
-    if Obs.HeadObs or Obs.DrawdownObs
+    if (Obs.General * [ogHead, ogDrawdown] <> [])
       or (Obs.GroundwaterFlowObs and (Obs.GwFlowObsChoices <> [])) then
     begin
       CellList := TCellAssignmentList.Create;
@@ -368,7 +368,7 @@ begin
 
           if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
           begin
-            if Obs.HeadObs or Obs.DrawdownObs then
+            if (Obs.General * [ogHead, ogDrawdown] <> []) then
             begin
               HeadDrawdown.FCell := ACell.Cell;
               HeadDrawdown.FName := Obs.Name;
@@ -376,11 +376,11 @@ begin
               begin
                 HeadDrawdown.FName := HeadDrawdown.FName + WriteCellName(ACell.Cell);
               end;
-              if Obs.HeadObs then
+              if ogHead in Obs.General then
               begin
                 FHeadObs.Add(HeadDrawdown);
               end;
-              if Obs.DrawdownObs then
+              if ogDrawdown in Obs.General then
               begin
                 FDrawdownObs.Add(HeadDrawdown);
               end;
@@ -801,7 +801,7 @@ begin
 
       if Obs <> nil then
       begin
-        if Obs.HeadObs then
+        if ogHead in Obs.General then
         begin
           CellList := TCellAssignmentList.Create;
           try

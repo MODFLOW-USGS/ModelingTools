@@ -13,6 +13,7 @@ type
 
   TObGeneral = (ogHead, ogDrawdown, ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
     ogRch, ogEVT, ogMvr);
+  TObGenerals = set of TObGeneral;
 
   TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub);
 
@@ -79,47 +80,46 @@ type
 
   TModflow6Obs = class(TGoPhastPersistent)
   private
-    FHeadObs: Boolean;
+//    FHeadObs: Boolean;
     FGroundwaterFlowObs: Boolean;
     FGwFlowObsChoices: TGwFlowObs;
-    FDrawdownObs: Boolean;
-    FUsed: Boolean;
+//    FDrawdownObs: Boolean;
     FName: string;
-    FChdFlowObs: Boolean;
-    FDrnFlowObs: Boolean;
-    FWelFlowObs: Boolean;
-    FGhbFlowObs: Boolean;
-    FRivFlowObs: Boolean;
-    FRchFlowObs: Boolean;
-    FEvtFlowObs: Boolean;
+//    FChdFlowObs: Boolean;
+//    FDrnFlowObs: Boolean;
+//    FWelFlowObs: Boolean;
+//    FGhbFlowObs: Boolean;
+//    FRivFlowObs: Boolean;
+//    FRchFlowObs: Boolean;
+//    FEvtFlowObs: Boolean;
     FMawObs: TMawObs;
     FSfrObs: TSfrObs;
     FLakObs: TLakObs;
     FSfrObsLocation: TSfrObsLocation;
-    FToMvrFlowObs: Boolean;
+//    FToMvrFlowObs: Boolean;
     FStoredUzfObsDepthFraction: TRealStorage;
     FUzfObs: TUzfObs;
     FCSubObs: TCSubObs;
     FCSubDelayCells: TIntegerCollection;
     FCalibrationObservations: TMf6CalibrationObservations;
-    procedure SetDrawdownObs(const Value: Boolean);
+    FGeneral: TObGenerals;
+//    procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
-    procedure SetHeadObs(const Value: Boolean);
-    procedure SetUsed(const Value: Boolean);
+//    procedure SetHeadObs(const Value: Boolean);
     procedure SetName(Value: string);
-    procedure SetChdFlowObs(const Value: Boolean);
-    procedure SetDrnFlowObs(const Value: Boolean);
-    procedure SetGhbFlowObs(const Value: Boolean);
-    procedure SetRivFlowObs(const Value: Boolean);
-    procedure SetWelFlowObs(const Value: Boolean);
-    procedure SetRchFlowObs(const Value: Boolean);
-    procedure SetEvtFlowObs(const Value: Boolean);
+//    procedure SetChdFlowObs(const Value: Boolean);
+//    procedure SetDrnFlowObs(const Value: Boolean);
+//    procedure SetGhbFlowObs(const Value: Boolean);
+//    procedure SetRivFlowObs(const Value: Boolean);
+//    procedure SetWelFlowObs(const Value: Boolean);
+//    procedure SetRchFlowObs(const Value: Boolean);
+//    procedure SetEvtFlowObs(const Value: Boolean);
     procedure SetMawObs(const Value: TMawObs);
     procedure SetSfrObs(const Value: TSfrObs);
     procedure SetLakObs(const Value: TLakObs);
     procedure SetSfrObsLocation(const Value: TSfrObsLocation);
-    procedure SetToMvrFlowObs(const Value: Boolean);
+//    procedure SetToMvrFlowObs(const Value: Boolean);
     function GetUzfObsDepthFraction: double;
     procedure SetStoredUzfObsDepthFraction(const Value: TRealStorage);
     procedure SetUzfObs(const Value: TUzfObs);
@@ -128,29 +128,46 @@ type
     procedure SetCSubDelayCells(const Value: TIntegerCollection);
     procedure SetCalibrationObservations(
       const Value: TMf6CalibrationObservations);
+    function StoreCalibObs: Boolean;
+    function GetUsed: Boolean;
+    procedure SetGeneral(const Value: TObGenerals);
+//    function GetHeadObs: Boolean;
+//    function GetDrawdownObs: Boolean;
+//    function GetChdFlowObs: Boolean;
+//    function GetDrnFlowObs: Boolean;
+//    function GetGhbFlowObs: Boolean;
+//    function GetRivFlowObs: Boolean;
+//    function GetWelFlowObs: Boolean;
+//    function GetRchFlowObs: Boolean;
+//    function GetEvtFlowObs: Boolean;
+//    function GetToMvrFlowObs: Boolean;
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property UzfObsDepthFraction: double read GetUzfObsDepthFraction
       write SetUzfObsDepthFraction;
+    // If @name is changed, @link(GetUsed) should be changed too.
+    procedure Clear;
+    // If @name is changed, @link(Clear) should be changed too.
+    property Used: Boolean read GetUsed;
   published
     property Name: string read FName write SetName;
-    property Used: Boolean read FUsed write SetUsed;
-    property HeadObs: Boolean read FHeadObs write SetHeadObs;
-    property DrawdownObs: Boolean read FDrawdownObs write SetDrawdownObs;
+//    property HeadObs: Boolean read GetHeadObs; // write SetHeadObs stored False;
+//    property DrawdownObs: Boolean read GetDrawdownObs; // write SetDrawdownObs stored False;
     property GroundwaterFlowObs: Boolean read FGroundwaterFlowObs
       write SetGroundwaterFlowObs;
     property GwFlowObsChoices: TGwFlowObs read FGwFlowObsChoices
       write SetGwFlowObsChoices;
-    property ChdFlowObs: Boolean read FChdFlowObs write SetChdFlowObs;
-    property DrnFlowObs: Boolean read FDrnFlowObs write SetDrnFlowObs;
-    property GhbFlowObs: Boolean read FGhbFlowObs write SetGhbFlowObs;
-    property RivFlowObs: Boolean read FRivFlowObs write SetRivFlowObs;
-    property WelFlowObs: Boolean read FWelFlowObs write SetWelFlowObs;
-    property RchFlowObs: Boolean read FRchFlowObs write SetRchFlowObs;
-    property EvtFlowObs: Boolean read FEvtFlowObs write SetEvtFlowObs;
-    property ToMvrFlowObs: Boolean read FToMvrFlowObs write SetToMvrFlowObs;
+//    property ChdFlowObs: Boolean read GetChdFlowObs; // write SetChdFlowObs stored False;
+//    property DrnFlowObs: Boolean read GetDrnFlowObs; // write SetDrnFlowObs stored False;
+//    property GhbFlowObs: Boolean read GetGhbFlowObs; // write SetGhbFlowObs stored False;
+//    property RivFlowObs: Boolean read GetRivFlowObs; // write SetRivFlowObs stored False;
+//    property WelFlowObs: Boolean read GetWelFlowObs; // write SetWelFlowObs stored False;
+//    property RchFlowObs: Boolean read GetRchFlowObs; // write SetRchFlowObs stored False;
+//    property EvtFlowObs: Boolean read GetEvtFlowObs; // write SetEvtFlowObs stored False;
+//    property ToMvrFlowObs: Boolean read GetToMvrFlowObs; // write SetToMvrFlowObs stored False;
+    property General: TObGenerals read FGeneral write SetGeneral;
     property MawObs: TMawObs read FMawObs write SetMawObs;
     property SfrObs: TSfrObs read FSfrObs write SetSfrObs;
     property LakObs: TLakObs read FLakObs write SetLakObs;
@@ -173,6 +190,8 @@ type
       read FCalibrationObservations write SetCalibrationObservations
   {$IFNDEF PEST}
     stored False
+  {$ELSE}
+    stored StoreCalibObs
   {$ENDIF}
       ;
   end;
@@ -285,22 +304,22 @@ begin
   if Source is TModflow6Obs then
   begin
     SourceObs := TModflow6Obs(Source);
-    Used := SourceObs.Used;
     Name := SourceObs.Name;
+    General := SourceObs.General;
 
-    HeadObs := SourceObs.HeadObs;
-    DrawdownObs := SourceObs.DrawdownObs;
+//    HeadObs := SourceObs.HeadObs;
+//    DrawdownObs := SourceObs.DrawdownObs;
     GroundwaterFlowObs := SourceObs.GroundwaterFlowObs;
     GwFlowObsChoices := SourceObs.GwFlowObsChoices;
 
-    ChdFlowObs := SourceObs.ChdFlowObs;
-    DrnFlowObs := SourceObs.DrnFlowObs;
-    GhbFlowObs := SourceObs.GhbFlowObs;
-    RivFlowObs := SourceObs.RivFlowObs;
-    WelFlowObs := SourceObs.WelFlowObs;
-    RchFlowObs := SourceObs.RchFlowObs;
-    EvtFlowObs := SourceObs.EvtFlowObs;
-    ToMvrFlowObs := SourceObs.ToMvrFlowObs;
+//    ChdFlowObs := SourceObs.ChdFlowObs;
+//    DrnFlowObs := SourceObs.DrnFlowObs;
+//    GhbFlowObs := SourceObs.GhbFlowObs;
+//    RivFlowObs := SourceObs.RivFlowObs;
+//    WelFlowObs := SourceObs.WelFlowObs;
+//    RchFlowObs := SourceObs.RchFlowObs;
+//    EvtFlowObs := SourceObs.EvtFlowObs;
+//    ToMvrFlowObs := SourceObs.ToMvrFlowObs;
 
     MawObs := SourceObs.MawObs;
     SfrObs := SourceObs.SfrObs;
@@ -320,6 +339,30 @@ begin
   begin
     inherited;
   end;
+end;
+
+procedure TModflow6Obs.Clear;
+begin
+  General := [];
+//  HeadObs := False;
+//  DrawdownObs := False;
+  GroundwaterFlowObs := False;
+//  ChdFlowObs := False;
+//  DrnFlowObs := False;
+//  GhbFlowObs := False;
+//  RivFlowObs := False;
+//  WelFlowObs := False;
+//  RchFlowObs := False;
+//  EvtFlowObs := False;
+//  ToMvrFlowObs := False;
+  MawObs := [];
+  SfrObs := [];
+  LakObs := [];
+  UzfObs := [];
+  CSubObs.CSubObsSet := [];
+  CalibrationObservations.Clear;
+  Assert(not Used);
+
 end;
 
 constructor TModflow6Obs.Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
@@ -343,10 +386,69 @@ begin
   inherited;
 end;
 
+//function TModflow6Obs.GetChdFlowObs: Boolean;
+//begin
+//  result := ogCHD in General;
+//end;
+
+//function TModflow6Obs.GetDrawdownObs: Boolean;
+//begin
+//  result := ogDrawdown in General;
+//end;
+//
+//function TModflow6Obs.GetDrnFlowObs: Boolean;
+//begin
+//  result := ogDrain in General;
+//end;
+//
+//function TModflow6Obs.GetEvtFlowObs: Boolean;
+//begin
+//  result := ogEVT in General;
+//end;
+//
+//function TModflow6Obs.GetGhbFlowObs: Boolean;
+//begin
+//  result := ogGHB in General;
+//end;
+
+//function TModflow6Obs.GetHeadObs: Boolean;
+//begin
+//  result := ogHead in General;
+//end;
+
+//function TModflow6Obs.GetRchFlowObs: Boolean;
+//begin
+//  result := ogRch in General;
+//end;
+//
+//function TModflow6Obs.GetRivFlowObs: Boolean;
+//begin
+//  result := ogRiv in General;
+//end;
+//
+//function TModflow6Obs.GetToMvrFlowObs: Boolean;
+//begin
+//  result := ogMvr in General;
+//end;
+
+function TModflow6Obs.GetUsed: Boolean;
+begin
+  result := (General <> []) or {HeadObs or DrawdownObs or} GroundwaterFlowObs {or ChdFlowObs
+    or DrnFlowObs or GhbFlowObs or RivFlowObs or WelFlowObs or RchFlowObs
+    or EvtFlowObs  or ToMvrFlowObs} or (MawObs <> []) or (SfrObs <> [])
+    or (LakObs <> []) or (UzfObs <> []) or (CSubObs.CSubObsSet <> [])
+    or (CalibrationObservations.Count > 0);
+end;
+
 function TModflow6Obs.GetUzfObsDepthFraction: double;
 begin
   result := FStoredUzfObsDepthFraction.Value;
 end;
+
+//function TModflow6Obs.GetWelFlowObs: Boolean;
+//begin
+//  result := ogWell in General;
+//end;
 
 procedure TModflow6Obs.SetCalibrationObservations(
   const Value: TMf6CalibrationObservations);
@@ -354,10 +456,22 @@ begin
   FCalibrationObservations.Assign(Value);
 end;
 
-procedure TModflow6Obs.SetChdFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FChdFlowObs, Value);
-end;
+//procedure TModflow6Obs.SetChdFlowObs(const Value: Boolean);
+//begin
+//  if Value <> ChdFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogCHD);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogCHD);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FChdFlowObs, Value);
+//end;
 
 procedure TModflow6Obs.SetCSubObs(const Value: TCSubObs);
 begin
@@ -373,25 +487,82 @@ begin
   FCSubDelayCells.Assign(Value);
 end;
 
-procedure TModflow6Obs.SetDrawdownObs(const Value: Boolean);
+//procedure TModflow6Obs.SetDrawdownObs(const Value: Boolean);
+//begin
+//  if Value <> DrawdownObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogDrawdown);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogDrawdown);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FDrawdownObs, Value);
+//end;
+
+//procedure TModflow6Obs.SetDrnFlowObs(const Value: Boolean);
+//begin
+//  if Value <> DrnFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogDrain);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogDrain);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FDrnFlowObs, Value);
+//end;
+
+//procedure TModflow6Obs.SetEvtFlowObs(const Value: Boolean);
+//begin
+//  if Value <> EvtFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogEVT);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogEVT);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FEvtFlowObs, Value);
+//end;
+
+procedure TModflow6Obs.SetGeneral(const Value: TObGenerals);
 begin
-  SetBooleanProperty(FDrawdownObs, Value);
+  if FGeneral <> Value then
+  begin
+    FGeneral := Value;
+    InvalidateModel;
+  end;
 end;
 
-procedure TModflow6Obs.SetDrnFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FDrnFlowObs, Value);
-end;
-
-procedure TModflow6Obs.SetEvtFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FEvtFlowObs, Value);
-end;
-
-procedure TModflow6Obs.SetGhbFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FGhbFlowObs, Value);
-end;
+//procedure TModflow6Obs.SetGhbFlowObs(const Value: Boolean);
+//begin
+//  if Value <> GhbFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogGHB);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogGHB);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FGhbFlowObs, Value);
+//end;
 
 procedure TModflow6Obs.SetGroundwaterFlowObs(const Value: Boolean);
 begin
@@ -407,10 +578,21 @@ begin
   end;
 end;
 
-procedure TModflow6Obs.SetHeadObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FHeadObs, Value);
-end;
+//procedure TModflow6Obs.SetHeadObs(const Value: Boolean);
+//begin
+//  if Value <> HeadObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogHead);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogHead);
+//    end;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TModflow6Obs.SetLakObs(const Value: TLakObs);
 begin
@@ -450,15 +632,39 @@ begin
   SetStringProperty(FName, Value);
 end;
 
-procedure TModflow6Obs.SetRchFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FRchFlowObs, Value);
-end;
+//procedure TModflow6Obs.SetRchFlowObs(const Value: Boolean);
+//begin
+//  if Value <> RchFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogRch);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogRch);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FRchFlowObs, Value);
+//end;
 
-procedure TModflow6Obs.SetRivFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FRivFlowObs, Value);
-end;
+//procedure TModflow6Obs.SetRivFlowObs(const Value: Boolean);
+//begin
+//  if Value <> RivFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogRiv);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogRiv);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FRivFlowObs, Value);
+//end;
 
 procedure TModflow6Obs.SetSfrObs(const Value: TSfrObs);
 begin
@@ -483,15 +689,22 @@ begin
   FStoredUzfObsDepthFraction.Assign(Value);
 end;
 
-procedure TModflow6Obs.SetToMvrFlowObs(const Value: Boolean);
-begin
-  SetBooleanProperty(FToMvrFlowObs, Value);
-end;
-
-procedure TModflow6Obs.SetUsed(const Value: Boolean);
-begin
-  SetBooleanProperty(FUsed, Value);
-end;
+//procedure TModflow6Obs.SetToMvrFlowObs(const Value: Boolean);
+//begin
+//  if Value <> ToMvrFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogMvr);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogMvr);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FToMvrFlowObs, Value);
+//end;
 
 procedure TModflow6Obs.SetUzfObs(const Value: TUzfObs);
 begin
@@ -507,9 +720,26 @@ begin
   FStoredUzfObsDepthFraction.Value := Value;
 end;
 
-procedure TModflow6Obs.SetWelFlowObs(const Value: Boolean);
+//procedure TModflow6Obs.SetWelFlowObs(const Value: Boolean);
+//begin
+//  if Value <> WelFlowObs then
+//  begin
+//    if Value then
+//    begin
+//      Include(FGeneral, ogWell);
+//    end
+//    else
+//    begin
+//      Exclude(FGeneral, ogWell);
+//    end;
+//    InvalidateModel;
+//  end;
+////  SetBooleanProperty(FWelFlowObs, Value);
+//end;
+
+function TModflow6Obs.StoreCalibObs: Boolean;
 begin
-  SetBooleanProperty(FWelFlowObs, Value);
+  result := CalibrationObservations.Count > 0;
 end;
 
 { TMf6CalibrationObs }

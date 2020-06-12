@@ -64,7 +64,7 @@ implementation
 
 uses ModflowUnitNumbers, frmProgressUnit, Forms, frmErrorsAndWarningsUnit,
   System.IOUtils, ModflowTimeSeriesUnit, ModflowTimeSeriesWriterUnit,
-  ModflowMvrWriterUnit, ModflowMvrUnit;
+  ModflowMvrWriterUnit, ModflowMvrUnit, Modflow6ObsUnit;
 
 resourcestring
   StrWritingWELPackage = 'Writing WEL Package input.';
@@ -278,16 +278,16 @@ function TModflowWEL_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.WelFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogWell in AScreenObject.Modflow6Obs.General);
 end;
 
 function TModflowWEL_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.ToMvrFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogMvr in AScreenObject.Modflow6Obs.General);
 end;
 
 class function TModflowWEL_Writer.ObservationExtension: string;

@@ -23,6 +23,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblTypesOfFlowObservation: TLabel
         Left = 3
         Top = 74
@@ -101,6 +105,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabMAW: TTabSheet
       Caption = 'MAW'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstMAW: TCheckListBox
         Left = 3
         Top = 3
@@ -128,6 +136,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabSFR: TTabSheet
       Caption = 'SFR'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstSFR: TCheckListBox
         Left = 3
         Top = 83
@@ -169,6 +181,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabLAK: TTabSheet
       Caption = 'LAK'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chklstLAK: TCheckListBox
         Left = 3
         Top = 3
@@ -202,6 +218,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabUZF: TTabSheet
       Caption = 'UZF'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblDepthFraction: TLabel
         Left = 159
         Top = 299
@@ -252,6 +272,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabCSUB: TTabSheet
       Caption = 'CSUB'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object splCSub: TSplitter
         Left = 0
         Top = 315
@@ -348,7 +372,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabCalibration: TTabSheet
       Caption = 'Calibration'
       ImageIndex = 6
-      ExplicitLeft = 7
       inline framePestObs: TframePestObsMf6
         Left = 0
         Top = 0
@@ -356,50 +379,64 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Height = 420
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 24
-        ExplicitWidth = 9
+        ExplicitWidth = 482
         inherited splObservations: TSplitter
           Width = 482
+          ExplicitWidth = 482
         end
         inherited grpDirectObs: TGroupBox
           Width = 482
+          ExplicitWidth = 482
           inherited frameObservations: TframeGrid
             Width = 478
+            ExplicitWidth = 478
             inherited Panel: TPanel
               Width = 478
+              ExplicitWidth = 478
               inherited sbAdd: TSpeedButton
                 Left = 248
+                ExplicitLeft = 248
               end
               inherited sbInsert: TSpeedButton
                 Left = 294
+                ExplicitLeft = 294
               end
               inherited sbDelete: TSpeedButton
                 Left = 340
+                ExplicitLeft = 340
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 478
+              ExplicitWidth = 478
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
           Width = 482
+          ExplicitWidth = 482
           inherited frameObsComparisons: TframeGrid
             Width = 478
+            ExplicitWidth = 478
             inherited Panel: TPanel
               Width = 478
+              ExplicitWidth = 478
               inherited sbAdd: TSpeedButton
                 Left = 248
+                ExplicitLeft = 248
               end
               inherited sbInsert: TSpeedButton
                 Left = 294
+                ExplicitLeft = 294
               end
               inherited sbDelete: TSpeedButton
                 Left = 340
+                ExplicitLeft = 340
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 478
+              ExplicitWidth = 478
             end
           end
         end

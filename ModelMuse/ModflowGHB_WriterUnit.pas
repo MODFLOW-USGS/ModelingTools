@@ -56,7 +56,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers, 
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
-  ModflowMvrUnit;
+  ModflowMvrUnit, Modflow6ObsUnit;
 
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +
@@ -640,16 +640,16 @@ function TModflowGHB_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.GhbFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogGHB in AScreenObject.Modflow6Obs.General);
 end;
 
 function TModflowGHB_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.ToMvrFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogMvr in AScreenObject.Modflow6Obs.General);
 end;
 
 procedure TModflowGHB_Writer.WriteParameterCells(CellList: TValueCellList;

@@ -53,7 +53,7 @@ implementation
 uses RbwParser, ModflowUnitNumbers, ModflowTransientListParameterUnit,
   frmErrorsAndWarningsUnit, ModflowRchUnit, GoPhastTypes,
   frmProgressUnit, Forms, ModflowOutputControlUnit, System.Math,
-  SparseArrayUnit;
+  SparseArrayUnit, Modflow6ObsUnit;
 
 resourcestring
   StrNoRechargeDefined = 'No recharge defined';
@@ -137,8 +137,8 @@ function TModflowRCH_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.RchFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogRch in AScreenObject.Modflow6Obs.General);
 end;
 
 class function TModflowRCH_Writer.ObservationExtension: string;

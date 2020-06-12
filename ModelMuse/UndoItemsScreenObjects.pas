@@ -983,7 +983,7 @@ uses Math, frmGoPhastUnit, frmSelectedObjectsUnit, frmShowHideObjectsUnit,
   ModflowCsubUnit, MeshRenumberingTypes, ModflowPackagesUnit,
   ModflowTransientListParameterUnit, OrderedCollectionUnit,
   ModflowConstantHeadBoundaryUnit, ModflowBoundaryUnit, ModflowFhbUnit,
-  ModflowWellUnit;
+  ModflowWellUnit, framePackageMf6ObsUnit, Modflow6ObsUnit;
 
 resourcestring
   StrChangeSelection = 'change selection';
@@ -4658,7 +4658,7 @@ begin
       if (AScreenObject.ModflowHeadObservations <> nil) then
       begin
         if (AScreenObject.Modflow6Obs <> nil)
-          and AScreenObject.Modflow6Obs.HeadObs then
+          and (ogHead in AScreenObject.Modflow6Obs.General) then
         begin
           FHobScreenObjects.Clear;
           break;
@@ -4685,7 +4685,7 @@ begin
           Continue;
         end;
         if (AScreenObject.Modflow6Obs <> nil)
-          and AScreenObject.Modflow6Obs.ChdFlowObs then
+          and (ogCHD in AScreenObject.Modflow6Obs.General) then
         begin
           FChobScreenObjects.Clear;
           ShouldBreak := True;
@@ -4717,7 +4717,7 @@ begin
           Continue;
         end;
         if (AScreenObject.Modflow6Obs <> nil)
-          and AScreenObject.Modflow6Obs.DrnFlowObs then
+          and (ogDrain in AScreenObject.Modflow6Obs.General) then
         begin
           FDrobScreenObjects.Clear;
           ShouldBreak := True;
@@ -4749,7 +4749,7 @@ begin
           Continue;
         end;
         if (AScreenObject.Modflow6Obs <> nil)
-          and AScreenObject.Modflow6Obs.GhbFlowObs then
+          and (ogGHB in AScreenObject.Modflow6Obs.General) then
         begin
           FGhbobScreenObjects.Clear;
           ShouldBreak := True;
@@ -4781,7 +4781,7 @@ begin
           Continue;
         end;
         if (AScreenObject.Modflow6Obs <> nil)
-          and AScreenObject.Modflow6Obs.GhbFlowObs then
+          and (ogRiv in AScreenObject.Modflow6Obs.General) then
         begin
           FRivobScreenObjects.Clear;
           ShouldBreak := True;
@@ -4830,8 +4830,8 @@ begin
   begin
     AScreenObject := FHobScreenObjects[ScreenObjectIndex];
     AScreenObject.CreateMf6Obs;
-    AScreenObject.Modflow6Obs.Used := True;
-    AScreenObject.Modflow6Obs.HeadObs := True;
+//    AScreenObject.Modflow6Obs.Used := True;
+    AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General + [ogHead];
     NewName := AScreenObject.ModflowHeadObservations.ObservationName;
     NewName := StringReplace(NewName, '-', '', [rfReplaceAll]);
     NewName := StringReplace(NewName, '+', '', [rfReplaceAll]);
@@ -4854,8 +4854,9 @@ begin
           Continue;
         end;
         AScreenObject.CreateMf6Obs;
-        AScreenObject.Modflow6Obs.Used := True;
-        AScreenObject.Modflow6Obs.ChdFlowObs := True;
+//        AScreenObject.Modflow6Obs.Used := True;
+        AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General + [ogCHD];
+//        AScreenObject.Modflow6Obs.ChdFlowObs := True;
         AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
@@ -4874,8 +4875,9 @@ begin
           Continue;
         end;
         AScreenObject.CreateMf6Obs;
-        AScreenObject.Modflow6Obs.Used := True;
-        AScreenObject.Modflow6Obs.DrnFlowObs := True;
+//        AScreenObject.Modflow6Obs.Used := True;
+        AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General + [ogDrain];
+//        AScreenObject.Modflow6Obs.DrnFlowObs := True;
         AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
@@ -4894,8 +4896,9 @@ begin
           Continue;
         end;
         AScreenObject.CreateMf6Obs;
-        AScreenObject.Modflow6Obs.Used := True;
-        AScreenObject.Modflow6Obs.GhbFlowObs := True;
+//        AScreenObject.Modflow6Obs.Used := True;
+        AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General + [ogGHB];
+//        AScreenObject.Modflow6Obs.GhbFlowObs := True;
         AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
@@ -4914,8 +4917,9 @@ begin
           Continue;
         end;
         AScreenObject.CreateMf6Obs;
-        AScreenObject.Modflow6Obs.Used := True;
-        AScreenObject.Modflow6Obs.RivFlowObs := True;
+//        AScreenObject.Modflow6Obs.Used := True;
+        AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General + [ogRiv];
+//        AScreenObject.Modflow6Obs.RivFlowObs := True;
         AScreenObject.Modflow6Obs.Name := FluxGroup.ObservationName;
       end;
     end;
@@ -4941,11 +4945,11 @@ var
   begin
 	if AScreenObject.Modflow6Obs <> nil then
 	begin
-	  if not AScreenObject.Modflow6Obs.HeadObs
-	    and not AScreenObject.Modflow6Obs.ChdFlowObs
-	    and not AScreenObject.Modflow6Obs.DrnFlowObs
-	    and not AScreenObject.Modflow6Obs.GhbFlowObs
-	    and not AScreenObject.Modflow6Obs.RivFlowObs
+	  if not AScreenObject.Modflow6Obs.Used
+//	    and not AScreenObject.Modflow6Obs.ChdFlowObs
+//	    and not AScreenObject.Modflow6Obs.DrnFlowObs
+//	    and not AScreenObject.Modflow6Obs.GhbFlowObs
+//	    and not AScreenObject.Modflow6Obs.RivFlowObs
 		then
 	  begin
       AScreenObject.Modflow6Obs := nil;
@@ -4958,27 +4962,31 @@ begin
   for ScreenObjectIndex := 0 to FHobScreenObjects.Count - 1 do
   begin
     AScreenObject := FHobScreenObjects[ScreenObjectIndex];
-    AScreenObject.Modflow6Obs.HeadObs := False;
+    AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General - [ogHead];
   end;
   for ScreenObjectIndex := 0 to FChobScreenObjects.Count - 1 do
   begin
     AScreenObject := FChobScreenObjects[ScreenObjectIndex];
-    AScreenObject.Modflow6Obs.ChdFlowObs := False;
+    AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General - [ogCHD];
+//    AScreenObject.Modflow6Obs.ChdFlowObs := False;
   end;
   for ScreenObjectIndex := 0 to FDrobScreenObjects.Count - 1 do
   begin
     AScreenObject := FDrobScreenObjects[ScreenObjectIndex];
-    AScreenObject.Modflow6Obs.DrnFlowObs := False;
+    AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General - [ogDrain];
+//    AScreenObject.Modflow6Obs.DrnFlowObs := False;
   end;
   for ScreenObjectIndex := 0 to FGhbobScreenObjects.Count - 1 do
   begin
     AScreenObject := FGhbobScreenObjects[ScreenObjectIndex];
-    AScreenObject.Modflow6Obs.GhbFlowObs := False;
+    AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General - [ogGHB];
+//    AScreenObject.Modflow6Obs.GhbFlowObs := False;
   end;
   for ScreenObjectIndex := 0 to FRivobScreenObjects.Count - 1 do
   begin
     AScreenObject := FRivobScreenObjects[ScreenObjectIndex];
-    AScreenObject.Modflow6Obs.RivFlowObs := False;
+    AScreenObject.Modflow6Obs.General := AScreenObject.Modflow6Obs.General - [ogRiv];
+//    AScreenObject.Modflow6Obs.RivFlowObs := False;
   end;
 
   for ScreenObjectIndex := 0 to FHobScreenObjects.Count - 1 do

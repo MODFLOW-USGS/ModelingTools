@@ -57,7 +57,8 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit;
+  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
+  Modflow6ObsUnit;
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +
@@ -647,16 +648,16 @@ function TModflowDRN_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.DrnFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogDrain in AScreenObject.Modflow6Obs.General);
 end;
 
 function TModflowDRN_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.ToMvrFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogMvr in AScreenObject.Modflow6Obs.General);
 end;
 
 procedure TModflowDRN_Writer.WriteParameterCells(CellList: TValueCellList;

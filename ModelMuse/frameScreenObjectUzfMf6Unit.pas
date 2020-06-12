@@ -76,7 +76,7 @@ resourcestring
 
 procedure TframeScreenObjectUzfMf6.InitializeFrame;
 var
-  RowIndex: Integer;
+//  RowIndex: Integer;
   ColIndex: Integer;
 begin
   pcUzf.ActivePageIndex := 0;

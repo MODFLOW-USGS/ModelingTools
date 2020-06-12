@@ -54,7 +54,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit;
+  DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit, Modflow6ObsUnit;
 
 resourcestring
   StrInTheFollowingRiv = 'In the following river cells, the stage is equal to or below t' +
@@ -699,16 +699,16 @@ function TModflowRIV_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.RivFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogRiv in AScreenObject.Modflow6Obs.General);
 end;
 
 function TModflowRIV_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-    and AScreenObject.Modflow6Obs.Used
-    and AScreenObject.Modflow6Obs.ToMvrFlowObs;
+//    and AScreenObject.Modflow6Obs.Used
+    and (ogMvr in AScreenObject.Modflow6Obs.General);
 end;
 
 procedure TModflowRIV_Writer.WriteParameterCells(CellList: TValueCellList;
