@@ -37,6 +37,9 @@ type
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
+  public
+    // @name creates and instance of @classname.
+    Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
   end;
 
   TModflow6Obs_Writer = class(TCustomMf6ObservationWriter)
@@ -1280,6 +1283,15 @@ begin
   WriteEndOptions;
 end;
 
+constructor TCustomMf6ObservationWriter.Create(Model: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  DirectObsLines := Model.DirectObservationLines;
+  CalculatedObsLines := Model.DerivedObservationLines;
+  FileNameLines := Model.FileNameLines;
+end;
+
 function TCustomMf6ObservationWriter.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.Mf6ObservationUtility;
@@ -1319,6 +1331,8 @@ var
   OutputFileName: string;
   obsnam: string;
   OutputFormat: string;
+  CalibObIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
 begin
   if (List.count > 0) or (ToMvrList.count > 0) then
   begin
@@ -1381,7 +1395,17 @@ begin
 
       if FObGeneral in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
       begin
-
+        DirectObsLines.Add(Format('ID %s', [obsnam]));
+        for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
+        begin
+          CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
+          if (CalibObs.ObSeries = osGeneral)
+            and (CalibObs.ObGeneral = FObGeneral) then
+          begin
+            DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+              [CalibObs.Name, CalibObs.Time]));
+          end;
+        end;
       end;
     end;
 
@@ -1404,6 +1428,22 @@ begin
         WriteString(FlowObs.FBoundName);
       end;
       NewLine;
+
+      if ogMvr in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
+      begin
+        DirectObsLines.Add(Format('ID %s', [obsnam]));
+        for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
+        begin
+          CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
+          if (CalibObs.ObSeries = osGeneral)
+            and (CalibObs.ObGeneral = ogMvr) then
+          begin
+            DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+              [CalibObs.Name, CalibObs.Time]));
+          end;
+        end;
+      end;
+
     end;
 
     WriteString('END CONTINUOUS');
@@ -1531,6 +1571,7 @@ var
   ObservationType: string;
   boundname: string;
   IconIndex: Integer;
+  OutputFormat: string;
 begin
   ObTypes := [];
   for ObsIndex := 0 to FObsList.Count - 1 do
@@ -1542,10 +1583,12 @@ begin
     ofText:
       begin
         OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
       end;
     ofBinary:
       begin
         OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
       end;
     else
       Assert(False);
@@ -1624,6 +1667,12 @@ begin
     WriteString('BEGIN CONTINUOUS FILEOUT ');
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
+    if Model.PestUsed then
+    begin
+      Assert(FileNameLines <> nil);
+      FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+        [OutputFileName, OutputFormat]));
+    end;
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
     if ObsPackage.OutputFormat = ofBinary then

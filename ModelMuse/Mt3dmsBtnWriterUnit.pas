@@ -739,11 +739,19 @@ begin
     Chem := Model.MobileComponents[SpeciesIndex];
     OutputFileName := Directory + GenerateNewRoot(BaseName + '_' + Chem.Name) + StrMt3dConcFile;
     WriteToMt3dMsNameFile(strDATABINARY, UnitNumber, OutputFileName, foOutput, Model);
+    if FileExists(OutputFileName) then
+    begin
+      DeleteFile(OutputFileName);
+    end;
     if SecondUcnFileCreated then
     begin
       UnitNumber := UnitNumber + 100;
       OutputFileName := Directory + GenerateNewRoot(BaseName + '_' + Chem.Name) + '_S'+ StrMt3dConcFile;
       WriteToMt3dMsNameFile(strDATABINARY, UnitNumber, OutputFileName, foOutput, Model);
+      if FileExists(OutputFileName) then
+      begin
+        DeleteFile(OutputFileName);
+      end;
     end;
   end;
   for SpeciesIndex := 0 to Model.ImmobileComponents.Count-1 do
@@ -752,11 +760,19 @@ begin
     Chem := Model.ImmobileComponents[SpeciesIndex];
     OutputFileName := Directory + GenerateNewRoot(BaseName + '_' + Chem.Name) + StrMt3dConcFile;
     WriteToMt3dMsNameFile(strDATABINARY, UnitNumber, OutputFileName, foOutput, Model);
+    if FileExists(OutputFileName) then
+    begin
+      DeleteFile(OutputFileName);
+    end;
     if SecondUcnFileCreated then
     begin
       UnitNumber := UnitNumber + 100;
       OutputFileName := Directory + GenerateNewRoot(BaseName + '_' + Chem.Name) + '_S'+ StrMt3dConcFile;
       WriteToMt3dMsNameFile(strDATABINARY, UnitNumber, OutputFileName, foOutput, Model);
+      if FileExists(OutputFileName) then
+      begin
+        DeleteFile(OutputFileName);
+      end;
     end;
   end;
   for SpeciesIndex := 0 to Model.MobileComponents.Count-1 do

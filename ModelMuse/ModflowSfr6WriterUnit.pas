@@ -722,6 +722,9 @@ begin
   FValues := TObjectList.Create;
   FSegments := TSfr6SegmentList.Create;
   FObsList := TSfr6ObservationList.Create;
+  DirectObsLines := Model.DirectObservationLines;
+  CalculatedObsLines := Model.DerivedObservationLines;
+  FileNameLines := Model.FileNameLines;
 end;
 
 destructor TModflowSFR_MF6_Writer.Destroy;

@@ -475,7 +475,7 @@ type
     function ObsType: string; virtual;
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
-    Class function Mf6ObType: TObGeneral; virtual; abstract;
+    Class function Mf6ObType: TObGeneral; virtual;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -3389,6 +3389,10 @@ begin
     FObsLocationCheck := T3DSparseStringArray.Create(SPASmall, SPASmall, SPASmall);
     FToMvrFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
   end;
+  DirectObsLines := Model.DirectObservationLines;
+  CalculatedObsLines := Model.DerivedObservationLines;
+  FileNameLines := Model.FileNameLines;
+
 end;
 
 destructor TCustomTransientWriter.Destroy;
@@ -5962,6 +5966,11 @@ begin
   result := False;
 end;
 
+class function TCustomTransientWriter.Mf6ObType: TObGeneral;
+begin
+  result := ogUndefined;
+end;
+
 function TCustomTransientWriter.ObservationsUsed: Boolean;
 begin
   result := False;
@@ -6657,6 +6666,9 @@ begin
   inherited;
   FPestInstructionFile:= TStringList.Create;
   FPestInstructionFile.Add('pif @');
+//  DirectObsLines := Model.DirectObservationLines;
+//  CalculatedObsLines := Model.DerivedObservationLines;
+//  FileNameLines := Model.FileNameLines;
 end;
 
 destructor TFluxObsWriter.Destroy;

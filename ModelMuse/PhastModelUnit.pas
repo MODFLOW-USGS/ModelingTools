@@ -1997,6 +1997,9 @@ that affects the model output should also have a comment. }
     FMawScreenObjects: TStringList;
     FSfrScreenObjects: TStringList;
     FUzfMf6ScreenObjects: TStringList;
+    FDirectObservationLines: TStringList;
+    FDerivedObservationLines: TStringList;
+    FFileNameLines: TStringList;
 //    FMeshFileName: string;
 
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
@@ -3249,6 +3252,9 @@ that affects the model output should also have a comment. }
     procedure FillObsItemList(List: TObservationList);
     property PestUsed: Boolean read GetPestUsed;
     property SutraLakesUsed: Boolean read GetSutraLakesUsed;
+    property DirectObservationLines: TStringList read FDirectObservationLines;
+    property DerivedObservationLines: TStringList read FDerivedObservationLines;
+    property FileNameLines: TStringList read FFileNameLines;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -9127,9 +9133,13 @@ const
   //                in a MODFLOW model as a comment either in the Basic package
   //                input file for pre-MODFLOW6 models or in the DIS or DISV
   //                files in MODFLOW 6 models.
+  //    '4.2.0.19' Bug fix: When exporting MT3D model input files, ModelMuse
+  //                will now check whether any .ucn files that will be created
+  //                by the model already exist. If they do exist, ModelMuse
+  //                will delete them.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.18';
+  IModelVersion = '4.2.0.19';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -39171,9 +39181,9 @@ var
   UzfMf6Writer: TModflowUzfMf6Writer;
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
-  DirectObservationLines: TStringList;
-  DerivedObservationLines: TStringList;
-  FileNameLines: TStringList;
+//  DirectObservationLines: TStringList;
+//  DerivedObservationLines: TStringList;
+//  FileNameLines: TStringList;
 begin
   // Note: MODFLOW can not read Unicode text files.
 
@@ -39183,9 +39193,9 @@ begin
   end;
 
   Assert(Assigned(NameFileWriter));
-  DirectObservationLines := TStringList.Create;
-  DerivedObservationLines := TStringList.Create;
-  FileNameLines := TStringList.Create;
+  FDirectObservationLines := TStringList.Create;
+  FDerivedObservationLines := TStringList.Create;
+  FFileNameLines := TStringList.Create;
   try
     LocalNameWriter := NameFileWriter as TNameFileWriter;
     UpdateCurrentModel(self);
@@ -39306,10 +39316,6 @@ begin
 
             Obs6_Writer := TModflow6Obs_Writer.Create(self, etExport);
             try
-              Obs6_Writer.DirectObsLines := DirectObservationLines;
-              Obs6_Writer.CalculatedObsLines := DerivedObservationLines;
-              Obs6_Writer.FileNameLines := FileNameLines;
-
               Obs6_Writer.WriteFile(FileName);
             finally
               Obs6_Writer.Free;
@@ -39604,9 +39610,6 @@ begin
 
           ChdWriter := TModflowCHD_Writer.Create(self, etExport);
           try
-            ChdWriter.DirectObsLines := DirectObservationLines;
-            ChdWriter.CalculatedObsLines := DerivedObservationLines;
-            ChdWriter.FileNameLines := FileNameLines;
             ChdWriter.WriteFile(FileName);
             ChdWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
           finally
@@ -39625,9 +39628,9 @@ begin
 
           GhbWriter := TModflowGHB_Writer.Create(self, etExport);
           try
-            GhbWriter.DirectObsLines := DirectObservationLines;
-            GhbWriter.CalculatedObsLines := DerivedObservationLines;
-            GhbWriter.FileNameLines := FileNameLines;
+//            GhbWriter.DirectObsLines := DirectObservationLines;
+//            GhbWriter.CalculatedObsLines := DerivedObservationLines;
+//            GhbWriter.FileNameLines := FileNameLines;
             GhbWriter.MvrWriter := ModflowMvrWriter;
             GhbWriter.WriteFile(FileName);
             GhbWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39647,9 +39650,9 @@ begin
 
           WellWriter := TModflowWEL_Writer.Create(self, etExport);
           try
-            WellWriter.DirectObsLines := DirectObservationLines;
-            WellWriter.CalculatedObsLines := DerivedObservationLines;
-            WellWriter.FileNameLines := FileNameLines;
+//            WellWriter.DirectObsLines := DirectObservationLines;
+//            WellWriter.CalculatedObsLines := DerivedObservationLines;
+//            WellWriter.FileNameLines := FileNameLines;
             WellWriter.MvrWriter := ModflowMvrWriter;
             WellWriter.WriteFile(FileName);
           finally
@@ -39668,9 +39671,9 @@ begin
 
           RivWriter := TModflowRIV_Writer.Create(self, etExport);
           try
-            RivWriter.DirectObsLines := DirectObservationLines;
-            RivWriter.CalculatedObsLines := DerivedObservationLines;
-            RivWriter.FileNameLines := FileNameLines;
+//            RivWriter.DirectObsLines := DirectObservationLines;
+//            RivWriter.CalculatedObsLines := DerivedObservationLines;
+//            RivWriter.FileNameLines := FileNameLines;
             RivWriter.MvrWriter := ModflowMvrWriter;
             RivWriter.WriteFile(FileName);
             RivWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39690,9 +39693,9 @@ begin
 
           DrnWriter := TModflowDRN_Writer.Create(self, etExport);
           try
-            DrnWriter.DirectObsLines := DirectObservationLines;
-            DrnWriter.CalculatedObsLines := DerivedObservationLines;
-            DrnWriter.FileNameLines := FileNameLines;
+//            DrnWriter.DirectObsLines := DirectObservationLines;
+//            DrnWriter.CalculatedObsLines := DerivedObservationLines;
+//            DrnWriter.FileNameLines := FileNameLines;
             DrnWriter.MvrWriter := ModflowMvrWriter;
             DrnWriter.WriteFile(FileName);
             DrnWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39747,9 +39750,9 @@ begin
 
           Sfr6Writer := TModflowSFR_MF6_Writer.Create(self, etExport);
           try
-            Sfr6Writer.DirectObsLines := DirectObservationLines;
-            Sfr6Writer.CalculatedObsLines := DerivedObservationLines;
-            Sfr6Writer.FileNameLines := FileNameLines;
+//            Sfr6Writer.DirectObsLines := DirectObservationLines;
+//            Sfr6Writer.CalculatedObsLines := DerivedObservationLines;
+//            Sfr6Writer.FileNameLines := FileNameLines;
             Sfr6Writer.MvrWriter := ModflowMvrWriter;
             Sfr6Writer.WriteFile(FileName);
   //          Sfr6Writer.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39769,9 +39772,9 @@ begin
 
           MawWriter := TModflowMAW_Writer.Create(self, etExport);
           try
-            MawWriter.DirectObsLines := DirectObservationLines;
-            MawWriter.CalculatedObsLines := DerivedObservationLines;
-            MawWriter.FileNameLines := FileNameLines;
+//            MawWriter.DirectObsLines := DirectObservationLines;
+//            MawWriter.CalculatedObsLines := DerivedObservationLines;
+//            MawWriter.FileNameLines := FileNameLines;
             MawWriter.MvrWriter := ModflowMvrWriter;
             MawWriter.WriteFile(FileName);
   //          MawWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39808,9 +39811,9 @@ begin
 
           RchWriter := TModflowRCH_Writer.Create(self, etExport);
           try
-            RchWriter.DirectObsLines := DirectObservationLines;
-            RchWriter.CalculatedObsLines := DerivedObservationLines;
-            RchWriter.FileNameLines := FileNameLines;
+//            RchWriter.DirectObsLines := DirectObservationLines;
+//            RchWriter.CalculatedObsLines := DerivedObservationLines;
+//            RchWriter.FileNameLines := FileNameLines;
             RchWriter.WriteFile(FileName);
           finally
             RchWriter.Free;
@@ -39828,9 +39831,9 @@ begin
 
           EvtWriter := TModflowEVT_Writer.Create(self, etExport);
           try
-            EvtWriter.DirectObsLines := DirectObservationLines;
-            EvtWriter.CalculatedObsLines := DerivedObservationLines;
-            EvtWriter.FileNameLines := FileNameLines;
+//            EvtWriter.DirectObsLines := DirectObservationLines;
+//            EvtWriter.CalculatedObsLines := DerivedObservationLines;
+//            EvtWriter.FileNameLines := FileNameLines;
             EvtWriter.WriteFile(FileName);
           finally
             EvtWriter.Free;
@@ -39848,9 +39851,9 @@ begin
 
           EtsWriter := TModflowETS_Writer.Create(self, etExport);
           try
-            EtsWriter.DirectObsLines := DirectObservationLines;
-            EtsWriter.CalculatedObsLines := DerivedObservationLines;
-            EtsWriter.FileNameLines := FileNameLines;
+//            EtsWriter.DirectObsLines := DirectObservationLines;
+//            EtsWriter.CalculatedObsLines := DerivedObservationLines;
+//            EtsWriter.FileNameLines := FileNameLines;
             EtsWriter.WriteFile(FileName);
           finally
             EtsWriter.Free;
@@ -39993,9 +39996,6 @@ begin
 
           LakeMf6Writer := TModflowLAKMf6Writer.Create(self, etExport);
           try
-            LakeMf6Writer.DirectObsLines := DirectObservationLines;
-            LakeMf6Writer.CalculatedObsLines := DerivedObservationLines;
-            LakeMf6Writer.FileNameLines := FileNameLines;
             LakeMf6Writer.MvrWriter := ModflowMvrWriter;
             LakeMf6Writer.WriteFile(FileName);
           finally
@@ -40015,9 +40015,9 @@ begin
 
           UzfMf6Writer := TModflowUzfMf6Writer.Create(self, etExport);
           try
-            UzfMf6Writer.DirectObsLines := DirectObservationLines;
-            UzfMf6Writer.CalculatedObsLines := DerivedObservationLines;
-            UzfMf6Writer.FileNameLines := FileNameLines;
+//            UzfMf6Writer.DirectObsLines := DirectObservationLines;
+//            UzfMf6Writer.CalculatedObsLines := DerivedObservationLines;
+//            UzfMf6Writer.FileNameLines := FileNameLines;
             UzfMf6Writer.MvrWriter := ModflowMvrWriter;
             UzfMf6Writer.WriteFile(FileName);
           finally
@@ -40037,9 +40037,9 @@ begin
 
           CSubWriter := TCSubWriter.Create(self, etExport);
           try
-            CSubWriter.DirectObsLines := DirectObservationLines;
-            CSubWriter.CalculatedObsLines := DerivedObservationLines;
-            CSubWriter.FileNameLines := FileNameLines;
+//            CSubWriter.DirectObsLines := DirectObservationLines;
+//            CSubWriter.CalculatedObsLines := DerivedObservationLines;
+//            CSubWriter.FileNameLines := FileNameLines;
   //          CSubWriter.MvrWriter := ModflowMvrWriter;
             CSubWriter.WriteFile(FileName);
           finally
@@ -40431,9 +40431,9 @@ begin
       end;
     end;
   finally
-    DirectObservationLines.Free;
-    DerivedObservationLines.Free;
-    FileNameLines.Free;
+    FreeAndNil(FDirectObservationLines);
+    FreeAndNil(FDerivedObservationLines);
+    FreeAndNil(FFileNameLines);
   end;
 end;
 

@@ -232,6 +232,9 @@ begin
   FLakeScreenObjects := TScreenObjectList.Create;
   FLakes := TLakeList.Create;
   FObservations := TLakObservationList.Create;
+  DirectObsLines := Model.DirectObservationLines;
+  CalculatedObsLines := Model.DerivedObservationLines;
+  FileNameLines := Model.FileNameLines;
 end;
 
 destructor TModflowLAKMf6Writer.Destroy;

@@ -12,7 +12,7 @@ type
   TGwFlowObs = set of TGwFlowOb;
 
   TObGeneral = (ogHead, ogDrawdown, ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
-    ogRch, ogEVT, ogMvr);
+    ogRch, ogEVT, ogMvr, ogUndefined);
   TObGenerals = set of TObGeneral;
 
   TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub);
@@ -231,7 +231,7 @@ uses
 
 const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
-    'Rch', 'EVT', 'Mvr');
+    'Rch', 'EVT', 'Mvr', 'undefined');
 
   ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak', 'Uzf', 'CSub');
 
@@ -259,7 +259,7 @@ var
 begin
   ObGenNames := TStringList.Create;
   ObGenNames.CaseSensitive := False;
-  for ObGen := Low(TObGeneral) to High(TObGeneral) do
+  for ObGen := Low(TObGeneral) to Pred(High(TObGeneral)) do
   begin
     ObGenNames.Add(ObGenName[ObGen]);
   end;
