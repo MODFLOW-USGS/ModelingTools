@@ -28,6 +28,7 @@ type
     FObGeneral: TObGeneral;
     FWeightFormula: TFormulaObject;
     FInterpObsNames: TStringList;
+    FMawConnectionNumber: Integer;
     procedure SetCSubOb(const Value: TCSubOb);
     procedure SetLakOb(const Value: TLakOb);
     procedure SetMawOb(const Value: TMawOb);
@@ -48,6 +49,9 @@ type
     function CreateFormulaObject: TFormulaObject;
     procedure UpdateFormula(Value: string; Position: integer;
       var FormulaObject: TFormulaObject);
+    procedure SetMawConnectionNumber(const Value: Integer);
+//    function GetUsed: Boolean;
+//    procedure SetUsed(const Value: Boolean);
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(Value: Integer); override;
@@ -73,6 +77,8 @@ type
     //
     // @name might not be used for all observation types.
     property WeightFormula: string read GetWeightFormula write SetWeightFormula;
+    property MawConnectionNumber: Integer read FMawConnectionNumber
+      write SetMawConnectionNumber;
   end;
 
   TMf6CalibrationObservations = class(TCustomComparisonCollection)
@@ -96,6 +102,8 @@ type
     property SubObsSet: TSubObsSet read GetSubObsSet;
     property Items[Index: Integer]: TMf6CalibrationObs read GetCalibItem
       write SetCalibItem; default;
+    function UsesMawConnectionNumber(ConnectionNumber: Integer;
+      AnObsType: TMawOb): Boolean;
   end;
 
   TModflow6Obs = class(TGoPhastPersistent)
@@ -151,27 +159,8 @@ type
     function GetRchFlowObs: Boolean;
     function GetEvtFlowObs: Boolean;
     function GetToMvrFlowObs: Boolean;
+    procedure SetUsed(const Value: Boolean);
   public
-    // @name is retained for backwards compatibility.
-    property HeadObs: Boolean read GetHeadObs  write SetHeadObs stored False;
-    // @name is retained for backwards compatibility.
-    property DrawdownObs: Boolean read GetDrawdownObs write SetDrawdownObs stored False;
-    // @name is retained for backwards compatibility.
-    property ChdFlowObs: Boolean read GetChdFlowObs write SetChdFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property DrnFlowObs: Boolean read GetDrnFlowObs write SetDrnFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property GhbFlowObs: Boolean read GetGhbFlowObs write SetGhbFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property RivFlowObs: Boolean read GetRivFlowObs write SetRivFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property WelFlowObs: Boolean read GetWelFlowObs write SetWelFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property RchFlowObs: Boolean read GetRchFlowObs write SetRchFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property EvtFlowObs: Boolean read GetEvtFlowObs write SetEvtFlowObs stored False;
-    // @name is retained for backwards compatibility.
-    property ToMvrFlowObs: Boolean read GetToMvrFlowObs write SetToMvrFlowObs stored False;
 
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
@@ -181,7 +170,6 @@ type
     // If @name is changed, @link(GetUsed) should be changed too.
     procedure Clear;
     // If @name is changed, @link(Clear) should be changed too.
-    property Used: Boolean read GetUsed;
   published
     property Name: string read FName write SetName;
     property GroundwaterFlowObs: Boolean read FGroundwaterFlowObs
@@ -215,6 +203,28 @@ type
     stored StoreCalibObs
   {$ENDIF}
       ;
+//    property Used: Boolean read GetUsed write SetUsed;// stored False;
+    property Used: Boolean read GetUsed write SetUsed stored False;
+    // @name is retained for backwards compatibility.
+    property HeadObs: Boolean read GetHeadObs  write SetHeadObs stored False;
+    // @name is retained for backwards compatibility.
+    property DrawdownObs: Boolean read GetDrawdownObs write SetDrawdownObs stored False;
+    // @name is retained for backwards compatibility.
+    property ChdFlowObs: Boolean read GetChdFlowObs write SetChdFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property DrnFlowObs: Boolean read GetDrnFlowObs write SetDrnFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property GhbFlowObs: Boolean read GetGhbFlowObs write SetGhbFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property RivFlowObs: Boolean read GetRivFlowObs write SetRivFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property WelFlowObs: Boolean read GetWelFlowObs write SetWelFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property RchFlowObs: Boolean read GetRchFlowObs write SetRchFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property EvtFlowObs: Boolean read GetEvtFlowObs write SetEvtFlowObs stored False;
+    // @name is retained for backwards compatibility.
+    property ToMvrFlowObs: Boolean read GetToMvrFlowObs write SetToMvrFlowObs stored False;
   end;
 
 function TryGetGenOb(const GenObName: string; var GenOb: TObGeneral): Boolean;
@@ -708,6 +718,11 @@ begin
 //  SetBooleanProperty(FToMvrFlowObs, Value);
 end;
 
+procedure TModflow6Obs.SetUsed(const Value: Boolean);
+begin
+
+end;
+
 procedure TModflow6Obs.SetUzfObs(const Value: TUzfObs);
 begin
   if FUzfObs <> Value then
@@ -761,6 +776,7 @@ begin
     UzfOb := ObsSource.UzfOb;
     CSubOb := ObsSource.CSubOb;
     WeightFormula := ObsSource.WeightFormula;
+    MawConnectionNumber := ObsSource.MawConnectionNumber;
   end;
   inherited;
 end;
@@ -876,6 +892,11 @@ begin
   end;
 end;
 
+//function TMf6CalibrationObs.GetUsed: Boolean;
+//begin
+//  result := False;
+//end;
+
 function TMf6CalibrationObs.GetWeightFormula: string;
 begin
   Result := FWeightFormula.Formula;
@@ -896,6 +917,11 @@ begin
     FCSubOb := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TMf6CalibrationObs.SetMawConnectionNumber(const Value: Integer);
+begin
+  SetIntegerProperty(FMawConnectionNumber, Value);
 end;
 
 procedure TMf6CalibrationObs.SetLakOb(const Value: TLakOb);
@@ -1094,6 +1120,11 @@ begin
   end;
 end;
 
+//procedure TMf6CalibrationObs.SetUsed(const Value: Boolean);
+//begin
+//
+//end;
+
 procedure TMf6CalibrationObs.SetUzfOb(const Value: TUzfOb);
 begin
   if FUzfOb <> Value then
@@ -1280,6 +1311,25 @@ procedure TMf6CalibrationObservations.SetCalibItem(Index: Integer;
   const Value: TMf6CalibrationObs);
 begin
   inherited Items[Index] := Value;
+end;
+
+function TMf6CalibrationObservations.UsesMawConnectionNumber(
+  ConnectionNumber: Integer; AnObsType: TMawOb): Boolean;
+var
+  ItemIndex: Integer;
+  AnItem: TMf6CalibrationObs;
+begin
+  result := False;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    AnItem := Items[ItemIndex];
+    if (AnItem.ObSeries = osMaw) and (AnItem.MawOb = AnObsType)
+      and (ConnectionNumber = AnItem.MawConnectionNumber) then
+    begin
+      result := True;
+      break;
+    end;
+  end;
 end;
 
 initialization

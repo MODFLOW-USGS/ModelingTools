@@ -1573,10 +1573,18 @@ begin
             xbShapeDataBase.Active := True;
           Except on E: EFOpenError do
             begin
+              result := False;
               Beep;
               MessageDlg(E.message, mtError, [mbOK], 0);
               Exit;
             end;
+          end;
+          if xbShapeDataBase.RecordCount <> FGeometryFile.Count then
+          begin
+            result := False;
+            Beep;
+            MessageDlg('Error. There is a mismatch between the number of shapes in the shape geometry file and the number of records in the shapefile data base.', mtError, [mbOK], 0);
+            Exit;
           end;
           Assert(xbShapeDataBase.RecordCount = FGeometryFile.Count);
           xbShapeDataBase.GotoBOF;

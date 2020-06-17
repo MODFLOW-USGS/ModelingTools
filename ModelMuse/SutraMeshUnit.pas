@@ -8918,18 +8918,21 @@ begin
     if Mesh2D.SelectedLayer <> Value then
     begin
       Mesh2D.SelectedLayer := Value;
-      (Model as TPhastModel).CombinedDisplayLayer := Value;
-      FNeedToRecordLayer := True;
-      FNeedToRedraw3d := True;
-      (Model as TPhastModel).TopContoursUpToDate := False;
-  //    if not (csLoading in frmGoPhast.PhastModel.ComponentState) then
-  //    begin
-  //      FDisplayLayer := Value;
-  //    end;
-  //    FRecordedTopGrid := False;
-      if Assigned(FOnSelectedLayerChange) then
+      if Model <> nil then
       begin
-        FOnSelectedLayerChange(self);
+        (Model as TPhastModel).CombinedDisplayLayer := Value;
+        FNeedToRecordLayer := True;
+        FNeedToRedraw3d := True;
+        (Model as TPhastModel).TopContoursUpToDate := False;
+    //    if not (csLoading in frmGoPhast.PhastModel.ComponentState) then
+    //    begin
+    //      FDisplayLayer := Value;
+    //    end;
+    //    FRecordedTopGrid := False;
+        if Assigned(FOnSelectedLayerChange) then
+        begin
+          FOnSelectedLayerChange(self);
+        end;
       end;
     end;
   finally

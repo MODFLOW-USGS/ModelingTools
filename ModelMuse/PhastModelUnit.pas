@@ -9138,6 +9138,9 @@ const
   //                by the model already exist. If they do exist, ModelMuse
   //                will delete them.
 
+  //               Bug fix: Fixed bug that could cause an access violation when
+  //                manually specifying the SUTRA mesh.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.19';
   StrPvalExt = '.pval';

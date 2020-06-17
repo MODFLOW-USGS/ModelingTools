@@ -6,7 +6,7 @@ uses
   System.UITypes, Winapi.Windows, System.Classes, Vcl.Forms, System.SysUtils,
   System.Generics.Collections, CustomModflowWriterUnit, ScreenObjectUnit,
   GoPhastTypes, ModflowPackageSelectionUnit, PhastModelUnit, ModflowMawUnit,
-  ModflowBoundaryDisplayUnit;
+  ModflowBoundaryDisplayUnit, Modflow6ObsUnit;
 
 type
   TMawObservation = record
@@ -15,6 +15,7 @@ type
     FBoundName: string;
     FCount: Integer;
     FObsTypes: TMawObs;
+    FModflow6Obs: TModflow6Obs;
   end;
   TMawObservationList = TList<TMawObservation>;
 
@@ -62,7 +63,7 @@ uses
   frameScreenObjectMawUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit, ModflowCellUnit, RbwParser, frmFormulaErrorsUnit,
   DataSetUnit, GIS_Functions, AbstractGridUnit, System.Math, ModflowUnitNumbers,
-  MeshRenumberingTypes, Vcl.Dialogs, Modflow6ObsUnit, Modflow6ObsWriterUnit,
+  MeshRenumberingTypes, Vcl.Dialogs, Modflow6ObsWriterUnit,
   ModflowMvrUnit, ModflowMvrWriterUnit;
 
 resourcestring
@@ -1441,6 +1442,7 @@ begin
       Obs.FBoundName := AScreenObject.Name;
       Obs.FWellNumber := Boundary.WellNumber;
       Obs.FObsTypes := MfObs.MawObs;
+      Obs.FModflow6Obs := MfObs;
       if (moFlowRateCells in Obs.FObsTypes)
         or (moConductanceCells in Obs.FObsTypes) then
       begin

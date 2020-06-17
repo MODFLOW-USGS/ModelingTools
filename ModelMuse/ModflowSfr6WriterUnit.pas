@@ -4,7 +4,8 @@ interface
 
 uses Windows, Types, SysUtils, Classes, Contnrs, Forms, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, PhastModelUnit, System.Generics.Collections,
-  ScreenObjectUnit, ModflowSfr6Unit, ModflowBoundaryDisplayUnit;
+  ScreenObjectUnit, ModflowSfr6Unit, ModflowBoundaryDisplayUnit,
+  Modflow6ObsUnit;
 
 type
   TSfr6Observation = record
@@ -14,6 +15,7 @@ type
     FCount: Integer;
     FObsTypes: TSfrObs;
     FSfrObsLocation: TSfrObsLocation;
+    FModflow6Obs: TModflow6Obs;
   end;
   TSfr6ObservationList = TList<TSfr6Observation>;
   
@@ -92,7 +94,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, GoPhastTypes, frmProgressUnit, ModflowGridUnit,
   RbwParser, GIS_Functions, DataSetUnit, frmFormulaErrorsUnit, ModflowCellUnit,
-  AbstractGridUnit, Modflow6ObsUnit, Modflow6ObsWriterUnit,
+  AbstractGridUnit, Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO;
 
 resourcestring
@@ -908,6 +910,7 @@ begin
           Obs.FSfrObsLocation := MfObs.SfrObsLocation;
           Obs.FReachStart := ReachStart;
           Obs.FCount := ASegment.ReachCount;
+          Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
         ReachStart := ReachStart + ASegment.ReachCount;
@@ -977,6 +980,7 @@ begin
       Obs.FSfrObsLocation := MfObs.SfrObsLocation;
       Obs.FReachStart := ReachStart;
       Obs.FCount := ASegment.ReachCount;
+      Obs.FModflow6Obs := MfObs;
       FObsList.Add(Obs);
     end;
     ReachStart := ReachStart + ASegment.ReachCount;

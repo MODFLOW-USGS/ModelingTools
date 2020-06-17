@@ -7,7 +7,7 @@ uses System.UITypes,Winapi.Windows, SysUtils, Classes, Contnrs, RbwParser,
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, OrderedCollectionUnit, ModflowBoundaryDisplayUnit,
   Vcl.Dialogs, ModflowCellUnit, GoPhastTypes, System.Generics.Collections,
-  ModflowUzfMf6Unit, SparseDataSets;
+  ModflowUzfMf6Unit, SparseDataSets, Modflow6ObsUnit;
 
 type
   TUzfObservation = record
@@ -18,6 +18,7 @@ type
     FScreenObject: TScreenObject;
     FUzfBoundNumber: TOneDIntegerArray;
     FCells: array of TCellLocation;
+    FModflow6Obs: TModflow6Obs;
   end;
   TUzfObservationList = TList<TUzfObservation>;
 
@@ -68,7 +69,7 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, DataSetUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
-  Modflow6ObsUnit, Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
+  Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
   ModflowGridUnit, frmErrorsAndWarningsUnit;
 
 resourcestring
@@ -161,6 +162,7 @@ begin
           Obs.FObsTypes := MfObs.UzfObs;
           Obs.FScreenObject := ScreenObject;
           Obs.FCells := nil;
+          Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
         CellList.Clear;
@@ -178,6 +180,7 @@ begin
         Obs.FBoundName := ScreenObject.Name;
         Obs.FObsTypes := MfObs.UzfObs;
         Obs.FScreenObject := ScreenObject;
+        Obs.FModflow6Obs := MfObs;
         CellList.Clear;
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
         SetLength(Obs.FCells, CellList.Count);

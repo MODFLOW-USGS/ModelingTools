@@ -97,14 +97,14 @@ type
 
   TMawObsWriter = class(TCustomMf6ObservationWriter)
   private
-    FObsList: TMawObservationList;
+    FMawObsList: TMawObservationList;
     procedure WriteMawObs;
   protected
     class function Extension: string; override;
     procedure Evaluate; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
-      ObsList: TMawObservationList); reintroduce;
+      MawObsList: TMawObservationList); reintroduce;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -1512,10 +1512,10 @@ end;
 { TMawObsWriter }
 
 constructor TMawObsWriter.Create(Model: TCustomModel;
-  EvaluationType: TEvaluationType; ObsList: TMawObservationList);
+  EvaluationType: TEvaluationType; MawObsList: TMawObservationList);
 begin
   inherited Create(Model, EvaluationType);
-  FObsList := ObsList;
+  FMawObsList := MawObsList;
 end;
 
 procedure TMawObsWriter.Evaluate;
@@ -1544,7 +1544,7 @@ begin
   FNameOfFile := AFileName;
 
   frmProgressMM.AddMessage(StrWritingMAWObservat);
-  Assert(FObsList.Count > 0);
+  Assert(FMawObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
   OpenFile(FNameOfFile);
@@ -1572,11 +1572,14 @@ var
   boundname: string;
   IconIndex: Integer;
   OutputFormat: string;
+  CalibrationObservations: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
 begin
   ObTypes := [];
-  for ObsIndex := 0 to FObsList.Count - 1 do
+  for ObsIndex := 0 to FMawObsList.Count - 1 do
   begin
-    ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
+    ObTypes := ObTypes + FMawObsList[ObsIndex].FObsTypes;
   end;
   ObsPackage := Package as TMf6ObservationUtility;
   case ObsPackage.OutputFormat of
@@ -1681,9 +1684,9 @@ begin
     end;
     NewLine;
 
-    for ObsIndex := 0 to FObsList.Count - 1 do
+    for ObsIndex := 0 to FMawObsList.Count - 1 do
     begin
-      AnObs := FObsList[ObsIndex];
+      AnObs := FMawObsList[ObsIndex];
       if AnObsType in AnObs.FObsTypes then
       begin
         obsnam := AnObs.FName;
@@ -1725,6 +1728,50 @@ begin
           WriteString(ObservationType);
           WriteString(boundname);
           NewLine;
+        end;
+
+        if Model.PestUsed then
+        begin
+          CalibrationObservations := AnObs.FModflow6Obs.CalibrationObservations;
+          if AnObsType in CalibrationObservations.MawObs then
+          begin
+            if AnObsType in [moFlowRateCells, moConductanceCells] then
+            begin
+              for IconIndex := 1 to AnObs.FCount do
+              begin
+                if CalibrationObservations.UsesMawConnectionNumber(IconIndex, AnObsType) then
+                begin
+                  DirectObsLines.Add(Format('ID %s_%d', [obsnam, IconIndex]));
+                  for CalibIndex := 0 to CalibrationObservations.Count - 1 do
+                  begin
+                    CalibObs := CalibrationObservations[CalibIndex];
+                    if (CalibObs.ObSeries = osMaw)
+                      and (AnObsType = CalibObs.MawOb)
+                      and (IconIndex = CalibObs.MawConnectionNumber)
+                      then
+                    begin
+                      DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                        [CalibObs.Name, CalibObs.Time]));
+                    end;
+                  end;
+                end;
+              end;
+            end
+            else
+            begin
+              DirectObsLines.Add(Format('ID %s', [obsnam]));
+              for CalibIndex := 0 to CalibrationObservations.Count - 1 do
+              begin
+                CalibObs := CalibrationObservations[CalibIndex];
+                if (CalibObs.ObSeries = osMaw)
+                  and (AnObsType = CalibObs.MawOb) then
+                begin
+                  DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                    [CalibObs.Name, CalibObs.Time]));
+                end;
+              end;
+            end;
+          end;
         end;
       end;
     end;
@@ -1799,6 +1846,8 @@ var
   ReachNumberStr: string;
   ObsNames: TStringList;
   Root: string;
+  OutputFormat: string;
+  CalibObservations: TMf6CalibrationObservations;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -1811,6 +1860,30 @@ var
       ObsNames.Add(obsnam);
     end;
   end;
+  procedure WritePestObs;
+  var
+    CalibIndex: Integer;
+    CalibObs: TMf6CalibrationObs;
+  begin
+    if Model.PestUsed then
+    begin
+      if AnObsType in CalibObservations.SfrObs then
+      begin
+        DirectObsLines.Add(Format('ID %s', [obsnam]));
+        for CalibIndex := 0 to CalibObservations.Count - 1 do
+        begin
+          CalibObs := CalibObservations[CalibIndex];
+          if (CalibObs.ObSeries = osSfr)
+            and (AnObsType = CalibObs.SfrOb) then
+          begin
+            DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+              [CalibObs.Name, CalibObs.Time]));
+          end;
+        end;
+      end;
+    end;
+
+  end;
 begin
   ObTypes := [];
   for ObsIndex := 0 to FObsList.Count - 1 do
@@ -1822,10 +1895,12 @@ begin
     ofText:
       begin
         OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
       end;
     ofBinary:
       begin
         OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
       end;
     else
       Assert(False);
@@ -1907,6 +1982,12 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
+      if Model.PestUsed then
+      begin
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [OutputFileName, OutputFormat]));
+      end;
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);
       if ObsPackage.OutputFormat = ofBinary then
@@ -1920,6 +2001,7 @@ begin
         AnObs := FObsList[ObsIndex];
         if AnObsType in AnObs.FObsTypes then
         begin
+          CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
           Root := AnObs.FName;
           if Root = '' then
           begin
@@ -1932,6 +2014,10 @@ begin
           case AnObs.FSfrObsLocation of
             solAll:
               begin
+                // Stage is only defined at individual reaches not for multiple
+                // combined reaches.
+                // If stage is to be used in calibration it must be
+                // for the first or last reach.
                 if AnObsType = soStage then
                 begin
                   ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
@@ -1940,7 +2026,6 @@ begin
                     Root := Copy(Root, 1, Length(Root)-1);
                   end;
 
-//                  Root := Root
                   for ReachIndex := 1 to AnObs.FCount do
                   begin
                     ReachNumber := ReachIndex + AnObs.FReachStart;
@@ -1964,6 +2049,7 @@ begin
                   WriteString(boundname);
                   NewLine;
                   CheckForDuplicateObsNames;
+                  WritePestObs;
                 end;
               end;
             solFirst:
@@ -1982,6 +2068,7 @@ begin
                 WriteInteger(ReachNumber);
                 NewLine;
                 CheckForDuplicateObsNames;
+                WritePestObs;
               end;
             solLast:
               begin
@@ -1999,9 +2086,11 @@ begin
                 WriteInteger(ReachNumber);
                 NewLine;
                 CheckForDuplicateObsNames;
+                WritePestObs;
               end;
             solIndividual:
               begin
+                // For calibration purposes, solIndividual can not be used.
                 ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
                 While Length(Root) + 1 + Length(ReachNumberStr) > 40 do
                 begin
@@ -2095,6 +2184,10 @@ var
   obsnam: string;
   ObservationType: string;
   boundname: string;
+  OutputFormat: string;
+  CalibObservations: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
 begin
   ObTypes := [];
   for ObsIndex := 0 to FObsList.Count - 1 do
@@ -2106,10 +2199,12 @@ begin
     ofText:
       begin
         OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
       end;
     ofBinary:
       begin
         OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
       end;
     else
       Assert(False);
@@ -2217,6 +2312,12 @@ begin
     WriteString('BEGIN CONTINUOUS FILEOUT ');
     OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
     Model.AddModelOutputFile(OutputFileName);
+    if Model.PestUsed then
+    begin
+      Assert(FileNameLines <> nil);
+      FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+        [OutputFileName, OutputFormat]));
+    end;
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
     if ObsPackage.OutputFormat = ofBinary then
@@ -2239,11 +2340,33 @@ begin
         boundname := Trim(AnObs.FBoundName);
         boundname := Copy(boundname, 1, 40);
         boundname := ' ' + boundname + ' ';
-        obsnam := ' ''' + obsnam + ''' ';
+//        obsnam := ' ''' + obsnam + ''' ';
+        WriteString(' ''');
         WriteString(obsnam);
+        WriteString(''' ');
         WriteString(ObservationType);
         WriteString(boundname);
         NewLine;
+
+        if Model.PestUsed then
+        begin
+          CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
+          if AnObsType in CalibObservations.LakObs then
+          begin
+            DirectObsLines.Add(Format('ID %s', [obsnam]));
+            for CalibIndex := 0 to CalibObservations.Count - 1 do
+            begin
+              CalibObs := CalibObservations[CalibIndex];
+              if (CalibObs.ObSeries = osLak)
+                and (AnObsType = CalibObs.LakOb) then
+              begin
+                DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                  [CalibObs.Name, CalibObs.Time]));
+              end;
+            end;
+          end;
+        end;
+
       end;
     end;
 
@@ -2317,6 +2440,11 @@ var
   Root: string;
   CellIndex: Integer;
   obsname: string;
+  OutputFormat: string;
+  CalibObservations: TMf6CalibrationObservations;
+  CalibObsNames: TStringList;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -2327,6 +2455,71 @@ var
     else
     begin
       ObsNames.Add(obsnam);
+    end;
+  end;
+  procedure WritePestObsFormulas;
+  var
+    CalibIndex: Integer;
+    CalibObs: TMf6CalibrationObs;
+    ObsNameIndex: Integer;
+    CalibObList: TList<TMf6CalibrationObs>;
+    FormulaBuilder: TStringBuilder;
+  begin
+    if Model.PestUsed then
+    begin
+      if AnObsType in CalibObservations.UzfObs then
+      begin
+        FormulaBuilder := TStringBuilder.Create;
+        CalibObList := TList<TMf6CalibrationObs>.Create;
+        try
+          for CalibIndex := 0 to CalibObservations.Count - 1 do
+          begin
+            CalibObs := CalibObservations[CalibIndex];
+            if (CalibObs.ObSeries = osUzf)
+              and (AnObsType = CalibObs.UzfOb) then
+            begin
+              CalibObList.Add(CalibObs);
+            end;
+          end;
+
+          for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
+          begin
+            obsnam := CalibObsNames[ObsNameIndex];
+            DirectObsLines.Add(Format('ID %s', [obsnam]));
+
+            for CalibIndex := 0 to CalibObList.Count - 1 do
+            begin
+              CalibObs := CalibObservations[CalibIndex];
+              DirectObsLines.Add(Format('OBSNAME %0:s_%1:d %2:g',
+                [CalibObs.Name, CalibIndex+1, CalibObs.Time]));
+            end;
+          end;
+
+          for CalibIndex := 0 to CalibObList.Count - 1 do
+          begin
+            CalibObs := CalibObservations[CalibIndex];
+            CalculatedObsLines.Add(Format('  OBSNAME %s PRINT',
+              [CalibObs.Name]));
+            FormulaBuilder.Clear;
+            FormulaBuilder.Append('  FORMULA ');
+            FormulaBuilder.Append(CalibObsNames[0]);
+              FormulaBuilder.Append('_');
+            FormulaBuilder.Append(CalibIndex+1);
+            for ObsNameIndex := 1 to CalibObsNames.Count - 1 do
+            begin
+              FormulaBuilder.Append(' + ');
+              FormulaBuilder.Append(CalibObsNames[ObsNameIndex]);
+              FormulaBuilder.Append('_');
+              FormulaBuilder.Append(CalibIndex+1);
+            end;
+            CalculatedObsLines.Add(FormulaBuilder.ToString);
+          end;
+
+        finally
+          FormulaBuilder.Free;
+          CalibObList.Free;
+        end;
+      end;
     end;
   end;
 begin
@@ -2340,10 +2533,12 @@ begin
     ofText:
       begin
         OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
       end;
     ofBinary:
       begin
         OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
       end;
     else
       Assert(False);
@@ -2419,6 +2614,12 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
+      if Model.PestUsed then
+      begin
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [OutputFileName, OutputFormat]));
+      end;
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);
       if ObsPackage.OutputFormat = ofBinary then
@@ -2432,6 +2633,7 @@ begin
         AnObs := FObsList[ObsIndex];
         if AnObsType in AnObs.FObsTypes then
         begin
+          CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
           Root := AnObs.FName;
           if Root = '' then
           begin
@@ -2446,40 +2648,79 @@ begin
           begin
             if AnObsType = uoWaterContent then
             begin
-              for CellIndex := 0 to Length(AnObs.FUzfBoundNumber) - 1 do
-              begin
-                obsname := '  ' + Root
-                  + IntToStr(AnObs.FUzfBoundNumber[CellIndex]) + ' ';
-                WriteString(obsname);
-                WriteString(ObservationType);
-                WriteInteger(AnObs.FUzfBoundNumber[CellIndex]);
-                WriteFloat(AnObs.FDepthFractions[CellIndex]);
-                NewLine;
+              CalibObsNames := TStringList.Create;
+              try
+                for CellIndex := 0 to Length(AnObs.FUzfBoundNumber) - 1 do
+                begin
+                  obsname := Root
+                    + IntToStr(AnObs.FUzfBoundNumber[CellIndex]);
+                  WriteString('  ');
+                  WriteString(obsname);
+                  WriteString(' ');
+                  WriteString(ObservationType);
+                  WriteInteger(AnObs.FUzfBoundNumber[CellIndex]);
+                  WriteFloat(AnObs.FDepthFractions[CellIndex]);
+                  NewLine;
+                  CalibObsNames.Add(obsname);
+                end;
+
+                WritePestObsFormulas;
+              finally
+                CalibObsNames.Free;
               end;
             end
             else
             begin
-              obsname := '  ' + Root + ' ';
+              obsname := Root;
+              WriteString('  ');
               WriteString(obsname);
+              WriteString(' ');
               WriteString(ObservationType);
               WriteString(boundname);
               NewLine;
             end;
+            if Model.PestUsed then
+            begin
+              if AnObsType in CalibObservations.UzfObs then
+              begin
+                DirectObsLines.Add(Format('ID %s', [obsnam]));
+                for CalibIndex := 0 to CalibObservations.Count - 1 do
+                begin
+                  CalibObs := CalibObservations[CalibIndex];
+                  if (CalibObs.ObSeries = osUzf)
+                    and (AnObsType = CalibObs.UzfOb) then
+                  begin
+                    DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                      [CalibObs.Name, CalibObs.Time]));
+                  end;
+                end;
+              end;
+            end;
           end
           else
           begin
-            for CellIndex := 0 to Length(AnObs.FUzfBoundNumber) - 1 do
-            begin
-              obsname := '  ' + Root
-                + IntToStr(AnObs.FUzfBoundNumber[CellIndex]) + ' ';
-              WriteString(obsname);
-              WriteString(ObservationType);
-              WriteInteger(AnObs.FUzfBoundNumber[CellIndex]);
-              if AnObsType = uoWaterContent then
+            CalibObsNames := TStringList.Create;
+            try
+              for CellIndex := 0 to Length(AnObs.FUzfBoundNumber) - 1 do
               begin
-                WriteFloat(AnObs.FDepthFractions[CellIndex]);
+                obsname := Root
+                  + IntToStr(AnObs.FUzfBoundNumber[CellIndex]);
+                WriteString('  ');
+                WriteString(obsname);
+                WriteString(' ');
+                WriteString(ObservationType);
+                WriteInteger(AnObs.FUzfBoundNumber[CellIndex]);
+                if AnObsType = uoWaterContent then
+                begin
+                  WriteFloat(AnObs.FDepthFractions[CellIndex]);
+                end;
+                NewLine;
+                CalibObsNames.Add(obsname);
               end;
-              NewLine;
+
+              WritePestObsFormulas;
+            finally
+              CalibObsNames.Free;
             end;
           end;
         end;
@@ -2567,6 +2808,11 @@ var
   DelayBedIndex: Integer;
   idcellno: Integer;
   NDELAYCELLS: Integer;
+  OutputFormat: string;
+  CalibObsNames: TStringList;
+  CalibObservations: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -2577,6 +2823,71 @@ var
     else
     begin
       ObsNames.Add(obsnam);
+    end;
+  end;
+  procedure WritePestObsFormulas;
+  var
+    CalibIndex: Integer;
+    CalibObs: TMf6CalibrationObs;
+    ObsNameIndex: Integer;
+    CalibObList: TList<TMf6CalibrationObs>;
+    FormulaBuilder: TStringBuilder;
+  begin
+    if Model.PestUsed then
+    begin
+      if AnObsType in CalibObservations.SubObsSet then
+      begin
+        FormulaBuilder := TStringBuilder.Create;
+        CalibObList := TList<TMf6CalibrationObs>.Create;
+        try
+          for CalibIndex := 0 to CalibObservations.Count - 1 do
+          begin
+            CalibObs := CalibObservations[CalibIndex];
+            if (CalibObs.ObSeries = osCSub)
+              and (AnObsType = CalibObs.CSubOb) then
+            begin
+              CalibObList.Add(CalibObs);
+            end;
+          end;
+
+          for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
+          begin
+            obsnam := CalibObsNames[ObsNameIndex];
+            DirectObsLines.Add(Format('ID %s', [obsnam]));
+
+            for CalibIndex := 0 to CalibObList.Count - 1 do
+            begin
+              CalibObs := CalibObservations[CalibIndex];
+              DirectObsLines.Add(Format('OBSNAME %0:s_%1:d %2:g',
+                [CalibObs.Name, CalibIndex+1, CalibObs.Time]));
+            end;
+          end;
+
+          for CalibIndex := 0 to CalibObList.Count - 1 do
+          begin
+            CalibObs := CalibObservations[CalibIndex];
+            CalculatedObsLines.Add(Format('  OBSNAME %s PRINT',
+              [CalibObs.Name]));
+            FormulaBuilder.Clear;
+            FormulaBuilder.Append('  FORMULA ');
+            FormulaBuilder.Append(CalibObsNames[0]);
+              FormulaBuilder.Append('_');
+            FormulaBuilder.Append(CalibIndex+1);
+            for ObsNameIndex := 1 to CalibObsNames.Count - 1 do
+            begin
+              FormulaBuilder.Append(' + ');
+              FormulaBuilder.Append(CalibObsNames[ObsNameIndex]);
+              FormulaBuilder.Append('_');
+              FormulaBuilder.Append(CalibIndex+1);
+            end;
+            CalculatedObsLines.Add(FormulaBuilder.ToString);
+          end;
+
+        finally
+          FormulaBuilder.Free;
+          CalibObList.Free;
+        end;
+      end;
     end;
   end;
 begin
@@ -2592,15 +2903,18 @@ begin
     ofText:
       begin
         OutputTypeExtension := '.csv';
+        OutputFormat := 'TEXT';
       end;
     ofBinary:
       begin
         OutputTypeExtension := '.bin';
+        OutputFormat := 'BINARY';
       end;
     else
       Assert(False);
   end;
   ObsNames := TStringList.Create;
+  CalibObsNames := TStringList.Create;
   try
     ObsNames.Sorted := True;
     for AnObsType in ObTypes do
@@ -2778,6 +3092,12 @@ begin
       WriteString('BEGIN CONTINUOUS FILEOUT ');
       OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
       Model.AddModelOutputFile(OutputFileName);
+      if Model.PestUsed then
+      begin
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [OutputFileName, OutputFormat]));
+      end;
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);
       if ObsPackage.OutputFormat = ofBinary then
@@ -2789,9 +3109,11 @@ begin
       for ObsIndex := 0 to FObsList.Count - 1 do
       begin
         AnObs := FObsList[ObsIndex];
+        CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
         ScreenObject := AnObs.FScreenObject as TScreenObject;
         if AnObsType in AnObs.FObsTypes then
         begin
+          CalibObsNames.Clear;
           Root := AnObs.FName;
           if Root = '' then
           begin
@@ -2802,7 +3124,7 @@ begin
           boundname := Copy(boundname, 1, 40);
           boundname := ' ' + boundname + ' ';
 
-          obsname := '  ''' + Root + ''' ';
+          obsname := Root;
 
           case AnObsType of
             coCSub, coInelastCSub, coElastCSub, coSk, coSke, coIntbedComp,
@@ -2811,11 +3133,30 @@ begin
                 if (ScreenObject.ModflowCSub <> nil)
                   and ScreenObject.ModflowCSub.CSubPackageData.Used then
                 begin
+                  WriteString('  ''');
                   WriteString(obsname);
+                  WriteString(''' ');
                   WriteString(ObservationType);
                   WriteString(boundname);
                   NewLine;
-                end
+
+                  if Model.PestUsed then
+                  begin
+                    if AnObsType in CalibObservations.SubObsSet then
+                    begin
+                      DirectObsLines.Add(Format('ID %s', [obsnam]));
+                      for CalibIndex := 0 to CalibObservations.Count - 1 do
+                      begin
+                        CalibObs := CalibObservations[CalibIndex];
+                        if (CalibObs.ObSeries = osCSub)
+                          and (AnObsType = CalibObs.CSubOb) then
+                        begin
+                          DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                            [CalibObs.Name, CalibObs.Time]));
+                        end;
+                      end;
+                    end;
+                  end                end
                 else
                 begin
                   for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
@@ -2824,13 +3165,17 @@ begin
                     for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
                     begin
                       icsubno := AnObs.FInterbedNumbers[IBIndex];
-                      obsname := Format(' ''%0:s_%1:d_%2:d'' ', [Root, icsubno, idcellno]);
+                      obsname := Format('%0:s_%1:d_%2:d', [Root, icsubno, idcellno]);
+                      WriteString('  ''');
                       WriteString(obsname);
+                      WriteString(''' ');
                       WriteString(ObservationType);
                       WriteInteger(icsubno);
                       NewLine;
+                      CalibObsNames.Add(obsname);
                     end;
                   end;
+                  WritePestObsFormulas;
                 end;
               end;
             coCoarseCSub, coCSubCell, coWcompCSubCell, coSkCell, coSkeCell,
@@ -2841,24 +3186,32 @@ begin
                 for CellIndex := 0 to Length(AnObs.FCells) - 1 do
                 begin
                   ACell := AnObs.FCells[CellIndex];
-                  obsname := ' ''' + Root + WriteCellName(ACell) + ''' ';
+                  obsname := Root + WriteCellName(ACell);
+                  WriteString('  ''');
                   WriteString(obsname);
+                  WriteString(''' ');
                   WriteString(ObservationType);
                   WriteCell(ACell);
                   NewLine;
+                  CalibObsNames.Add(obsname);
                 end;
+                WritePestObsFormulas;
               end;
             coTheta:
               begin
                 for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
                 begin
                   icsubno := AnObs.FInterbedNumbers[IBIndex];
-                  obsname := ' ''' + Root + '_' + IntToStr(icsubno) + ''' ';
+                  obsname := Root + '_' + IntToStr(icsubno);
+                  WriteString('  ''');
                   WriteString(obsname);
+                  WriteString(''' ');
                   WriteString(ObservationType);
                   WriteInteger(icsubno);
                   NewLine;
+                  CalibObsNames.Add(obsname);
                 end;
+                WritePestObsFormulas;
               end;
             coDelayFlowTop, coDelayFlowBot:
               begin
@@ -2867,13 +3220,17 @@ begin
                   if AnObs.FDelayInterbeds[IBIndex] then
                   begin
                     icsubno := AnObs.FInterbedNumbers[IBIndex];
-                    obsname := ' ''' + Root + '_' + IntToStr(icsubno) + ''' ';
+                    obsname := Root + '_' + IntToStr(icsubno);
+                    WriteString('  ''');
                     WriteString(obsname);
+                    WriteString(''' ');
                     WriteString(ObservationType);
                     WriteInteger(icsubno);
                     NewLine;
+                    CalibObsNames.Add(obsname);
                   end;
                 end;
+                WritePestObsFormulas;
               end;
             coDelayHead, coDelayGStress, coDelayEStress, coDelayPreConStress,
             coDelayComp, coDelayThickness, coDelayTheta:
@@ -2888,17 +3245,20 @@ begin
                       idcellno := AnObs.FDelayCellNumbers[DelayBedIndex];
                       if (1 <= idcellno) and (idcellno <> NDELAYCELLS) then
                       begin
-                        obsname := Format(' ''%0:s_%1:d_%2:d'' ', [Root, icsubno, idcellno]);
+                        obsname := Format('%0:s_%1:d_%2:d', [Root, icsubno, idcellno]);
+                        WriteString('  ''');
                         WriteString(obsname);
+                        WriteString(''' ');
                         WriteString(ObservationType);
                         WriteInteger(icsubno);
                         WriteInteger(idcellno);
                         NewLine;
+                        CalibObsNames.Add(obsname);
                       end;
                     end;
                   end;
-
                 end;
+                WritePestObsFormulas;
               end;
             else
               Assert(False);
@@ -2913,6 +3273,7 @@ begin
     end;
   finally
     ObsNames.Free;
+    CalibObsNames.Free;
   end;
 end;
 

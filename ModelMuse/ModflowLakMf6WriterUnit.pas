@@ -5,13 +5,14 @@ interface
 uses SysUtils, Classes, PhastModelUnit, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, ModflowTimeUnit, ModflowLakUnit,
   ScreenObjectUnit, System.Generics.Collections, ModflowCellUnit,
-  ModflowLakMf6Unit;
+  ModflowLakMf6Unit, Modflow6ObsUnit;
 
 type
   TLakObservation = record
     FName: string;
     FBoundName: string;
     FObsTypes: TLakObs;
+    FModflow6Obs: TModflow6Obs;
   end;
   TLakObservationList = TList<TLakObservation>;
 
@@ -156,7 +157,7 @@ uses
   ModflowOptionsUnit, frmProgressUnit, SparseDataSets,
   GoPhastTypes, SparseArrayUnit, frmErrorsAndWarningsUnit, DataSetUnit,
   ModflowIrregularMeshUnit, AbstractGridUnit, RealListUnit, RbwParser,
-  frmFormulaErrorsUnit, System.Math, Modflow6ObsUnit, Modflow6ObsWriterUnit,
+  frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit;
 
 resourcestring
@@ -1329,6 +1330,7 @@ begin
           Obs.FName := MfObs.Name;
           Obs.FBoundName := ScreenObject.Name;
           Obs.FObsTypes := MfObs.LakObs;
+          Obs.FModflow6Obs := MfObs;
           if LakeBoundary.Outlets.Count = 0 then
           begin
             if loExternalOutflow in Obs.FObsTypes then

@@ -6,7 +6,8 @@ uses
   System.SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit,
   PhastModelUnit, SparseDataSets, DataSetUnit, ModflowCSubInterbed,
   System.Classes, ModflowCellUnit, ModflowCsubUnit, GoPhastTypes,
-  System.Generics.Collections, ScreenObjectUnit, ModflowBoundaryDisplayUnit;
+  System.Generics.Collections, ScreenObjectUnit, ModflowBoundaryDisplayUnit,
+  Modflow6ObsUnit;
 
 type
   TCSubObservation = record
@@ -18,6 +19,7 @@ type
     FDelayInterbeds: TBoolArray;
     FDelayCellNumbers: TOneDIntegerArray;
     FCells: array of TCellLocation;
+    FModflow6Obs: TModflow6Obs;
   end;
   TCSubObservationList = TList<TCSubObservation>;
 
@@ -65,7 +67,7 @@ implementation
 
 uses
   frmProgressUnit, frmErrorsAndWarningsUnit,
-  Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit, Modflow6ObsUnit;
+  Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit;
 
 
 { TCSubWriter }
@@ -132,6 +134,7 @@ begin
           Obs.FBoundName := ScreenObject.Name;
           Obs.FObsTypes := MfObs.CSubObs.CSubObsSet;
           Obs.FScreenObject := ScreenObject;
+          Obs.FModflow6Obs := MfObs;
           CellList.Clear;
           ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
           SetLength(Obs.FCells, CellList.Count);
@@ -169,6 +172,7 @@ begin
         Obs.FBoundName := ScreenObject.Name;
         Obs.FObsTypes := MfObs.CSubObs.CSubObsSet;
         Obs.FScreenObject := ScreenObject;
+        Obs.FModflow6Obs := MfObs;
         CellList.Clear;
         ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
         SetLength(Obs.FCells, CellList.Count);

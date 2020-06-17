@@ -340,7 +340,7 @@ const
     'delay-head',
     'delay-head', 'delay-estress', 'delay-preconstress', 'delay-compaction',
     'delay-thickness', 'delay-theta',
-    '.preconstress-cell');
+    'preconstress-cell');
 
 var
   CSubObNames: TStringList;
