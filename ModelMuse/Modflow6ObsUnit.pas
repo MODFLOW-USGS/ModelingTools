@@ -57,12 +57,14 @@ type
     procedure SetObsTypeIndex(Value: Integer); override;
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
+    function ObservationType: string; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property InterpObsNames: TStringList read FInterpObsNames;
   published
+    property GUID;
     property ObSeries: TObSeries read FObSeries write SetObSeries;
     property ObGeneral: TObGeneral read FObGeneral write SetObGeneral stored StoreObGeneral;
     property MawOb: TMawOb read FMawOb write SetMawOb stored StoreMawOb;
@@ -901,6 +903,11 @@ function TMf6CalibrationObs.GetWeightFormula: string;
 begin
   Result := FWeightFormula.Formula;
 //  ResetItemObserver(EndHeadPosition);
+end;
+
+function TMf6CalibrationObs.ObservationType: string;
+begin
+  result := 'MODFLOW 6 Observation'
 end;
 
 procedure TMf6CalibrationObs.RemoveFormulaObjects;

@@ -254,6 +254,10 @@ resourcestring
   StrAParameterNamed0 = 'A parameter named %0:s is used to define a stream i' +
   'n the STR package in the %1:s object but no such parameter has been defin' +
   'ed. This stream will be skipped.';
+  StrInvalidSTRObservat = 'Invalid STR observation object';
+  StrTheObject0sIsL = 'The object %0:s is listed as part of the %1:s observa' +
+  'tion in the Stream Observation package but that object does not define a ' +
+  'stream segment.';
 
 const
   StrSegmentNumber = 'Segment Number in ';
@@ -2097,6 +2101,7 @@ var
   DataSet1: string;
   PrintObservations: Boolean;
   Index: Integer;
+  AScreenObject: TScreenObject;
 begin
   // if the package is not selected, quit.
   if not ObservationPackage.IsSelected then
@@ -2112,6 +2117,7 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveWarningGroup(Model, ObsNameWarningString);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSTRObservat);
 
     FluxObsCountWarning := Format(StrInSNoFlowObser,
       [ObservationPackage.PackageIdentifier]);
@@ -2170,6 +2176,15 @@ begin
                 ObsFactor := ObservationGroup.ObservationFactors[ScreenObjectIndex];
                 Assert(ObsFactor.ScreenObject <> nil);
                 ASegment := GetSegFromObject(ObsFactor.ScreenObject as TScreenObject);
+                if ASegment = nil then
+                begin
+                  AScreenObject := ObsFactor.ScreenObject as TScreenObject;
+                  frmErrorsAndWarnings.AddError(Model, StrInvalidSTRObservat,
+                    Format(StrTheObject0sIsL,
+                    [AScreenObject.Name, ObservationGroup.ObservationName]),
+                    AScreenObject);
+                  Continue;
+                end;
                 Assert(ASegment <> nil);
                 AllSegments.Add(ASegment);
                 if ASegment.FParamValues.Count > 0 then

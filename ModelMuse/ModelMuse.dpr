@@ -708,7 +708,8 @@ uses
   framePestObsCaptionedUnit in 'framePestObsCaptionedUnit.pas' {framePestObsCaptioned: TFrame},
   SutraPestObsWriterUnit in 'SutraPestObsWriterUnit.pas',
   frmManageSutraBoundaryObservationsUnit in 'frmManageSutraBoundaryObservationsUnit.pas' {frmManageSutraBoundaryObservations},
-  framePestObsMf6Unit in 'framePestObsMf6Unit.pas' {framePestObsMf6: TFrame};
+  framePestObsMf6Unit in 'framePestObsMf6Unit.pas' {framePestObsMf6: TFrame},
+  PestObsExtractorInputWriterUnit in 'PestObsExtractorInputWriterUnit.pas';
 
 {$R *.res}
 

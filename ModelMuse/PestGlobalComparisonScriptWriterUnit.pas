@@ -13,16 +13,16 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+resourcestring
+  StrTheObservationComp = 'The observation comparison item "%s" could not be' +
+  ' exported. Check that it is defined correctly for this model.';
+  StrUnableToExportObs = 'Unable to export observations';
+
 implementation
 
 uses
   PestObsUnit, ObservationComparisonsUnit, ScreenObjectUnit, GoPhastTypes,
   frmErrorsAndWarningsUnit, ModelMuseUtilities;
-
-resourcestring
-  StrTheObservationComp = 'The observation comparison item "%s" could not be' +
-  ' exported. Check that it is defined correctly for this model.';
-  StrUnableToExportObs = 'Unable to export observations';
 
 { TGlobalComparisonScriptWriter }
 

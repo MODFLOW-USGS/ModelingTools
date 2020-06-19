@@ -228,7 +228,11 @@ begin
   InitializeObsItemDictionary;
 
   ObsComparisons := nil;
-  if frmGoPhast.ModelSelection in ModflowSelection then
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    ObsComparisons := frmGoPhast.PhastModel.Modflow6GlobalObservationComparisons;
+  end
+  else if frmGoPhast.ModelSelection in ModflowSelection then
   begin
     ObsComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
   end
@@ -469,7 +473,11 @@ begin
       end;
     end;
     ExistingComparisons := nil;
-    if frmGoPhast.ModelSelection in ModflowSelection then
+    if frmGoPhast.ModelSelection = msModflow2015 then
+    begin
+      ExistingComparisons := frmGoPhast.PhastModel.Modflow6GlobalObservationComparisons;
+    end
+    else if frmGoPhast.ModelSelection in ModflowSelection then
     begin
       ExistingComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
     end

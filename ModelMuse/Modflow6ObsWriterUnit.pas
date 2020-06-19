@@ -867,7 +867,7 @@ begin
               FlowObs.FOtherCell.Layer := ACell.Layer;
               FlowObs.FOtherCell.Row := 0;
               FlowObs.FOtherCell.Column := OtherElementIndex;
-              FlowObs.FName := Obs.Name;
+              FlowObs.FName := Format('fn_%s', [Obs.Name]);
               FFlowObs.Add(FlowObs);
             end;
           end;
@@ -893,7 +893,7 @@ begin
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
-        FlowObs.FName := Obs.Name;
+        FlowObs.FName := Format('fcl_%s', [Obs.Name]);
         FFlowObs.Add(FlowObs);
       end;
       OtherCell := ACell.Cell;
@@ -904,7 +904,7 @@ begin
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
-        FlowObs.FName := Obs.Name;
+        FlowObs.FName := Format('fcg_%s', [Obs.Name]);
         FFlowObs.Add(FlowObs);
       end;
 
@@ -916,7 +916,7 @@ begin
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
-        FlowObs.FName := Obs.Name;
+        FlowObs.FName := Format('frl_%s', [Obs.Name]);
         FFlowObs.Add(FlowObs);
       end;
       OtherCell := ACell.Cell;
@@ -927,7 +927,7 @@ begin
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
-        FlowObs.FName := Obs.Name;
+        FlowObs.FName := Format('frg_%s', [Obs.Name]);
         FFlowObs.Add(FlowObs);
       end;
     end
@@ -952,6 +952,7 @@ begin
           FlowObs.FOtherCell := ACell.Cell;
           FlowObs.FOtherCell.Column := OtherElementNumber;
           FlowObs.FName := Obs.Name;
+          FlowObs.FName := Format('f_%0:s_%1:d', [Obs.Name, NodeIndex+1]);
           if ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
             FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
           begin
@@ -968,7 +969,7 @@ begin
     FlowObs.FCell := ACell.Cell;
     FlowObs.FOtherCell := ACell.Cell;
     Dec(FlowObs.FOtherCell.Layer);
-    FlowObs.FName := Obs.Name;
+    FlowObs.FName := Format('fa_', [Obs.Name]);
     if (FlowObs.FOtherCell.Layer >= 0)
       and ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
       FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
@@ -981,7 +982,7 @@ begin
     FlowObs.FCell := ACell.Cell;
     FlowObs.FOtherCell := ACell.Cell;
     Inc(FlowObs.FOtherCell.Layer);
-    FlowObs.FName := Obs.Name;
+    FlowObs.FName := Format('fb_', [Obs.Name]);
     if (FlowObs.FOtherCell.Layer < Model.LayerCount)
       and ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
       FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
@@ -2507,7 +2508,7 @@ var
   OutputExtension: string;
   OutputFileName: string;
   AnObs: TUzfObservation;
-  obsnam: string;
+  ID: string;
   ObservationType: string;
   boundname: string;
   ObsNames: TStringList;
@@ -2523,14 +2524,14 @@ var
   Prefix: string;
   procedure CheckForDuplicateObsNames;
   begin
-    if ObsNames.IndexOf(obsnam) >= 0 then
+    if ObsNames.IndexOf(ID) >= 0 then
     begin
       frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueUZFObser,
-        Format(StrTheFollowingUZFOb, [obsnam]));
+        Format(StrTheFollowingUZFOb, [ID]));
     end
     else
     begin
-      ObsNames.Add(obsnam);
+      ObsNames.Add(ID);
     end;
   end;
   procedure WritePestObsFormulas;
@@ -2560,14 +2561,14 @@ var
 
           for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
           begin
-            obsnam := CalibObsNames[ObsNameIndex];
-            DirectObsLines.Add(Format('ID %s', [obsnam]));
+            ID := CalibObsNames[ObsNameIndex];
+            DirectObsLines.Add(Format('ID %s', [ID]));
 
             for CalibIndex := 0 to CalibObList.Count - 1 do
             begin
               CalibObs := CalibObservations[CalibIndex];
-              DirectObsLines.Add(Format('OBSNAME %0:s_%1:d %2:g',
-                [CalibObs.Name, CalibIndex+1, CalibObs.Time - StartTime]));
+              DirectObsLines.Add(Format('OBSNAME %0:s_%1:d_%2:d %3:g',
+                [CalibObs.Name, ObsNameIndex+1, CalibIndex+1, CalibObs.Time - StartTime]));
             end;
           end;
 
@@ -2579,12 +2580,14 @@ var
             FormulaBuilder.Clear;
             FormulaBuilder.Append('  FORMULA ');
             FormulaBuilder.Append(CalibObsNames[0]);
-              FormulaBuilder.Append('_');
+              FormulaBuilder.Append('_1_');
             FormulaBuilder.Append(CalibIndex+1);
             for ObsNameIndex := 1 to CalibObsNames.Count - 1 do
             begin
               FormulaBuilder.Append(' + ');
               FormulaBuilder.Append(CalibObsNames[ObsNameIndex]);
+              FormulaBuilder.Append('_');
+              FormulaBuilder.Append(ObsNameIndex+1);
               FormulaBuilder.Append('_');
               FormulaBuilder.Append(CalibIndex+1);
             end;
@@ -2772,7 +2775,7 @@ begin
             begin
               if AnObsType in CalibObservations.UzfObs then
               begin
-                DirectObsLines.Add(Format('ID %s', [obsnam]));
+                DirectObsLines.Add(Format('ID %s', [obsname]));
                 for CalibIndex := 0 to CalibObservations.Count - 1 do
                 begin
                   CalibObs := CalibObservations[CalibIndex];
@@ -2882,7 +2885,7 @@ var
   OutputExtension: string;
   OutputFileName: string;
   AnObs: TCSubObservation;
-  obsnam: string;
+  ID: string;
   ObservationType: string;
   boundname: string;
   ObsNames: TStringList;
@@ -2906,14 +2909,14 @@ var
   Prefix: string;
   procedure CheckForDuplicateObsNames;
   begin
-    if ObsNames.IndexOf(obsnam) >= 0 then
+    if ObsNames.IndexOf(ID) >= 0 then
     begin
       frmErrorsAndWarnings.AddWarning(Model, StrNonuniqueCSUBObse,
-        Format(StrTheFollowingCSUBOb, [obsnam]));
+        Format(StrTheFollowingCSUBOb, [ID]));
     end
     else
     begin
-      ObsNames.Add(obsnam);
+      ObsNames.Add(ID);
     end;
   end;
   procedure WritePestObsFormulas;
@@ -2943,8 +2946,8 @@ var
 
           for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
           begin
-            obsnam := CalibObsNames[ObsNameIndex];
-            DirectObsLines.Add(Format('ID %s', [obsnam]));
+            ID := CalibObsNames[ObsNameIndex];
+            DirectObsLines.Add(Format('ID %s', [ID]));
 
             for CalibIndex := 0 to CalibObList.Count - 1 do
             begin
@@ -3269,7 +3272,7 @@ begin
                   begin
                     if AnObsType in CalibObservations.SubObsSet then
                     begin
-                      DirectObsLines.Add(Format('ID %s', [obsnam]));
+                      DirectObsLines.Add(Format('ID %s', [ID]));
                       for CalibIndex := 0 to CalibObservations.Count - 1 do
                       begin
                         CalibObs := CalibObservations[CalibIndex];

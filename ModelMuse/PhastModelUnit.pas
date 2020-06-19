@@ -2191,6 +2191,7 @@ that affects the model output should also have a comment. }
     FModflowGlobalObservationComparisons: TGlobalObservationComparisons;
     FSutraGlobalObservationComparisons: TGlobalObservationComparisons;
     FSutraFluxObs: TSutraFluxObs;
+    FModflow6GlobalObservationComparisons: TGlobalObservationComparisons;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2408,7 +2409,9 @@ that affects the model output should also have a comment. }
       const Value: TGlobalObservationComparisons);
     procedure SetSutraFluxObs(const Value: TSutraFluxObs);
     function GetSutraLakesUsed: Boolean;
-    procedure WriteMf6ObsExtractorFile(FileName: string);
+//    procedure WriteMf6ObsExtractorFile(FileName: string);
+    procedure SetModflow6GlobalObservationComparisons(
+      const Value: TGlobalObservationComparisons);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3442,6 +3445,12 @@ that affects the model output should also have a comment. }
     property SutraGlobalObservationComparisons: TGlobalObservationComparisons
       read FSutraGlobalObservationComparisons
       write SetSutraGlobalObservationComparisons
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
+    property Modflow6GlobalObservationComparisons: TGlobalObservationComparisons
+      read FModflow6GlobalObservationComparisons write SetModflow6GlobalObservationComparisons
     {$IFNDEF PEST}
       stored False
     {$ENDIF}
@@ -9291,7 +9300,7 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
-  ModflowMnw2Unit;
+  ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -28136,6 +28145,7 @@ begin
   FDisvGrid := TModflowDisvGrid.Create(self);
   FModflowGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
   FSutraGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
+  FModflow6GlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
 
 end;
 
@@ -28562,6 +28572,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FModflow6GlobalObservationComparisons.Free;
   FSutraGlobalObservationComparisons.Free;
   FModflowGlobalObservationComparisons.Free;
   FLakScreenObjects.Free;
@@ -29180,6 +29191,12 @@ end;
 procedure TCustomModel.SetGhbObservations(const Value: TFluxObservationGroups);
 begin
   FGhbObservations.Assign(Value);
+end;
+
+procedure TCustomModel.SetModflow6GlobalObservationComparisons(
+  const Value: TGlobalObservationComparisons);
+begin
+  FModflow6GlobalObservationComparisons.Assign(Value);
 end;
 
 procedure TCustomModel.SetModflowGlobalObservationComparisons(
@@ -31147,6 +31164,7 @@ var
   FluxGroup: TCustomSutraFluxObservationGroup;
   ItemIndex: Integer;
   Item: TCustomObservationItem;
+  CalibrationObservations: TMf6CalibrationObservations;
 begin
   for ObjectIndex := 0 to ScreenObjectCount - 1 do
   begin
@@ -31158,7 +31176,21 @@ begin
 
     if (ModelSelection in ModflowSelection) then
     begin
-      if ModelSelection <> msModflow2015 then
+      if ModelSelection = msModflow2015 then
+      begin
+        if (AScreenObject.Modflow6Obs <> nil)
+          and AScreenObject.Modflow6Obs.Used then
+        begin
+          CalibrationObservations :=
+            AScreenObject.Modflow6Obs.CalibrationObservations;
+          for ObsIndex := 0 to CalibrationObservations.Count - 1 do
+          begin
+            AnObs := CalibrationObservations[ObsIndex];
+            List.Add(AnObs);
+          end;
+        end;
+      end
+      else
       begin
         if ModflowPackages.Mnw2Package.IsSelected then
         begin
@@ -39115,46 +39147,46 @@ begin
   end;
 end;
 
-procedure TCustomModel.WriteMf6ObsExtractorFile(FileName: string);
-var
-  Lines: TStringList;
-begin
-  if PestUsed and (ModelSelection = msModflow2015)
-    and (DirectObservationLines.Count > 0) then
-  begin
-    FileName := ChangeFileExt(FileName, '.Mf6ObsExtIns');
-    Lines := TStringList.Create;
-    try
-      Lines.Add('BEGIN OPTIONS');
-      Lines.Add('  LISTING ' + ChangeFileExt(FileName, '.Mf6ObsExtInsLst'));
-      Lines.Add('  VALUES ' + ChangeFileExt(FileName, '.Mf6ObsExtInsValues'));
-      Lines.Add('  INSTRUCTION ' + ChangeFileExt(FileName, '.PestIns'));
-      Lines.Add('END OPTIONS');
-      Lines.Add('');
-
-      Lines.Add('BEGIN OBSERVATION_FILES');
-      Lines.AddStrings(FileNameLines);
-      Lines.Add('END OBSERVATION_FILES');
-      Lines.Add('');
-
-      Lines.Add('BEGIN IDENTIFIERS');
-      Lines.AddStrings(DirectObservationLines);
-      Lines.Add('END IDENTIFIERS');
-      Lines.Add('');
-
-      if DerivedObservationLines.Count > 0 then
-      begin
-        Lines.Add('BEGIN DERIVED_OBSERVATIONS');
-        Lines.AddStrings(DirectObservationLines);
-        Lines.Add('END DERIVED_OBSERVATIONS');
-      end;
-
-      Lines.SaveToFile(FileName);
-    finally
-      Lines.Free;
-    end;
-  end;
-end;
+//procedure TCustomModel.WriteMf6ObsExtractorFile(FileName: string);
+//var
+//  Lines: TStringList;
+//begin
+//  if PestUsed and (ModelSelection = msModflow2015)
+//    and (DirectObservationLines.Count > 0) then
+//  begin
+//    FileName := ChangeFileExt(FileName, '.Mf6ObsExtIns');
+//    Lines := TStringList.Create;
+//    try
+//      Lines.Add('BEGIN OPTIONS');
+//      Lines.Add('  LISTING ' + ChangeFileExt(FileName, '.Mf6ObsExtInsLst'));
+//      Lines.Add('  VALUES ' + ChangeFileExt(FileName, '.Mf6ObsExtInsValues'));
+//      Lines.Add('  INSTRUCTION ' + ChangeFileExt(FileName, '.PestIns'));
+//      Lines.Add('END OPTIONS');
+//      Lines.Add('');
+//
+//      Lines.Add('BEGIN OBSERVATION_FILES');
+//      Lines.AddStrings(FileNameLines);
+//      Lines.Add('END OBSERVATION_FILES');
+//      Lines.Add('');
+//
+//      Lines.Add('BEGIN IDENTIFIERS');
+//      Lines.AddStrings(DirectObservationLines);
+//      Lines.Add('END IDENTIFIERS');
+//      Lines.Add('');
+//
+//      if DerivedObservationLines.Count > 0 then
+//      begin
+//        Lines.Add('BEGIN DERIVED_OBSERVATIONS');
+//        Lines.AddStrings(DirectObservationLines);
+//        Lines.Add('END DERIVED_OBSERVATIONS');
+//      end;
+//
+//      Lines.SaveToFile(FileName);
+//    finally
+//      Lines.Free;
+//    end;
+//  end;
+//end;
 
 procedure TCustomModel.InternalExportModflowModel(const FileName: string;
   ExportAllLgr: boolean);
@@ -39231,6 +39263,7 @@ var
   UzfMf6Writer: TModflowUzfMf6Writer;
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
+  PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
 //  DirectObservationLines: TStringList;
 //  DerivedObservationLines: TStringList;
 //  FileNameLines: TStringList;
@@ -40475,7 +40508,14 @@ begin
         UpdateCurrentModel(SelectedModel);
       end;
 
-      WriteMf6ObsExtractorFile(FileName);
+      PestObsExtractorInputWriter := TPestObsExtractorInputWriter.Create(Self);
+      try
+        PestObsExtractorInputWriter.WriteFile(FileName)
+      finally
+        PestObsExtractorInputWriter.Free;
+      end;
+
+//      WriteMf6ObsExtractorFile(FileName);
     except on E: EInvalidTime do
       begin
         Beep;
