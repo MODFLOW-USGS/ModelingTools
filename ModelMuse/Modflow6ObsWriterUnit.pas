@@ -346,6 +346,7 @@ var
   ObservationName: string;
   InterpolateFormula: TStringBuilder;
   NameIndex: Integer;
+  StartTime: Double;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
     if Model.DisvUsed then
@@ -375,6 +376,7 @@ begin
     Assert(Mesh <> nil);
   end;
 
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   OtherObsDefined := False;
   for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
@@ -573,9 +575,9 @@ begin
                           and (Observation.ObGeneral = ogHead) then
                         begin
                           ObservationName := Format('%0:s_%1:d',
-                            [HeadDrawdown.FName, ObservationIndex+1]);
+                            ['hd_' + HeadDrawdown.FName, ObservationIndex+1]);
                           DirectObsLines.Add(Format('  OBSNAME %0:s %2:g',
-                            [ObservationName, Observation.Time]));
+                            [ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
                         end;
                       end;
@@ -593,9 +595,9 @@ begin
                           and (Observation.ObGeneral = ogDrawdown) then
                         begin
                           ObservationName := Format('%0:s_%1:d',
-                            [HeadDrawdown.FName, ObservationIndex+1]);
+                            ['ddn_' + HeadDrawdown.FName, ObservationIndex+1]);
                           DirectObsLines.Add(Format('  OBSNAME %0:s %2:g',
-                            [ObservationName, Observation.Time]));
+                            [ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
                         end;
                       end;
@@ -1122,7 +1124,8 @@ var
   ObsIndex: Integer;
   ObsType: string;
   ObsFileFormat: string;
-  procedure WriteHeadDrawdownOutput(ObsType: string; List: THeadDrawdownObservationLocationList);
+  procedure WriteHeadDrawdownOutput(ObsType, Prefix: string;
+    List: THeadDrawdownObservationLocationList);
   var
     ObsIndex: Integer;
     HeadObs: THeadDrawdownObservationLocation;
@@ -1165,10 +1168,10 @@ var
       for ObsIndex := 0 to List.Count - 1 do
       begin
         HeadObs := List[ObsIndex];
-        obsnam := HeadObs.FName;
-        if obsnam = '' then
+        obsnam := Prefix + HeadObs.FName;
+        if obsnam = Prefix then
         begin
-          obsnam := Format('Obs%d', [ObsIndex+1]);
+          obsnam := Format('%0:sObs%1:d', [Prefix, ObsIndex+1]);
         end;
         Assert(Length(obsnam) <= 40);
         WriteString('  ''');
@@ -1186,8 +1189,8 @@ var
   end;
 begin
   ObsPackage := Package as TMf6ObservationUtility;
-  WriteHeadDrawdownOutput('head', FHeadObs);
-  WriteHeadDrawdownOutput('drawdown', FDrawdownObs);
+  WriteHeadDrawdownOutput('head', 'hd_', FHeadObs);
+  WriteHeadDrawdownOutput('drawdown', 'ddn_', FDrawdownObs);
 
   if FFlowObs.count > 0 then
   begin
@@ -1333,7 +1336,22 @@ var
   OutputFormat: string;
   CalibObIndex: Integer;
   CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
 begin
+  case FObGeneral of
+    ogCHD: Prefix := 'chd_';
+    ogDrain: Prefix := 'drn_';
+    ogWell: Prefix := 'wel_';
+    ogGHB: Prefix := 'ghb_';
+    ogRiv: Prefix := 'riv_';
+    ogRch: Prefix := 'rch_';
+    ogEVT: Prefix := 'evt_';
+    ogMvr: Prefix := 'mvr_';
+    else
+      Assert(False);
+  end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   if (List.count > 0) or (ToMvrList.count > 0) then
   begin
     ObsPackage := Package as TMf6ObservationUtility;
@@ -1372,10 +1390,10 @@ begin
     for ObsIndex := 0 to List.Count - 1 do
     begin
       FlowObs := List[ObsIndex];
-      obsnam := FlowObs.FName;
-      if obsnam = '' then
+      obsnam := Prefix + FlowObs.FName;
+      if obsnam = Prefix then
       begin
-        obsnam := Format('FlowObs%d', [ObsIndex+1]);
+        obsnam := Format(Prefix + 'FlowObs%d', [ObsIndex+1]);
       end;
       Assert(Length(obsnam) <= 40);
       WriteString('  ''');
@@ -1403,7 +1421,7 @@ begin
             and (CalibObs.ObGeneral = FObGeneral) then
           begin
             DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-              [CalibObs.Name, CalibObs.Time]));
+              [CalibObs.Name, CalibObs.Time - StartTime]));
           end;
         end;
       end;
@@ -1439,7 +1457,7 @@ begin
             and (CalibObs.ObGeneral = ogMvr) then
           begin
             DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-              [CalibObs.Name, CalibObs.Time]));
+              [CalibObs.Name, CalibObs.Time - StartTime]));
           end;
         end;
       end;
@@ -1575,7 +1593,10 @@ var
   CalibrationObservations: TMf6CalibrationObservations;
   CalibIndex: Integer;
   CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
 begin
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   ObTypes := [];
   for ObsIndex := 0 to FMawObsList.Count - 1 do
   begin
@@ -1603,66 +1624,79 @@ begin
         begin
           OutputExtension := '.maw_head_ob' + OutputTypeExtension;
           ObservationType := 'head';
+          Prefix := 'mhd_';
         end;
       moFromMvr:
         begin
           OutputExtension := '.maw_from_mvr_ob' + OutputTypeExtension;
           ObservationType := 'from-mvr';
+          Prefix := 'mfmv_';
         end;
       moFlowRate:
         begin
           OutputExtension := '.maw_flow_rate_ob' + OutputTypeExtension;
           ObservationType := 'maw';
+          Prefix := 'maw_';
         end;
       moFlowRateCells:
         begin
           OutputExtension := '.maw_cell_flow_rate_ob' + OutputTypeExtension;
           ObservationType := 'maw';
+          Prefix := 'mawc_';
         end;
       moPumpRate:
         begin
           OutputExtension := '.maw_pump_rate_ob' + OutputTypeExtension;
           ObservationType := 'rate';
+          Prefix := 'mp_';
         end;
       moRateToMvr:
         begin
           OutputExtension := '.maw_pump_rate_to_mvr_ob' + OutputTypeExtension;
           ObservationType := 'rate-to-mvr';
+          Prefix := 'm2mv_';
         end;
       moFlowingWellFlowRate:
         begin
           OutputExtension := '.maw_flowing_well_rate_ob' + OutputTypeExtension;
           ObservationType := 'fw-rate';
+          Prefix := 'mfr_';
         end;
       moFlowWellToMvr:
         begin
           OutputExtension := '.maw_flowing_well_to_mvr_ob' + OutputTypeExtension;
           ObservationType := 'fw-to-mvr';
+          Prefix := 'mf2mv_';
         end;
       moStorageFlowRate:
         begin
           OutputExtension := '.maw_storage_flow_rate_ob' + OutputTypeExtension;
           ObservationType := 'storage';
+          Prefix := 'mst_';
         end;
       moConstantFlowRate:
         begin
           OutputExtension := '.maw_constant_flow_rate_ob' + OutputTypeExtension;
           ObservationType := 'constant';
+          Prefix := 'mcr_';
         end;
       moConductance:
         begin
           OutputExtension := '.maw_conductance_ob' + OutputTypeExtension;
           ObservationType := 'conductance';
+          Prefix := 'mcd_';
         end;
       moConductanceCells:
         begin
           OutputExtension := '.maw_cell_conductance_ob' + OutputTypeExtension;
           ObservationType := 'conductance';
+          Prefix := 'mcdc_';
         end;
       moFlowingWellConductance:
         begin
           OutputExtension := '.maw_flowing_well_conductance_ob' + OutputTypeExtension;
           ObservationType := 'fw-conductance';
+          Prefix := 'mfcd_';
         end;
       else
         Assert(False);
@@ -1689,10 +1723,10 @@ begin
       AnObs := FMawObsList[ObsIndex];
       if AnObsType in AnObs.FObsTypes then
       begin
-        obsnam := AnObs.FName;
-        if obsnam = '' then
+        obsnam := Prefix + AnObs.FName;
+        if obsnam = Prefix then
         begin
-          obsnam := Format('MawObs%d', [ObsIndex+1]);
+          obsnam := Format(Prefix + 'MawObs%d', [ObsIndex+1]);
         end;
 
         frmProgressMM.AddMessage(Format('  Exporting %s', [obsnam]));
@@ -1723,9 +1757,11 @@ begin
         end
         else
         begin
-          obsnam := ' ''' + obsnam + ''' ';
+          WriteString(' ''');
           WriteString(obsnam);
+          WriteString(''' ');
           WriteString(ObservationType);
+          WriteString(' ');
           WriteString(boundname);
           NewLine;
         end;
@@ -1751,7 +1787,7 @@ begin
                       then
                     begin
                       DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-                        [CalibObs.Name, CalibObs.Time]));
+                        [CalibObs.Name, CalibObs.Time - StartTime]));
                     end;
                   end;
                 end;
@@ -1767,7 +1803,7 @@ begin
                   and (AnObsType = CalibObs.MawOb) then
                 begin
                   DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-                    [CalibObs.Name, CalibObs.Time]));
+                    [CalibObs.Name, CalibObs.Time - StartTime]));
                 end;
               end;
             end;
@@ -1848,6 +1884,8 @@ var
   Root: string;
   OutputFormat: string;
   CalibObservations: TMf6CalibrationObservations;
+  StartTime: Double;
+  Prefix: string;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -1877,7 +1915,7 @@ var
             and (AnObsType = CalibObs.SfrOb) then
           begin
             DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-              [CalibObs.Name, CalibObs.Time]));
+              [CalibObs.Name, CalibObs.Time - StartTime]));
           end;
         end;
       end;
@@ -1890,6 +1928,7 @@ begin
   begin
     ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
   end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   ObsPackage := Package as TMf6ObservationUtility;
   case ObsPackage.OutputFormat of
     ofText:
@@ -1915,66 +1954,79 @@ begin
           begin
             OutputExtension := '.sfr_stage_ob' + OutputTypeExtension;
             ObservationType := 'stage';
+            Prefix := 'ss_';
           end;
         soExtInflow:
           begin
             OutputExtension := '.sfr_ext-inflow_ob' + OutputTypeExtension;
             ObservationType := 'ext-inflow';
+            Prefix := 'sei_';
           end;
         soInflow:
           begin
             OutputExtension := '.sfr_inflow_ob' + OutputTypeExtension;
             ObservationType := 'inflow';
+            Prefix := 'si_';
           end;
         soFromMvr:
           begin
             OutputExtension := '.sfr_from_mvr_ob' + OutputTypeExtension;
             ObservationType := 'from-mvr';
+            Prefix := 'sfm_';
           end;
         soRainfall:
           begin
             OutputExtension := '.sfr_rainfall_ob' + OutputTypeExtension;
             ObservationType := 'rainfall';
+            Prefix := 'sra_';
           end;
         soRunoff:
           begin
             OutputExtension := '.sfr_runoff_ob' + OutputTypeExtension;
             ObservationType := 'runoff';
+            Prefix := 'sru_';
           end;
         soSfr:
           begin
             OutputExtension := '.sfr_gw_exchange_ob' + OutputTypeExtension;
             ObservationType := 'sfr';
+            Prefix := 'sge_';
           end;
         soEvaporation:
           begin
             OutputExtension := '.sfr_evaporation_ob' + OutputTypeExtension;
             ObservationType := 'evaporation';
+            Prefix := 'se_';
           end;
         soOutflow:
           begin
             OutputExtension := '.sfr_outflow_ob' + OutputTypeExtension;
             ObservationType := 'outflow';
+            Prefix := 'sof_';
           end;
         soExternalOutflow:
           begin
             OutputExtension := '.sfr_ext-outflow_ob' + OutputTypeExtension;
             ObservationType := 'ext-outflow';
+            Prefix := 'seo_';
           end;
         soToMvr:
           begin
             OutputExtension := '.sfr_to_mvr_ob' + OutputTypeExtension;
             ObservationType := 'to-mvr';
+            Prefix := 's2m_';
           end;
         soUpstreamFlow:
           begin
             OutputExtension := '.sfr_upstream-flow_ob' + OutputTypeExtension;
             ObservationType := 'upstream-flow';
+            Prefix := 'suf_';
           end;
         soDownstreamFlow:
           begin
             OutputExtension := '.sfr_downstream-flow_ob' + OutputTypeExtension;
             ObservationType := 'downstream-flow';
+            Prefix := 'sdf_';
           end;
         else
           Assert(False);
@@ -2002,10 +2054,10 @@ begin
         if AnObsType in AnObs.FObsTypes then
         begin
           CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
-          Root := AnObs.FName;
-          if Root = '' then
+          Root := Prefix + AnObs.FName;
+          if Root = Prefix then
           begin
-            Root := Format('SfrObs%d', [ObsIndex+1]);
+            Root := Format(Prefix + 'SfrObs%d', [ObsIndex+1]);
           end;
           Assert(Length(Root) <= 40);
           boundname := Trim(AnObs.FBoundName);
@@ -2188,12 +2240,15 @@ var
   CalibObservations: TMf6CalibrationObservations;
   CalibIndex: Integer;
   CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
 begin
   ObTypes := [];
   for ObsIndex := 0 to FObsList.Count - 1 do
   begin
     ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
   end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   ObsPackage := Package as TMf6ObservationUtility;
   case ObsPackage.OutputFormat of
     ofText:
@@ -2216,96 +2271,115 @@ begin
         begin
           OutputExtension := '.lak_stage_ob' + OutputTypeExtension;
           ObservationType := 'stage';
+          Prefix := 'ls_';
         end;
       loExternalInflow:
         begin
           OutputExtension := '.lak_ext-inflow_ob' + OutputTypeExtension;
           ObservationType := 'ext-inflow';
+          Prefix := 'lef_';
         end;
       loSimOutletInflow:
         begin
           OutputExtension := '.lak_outlet-inflow_ob' + OutputTypeExtension;
           ObservationType := 'outlet-inflow';
+          Prefix := 'lof_';
         end;
       loSumInflow:
         begin
           OutputExtension := '.lak_inflow_ob' + OutputTypeExtension;
           ObservationType := 'inflow';
+          Prefix := 'li_';
         end;
       loFromMvr:
         begin
           OutputExtension := '.lak_from_MVR_ob' + OutputTypeExtension;
           ObservationType := 'from-mvr';
+          Prefix := 'lfm_';
         end;
       loRain:
         begin
           OutputExtension := '.lak_rainfall_ob' + OutputTypeExtension;
           ObservationType := 'rainfall';
+          Prefix := 'lra_';
         end;
       loRunoff:
         begin
           OutputExtension := '.lak_runoff_ob' + OutputTypeExtension;
           ObservationType := 'runoff';
+          Prefix := 'lru_';
         end;
       loFlowRate:
         begin
           OutputExtension := '.lak_flow_ob' + OutputTypeExtension;
           ObservationType := 'lak';
+          Prefix := 'lf_';
         end;
       loWithdrawal:
         begin
           OutputExtension := '.lak_withdrawal_ob' + OutputTypeExtension;
           ObservationType := 'withdrawal';
+          Prefix := 'lw_';
         end;
       loEvap:
         begin
           OutputExtension := '.lak_evaporation_ob' + OutputTypeExtension;
           ObservationType := 'evaporation';
+          Prefix := 'le_';
         end;
       loExternalOutflow:
         begin
           OutputExtension := '.lak_ext-outflow_ob' + OutputTypeExtension;
           ObservationType := 'ext-outflow';
+          Prefix := 'leo_';
         end;
       loToMvr:
         begin
           OutputExtension := '.lak_to_mvr_ob' + OutputTypeExtension;
           ObservationType := 'to-mvr';
+          Prefix := 'l2m_';
         end;
       loStorage:
         begin
           OutputExtension := '.lak_storage_ob' + OutputTypeExtension;
           ObservationType := 'storage';
+          Prefix := 'lst_';
         end;
       loConstantFlow:
         begin
           OutputExtension := '.lak_constant_flow_ob' + OutputTypeExtension;
           ObservationType := 'constant';
+          Prefix := 'lc_';
         end;
       loOutlet:
         begin
           OutputExtension := '.lak_outlet_ob' + OutputTypeExtension;
           ObservationType := 'outlet';
+          Prefix := 'lo_';
         end;
       loVolume:
         begin
           OutputExtension := '.lak_volume_ob' + OutputTypeExtension;
           ObservationType := 'volume';
+          Prefix := 'lv_';
         end;
       loSurfaceArea:
         begin
           OutputExtension := '.lak_surface-area_ob' + OutputTypeExtension;
           ObservationType := 'surface-area';
+          Prefix := 'lsa_';
         end;
       loWettedArea:
         begin
           OutputExtension := '.lak_wetted-area_ob' + OutputTypeExtension;
           ObservationType := 'wetted-area';
+          Prefix := 'lwa_';
         end;
       loConductance:
         begin
           OutputExtension := '.lak_conductance_ob' + OutputTypeExtension;
           ObservationType := 'conductance';
+          Prefix := 'lco_';
         end;
     end;
 
@@ -2331,10 +2405,10 @@ begin
       AnObs := FObsList[ObsIndex];
       if AnObsType in AnObs.FObsTypes then
       begin
-        obsnam := AnObs.FName;
-        if obsnam = '' then
+        obsnam := Prefix + AnObs.FName;
+        if obsnam = Prefix then
         begin
-          obsnam := Format('Lak%d', [ObsIndex+1]);
+          obsnam := Format(Prefix + 'Lak%d', [ObsIndex+1]);
         end;
         Assert(Length(obsnam) <= 40);
         boundname := Trim(AnObs.FBoundName);
@@ -2361,7 +2435,7 @@ begin
                 and (AnObsType = CalibObs.LakOb) then
               begin
                 DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-                  [CalibObs.Name, CalibObs.Time]));
+                  [CalibObs.Name, CalibObs.Time - StartTime]));
               end;
             end;
           end;
@@ -2445,6 +2519,8 @@ var
   CalibObsNames: TStringList;
   CalibIndex: Integer;
   CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -2491,7 +2567,7 @@ var
             begin
               CalibObs := CalibObservations[CalibIndex];
               DirectObsLines.Add(Format('OBSNAME %0:s_%1:d %2:g',
-                [CalibObs.Name, CalibIndex+1, CalibObs.Time]));
+                [CalibObs.Name, CalibIndex+1, CalibObs.Time - StartTime]));
             end;
           end;
 
@@ -2528,6 +2604,7 @@ begin
   begin
     ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
   end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   ObsPackage := Package as TMf6ObservationUtility;
   case ObsPackage.OutputFormat of
     ofText:
@@ -2553,61 +2630,73 @@ begin
           begin
             OutputExtension := '.uzf-gwrch_ob' + OutputTypeExtension;
             ObservationType := 'uzf-gwrch';
+            Prefix := 'ugr_';
           end;
         uoGW_Discharge:
           begin
             OutputExtension := '.uzf-gwd_ob' + OutputTypeExtension;
             ObservationType := 'uzf-gwd';
+            Prefix := 'ug_';
           end;
         uoDischargeToMvr:
           begin
             OutputExtension := '.uzf-gwd-to-mvr_ob' + OutputTypeExtension;
             ObservationType := 'uzf-gwd-to-mvr';
+            Prefix := 'u2m_';
           end;
         uoSatZoneEvapotranspiration:
           begin
             OutputExtension := '.uzf-gwet_ob' + OutputTypeExtension;
             ObservationType := 'uzf-gwet';
+            Prefix := 'uge_';
           end;
         uoInfiltration:
           begin
             OutputExtension := '.infiltration_ob' + OutputTypeExtension;
             ObservationType := 'infiltration';
+            Prefix := 'ui_';
           end;
         uoMvrInflow:
           begin
             OutputExtension := '.from-mvr_ob' + OutputTypeExtension;
             ObservationType := 'from-mvr';
+            Prefix := 'ufm_';
           end;
         uoRejectInfiltration:
           begin
             OutputExtension := '.rej-inf_ob' + OutputTypeExtension;
             ObservationType := 'rej-inf';
+            Prefix := 'ur_';
           end;
         uoRejectInfiltrationToMvr:
           begin
             OutputExtension := '.rej-inf-to-mvr_ob' + OutputTypeExtension;
             ObservationType := 'rej-inf-to-mvr';
+            Prefix := 'ur2m_';
           end;
         uoUnsatZoneEvapotranspiration:
           begin
             OutputExtension := '.uzet_ob' + OutputTypeExtension;
             ObservationType := 'uzet';
+            Prefix := 'ue_';
           end;
         uoStorage:
           begin
             OutputExtension := '.storage_ob' + OutputTypeExtension;
             ObservationType := 'storage';
+            Prefix := 'us_';
           end;
         uoNetInfiltration:
           begin
             OutputExtension := '.net-infiltration_ob' + OutputTypeExtension;
             ObservationType := 'net-infiltration';
+            Prefix := 'uni_';
           end;
         uoWaterContent:
           begin
             OutputExtension := '.water-content_ob' + OutputTypeExtension;
             ObservationType := 'water-content';
+            Prefix := 'uw_';
           end;
       end;
 
@@ -2634,10 +2723,10 @@ begin
         if AnObsType in AnObs.FObsTypes then
         begin
           CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
-          Root := AnObs.FName;
-          if Root = '' then
+          Root := Prefix + AnObs.FName;
+          if Root = Prefix then
           begin
-            Root := Format('UzfObs%d', [ObsIndex+1]);
+            Root := Format(Prefix + 'UzfObs%d', [ObsIndex+1]);
           end;
           Assert(Length(Root) <= 40);
           boundname := Trim(AnObs.FBoundName);
@@ -2691,7 +2780,7 @@ begin
                     and (AnObsType = CalibObs.UzfOb) then
                   begin
                     DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-                      [CalibObs.Name, CalibObs.Time]));
+                      [CalibObs.Name, CalibObs.Time - StartTime]));
                   end;
                 end;
               end;
@@ -2813,6 +2902,8 @@ var
   CalibObservations: TMf6CalibrationObservations;
   CalibIndex: Integer;
   CalibObs: TMf6CalibrationObs;
+  StartTime: Double;
+  Prefix: string;
   procedure CheckForDuplicateObsNames;
   begin
     if ObsNames.IndexOf(obsnam) >= 0 then
@@ -2859,7 +2950,7 @@ var
             begin
               CalibObs := CalibObservations[CalibIndex];
               DirectObsLines.Add(Format('OBSNAME %0:s_%1:d %2:g',
-                [CalibObs.Name, CalibIndex+1, CalibObs.Time]));
+                [CalibObs.Name, CalibIndex+1, CalibObs.Time - StartTime]));
             end;
           end;
 
@@ -2897,6 +2988,7 @@ begin
   begin
     ObTypes := ObTypes + FObsList[ObsIndex].FObsTypes;
   end;
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
   ObsPackage := Package as TMf6ObservationUtility;
   NDELAYCELLS := Model.ModflowPackages.CSubPackage.NumberOfDelayCells;
   case ObsPackage.OutputFormat of
@@ -2924,166 +3016,199 @@ begin
           begin
             OutputExtension := '.csub_ob' + OutputTypeExtension;
             ObservationType := 'csub';
+            Prefix := 'c_';
           end;
         coInelastCSub:
           begin
             OutputExtension := '.inelastic-csub_ob' + OutputTypeExtension;
             ObservationType := 'inelastic-csub';
+            Prefix := 'ci_';
           end;
         coElastCSub:
           begin
             OutputExtension := '.elastic-csub_ob' + OutputTypeExtension;
             ObservationType := 'elastic-csub';
+            Prefix := 'ce_';
           end;
         coCoarseCSub:
           begin
             OutputExtension := '.coarse-csub_ob' + OutputTypeExtension;
             ObservationType := 'coarse-csub';
+            Prefix := 'cc_';
           end;
         coCSubCell:
           begin
             OutputExtension := '.csub-cell_ob' + OutputTypeExtension;
             ObservationType := 'csub-cell';
+            Prefix := 'cce_';
           end;
         coWcompCSubCell:
           begin
             OutputExtension := '.wcomp-csub-cell_ob' + OutputTypeExtension;
             ObservationType := 'wcomp-csub-cell';
+            Prefix := 'cw_';
           end;
         coSk:
           begin
             OutputExtension := '.sk_ob' + OutputTypeExtension;
             ObservationType := 'sk';
+            Prefix := 'cs_';
           end;
         coSke:
           begin
             OutputExtension := '.ske_ob' + OutputTypeExtension;
             ObservationType := 'ske';
+            Prefix := 'cse_';
           end;
         coSkCell:
           begin
             OutputExtension := '.sk-cell_ob' + OutputTypeExtension;
             ObservationType := 'sk-cell';
+            Prefix := 'csc_';
           end;
         coSkeCell:
           begin
             OutputExtension := '.ske-cell_ob' + OutputTypeExtension;
             ObservationType := 'ske-cell';
+            Prefix := 'csec_';
           end;
         coEStressCell:
           begin
             OutputExtension := '.estress-cell_ob' + OutputTypeExtension;
             ObservationType := 'estress-cell';
+            Prefix := 'ces_';
           end;
         coGStressCell:
           begin
             OutputExtension := '.gstress-cell_ob' + OutputTypeExtension;
             ObservationType := 'gstress-cell';
+            Prefix := 'cg_';
           end;
         coIntbedComp:
           begin
             OutputExtension := '.interbed-compaction_ob' + OutputTypeExtension;
             ObservationType := 'interbed-compaction';
+            Prefix := 'cico_';
           end;
         coInelastComp:
           begin
             OutputExtension := '.inelastic-compaction_ob' + OutputTypeExtension;
             ObservationType := 'inelastic-compaction';
+            Prefix := 'cic_';
           end;
         coElastComp:
           begin
             OutputExtension := '.elastic-compaction_ob' + OutputTypeExtension;
             ObservationType := 'elastic-compaction';
+            Prefix := 'cec_';
           end;
         coCoarseCompaction:
           begin
             OutputExtension := '.coarse-compaction_ob' + OutputTypeExtension;
             ObservationType := 'coarse-compaction';
+            Prefix := 'ccc_';
           end;
         coCompCell:
           begin
             OutputExtension := '.compaction-cell_ob' + OutputTypeExtension;
             ObservationType := 'compaction-cell';
+            Prefix := 'ccce_';
           end;
         coThickness:
           begin
             OutputExtension := '.thickness_ob' + OutputTypeExtension;
             ObservationType := 'thickness';
+            Prefix := 'ct_';
           end;
         coCoarseThickness:
           begin
             OutputExtension := '.coarse-thickness_ob' + OutputTypeExtension;
             ObservationType := 'coarse-thickness';
+            Prefix := 'ccth_';
           end;
         coThickCell:
           begin
             OutputExtension := '.thickness-cell_ob' + OutputTypeExtension;
             ObservationType := 'thickness-cell';
+            Prefix := 'ctc_';
           end;
         coTheta:
           begin
             OutputExtension := '.theta_ob' + OutputTypeExtension;
             ObservationType := 'theta';
+            Prefix := 'ct_';
           end;
         coCoarseTheta:
           begin
             OutputExtension := '.coarse-theta_ob' + OutputTypeExtension;
             ObservationType := 'coarse-theta';
+            Prefix := 'cct_';
           end;
         coThetaCell:
           begin
             OutputExtension := '.theta-cell_ob' + OutputTypeExtension;
             ObservationType := 'theta-cell';
+            Prefix := 'cthc_';
           end;
         coDelayFlowTop:
           begin
             OutputExtension := '.delay-flowtop_ob' + OutputTypeExtension;
             ObservationType := 'delay-flowtop';
+            Prefix := 'cdft_';
           end;
         coDelayFlowBot:
           begin
             OutputExtension := '.delay-flowbot_ob' + OutputTypeExtension;
             ObservationType := 'delay-flowbot';
+            Prefix := 'cdfb_';
           end;
         coDelayHead:
           begin
             OutputExtension := '.delay-head_ob' + OutputTypeExtension;
             ObservationType := 'delay-head';
+            Prefix := 'cdh_';
           end;
         coDelayGStress:
           begin
             OutputExtension := '.delay-gstress_ob' + OutputTypeExtension;
             ObservationType := 'delay-gstress';
+            Prefix := 'cdg_';
           end;
         coDelayEStress:
           begin
             OutputExtension := '.delay-estress_ob' + OutputTypeExtension;
             ObservationType := 'delay-estress';
+            Prefix := 'cde_';
           end;
         coDelayPreConStress:
           begin
             OutputExtension := '.delay-preconstress_ob' + OutputTypeExtension;
             ObservationType := 'delay-preconstress';
+            Prefix := 'cdp_';
           end;
         coDelayComp:
           begin
             OutputExtension := '.delay-compaction_ob' + OutputTypeExtension;
             ObservationType := 'delay-compaction';
+            Prefix := 'cdc_';
           end;
         coDelayThickness:
           begin
             OutputExtension := '.delay-thickness_ob' + OutputTypeExtension;
             ObservationType := 'delay-thickness';
+            Prefix := 'cdth_';
           end;
         coDelayTheta:
           begin
             OutputExtension := '.delay-theta_ob' + OutputTypeExtension;
             ObservationType := 'delay-theta';
+            Prefix := 'cdt_';
           end;
         coPreConsStressCell:
           begin
             OutputExtension := '.preconstress-cell_ob' + OutputTypeExtension;
             ObservationType := 'preconstress-cell';
+            Prefix := 'cp_';
           end;
         else
           Assert(False);
@@ -3114,10 +3239,10 @@ begin
         if AnObsType in AnObs.FObsTypes then
         begin
           CalibObsNames.Clear;
-          Root := AnObs.FName;
-          if Root = '' then
+          Root := Prefix + AnObs.FName;
+          if Root = Prefix then
           begin
-            Root := Format('CSubObs%d', [ObsIndex+1]);
+            Root := Format(Prefix + 'CSubObs%d', [ObsIndex+1]);
           end;
           Assert(Length(Root) <= 40);
           boundname := Trim(AnObs.FBoundName);
@@ -3152,7 +3277,7 @@ begin
                           and (AnObsType = CalibObs.CSubOb) then
                         begin
                           DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
-                            [CalibObs.Name, CalibObs.Time]));
+                            [CalibObs.Name, CalibObs.Time - StartTime]));
                         end;
                       end;
                     end;

@@ -2408,6 +2408,7 @@ that affects the model output should also have a comment. }
       const Value: TGlobalObservationComparisons);
     procedure SetSutraFluxObs(const Value: TSutraFluxObs);
     function GetSutraLakesUsed: Boolean;
+    procedure WriteMf6ObsExtractorFile(FileName: string);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -9140,6 +9141,11 @@ const
 
   //               Bug fix: Fixed bug that could cause an access violation when
   //                manually specifying the SUTRA mesh.
+  //               Bug fix: Fixed a bug that could cause the MAW observations
+  //                to be written incorrectly.
+  //               Change: With MODFLOW 6 observations, a prefix is added before
+  //                each observation name to ensure that all the observation
+  //                names are unique.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.19';
@@ -39109,6 +39115,47 @@ begin
   end;
 end;
 
+procedure TCustomModel.WriteMf6ObsExtractorFile(FileName: string);
+var
+  Lines: TStringList;
+begin
+  if PestUsed and (ModelSelection = msModflow2015)
+    and (DirectObservationLines.Count > 0) then
+  begin
+    FileName := ChangeFileExt(FileName, '.Mf6ObsExtIns');
+    Lines := TStringList.Create;
+    try
+      Lines.Add('BEGIN OPTIONS');
+      Lines.Add('  LISTING ' + ChangeFileExt(FileName, '.Mf6ObsExtInsLst'));
+      Lines.Add('  VALUES ' + ChangeFileExt(FileName, '.Mf6ObsExtInsValues'));
+      Lines.Add('  INSTRUCTION ' + ChangeFileExt(FileName, '.PestIns'));
+      Lines.Add('END OPTIONS');
+      Lines.Add('');
+
+      Lines.Add('BEGIN OBSERVATION_FILES');
+      Lines.AddStrings(FileNameLines);
+      Lines.Add('END OBSERVATION_FILES');
+      Lines.Add('');
+
+      Lines.Add('BEGIN IDENTIFIERS');
+      Lines.AddStrings(DirectObservationLines);
+      Lines.Add('END IDENTIFIERS');
+      Lines.Add('');
+
+      if DerivedObservationLines.Count > 0 then
+      begin
+        Lines.Add('BEGIN DERIVED_OBSERVATIONS');
+        Lines.AddStrings(DirectObservationLines);
+        Lines.Add('END DERIVED_OBSERVATIONS');
+      end;
+
+      Lines.SaveToFile(FileName);
+    finally
+      Lines.Free;
+    end;
+  end;
+end;
+
 procedure TCustomModel.InternalExportModflowModel(const FileName: string;
   ExportAllLgr: boolean);
 var
@@ -40427,6 +40474,8 @@ begin
         ModflowMvrWriter.Free;
         UpdateCurrentModel(SelectedModel);
       end;
+
+      WriteMf6ObsExtractorFile(FileName);
     except on E: EInvalidTime do
       begin
         Beep;

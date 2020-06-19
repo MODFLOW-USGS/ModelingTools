@@ -1,15 +1,15 @@
-# OBS: Observation Utility file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+# OBS: Observation Utility file created on 6/18/2020 by ModelMuse version 4.2.0.19.
 BEGIN OPTIONS
     DIGITS      5
     PRINT_INPUT
 END OPTIONS
 
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.ob_gw_out_head.csv
-  'HeadObs' head     3     4     8
+  'hd_HeadObs' head     3     4     8
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.ob_gw_out_drawdown.csv
-  'HeadObs' drawdown     3     4     8
+  'ddn_HeadObs' drawdown     3     4     8
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.ob_gw_out_flow-ja-face.csv

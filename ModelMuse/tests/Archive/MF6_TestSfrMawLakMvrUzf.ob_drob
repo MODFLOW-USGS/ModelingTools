@@ -1,11 +1,11 @@
-# OBS: Observation Utility file created on 8/20/2019 by ModelMuse version 4.0.0.12.
+# OBS: Observation Utility file created on 6/18/2020 by ModelMuse version 4.2.0.19.
 BEGIN OPTIONS
     DIGITS      5
     PRINT_INPUT
 END OPTIONS
 
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.drob_out_drn.csv
-  'DRN' drn Drain
+  'drn_DRN' drn Drain
   'DRN_MVR' to-mvr Drain
 END CONTINUOUS
 

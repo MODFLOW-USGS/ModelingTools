@@ -1126,6 +1126,22 @@ begin
         FListingFile.Add(Format(rsObservationV, [AnObs.Value]));
         FListingFile.Add('');
       end;
+    end
+    else if ObsFile.OutputFile.FirstTime = AnObs.Time then
+    begin
+      AnObs.Value := ObsFile.OutputFile.FirstValue[ObsFile.Position];
+      AnObs.TimeAssigned := True;
+      AddObsToDictionary(AnObs);
+
+      FParser.CreateVariable(AnObs.ObsName, '', AnObs.Value, AnObs.ObsName);
+      PrintToOutputFile(AnObs);
+      if FListingFile <> nil then
+      begin
+        FListingFile.Add(Format(rsObservationN2, [AnObs.Obsname]));
+        FListingFile.Add(Format(rsObservationT2, [AnObs.Time]));
+        FListingFile.Add(Format(rsObservationV, [AnObs.Value]));
+        FListingFile.Add('');
+      end;
     end;
   end;
   if FListingFile <> nil then

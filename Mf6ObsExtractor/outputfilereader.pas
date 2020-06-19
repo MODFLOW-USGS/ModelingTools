@@ -96,6 +96,7 @@ begin
     Readln(FTextFile, ALine);
     Splitter := TStringList.Create;
     try
+      Splitter.Delimiter := ',';
       Splitter.DelimitedText := ALine;
       FNOBS := Splitter.Count - 1;
       FObservationDictionary.Capacity := FObservationDictionary.Count + Splitter.Count;
@@ -143,8 +144,11 @@ begin
     begin
       Splitter := TStringList.Create;
       try
+        Splitter.Delimiter := ',';
         Splitter.DelimitedText := ALine;
-        Assert(FNOBS = Splitter.Count - 1, Format('In the line "%0:s", the number of observation values is %1:d instead of %2:d', [ALine, FObservationDictionary.Count - 1, FNOBS]));
+        Assert(FNOBS = Splitter.Count - 1,
+          Format('In the line "%0:s" of "%1:s", the number of observation values is %2:d instead of %3:d',
+          [ALine, FileName, FObservationDictionary.Count - 1, FNOBS]));
         ATime := StrToFloat(Splitter[0]);
         for Index := 1 to Splitter.Count -1 do
         begin
