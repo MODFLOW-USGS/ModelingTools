@@ -456,7 +456,7 @@ begin
         end;
       end;
       ItemIndex := 0;
-      for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
+      for RowIndex := 1 to seNumberOfTimes.AsInteger do
       begin
         if TryStrToFloat(rdgModflowBoundary.Cells[Ord(stcStartTime), RowIndex], StartTime)
           and TryStrToFloat(rdgModflowBoundary.Cells[Ord(stcEndTime), RowIndex], EndTime) then
@@ -481,7 +481,7 @@ begin
 
           if TryStrToInt(rdgModflowBoundary.Cells[
             Ord(stcDiversionSegment), RowIndex], SegNum) then
-          begin                                
+          begin
             StrItem.DiversionSegment := SegNum
           end;
 
@@ -537,6 +537,7 @@ begin
           end;
         end;
       end;
+      Values.Count := ItemIndex;
     end;
   end;
 

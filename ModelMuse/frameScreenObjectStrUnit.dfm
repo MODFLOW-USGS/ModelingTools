@@ -138,8 +138,7 @@ inherited frameScreenObjectStr: TframeScreenObjectStr
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 2
-      ExplicitTop = 58
+      ExplicitTop = 57
       ExplicitHeight = 92
     end
   end

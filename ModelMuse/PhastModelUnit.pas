@@ -9155,6 +9155,8 @@ const
   //               Change: With MODFLOW 6 observations, a prefix is added before
   //                each observation name to ensure that all the observation
   //                names are unique.
+  //               Bug fix: It is now possible to inactivate a STR boundary by
+  //                deleting all the times at which the boundary is defined.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.19';

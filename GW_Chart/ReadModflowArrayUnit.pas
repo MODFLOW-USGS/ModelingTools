@@ -119,7 +119,15 @@ begin
     or (Description = '      VOID RATIO')
     or (Description = '       THICKNESS')
     or (Description = 'CENTER ELEVATION')
-    or (Description = 'HEAD            ');
+    or (Description = 'HEAD            ')
+
+    or (Description = 'CSUB-COMPACTION ')
+    or (Description = ' CSUB-INELASTIC ')
+    or (Description = '   CSUB-ELASTIC ')
+    or (Description = '  CSUB-INTERBED ')
+    or (Description = '    CSUB-COARSE ')
+    or (Description = ' CSUB-ZDISPLACE ')
+    ;
 end;
 
 function CheckArrayFileType(AFile: TFileStream): TModflowFileType;

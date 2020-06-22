@@ -326,6 +326,7 @@ begin
   end;
   DerivedObs.Value := 0;
   FDerivedObsList.Add(DerivedObs);
+  //RecordObs(DerivedObs);
   if FListingFile <> nil then
   begin
     FListingFile.Add(Format(rsObservationN, [DerivedObs.Obsname]));
@@ -1127,7 +1128,7 @@ begin
         FListingFile.Add('');
       end;
     end
-    else if ObsFile.OutputFile.FirstTime = AnObs.Time then
+    else if ObsFile.OutputFile.FirstTime >= AnObs.Time then
     begin
       AnObs.Value := ObsFile.OutputFile.FirstValue[ObsFile.Position];
       AnObs.TimeAssigned := True;

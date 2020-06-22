@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, GoPhastTypes, System.SysUtils, ModflowMawUnit,
   ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowCsubUnit, PestObsUnit, FormulaManagerUnit;
+  ModflowCsubUnit, PestObsUnit, FormulaManagerUnit, System.Generics.Collections;
 
 type
   TGwFlowOb = (gfoNearestNeighbor, gfoAllNeighbors, gfoAbove, gfoBelow);
@@ -82,6 +82,8 @@ type
     property MawConnectionNumber: Integer read FMawConnectionNumber
       write SetMawConnectionNumber;
   end;
+
+  TCalibObList = TList<TMf6CalibrationObs>;
 
   TMf6CalibrationObservations = class(TCustomComparisonCollection)
   private

@@ -3,7 +3,8 @@ unit Modflow6ObsWriterUnit;
 interface
 
 uses
-  System.Generics.Collections, CustomModflowWriterUnit,
+  PestObsUnit, ModflowTimeUnit, System.Generics.Collections,
+  CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, ModflowCellUnit, PhastModelUnit, QuadTreeClass,
   Modflow6ObsUnit, ScreenObjectUnit, System.SysUtils, ModflowMawWriterUnit,
   ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit, System.Classes,
@@ -31,6 +32,8 @@ type
     procedure WriteOptions;
     procedure WriteCell(Cell: TCellLocation);
     function WriteCellName(Cell: TCellLocation): string;
+    procedure WriteSumFormula(CalibObList: TCalibObList;
+      CalibObsNames: TStringList);
   protected
     FNameOfFile: string;
     function Package: TModflowPackageSelection; override;
@@ -197,6 +200,11 @@ resourcestring
   StrErrorInDefiningHe = 'Error in defining head observation';
   StrSDoesNotDefineA = '%s does not define a head observation because it doe' +
   's not intersect any active cell.';
+  StrInvalidHeadOrDrawCalib = 'Invalid head or drawdown calibration observat' +
+  'ion';
+  StrTheHeadOrDrawdownCalib = 'The head or drawdown calibration observation ' +
+  'defined by %s is invalid because it involves more than one cell. Head or ' +
+  'drawdown observations for calibration must be defined by point objects.';
 
 
 { TModflow6Obs_Writer }
@@ -268,7 +276,6 @@ var
   NodeIndex: Integer;
   ANode: INode2D;
   Mesh: IMesh3D;
-//  MeshLimits: TGridLimit;
 begin
   if FNodeNumberQuadTree = nil then
   begin
@@ -288,8 +295,6 @@ begin
         ANode := AnElement.NodesI[NodeIndex];
         FNodeNumberQuadTree.AddPoint(ANode.NodeNumber, PriorNode.NodeNumber,
           Pointer(AnElement.ElementNumber));
-//        FNodeNumberQuadTree.AddPoint(PriorNode.NodeNumber, ANode.NodeNumber,
-//          Pointer(AnElement.ElementNumber));
         PriorNode := ANode;
       end;
     end;
@@ -347,6 +352,7 @@ var
   InterpolateFormula: TStringBuilder;
   NameIndex: Integer;
   StartTime: Double;
+  Prefix: string;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
     if Model.DisvUsed then
@@ -359,6 +365,7 @@ var
     end;
   end;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidHeadOrDrawCalib);
   if Model.PestUsed then
   begin
     // These two properties need to be specified outside of TModflow6Obs_Writer;
@@ -418,6 +425,13 @@ begin
 
           if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
           begin
+            if Model.PestUsed and (CellList.Count <> 1) and (CellIndex = 0) and
+              (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  then
+            begin
+              frmErrorsAndWarnings.AddError(Model, StrInvalidHeadOrDrawCalib,
+                Format(StrTheHeadOrDrawdownCalib,
+                [AScreenObject.Name]), AScreenObject)
+            end;
             if Model.PestUsed and (CellList.Count = 1) and
               (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  then
             begin
@@ -566,7 +580,7 @@ begin
                     begin
                       HeadDrawdown.FName := Obs.Name + '_H' + IntToStr(ObsIndex);
                       FHeadObs.Add(HeadDrawdown);
-                      DirectObsLines.Add(Format('  ID %0:s', [HeadDrawdown.FName]));
+                      DirectObsLines.Add(Format('  ID %0:s', ['hd_' + HeadDrawdown.FName]));
                       DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
                       for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
                       begin
@@ -575,18 +589,19 @@ begin
                           and (Observation.ObGeneral = ogHead) then
                         begin
                           ObservationName := Format('%0:s_%1:d',
-                            ['hd_' + HeadDrawdown.FName, ObservationIndex+1]);
-                          DirectObsLines.Add(Format('  OBSNAME %0:s %2:g',
-                            [ObservationName, Observation.Time - StartTime]));
+                            [HeadDrawdown.FName, ObservationIndex+1]);
+                          DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
+                            ['hd_' + ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
                         end;
                       end;
+                      DirectObsLines.Add('');
                     end;
                     if ogDrawdown in Obs.CalibrationObservations.ObGenerals  then
                     begin
                       HeadDrawdown.FName := Obs.Name + '_D' + IntToStr(ObsIndex);
                       FDrawdownObs.Add(HeadDrawdown);
-                      DirectObsLines.Add(Format('  ID %0:s', [HeadDrawdown.FName]));
+                      DirectObsLines.Add(Format('  ID %0:s', ['ddn_' + HeadDrawdown.FName]));
                       DirectObsLines.Add(Format('  LOCATION %0:g %1:g', [APoint.x, APoint.y]));
                       for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
                       begin
@@ -595,12 +610,13 @@ begin
                           and (Observation.ObGeneral = ogDrawdown) then
                         begin
                           ObservationName := Format('%0:s_%1:d',
-                            ['ddn_' + HeadDrawdown.FName, ObservationIndex+1]);
+                            [HeadDrawdown.FName, ObservationIndex+1]);
                           DirectObsLines.Add(Format('  OBSNAME %0:s %2:g',
-                            [ObservationName, Observation.Time - StartTime]));
+                            ['ddn_' + ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
                         end;
                       end;
+                      DirectObsLines.Add('');
                     end;
                     Inc(ObsIndex);
                   end;
@@ -610,10 +626,19 @@ begin
                     if (Observation.ObSeries = osGeneral)
                       and (Observation.ObGeneral in [ogHead, ogDrawdown]) then
                     begin
-                      CalculatedObsLines.Add(Format('OBSNAME %s PRINT', [Observation.Name]));
+                      if Observation.ObGeneral = ogHead then
+                      begin
+                        Prefix := 'hd_';
+                      end
+                      else
+                      begin
+                        Prefix := 'ddn_';
+                      end;
+
+                      CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [Observation.Name]));
                       InterpolateFormula := TStringBuilder.Create;
                       try
-                        InterpolateFormula.Append('INTERPOLATE ');
+                        InterpolateFormula.Append('  INTERPOLATE ');
                         APoint := AScreenObject.Points[0];
                         InterpolateFormula.Append(APoint.x);
                         InterpolateFormula.Append(' ');
@@ -621,9 +646,11 @@ begin
                         for NameIndex := 0 to Observation.InterpObsNames.Count - 1 do
                         begin
                           InterpolateFormula.Append(' ');
+                          InterpolateFormula.Append(Prefix);
                           InterpolateFormula.Append(Observation.InterpObsNames[NameIndex]);
                         end;
                         CalculatedObsLines.Add(InterpolateFormula.ToString);
+                        CalculatedObsLines.Add('');
                       finally
                         InterpolateFormula.Free;
                       end;
@@ -1328,7 +1355,6 @@ procedure TModflow6FlowObsWriter.WriteFlowObs(ObsType: string;
   List, ToMvrList: TBoundaryFlowObservationLocationList);
 var
   ObsIndex: Integer;
-//  HeadObs: THeadDrawdownObservationLocation;
   OutputExtension: string;
   FlowObs: TBoundaryFlowObservationLocation;
   ObsPackage: TMf6ObservationUtility;
@@ -1414,17 +1440,18 @@ begin
 
       if FObGeneral in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
       begin
-        DirectObsLines.Add(Format('ID %s', [obsnam]));
+        DirectObsLines.Add(Format('  ID %s', [obsnam]));
         for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
         begin
           CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
           if (CalibObs.ObSeries = osGeneral)
             and (CalibObs.ObGeneral = FObGeneral) then
           begin
-            DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
               [CalibObs.Name, CalibObs.Time - StartTime]));
           end;
         end;
+        DirectObsLines.Add('');
       end;
     end;
 
@@ -1450,17 +1477,18 @@ begin
 
       if ogMvr in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
       begin
-        DirectObsLines.Add(Format('ID %s', [obsnam]));
+        DirectObsLines.Add(Format('  ID %s', [obsnam]));
         for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
         begin
           CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
           if (CalibObs.ObSeries = osGeneral)
             and (CalibObs.ObGeneral = ogMvr) then
           begin
-            DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
               [CalibObs.Name, CalibObs.Time - StartTime]));
           end;
         end;
+        DirectObsLines.Add('');
       end;
 
     end;
@@ -1501,7 +1529,6 @@ end;
 
 procedure TModflow6FlowObsWriter.WriteFile(const AFileName: string);
 begin
-//  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   if not Package.IsSelected then
   begin
     Exit
@@ -1527,7 +1554,6 @@ begin
 
 end;
 
-
 { TMawObsWriter }
 
 constructor TMawObsWriter.Create(Model: TCustomModel;
@@ -1551,7 +1577,6 @@ end;
 
 procedure TMawObsWriter.WriteFile(const AFileName: string);
 begin
-//  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   if not Package.IsSelected then
   begin
     Exit
@@ -1778,7 +1803,7 @@ begin
               begin
                 if CalibrationObservations.UsesMawConnectionNumber(IconIndex, AnObsType) then
                 begin
-                  DirectObsLines.Add(Format('ID %s_%d', [obsnam, IconIndex]));
+                  DirectObsLines.Add(Format('  ID %s_%d', [obsnam, IconIndex]));
                   for CalibIndex := 0 to CalibrationObservations.Count - 1 do
                   begin
                     CalibObs := CalibrationObservations[CalibIndex];
@@ -1787,26 +1812,28 @@ begin
                       and (IconIndex = CalibObs.MawConnectionNumber)
                       then
                     begin
-                      DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                      DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                         [CalibObs.Name, CalibObs.Time - StartTime]));
                     end;
                   end;
+                  DirectObsLines.Add('');
                 end;
               end;
             end
             else
             begin
-              DirectObsLines.Add(Format('ID %s', [obsnam]));
+              DirectObsLines.Add(Format('  ID %s', [obsnam]));
               for CalibIndex := 0 to CalibrationObservations.Count - 1 do
               begin
                 CalibObs := CalibrationObservations[CalibIndex];
                 if (CalibObs.ObSeries = osMaw)
                   and (AnObsType = CalibObs.MawOb) then
                 begin
-                  DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                  DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                     [CalibObs.Name, CalibObs.Time - StartTime]));
                 end;
               end;
+              DirectObsLines.Add('');
             end;
           end;
         end;
@@ -1908,17 +1935,18 @@ var
     begin
       if AnObsType in CalibObservations.SfrObs then
       begin
-        DirectObsLines.Add(Format('ID %s', [obsnam]));
+        DirectObsLines.Add(Format('  ID %s', [obsnam]));
         for CalibIndex := 0 to CalibObservations.Count - 1 do
         begin
           CalibObs := CalibObservations[CalibIndex];
           if (CalibObs.ObSeries = osSfr)
             and (AnObsType = CalibObs.SfrOb) then
           begin
-            DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
               [CalibObs.Name, CalibObs.Time - StartTime]));
           end;
         end;
+        DirectObsLines.Add('');
       end;
     end;
 
@@ -2428,17 +2456,18 @@ begin
           CalibObservations := AnObs.FModflow6Obs.CalibrationObservations;
           if AnObsType in CalibObservations.LakObs then
           begin
-            DirectObsLines.Add(Format('ID %s', [obsnam]));
+            DirectObsLines.Add(Format('  ID %s', [obsnam]));
             for CalibIndex := 0 to CalibObservations.Count - 1 do
             begin
               CalibObs := CalibObservations[CalibIndex];
               if (CalibObs.ObSeries = osLak)
                 and (AnObsType = CalibObs.LakOb) then
               begin
-                DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                   [CalibObs.Name, CalibObs.Time - StartTime]));
               end;
             end;
+            DirectObsLines.Add('');
           end;
         end;
 
@@ -2538,16 +2567,13 @@ var
   var
     CalibIndex: Integer;
     CalibObs: TMf6CalibrationObs;
-    ObsNameIndex: Integer;
-    CalibObList: TList<TMf6CalibrationObs>;
-    FormulaBuilder: TStringBuilder;
+    CalibObList: TCalibObList;
   begin
     if Model.PestUsed then
     begin
       if AnObsType in CalibObservations.UzfObs then
       begin
-        FormulaBuilder := TStringBuilder.Create;
-        CalibObList := TList<TMf6CalibrationObs>.Create;
+        CalibObList := TCalibObList.Create;
         try
           for CalibIndex := 0 to CalibObservations.Count - 1 do
           begin
@@ -2559,43 +2585,8 @@ var
             end;
           end;
 
-          for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
-          begin
-            ID := CalibObsNames[ObsNameIndex];
-            DirectObsLines.Add(Format('ID %s', [ID]));
-
-            for CalibIndex := 0 to CalibObList.Count - 1 do
-            begin
-              CalibObs := CalibObservations[CalibIndex];
-              DirectObsLines.Add(Format('OBSNAME %0:s_%1:d_%2:d %3:g',
-                [CalibObs.Name, ObsNameIndex+1, CalibIndex+1, CalibObs.Time - StartTime]));
-            end;
-          end;
-
-          for CalibIndex := 0 to CalibObList.Count - 1 do
-          begin
-            CalibObs := CalibObservations[CalibIndex];
-            CalculatedObsLines.Add(Format('  OBSNAME %s PRINT',
-              [CalibObs.Name]));
-            FormulaBuilder.Clear;
-            FormulaBuilder.Append('  FORMULA ');
-            FormulaBuilder.Append(CalibObsNames[0]);
-              FormulaBuilder.Append('_1_');
-            FormulaBuilder.Append(CalibIndex+1);
-            for ObsNameIndex := 1 to CalibObsNames.Count - 1 do
-            begin
-              FormulaBuilder.Append(' + ');
-              FormulaBuilder.Append(CalibObsNames[ObsNameIndex]);
-              FormulaBuilder.Append('_');
-              FormulaBuilder.Append(ObsNameIndex+1);
-              FormulaBuilder.Append('_');
-              FormulaBuilder.Append(CalibIndex+1);
-            end;
-            CalculatedObsLines.Add(FormulaBuilder.ToString);
-          end;
-
+          WriteSumFormula(CalibObList, CalibObsNames);
         finally
-          FormulaBuilder.Free;
           CalibObList.Free;
         end;
       end;
@@ -2773,19 +2764,21 @@ begin
             end;
             if Model.PestUsed then
             begin
-              if AnObsType in CalibObservations.UzfObs then
+              if (AnObsType in CalibObservations.UzfObs)
+                and (AnObsType <> uoWaterContent) then
               begin
-                DirectObsLines.Add(Format('ID %s', [obsname]));
+                DirectObsLines.Add(Format('  ID %s', [obsname]));
                 for CalibIndex := 0 to CalibObservations.Count - 1 do
                 begin
                   CalibObs := CalibObservations[CalibIndex];
                   if (CalibObs.ObSeries = osUzf)
                     and (AnObsType = CalibObs.UzfOb) then
                   begin
-                    DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                    DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                       [CalibObs.Name, CalibObs.Time - StartTime]));
                   end;
                 end;
+                DirectObsLines.Add('');
               end;
             end;
           end
@@ -2923,16 +2916,13 @@ var
   var
     CalibIndex: Integer;
     CalibObs: TMf6CalibrationObs;
-    ObsNameIndex: Integer;
-    CalibObList: TList<TMf6CalibrationObs>;
-    FormulaBuilder: TStringBuilder;
+    CalibObList: TCalibObList;
   begin
     if Model.PestUsed then
     begin
       if AnObsType in CalibObservations.SubObsSet then
       begin
-        FormulaBuilder := TStringBuilder.Create;
-        CalibObList := TList<TMf6CalibrationObs>.Create;
+        CalibObList := TCalibObList.Create;
         try
           for CalibIndex := 0 to CalibObservations.Count - 1 do
           begin
@@ -2944,41 +2934,8 @@ var
             end;
           end;
 
-          for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
-          begin
-            ID := CalibObsNames[ObsNameIndex];
-            DirectObsLines.Add(Format('ID %s', [ID]));
-
-            for CalibIndex := 0 to CalibObList.Count - 1 do
-            begin
-              CalibObs := CalibObservations[CalibIndex];
-              DirectObsLines.Add(Format('OBSNAME %0:s_%1:d %2:g',
-                [CalibObs.Name, CalibIndex+1, CalibObs.Time - StartTime]));
-            end;
-          end;
-
-          for CalibIndex := 0 to CalibObList.Count - 1 do
-          begin
-            CalibObs := CalibObservations[CalibIndex];
-            CalculatedObsLines.Add(Format('  OBSNAME %s PRINT',
-              [CalibObs.Name]));
-            FormulaBuilder.Clear;
-            FormulaBuilder.Append('  FORMULA ');
-            FormulaBuilder.Append(CalibObsNames[0]);
-              FormulaBuilder.Append('_');
-            FormulaBuilder.Append(CalibIndex+1);
-            for ObsNameIndex := 1 to CalibObsNames.Count - 1 do
-            begin
-              FormulaBuilder.Append(' + ');
-              FormulaBuilder.Append(CalibObsNames[ObsNameIndex]);
-              FormulaBuilder.Append('_');
-              FormulaBuilder.Append(CalibIndex+1);
-            end;
-            CalculatedObsLines.Add(FormulaBuilder.ToString);
-          end;
-
+          WriteSumFormula(CalibObList, CalibObsNames);
         finally
-          FormulaBuilder.Free;
           CalibObList.Free;
         end;
       end;
@@ -3272,19 +3229,21 @@ begin
                   begin
                     if AnObsType in CalibObservations.SubObsSet then
                     begin
-                      DirectObsLines.Add(Format('ID %s', [ID]));
+                      DirectObsLines.Add(Format('  ID %s', [ID]));
                       for CalibIndex := 0 to CalibObservations.Count - 1 do
                       begin
                         CalibObs := CalibObservations[CalibIndex];
                         if (CalibObs.ObSeries = osCSub)
                           and (AnObsType = CalibObs.CSubOb) then
                         begin
-                          DirectObsLines.Add(Format('OBSNAME %0:s %1:g PRINT',
+                          DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                             [CalibObs.Name, CalibObs.Time - StartTime]));
                         end;
                       end;
+                      DirectObsLines.Add('');
                     end;
-                  end                end
+                  end
+                end
                 else
                 begin
                   for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
@@ -3402,6 +3361,58 @@ begin
   finally
     ObsNames.Free;
     CalibObsNames.Free;
+  end;
+end;
+
+procedure TCustomMf6ObservationWriter.WriteSumFormula(CalibObList: TCalibObList;
+  CalibObsNames: TStringList);
+var
+  CalibIndex: Integer;
+  CalibObs: TMf6CalibrationObs;
+  ObsNameIndex: Integer;
+  FormulaBuilder: TStringBuilder;
+  ID: string;
+  StartTime: double;
+begin
+  StartTime := Model.ModflowStressPeriods.First.StartTime;
+  FormulaBuilder := TStringBuilder.Create;
+  try
+    for ObsNameIndex := 0 to CalibObsNames.Count - 1 do
+    begin
+      ID := CalibObsNames[ObsNameIndex];
+      DirectObsLines.Add(Format('  ID %s', [ID]));
+      for CalibIndex := 0 to CalibObList.Count - 1 do
+      begin
+        CalibObs := CalibObList[CalibIndex];
+        DirectObsLines.Add(Format('  OBSNAME %0:s_%1:d_%2:d %3:g',
+          [CalibObs.Name, ObsNameIndex + 1, CalibIndex + 1,
+          CalibObs.Time - StartTime]));
+      end;
+      DirectObsLines.Add('');
+    end;
+    for CalibIndex := 0 to CalibObList.Count - 1 do
+    begin
+      CalibObs := CalibObList[CalibIndex];
+      CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [CalibObs.Name]));
+      FormulaBuilder.Clear;
+      FormulaBuilder.Append('  FORMULA ');
+      FormulaBuilder.Append(CalibObs.Name);
+      FormulaBuilder.Append('_1_');
+      FormulaBuilder.Append(CalibIndex + 1);
+      for ObsNameIndex := 1 to CalibObsNames.Count - 1 do
+      begin
+        FormulaBuilder.Append(' + ');
+        FormulaBuilder.Append(CalibObs.Name);
+        FormulaBuilder.Append('_');
+        FormulaBuilder.Append(ObsNameIndex + 1);
+        FormulaBuilder.Append('_');
+        FormulaBuilder.Append(CalibIndex + 1);
+      end;
+      CalculatedObsLines.Add(FormulaBuilder.ToString);
+      CalculatedObsLines.Add('');
+    end;
+  finally
+    FormulaBuilder.Free;
   end;
 end;
 
