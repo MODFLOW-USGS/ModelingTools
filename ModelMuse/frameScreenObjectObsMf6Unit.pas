@@ -64,6 +64,7 @@ type
     procedure chklstLAKClick(Sender: TObject);
     procedure chklstUZFClick(Sender: TObject);
     procedure chklstCSUBClick(Sender: TObject);
+    procedure frameObservationsseNumberChange(Sender: TObject);
   private
     FOnChangeProperties: TNotifyEvent;
     FInitializing: Boolean;
@@ -409,6 +410,7 @@ begin
       end;
     end;
     EnableDepthFraction;
+    UpdateEdObsNameColor;
   finally
     FInitializing := False;
   end;
@@ -830,6 +832,13 @@ begin
   rdeDepthFraction.Enabled := chklstUZF.State[Ord(uoWaterContent)] <> cbUnchecked;
 end;
 
+procedure TframeScreenObjectObsMf6.frameObservationsseNumberChange(
+  Sender: TObject);
+begin
+  framePestObs.frameObservationsseNumberChange(Sender);
+  UpdateEdObsNameColor;
+end;
+
 procedure TframeScreenObjectObsMf6.UpdateEdObsNameColor;
 var
   ObsUsed: Boolean;
@@ -891,6 +900,10 @@ begin
         break;
       end;
     end;
+  end;
+  if not ObsUsed then
+  begin
+    ObsUsed := framePestObs.frameObservations.seNumber.asInteger > 0
   end;
   if ObsUsed and ActiveObs and (edObsName.Text = '') then
   begin

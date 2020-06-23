@@ -23,10 +23,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblTypesOfFlowObservation: TLabel
         Left = 3
         Top = 74
@@ -105,10 +101,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabMAW: TTabSheet
       Caption = 'MAW'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chklstMAW: TCheckListBox
         Left = 3
         Top = 3
@@ -136,10 +128,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabSFR: TTabSheet
       Caption = 'SFR'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chklstSFR: TCheckListBox
         Left = 3
         Top = 83
@@ -181,10 +169,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabLAK: TTabSheet
       Caption = 'LAK'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chklstLAK: TCheckListBox
         Left = 3
         Top = 3
@@ -218,10 +202,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabUZF: TTabSheet
       Caption = 'UZF'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblDepthFraction: TLabel
         Left = 159
         Top = 299
@@ -272,10 +252,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     object tabCSUB: TTabSheet
       Caption = 'CSUB'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splCSub: TSplitter
         Left = 0
         Top = 315
@@ -405,6 +381,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 Left = 340
                 ExplicitLeft = 340
               end
+              inherited seNumber: TJvSpinEdit
+                OnChange = frameObservationsseNumberChange
+              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 478
@@ -452,7 +431,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     BevelOuter = bvNone
     TabOrder = 2
     object edObsName: TLabeledEdit
-      Left = 7
+      Left = 6
       Top = 19
       Width = 278
       Height = 21

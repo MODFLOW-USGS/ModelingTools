@@ -164,6 +164,12 @@ type
     function GetEvtFlowObs: Boolean;
     function GetToMvrFlowObs: Boolean;
     procedure SetUsed(const Value: Boolean);
+    function GetGeneral: TObGenerals;
+    function GetMawObs: TMawObs;
+    function GetCSubObs: TCSubObs;
+    function GetLakObs: TLakObs;
+    function GetSfrObs: TSfrObs;
+    function GetUzfObs: TUzfObs;
   public
 
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
@@ -180,13 +186,13 @@ type
       write SetGroundwaterFlowObs;
     property GwFlowObsChoices: TGwFlowObs read FGwFlowObsChoices
       write SetGwFlowObsChoices;
-    property General: TObGenerals read FGeneral write SetGeneral;
-    property MawObs: TMawObs read FMawObs write SetMawObs;
-    property SfrObs: TSfrObs read FSfrObs write SetSfrObs;
-    property LakObs: TLakObs read FLakObs write SetLakObs;
+    property General: TObGenerals read GetGeneral write SetGeneral;
+    property MawObs: TMawObs read GetMawObs write SetMawObs;
+    property SfrObs: TSfrObs read GetSfrObs write SetSfrObs;
+    property LakObs: TLakObs read GetLakObs write SetLakObs;
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
-    property UzfObs: TUzfObs read FUzfObs write SetUzfObs;
-    property CSubObs: TCSubObs read FCSubObs write SetCSubObs
+    property UzfObs: TUzfObs read GetUzfObs write SetUzfObs;
+    property CSubObs: TCSubObs read GetCSubObs write SetCSubObs
   {$IFNDEF CSUB}
     stored False
   {$ENDIF}
@@ -407,6 +413,13 @@ begin
   result := ogCHD in General;
 end;
 
+function TModflow6Obs.GetCSubObs: TCSubObs;
+begin
+  FCSubObs.CSubObsSet  :=
+    FCSubObs.CSubObsSet +  CalibrationObservations.SubObsSet;
+  result := FCSubObs;
+end;
+
 function TModflow6Obs.GetDrawdownObs: Boolean;
 begin
   result := ogDrawdown in General;
@@ -422,6 +435,11 @@ begin
   result := ogEVT in General;
 end;
 
+function TModflow6Obs.GetGeneral: TObGenerals;
+begin
+  result := FGeneral + CalibrationObservations.ObGenerals;
+end;
+
 function TModflow6Obs.GetGhbFlowObs: Boolean;
 begin
   result := ogGHB in General;
@@ -432,6 +450,16 @@ begin
   result := ogHead in General;
 end;
 
+function TModflow6Obs.GetLakObs: TLakObs;
+begin
+  result := FLakObs + CalibrationObservations.LakObs;
+end;
+
+function TModflow6Obs.GetMawObs: TMawObs;
+begin
+  result := FMawObs + CalibrationObservations.MawObs;
+end;
+
 function TModflow6Obs.GetRchFlowObs: Boolean;
 begin
   result := ogRch in General;
@@ -440,6 +468,11 @@ end;
 function TModflow6Obs.GetRivFlowObs: Boolean;
 begin
   result := ogRiv in General;
+end;
+
+function TModflow6Obs.GetSfrObs: TSfrObs;
+begin
+  result := FSfrObs + CalibrationObservations.SfrObs;
 end;
 
 function TModflow6Obs.GetToMvrFlowObs: Boolean;
@@ -454,6 +487,11 @@ begin
     or EvtFlowObs  or ToMvrFlowObs} or (MawObs <> []) or (SfrObs <> [])
     or (LakObs <> []) or (UzfObs <> []) or (CSubObs.CSubObsSet <> [])
     or (CalibrationObservations.Count > 0);
+end;
+
+function TModflow6Obs.GetUzfObs: TUzfObs;
+begin
+  result := FUzfObs + CalibrationObservations.UzfObs;
 end;
 
 function TModflow6Obs.GetUzfObsDepthFraction: double;

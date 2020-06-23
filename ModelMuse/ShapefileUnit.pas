@@ -230,6 +230,8 @@ type
     Y: double;
   end;
 
+  TShapePointArray = array of TShapePoint;
+
   { @abstract(@name is the constant-length part of a multi-point shape.)
   @longcode(#
   TMultiPointShapeRecord = packed record
@@ -278,6 +280,9 @@ type
     NumPoints: longint;
   end;
   #)
+  The vertices in a Polygons should be in clockwise order unless they
+  represent a hole in the shapefile in which case they should be in
+  counterclockwise order.
   }
   TPolygonShapeRecord = packed record
     // The value of ShapeType should be @link(stPolygon) = 5.
@@ -656,7 +661,7 @@ type
     so on. The @link(FParts) array
     holds the array index of the starting point for each
     part. There is no delimiter in the points array between parts.    }
-    FPoints: array of TShapePoint;
+    FPoints: TShapePointArray;
     // @name indicates the type of shape stored in the Shapefile.
     // It can be any of the following
     // @link(stNull) = 0;

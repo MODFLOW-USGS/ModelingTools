@@ -7451,14 +7451,15 @@ procedure TfrmGoPhast.EnableGridItems;
 var
   GridModel: Boolean;
 begin
-  GridModel := (PhastModel.ModelSelection in ModelsWithGrid) and not DisvUsed;
+  GridModel := (PhastModel.ModelSelection in ModelsWithGrid);
+  miShow2DGridlines.Visible := GridModel;
+  GridModel := GridModel and not DisvUsed;
   miGrid.Visible := GridModel;
   acShowGridShell.Visible := GridModel;
   acShowTopGrid.Visible := GridModel;
   acShowFrontGrid.Visible := GridModel;
   acShowSideGrid.Visible := GridModel;
   acColoredGrid.Visible := GridModel;
-  miShow2DGridlines.Visible := GridModel;
   // This may need to be changed later.
   acShow3DObjects.Visible := GridModel;
 end;

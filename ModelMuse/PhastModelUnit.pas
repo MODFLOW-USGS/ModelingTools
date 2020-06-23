@@ -9147,8 +9147,7 @@ const
   //                will now check whether any .ucn files that will be created
   //                by the model already exist. If they do exist, ModelMuse
   //                will delete them.
-
-  //               Bug fix: Fixed bug that could cause an access violation when
+  //    '4.2.0.20' Bug fix: Fixed bug that could cause an access violation when
   //                manually specifying the SUTRA mesh.
   //               Bug fix: Fixed a bug that could cause the MAW observations
   //                to be written incorrectly.
@@ -9157,9 +9156,14 @@ const
   //                names are unique.
   //               Bug fix: It is now possible to inactivate a STR boundary by
   //                deleting all the times at which the boundary is defined.
+  //               Bug fix: Fixed export of grid data to Shapefile with DISV
+  //                grids. Formerly, the cells boundaries could be exported in
+  //                counterclockwise direction instead of clockwise direction.
+  //               Bug fix: Fixed drawing active area outline to avoid access
+  //                violations.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.19';
+  IModelVersion = '4.2.0.20';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

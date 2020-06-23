@@ -7115,6 +7115,10 @@ begin
         end;
         PointIndex := 0;
         repeat
+          if PointIndex >= Length(APolygon) then
+          begin
+            SetLength(APolygon, PointIndex+1);
+          end;
           APolygon[PointIndex] := ASegment[2];
           X := ASegment[2].X;
           Y := ASegment[2].Y;

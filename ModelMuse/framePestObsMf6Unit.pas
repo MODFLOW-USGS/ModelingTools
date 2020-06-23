@@ -136,6 +136,9 @@ var
   PickList: TStrings;
   MawObsTypeName: string;
   MawOb: TMawOb;
+  ObsTypeName: string;
+  GenOb: TObGeneral;
+//  MawOb: TMawOb;
 begin
   inherited;
   if (ARow >= 0) then
@@ -145,6 +148,7 @@ begin
     begin
       CanSelect := False;
     end;
+
     if TryGetObsSeries(ObsSeriesName, ObsSeries) then
     begin
       PickList := frameObservations.Grid.Columns[Ord(pm6Type)].PickList;
@@ -185,6 +189,50 @@ begin
           begin
             Assert(False);
           end;
+      end;
+    end;
+
+    if ACol = Ord(pm6Weight) then
+    begin
+      CanSelect := False;
+      if TryGetObsSeries(ObsSeriesName, ObsSeries) then
+      begin
+        ObsTypeName := frameObservations.Grid.Cells[Ord(pm6Type), ARow];
+        case ObsSeries of
+          osGeneral:
+            begin
+              if TryGetGenOb(ObsTypeName, GenOb) then
+              begin
+                CanSelect := GenOb in [ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
+                  ogRch, ogEVT, ogMvr];
+              end;
+            end;
+          osMaw:
+            begin
+              if TryGetMawOb(ObsTypeName, MawOb) then
+              begin
+
+              end;
+            end;
+          osSfr:
+            begin
+
+            end;
+          osLak:
+            begin
+
+            end;
+          osUzf:
+            begin
+
+            end;
+          osCSub:
+            begin
+
+            end;
+          else
+            Assert(False);
+        end;
       end;
     end;
   end;

@@ -124,7 +124,7 @@ uses Math, ClassificationUnit, PhastModelUnit, frmGoPhastUnit,
   PhastDataSets, RealListUnit, ModflowTimeUnit,
   TimeUnit, FastGEO, RbwParser, EdgeDisplayUnit, ModelMuseUtilities,
   frameCustomColorUnit, SutraTimeScheduleUnit, SutraBoundariesUnit,
-  frmProgressUnit, SutraBoundaryUnit;
+  frmProgressUnit, SutraBoundaryUnit, ConvexHullUnit;
 
 resourcestring
   StrSAlreadyExists = '%s already exists.  Do you want to replace it?';
@@ -925,6 +925,35 @@ var
   CellOutline: TVertexArray;
   PointIndex: Integer;
   AnElement: IElement2D;
+  procedure EnforceClockwise(var Points: TShapePointArray);
+  var
+    Index: Integer;
+    TempPoint: TShapePoint;
+    ArrayLength: Integer;
+    ShapeOrientation: Integer;
+    APolygon: TPolygon2D;
+    Hull: TPolygon2D;
+    PointIndex: Integer;
+  begin
+    ArrayLength := Length(Points);
+    SetLength(APolygon, ArrayLength);
+    for PointIndex := 0 to ArrayLength - 1 do
+    begin
+      APolygon[PointIndex].x := Points[PointIndex].x;
+      APolygon[PointIndex].y := Points[PointIndex].y;
+    end;
+    ConvexHull2(APolygon, ShapeOrientation, Hull);
+
+    if ShapeOrientation <> Clockwise then
+    begin
+      for Index := 0 to (ArrayLength div 2) - 1 do
+      begin
+        TempPoint := Points[Index];
+        Points[Index] := Points[ArrayLength-Index-1];
+        Points[ArrayLength-Index-1] := TempPoint;
+      end;
+    end;
+  end;
 begin
   Shape.FMArray := nil;
   Shape.FZArray := nil;
@@ -1037,6 +1066,7 @@ begin
             else Assert(False);
           end;
         end;
+        EnforceClockwise(Shape.FPoints);
       end;
     stPoint:
       begin
