@@ -33,6 +33,7 @@ type
   private
     FIFace: TIface;
     FScreenObject: TObject;
+    FBoundaryIndex: integer;
     procedure SetScreenObject(const Value: TObject);
   protected
     function GetColumn: integer; virtual; abstract;
@@ -72,6 +73,8 @@ type
     procedure RecordStrings(Strings: TStringList); virtual; abstract;
   public
     Constructor Create; virtual;
+    // @name is used for MODFLOW 6 PEST observations.
+    property BoundaryIndex: integer read FBoundaryIndex write FBoundaryIndex;
     // @name is the layer number for this cell. Valid values range from 0 to
     // the number of layers in the grid minus 1.
     property Layer: integer read GetLayer write SetLayer;
@@ -542,6 +545,8 @@ end;
 
 procedure TValueCell.Cache(Comp: TCompressionStream; Strings: TStringList);
 begin
+  WriteCompInt(Comp, FBoundaryIndex);
+
   Comp.Write(FIface, SizeOf(FIface));
   if ScreenObject = nil then
   begin
@@ -582,6 +587,7 @@ procedure TValueCell.Restore(Decomp: TDecompressionStream;
 var
   ScreenObjectName: string;
 begin
+  FBoundaryIndex := ReadCompInt(Decomp);
   Decomp.Read(FIFace, SizeOf(FIFace));
   ScreenObjectName := ReadCompStringSimple(Decomp);
   if ScreenObjectName = '' then

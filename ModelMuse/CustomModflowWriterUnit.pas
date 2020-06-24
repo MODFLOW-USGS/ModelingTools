@@ -393,6 +393,7 @@ type
     FValues: TList;
     FFlowObsLocations: TBoundaryFlowObservationLocationList;
     FObsLocationCheck: T3DSparseStringArray;
+    FMf6ObsArray: T3DSparsePointerArray;
     FToMvrFlowObsLocations: TBoundaryFlowObservationLocationList;
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
@@ -410,6 +411,7 @@ type
     // @name is used for recording the locations of observations for
     // MODFLOW-6 flow observations.
     property ObsLocationCheck: T3DSparseStringArray read FObsLocationCheck;
+    property Mf6ObsArray: T3DSparsePointerArray read FMf6ObsArray;
     // @name reads the data from the model and processes it into a form
     // where it can be readily exported to the MODFLOW input file.
     procedure Evaluate; virtual; abstract;
@@ -463,8 +465,10 @@ type
     // in a descendant class.
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; virtual;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; virtual;
+    function IsFlowObs(AScreenObject: TScreenObject): Boolean; virtual;
+//    function ObsFactors: TObservationFactors; virtual;
     // @name indicates that flow observations are used in a descendant class.
-    function ObservationsUsed: Boolean; virtual;
+    function Mf6ObservationsUsed: Boolean; virtual;
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; virtual;
     // @name is the file extension used for the observation output file.
@@ -741,7 +745,7 @@ type
 //      PackageAbbreviation, DataSet1Comment, DataSet2Comment,
 //      DataSet3Comment: string; Observations: TFluxObservationGroups;
 //      Purpose: TObservationPurpose);
-    function ObsTypeMF6: string; virtual; abstract;
+//    function ObsTypeMF6: string; virtual; abstract;
     // @name writes a cell with a factor of zero in order to ensure that
     // MODFLOW skips the cell in the observation.
     procedure WriteZeroConductanceCell(ACell: TValueCell;
@@ -777,6 +781,8 @@ type
       ObsFactor: TObservationFactor);
     procedure SavePestInstructionFile(OutputName: string);
 //    procedure WriteListOptions; override;
+    function IsFlowObs(AScreenObject: TScreenObject): Boolean; override;
+    function ObsFactors: TFluxObservationGroups; virtual;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     Destructor Destroy; override;
@@ -3383,10 +3389,11 @@ constructor TCustomTransientWriter.Create(Model: TCustomModel; EvaluationType: T
 begin
   inherited;
   FValues := TObjectList.Create;
-  if ObservationsUsed then
+  if Mf6ObservationsUsed then
   begin
     FFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
     FObsLocationCheck := T3DSparseStringArray.Create(SPASmall, SPASmall, SPASmall);
+    FMf6ObsArray := T3DSparsePointerArray.Create(SPASmall, SPASmall, SPASmall);
     FToMvrFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
   end;
   DirectObsLines := Model.DirectObservationLines;
@@ -3398,6 +3405,7 @@ end;
 destructor TCustomTransientWriter.Destroy;
 begin
   FToMvrFlowObsLocations.Free;
+  FMf6ObsArray.Free;
   FObsLocationCheck.Free;
   FFlowObsLocations.Free;
   FValues.Free;
@@ -3474,7 +3482,7 @@ begin
           [ScreenObject.Name]));
         Boundary.GetCellValues(FValues, FParamValues, Model);
 
-        if ObservationsUsed then
+        if Mf6ObservationsUsed then
         begin
           if IsMf6ToMvrObservation(ScreenObject) then
           begin
@@ -3516,6 +3524,8 @@ begin
                   FlowObs.FName := ObsLocationCheck[ACell.Cell.Layer,
                     ACell.Cell.Row, ACell.Cell.Column];
                   FlowObs.FBoundName := '';
+                  FlowObs.FMf6Obs := Mf6ObsArray[ACell.Cell.Layer,
+                  ACell.Cell.Row, ACell.Cell.Column];
                   FlowObsLocations.Add(FlowObs);
                 end;
               end;
@@ -5656,7 +5666,7 @@ var
   ScreenObjectIndex: Integer; CellIndex: integer;
   IDomainArray: TDataArray;
 begin
-  if not ObservationsUsed then
+  if not Mf6ObservationsUsed then
   begin
     Exit;
   end;
@@ -5695,6 +5705,8 @@ begin
             begin
               ObsLocationCheck[ACell.Cell.Layer, ACell.Cell.Row,
                 ACell.Cell.Column] := Mf6Obs.Name;
+              Mf6ObsArray[ACell.Cell.Layer,
+                  ACell.Cell.Row, ACell.Cell.Column] := Mf6Obs
             end;
           end;
         finally
@@ -5954,6 +5966,12 @@ begin
   DisplayArray.InitializeDisplayArray(0);
 end;
 
+function TCustomTransientWriter.IsFlowObs(
+  AScreenObject: TScreenObject): Boolean;
+begin
+  result := False;
+end;
+
 function TCustomTransientWriter.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
@@ -5971,13 +5989,18 @@ begin
   result := ogUndefined;
 end;
 
-function TCustomTransientWriter.ObservationsUsed: Boolean;
+function TCustomTransientWriter.Mf6ObservationsUsed: Boolean;
 begin
   result := False;
 //  result := (Model.ModelSelection = msModflow2015)
 //    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
 end;
 
+//function TCustomTransientWriter.ObsFactors: TObservationFactors;
+//begin
+//  result := nil;
+//end;
+//
 procedure TCustomTransientWriter.SetOwnsValueContents(const Value: Boolean);
 begin
   (FValues as TObjectList).OwnsObjects := Value;
@@ -6083,6 +6106,11 @@ begin
   result := ChangeFileExt(AFileName, ObservationOutputExtension);
 end;
 
+function TFluxObsWriter.ObsFactors: TFluxObservationGroups;
+begin
+  result := nil;
+end;
+
 procedure TFluxObsWriter.RemoveWarningGroups(ObservationGroup: TFluxObservationGroup);
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model,
@@ -6108,6 +6136,32 @@ begin
     fotGHB: result := 'GBOB ';
     fotSTR: result := 'STOB ';
   end;
+end;
+
+function TFluxObsWriter.IsFlowObs(AScreenObject: TScreenObject): Boolean;
+var
+  Obs: TFluxObservationGroups;
+  ObsIndex: Integer;
+  ObsGroup: TFluxObservationGroup;
+begin
+  result := False;
+  if ObservationPackage.IsSelected then
+  begin
+    Obs:= ObsFactors;
+    if Obs <> nil then
+    begin
+      for ObsIndex := 0 to Obs.Count - 1 do
+      begin
+        ObsGroup := Obs[ObsIndex];
+        result := ObsGroup.ObservationFactors.IndexOfScreenObject(AScreenObject)>= 0;
+        if result then
+        begin
+          break;
+        end;
+      end;
+    end;
+  end;
+
 end;
 
 procedure TFluxObsWriter.WriteObservationDataSet4(ObservationGroup: TFluxObservationGroup;
@@ -8059,7 +8113,7 @@ begin
     else
     begin
       ScreenObject := ACell.ScreenObject as TScreenObject;
-      BoundName := Copy(ScreenObject.Name, 1, 40);
+      BoundName := Copy(ScreenObject.Name, 1, MaxBoundNameLength);
       BoundName := ' ''' + BoundName + ''' ';
       WriteString(BoundName);
     end;

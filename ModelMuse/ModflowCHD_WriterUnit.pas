@@ -39,14 +39,16 @@ type
       ScreenObject: TScreenObject; ObsFactor: TObservationFactor); override;
     function ObsNameWarningString: string; override;
     procedure Evaluate; override;
-    function ObsTypeMF6: string; override;
+//    function ObsTypeMF6: string; override;
     procedure CheckCell(ValueCell: TValueCell;
       const PackageName: string); override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
+//    function IsFlowObs(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
-    function ObservationsUsed: Boolean; override;
+    function Mf6ObservationsUsed: Boolean; override;
     procedure WriteListOptions(InputFileName: string); override;
     Class function Mf6ObType: TObGeneral; override;
+    function ObsFactors: TFluxObservationGroups; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -136,7 +138,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorInCHDPackage);
     frmErrorsAndWarnings.RemoveWarningGroup(Model,  Format(StrInvalidCHDS, [StrStartingHead]));
     frmErrorsAndWarnings.RemoveWarningGroup(Model,  Format(StrInvalidCHDS, [StrEndingHead]));
-    inherited;
+    inherited Evaluate;
     CountParametersAndParameterCells(ParamCount, ParamCellCount);
     CountCells(MXACTC);
     if (ParamCellCount = 0) and (MXACTC = 0) and (FEvaluationType = etExport) then
@@ -541,6 +543,28 @@ begin
 end;
 
 
+//function TModflowCHD_Writer.IsFlowObs(AScreenObject: TScreenObject): Boolean;
+//var
+//  ObsGroup: TFluxObservationGroups;
+//  ObsIndex: Integer;
+//  ObservationFactors: TObservationFactors;
+//begin
+//  result := False;
+//  if ObservationPackage.Used then
+//  begin
+//    Obs:= Model.HeadFluxObservations;
+//    for ObsIndex := 0 to Obs.Count - 1 do
+//    begin
+//      ObservationFactors := Obs[ObsIndex];
+//      result := ObservationFactors.IndexOfScreenObject(ScreenObject)>= 0;
+//      if result then
+//      begin
+//        Break;
+//      end;
+//    end;
+//  end;
+//end;
+
 function TModflowCHD_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
@@ -569,7 +593,7 @@ begin
   result := Model.ModflowPackages.ChobPackage;
 end;
 
-function TModflowCHD_Writer.ObservationsUsed: Boolean;
+function TModflowCHD_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
@@ -578,6 +602,11 @@ begin
 //  begin
 //    Model.ModflowPackages.
 //  end;
+end;
+
+function TModflowCHD_Writer.ObsFactors: TFluxObservationGroups;
+begin
+  result := Model.HeadFluxObservations;
 end;
 
 function TModflowCHD_Writer.ObsNameWarningString: string;
@@ -597,10 +626,10 @@ begin
   result := 'chd';
 end;
 
-function TModflowCHD_Writer.ObsTypeMF6: string;
-begin
-  result := ' chd-flow'
-end;
+//function TModflowCHD_Writer.ObsTypeMF6: string;
+//begin
+//  result := ' chd-flow'
+//end;
 
 function TModflowCHD_Writer.Package: TModflowPackageSelection;
 begin

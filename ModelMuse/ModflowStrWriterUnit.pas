@@ -130,7 +130,7 @@ type
     procedure WriteObservationCell(ACell: TValueCell; DataSet5: TStringList;
       var Expression: TExpression; DataSets, Variables: TList;
       ObsFactor: TObservationFactor); override;
-    function ObsTypeMF6: string; override;
+//    function ObsTypeMF6: string; override;
   public
     class function ComputeStreamConstant(Model: TCustomModel): double;
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -522,11 +522,11 @@ begin
   end;
 end;
 
-function TStrWriter.ObsTypeMF6: string;
-begin
-  result := '';
-  Assert(False);
-end;
+//function TStrWriter.ObsTypeMF6: string;
+//begin
+//  result := '';
+//  Assert(False);
+//end;
 
 function TStrWriter.Package: TModflowPackageSelection;
 begin

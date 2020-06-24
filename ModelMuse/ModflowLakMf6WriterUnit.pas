@@ -1594,7 +1594,7 @@ begin
     WriteFloat(ALake.FStartingStage);
     WriteInteger(ALake.FLakeCellList.Count);
     // aux
-    BoundName := Copy(ALake.FScreenObject.Name, 1, 40);
+    BoundName := Copy(ALake.FScreenObject.Name, 1, MaxBoundNameLength);
     BoundName := ' ''' + BoundName + ''' ';
     WriteString(BoundName);
     NewLine;

@@ -1201,7 +1201,7 @@ var
         begin
           obsnam := Format('%0:sObs%1:d', [Prefix, ObsIndex+1]);
         end;
-        Assert(Length(obsnam) <= 40);
+        Assert(Length(obsnam) <= MaxBoundNameLength);
         WriteString('  ''');
         WriteString(obsnam);
         WriteString(''' ');
@@ -1250,7 +1250,7 @@ begin
     begin
       FlowObs := FFlowObs[ObsIndex];
       obsnam := FlowObs.FName;
-      Assert(Length(obsnam) <= 40);
+      Assert(Length(obsnam) <= MaxBoundNameLength);
       WriteString('  ''');
       WriteString(obsnam);
       WriteString(''' ');
@@ -1422,7 +1422,7 @@ begin
       begin
         obsnam := Format(Prefix + 'FlowObs%d', [ObsIndex+1]);
       end;
-      Assert(Length(obsnam) <= 40);
+      Assert(Length(obsnam) <= MaxBoundNameLength);
       WriteString('  ''');
       WriteString(obsnam);
       WriteString(''' ');
@@ -1459,7 +1459,7 @@ begin
     begin
       FlowObs := ToMvrList[ObsIndex];
       obsnam := FlowObs.FName;
-      Assert(Length(obsnam) <= 40);
+      Assert(Length(obsnam) <= MaxBoundNameLength);
       WriteString('  ''');
       WriteString(obsnam);
       WriteString(''' ');
@@ -1762,9 +1762,9 @@ begin
           Exit;
         end;
 
-        Assert(Length(obsnam) <= 40);
+        Assert(Length(obsnam) <= MaxBoundNameLength);
         boundname := Trim(AnObs.FBoundName);
-        boundname := Copy(boundname, 1, 40);
+        boundname := Copy(boundname, 1, MaxBoundNameLength);
         boundname := ' ' + boundname + ' ';
         if AnObsType in [moFlowRateCells, moConductanceCells] then
         begin
@@ -2088,9 +2088,9 @@ begin
           begin
             Root := Format(Prefix + 'SfrObs%d', [ObsIndex+1]);
           end;
-          Assert(Length(Root) <= 40);
+          Assert(Length(Root) <= MaxBoundNameLength);
           boundname := Trim(AnObs.FBoundName);
-          boundname := Copy(boundname, 1, 40);
+          boundname := Copy(boundname, 1, MaxBoundNameLength);
           boundname := ' ' + boundname + ' ';
           case AnObs.FSfrObsLocation of
             solAll:
@@ -2102,7 +2102,7 @@ begin
                 if AnObsType = soStage then
                 begin
                   ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
-                  While Length(Root) + 1 + Length(ReachNumberStr) > 40 do
+                  While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
                   begin
                     Root := Copy(Root, 1, Length(Root)-1);
                   end;
@@ -2137,7 +2137,7 @@ begin
               begin
                 ReachNumber := 1 + AnObs.FReachStart;
                 ReachNumberStr := IntToStr(ReachNumber);
-                While Length(Root) + 1 + Length(ReachNumberStr) > 40 do
+                While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
                 begin
                   Root := Copy(Root, 1, Length(Root)-1);
                 end;
@@ -2155,7 +2155,7 @@ begin
               begin
                 ReachNumber := AnObs.FCount + AnObs.FReachStart;
                 ReachNumberStr := IntToStr(ReachNumber);
-                While Length(Root) + 1 + Length(ReachNumberStr) > 40 do
+                While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
                 begin
                   Root := Copy(Root, 1, Length(Root)-1);
                 end;
@@ -2173,7 +2173,7 @@ begin
               begin
                 // For calibration purposes, solIndividual can not be used.
                 ReachNumberStr := IntToStr(AnObs.FCount + AnObs.FReachStart);
-                While Length(Root) + 1 + Length(ReachNumberStr) > 40 do
+                While Length(Root) + 1 + Length(ReachNumberStr) > MaxBoundNameLength do
                 begin
                   Root := Copy(Root, 1, Length(Root)-1);
                 end;
@@ -2439,9 +2439,9 @@ begin
         begin
           obsnam := Format(Prefix + 'Lak%d', [ObsIndex+1]);
         end;
-        Assert(Length(obsnam) <= 40);
+        Assert(Length(obsnam) <= MaxBoundNameLength);
         boundname := Trim(AnObs.FBoundName);
-        boundname := Copy(boundname, 1, 40);
+        boundname := Copy(boundname, 1, MaxBoundNameLength);
         boundname := ' ' + boundname + ' ';
 //        obsnam := ' ''' + obsnam + ''' ';
         WriteString(' ''');
@@ -2722,9 +2722,9 @@ begin
           begin
             Root := Format(Prefix + 'UzfObs%d', [ObsIndex+1]);
           end;
-          Assert(Length(Root) <= 40);
+          Assert(Length(Root) <= MaxBoundNameLength);
           boundname := Trim(AnObs.FBoundName);
-          boundname := Copy(boundname, 1, 40);
+          boundname := Copy(boundname, 1, MaxBoundNameLength);
           boundname := ' ' + boundname + ' ';
 
           if AnObs.FCells = nil then
@@ -3204,9 +3204,9 @@ begin
           begin
             Root := Format(Prefix + 'CSubObs%d', [ObsIndex+1]);
           end;
-          Assert(Length(Root) <= 40);
+          Assert(Length(Root) <= MaxBoundNameLength);
           boundname := Trim(AnObs.FBoundName);
-          boundname := Copy(boundname, 1, 40);
+          boundname := Copy(boundname, 1, MaxBoundNameLength);
           boundname := ' ' + boundname + ' ';
 
           obsname := Root;

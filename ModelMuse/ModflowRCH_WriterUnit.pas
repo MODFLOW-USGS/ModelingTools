@@ -42,7 +42,7 @@ Type
     class function ObservationOutputExtension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
-    function ObservationsUsed: Boolean; override;
+    function Mf6ObservationsUsed: Boolean; override;
     Class function Mf6ObType: TObGeneral; override;
   public
     procedure WriteFile(const AFileName: string);
@@ -157,7 +157,7 @@ begin
   result := '.ob_rch_out';
 end;
 
-function TModflowRCH_Writer.ObservationsUsed: Boolean;
+function TModflowRCH_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;

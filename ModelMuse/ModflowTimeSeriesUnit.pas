@@ -130,7 +130,7 @@ end;
 
 procedure TTimeSeries.SetSeriesName(SeriesIndex: Integer; const Value: string);
 begin
-  FSeriesNames[SeriesIndex] := Copy(Value, 1, 40);
+  FSeriesNames[SeriesIndex] := Copy(Value, 1, MaxBoundNameLength);
 end;
 
 procedure TTimeSeries.SetTimeCount(const Value: Integer);

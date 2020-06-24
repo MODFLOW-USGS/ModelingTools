@@ -56,7 +56,7 @@ function TframeFluxObs.GetData(ListOfScreenObjects: TList;
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
-  ObsevationIndex: Integer;
+  ObservationIndex: Integer;
   Observation: TFluxObservationGroup;
   FirstObsForScreenObject: boolean;
 begin
@@ -65,14 +65,14 @@ begin
   rdgObservationGroups.FixedRows := 1;
   rdgObservationGroups.BeginUpdate;
   try
-    for ObsevationIndex := 0 to Observations.Count - 1 do
+    for ObservationIndex := 0 to Observations.Count - 1 do
     begin
-      Observation := Observations[ObsevationIndex];
-      rdgObservationGroups.Cells[Ord(ocLabel),ObsevationIndex+1] :=
-        IntToStr(ObsevationIndex+1);
-      rdgObservationGroups.Cells[Ord(ocName),ObsevationIndex+1] :=
+      Observation := Observations[ObservationIndex];
+      rdgObservationGroups.Cells[Ord(ocLabel),ObservationIndex+1] :=
+        IntToStr(ObservationIndex+1);
+      rdgObservationGroups.Cells[Ord(ocName),ObservationIndex+1] :=
         Observation.ObservationName;
-      GetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
+      GetObservationFactors(ObservationIndex, Observation.ObservationFactors,
         ListOfScreenObjects);
     end;
   finally
@@ -84,9 +84,9 @@ begin
   begin
     ScreenObject := ListOfScreenObjects[ScreenObjectIndex];
     FirstObsForScreenObject := True;
-    for ObsevationIndex := 0 to Observations.Count - 1 do
+    for ObservationIndex := 0 to Observations.Count - 1 do
     begin
-      Observation := Observations[ObsevationIndex];
+      Observation := Observations[ObservationIndex];
       if Observation.ObservationFactors.
         IndexOfScreenObject(ScreenObject) >= 0 then
       begin
@@ -103,25 +103,20 @@ end;
 procedure TframeFluxObs.SetData(ListOfScreenObjects: TList;
   Observations: TFluxObservationGroups; ScreenObjectsUsed: TCheckBoxState);
 var
-  ObsevationIndex: Integer;
+  ObservationIndex: Integer;
   Observation: TFluxObservationGroup;
-//  ScreenObjectIndex: Integer;
-//  ScreenObject: TScreenObject;
-//  ObjectPosition: Integer;
-//  ObsFactor: TObservationFactor;
-//  ObsState: TCheckBoxState;
 begin
   if Observations.Count > 0 then
   begin
     Assert(rdgObservationGroups.RowCount = Observations.Count+1);
   end;
-  for ObsevationIndex := 0 to Observations.Count - 1 do
+  for ObservationIndex := 0 to Observations.Count - 1 do
   begin
-    Observation:= Observations[ObsevationIndex];
+    Observation:= Observations[ObservationIndex];
     Assert(Observation.ObservationName =
-      rdgObservationGroups.Cells[Ord(ocName),ObsevationIndex+1]);
+      rdgObservationGroups.Cells[Ord(ocName),ObservationIndex+1]);
 
-    SetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
+    SetObservationFactors(ObservationIndex, Observation.ObservationFactors,
       ListOfScreenObjects, ScreenObjectsUsed);
   end;
 end;
@@ -129,7 +124,7 @@ end;
 function TframeFluxObs.GetData(ListOfScreenObjects: TList;
   Observations: TCustomSutraFluxObservationGroups): integer;
 var
-  ObsevationIndex: Integer;
+  ObservationIndex: Integer;
   Observation: TCustomSutraFluxObservations;
   ScreenObjectIndex: Integer;
   ScreenObject: Pointer;
@@ -140,14 +135,14 @@ begin
   rdgObservationGroups.FixedRows := 1;
   rdgObservationGroups.BeginUpdate;
   try
-    for ObsevationIndex := 0 to Observations.Count - 1 do
+    for ObservationIndex := 0 to Observations.Count - 1 do
     begin
-      Observation := (Observations.Items[ObsevationIndex] as TCustomSutraFluxObservationGroup).ObservationGroup;
-      rdgObservationGroups.Cells[Ord(ocLabel),ObsevationIndex+1] :=
-        IntToStr(ObsevationIndex+1);
-      rdgObservationGroups.Cells[Ord(ocName),ObsevationIndex+1] :=
+      Observation := (Observations.Items[ObservationIndex] as TCustomSutraFluxObservationGroup).ObservationGroup;
+      rdgObservationGroups.Cells[Ord(ocLabel),ObservationIndex+1] :=
+        IntToStr(ObservationIndex+1);
+      rdgObservationGroups.Cells[Ord(ocName),ObservationIndex+1] :=
         Observation.ObservationName;
-      GetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
+      GetObservationFactors(ObservationIndex, Observation.ObservationFactors,
         ListOfScreenObjects);
     end;
   finally
@@ -159,9 +154,9 @@ begin
   begin
     ScreenObject := ListOfScreenObjects[ScreenObjectIndex];
     FirstObsForScreenObject := True;
-    for ObsevationIndex := 0 to Observations.Count - 1 do
+    for ObservationIndex := 0 to Observations.Count - 1 do
     begin
-      Observation := (Observations.Items[ObsevationIndex]
+      Observation := (Observations.Items[ObservationIndex]
         as TCustomSutraFluxObservationGroup).ObservationGroup;
       if Observation.ObservationFactors.
         IndexOfScreenObject(ScreenObject) >= 0 then
@@ -200,23 +195,21 @@ procedure TframeFluxObs.SetData(ListOfScreenObjects: TList;
   Observations: TCustomSutraFluxObservationGroups;
   ScreenObjectsUsed: TCheckBoxState);
 var
-  ObsevationIndex: Integer;
+  ObservationIndex: Integer;
   Observation: TCustomSutraFluxObservations;
-//  ObservationFactors: TObservationFactors;
 begin
   if Observations.Count > 0 then
   begin
     Assert(rdgObservationGroups.RowCount = Observations.Count+1);
   end;
-  for ObsevationIndex := 0 to Observations.Count - 1 do
+  for ObservationIndex := 0 to Observations.Count - 1 do
   begin
-    Observation:= (Observations.Items[ObsevationIndex]
+    Observation:= (Observations.Items[ObservationIndex]
       as TCustomSutraFluxObservationGroup).ObservationGroup;
     Assert(Observation.ObservationName =
-      rdgObservationGroups.Cells[Ord(ocName),ObsevationIndex+1]);
+      rdgObservationGroups.Cells[Ord(ocName),ObservationIndex+1]);
 
-//    ObservationFactors := Observation.ObservationFactors;
-    SetObservationFactors(ObsevationIndex, Observation.ObservationFactors,
+    SetObservationFactors(ObservationIndex, Observation.ObservationFactors,
       ListOfScreenObjects, ScreenObjectsUsed);
   end;
 end;

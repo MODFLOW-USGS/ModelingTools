@@ -500,6 +500,7 @@ begin
       begin
         BoundaryValues := LocalBoundaryStorage.EvtArray[BoundaryIndex];
         Cell := TEvt_Cell.Create;
+        Cell.BoundaryIndex := BoundaryIndex;
         Assert(ScreenObject <> nil);
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);

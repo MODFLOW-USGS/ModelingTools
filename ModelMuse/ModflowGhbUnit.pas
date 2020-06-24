@@ -855,6 +855,7 @@ begin
             BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TGhb_Cell.Create;
+        Cell.BoundaryIndex := BoundaryIndex;
         Assert(ScreenObject <> nil);
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);

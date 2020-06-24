@@ -51,7 +51,7 @@ type
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
-    function ObservationsUsed: Boolean; override;
+    function Mf6ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
   public
@@ -306,7 +306,7 @@ begin
   result := '.ob_wel_out';
 end;
 
-function TModflowWEL_Writer.ObservationsUsed: Boolean;
+function TModflowWEL_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;

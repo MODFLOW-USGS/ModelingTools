@@ -38,12 +38,12 @@ type
     function ObsNameWarningString: string; override;
     procedure CheckCell(ValueCell: TValueCell; const PackageName: string); override;
     procedure DoBeforeWriteCells; override;
-    function ObsTypeMF6: string; override;
+//    function ObsTypeMF6: string; override;
     procedure WriteListOptions(InputFileName: string); override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
-    function ObservationsUsed: Boolean; override;
+    function Mf6ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
   public
@@ -288,7 +288,7 @@ begin
   result := Model.ModflowPackages.RvobPackage;
 end;
 
-function TModflowRIV_Writer.ObservationsUsed: Boolean;
+function TModflowRIV_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
@@ -311,10 +311,10 @@ begin
   result := 'riv';
 end;
 
-function TModflowRIV_Writer.ObsTypeMF6: string;
-begin
-  result := ' riv';
-end;
+//function TModflowRIV_Writer.ObsTypeMF6: string;
+//begin
+//  result := ' riv';
+//end;
 
 function TModflowRIV_Writer.Package: TModflowPackageSelection;
 begin

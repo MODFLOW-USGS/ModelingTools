@@ -802,6 +802,7 @@ begin
             BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TDrn_Cell.Create;
+        Cell.BoundaryIndex := BoundaryIndex;
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
 //        Cell.StressPeriod := TimeIndex;

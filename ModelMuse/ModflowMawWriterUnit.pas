@@ -47,7 +47,7 @@ type
     class function ObservationOutputExtension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
-    function ObservationsUsed: Boolean; override;
+    function Mf6ObservationsUsed: Boolean; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -342,7 +342,7 @@ begin
   result := '.ob_maw_out';
 end;
 
-function TModflowMAW_Writer.ObservationsUsed: Boolean;
+function TModflowMAW_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
@@ -992,7 +992,7 @@ begin
     end;
     WriteInteger(AWell.CellCount);
 
-    BoundName := Copy(AWell.BoundName, 1, 40);
+    BoundName := Copy(AWell.BoundName, 1, MaxBoundNameLength);
     BoundName := ' ''' + BoundName + ''' ';
     WriteString(BoundName);
 

@@ -51,7 +51,7 @@ Type
     class function ObservationOutputExtension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
-    function ObservationsUsed: Boolean; override;
+    function Mf6ObservationsUsed: Boolean; override;
     Class function Mf6ObType: TObGeneral; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -227,7 +227,7 @@ begin
   result := '.ob_evt_out';
 end;
 
-function TModflowETS_Writer.ObservationsUsed: Boolean;
+function TModflowETS_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;

@@ -671,9 +671,9 @@ var
   CharIndex: Integer;
 begin
   Value := Trim(Value);
-  if Length(Value) > 40 then
+  if Length(Value) > MaxBoundNameLength then
   begin
-    Value := Copy(Value, 1, 40);
+    Value := Copy(Value, 1, MaxBoundNameLength);
   end;
   for CharIndex := 1 to Length(Value) do
   begin

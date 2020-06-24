@@ -999,7 +999,7 @@ begin
       StateObs := SutraStateObs[TimeIndex];
       if StateObs.ObsType <> StrLakeStage then
       begin
-        ID := Copy(AScreenObject.Name, 1, 40);
+        ID := Copy(AScreenObject.Name, 1, MaxBoundNameLength);
         WriteString('  ID ');
         WriteString(ID);
         case StateObs.ObsTypeIndex of

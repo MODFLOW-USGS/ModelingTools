@@ -1770,7 +1770,7 @@ begin
         ndiv := 0;
       end;
       WriteInteger(ndiv);
-      boundname := ' ' + Copy(ReachProp.BoundName, 1, 40);
+      boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
       WriteString(boundname);
 
       NewLine;

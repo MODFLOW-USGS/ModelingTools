@@ -629,6 +629,7 @@ begin
             BoundaryValues.StartAnnotation, FCurrentParameter.ParameterName]);
         end;
         Cell := TCHD_Cell.Create;
+        Cell.BoundaryIndex := BoundaryIndex;
         Assert(ScreenObject <> nil);
         Cell.IFace := (ScreenObject as TScreenObject).IFace;
         Cells.Add(Cell);
