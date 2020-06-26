@@ -9319,7 +9319,7 @@ resourcestring
   StrPhastDefaultPath = 'C:\Program Files\USGS\phast-1.5.1\bin\phast.bat';
   StrPhastDefaultPath64 = 'C:\Program Files (x86)\USGS\phast-1.5.1\bin\phast.bat';
   StrZoneBudgetDefaultPath = 'C:\WRDAPP\Zonbud.3_01\Bin\zonbud.exe';
-  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.1.0\bin\zbud6.exe';
+  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.1.1\bin\zbud6.exe';
   StrModelMateDefaultPath = 'C:\WRDAPP\ModelMate_1_0_3\Bin\ModelMate.exe';
   strModflowLgrDefaultPath = 'C:\WRDAPP\mflgr.1_2\bin\mflgr.exe';
   strModflowLgr2DefaultPath = 'C:\WRDAPP\mflgr.2_0\bin\mflgr.exe';
@@ -9337,7 +9337,7 @@ resourcestring
 {$ENDIF}
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0\bin\WellFootprint.exe';
-  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.1.0\bin\mf6.exe';
+  StrDefaultModflow6Path = 'C:\WRDAPP\mf6.1.1\bin\mf6.exe';
 
   StrProgramLocations = 'Program Locations';
   StrMODFLOW2005 = 'MODFLOW-2005';

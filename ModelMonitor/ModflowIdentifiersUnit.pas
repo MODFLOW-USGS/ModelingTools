@@ -51,6 +51,8 @@ const
   StressPeriodMf6ID2A = 'IS TRANSIENT';
   StressPeriodMf6ID2B = 'IS STEADY-STATE';
   StrOUTPUTCONTROLFORS = 'OUTPUT CONTROL FOR STRESS PERIOD';
+  Mf6StartTimeStep = 'start timestep kper="';
+  Mf6Kstp = '" kstp="';
 
 
 const

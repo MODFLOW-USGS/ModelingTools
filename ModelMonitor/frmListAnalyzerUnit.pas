@@ -538,9 +538,11 @@ begin
   // MODFLOW 6
   AddKey(StressPeriodMf6ID1, itStressPeriod);
   AddKey(StrOUTPUTCONTROLFORS, itStressPeriod);
+  AddKey(Mf6StartTimeStep, itStressPeriod);
 
   AddKey(StressPeriodMf6ID2A, itStressPeriod2);
   AddKey(StressPeriodMf6ID2B, itStressPeriod2);
+  AddKey(Mf6Kstp, itStressPeriod2);
 
 
 
@@ -2241,6 +2243,12 @@ var
   function GetSP_Pos(const AnsiLine: AnsiString; out PeriodSearchTerm: AnsiString): Integer;
   begin
     PeriodSearchTerm := '';
+    result := BMPos(Mf6StartTimeStep, AnsiLine);
+    if result > 0 then
+    begin
+      PeriodSearchTerm := Mf6StartTimeStep;
+      Exit;
+    end;
     result := BMPos('STRESS PERIOD NO.', AnsiLine);
     if result > 0 then
     begin
@@ -2294,6 +2302,21 @@ var
       end;
     end;
     result := Trim(Result);
+  end;
+  procedure AddStressPeriod;
+  var
+    StepLine: String;
+  begin
+    StepLine := Format('Stress Period %0:s', [StressPeriod]);
+    frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, StepLine);
+    Inc(AddToDictionaryCount);
+    frameListing.AddLine(LineIndex + InnerLineIndex, StepLine, 0);
+    Inc(AddLineCount);
+    frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+    Inc(AddToDictionaryCount);
+    frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
+    Inc(AddLineCount);
+    Indent := 1;
   end;
 //  SpacePos: Integer;
 begin
@@ -2463,10 +2486,19 @@ begin
             SP_Start := GetSP_Pos(AnsiLine, PeriodSearchTerm);
             if SP_Start > 0 then
             begin
-              TS_Start := BMPos('TIME STEP', AnsiLine);
+              TS_Start := BMPos(Mf6Kstp, AnsiLine);
               if TS_Start > 0 then
               begin
-                StepSearchTerm := 'TIME STEP'
+                StepSearchTerm := Mf6Kstp
+              end;
+
+              if TS_Start <= 0 then
+              begin
+                TS_Start := BMPos('TIME STEP', AnsiLine);
+                if TS_Start > 0 then
+                begin
+                  StepSearchTerm := 'TIME STEP'
+                end;
               end;
 
               if TS_Start <= 0 then
@@ -2492,8 +2524,8 @@ begin
                 if TS_Start > SP_Start then
                 begin
 //                  StepLine := Copy(ALine, SP_Start, MAXINT);
-                  StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'STEP', ',']);
-                  TimeStep := ExtractStringBetween(ALine,StepSearchTerm, [',', 'IN', ':']);
+                  StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'STEP', ',', '"']);
+                  TimeStep := ExtractStringBetween(ALine,StepSearchTerm, [',', 'IN', ':', '"']);
                   StepLine := Format('Stress Period %0:s, Time Step %1:s', [StressPeriod, TimeStep]);
                 end
                 else
@@ -2507,6 +2539,11 @@ begin
                 begin
                   frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, StepLine);
                   Inc(AddToDictionaryCount);
+                  if (TimeStep = '1') and (StressPeriod <> PriorStressPeriod) then
+                  begin
+                    AddStressPeriod;
+                  end;
+                  PriorStressPeriod := StressPeriod;
                   frameListing.AddLine(LineIndex + InnerLineIndex, StepLine, 1);
                   Inc(AddLineCount);
                   Indent := 2;
@@ -2523,7 +2560,6 @@ begin
                     NextIndent := 2;
                   end;
                   PriorSP := StressPeriod;
-                  PriorStressPeriod := StressPeriod;
                   NewTimeStepLines.Add(LineIndex + InnerLineIndex);
                   NewTimeStepPostions.Add(NewTimeStepPostion);
                   FParameterDefined := False;
@@ -2646,19 +2682,10 @@ begin
 //                  PeriodSearchTerm := 'STRESS PERIOD'
 //                end;
                 Assert(SP_Start > 0);
-                StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'TIME', 'STEP', ',', 'IS', ' ']);
+                StressPeriod := ExtractStringBetween(ALine,PeriodSearchTerm, ['', 'TIME', 'STEP', ',', 'IS', '"', ' ']);
                 if PriorStressPeriod <> StressPeriod then
                 begin
-                  StepLine := Format('Stress Period %0:s', [StressPeriod]);
-                  frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, StepLine);
-                  Inc(AddToDictionaryCount);
-                  frameListing.AddLine(LineIndex + InnerLineIndex, StepLine, 0);
-                  Inc(AddLineCount);
-                  frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
-                  Inc(AddToDictionaryCount);
-                  frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
-                  Inc(AddLineCount);
-                  Indent := 1;
+                  AddStressPeriod;
                 end
                 else
                 begin
