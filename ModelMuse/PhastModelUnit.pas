@@ -9162,8 +9162,12 @@ const
   //               Bug fix: Fixed drawing active area outline to avoid access
   //                violations.
 
+  //    '4.2.0.21' Bug fix: Changing the times of the MODFLOW Stress periods
+  //                will now result in the times of MNW2 wells being updated to
+  //                the same times.
+
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.20';
+  IModelVersion = '4.2.0.21';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

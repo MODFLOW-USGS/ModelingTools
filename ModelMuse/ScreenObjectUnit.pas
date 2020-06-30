@@ -41092,6 +41092,7 @@ begin
   if FModflowMnw2Boundary <> nil then
   begin
     FModflowMnw2Boundary.Values.ReplaceATime(OldTime, NewTime);
+    FModflowMnw2Boundary.TimeValues.ReplaceATime(OldTime, NewTime);
   end;
 
   if FFmpWellBoundary <> nil then
