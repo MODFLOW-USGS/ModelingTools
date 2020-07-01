@@ -709,6 +709,7 @@ var
   SeriesIndex: Integer;
   InitialTime: Double;
 begin
+  LocalModel := AModel as TCustomModel;
   FCurrentParameter := nil;
   EvaluateListBoundaries(AModel);
   for ValueIndex := 0 to Values.Count - 1 do
@@ -719,7 +720,6 @@ begin
       AssignCells(BoundaryStorage, ValueTimeList, AModel);
     end;
   end;
-  LocalModel := AModel as TCustomModel;
   for ParamIndex := 0 to Parameters.Count - 1 do
   begin
     Param := Parameters[ParamIndex] as TChdParamItem;

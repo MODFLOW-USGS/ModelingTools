@@ -717,6 +717,8 @@ type
       Sender: TObject; ACol, ARow: Integer; const Value: TCheckBoxState);
     procedure frameSutraSpecUObsrdgObservationGroupsStateChange(Sender: TObject;
       ACol, ARow: Integer; const Value: TCheckBoxState);
+    procedure frameChdParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -24240,6 +24242,7 @@ var
   ParamType: TParameterType;
   Index: Integer;
   Item: TScreenObjectEditItem;
+  RowIndex: Integer;
 begin
   if IsLoaded then
   begin
@@ -24257,6 +24260,14 @@ begin
     begin
       Item := FNewProperties[Index];
       Item.ScreenObject.CreateChdBoundary;
+    end;
+    if frmGoPhast.ModelSelection = msModflow2015 then
+    begin
+      for RowIndex := 1 to Frame.rdgModflowBoundary.RowCount - 1 do
+      begin
+        Frame.rdgModflowBoundary.Cells[3,RowIndex] :=
+          Frame.rdgModflowBoundary.Cells[2,RowIndex];
+      end;
     end;
     StoreModflowBoundary(Frame, ParamType, FCHD_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FCHD_Node);
@@ -24494,6 +24505,17 @@ begin
   if not frameChdParam.rdgModflowBoundary.DistributingText then
   begin
     StoreChdBoundary;
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.frameChdParamrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameChdParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+  if (frmGoPhast.ModelSelection = msModflow2015) and (ACol = 3) then
+  begin
+    CanSelect := False;
   end;
 end;
 

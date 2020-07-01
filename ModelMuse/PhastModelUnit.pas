@@ -9161,13 +9161,17 @@ const
   //                counterclockwise direction instead of clockwise direction.
   //               Bug fix: Fixed drawing active area outline to avoid access
   //                violations.
-
   //    '4.2.0.21' Bug fix: Changing the times of the MODFLOW Stress periods
   //                will now result in the times of MNW2 wells being updated to
   //                the same times.
+  //    '4.2.0.22' Bug fix: In MODFLOW 6 models, the CHD ending head can no
+  //                longer be specified without using a parameter.
+  //               Bug fix: When converting to a MODFLOW 6 model, CHD boundaries
+  //                that don't use parametes are converted to CHD boundaries
+  //                that use a parameter.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.21';
+  IModelVersion = '4.2.0.22';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

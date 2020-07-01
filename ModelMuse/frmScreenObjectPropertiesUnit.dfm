@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspGBOB
+        ActivePage = jvspCHD
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -2563,6 +2563,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 256
                 ColCount = 4
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
+                OnSelectCell = frameChdParamrdgModflowBoundarySelectCell
                 OnSetEditText = frameChdParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 Columns = <
@@ -5512,15 +5513,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 155
                 inherited framePestObsLak: TframePestObs
                   Width = 573
                   Height = 155
-                  ExplicitLeft = 0
-                  ExplicitTop = 0
                   ExplicitWidth = 573
                   ExplicitHeight = 155
                   inherited splObservations: TSplitter
@@ -7282,7 +7280,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 442
@@ -12518,7 +12515,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCalibration: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371
@@ -12531,6 +12527,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Top = 193
                     Width = 573
                     ExplicitTop = 193
+                    ExplicitWidth = 573
                   end
                   inherited grpDirectObs: TGroupBox
                     Width = 573
@@ -12557,12 +12554,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         inherited sbAdd: TSpeedButton
                           Left = 297
+                          ExplicitLeft = 297
                         end
                         inherited sbInsert: TSpeedButton
                           Left = 352
+                          ExplicitLeft = 352
                         end
                         inherited sbDelete: TSpeedButton
                           Left = 407
+                          ExplicitLeft = 407
                         end
                         inherited seNumber: TJvSpinEdit
                           Height = 27
@@ -12603,12 +12603,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         inherited sbAdd: TSpeedButton
                           Left = 297
+                          ExplicitLeft = 297
                         end
                         inherited sbInsert: TSpeedButton
                           Left = 352
+                          ExplicitLeft = 352
                         end
                         inherited sbDelete: TSpeedButton
                           Left = 407
+                          ExplicitLeft = 407
                         end
                         inherited seNumber: TJvSpinEdit
                           Height = 27
@@ -12628,8 +12631,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlName: TPanel
               Width = 581
-              ExplicitLeft = -4
-              ExplicitTop = 19
               ExplicitWidth = 581
               inherited edObsName: TLabeledEdit
                 Height = 27

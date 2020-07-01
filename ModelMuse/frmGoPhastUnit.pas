@@ -2300,6 +2300,8 @@ resourcestring
   'saving the file. If saving as a ' +
   'mmZLib file, try saving as a bin file instead. In the "File|Save As" dial' +
   'og box, you can also try unchecking the "Save data set values" check box.';
+  StrDoYouWantToConveChd = 'Do you want to convert the CHD boundaries in MOD' +
+  'FLOW-2005 to the CHD boundaries in MODFLOW 6?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -4927,6 +4929,7 @@ procedure TfrmGoPhast.acModflow6ActiveExecute(Sender: TObject);
 var
   UndoHfb: TUndoConvertHfbMf6;
   UndoConvertObs: TUndoConvertObservationsMf6;
+  UndoChd: TUndoConvertChd;
 begin
   inherited;
   if ModelSelection <> msModflow2015 then
@@ -4976,6 +4979,22 @@ begin
         end;
       finally
         UndoHfb.Free;
+      end;
+    end;
+
+    if PhastModel.ModflowPackages.ChdBoundary.IsSelected then
+    begin
+      UndoChd := TUndoConvertChd.Create;
+      try
+        if  UndoChd.ShouldConvert and
+          (MessageDlg(StrDoYouWantToConveChd, mtConfirmation,
+          [mbYes, mbNo], 0) = mrYes) then
+        begin
+          UndoStack.Submit(UndoChd);
+          UndoChd := nil;
+        end;
+      finally
+        UndoChd.Free;
       end;
     end;
 
@@ -14434,7 +14453,7 @@ initialization
   MfOwhmDate := EncodeDate(2016, 6, 15);
   MfCfpDate := EncodeDate(2011, 2, 23);
   ModelMateDate := EncodeDate(2013, 11, 19);
-  Mf6Date := EncodeDate(2020, 11, 6);
+  Mf6Date := EncodeDate(2020, 6, 11);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
 

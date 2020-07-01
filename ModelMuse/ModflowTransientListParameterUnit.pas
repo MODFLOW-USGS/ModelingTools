@@ -119,12 +119,12 @@ begin
   begin
     SourceParam := TModflowTransientListParameter(Source);
     ParmChanged := not IsSame(SourceParam);
-    if ParmChanged then
+    if ParmChanged and (Collection <> nil) then
     begin
       Collection.UpdateDisplay(self);
     end;
     inherited;
-    if ParmChanged then
+    if ParmChanged and (Collection <> nil) then
     begin
       Collection.UpdateDisplay(SourceParam);
     end;
@@ -177,7 +177,10 @@ begin
     ParameterInstances := LocalModel.ModflowPackages.SfrPackage.ParameterInstances;
     ParameterInstances.DeleteInstancesOfParameter(ParameterName);
   end;
-  (Collection as TModflowTransientListParameters).UpdateDisplay(self);
+  if Collection <> nil then
+  begin
+    (Collection as TModflowTransientListParameters).UpdateDisplay(self);
+  end;
   FChildModelValues.Free;
   inherited;
 end;
@@ -253,7 +256,7 @@ begin
   begin
     if ParameterType in [ptRCH,ptEVT,ptETS, ptCHD,ptGHB,ptQ,ptRIV,ptDRN,ptDRT,ptSFR] then
     begin
-      if Collection.Model <> nil then
+      if (Collection <> nil) and  (Collection.Model <> nil) then
       begin
         Model := Collection.Model as TPhastModel;
         for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -304,14 +307,17 @@ var
   ChildModel: TChildModel;
 begin
   inherited;
-  (Collection as TModflowTransientListParameters).UpdateDisplay(self);
-  LocalModel := Model as TPhastModel;
-  if LocalModel <> nil then
+  if Collection <> nil then
   begin
-    for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
+    (Collection as TModflowTransientListParameters).UpdateDisplay(self);
+    LocalModel := Model as TPhastModel;
+    if LocalModel <> nil then
     begin
-      ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
-      NewChildModelCreated(ChildModel);
+      for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
+      begin
+        ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
+        NewChildModelCreated(ChildModel);
+      end;
     end;
   end;
 end;
@@ -319,7 +325,10 @@ end;
 procedure TModflowTransientListParameter.SetValue(Value: double);
 begin
   inherited;
-  (Collection as TModflowTransientListParameters).UpdateDisplay(self);
+  if Collection <> nil then
+  begin
+    (Collection as TModflowTransientListParameters).UpdateDisplay(self);
+  end;
 end;
 
 { TModflowTransientListParameters }
