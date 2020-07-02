@@ -35,6 +35,11 @@ Const
   // Each value takes up 22 characters on the line. Each line also contains
   // a time value.
   MaxSeries = 80;
+  // Unfortunately, MODFLOW seems to run into problems when the number of
+  // time series files is too high. Multiply the desired number by 8000 to
+  // temporarily get around this limitation. Unfortunately, this doesn't work
+  // either.
+//  MaxSeries = 80*8000;
 
 implementation
 

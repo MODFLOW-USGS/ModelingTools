@@ -9169,9 +9169,12 @@ const
   //               Bug fix: When converting to a MODFLOW 6 model, CHD boundaries
   //                that don't use parametes are converted to CHD boundaries
   //                that use a parameter.
+  //    '4.2.0.23' Bug fix: When attempting to read an invalid .nod or .ele
+  //                SUTRA output file, ModelMuse will now generate an error
+  //                message for the user instead of issuing  a bug report.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.22';
+  IModelVersion = '4.2.0.23';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

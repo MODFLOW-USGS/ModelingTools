@@ -18,6 +18,8 @@ type
 
   TStoredResultsComparer = TComparer<TStoredResults>;
 
+  EReadSutraError = Class(Exception);
+
   TCustomSutraOutputReader = class(TObject)
   private
     FReader: TStreamReader;
@@ -25,7 +27,7 @@ type
     FStoredResults: TStoredResultsList;
     FCount: integer;
     FCurrentTimeStep: Integer;
-    procedure ReadHeader;
+    function ReadHeader: boolean;
   protected
     function CountSearchString: string; virtual; abstract;
     procedure ReadValueHeader; virtual; abstract;
@@ -93,6 +95,10 @@ implementation
 uses
   IOUtils, ModelMuseUtilities;
 
+resourcestring
+  StrUnableToReadHeade = 'Unable to read header of "%s". Check that the file' +
+  ' is for this model.';
+
 { TCustomSutraOutputReader }
 
 constructor TCustomSutraOutputReader.Create(const FileName: string);
@@ -103,7 +109,10 @@ begin
   FSplitter.Delimiter := ' ';
   FCurrentTimeStep := -1;
   FStoredResults:= TStoredResultsList.Create;
-  ReadHeader;
+  if not ReadHeader then
+  begin
+    raise EReadSutraError.Create(Format(StrUnableToReadHeade, [FileName]));
+  end;
 end;
 
 destructor TCustomSutraOutputReader.Destroy;
@@ -114,7 +123,7 @@ begin
   inherited;
 end;
 
-procedure TCustomSutraOutputReader.ReadHeader;
+function TCustomSutraOutputReader.ReadHeader: Boolean;
 const
   SkipLines1 = 3;
   SkipLines2 = 2;
@@ -129,6 +138,7 @@ var
   StoredDecimalSeparator: Char;
   StoredR: TStoredResults;
 begin
+  result := True;
   StoredDecimalSeparator := FormatSettings.DecimalSeparator;
   FormatSettings.DecimalSeparator := '.';
   try
@@ -138,6 +148,11 @@ begin
     end;
     FSplitter.Delimitedtext := FReader.ReadLine;
     NodeIndex := FSplitter.IndexOf(CountSearchString)-1;
+    if NodeIndex < 0 then
+    begin
+      result := False;
+      Exit;
+    end;
     Assert(NodeIndex >= 0);
     FCount := StrToInt(FSplitter[NodeIndex]);
 
@@ -147,6 +162,11 @@ begin
     end;
     FSplitter.Delimitedtext := FReader.ReadLine;
     TimeStepsIndex := FSplitter.IndexOf('Time')-1;
+    if TimeStepsIndex < 0 then
+    begin
+      result := False;
+      Exit;
+    end;
     Assert(TimeStepsIndex >= 0);
     TimeStepCount := StrToInt(FSplitter[TimeStepsIndex]);
     FStoredResults.Capacity := TimeStepCount;

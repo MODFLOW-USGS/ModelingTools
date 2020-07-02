@@ -734,6 +734,12 @@ begin
       MessageDlg(Format(StrUnableToOpen0s, [FNodeFileName, E.message]), mtWarning, [mbOK], 0);
       result := False;
     end;
+    on E: EReadSutraError do
+    begin
+      Beep;
+      MessageDlg(Format(StrUnableToOpen0s, [FNodeFileName, E.message]), mtWarning, [mbOK], 0);
+      result := False;
+    end;
   end;
   if result then
   begin
@@ -741,6 +747,12 @@ begin
       FEleReader := TEleReader.Create(FElementFileName);
     except
       on E: EInOutError do
+      begin
+        Beep;
+        MessageDlg(Format(StrUnableToOpen0s, [FElementFileName, E.message]), mtWarning, [mbOK], 0);
+        result := False;
+      end;
+      on E: EReadSutraError do
       begin
         Beep;
         MessageDlg(Format(StrUnableToOpen0s, [FElementFileName, E.message]), mtWarning, [mbOK], 0);
