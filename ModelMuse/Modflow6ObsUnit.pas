@@ -57,12 +57,12 @@ type
     procedure SetObsTypeIndex(Value: Integer); override;
     function GetObsTypeString: string; override;
     procedure SetObsTypeString(const Value: string); override;
-    function ObservationType: string; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property InterpObsNames: TStringList read FInterpObsNames;
+    function ObservationType: string; override;
   published
     property GUID;
     property ObSeries: TObSeries read FObSeries write SetObSeries;
@@ -78,7 +78,7 @@ type
     // in model calibration.
     //
     // @name might not be used for all observation types.
-    property WeightFormula: string read GetWeightFormula write SetWeightFormula;
+    property WeightFormula: string read GetWeightFormula write SetWeightFormula stored False;
     property MawConnectionNumber: Integer read FMawConnectionNumber
       write SetMawConnectionNumber;
   end;
@@ -108,6 +108,8 @@ type
       write SetCalibItem; default;
     function UsesMawConnectionNumber(ConnectionNumber: Integer;
       AnObsType: TMawOb): Boolean;
+    function IndexOfTimeAndType(ATime: double; ObGeneralType: TObGeneral): integer;
+    function Add: TMf6CalibrationObs;
   end;
 
   TModflow6Obs = class(TGoPhastPersistent)
@@ -1246,6 +1248,11 @@ end;
 
 { TMf6CalibrationObservations }
 
+function TMf6CalibrationObservations.Add: TMf6CalibrationObs;
+begin
+  result := inherited Add as TMf6CalibrationObs;
+end;
+
 constructor TMf6CalibrationObservations.Create(
   InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
 begin
@@ -1350,6 +1357,25 @@ begin
     if Item.ObSeries = osUzf then
     begin
       Include(result, Item.UzfOb);
+    end;
+  end;
+end;
+
+function TMf6CalibrationObservations.IndexOfTimeAndType(ATime: double;
+  ObGeneralType: TObGeneral): integer;
+var
+  Index: Integer;
+  ObItem: TMf6CalibrationObs;
+begin
+  result := -1;
+  for Index := 0 to Count - 1 do
+  begin
+    ObItem := Items[Index];
+    if (ObItem.Time = ATime) and (ObItem.ObSeries = osGeneral)
+      and (ObItem.ObGeneral = ObGeneralType) then
+    begin
+      result := Index;
+      Exit;
     end;
   end;
 end;

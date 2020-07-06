@@ -43,7 +43,6 @@ type
     procedure CheckCell(ValueCell: TValueCell;
       const PackageName: string); override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
-//    function IsFlowObs(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
     function Mf6ObservationsUsed: Boolean; override;
     procedure WriteListOptions(InputFileName: string); override;
@@ -542,35 +541,12 @@ begin
   result := ScreenObject.ModflowChdBoundary;
 end;
 
-
-//function TModflowCHD_Writer.IsFlowObs(AScreenObject: TScreenObject): Boolean;
-//var
-//  ObsGroup: TFluxObservationGroups;
-//  ObsIndex: Integer;
-//  ObservationFactors: TObservationFactors;
-//begin
-//  result := False;
-//  if ObservationPackage.Used then
-//  begin
-//    Obs:= Model.HeadFluxObservations;
-//    for ObsIndex := 0 to Obs.Count - 1 do
-//    begin
-//      ObservationFactors := Obs[ObsIndex];
-//      result := ObservationFactors.IndexOfScreenObject(ScreenObject)>= 0;
-//      if result then
-//      begin
-//        Break;
-//      end;
-//    end;
-//  end;
-//end;
-
 function TModflowCHD_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
-  result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
-    and (ogCHD in AScreenObject.Modflow6Obs.General);
+  result := ((AScreenObject.Modflow6Obs <> nil)
+    and (ogCHD in AScreenObject.Modflow6Obs.General))
+    or IsFlowObs(AScreenObject);
 end;
 
 class function TModflowCHD_Writer.Mf6ObType: TObGeneral;

@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowRivUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes,
-  Modflow6ObsUnit;
+  Modflow6ObsUnit, FluxObservationUnit;
 
 type
   TModflowRIV_Writer = class(TFluxObsWriter)
@@ -46,6 +46,7 @@ type
     function Mf6ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
+    function ObsFactors: TFluxObservationGroups; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -286,6 +287,11 @@ end;
 function TModflowRIV_Writer.ObservationPackage: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.RvobPackage;
+end;
+
+function TModflowRIV_Writer.ObsFactors: TFluxObservationGroups;
+begin
+  result := Model.RiverObservations;
 end;
 
 function TModflowRIV_Writer.Mf6ObservationsUsed: Boolean;
@@ -700,9 +706,9 @@ end;
 function TModflowRIV_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
-  result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
-    and (ogRiv in AScreenObject.Modflow6Obs.General);
+  result := ((AScreenObject.Modflow6Obs <> nil)
+    and (ogRiv in AScreenObject.Modflow6Obs.General))
+    or IsFlowObs(AScreenObject);
 end;
 
 function TModflowRIV_Writer.IsMf6ToMvrObservation(

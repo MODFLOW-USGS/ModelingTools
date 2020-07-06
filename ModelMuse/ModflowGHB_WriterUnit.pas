@@ -6,7 +6,7 @@ uses SysUtils, Classes, Contnrs, CustomModflowWriterUnit, ModflowGhbUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, OrderedCollectionUnit, GoPhastTypes,
   ModflowBoundaryDisplayUnit, ModflowTransientListParameterUnit,
-  Modflow6ObsUnit;
+  Modflow6ObsUnit, FluxObservationUnit;
 
 type
   TModflowGHB_Writer = class(TFluxObsWriter)
@@ -48,6 +48,7 @@ type
     function Mf6ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
+    function ObsFactors: TFluxObservationGroups; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -248,6 +249,11 @@ end;
 function TModflowGHB_Writer.ObservationPackage: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.GbobPackage;
+end;
+
+function TModflowGHB_Writer.ObsFactors: TFluxObservationGroups;
+begin
+  result := Model.GhbObservations;
 end;
 
 function TModflowGHB_Writer.Mf6ObservationsUsed: Boolean;
@@ -641,9 +647,9 @@ end;
 function TModflowGHB_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
-  result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
-    and (ogGHB in AScreenObject.Modflow6Obs.General);
+  result := ((AScreenObject.Modflow6Obs <> nil)
+    and (ogGHB in AScreenObject.Modflow6Obs.General))
+    or IsFlowObs(AScreenObject);
 end;
 
 function TModflowGHB_Writer.IsMf6ToMvrObservation(

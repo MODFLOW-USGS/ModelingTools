@@ -6143,6 +6143,12 @@ var
   Obs: TFluxObservationGroups;
   ObsIndex: Integer;
   ObsGroup: TFluxObservationGroup;
+  ObserveIndex: Integer;
+  CalibrationObservations: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  CalibObs: TFluxObservation;
+  CalibItem: TMf6CalibrationObs;
+  MyGuid: TGUID;
 begin
   result := False;
   if ObservationPackage.IsSelected then
@@ -6153,10 +6159,46 @@ begin
       for ObsIndex := 0 to Obs.Count - 1 do
       begin
         ObsGroup := Obs[ObsIndex];
-        result := ObsGroup.ObservationFactors.IndexOfScreenObject(AScreenObject)>= 0;
-        if result then
+        ObserveIndex := ObsGroup.ObservationFactors.IndexOfScreenObject(AScreenObject);
+        result := (ObserveIndex >= 0) or result;
+        if ObserveIndex >= 0 then
         begin
-          break;
+          if AScreenObject.Modflow6Obs = nil then
+          begin
+            AScreenObject.CreateMf6Obs;
+            AScreenObject.Modflow6Obs.General := [Mf6ObType];
+            AScreenObject.Modflow6Obs.Name := Format('%0:s_%1:d',
+              [ObsGroup.ObservationName, ObserveIndex + 1]);
+          end
+          else
+          begin
+            AScreenObject.Modflow6Obs.General :=
+              AScreenObject.Modflow6Obs.General + [Mf6ObType];
+          end;
+
+          CalibrationObservations :=
+            AScreenObject.Modflow6Obs.CalibrationObservations;
+
+          for CalibIndex := 0 to ObsGroup.ObservationTimes.Count - 1 do
+          begin
+            CalibObs := ObsGroup.ObservationTimes[CalibIndex];
+            if CalibrationObservations.IndexOfTimeAndType(CalibObs.Time, Mf6ObType) < 0 then
+            begin
+              CalibItem := CalibrationObservations.Add;
+              CalibItem.ObSeries := osGeneral;
+              CalibItem.ObGeneral := Mf6ObType;
+              if CreateGUID(MyGuid) = 0 then
+              begin
+                CalibItem.GUID := GUIDToString(MyGuid);
+              end;
+              CalibItem.Time := CalibObs.Time;
+              CalibItem.Name := Format('%0:s_%1:d_%2:d',
+                [ObsGroup.ObservationName, ObserveIndex+1, CalibIndex+1]);
+            end;
+          end;
+
+
+//          break;
         end;
       end;
     end;
