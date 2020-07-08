@@ -466,6 +466,7 @@ type
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; virtual;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; virtual;
     function IsFlowObs(AScreenObject: TScreenObject): Boolean; virtual;
+    procedure EnsureMf6CalibObservations(AScreenObject: TScreenObject); virtual;
 //    function ObsFactors: TObservationFactors; virtual;
     // @name indicates that flow observations are used in a descendant class.
     function Mf6ObservationsUsed: Boolean; virtual;
@@ -741,11 +742,6 @@ type
       PackageAbbreviation, DataSet1Comment, DataSet2Comment,
       DataSet3Comment: string; Observations: TFluxObservationGroups;
       Purpose: TObservationPurpose);
-//    procedure WriteFluxObsFileMF6(const AFileName, OutputUnitId,
-//      PackageAbbreviation, DataSet1Comment, DataSet2Comment,
-//      DataSet3Comment: string; Observations: TFluxObservationGroups;
-//      Purpose: TObservationPurpose);
-//    function ObsTypeMF6: string; virtual; abstract;
     // @name writes a cell with a factor of zero in order to ensure that
     // MODFLOW skips the cell in the observation.
     procedure WriteZeroConductanceCell(ACell: TValueCell;
@@ -783,6 +779,7 @@ type
 //    procedure WriteListOptions; override;
     function IsFlowObs(AScreenObject: TScreenObject): Boolean; override;
     function ObsFactors: TFluxObservationGroups; virtual;
+    procedure EnsureMf6CalibObservations(AScreenObject: TScreenObject); override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     Destructor Destroy; override;
@@ -3412,6 +3409,12 @@ begin
   inherited;
 end;
 
+procedure TCustomTransientWriter.EnsureMf6CalibObservations(
+  AScreenObject: TScreenObject);
+begin
+  // do nothing
+end;
+
 function TCustomTransientWriter.GetOwnsValueContents: Boolean;
 begin
   result := (FValues as TObjectList).OwnsObjects;
@@ -3501,6 +3504,10 @@ begin
           end;
           if IsMf6Observation(ScreenObject) then
           begin
+            if IsFlowObs(ScreenObject) then
+            begin
+              EnsureMf6CalibObservations(ScreenObject)
+            end;
             Mf6Obs := ScreenObject.Modflow6Obs;
 
             FlowObs.FName := Mf6Obs.Name;
@@ -5691,6 +5698,10 @@ begin
     begin
       if IsMf6Observation(ScreenObject) then
       begin
+        if IsFlowObs(ScreenObject) then
+        begin
+          EnsureMf6CalibObservations(ScreenObject)
+        end;
         CellList := TCellAssignmentList.Create;
         try
           ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
@@ -6138,7 +6149,7 @@ begin
   end;
 end;
 
-function TFluxObsWriter.IsFlowObs(AScreenObject: TScreenObject): Boolean;
+procedure TFluxObsWriter.EnsureMf6CalibObservations(AScreenObject: TScreenObject);
 var
   Obs: TFluxObservationGroups;
   ObsIndex: Integer;
@@ -6150,7 +6161,6 @@ var
   CalibItem: TMf6CalibrationObs;
   MyGuid: TGUID;
 begin
-  result := False;
   if ObservationPackage.IsSelected then
   begin
     Obs:= ObsFactors;
@@ -6160,22 +6170,8 @@ begin
       begin
         ObsGroup := Obs[ObsIndex];
         ObserveIndex := ObsGroup.ObservationFactors.IndexOfScreenObject(AScreenObject);
-        result := (ObserveIndex >= 0) or result;
         if ObserveIndex >= 0 then
         begin
-          if AScreenObject.Modflow6Obs = nil then
-          begin
-            AScreenObject.CreateMf6Obs;
-            AScreenObject.Modflow6Obs.General := [Mf6ObType];
-            AScreenObject.Modflow6Obs.Name := Format('%0:s_%1:d',
-              [ObsGroup.ObservationName, ObserveIndex + 1]);
-          end
-          else
-          begin
-            AScreenObject.Modflow6Obs.General :=
-              AScreenObject.Modflow6Obs.General + [Mf6ObType];
-          end;
-
           CalibrationObservations :=
             AScreenObject.Modflow6Obs.CalibrationObservations;
 
@@ -6192,13 +6188,54 @@ begin
                 CalibItem.GUID := GUIDToString(MyGuid);
               end;
               CalibItem.Time := CalibObs.Time;
-              CalibItem.Name := Format('%0:s_%1:d_%2:d',
-                [ObsGroup.ObservationName, ObserveIndex+1, CalibIndex+1]);
+              CalibItem.Name := Format('%0:s_%1:d_%2:s',
+                [ObsGroup.ObservationName, ObserveIndex+1, CalibObs.ObsNameTimeString]);
             end;
           end;
 
 
 //          break;
+        end;
+      end;
+    end;
+  end;
+
+end;
+
+function TFluxObsWriter.IsFlowObs(AScreenObject: TScreenObject): Boolean;
+var
+  Obs: TFluxObservationGroups;
+  ObsIndex: Integer;
+  ObsGroup: TFluxObservationGroup;
+  ObserveIndex: Integer;
+begin
+  result := False;
+  if ObservationPackage.IsSelected then
+  begin
+    Obs:= ObsFactors;
+    if Obs <> nil then
+    begin
+      for ObsIndex := 0 to Obs.Count - 1 do
+      begin
+        ObsGroup := Obs[ObsIndex];
+        ObserveIndex := ObsGroup.ObservationFactors.IndexOfScreenObject(AScreenObject);
+        result := (ObserveIndex >= 0);
+        if result then
+        begin
+          if AScreenObject.Modflow6Obs = nil then
+          begin
+            AScreenObject.CreateMf6Obs;
+            AScreenObject.Modflow6Obs.General := [Mf6ObType];
+            AScreenObject.Modflow6Obs.Name := Format('%0:s_%1:d',
+              [ObsGroup.ObservationName, ObserveIndex + 1]);
+          end
+          else
+          begin
+            AScreenObject.Modflow6Obs.General :=
+              AScreenObject.Modflow6Obs.General + [Mf6ObType];
+          end;
+
+          break;
         end;
       end;
     end;
@@ -6762,9 +6799,6 @@ begin
   inherited;
   FPestInstructionFile:= TStringList.Create;
   FPestInstructionFile.Add('pif @');
-//  DirectObsLines := Model.DirectObservationLines;
-//  CalculatedObsLines := Model.DerivedObservationLines;
-//  FileNameLines := Model.FileNameLines;
 end;
 
 destructor TFluxObsWriter.Destroy;

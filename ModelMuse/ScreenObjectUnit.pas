@@ -44842,9 +44842,12 @@ begin
                           eaBlocks:
                             begin
                               Middle := (LowerBound + UpperBound)/2;
+//                              if (Orientation = dsoTop) or
+//                                ((FScreenObject.TopElevation >= Middle)
+//                                and (FScreenObject.BottomElevation <= Middle)) then
                               if (Orientation = dsoTop) or
-                                ((FScreenObject.TopElevation >= Middle)
-                                and (FScreenObject.BottomElevation <= Middle)) then
+                                ((FScreenObject.TopElevation >= LowerBound)
+                                and (FScreenObject.BottomElevation <= UpperBound)) then
                               begin
                                 ACellAssignment := TCellAssignment.Create(LayerIndex,
                                   ASegment.Row, ASegment.Col, ASegment,
@@ -44854,8 +44857,7 @@ begin
                                   2;
                                 ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACellAssignment.FSutraZ := (FScreenObject.FTopElevation
-                                  + FScreenObject.FBottomElevation)/2;
+                                ACellAssignment.FSutraZ := Middle;
                               end;
                             end;
                           eaNodes:

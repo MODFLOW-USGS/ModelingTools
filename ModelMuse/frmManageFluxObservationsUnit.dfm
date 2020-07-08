@@ -455,6 +455,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             Caption = 'Mass flux observation times and values'
             ImageIndex = 2
             TabVisible = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -759,6 +763,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           object tabObjects: TTabSheet
             Caption = 'Objects'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -933,6 +941,10 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0
@@ -1015,7 +1027,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
     ReadOnly = True
     TabOrder = 0
     OnChange = tvFluxObservationsChange
-    ExplicitTop = -8
   end
   object rparserThreeDFormulaElements: TRbwParser
     Left = 272

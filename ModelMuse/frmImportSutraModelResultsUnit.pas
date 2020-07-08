@@ -2322,11 +2322,7 @@ procedure TfrmImportSutraModelResults.ImportRestartData(
   NewScreenObjects: TList);
 var
   DataSets: TList;
-//  StepList: TIntegerList;
-//  FirstResults: Boolean;
-//  index: Integer;
   NodeScreenObject: TScreenObject;
-//  ElementScreenObject: TScreenObject;
   RestartFile: TStringList;
   Splitter: TStringList;
   Pressures: TList<Double>;
@@ -2336,12 +2332,9 @@ var
   LineIndex: Integer;
 begin
   DataSets := TList.Create;
-//  StepList := TIntegerList.Create;
   try
-//    FirstResults := True;
     if chklstDataToImport.Checked[Ord(iiPressure)]
-      or chklstDataToImport.Checked[Ord(iiU)]
-      {or chklstDataToImport.Checked[Ord(iiSaturation)]} then
+      or chklstDataToImport.Checked[Ord(iiU)] then
     begin
       RestartFile := TStringList.Create;
       Splitter := TStringList.Create;
@@ -2375,16 +2368,12 @@ begin
         CreateRestartNodeDataSets(DataSets);
         if DataSets.Count > 0 then
         begin
-//          if FirstResults then
-//          begin
-            CreateRestartNodeScreenObject(NodeScreenObject);
-            if NodeScreenObject = nil then
-            begin
-              Exit;
-            end;
-            NewScreenObjects.Add(NodeScreenObject);
-//            FirstResults := False;
-//          end;
+          CreateRestartNodeScreenObject(NodeScreenObject);
+          if NodeScreenObject = nil then
+          begin
+            Exit;
+          end;
+          NewScreenObjects.Add(NodeScreenObject);
 
           AssignRestartNodeValues(DataSets, NodeScreenObject, Pressures, UValues);
         end;
@@ -2394,98 +2383,9 @@ begin
         Splitter.Free;
         RestartFile.Free;
       end;
-//      for index := 0 to FNodeReader.StoredResults.Count - 1 do
-//      begin
-//        StepList.Add(FNodeReader.StoredResults[index].TimeStep);
-//      end;
-//      StepList.Sorted := True;
-//      Assert(FResultList.Count = chklstTimeStepsToImport.Items.Count);
-//      FirstResults := True;
-//      NodeScreenObject := nil;
-//      for index := 0 to FResultList.Count - 1 do
-//      begin
-//        if StepList.IndexOf(FResultList[index].TimeStep) >= 0 then
-//        begin
-//          if chklstTimeStepsToImport.Checked[index] then
-//          begin
-//            FNodeReader.ReadNextResults;
-//            DataSets.Clear;
-//            CreateNodeDataSets(index, DataSets);
-//            if DataSets.Count > 0 then
-//            begin
-//              if FirstResults then
-//              begin
-//                CreateNodeScreenObject(NodeScreenObject);
-//                if NodeScreenObject = nil then
-//                begin
-//                  Exit;
-//                end;
-//                NewScreenObjects.Add(NodeScreenObject);
-//                FirstResults := False;
-//              end;
-//
-//              AssignNodeValues(DataSets, NodeScreenObject);
-//            end;
-//
-//          end
-//          else
-//          begin
-//            FNodeReader.SkipNextResults
-//          end;
-//        end;
-//      end;
     end;
-//    StepList.Sorted := True;
-
-//    if chklstDataToImport.Checked[Ord(iiXVel)]
-//      or chklstDataToImport.Checked[Ord(iiYVel)]
-//      or chklstDataToImport.Checked[Ord(iiZVel)] then
-//    begin
-////      StepList.Clear;
-////      for index := 0 to FEleReader.StoredResults.Count - 1 do
-////      begin
-////        StepList.AddUnique(FEleReader.StoredResults[index].TimeStep);
-////      end;
-////        StepList.Sorted := True;
-//      Assert(FResultList.Count = chklstTimeStepsToImport.Items.Count);
-//      FirstResults := True;
-//      ElementScreenObject := nil;
-//      for index := 0 to FResultList.Count - 1 do
-//      begin
-////        if StepList.IndexOf(FResultList[index].TimeStep) >= 0 then
-////        begin
-////          if chklstTimeStepsToImport.Checked[index] then
-////          begin
-////            FEleReader.ReadNextResults;
-////            DataSets.Clear;
-////            CreateElementDataSets(index, DataSets);
-////            if DataSets.Count > 0 then
-////            begin
-////              if FirstResults then
-////              begin
-////                CreateElementScreenObject(ElementScreenObject);
-////                if ElementScreenObject = nil then
-////                begin
-////                  Exit;
-////                end;
-////                NewScreenObjects.Add(ElementScreenObject);
-////                FirstResults := False;
-////              end;
-////
-////              AssignElementValues(DataSets, ElementScreenObject);
-////            end;
-////
-////          end
-////          else
-////          begin
-////            FEleReader.SkipNextResults
-////          end;
-////        end;
-//      end;
-//    end;
   finally
     DataSets.Free;
-//    StepList.Free;
   end
 end;
 

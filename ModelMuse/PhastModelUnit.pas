@@ -590,6 +590,8 @@ resourcestring
 //  StrFarmID = 'Farm_ID';
   StrSoilID = 'Soil_ID';
   StrFootprintInputClassification = 'WellFootprint';
+  StrTheFollowingObjectNoCells = 'The following objects do not assign proper' +
+  'ties to any cells.';
 const
   WettableLayers = [1,3];
 
@@ -9172,9 +9174,14 @@ const
   //    '4.2.0.23' Bug fix: When attempting to read an invalid .nod or .ele
   //                SUTRA output file, ModelMuse will now generate an error
   //                message for the user instead of issuing  a bug report.
+  //    '4.2.0.24' Bug fix: When attempting to read an invalid
+  //                MODPATH output file, ModelMuse will now generate an error
+  //                message for the user instead of issuing  a bug report.
+  //               Bug fix: Fixed bug that could cause objects to fail to
+  //                intersect all the correct cells in MODFLOW DISV models.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.23';
+  IModelVersion = '4.2.0.24';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -39164,47 +39171,6 @@ begin
   end;
 end;
 
-//procedure TCustomModel.WriteMf6ObsExtractorFile(FileName: string);
-//var
-//  Lines: TStringList;
-//begin
-//  if PestUsed and (ModelSelection = msModflow2015)
-//    and (DirectObservationLines.Count > 0) then
-//  begin
-//    FileName := ChangeFileExt(FileName, '.Mf6ObsExtIns');
-//    Lines := TStringList.Create;
-//    try
-//      Lines.Add('BEGIN OPTIONS');
-//      Lines.Add('  LISTING ' + ChangeFileExt(FileName, '.Mf6ObsExtInsLst'));
-//      Lines.Add('  VALUES ' + ChangeFileExt(FileName, '.Mf6ObsExtInsValues'));
-//      Lines.Add('  INSTRUCTION ' + ChangeFileExt(FileName, '.PestIns'));
-//      Lines.Add('END OPTIONS');
-//      Lines.Add('');
-//
-//      Lines.Add('BEGIN OBSERVATION_FILES');
-//      Lines.AddStrings(FileNameLines);
-//      Lines.Add('END OBSERVATION_FILES');
-//      Lines.Add('');
-//
-//      Lines.Add('BEGIN IDENTIFIERS');
-//      Lines.AddStrings(DirectObservationLines);
-//      Lines.Add('END IDENTIFIERS');
-//      Lines.Add('');
-//
-//      if DerivedObservationLines.Count > 0 then
-//      begin
-//        Lines.Add('BEGIN DERIVED_OBSERVATIONS');
-//        Lines.AddStrings(DirectObservationLines);
-//        Lines.Add('END DERIVED_OBSERVATIONS');
-//      end;
-//
-//      Lines.SaveToFile(FileName);
-//    finally
-//      Lines.Free;
-//    end;
-//  end;
-//end;
-
 procedure TCustomModel.InternalExportModflowModel(const FileName: string;
   ExportAllLgr: boolean);
 var
@@ -39281,10 +39247,8 @@ var
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
-//  DirectObservationLines: TStringList;
-//  DerivedObservationLines: TStringList;
-//  FileNameLines: TStringList;
 begin
+  frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);
   // Note: MODFLOW can not read Unicode text files.
 
   for ParameterIndex := 0 to ModflowTransientParameters.Count -1 do
@@ -39728,9 +39692,6 @@ begin
 
           GhbWriter := TModflowGHB_Writer.Create(self, etExport);
           try
-//            GhbWriter.DirectObsLines := DirectObservationLines;
-//            GhbWriter.CalculatedObsLines := DerivedObservationLines;
-//            GhbWriter.FileNameLines := FileNameLines;
             GhbWriter.MvrWriter := ModflowMvrWriter;
             GhbWriter.WriteFile(FileName);
             GhbWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39750,9 +39711,6 @@ begin
 
           WellWriter := TModflowWEL_Writer.Create(self, etExport);
           try
-//            WellWriter.DirectObsLines := DirectObservationLines;
-//            WellWriter.CalculatedObsLines := DerivedObservationLines;
-//            WellWriter.FileNameLines := FileNameLines;
             WellWriter.MvrWriter := ModflowMvrWriter;
             WellWriter.WriteFile(FileName);
           finally
@@ -39771,9 +39729,6 @@ begin
 
           RivWriter := TModflowRIV_Writer.Create(self, etExport);
           try
-//            RivWriter.DirectObsLines := DirectObservationLines;
-//            RivWriter.CalculatedObsLines := DerivedObservationLines;
-//            RivWriter.FileNameLines := FileNameLines;
             RivWriter.MvrWriter := ModflowMvrWriter;
             RivWriter.WriteFile(FileName);
             RivWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39793,9 +39748,6 @@ begin
 
           DrnWriter := TModflowDRN_Writer.Create(self, etExport);
           try
-//            DrnWriter.DirectObsLines := DirectObservationLines;
-//            DrnWriter.CalculatedObsLines := DerivedObservationLines;
-//            DrnWriter.FileNameLines := FileNameLines;
             DrnWriter.MvrWriter := ModflowMvrWriter;
             DrnWriter.WriteFile(FileName);
             DrnWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
@@ -39850,12 +39802,8 @@ begin
 
           Sfr6Writer := TModflowSFR_MF6_Writer.Create(self, etExport);
           try
-//            Sfr6Writer.DirectObsLines := DirectObservationLines;
-//            Sfr6Writer.CalculatedObsLines := DerivedObservationLines;
-//            Sfr6Writer.FileNameLines := FileNameLines;
             Sfr6Writer.MvrWriter := ModflowMvrWriter;
             Sfr6Writer.WriteFile(FileName);
-  //          Sfr6Writer.WriteFluxObservationFile(FileName, ObservationPurpose);
           finally
             Sfr6Writer.Free;
           end;
@@ -39872,12 +39820,8 @@ begin
 
           MawWriter := TModflowMAW_Writer.Create(self, etExport);
           try
-//            MawWriter.DirectObsLines := DirectObservationLines;
-//            MawWriter.CalculatedObsLines := DerivedObservationLines;
-//            MawWriter.FileNameLines := FileNameLines;
             MawWriter.MvrWriter := ModflowMvrWriter;
             MawWriter.WriteFile(FileName);
-  //          MawWriter.WriteFluxObservationFile(FileName, ObservationPurpose);
           finally
             MawWriter.Free;
           end;
@@ -39911,9 +39855,6 @@ begin
 
           RchWriter := TModflowRCH_Writer.Create(self, etExport);
           try
-//            RchWriter.DirectObsLines := DirectObservationLines;
-//            RchWriter.CalculatedObsLines := DerivedObservationLines;
-//            RchWriter.FileNameLines := FileNameLines;
             RchWriter.WriteFile(FileName);
           finally
             RchWriter.Free;
@@ -39931,9 +39872,6 @@ begin
 
           EvtWriter := TModflowEVT_Writer.Create(self, etExport);
           try
-//            EvtWriter.DirectObsLines := DirectObservationLines;
-//            EvtWriter.CalculatedObsLines := DerivedObservationLines;
-//            EvtWriter.FileNameLines := FileNameLines;
             EvtWriter.WriteFile(FileName);
           finally
             EvtWriter.Free;
@@ -39951,9 +39889,6 @@ begin
 
           EtsWriter := TModflowETS_Writer.Create(self, etExport);
           try
-//            EtsWriter.DirectObsLines := DirectObservationLines;
-//            EtsWriter.CalculatedObsLines := DerivedObservationLines;
-//            EtsWriter.FileNameLines := FileNameLines;
             EtsWriter.WriteFile(FileName);
           finally
             EtsWriter.Free;
@@ -40115,9 +40050,6 @@ begin
 
           UzfMf6Writer := TModflowUzfMf6Writer.Create(self, etExport);
           try
-//            UzfMf6Writer.DirectObsLines := DirectObservationLines;
-//            UzfMf6Writer.CalculatedObsLines := DerivedObservationLines;
-//            UzfMf6Writer.FileNameLines := FileNameLines;
             UzfMf6Writer.MvrWriter := ModflowMvrWriter;
             UzfMf6Writer.WriteFile(FileName);
           finally
@@ -40137,10 +40069,6 @@ begin
 
           CSubWriter := TCSubWriter.Create(self, etExport);
           try
-//            CSubWriter.DirectObsLines := DirectObservationLines;
-//            CSubWriter.CalculatedObsLines := DerivedObservationLines;
-//            CSubWriter.FileNameLines := FileNameLines;
-  //          CSubWriter.MvrWriter := ModflowMvrWriter;
             CSubWriter.WriteFile(FileName);
           finally
             CSubWriter.Free;
@@ -40532,7 +40460,6 @@ begin
         PestObsExtractorInputWriter.Free;
       end;
 
-//      WriteMf6ObsExtractorFile(FileName);
     except on E: EInvalidTime do
       begin
         Beep;

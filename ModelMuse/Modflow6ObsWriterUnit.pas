@@ -88,6 +88,7 @@ type
     FObGeneral: TObGeneral;
     procedure WriteFlowObs(ObsType: string;
       List, ToMvrList: TBoundaryFlowObservationLocationList);
+    procedure WriteSumFormulas;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
@@ -170,7 +171,8 @@ uses
   AbstractGridUnit, MeshRenumberingTypes, GoPhastTypes, FastGEO,
   ModflowIrregularMeshUnit, ModflowUnitNumbers, frmErrorsAndWarningsUnit,
   ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit, ModflowUzfMf6Unit,
-  ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math;
+  ModflowUzfWriterUnit, PestHeadObsWeightsUnit, ModflowCsubUnit, System.Math,
+  FluxObservationUnit;
 
 resourcestring
   StrNoHeadDrawdownO = 'No head, drawdown, or groundwater flow observations ' +
@@ -1447,8 +1449,16 @@ begin
           if (CalibObs.ObSeries = osGeneral)
             and (CalibObs.ObGeneral = FObGeneral) then
           begin
-            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
-              [CalibObs.Name, CalibObs.Time - StartTime]));
+            if CalibObs.Weight > 0 then
+            begin
+              DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                [CalibObs.Name, CalibObs.Time - StartTime]));
+            end
+            else
+            begin
+              DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
+                [CalibObs.Name, CalibObs.Time - StartTime]));
+            end;
           end;
         end;
         DirectObsLines.Add('');
@@ -1496,7 +1506,97 @@ begin
     WriteString('END CONTINUOUS');
     NewLine;
     NewLine;
+
+    WriteSumFormulas;
   end
+end;
+
+procedure TModflow6FlowObsWriter.WriteSumFormulas;
+var
+  Observations: TFluxObservationGroups;
+  ObsGroupIndex: Integer;
+  ObsGroup: TFluxObservationGroup;
+  TimeIndex: Integer;
+  Obs: TFluxObservation;
+  TimeString: string;
+  OBSNAM: string;
+  FormulaBuilder: TStringBuilder;
+  ObsNameIndex: Integer;
+begin
+  Observations := nil;
+  case FObGeneral of
+    ogCHD:
+      begin
+        if Model.ModflowPackages.ChobPackage.IsSelected then
+        begin
+          Observations := Model.HeadFluxObservations;
+        end;
+      end;
+    ogDrain:
+      begin
+        if Model.ModflowPackages.DrobPackage.IsSelected then
+        begin
+          Observations := Model.DrainObservations;
+        end;
+      end;
+    ogGHB:
+      begin
+        if Model.ModflowPackages.GbobPackage.IsSelected then
+        begin
+          Observations := Model.GhbObservations;
+        end;
+      end;
+    ogRiv:
+      begin
+        if Model.ModflowPackages.RvobPackage.IsSelected then
+        begin
+          Observations := Model.RiverObservations;
+        end;
+      end;
+    else
+      begin
+        Exit;
+      end;
+  end;
+  if Observations = nil then
+  begin
+    Exit;
+  end;
+  FormulaBuilder := TStringBuilder.Create;
+  try
+    for ObsGroupIndex := 0 to Observations.Count - 1 do
+    begin
+      ObsGroup := Observations[ObsGroupIndex];
+      for TimeIndex := 0 to ObsGroup.ObservationTimes.Count - 1 do
+      begin
+        Obs := ObsGroup.ObservationTimes[TimeIndex];
+
+        TimeString := Obs.ObsNameTimeString;
+        OBSNAM := ObsGroup.ObservationName
+          + '_' + TimeString;
+
+        CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [OBSNAM]));
+        FormulaBuilder.Clear;
+        FormulaBuilder.Append('  FORMULA ');
+        FormulaBuilder.Append(ObsGroup.ObservationName);
+        FormulaBuilder.Append('_1_');
+        FormulaBuilder.Append(TimeString);
+        for ObsNameIndex := 1 to ObsGroup.ObservationFactors.Count - 1 do
+        begin
+          FormulaBuilder.Append(' + ');
+          FormulaBuilder.Append(ObsGroup.ObservationName);
+          FormulaBuilder.Append('_');
+          FormulaBuilder.Append(ObsNameIndex + 1);
+          FormulaBuilder.Append('_');
+          FormulaBuilder.Append(TimeString);
+        end;
+        CalculatedObsLines.Add(FormulaBuilder.ToString);
+        CalculatedObsLines.Add('');
+      end;
+    end;
+  finally
+    FormulaBuilder.Free;
+  end;
 end;
 
 { TModflow6FlowObsWriter }

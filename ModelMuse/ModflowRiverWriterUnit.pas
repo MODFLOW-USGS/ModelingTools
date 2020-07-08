@@ -641,12 +641,6 @@ begin
     WriteFluxObsFile(AFileName, StrIURVOBSV, PackageAbbreviation,
       DataSet1Comment, DataSet2Comment, DataSet3Comment,
       Model.RiverObservations, Purpose);
-//  end
-//  else
-//  begin
-//    WriteFluxObsFileMF6(AFileName, StrIURVOBSV, PackageAbbreviation,
-//      DataSet1Comment, DataSet2Comment, DataSet3Comment,
-//      Model.RiverObservations, Purpose);
   end;
 end;
 

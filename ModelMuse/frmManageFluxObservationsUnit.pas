@@ -2629,24 +2629,43 @@ begin
   end;
 
   FChobObservations.Assign(frmGoPhast.PhastModel.HeadFluxObservations);
-  ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.ChobPackage,
-    FChobObservations, FChobNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015)
+    or frmGoPhast.PhastModel.PestUsed then
+  begin
+    ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.ChobPackage,
+      FChobObservations, FChobNode);
+  end;
 
   FDrobObservations.Assign(frmGoPhast.PhastModel.DrainObservations);
-  ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.DrobPackage,
-    FDrobObservations, FDrobNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015)
+    or frmGoPhast.PhastModel.PestUsed then
+  begin
+    ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.DrobPackage,
+      FDrobObservations, FDrobNode);
+  end;
 
   FGbobObservations.Assign(frmGoPhast.PhastModel.GhbObservations);
-  ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.GbobPackage,
-    FGbobObservations, FGbobNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015)
+    or frmGoPhast.PhastModel.PestUsed then
+  begin
+    ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.GbobPackage,
+      FGbobObservations, FGbobNode);
+  end;
 
   FRvobObservations.Assign(frmGoPhast.PhastModel.RiverObservations);
-  ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.RvobPackage,
-    FRvobObservations, FRvobNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015)
+    or frmGoPhast.PhastModel.PestUsed then
+  begin
+    ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.RvobPackage,
+      FRvobObservations, FRvobNode);
+  end;
 
   FStobObservations.Assign(frmGoPhast.PhastModel.StreamObservations);
-  ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.StobPackage,
-    FStobObservations, FStobNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadFluxObservations(frmGoPhast.PhastModel.ModflowPackages.StobPackage,
+      FStobObservations, FStobNode);
+  end;
 
   FMassFluxObs.Mt3dmsHeadMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsHeadMassFluxObservations);
@@ -2680,8 +2699,11 @@ begin
 
   FMassFluxObs.Mt3dmsEvtMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsEvtMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.EvtPackage,
-    StrEVTMassFlux, FMassFluxObs.Mt3dmsEvtMassFluxObservations, FEVTMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.EvtPackage,
+      StrEVTMassFlux, FMassFluxObs.Mt3dmsEvtMassFluxObservations, FEVTMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsMassLoadingMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsMassLoadingMassFluxObservations);
@@ -2690,33 +2712,51 @@ begin
 
   FMassFluxObs.Mt3dmsResMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsResMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.ResPackage,
-    StrResevoirMassFlux, FMassFluxObs.Mt3dmsResMassFluxObservations, FResMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.ResPackage,
+      StrResevoirMassFlux, FMassFluxObs.Mt3dmsResMassFluxObservations, FResMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsLakMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsLakMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.LakPackage,
-    StrLakeMassFlux, FMassFluxObs.Mt3dmsLakMassFluxObservations, FLakMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.LakPackage,
+      StrLakeMassFlux, FMassFluxObs.Mt3dmsLakMassFluxObservations, FLakMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsDrtMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsDrtMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.DrtPackage,
-    StrDRTMassFlux, FMassFluxObs.Mt3dmsDrtMassFluxObservations, FDrtMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.DrtPackage,
+      StrDRTMassFlux, FMassFluxObs.Mt3dmsDrtMassFluxObservations, FDrtMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsStrMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsStrMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.StrPackage,
-    StrSTRMassFlux, FMassFluxObs.Mt3dmsStrMassFluxObservations, FStrMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.StrPackage,
+      StrSTRMassFlux, FMassFluxObs.Mt3dmsStrMassFluxObservations, FStrMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsFhbHeadMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsFhbHeadMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.FhbPackage,
-    StrFHBHeadMassFlux, FMassFluxObs.Mt3dmsFhbHeadMassFluxObservations, FFhbHeadsMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.FhbPackage,
+      StrFHBHeadMassFlux, FMassFluxObs.Mt3dmsFhbHeadMassFluxObservations, FFhbHeadsMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsFhbFlowMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsFhbFlowMassFluxObservations);
-  ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.FhbPackage,
-    StrFHBFlowMassFlux, FMassFluxObs.Mt3dmsFhbFlowMassFluxObservations, FFhbFlowsMassFluxNode);
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    ReadMassFluxObservations(frmGoPhast.PhastModel.ModflowPackages.FhbPackage,
+      StrFHBFlowMassFlux, FMassFluxObs.Mt3dmsFhbFlowMassFluxObservations, FFhbFlowsMassFluxNode);
+  end;
 
   FMassFluxObs.Mt3dmsEtsMassFluxObservations.Assign(
     frmGoPhast.PhastModel.Mt3dmsEtsMassFluxObservations);

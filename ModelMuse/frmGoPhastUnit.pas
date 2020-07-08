@@ -6072,14 +6072,39 @@ end;
 
 procedure TfrmGoPhast.EnableManageFlowObservations;
 begin
-  miManageFluxObservations.Enabled :=
-    (PhastModel.ModelSelection in ModflowSelection)
-    and (PhastModel.ChobIsSelected
-    or PhastModel.DrobIsSelected
-    or PhastModel.GbobIsSelected
-    or PhastModel.RvobIsSelected
-    or PhastModel.StobIsSelected
-    or PhastModel.TobIsSelected);
+  if PhastModel.ModelSelection in ModflowSelection then
+  begin
+    if PhastModel.ModelSelection = msModflow2015 then
+    begin
+      {$IFDEF PEST}
+        miManageFluxObservations.Enabled :=
+          (PhastModel.ChobIsSelected
+          or PhastModel.DrobIsSelected
+          or PhastModel.GbobIsSelected
+          or PhastModel.RvobIsSelected
+//          or PhastModel.StobIsSelected
+          or PhastModel.TobIsSelected);
+      {$ELSE}
+        miManageFluxObservations.Enabled :=
+          PhastModel.TobIsSelected;
+      {$ENDIF}
+    end
+    else
+    begin
+      miManageFluxObservations.Enabled :=
+        (PhastModel.ModelSelection in ModflowSelection)
+        and (PhastModel.ChobIsSelected
+        or PhastModel.DrobIsSelected
+        or PhastModel.GbobIsSelected
+        or PhastModel.RvobIsSelected
+        or PhastModel.StobIsSelected
+        or PhastModel.TobIsSelected);
+    end;
+  end
+  else
+  begin
+    miManageFluxObservations.Enabled := False;
+  end;
 end;
 
 procedure TfrmGoPhast.EnableManageHeadObservations;
@@ -9367,6 +9392,7 @@ begin
   ModelDirectory := ExtractFileDir(FileName);
   PhastModel.ClearModelFiles;
   frmProgressMM.ShouldContinue := True;
+  frmErrorsAndWarnings.RemoveWarningGroup(PhastModel, StrTheFollowingObjectNoCells);
 //  BcopgFileNames := TStringList.Create;
 //  BcougFileNames := TStringList.Create;
   try

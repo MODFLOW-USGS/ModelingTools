@@ -3568,6 +3568,10 @@ begin
 
     AScreenObject.GetCellsToAssign({Grid,} '0', nil, nil, CellList, alAll, LocalModel);
 
+    if CellList.Count = 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrTheFollowingObjectNoCells, AScreenObject.Name, AScreenObject)
+    end;
     // FSectionDuplicatesAllowed is set to True in TSwrReachCollection
     // and TStrCollection.
     // SFR in MODFLOW 6 requires duplicate cells to be used.
