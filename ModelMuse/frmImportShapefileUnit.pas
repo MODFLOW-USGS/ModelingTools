@@ -1052,6 +1052,8 @@ resourcestring
   'name as another attribute. It will be skipped.';
   StrTheCSVAttributeNa = 'The CSV attribute named %0:s has the same ' +
   'name as another attribute. It will be skipped.';
+  StrTheAttribute0sI = 'The attribute #%0:d (%1:s) in file "%2:s" is a duplicate and' +
+  ' will be skipped.';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -1283,6 +1285,7 @@ var
   Warnings: TStringList;
   AttribIndex: Integer;
   AnAttribute: TCsvAttribute;
+  AttributeName: string;
   procedure InitializeAttributeObjects;
   begin
     FCsvAttributes.Clear;
@@ -1335,14 +1338,24 @@ begin
           Splitter.DelimitedText := AttFile[0];
           for AttribIndex := 0 to Splitter.Count - 1 do
           begin
-            AnAttribute := TCsvAttribute.Create;
-            AnAttribute.FileName := AFileName;
-            AnAttribute.AttributeName := FieldToVarName(Trim(Splitter[AttribIndex]));
-            AnAttribute.Position := AttribIndex;
-            FCsvAttributes.Add(AnAttribute);
-            FRealFieldNames.Add(AnAttribute.AttributeName);
-            FRealFieldGlobalsAndDataSetsNames.Add(AnAttribute.AttributeName);
-            FCsvDictionary.Add(AnAttribute.AttributeName, AnAttribute);
+            AttributeName := FieldToVarName(Trim(Splitter[AttribIndex]));
+            if FCsvDictionary.ContainsKey(AttributeName) then
+            begin
+              Beep;
+              MessageDlg(Format(StrTheAttribute0sI,
+                [AttribIndex+1, AttributeName, AFileName]), mtWarning, [mbOK], 0);
+            end
+            else
+            begin
+              AnAttribute := TCsvAttribute.Create;
+              AnAttribute.FileName := AFileName;
+              AnAttribute.AttributeName := AttributeName;
+              AnAttribute.Position := AttribIndex;
+              FCsvAttributes.Add(AnAttribute);
+              FRealFieldNames.Add(AnAttribute.AttributeName);
+              FRealFieldGlobalsAndDataSetsNames.Add(AnAttribute.AttributeName);
+              FCsvDictionary.Add(AnAttribute.AttributeName, AnAttribute);
+            end;
           end;
         end;
       end;

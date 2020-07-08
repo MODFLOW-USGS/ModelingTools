@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspCHD
+        ActivePage = jvspSWI_Obs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -2550,6 +2550,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 308
               inherited pnlEditGrid: TPanel
                 Width = 579
+                ExplicitLeft = 6
+                ExplicitTop = 2
                 ExplicitWidth = 579
                 inherited lblFormula: TLabel
                   Width = 59

@@ -1,9 +1,9 @@
 inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservations
-  Caption = 'frmManageSutraBoundaryObservations'
+  Caption = 'Manage SUTRA Boundary Observations'
   ClientHeight = 561
   ClientWidth = 747
   OnKeyDown = FormKeyDown
-  ExplicitTop = -122
+  OnResize = FormResize
   ExplicitWidth = 763
   ExplicitHeight = 600
   PixelsPerInch = 96
@@ -94,7 +94,6 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     ReadOnly = True
     TabOrder = 1
     OnChange = tvFluxObservationsChange
-    ExplicitLeft = 4
   end
   object pnlMain: TPanel
     Left = 131
@@ -280,6 +279,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       object tabObjects: TTabSheet
         Caption = 'Objects'
         ImageIndex = 1
+        OnResize = FormResize
         DesignSize = (
           608
           422)

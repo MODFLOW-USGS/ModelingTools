@@ -90,6 +90,7 @@ type
     procedure miGoToUsedClick(Sender: TObject);
     procedure miHideUsedClick(Sender: TObject);
     procedure btnFactorFormulaClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     FFluxObs: TSutraFluxObs;
     FSpecPresObjects: TScreenObjectList;
@@ -721,6 +722,20 @@ end;
 
 procedure TfrmManageSutraBoundaryObservations.FormKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  btnIncBtn.Left := 4 + (tabObjects.Width - btnIncBtn.Width) div 2;
+  btnIncAllBtn.Left := btnIncBtn.Left;
+  btnExclBtn.Left := btnIncBtn.Left;
+  btnExclAllBtn.Left := btnIncBtn.Left;
+  lbSrcList.Width := (tabObjects.Width - (8 + 7 + btnIncBtn.Width + 7 + 8)) div 2;
+  lblSrcLabel.Left := lbSrcList.Left;
+  lbDstList.Width := lbSrcList.Width;
+  lbDstList.Left := btnIncBtn.Left + btnIncBtn.Width + 7;
+  lblDstLabel.Left := lbDstList.Left;
+end;
+
+procedure TfrmManageSutraBoundaryObservations.FormResize(Sender: TObject);
 begin
   inherited;
   btnIncBtn.Left := 4 + (tabObjects.Width - btnIncBtn.Width) div 2;
